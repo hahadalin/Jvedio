@@ -36,7 +36,7 @@ namespace Jvedio
             vieModel = new VieModel_Tools();
             this.DataContext = vieModel;
             cts = new CancellationTokenSource();
-            cts.Token.Register(() => { Console.WriteLine("取消当前下载任务"); });
+            cts.Token.Register(() => { HandyControl.Controls.Growl.Info("取消当前下载任务！", "ToolsGrowl"); });
             ct = cts.Token;
             Running = false;
 
@@ -201,7 +201,9 @@ namespace Jvedio
                         break;
                     }
                 }
-                if (!PathConflict) { vieModel.NFOScanPath.Add(path); NFODirPathTextBox.Text = ""; } else { new Msgbox(this, "路径冲突！").ShowDialog(); }
+                if (!PathConflict) { vieModel.NFOScanPath.Add(path); NFODirPathTextBox.Text = ""; } else {
+                    HandyControl.Controls.Growl.Warning("路径冲突！", "ToolsGrowl");
+                }
 
             }
 
@@ -229,7 +231,7 @@ namespace Jvedio
                         break;
                     }
                 }
-                if (!PathConflict) { vieModel.NFOScanPath.Add(folderBrowserDialog.SelectedPath); } else { new Msgbox(this, "路径冲突！").ShowDialog(); }
+                if (!PathConflict) { vieModel.NFOScanPath.Add(folderBrowserDialog.SelectedPath); } else { HandyControl.Controls.Growl.Warning("路径冲突！", "ToolsGrowl"); }
 
             }
 
@@ -242,10 +244,12 @@ namespace Jvedio
         public async void StartRun(object sender, RoutedEventArgs e)
         {
 
-            if (Running) { new Msgbox(this, "其他任务正在进行！").ShowDialog(); return; }
+            if (Running) { 
+                HandyControl.Controls.Growl.Error("其他任务正在进行！", "ToolsGrowl");
+                return; }
 
             cts = new CancellationTokenSource();
-            cts.Token.Register(() => { Console.WriteLine("取消当前下载任务"); });
+            cts.Token.Register(() => { HandyControl.Controls.Growl.Info("取消当前下载任务！", "ToolsGrowl"); });
             ct = cts.Token;
 
             var grids = MainGrid.Children.OfType<Grid>().ToList();
@@ -297,7 +301,10 @@ namespace Jvedio
                         }
 
                         LoadingStackPanel.Visibility = Visibility.Hidden;
-                        if (!cts.IsCancellationRequested) new PopupWindow(this, $"扫描出 {totalnum} 个，导入 {insertnum} 个",true).Show();
+                        if (!cts.IsCancellationRequested) {
+                            HandyControl.Controls.Growl.Info($"扫描出 {totalnum} 个，导入 {insertnum} 个", "ToolsGrowl");
+
+                        }
                     }
                     catch (OperationCanceledException ex)
                     {
@@ -315,7 +322,10 @@ namespace Jvedio
                     //Access
                     LoadingStackPanel.Visibility = Visibility.Visible;
                     string AccessPath = AccessPathTextBox.Text;
-                    if (!File.Exists(AccessPath)) { new Msgbox(this, $"不存在 ：{AccessPath}").ShowDialog(); break; }
+                    if (!File.Exists(AccessPath)) {
+                        HandyControl.Controls.Growl.Error($"不存在 ：{AccessPath}", "ToolsGrowl");
+                        
+                        break; }
                     try
                     {
                         await Task.Run(() =>
@@ -324,7 +334,10 @@ namespace Jvedio
                         
                     });
                         LoadingStackPanel.Visibility = Visibility.Hidden;
-                        if (!cts.IsCancellationRequested) new PopupWindow(this, "成功！").Show();
+                        if (!cts.IsCancellationRequested)
+                        {
+                            HandyControl.Controls.Growl.Success("成功！", "ToolsGrowl");
+                        }
 
                     }
                     finally
@@ -337,9 +350,9 @@ namespace Jvedio
                     //NFO
                     if ((bool)NfoRB1.IsChecked)
                     {
-                        if (vieModel.NFOScanPath.Count == 0) { new Msgbox(this, "路径为空！").ShowDialog(); }
+                        if (vieModel.NFOScanPath.Count == 0) {  HandyControl.Controls.Growl.Warning("路径为空！", "ToolsGrowl"); }
                     }
-                    else { if (!File.Exists(NFOPathTextBox.Text)) { new Msgbox(this, $"文件不存在{NFOPathTextBox.Text}").ShowDialog(); } }
+                    else { if (!File.Exists(NFOPathTextBox.Text)) {HandyControl.Controls.Growl.Warning($"文件不存在{NFOPathTextBox.Text}", "ToolsGrowl"); } }
 
 
                     Running = true;
@@ -377,6 +390,7 @@ namespace Jvedio
 
                         //导入所有 nfo 文件信息
                         double total = 0;
+                        bool importpic = (bool)NFOCopyPicture.IsChecked;
                         await Task.Run(() =>
                         {
                             
@@ -385,12 +399,12 @@ namespace Jvedio
                                 if (File.Exists(item))
                                 {
                                     Movie movie = GetInfoFromNfo(item);
-                                    if (movie != null)
+                                    if (movie != null && !string.IsNullOrEmpty(movie.id))
                                     {
 
                                         DataBase.InsertFullMovie(movie);
                                         //复制并覆盖所有图片
-                                        CopyPicToPath(movie.id, item);
+                                       if(importpic) CopyPicToPath(movie.id, item);
                                         total += 1;
                                         Logger.LogScanInfo($"\n成功导入数据库 => {item}  ");
                                     }
@@ -403,7 +417,9 @@ namespace Jvedio
                         LoadingStackPanel.Visibility = Visibility.Hidden;
                         if (!cts.IsCancellationRequested) {
                             Logger.LogScanInfo($"\n成功导入 {total} 个");
-                            new PopupWindow(this, "成功！").Show(); }
+                            HandyControl.Controls.Growl.Success($"\n成功导入 {total} 个", "ToolsGrowl");
+                        }
+
                     }
                     finally
                     {
@@ -433,7 +449,9 @@ namespace Jvedio
                         });
 
                         LoadingStackPanel.Visibility = Visibility.Hidden;
-                        if (!cts.IsCancellationRequested) new PopupWindow(this, $"扫描出 {totalnum} 个，导入 {insertnum} 个", true).Show();
+                        if (!cts.IsCancellationRequested) {
+                            HandyControl.Controls.Growl.Info($"扫描出 {totalnum} 个，导入 {insertnum} 个");
+                        }
                     }
                     finally
 
@@ -445,70 +463,6 @@ namespace Jvedio
                     break;
 
                 case 4:
-
-                    //if (IsDownLoading()) { new PopupWindow(this, "请等待下载结束！").Show(); break; }
-
-                    //if (new Msgbox(this, "删除不可逆，是否继续？").ShowDialog() == false) { break; }
-
-
-
-                    //string InfoDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "Info.sqlite";
-                    //try
-                    //{
-
-                    //    //数据库管理
-                    //    var cb = CheckBoxStackPanel.Children.OfType<CheckBox>().ToList();
-
-                    //    if ((bool)cb[0].IsChecked)
-                    //    {
-                    //        //重置信息
-                    //        DataBase 
-                    //        cdb.DeleteTable("movie");
-                    //        cdb.CreateTable(StaticVariable.SQLITETABLE_MOVIE);
-                    //        
-                    //    }
-
-                    //    if ((bool)cb[1].IsChecked)
-                    //    {
-                    //        //删除不存在影片
-                    //        DataBase cdb = new DataBase("");
-                    //        var movies = cdb.SelectMoviesBySql("select * from movie");
-                    //        movies.ForEach(movie =>
-                    //        {
-                    //            if (!File.Exists(movie.filepath))
-                    //            {
-                    //                cdb.DelInfoByType("movie", "id", movie.id);
-                    //            }
-                    //        });
-                    //        
-
-
-
-                    //    }
-
-                    //    if ((bool)cb[2].IsChecked)
-                    //    {
-                    //        //Vaccum
-                    //        DataBase 
-                    //        cdb.Vaccum();
-                    //        
-                    //        cdb = new DataBase("Image");
-                    //        cdb.Vaccum();
-                    //        
-                    //    }
-
-                    //    if (!cts.IsCancellationRequested) new PopupWindow(this, "成功！").Show();
-                    //}
-                    //finally 
-                    //{
-                    //    cts.Dispose();
-                    //    Running = false;
-                    //}
-
-                    //Main main = null;
-                    //Window window = Jvedio.GetWindow.Get("Main");
-                    //if (window != null) main = (Main)window;
-                    //main?.vieModel.Reset();
 
                     break;
 
@@ -527,7 +481,7 @@ namespace Jvedio
                         catch { CanScan = false; }
                     });
 
-                    if (!CanScan) { LoadingStackPanel.Visibility = Visibility.Hidden; new Msgbox(this, "权限不够！").ShowDialog(); break; }
+                    if (!CanScan) { LoadingStackPanel.Visibility = Visibility.Hidden;HandyControl.Controls.Growl.Error($"权限不够！"); break; }
 
 
                     bool IsEurope = (bool)ScanTypeRadioButton.IsChecked ? false : true;
@@ -546,7 +500,7 @@ namespace Jvedio
                         });
 
                         LoadingStackPanel.Visibility = Visibility.Hidden;
-                        if (!cts.IsCancellationRequested) new PopupWindow(this, $"扫描出 {totalnum} 个，导入 {insertnum} 个", true).Show();
+                        if (!cts.IsCancellationRequested) { HandyControl.Controls.Growl.Info($"扫描出 {totalnum} 个，导入 {insertnum} 个"); }
                     }
                     finally
                     {
@@ -617,30 +571,30 @@ namespace Jvedio
                 {
                     case 0:
                         filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else new PopupWindow(this, "不存在").Show();
+                        if (File.Exists(filepath)) Process.Start(filepath); else  HandyControl.Controls.Growl.Error("不存在");
                         break;
 
                     case 1:
                         filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\DataBase\\{DateTime.Now.ToString("yyyy -MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else new PopupWindow(this, "不存在").Show();
+                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在");
                         break;
                     case 2:
                         filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else new PopupWindow(this, "不存在").Show();
+                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在");
                         break;
 
                     case 3:
                         filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else new PopupWindow(this, "不存在").Show();
+                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在");
                         break;
 
                     case 4:
-                        new PopupWindow(this, "无报告").Show();
+                        HandyControl.Controls.Growl.Info("无报告");
                         break;
 
                     case 5:
                         filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else new PopupWindow(this, "不存在").Show();
+                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在");
                         break;
 
                     default:
@@ -703,22 +657,27 @@ namespace Jvedio
             if (files != null)
             {
                 var piclist = files.Where(s => ImageExtList.Contains(Path.GetExtension(s))).ToList();
-
-                piclist.ForEach(arg =>
+                if (piclist.Count <= 0) return;
+                foreach (var item in piclist)
                 {
-
-                    if (arg.ToLower().IndexOf("poster") >= 0 || arg.ToLower().IndexOf($"{id.ToLower()}_s") >= 0)
+                    if (!string .IsNullOrEmpty(item))
                     {
-                        try { File.Copy(arg, StaticVariable.BasePicPath + $"SmallPic\\{id}.jpg", true); }
-                        catch { }
+                        if (item.ToLower().IndexOf("poster") >= 0 || item.ToLower().IndexOf($"{id.ToLower()}_s") >= 0)
+                        {
+                            try { File.Copy(item, StaticVariable.BasePicPath + $"SmallPic\\{id}.jpg", true); }
+                            catch { }
 
+                        }
+                        else if (item.ToLower().IndexOf("fanart") >= 0 || item.ToLower().IndexOf($"{id.ToLower()}_b") >= 0)
+                        {
+                            try { File.Copy(item, StaticVariable.BasePicPath + $"BigPic\\{id}.jpg", true); }
+                            catch { }
+                        }
                     }
-                    else if (arg.ToLower().IndexOf("fanart") >= 0 || arg.ToLower().IndexOf($"{id.ToLower()}_b") >= 0)
-                    {
-                        try { File.Copy(arg, StaticVariable.BasePicPath + $"BigPic\\{id}.jpg", true); }
-                        catch { }
-                    }
-                });
+
+                }
+
+
 
 
             }
@@ -874,8 +833,8 @@ namespace Jvedio
 
         private void DownloadMany(object sender, RoutedEventArgs e)
         {
-            if (Running) { new Msgbox(this, "其他任务正在进行！").ShowDialog(); return; }
-            if (IsDownLoading()) { new PopupWindow(this, "请等待下载结束！").Show(); return; }
+            if (Running) {  HandyControl.Controls.Growl.Warning("其他任务正在进行！"); return; }
+            if (IsDownLoading()) {  HandyControl.Controls.Growl.Warning("请等待下载结束！"); return; }
 
             WindowDownLoad WindowDownLoad = null;
             Window window = Jvedio.GetWindow.Get("WindowDownLoad");
@@ -903,7 +862,8 @@ namespace Jvedio
         {
             cts.Cancel();
             LoadingStackPanel.Visibility = Visibility.Hidden;
-            new PopupWindow(this, "已取消！").Show();
+
+            HandyControl.Controls.Growl.Info("已取消！");
             Running = false;
         }
 

@@ -63,6 +63,8 @@ namespace Jvedio
         public List<string> subsectionlist { get; set; }
 
 
+        public List<LabelMenuItem> LabelMenus { get; set; }
+
         public int vediotype { get; set; }
         public string scandate { get; set; }
 
@@ -126,6 +128,7 @@ namespace Jvedio
         public Movie()
         {
             subsectionlist = new List<string>();
+            LabelMenus = new List<LabelMenuItem>();
         }
 
     }

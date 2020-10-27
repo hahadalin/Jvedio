@@ -28,6 +28,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.IO.Compression;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Jvedio
 {
@@ -57,6 +58,8 @@ namespace Jvedio
         public bool IsMouseDown = false;
         public Point MosueDownPoint;
 
+        public bool CanRateChange = false;
+        public bool IsToUpdate = false;
 
         public CancellationTokenSource RefreshScanCTS;
         public CancellationToken RefreshScanCT;
@@ -417,16 +420,23 @@ namespace Jvedio
                         for (int i = 0; i < movies.Count; i++)
                         {
                             Movie movie = movies[i];
-                            movie.smallimage = GetBitmapImage(movie.id, "SmallPic");
-                            movie.bigimage = GetBitmapImage(movie.id, "BigPic");
-                            App.Current.Dispatcher.Invoke((Action)delegate
+                            if (movie != null)
                             {
-                                if (vieModel.CurrentMovieList.Count > i)
+                                movie.smallimage = GetBitmapImage(movie.id, "SmallPic");
+                                movie.bigimage = GetBitmapImage(movie.id, "BigPic");
+                                if (App.Current != null)
                                 {
-                                    vieModel.CurrentMovieList[i] = null;
-                                    vieModel.CurrentMovieList[i] = movie;
+                                    App.Current.Dispatcher.Invoke((Action)delegate
+                                    {
+                                        if (vieModel.CurrentMovieList.Count > i)
+                                        {
+                                            vieModel.CurrentMovieList[i] = null;
+                                            vieModel.CurrentMovieList[i] = movie;
+                                        }
+                                    });
                                 }
-                            });
+
+                            }
                         }
                     }
                     else if (Properties.Settings.Default.ShowImageMode == "预览图")
@@ -672,7 +682,7 @@ namespace Jvedio
                 await Task.Run(() =>
                 {
                     List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First()), RefreshScanCT);
-                    Scan.DistinctMovieAndInsert(filepaths, RefreshScanCT);
+                    double num=Scan.DistinctMovieAndInsert(filepaths, RefreshScanCT);
                     vieModel.IsScanning = false;
 
                     if (Properties.Settings.Default.AutoDeleteNotExistMovie)
@@ -689,7 +699,10 @@ namespace Jvedio
 
                     }
 
-                    this.Dispatcher.BeginInvoke(new Action(() => { vieModel.Reset(); }), System.Windows.Threading.DispatcherPriority.Render);
+                    this.Dispatcher.BeginInvoke(new Action(() => { 
+                        vieModel.Reset();
+                        if(num>0) HandyControl.Controls.Growl.Info($"扫描并导入 {num} 个视频，详细请看 log\\scanlog\\ 文件夹当天日志文件");
+                    }), System.Windows.Threading.DispatcherPriority.Render);
 
 
                 }, RefreshScanCTS.Token);
@@ -1018,7 +1031,7 @@ namespace Jvedio
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.CloseToTaskBar & this.IsVisible == true)
+            if (!IsToUpdate && Properties.Settings.Default.CloseToTaskBar && this.IsVisible == true)
             {
                 NotifyIcon.Visibility = Visibility.Visible;
                 this.Hide();
@@ -1475,8 +1488,23 @@ namespace Jvedio
 
         public void Label_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            HandyControl.Controls.Tag Tag = (HandyControl.Controls.Tag)sender;
-            string tag = Tag.Content.ToString();
+            string type = sender.GetType().ToString();
+            string tag = "";
+            if(type== "System.Windows.Controls.Label")
+            {
+                Label Tag = (Label)sender;
+                tag = Tag.Content.ToString();
+                Match match = Regex.Match(tag, @"\( \d+ \)");
+                if (match != null && match.Value!="")
+                {
+                    tag = tag.Replace(match.Value, "");
+                }
+            }
+            else if(type== "HandyControl.Controls.Tag")
+            {
+                HandyControl.Controls.Tag Tag = (HandyControl.Controls.Tag)sender;
+                tag = Tag.Content.ToString();
+            }
             vieModel = new VieModel_Main();
             vieModel.GetMoviebyLabel(tag);
             this.DataContext = vieModel;
@@ -2976,7 +3004,7 @@ namespace Jvedio
                             {
                                 List<string> originlabel = LabelToList(movie.label);
                                 List<string> newlabel = LabelToList(di.Text);
-                                movie.label = ListToLabel(originlabel.Except(newlabel).ToList());
+                                movie.label = string.Join(" ", originlabel.Except(newlabel).ToList());
                                 DataBase.UpdateMovieByID(item.id, "label", movie.label, "String");
                                 break;
                             }
@@ -3015,7 +3043,7 @@ namespace Jvedio
                             {
                                 List<string> originlabel = LabelToList(movie.label);
                                 List<string> newlabel = LabelToList(di.Text);
-                                movie.label = ListToLabel(originlabel.Union(newlabel).ToList());
+                                movie.label = string.Join(" ", originlabel.Union(newlabel).ToList());
                                 originlabel.ForEach(arg => Console.WriteLine(arg));
                                 newlabel.ForEach(arg => Console.WriteLine(arg));
                                 originlabel.Union(newlabel).ToList().ForEach(arg => Console.WriteLine(arg));
@@ -3032,20 +3060,15 @@ namespace Jvedio
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
         }
 
-        public string ListToLabel(List<string> label)
-        {
-            string result = "";
-            label.ForEach(arg =>
-            {
-                string l = arg.Replace(" ", "");
-                result += l + " ";
-            });
-            return result.Length > 0 ? result.Substring(0, result.Length - 1) : result;
-        }
+
+
+
 
         public List<string> LabelToList(string label)
         {
+
             List<string> result = new List<string>();
+            if (string.IsNullOrEmpty(label)) return result;
             if (label.IndexOf(' ') > 0)
             {
                 foreach (var item in label.Split(' '))
@@ -3299,7 +3322,7 @@ namespace Jvedio
             Properties.Settings.Default.ActorEditMode = false;
             Properties.Settings.Default.Save();
 
-            if (Properties.Settings.Default.CloseToTaskBar & this.IsVisible == true)
+            if (!IsToUpdate && Properties.Settings.Default.CloseToTaskBar && this.IsVisible == true)
             {
                 e.Cancel = true;
                 NotifyIcon.Visibility = Visibility.Visible;
@@ -3693,14 +3716,9 @@ namespace Jvedio
                         }
                         catch { }
                     }
-
-
-
-
-
-
                     Process.Start(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
-                    this.Close();
+                    IsToUpdate = true;
+                    Application.Current.Shutdown();//直接关闭
                 }
                 catch { MessageBox.Show("找不到 JvedioUpdate.exe"); }
                 
@@ -4344,6 +4362,149 @@ namespace Jvedio
             //}
 
         }
+
+        private void Rate_ValueChanged(object sender, HandyControl.Data.FunctionEventArgs<double> e)
+        {
+            if (!CanRateChange) return;
+            HandyControl.Controls.Rate rate = (HandyControl.Controls.Rate)sender;
+            StackPanel stackPanel = rate.Parent as StackPanel;
+            StackPanel sp = stackPanel.Parent as StackPanel;
+            TextBox textBox = sp.Children.OfType<TextBox>().First();
+
+            if (vieModel.CurrentMovieList != null && vieModel.CurrentMovieList.Count > 0)
+            {
+                foreach (var item in vieModel.CurrentMovieList)
+                {
+                    if (item != null)
+                    {
+                        if (item.id.ToUpper() == textBox.Text.ToUpper())
+                        {
+                            DataBase.UpdateMovieByID(item.id, "favorites", item.favorites, "string");
+                            break;
+                        }
+                    }
+
+
+                }
+
+            }
+            CanRateChange = false;
+
+
+
+        }
+
+        private void StackPanel_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            CanRateChange = true;
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            MenuItem _mnu = sender as MenuItem;
+            MenuItem mnu = _mnu.Parent as MenuItem;
+            StackPanel sp = null;
+            if (mnu != null)
+            {
+                sp = ((ContextMenu)mnu.Parent).PlacementTarget as StackPanel;
+                if (sp != null)
+                {
+
+                    var TB = sp.Children.OfType<TextBox>().First();
+                    Movie CurrentMovie = GetMovieFromVieModel(TB.Text);
+                    if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedMovie.Add(CurrentMovie);
+
+
+                }
+            }
+
+
+            LabelGrid.Visibility = Visibility.Visible;
+            for (int i = 0; i < vieModel.LabelList.Count; i++)
+            {
+                ContentPresenter c = (ContentPresenter)LabelItemsControl.ItemContainerGenerator.ContainerFromItem(LabelItemsControl.Items[i]);
+                WrapPanel wrapPanel = FindElementByName<WrapPanel>(c, "LabelWrapPanel");
+                if (wrapPanel != null)
+                {
+                    ToggleButton toggleButton = wrapPanel.Children.OfType<ToggleButton>().First();
+                    toggleButton.IsChecked = false;
+                }
+            }
+
+
+        }
+
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            ContextMenu contextMenu = menuItem.Parent as ContextMenu;
+            HandyControl.Controls.Tag tag = contextMenu.PlacementTarget as HandyControl.Controls.Tag;
+            if (tag.IsSelected) tag.IsSelected = false;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+
+
+                    //获得选中的标签
+                    List<string> originLabels = new List<string>();
+                    for (int i = 0; i < vieModel.LabelList.Count; i++)
+                    {
+                        ContentPresenter c = (ContentPresenter)LabelItemsControl.ItemContainerGenerator.ContainerFromItem(LabelItemsControl.Items[i]);
+                        WrapPanel wrapPanel = FindElementByName<WrapPanel>(c, "LabelWrapPanel");
+                        if (wrapPanel != null)
+                        {
+                            ToggleButton toggleButton = wrapPanel.Children.OfType<ToggleButton>().First();
+                            if ((bool)toggleButton.IsChecked)
+                            {
+                                Match match = Regex.Match(toggleButton.Content.ToString(), @"\( \d+ \)");
+                                if (match != null && match.Value != "")
+                                {
+                                    string label = toggleButton.Content.ToString().Replace(match.Value, "");
+                                    if (!originLabels.Contains(label)) originLabels.Add(label);
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (originLabels.Count <= 0)
+                    {
+                        HandyControl.Controls.Growl.Warning("请选择标签！");
+                        return;
+                    }
+
+
+                    foreach (Movie movie in vieModel.SelectedMovie)
+                    {
+                        List<string> labels = LabelToList(movie.label);
+                        labels = labels.Union(originLabels).ToList();
+                        movie.label = string.Join(" ", labels);
+                        DataBase.UpdateMovieByID(movie.id, "label", movie.label, "String");
+                    }
+                    HandyControl.Controls.Growl.Info($"成功添加标签！");
+                    if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
+                    LabelGrid.Visibility = Visibility.Hidden;
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            LabelGrid.Visibility = Visibility.Hidden;
+        }
+
+
+        WindowBatch  WindowBatch;
+
+        private void OpenBatching(object sender, RoutedEventArgs e)
+        {
+            if (WindowBatch != null) { WindowBatch.Close(); }
+            WindowBatch = new WindowBatch();
+            WindowBatch.Show();
+        }
+
     }
 
     public class DownLoadProgress
@@ -4354,6 +4515,26 @@ namespace Jvedio
 
     }
 
+
+    public class BiggerWidthConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null) return 0;
+            double width = 0;
+            double.TryParse(value.ToString(), out width);
+            return width;
+                
+        }
+
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+
+
+    }
 
 
     public class BoolToVisibilityConverter : IValueConverter
@@ -4933,6 +5114,11 @@ namespace Jvedio
         {
             return null;
         }
+    }
+
+    public class LabelMenuItem
+    {
+        public string Header { get; set; }
     }
 
 

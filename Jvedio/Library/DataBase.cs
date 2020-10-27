@@ -231,6 +231,7 @@ namespace Jvedio
                     while (sr.Read())
                     {
                         int vt = 1;
+                        int favorites = 0;
                         Movie movie = new Movie()
                         {
                             id = sr["id"].ToString(),
@@ -241,7 +242,9 @@ namespace Jvedio
                             subsection=sr["subsection"].ToString()
                         };
                         int.TryParse(sr["releasedate"].ToString(), out vt);
+                        int.TryParse(sr["favorites"].ToString(), out favorites);
                         movie.vediotype = vt;
+                        movie.favorites = favorites;
                         result.Add(movie);
                     }
                     sr.Close();

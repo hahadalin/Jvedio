@@ -170,6 +170,7 @@ namespace Jvedio.ViewModel
         #region "ObservableCollection"
 
 
+
         public ObservableCollection<string> _DataBases;
 
 
@@ -880,10 +881,7 @@ namespace Jvedio.ViewModel
         /// </summary>
         public void FlipOver()
         {
-
-
-
-
+            GetLabelList();
             if (Properties.Settings.Default.ShowImageMode == "列表模式")
             {
                 ShowDetailsData();
@@ -1280,6 +1278,7 @@ namespace Jvedio.ViewModel
             Statistic();
             MovieList = DataBase.SelectPartialInfo("SELECT * FROM movie");
             FlipOver();
+
         }
 
 

@@ -558,7 +558,7 @@
                 <RadioButton Click="LabelMouseUp" Content="翻译"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
                 <RadioButton Click="LabelMouseUp" Content="人工智能"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
                 <RadioButton Click="LabelMouseUp" Content="视频处理"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
-                <RadioButton  Visibility="Collapsed"  Click="LabelMouseUp" Content="自定外观"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
+                <RadioButton  Visibility="Visible"  Click="LabelMouseUp" Content="自定外观"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
             </StackPanel>
 
 
@@ -971,7 +971,7 @@
                     </StackPanel>
 
 
-                    <StackPanel x:Name="ViewPanel" Background="Transparent" Visibility="Visible">
+                    <StackPanel x:Name="ViewPanel" Background="Transparent" Visibility="Hidden">
 
                         <StackPanel Orientation="Vertical"  Margin="20 5">
                             <CheckBox IsChecked="{Binding MainImageAutoMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="图片自动缩放" Height="40" VerticalContentAlignment="Center"/>
@@ -986,7 +986,7 @@
                             <TextBlock Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="0 2 20 0" Text="每页影片数目" />
                             <hc:NumericUpDown Maximum="100" Minimum="4" Increment="1"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"   BorderThickness="0" Value="{Binding DisplayNumber, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"    />
                             <TextBlock   Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="每次滚动数目"/>
-                            <hc:NumericUpDown Maximum="10" Minimum="1" Increment="1"   Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"     BorderThickness="0" Value="{Binding FlowNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"       />
+                            <hc:NumericUpDown Maximum="25" Minimum="1" Increment="1"   Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"     BorderThickness="0" Value="{Binding FlowNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"       />
                             <TextBlock  Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="每页演员数目"/>
                             <hc:NumericUpDown Maximum="100" Minimum="5" Increment="5"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"      BorderThickness="0" Value="{Binding ActorDisplayNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Width="100"       />
                         </WrapPanel>
@@ -1159,7 +1159,7 @@
 
                     </StackPanel>
 
-                    <StackPanel x:Name="CustomPanel" Background="Transparent" Visibility="Collapsed" VerticalAlignment="Stretch" Height="auto" Margin="20 5">
+                    <StackPanel x:Name="CustomPanel" Background="Transparent" Visibility="Visible" VerticalAlignment="Stretch" Height="auto" Margin="20 5">
 
 
 
@@ -1248,11 +1248,12 @@
                                 <CheckBox IsChecked="{Binding DisplayTitle, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="10 5 10 5" Content="名称" Height="40" VerticalContentAlignment="Center"/>
                                 <CheckBox IsChecked="{Binding DisplayDate, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="10 5 10 5" Content="日期" Height="40" VerticalContentAlignment="Center"/>
                                 <CheckBox IsChecked="{Binding DisplayStamp, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="10 5 10 5" Content="标签戳" Height="40" VerticalContentAlignment="Center"/>
+                                <CheckBox IsChecked="{Binding DisplayFavorites, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="10 5 10 5" Content="喜爱" Height="40" VerticalContentAlignment="Center"/>
                             </WrapPanel>
                         </Border>
 
 
-                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10">
+                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10" Visibility="Collapsed">
                             <Grid >
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                                     <TextBlock Text="图片大小" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
@@ -1294,7 +1295,7 @@
                         </Border>
 
 
-                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10">
+                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10" Visibility="Collapsed">
                             <StackPanel Orientation="Vertical">
                                 <WrapPanel Orientation="Horizontal">
                                     <TextBlock Text="名称" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
@@ -1316,7 +1317,7 @@
                             </StackPanel>
                         </Border>
 
-                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10">
+                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10"  Visibility="Collapsed">
                             <StackPanel Orientation="Vertical">
                                 <WrapPanel Orientation="Horizontal">
                                     <TextBlock Text="识别码" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
@@ -1344,7 +1345,7 @@
                             </StackPanel>
                         </Border>
 
-                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10">
+                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10"  Visibility="Collapsed">
                             <StackPanel Orientation="Vertical">
                                 <WrapPanel Orientation="Horizontal">
                                     <TextBlock Text="日期" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
@@ -1376,7 +1377,7 @@
 
 
 
-                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10">
+                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10"  Visibility="Collapsed">
                             <Grid >
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                                     <TextBlock Text="外部间隔" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
@@ -1415,7 +1416,7 @@
 
 
 
-                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10">
+                        <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10"  Visibility="Collapsed">
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="选中框" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />

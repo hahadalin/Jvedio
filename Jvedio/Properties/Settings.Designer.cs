@@ -1990,5 +1990,29 @@ namespace Jvedio.Properties {
                 this["AsyncShowImage"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayFavorites {
+            get {
+                return ((bool)(this["DisplayFavorites"]));
+            }
+            set {
+                this["DisplayFavorites"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int BatchIndex {
+            get {
+                return ((int)(this["BatchIndex"]));
+            }
+            set {
+                this["BatchIndex"] = value;
+            }
+        }
     }
 }

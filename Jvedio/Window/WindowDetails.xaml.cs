@@ -746,7 +746,33 @@ namespace Jvedio
         }
 
 
+        private void SetToBigAndSmallPic(object sender, RoutedEventArgs e)
+        {
+            MenuItem m1 = sender as MenuItem;
+            MenuItem m2 = m1.Parent as MenuItem;
 
+            ContextMenu contextMenu = m2.Parent as ContextMenu;
+
+            Border border = contextMenu.PlacementTarget as Border;
+            Grid grid = border.Parent as Grid;
+            TextBlock textBox = grid.Children.OfType<TextBlock>().First();
+
+            int idx = int.Parse(textBox.Text);
+
+            string path = vieModel.DetailMovie.extraimagePath[idx];
+
+            try
+            {
+                File.Copy(path, BasePicPath + $"SmallPic\\{vieModel.DetailMovie.id}.jpg", true);
+                File.Copy(path, BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg", true);
+                RefreshUI(path,path);
+                HandyControl.Controls.Growl.Info("已成功设置！", "DetailsGrowl");
+            }
+            catch (Exception ex)
+            {
+                HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl");
+            }
+        }
 
 
 
@@ -769,16 +795,14 @@ namespace Jvedio
             try
             {
                 File.Copy(path, BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg", true);
-                //更新到 UI
+                ////BigImage.Source = new BitmapImage(new Uri(path));
+                //DetailMovie detailMovie = vieModel.DetailMovie;
+                //detailMovie.bigimage = null;
 
-                //BigImage.Source = new BitmapImage(new Uri(path));
-                DetailMovie detailMovie = vieModel.DetailMovie;
-                detailMovie.bigimage = null;
+                //vieModel.DetailMovie = null;
 
-                vieModel.DetailMovie = null;
-
-                detailMovie.bigimage = StaticClass.BitmapImageFromFile(path);
-                vieModel.DetailMovie = detailMovie;
+                //detailMovie.bigimage = StaticClass.BitmapImageFromFile(path);
+                //vieModel.DetailMovie = detailMovie;
 
                 RefreshUI("", path);
                 HandyControl.Controls.Growl.Info("已成功设置！", "DetailsGrowl");
@@ -800,11 +824,18 @@ namespace Jvedio
                     if (windowMain.vieModel.CurrentMovieList[i]?.id == vieModel.DetailMovie.id)
                     {
                         Movie movie = windowMain.vieModel.CurrentMovieList[i];
+                        BitmapSource smallimage = movie.smallimage;
+                        BitmapSource bigimage = movie.bigimage;
+
                         if (smallPicPath != "") movie.bigimage = null;
                         if (BigPicPath != "") movie.smallimage = null;
                         windowMain.vieModel.CurrentMovieList[i] = null;
                         if (smallPicPath != "") movie.smallimage = StaticClass.BitmapImageFromFile(smallPicPath);
                         if (BigPicPath != "") movie.bigimage = StaticClass.BitmapImageFromFile(BigPicPath);
+
+                        if (movie.bigimage == null && bigimage != null) movie.bigimage = bigimage;
+                        if (movie.smallimage == null && smallimage != null) movie.smallimage = smallimage;
+
                         windowMain.vieModel.CurrentMovieList[i] = movie;
                     }
                 }

@@ -206,7 +206,7 @@ namespace Jvedio
 
         public static VedioType GetVedioType(string FileName)
         {
-
+            if (string.IsNullOrEmpty(FileName)) return VedioType.所有;
             if (FileName.ToLower().IndexOf("s2m") >= 0) return VedioType.步兵;
             if (FileName.ToLower().IndexOf("t28") >= 0) return VedioType.骑兵;
 

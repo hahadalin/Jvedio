@@ -232,6 +232,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource_String.resx</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
+    <Compile Include="ViewModel\VieModel_Batch.cs" />
     <Compile Include="Window\DialogInput.xaml.cs">
       <DependentUpon>DialogInput.xaml</DependentUpon>
     </Compile>
@@ -282,6 +284,9 @@
     <Compile Include="Window\WindowSearch.xaml.cs">
       <DependentUpon>WindowSearch.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Window\WindowBatch.xaml.cs">
+      <DependentUpon>WindowBatch.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Window\WindowTools.xaml.cs">
       <DependentUpon>WindowTools.xaml</DependentUpon>
     </Compile>
@@ -297,6 +302,10 @@
     <Page Include="Window\WindowSearch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\WindowBatch.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Window\Window_DBManagement.xaml">
       <SubType>Designer</SubType>

@@ -28,7 +28,7 @@ namespace Jvedio
              SearchPattern = new List<string>();
             string ScanVetioType = Resource_String.ScanVetioType;
             foreach (var item in ScanVetioType.Split(','))
-                SearchPattern.Add("." + item);
+                SearchPattern.Add("." + item.ToLower());
         }
 
 
@@ -103,7 +103,7 @@ namespace Jvedio
                 return FilePathList
                     .Where(s => SearchPattern.Contains(Path.GetExtension(s).ToLower()))
                     .Where(s => !File.Exists(s) || new FileInfo(s).Length >= MinFileSize)
-                    .Where(s => Identify.GetFanhao(new FileInfo(s).Name).ToUpper() == ID.ToUpper())
+                    .Where(s => { try { return Identify.GetFanhao(new FileInfo(s).Name).ToUpper() == ID.ToUpper(); } catch(Exception ex) { Logger.LogScanInfo($"错误路径：{s}"); return false; } })
                     .OrderBy(s => s).ToList();
             }
         }

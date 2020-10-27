@@ -255,8 +255,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-
-                <Border  Cursor="Hand"  Grid.Column="0" Height="60"      ToolTip="上一个"    Width="30" Margin="5 0" CornerRadius="10" MouseLeftButtonUp="PreviewMovie">
+                <Grid Grid.Column="0" PreviewMouseWheel="Border_PreviewMouseWheel" Background="{DynamicResource BackgroundMain}">
+                    <Border  Cursor="Hand"  Height="60"      ToolTip="上一个"    Width="30" Margin="5 0" CornerRadius="10" MouseLeftButtonUp="PreviewMovie">
                     <Border.Style>
                         <Style TargetType="Border">
                             <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
@@ -270,7 +270,7 @@
 
                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" Canvas.Left="9" Canvas.Top="11" Cursor="Hand"/>
                 </Border>
-
+                </Grid>
 
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
@@ -286,11 +286,11 @@
                             <ColumnDefinition Width="50"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Opacity="0.2" VerticalAlignment="Center" TextAlignment="Left" MouseMove="MoveWindow" FontWeight="Bold" Grid.Column="0"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 60 0" ></TextBlock>
+                        <TextBlock Opacity="0.5" VerticalAlignment="Center" TextAlignment="Left" MouseMove="MoveWindow" FontWeight="Bold" Grid.Column="0"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 60 0" ></TextBlock>
 
-                        <Button Opacity="0.2" VerticalAlignment="Center" Click="EditInfo" Cursor="Hand" BorderThickness="0"  Grid.Column="1" FontSize="16" Content="编辑"  Width="auto" HorizontalAlignment="Stretch" Background="Transparent" Style="{DynamicResource ButtonStyle1}"/>
+                        <Button Opacity="0.8" VerticalAlignment="Center" Click="EditInfo" Cursor="Hand" BorderThickness="0"  Grid.Column="1" FontSize="16" Content="编辑"  Width="auto" HorizontalAlignment="Stretch" Background="Transparent" Style="{DynamicResource ButtonStyle1}"/>
 
-                        <Border Opacity="0.2"  Grid.Column="2"  ToolTip="返回"   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="CloseWindow">
+                        <Border Opacity="0.8"  Grid.Column="2"  ToolTip="返回"   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="CloseWindow">
                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Border>
 
@@ -458,6 +458,7 @@
                                                                     <ContextMenu>
                                                                         <MenuItem Header="打开位置" Click="OpenExtraImagePath" ></MenuItem>
                                                                         <MenuItem Header="设置为" >
+                                                                            <MenuItem Header="缩略+海报  " Click="SetToBigAndSmallPic" ></MenuItem>
                                                                             <MenuItem Header="缩略图"  Click="SetToSmallPic" ></MenuItem>
                                                                             <MenuItem Header="海报图" Click="SetToBigPic" ></MenuItem>
                                                                         </MenuItem>
@@ -502,7 +503,7 @@
 
 
 
-                            <Border Margin="0 0 0 20" Grid.Column="0" Background="Transparent"  BorderBrush="Gray"  PreviewMouseWheel="Border_PreviewMouseWheel">
+                            <Border Margin="0 0 0 20" Grid.Column="0" Background="Transparent"  BorderBrush="Gray" >
                                 <ScrollViewer Height="auto"  Margin="20 0 0 0" HorizontalAlignment="Stretch">
                                     <StackPanel  >
                                         <TextBox Margin="-1 20 0 16" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"></TextBox>
@@ -706,7 +707,7 @@
                                                     <DataTemplate>
                                                         <Border >
                                                             <hc:TagPanel >
-                                                                <hc:Tag Closing="Tag_Closing"  MouseLeftButtonUp="ShowSameLabel" Cursor="Hand"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}" FontSize="16" ShowCloseButton="False" Selectable="False"  Content="{Binding}"/>
+                                                                <hc:Tag Closing="Tag_Closing"  MouseLeftButtonUp="ShowSameLabel" Cursor="Hand"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}" FontSize="16" ShowCloseButton="True" Selectable="False"  Content="{Binding}"/>
                                                             </hc:TagPanel>
                                                         </Border>
                                                     </DataTemplate>
@@ -745,8 +746,11 @@
                             </Border>
 
 
+                            <Grid  PreviewMouseWheel="Border_PreviewMouseWheel" Background="{DynamicResource BackgroundMain}"  Grid.Column="1">
+                                
 
-                            <Border Cursor="Hand" Grid.Column="1" Height="60"      ToolTip="下一个"    Width="30" Margin="5 0" CornerRadius="10"  MouseLeftButtonUp="NextMovie">
+
+                            <Border  Cursor="Hand"  Height="60"      ToolTip="下一个"    Width="30" Margin="5 0" CornerRadius="10"  MouseLeftButtonUp="NextMovie">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
@@ -760,6 +764,7 @@
 
                                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Canvas.Left="11" Canvas.Top="11" Cursor="Hand"/>
                             </Border>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
