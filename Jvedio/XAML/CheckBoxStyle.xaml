@@ -65,7 +65,10 @@
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="gray"/>
-                            <Setter Property="Fill" TargetName="optionMark" Value="{DynamicResource ForegroundSearch}"/>
+                            <Setter Property="Fill" TargetName="optionMark" Value="gray"/>
+                            <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
+                            <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="gray"/>
+                            <Setter Property="Background" TargetName="checkBoxBorder" Value="gray"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="true">
                             <Setter Property="Opacity" TargetName="optionMark" Value="1"/>

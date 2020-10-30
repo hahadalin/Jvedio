@@ -462,6 +462,7 @@
                                                                             <MenuItem Header="缩略图"  Click="SetToSmallPic" ></MenuItem>
                                                                             <MenuItem Header="海报图" Click="SetToBigPic" ></MenuItem>
                                                                         </MenuItem>
+                                                                        <MenuItem Header="删除图片" Click="DeleteImage" ></MenuItem>
                                                                     </ContextMenu>
                                                                 </Border.ContextMenu>
                                                             </Border>

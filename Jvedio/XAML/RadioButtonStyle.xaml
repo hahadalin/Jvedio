@@ -100,7 +100,7 @@
 
                         <Border Grid.Column="0" x:Name="radioButtonBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="Transparent" CornerRadius="100" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,1,2,1" VerticalAlignment="Center">
                             <Grid x:Name="markGrid" Margin="2">
-                                <Rectangle x:Name="optionMark" Fill="Orange" MinWidth="5" MinHeight="30" Opacity="0"/>
+                                <Rectangle x:Name="optionMark"  MinWidth="5" MinHeight="30"/>
                             </Grid>
                         </Border>
                         <Image Source="{DynamicResource ImageSource}"/>
@@ -115,9 +115,9 @@
                             <Setter Property="Background" TargetName="templateRoot" Value="{DynamicResource  BackgroundTitle}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.Disabled.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.Disabled.Border}"/>
-                            <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource RadioButton.Disabled.Glyph}"/>
+                            <!--<Setter Property="Background" TargetName="radioButtonBorder" Value="gray"/>-->
+                            <!--<Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.Disabled.Border}"/>-->
+                            <Setter Property="Fill" TargetName="optionMark" Value="gray"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                         </Trigger>
@@ -127,6 +127,9 @@
                         </Trigger>
                         <Trigger Property="IsChecked" Value="{x:Null}">
                             <Setter Property="Opacity" TargetName="optionMark" Value="0.56"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Fill" TargetName="optionMark" Value="Orange"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -2,8 +2,11 @@
 using LiveCharts;
 using LiveCharts.Wpf;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +24,8 @@ namespace Jvedio
     {
 
 
+        public CancellationTokenSource cts;
+        public CancellationToken ct;
 
         public VieModel_DBManagement vieModel_DBManagement;
 
@@ -57,7 +62,8 @@ namespace Jvedio
             //刷新主界面
             Main main = App.Current.Windows[0] as Main;
             main.vieModel.LoadDataBaseList();
-            if (main.vieModel.DataBases.Count > 1) { 
+            if (main.vieModel.DataBases.Count > 1)
+            {
                 main.DatabaseComboBox.Visibility = Visibility.Visible;
                 main.DatabaseComboBox.SelectedItem = Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First();
 
@@ -81,7 +87,7 @@ namespace Jvedio
             NameBorder.Background = brush;
             Color TargColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Application.Current.Resources["BackgroundMain"].ToString())).Color;
             var ca = new ColorAnimation(TargColor, TimeSpan.FromSeconds(0.75));
-             brush.BeginAnimation(SolidColorBrush.ColorProperty, ca);
+            brush.BeginAnimation(SolidColorBrush.ColorProperty, ca);
 
         }
 
@@ -90,7 +96,8 @@ namespace Jvedio
             if (SecondRow.Height == new GridLength(0))
             {
 
-                Task.Run(() => {
+                Task.Run(() =>
+                {
                     for (int i = 0; i <= 20; i++)
                     {
                         this.Dispatcher.Invoke((Action)delegate { SecondRow.Height = new GridLength(5 * i); });
@@ -100,7 +107,8 @@ namespace Jvedio
             }
             else
             {
-                Task.Run(() => {
+                Task.Run(() =>
+                {
                     for (int i = 20; i >= 0; i--)
                     {
                         this.Dispatcher.Invoke((Action)delegate { SecondRow.Height = new GridLength(5 * i); });
@@ -173,9 +181,9 @@ namespace Jvedio
         private void CartesianChart_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             int num = Properties.Settings.Default.Statictistic_ID_Number;
-            num += (int) (e.Delta/120);
+            num += (int)(e.Delta / 120);
 
-            if(num < 5) num = 5;
+            if (num < 5) num = 5;
             else if (num > 50) num = 50;
 
             Properties.Settings.Default.Statictistic_ID_Number = num;
@@ -241,7 +249,7 @@ namespace Jvedio
                 db.CreateTable(StaticVariable.SQLITETABLE_ACTRESS);
                 db.CreateTable(StaticVariable.SQLITETABLE_LIBRARY);
                 db.CreateTable(StaticVariable.SQLITETABLE_JAVDB);
-                
+
 
                 vieModel_DBManagement.DataBases.Add(name);
 
@@ -253,7 +261,7 @@ namespace Jvedio
 
             }
 
-            
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -332,68 +340,132 @@ namespace Jvedio
             }
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            if (new Msgbox(this, "删除不可逆，是否继续？").ShowDialog() == false) { return; }
-            try
+
+
+            cts = new CancellationTokenSource();
+            cts.Token.Register(() => { HandyControl.Controls.Growl.Info("取消当前任务！", "DBManageGrowl"); });
+            ct = cts.Token;
+
+            //数据库管理
+            var cb = CheckBoxWrapPanel.Children.OfType<CheckBox>().ToList();
+            string path = "";
+            if (vieModel_DBManagement.CurrentDataBase.ToLower() == "info")
+                path = $"{vieModel_DBManagement.CurrentDataBase}";
+            else
+                path = $"DataBase\\{vieModel_DBManagement.CurrentDataBase}";
+            DB db = new DB(path);
+
+
+            if ((bool)cb[1].IsChecked || (bool)cb[2].IsChecked) WaitingPanel.Visibility = Visibility.Visible;
+
+            if ((bool)cb[0].IsChecked)
             {
-                //数据库管理
-                var cb = CheckBoxWrapPanel.Children.OfType<CheckBox>().ToList();
-                string path = "";
-                if (vieModel_DBManagement.CurrentDataBase.ToLower()=="info")
-                     path = $"{vieModel_DBManagement.CurrentDataBase}";
-                else
-                     path = $"DataBase\\{vieModel_DBManagement.CurrentDataBase}";
+                //重置信息
+                db.DeleteTable("movie");
+                db.CreateTable(StaticVariable.SQLITETABLE_MOVIE);
+                HandyControl.Controls.Growl.Success("成功重置信息", "DBManageGrowl");
+            }
 
-
-
-                if ((bool)cb[0].IsChecked)
+            if ((bool)cb[1].IsChecked)
+            {
+                //删除不存在影片
+                long num = 0;
+                await Task.Run(() =>
                 {
-                    //重置信息
-                    DB db = new DB(path);
-                    db.DeleteTable("movie");
-                    db.CreateTable(StaticVariable.SQLITETABLE_MOVIE);
-                    
-                }
 
-                if ((bool)cb[1].IsChecked)
-                {
-                    //删除不存在影片
-                    DB db = new DB(path);
                     var movies = db.SelectMoviesBySql("select * from movie");
-                    movies.ForEach(movie =>
+                    try
                     {
+                        movies.ForEach(movie =>
+                            {
+                        ct.ThrowIfCancellationRequested();
                         if (!File.Exists(movie.filepath))
                         {
                             db.DelInfoByType("movie", "id", movie.id);
+                            num++;
                         }
+
                     });
-                    
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        Console.WriteLine($"{nameof(OperationCanceledException)} thrown with message: {ex.Message}");
+                        return false;
 
+                    }
+                    return true;
+                }, ct);
 
-
-                }
-
-                if ((bool)cb[2].IsChecked)
-                {
-                    //Vaccum
-                    DB db = new DB(path);
-                    db.Vacuum();
-                    db.CloseDB();
-
-
-                }
-                new PopupWindow(this, "成功！").Show();
+                HandyControl.Controls.Growl.Success($"成功删除 {num} 个不存在的影片", "DBManageGrowl");
             }
-            finally
+
+            if ((bool)cb[2].IsChecked)
             {
-                Main main = null;
-                Window window = Jvedio.GetWindow.Get("Main");
-                if (window != null) main = (Main)window;
-                main?.vieModel.Reset();
+                var movies = db.SelectMoviesBySql("select * from movie");
+                StringCollection ScanPath = ReadScanPathFromConfig(vieModel_DBManagement.CurrentDataBase);
+
+                long num = 0;
+
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        movies.ForEach(movie =>
+                        {
+                            ct.ThrowIfCancellationRequested();
+                            if (!IsPathIn(movie.filepath, ScanPath))
+                            {
+                                db.DelInfoByType("movie", "id", movie.id);
+                                num++;
+                            }
+                        });
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        Console.WriteLine($"{nameof(OperationCanceledException)} thrown with message: {ex.Message}");
+                        return false;
+                    }
+                    
+                    return true;
+                }, ct);
+
+
+                HandyControl.Controls.Growl.Success($"成功删除 {num} 个不位于指定目录的影片", "DBManageGrowl");
             }
 
+            db.Vacuum();
+            db.CloseDB();
+            cts.Dispose();
+            WaitingPanel.Visibility = Visibility.Hidden;
 
+            await Task.Run(() => { Task.Delay(500).Wait(); });
+
+            Main main = null;
+            Window window = Jvedio.GetWindow.Get("Main");
+            if (window != null) main = (Main)window;
+            main?.vieModel.Reset();
+
+
+
+        }
+
+        public bool IsPathIn(string path, StringCollection paths)
+        {
+            foreach (var item in paths)
+            {
+                if (path.IndexOf(item) >= 0) return true;
+            }
+            return false;
+        }
+
+
+
+        private void WaitingPanel_Cancel(object sender, RoutedEventArgs e)
+        {
+            cts.Cancel();
+            WaitingPanel.Visibility = Visibility.Hidden;
         }
     }
 

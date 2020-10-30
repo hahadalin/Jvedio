@@ -215,6 +215,9 @@
     <Compile Include="Class\AppHotKey.cs" />
     <Compile Include="Class\JvedioClass.cs" />
     <Compile Include="Class\MediaParse.cs" />
+    <Compile Include="Controls\WaitingPanel.xaml.cs">
+      <DependentUpon>WaitingPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Library\CustomExtension.cs" />
     <Compile Include="Library\DB.cs" />
     <Compile Include="Library\MediaInfo.cs" />
@@ -232,7 +235,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource_String.resx</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\VieModel_Batch.cs" />
     <Compile Include="Window\DialogInput.xaml.cs">
       <DependentUpon>DialogInput.xaml</DependentUpon>
@@ -299,6 +301,10 @@
     <Compile Include="Window\Window_DBManagement.xaml.cs">
       <DependentUpon>Window_DBManagement.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\WaitingPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Window\WindowSearch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

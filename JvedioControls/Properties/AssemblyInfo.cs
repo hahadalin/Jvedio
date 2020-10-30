@@ -7,17 +7,17 @@ using System.Windows;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Jvedio")]
-[assembly: AssemblyDescription("Jvedio 是本地视频管理软件，支持扫描本地视频并导入软件，建立视频库，提取出视频的唯一识别码，自动分类视频，从网上下载信息以及图片，添加标签管理视频，使用人工智能识别演员，支持翻译信息，基于 ffmpeg 截取视频图片，window 桌面端流畅美观的应用软件")]
+[assembly: AssemblyTitle("JvedioControls")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("hitchao")]
-[assembly: AssemblyProduct("Jvedio")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("JvedioControls")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// 将 ComVisible 设置为 false 会使此程序集中的类型
-//对 COM 组件不可见。如果需要从 COM 访问此程序集中的类型
+//将 ComVisible 设置为 false 将使此程序集中的类型
+//对 COM 组件不可见。  如果需要从 COM 访问此程序集中的类型，
 //请将此类型的 ComVisible 特性设置为 true。
 [assembly: ComVisible(false)]
 
@@ -31,13 +31,13 @@ using System.Windows;
 //[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
 
 
-[assembly: ThemeInfo(
+[assembly:ThemeInfo(
     ResourceDictionaryLocation.None, //主题特定资源词典所处位置
-                                     //(未在页面中找到资源时使用，
-                                     //或应用程序资源字典中找到时使用)
+                             //(未在页面中找到资源时使用，
+                             //或应用程序资源字典中找到时使用)
     ResourceDictionaryLocation.SourceAssembly //常规资源词典所处位置
-                                              //(未在页面中找到资源时使用，
-                                              //、应用程序或任何主题专用资源字典中找到时使用)
+                                      //(未在页面中找到资源时使用，
+                                      //、应用程序或任何主题专用资源字典中找到时使用)
 )]
 
 
@@ -51,5 +51,5 @@ using System.Windows;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值
 //通过使用 "*"，如下所示:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.1.0.8")]
-[assembly: AssemblyFileVersion("4.1.0.8")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

@@ -879,8 +879,11 @@ namespace Jvedio.ViewModel
         /// <summary>
         /// 翻页：加载图片以及其他
         /// </summary>
-        public void FlipOver()
+        public bool FlipOver()
         {
+
+
+
             GetLabelList();
             if (Properties.Settings.Default.ShowImageMode == "列表模式")
             {
@@ -916,30 +919,26 @@ namespace Jvedio.ViewModel
 
                         }
 
-                        
+
                         App.Current.Dispatcher.Invoke((Action)delegate
                         {
                             CurrentMovieList = new ObservableCollection<Movie>();
                             CurrentMovieList.AddRange(Movies);
-                            CurrentCount = CurrentMovieList.Count;
-                            Main main = App.Current.Windows[0] as Main;
-                            if (Properties.Settings.Default.ShowImageMode == "预览图") main.ImageSlideTimer.Start();//0.5s后开始展示预览图
-                            IsFlipOvering = false;
-                            main.AsyncLoadImage(); //异步加载图片
-                            main.IsFlowing = false;
-                            main.SetSelected();
+                    CurrentCount = CurrentMovieList.Count;
+                    Main main = App.Current.Windows[0] as Main;
+                    if (Properties.Settings.Default.ShowImageMode == "预览图") main.ImageSlideTimer.Start();//0.5s后开始展示预览图
+                    IsFlipOvering = false;
+                    main.AsyncLoadImage(); //异步加载图片
+                    main.IsFlowing = false;
+                    main.SetSelected();
+                    CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
+                });
 
-                            
-                                CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
-
-
-
-                        });
-
-                    }
+            }
                 });
             }
 
+            return true;
         }
 
 
@@ -1080,10 +1079,12 @@ namespace Jvedio.ViewModel
 
         public void GetFavoritesMovie()
         {
-            TextType = "我的喜爱";
-            Statistic();
-            MovieList = DataBase.SelectPartialInfo("SELECT * from movie where favorites>0 and favorites<=5");
-            FlipOver();
+            Task.Run(() => { 
+                TextType = "我的喜爱";
+                Statistic();
+                MovieList = DataBase.SelectPartialInfo("SELECT * from movie where favorites>0 and favorites<=5");
+                FlipOver();
+            });
         }
 
         public void GetMoviebyStudio(string moviestudio)
@@ -1272,13 +1273,14 @@ namespace Jvedio.ViewModel
 
 
 
-        public void Reset()
+        public  void Reset()
         {
-            TextType = "所有视频";
-            Statistic();
-            MovieList = DataBase.SelectPartialInfo("SELECT * FROM movie");
-            FlipOver();
-
+            Task.Run(() => { 
+                TextType = "所有视频";
+                Statistic();
+                MovieList = DataBase.SelectPartialInfo("SELECT * FROM movie");
+                FlipOver();
+            });
         }
 
 

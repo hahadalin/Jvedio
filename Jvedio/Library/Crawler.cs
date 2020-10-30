@@ -72,16 +72,21 @@ namespace Jvedio
         }
 
 
-        protected virtual async Task<string> GetMovieCode()
+        protected virtual async Task<(string, int)> GetMovieCode()
         {
-            return await Task.Run(() => { return ""; });
+            return await Task.Run(() => { return ("",404); });
         }
 
-        public virtual async Task<bool> Crawl()
+        public virtual async Task<bool> Crawl(Action<int> callback=null, Action<int> ICcallback = null)
         {
             (Content, StatusCode) = await Net.Http(Url,Cookie: Cookies);
             if (StatusCode == 200 & Content != "") { SaveInfo(GetInfo(), webSite); return true; }
-            else { resultMessage = "Get html Fail"; Logger.LogN($"URL={Url},Message-{resultMessage}"); return false; }
+            else { 
+                resultMessage = "Get html Fail"; 
+                Logger.LogN($"URL={Url},Message-{resultMessage}");
+                if(callback!=null) callback(StatusCode);
+                return false; 
+            }
         }
 
         protected virtual  Dictionary<string,string> GetInfo()
@@ -149,15 +154,16 @@ namespace Jvedio
             webSite = WebSite.DB;
         }
 
-        protected override async Task<string> GetMovieCode()
+        protected override async Task<(string,int)> GetMovieCode()
         {
             string result = "";
+            int statusCode = 404;
             //先从数据库获取
             result = DataBase.SelectInfoByID("code", "javdb", ID);
             if (result == "")
             {
                 //从网络获取
-                string content; int statusCode;
+                string content; 
                 (content, statusCode) = await Net.Http(Url, Cookie: Cookies);
 
                 if (statusCode == 200 & content != "")
@@ -167,7 +173,7 @@ namespace Jvedio
             //存入数据库
             if (result != "") { DataBase.SaveMovieCodeByID(ID, "javdb", result); }
             
-            return result;
+            return (result, statusCode);
         }
 
         protected string GetMovieCodeFromSearchResult(string content)
@@ -193,17 +199,19 @@ namespace Jvedio
 
 
 
-        public override async Task<bool> Crawl()
+        public override async Task<bool> Crawl(Action<int> callback=null,Action<int> ICcallback=null)
         {
-            MovieCode=await GetMovieCode();
+            int statuscode = 404;
+            (MovieCode,statuscode) = await GetMovieCode();
             if (MovieCode != "")
             {
                 //解析
                 Url = RootUrl.DB + $"v/{MovieCode}";
-                return await base.Crawl();
+                return await base.Crawl(callback);
             }
             else
             {
+                if (ICcallback != null) ICcallback(statuscode);
                 return false;
             }
         }
@@ -234,8 +242,9 @@ namespace Jvedio
             webSite = WebSite.Library;
         }
 
-        protected override async Task<string> GetMovieCode()
+        protected override async Task<(string,int)> GetMovieCode()
         {
+            int StatusCode = 404;
             string result;
             //先从数据库获取
             result = DataBase.SelectInfoByID("code", "library", ID);
@@ -243,7 +252,7 @@ namespace Jvedio
             {
                 Console.WriteLine(Url);
                 //从网络获取
-                string Location; int StatusCode;
+                string Location; 
                 (Location, StatusCode) = await Net.Http(Url, Mode: HttpMode.RedirectGet);
 
                 if (Location.IndexOf("=") >= 0) result = Location.Split('=')[1];
@@ -252,21 +261,23 @@ namespace Jvedio
             //存入数据库
             if (result != "" && result.IndexOf("zh-cn") < 0) { DataBase.SaveMovieCodeByID(ID, "library", result);  } else { result = ""; }
             
-            return result;
+            return (result,StatusCode);
         }
 
 
-        public override async Task<bool> Crawl()
+        public override async Task<bool> Crawl(Action<int> callback =null, Action<int> ICcallback = null)
         {
-            MovieCode = await GetMovieCode();
+            int statuscode = 404;
+            (MovieCode, statuscode) = await GetMovieCode();
             if (MovieCode != "")
             {
                 //解析
                 Url = RootUrl.Library + $"?v={MovieCode}";
-                return await base.Crawl();
+                return await base.Crawl(callback);
             }
             else
             {
+                if (ICcallback != null) ICcallback(statuscode);
                 return false;
             }
         }
@@ -300,7 +311,7 @@ namespace Jvedio
 
 
 
-        public override async Task<bool> Crawl()
+        public override async Task<bool> Crawl(Action<int> callback =null, Action<int> ICcallback = null)
         {
             (Content, StatusCode) = await Net.Http(Url, Cookie: Cookies);
             if (StatusCode == 200 & Content != "") {
@@ -320,7 +331,7 @@ namespace Jvedio
             {
                 //解析
                 Url = RootUrl.Library + $"?v={MovieCode}";
-                return await base.Crawl();
+                return await base.Crawl(callback);
             }
             else
             {

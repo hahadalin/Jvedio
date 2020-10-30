@@ -3624,8 +3624,12 @@ namespace Jvedio
         }
 
 
-        private void Grid_Drop(object sender, DragEventArgs e)
+        private async void Grid_Drop(object sender, DragEventArgs e)
         {
+            WaitingPanel.Visibility = Visibility.Visible;
+
+            //异步导入
+            await Task.Run(() => { 
             //分为文件夹和文件
             string[] dragdropFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             List<string> files = new List<string>();
@@ -3643,8 +3647,12 @@ namespace Jvedio
                 filepaths = Scan.ScanPaths(stringCollection, new CancellationToken());
 
             if (files.Count > 0) filepaths.AddRange(files);
-            double num = Scan.DistinctMovieAndInsert(filepaths, new CancellationToken());
-            HandyControl.Controls.Growl.Info( $"总计导入{num}个文件");
+            double _num= Scan.DistinctMovieAndInsert(filepaths, new CancellationToken());
+                HandyControl.Controls.Growl.Info($"总计导入{_num}个文件");
+                Task.Delay(300).Wait();
+            });
+            
+            WaitingPanel.Visibility = Visibility.Hidden;
             vieModel.Reset();
         }
 
@@ -4505,6 +4513,15 @@ namespace Jvedio
             WindowBatch.Show();
         }
 
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            new Msgbox(this, "请等待！",true).ShowDialog();
+        }
+
+        private void WaitingPanel_Cancel(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine(123);
+        }
     }
 
     public class DownLoadProgress

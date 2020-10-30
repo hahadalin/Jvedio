@@ -313,6 +313,7 @@ namespace Jvedio
             if (ImageBytes == null) { result = false; }
             else
             {
+                result = true;
                 StaticClass.SaveImage(ID, ImageBytes, imageType, Url);
             }
             return (result, cookies);
@@ -350,42 +351,49 @@ namespace Jvedio
         }
 
 
+
+
         public static async Task<(bool, string)> DownLoadFromNet(Movie movie)
         {
+            bool success = false;
+            string message = "";
             Movie newMovie;
             if (movie.vediotype == (int)VedioType.欧美)
             {
-                if (EnableUrl.BusEu) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl();
+                if (!string.IsNullOrEmpty( RootUrl.BusEu) && EnableUrl.BusEu) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl((statuscode)=> { message = statuscode.ToString(); } );
+                else if (!string.IsNullOrEmpty(RootUrl.BusEu)) message = "未开启欧美网址";
+                else message = "网址未正确配置";
             }
             else
             {
                 if (movie.id.ToUpper().IndexOf("FC2") >= 0)
                 {
-                    if (EnableUrl.FC2Club) await new Fc2ClubCrawler(movie.id).Crawl();
-
-                    newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (newMovie != null)
-                    {
-                        if (EnableUrl.DB) { if (newMovie.title == "" || newMovie.sourceurl == "") await new DBCrawler(movie.id).Crawl(); }
-                    }
-                    
+                        if (!string.IsNullOrEmpty(RootUrl.DB) && EnableUrl.DB) {  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
+                        else if (!string.IsNullOrEmpty(RootUrl.DB)) message = "未开启 DB 网址";
+                    else message = "网址未正确配置";
                 }
                 else
                 {
-                    if (EnableUrl.Bus) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl();
+                    if (!string.IsNullOrEmpty(RootUrl.Bus) && EnableUrl.Bus) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl((statuscode) => { message = statuscode.ToString(); });
+                    else if (!string.IsNullOrEmpty(RootUrl.Bus)) message = "未开启 Bus 网址";
+                    else message = "网址未正确配置";
 
                     newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (newMovie != null)
+                    if (newMovie != null && (newMovie.title=="" || newMovie.smallimageurl=="" || newMovie.bigimageurl=="" || newMovie.extraimageurl=="" ) )
                     {
-                        if (EnableUrl.Library) if (newMovie.title == "" || newMovie.sourceurl == "") await new LibraryCrawler(movie.id).Crawl();
+                        if (!string.IsNullOrEmpty(RootUrl.Library) && EnableUrl.Library) { await new LibraryCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); }); }
+                        else if(!string.IsNullOrEmpty(RootUrl.Library)) message = "未开启 Library 网址";
+                        else message = "网址未正确配置";
                     }
 
                    
 
                     newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (newMovie != null)
+                    if (newMovie != null && (newMovie.title == "" || newMovie.smallimageurl == "" || newMovie.bigimageurl == "" || newMovie.extraimageurl == ""))
                     {
-                        if (EnableUrl.DB) if (newMovie.title == "" || newMovie.sourceurl == "") await new DBCrawler(movie.id).Crawl();
+                        if (!string.IsNullOrEmpty(RootUrl.DB) && EnableUrl.DB)  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); });
+                        else if (!string.IsNullOrEmpty(RootUrl.DB)) message = "未开启 DB 网址";
+                        else message = "网址未正确配置";
                     }
                         
 
@@ -397,29 +405,17 @@ namespace Jvedio
             if (newMovie != null )
             {
                 if (newMovie.title != "")
-                {
-                    return (true, "");
-                }
+                    success = true;
                 else
-                {
-                    return (false, "");
-                }
+                    success = false;
             }
             else
-            {
-                return (false, "");
-            }
+                success = false;
 
+
+            return (success,message);
 
         }
-
-
-
-
-
-
-
-
 
     }
 

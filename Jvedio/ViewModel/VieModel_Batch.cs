@@ -19,144 +19,578 @@ namespace Jvedio.ViewModel
 
         public VieModel_Batch()
         {
-            DataBase = Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First();
-            DataBases = ((Main)App.Current.Windows[0]).vieModel.DataBases;
 
 
+        }
 
 
+        /// <summary>
+        /// 如果目录下的图片数目少于网址的数目，则下载
+        /// </summary>
+        /// <param name="movie"></param>
+        /// <returns></returns>
+        private bool IsToDownload(Movie movie)
+        {
+            if (movie.title == "" || movie.smallimageurl=="" || movie.bigimageurl=="" || movie.extraimageurl=="")
+                return true;
+            else
+            {
+                //判断预览图个数
+                List<string> extraImageList = new List<string>();
+
+                
+                if (!string.IsNullOrEmpty(movie.extraimageurl) && movie.extraimageurl.IndexOf(";") > 0)
+                {
+                    //预览图地址不为空
+                    extraImageList = movie.extraimageurl.Split(';').ToList().Where(arg => !string.IsNullOrEmpty(arg) && arg.IndexOf("http") >= 0 && arg.IndexOf("dmm") >= 0).ToList();
+                    int count = 0;
+                    try
+                    {
+                        var files = Directory.GetFiles(BasePicPath + "ExtraPic\\" + movie.id + "\\", "*.*", SearchOption.TopDirectoryOnly);
+                        if (files != null) { count = files.Count(); }
+
+                    } catch { }
+
+                    if (extraImageList.Count > count)
+                        return true;
+                    else 
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        private bool IsScreenShotExist(string path)
+        {
+            if (!Directory.Exists(path)) return false;
+            try
+            {
+                var files = Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly);
+                if (files.Count() > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch { }
+            return false;
         }
 
 
         public void Reset()
         {
-            //读取配置文件
-            ScanPath = new ObservableCollection<string>();
-            foreach(var item in ReadScanPathFromConfig(DataBase))
-            {
-                ScanPath.Add(item);
-            }
-            if (ScanPath.Count == 0) ScanPath = null;
+            Movies = new ObservableCollection<string>();
+            var movies = DataBase.SelectMoviesBySql("SELECT * FROM movie");
+            int idx = Properties.Settings.Default.BatchIndex;
 
-            Servers = new ObservableCollection<Server>();
-            if (Properties.Settings.Default.Bus != "")
+            switch (idx)
             {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.Bus);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableBus, Url = Properties.Settings.Default.Bus, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
-            if (Properties.Settings.Default.BusEurope != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.BusEu);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableBusEu, Url = Properties.Settings.Default.BusEurope, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
-            if (Properties.Settings.Default.DB != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.DB);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableDB, Url = Properties.Settings.Default.DB, Cookie = Properties.Settings.Default.DBCookie, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
-            if (Properties.Settings.Default.Library != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.Library);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableLibrary, Url = Properties.Settings.Default.Library, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
+                case 0:
+                    if (Info_ForceDownload)
+                    {
+                        movies.ForEach(arg => { Movies.Add(arg.id); });
 
-            if (Properties.Settings.Default.DMM != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.DMM);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableDMM, Url = Properties.Settings.Default.DMM, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
-            if (Properties.Settings.Default.Jav321 != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.Jav321);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.Enable321, Url = Properties.Settings.Default.Jav321, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
+                    }
+                    else
+                    {
+                        //判断哪些需要下载
+                        movies.ForEach(arg => {
+                            if (IsToDownload(arg))
+                            {
+                                Movies.Add(arg.id);
+                            }
+                        });
+                    }
+                    Info_TotalNum = Movies.Count;
 
+                    break;
+
+                case 1:
+                    if (Gif_Skip)
+                    {
+                        string path = Properties.Settings.Default.BasePicPath + "Gif\\";
+                        movies.ForEach(arg => { 
+                            if(!File.Exists(path + arg.id + ".gif"))
+                            {
+                                Movies.Add(arg.id);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        movies.ForEach(arg => { Movies.Add(arg.id); });
+                    }
+                    Gif_TotalNum = Movies.Count;
+                    break;
+
+                case 2:
+                    if (ScreenShot_Skip)
+                    {
+                        string path = Properties.Settings.Default.BasePicPath;
+                        if (Properties.Settings.Default.ScreenShotToExtraPicPath)
+                            path += "ExtraPic\\";
+                        else
+                            path += "ScreenShot\\";
+
+                        movies.ForEach(arg => {
+                            if (!IsScreenShotExist(path + arg.id))
+                            {
+                                Movies.Add(arg.id);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        movies.ForEach(arg => { Movies.Add(arg.id); });
+                    }
+                    ScreenShot_TotalNum = Movies.Count;
+                    break;
+
+                case 3:
+
+                    break;
+
+                case 4:
+
+                    break;
+
+                case 5:
+
+                    break;
+
+                default:
+
+                    break;
+            }
+            
         }
 
 
 
 
+        private int _TotalNum = 0;
 
-        private ObservableCollection<Server> _Servers;
-
-        public ObservableCollection<Server> Servers
+        public int TotalNum
         {
-            get { return _Servers; }
+            get { return _TotalNum; }
             set
             {
-                _Servers = value;
+                _TotalNum = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _CurrentNum = 0;
+
+        public int CurrentNum
+        {
+            get { return _CurrentNum; }
+            set
+            {
+                _CurrentNum = value;
                 RaisePropertyChanged();
             }
         }
 
 
-        private ObservableCollection<string> _ScanPath ;
+        private int _TotalNum_S = 0;
 
-        public ObservableCollection<string> ScanPath
+        public int TotalNum_S
         {
-            get { return _ScanPath; }
+            get { return _TotalNum_S; }
             set
             {
-                _ScanPath = value;
+                _TotalNum_S = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _CurrentNum_S = 0;
+
+        public int CurrentNum_S
+        {
+            get { return _CurrentNum_S; }
+            set
+            {
+                _CurrentNum_S = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _Progress = 0;
+
+        public int Progress
+        {
+            get { return _Progress; }
+            set
+            {
+                _Progress = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _Progress_S = 0;
+
+        public int Progress_S
+        {
+            get { return _Progress_S; }
+            set
+            {
+                _Progress_S = value;
                 RaisePropertyChanged();
             }
         }
 
 
-        private Skin _Themes = (Skin)Enum.Parse(typeof(Skin), Properties.Settings.Default.Themes, true);
+        private ObservableCollection<string> _Movies = new ObservableCollection<string>();
 
-        public Skin Themes
+        public ObservableCollection<string> Movies
         {
-            get { return _Themes; }
+            get { return _Movies; }
             set
             {
-                _Themes = value;
+                _Movies = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        #region "Gif"
+
+
+
+
+        private bool _Gif_Skip = true;
+
+        public bool Gif_Skip
+        {
+            get { return _Gif_Skip; }
+            set
+            {
+                _Gif_Skip = value;
                 RaisePropertyChanged();
             }
         }
 
 
-        private Language _Language = (Language)Enum.Parse(typeof(Language), Properties.Settings.Default.Language, true);
 
-        public Language Language
+
+        private int _Gif_Length = 5;
+
+        public int Gif_Length
         {
-            get { return _Language; }
+            get { return _Gif_Length; }
             set
             {
-                _Language = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private string _DataBase  ;
-
-        public string DataBase
-        {
-            get { return _DataBase; }
-            set
-            {
-                _DataBase = value;
+                _Gif_Length = value;
                 RaisePropertyChanged();
             }
         }
 
 
-        private ObservableCollection<string> _DataBases;
+        private int _Gif_Width = 280;
 
-        public ObservableCollection<string> DataBases
+        public int Gif_Width
         {
-            get { return _DataBases; }
+            get { return _Gif_Width; }
             set
             {
-                _DataBases = value;
+                _Gif_Width = value;
                 RaisePropertyChanged();
             }
         }
 
 
-        
 
 
+
+        private int _Gif_Height = 170;
+
+        public int Gif_Height
+        {
+            get { return _Gif_Height; }
+            set
+            {
+                _Gif_Height = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        private int _Gif_TotalNum = 0;
+
+        public int Gif_TotalNum
+        {
+            get { return _Gif_TotalNum; }
+            set
+            {
+                _Gif_TotalNum = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 1) TotalNum = Gif_TotalNum;
+            }
+        }
+
+        private int _Gif_CurrentProgress = 0;
+
+        public int Gif_CurrentProgress
+        {
+            get { return _Gif_CurrentProgress; }
+            set
+            {
+                _Gif_CurrentProgress = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 1) {
+                    CurrentNum = Gif_CurrentProgress;
+                    Progress = 100 * Gif_CurrentProgress / (Gif_TotalNum == 0 ? 1 : Gif_TotalNum); }
+            }
+        }
+
+
+
+
+
+        #endregion
+
+
+
+        #region "ScreenShot"
+
+
+
+
+        private bool _ScreenShot_Skip = true;
+
+        public bool ScreenShot_Skip
+        {
+            get { return _ScreenShot_Skip; }
+            set
+            {
+                _ScreenShot_Skip = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _ScreenShot_DefaultSave = true;
+
+        public bool ScreenShot_DefaultSave
+        {
+            get { return _ScreenShot_DefaultSave; }
+            set
+            {
+                _ScreenShot_DefaultSave = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private int _ScreenShot_Num = 5;
+
+        public int ScreenShot_Num
+        {
+            get { return _ScreenShot_Num; }
+            set
+            {
+                _ScreenShot_Num = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+
+
+
+        private int _ScreenShot_TotalNum = 0;
+
+        public int ScreenShot_TotalNum
+        {
+            get { return _ScreenShot_TotalNum; }
+            set
+            {
+                _ScreenShot_TotalNum = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 2) TotalNum = ScreenShot_TotalNum;
+            }
+        }
+
+        private int _ScreenShot_CurrentProgress = 0;
+
+        public int ScreenShot_CurrentProgress
+        {
+            get { return _ScreenShot_CurrentProgress; }
+            set
+            {
+                _ScreenShot_CurrentProgress = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 2) {
+                    CurrentNum = ScreenShot_CurrentProgress;
+                    Progress = 100 * ScreenShot_CurrentProgress / (ScreenShot_TotalNum == 0 ? 1 : ScreenShot_TotalNum); 
+                }
+            }
+        }
+
+
+        private int _ScreenShot_TotalNum_S = 0;
+
+        public int ScreenShot_TotalNum_S
+        {
+            get { return _ScreenShot_TotalNum_S; }
+            set
+            {
+                _ScreenShot_TotalNum_S = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 2) TotalNum_S = ScreenShot_TotalNum_S;
+            }
+        }
+
+        private int _ScreenShot_CurrentProgress_S = 0;
+
+        public int ScreenShot_CurrentProgress_S
+        {
+            get { return _ScreenShot_CurrentProgress_S; }
+            set
+            {
+                _ScreenShot_CurrentProgress_S = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 2) {
+                    CurrentNum_S = ScreenShot_CurrentProgress_S;
+                    Progress_S = 100 * ScreenShot_CurrentProgress_S / (ScreenShot_TotalNum_S == 0 ? 1 : ScreenShot_TotalNum_S); }
+            }
+        }
+
+
+
+
+
+        #endregion
+
+
+
+
+        #region "Download"
+
+
+
+
+        private bool _Info_ForceDownload = false;
+
+        public bool Info_ForceDownload
+        {
+            get { return _Info_ForceDownload; }
+            set
+            {
+                _Info_ForceDownload = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _Info_DS = false;
+
+        public bool Info_DS
+        {
+            get { return _Info_DS; }
+            set
+            {
+                _Info_DS = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _Info_DB = false;
+
+        public bool Info_DB
+        {
+            get { return _Info_DB; }
+            set
+            {
+                _Info_DB = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _Info_DE = true;
+
+        public bool Info_DE
+        {
+            get { return _Info_DE; }
+            set
+            {
+                _Info_DE = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+
+
+        private int _Info_TotalNum = 0;
+
+        public int Info_TotalNum
+        {
+            get { return _Info_TotalNum; }
+            set
+            {
+                _Info_TotalNum = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 0) TotalNum = Info_TotalNum;
+            }
+        }
+
+        private int _Info_CurrentProgress = 0;
+
+        public int Info_CurrentProgress
+        {
+            get { return _Info_CurrentProgress; }
+            set
+            {
+                _Info_CurrentProgress = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 0)
+                {
+                    CurrentNum = Info_CurrentProgress;
+                    Progress = 100 * Info_CurrentProgress / (Info_TotalNum == 0 ? 1 : Info_TotalNum);
+                }
+            }
+        }
+
+
+        private int _Info_TotalNum_S = 0;
+
+        public int Info_TotalNum_S
+        {
+            get { return _Info_TotalNum_S; }
+            set
+            {
+                _Info_TotalNum_S = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 0) TotalNum_S = Info_TotalNum_S;
+            }
+        }
+
+        private int _Info_CurrentProgress_S = 0;
+
+        public int Info_CurrentProgress_S
+        {
+            get { return _Info_CurrentProgress_S; }
+            set
+            {
+                _Info_CurrentProgress_S = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 0) {
+                    CurrentNum_S = Info_CurrentProgress_S;
+                    Progress_S = 100 * Info_CurrentProgress_S / (Info_TotalNum_S == 0 ? 1 : Info_TotalNum_S); 
+                
+                }
+            }
+        }
+
+
+
+
+        #endregion
 
     }
 }

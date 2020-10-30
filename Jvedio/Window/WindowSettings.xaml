@@ -736,7 +736,7 @@
                     </StackPanel>
 
 
-                    <StackPanel x:Name="WebsitePanel" Background="Transparent" Visibility="Hidden">
+                    <StackPanel x:Name="WebsitePanel" Background="Transparent" Visibility="Visible">
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Style="{StaticResource TextBlockTitle}" Text="服务器源" HorizontalAlignment="Left"/>
@@ -1159,7 +1159,7 @@
 
                     </StackPanel>
 
-                    <StackPanel x:Name="CustomPanel" Background="Transparent" Visibility="Visible" VerticalAlignment="Stretch" Height="auto" Margin="20 5">
+                    <StackPanel x:Name="CustomPanel" Background="Transparent" Visibility="Hidden" VerticalAlignment="Stretch" Height="auto" Margin="20 5">
 
 
 

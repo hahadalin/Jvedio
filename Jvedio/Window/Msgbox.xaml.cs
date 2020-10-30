@@ -13,8 +13,9 @@ namespace Jvedio
     {
         string Text;
 
+        public event EventHandler CancelTask;
 
-        public Msgbox(Window window, string text)
+        public Msgbox(Window window, string text,bool waiting=false)
         {
             InitializeComponent();
             Text = text;
@@ -29,7 +30,13 @@ namespace Jvedio
             this.Height = window.Height;
             this.Width = window.Width;
 
-
+            if (waiting)
+            {
+                YesButton.Visibility = Visibility.Collapsed;
+                CancelButton.Content = "强制停止";
+                CancelButton.Width = 125;
+                WaitingImageAwesome.Visibility = Visibility.Visible;
+            }
 
 
 
@@ -45,6 +52,7 @@ namespace Jvedio
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            CancelTask?.Invoke(this, e);
             this.DialogResult = false;
         }
 
@@ -71,7 +79,7 @@ namespace Jvedio
             double.TryParse(value.ToString(), out height);
 
             if (height > 500) height = 500;
-            return height+100;
+            return height+80;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

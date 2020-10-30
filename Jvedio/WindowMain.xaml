@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:Jvedio"
     xmlns:p="clr-namespace:Jvedio.Properties"
     xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+    xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     x:Class="Jvedio.Main"
     mc:Ignorable="d"
@@ -1094,6 +1095,10 @@
         </Border>
 
 
+        <JvedioControls:WaitingPanel Visibility="Hidden"  ShowCancelButton="Collapsed" x:Name="WaitingPanel"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel" ></JvedioControls:WaitingPanel>
+
+
+
         <!--消息提示框-->
         <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="10 120 30 80">
             <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
@@ -1620,6 +1625,8 @@
                                     <Image Source="Resources/Picture/随机.png" Height="20" Width="20"   Visibility="Visible" />
                                 </Border>
 
+                                <Button Click="Button_Click_2" Content="测试" Visibility="Collapsed"/>
+
                             </StackPanel>
 
                             <Popup VerticalOffset="10" HorizontalOffset="-40" x:Name="ImageSortPopup" Placement="Bottom" PopupAnimation="Fade"  PlacementTarget="{Binding ElementName=ImageSortBorder}" AllowsTransparency="True" StaysOpen="False" IsOpen="False">
@@ -1893,14 +1900,14 @@
                                                                     <MenuItem Header="删除" Click="DelLabel"  ></MenuItem>
                                                                     <MenuItem Header="清空" Click="ClearLabel"   ></MenuItem>
                                                                 </MenuItem>
-                                                                <MenuItem Header="修改喜爱"  >
+                                                                <!--<MenuItem Header="修改喜爱"  >
                                                                     <MenuItem IsChecked="{Binding favorites, ConverterParameter=0, Converter={StaticResource IntToCheckedConverter}}"  IsCheckable="True" Header="0" Click="SetFavorites"  />
                                                                     <MenuItem IsChecked="{Binding favorites, ConverterParameter=1, Converter={StaticResource IntToCheckedConverter}}"  IsCheckable="True" Header="1" Click="SetFavorites"/>
                                                                     <MenuItem IsChecked="{Binding favorites, ConverterParameter=2, Converter={StaticResource IntToCheckedConverter}}"  IsCheckable="True" Header="2" Click="SetFavorites"/>
                                                                     <MenuItem  IsChecked="{Binding favorites, ConverterParameter=3, Converter={StaticResource IntToCheckedConverter}}"  IsCheckable="True" Header="3" Click="SetFavorites"/>
                                                                     <MenuItem  IsChecked="{Binding favorites, ConverterParameter=4, Converter={StaticResource IntToCheckedConverter}}"  IsCheckable="True" Header="4" Click="SetFavorites"/>
                                                                     <MenuItem  IsChecked="{Binding favorites, ConverterParameter=5, Converter={StaticResource IntToCheckedConverter}}"  IsCheckable="True" Header="5" Click="SetFavorites"/>
-                                                                </MenuItem>
+                                                                </MenuItem>-->
                                                                 <MenuItem Header="打开位置"   >
                                                                     <MenuItem Header="影片" Click="OpenFilePath"   ></MenuItem>
                                                                     <MenuItem Header="海报图" Click="OpenImagePath"  ></MenuItem>

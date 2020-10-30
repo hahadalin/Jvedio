@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Jvedio"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="DialogInput" 
         WindowStyle="None"
@@ -62,19 +63,35 @@
     </Window.Resources>
     <Grid KeyUp="Grid_KeyUp">
         <Border CornerRadius="0" Background="Black" Opacity="0.5" Margin="5"/>
-        <Grid Width="500" Height="{Binding ElementName=border,Path=Height}"  >
+        <Grid Width="500" Height="auto"  >
             <Border x:Name="border"  CornerRadius="10" Background="{DynamicResource BackgroundMain}" Margin="5" Height="{Binding ElementName=TextBlock, Path=ActualHeight,TargetNullValue=200,Converter={StaticResource HeightConverter},Mode=OneWay}" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                        <TextBox MaxHeight="300" Grid.Row="0"  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource ViewTextBox}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Text="123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123" >
+                    </TextBox>
+
+
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"  >
+                        <fa:ImageAwesome Visibility="Collapsed" x:Name="WaitingImageAwesome"  VerticalAlignment="Center"  Margin="5 0"  Height="20" Icon="Refresh" Spin="True" Foreground="{DynamicResource ForegroundSearch}"/>
+
+                        <Button  x:Name="CancelButton" Margin="5 0"  Style="{StaticResource ButtonStyleFill}" FontSize="20" Background="Red"    Content="取 消" Width="80" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
+                        <Button x:Name="YesButton"  Margin="5 0"  Style="{StaticResource ButtonStyleFill}" FontSize="20"   Content="确 定" Width="80" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>
+
+
+                    </StackPanel>
+
+                </Grid>
+
+
             </Border>
 
-            <Border Margin="20 20 20 60" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBox  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource ViewTextBox}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Text="123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123" >
-                </TextBox>
 
 
-            </Border>
 
-            <Button Style="{StaticResource ButtonTrigger}" FontSize="20"   Margin="0 0 100 20" Content="取 消" Width="auto" Height="auto" HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
-            <Button Style="{StaticResource ButtonTrigger}" FontSize="20"  Margin="0 0 30 20" Content="确 定" Width="auto" Height="auto" HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>
 
 
         </Grid>

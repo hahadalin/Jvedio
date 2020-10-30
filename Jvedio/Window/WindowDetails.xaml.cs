@@ -695,6 +695,32 @@ namespace Jvedio
             }
         }
 
+        public void DeleteImage(object sender, RoutedEventArgs e)
+        {
+            MenuItem m1 = sender as MenuItem;
+
+            ContextMenu contextMenu = m1.Parent as ContextMenu;
+
+            Border border = contextMenu.PlacementTarget as Border;
+            Grid grid = border.Parent as Grid;
+            TextBlock textBox = grid.Children.OfType<TextBlock>().First();
+
+            int idx = int.Parse(textBox.Text);
+
+            string path = vieModel.DetailMovie.extraimagePath[idx];
+
+            try
+            {
+                File.Delete(path);
+                HandyControl.Controls.Growl.Success("已成功删除！", "DetailsGrowl");
+                vieModel.Query(vieModel.DetailMovie.id);
+            }
+            catch (Exception ex)
+            {
+                HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl");
+            }
+        }
+
         public void OpenFilePath(object sender, RoutedEventArgs e)
         {
             try
