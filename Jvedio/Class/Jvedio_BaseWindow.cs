@@ -9,6 +9,11 @@ using static Jvedio.StaticVariable;
 
 namespace Jvedio
 {
+
+
+    /// <summary>
+    /// 除 Main 和 Detail 外的的窗口样式
+    /// </summary>
     public  class Jvedio_BaseWindow : Window
     {
         public Point WindowPoint = new Point(100, 100);
@@ -17,13 +22,14 @@ namespace Jvedio
 
         public Jvedio_BaseWindow()
         {
-            InitStyle();
+            InitStyle();//窗体的 Style
             AdjustWindow();
-            this.Loaded += delegate { InitEvent(); };
-
-            
+            this.Loaded += delegate { InitEvent(); };//初始化载入事件
         }
 
+        /// <summary>
+        /// 保存窗口状态
+        /// </summary>
         private void SaveWindow()
         {
             if (this.WindowState != WindowState.Minimized)
@@ -38,6 +44,9 @@ namespace Jvedio
             }
         }
 
+        /// <summary>
+        /// 调整窗体状态
+        /// </summary>
         private void AdjustWindow()
         {
             //读取窗体设置
@@ -69,9 +78,6 @@ namespace Jvedio
             }
 
             HideMargin();
-
-
-
         }
 
         private void InitStyle()
@@ -95,7 +101,6 @@ namespace Jvedio
             closeBtn.MouseLeftButtonUp += delegate (object sender, MouseButtonEventArgs e)
             {
                 FadeOut();
-                
             };
 
             Border borderTitle = (Border)baseWindowTemplate.FindName("BorderTitle", this);
@@ -112,12 +117,7 @@ namespace Jvedio
                 SaveWindow();
             };
 
-
-
             FadeIn();
-
-            //if (System.Windows.Interop.ComponentDispatcher.IsThreadModal)
-            //    this.Owner = App.Current.MainWindow;
 
         }
 

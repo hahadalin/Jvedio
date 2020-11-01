@@ -12,14 +12,12 @@
 
     <ControlTemplate x:Key="BaseWindowControlTemplate" TargetType="{x:Type Window}">
         <DockPanel LastChildFill="True">
-            <!--外边框-->
+            <!--窗口栏-->
             <Border Width="Auto" Height="50" DockPanel.Dock="Top" Background="{DynamicResource BackgroundTitle}" x:Name="BorderTitle" Margin="2 2 2 0">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="50" Direction="-90" RenderingBias="Quality" ShadowDepth="5"/>
                 </Border.Effect>
-
                 <Grid>
-
                     <TextBlock Text="{TemplateBinding Title }" Foreground="{DynamicResource ForegroundSearch}"  VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="auto" />
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                         <Border  ToolTip="最小化"   x:Name="BorderMin"  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}"  >
@@ -45,7 +43,7 @@
                     <AdornerDecorator>
                         <ContentPresenter />
                     </AdornerDecorator>
-                    <ResizeGrip Visibility="Visible"  HorizontalAlignment="Right" x:Name="WindowResizeGrip" VerticalAlignment="Bottom" />
+                    <!--<ResizeGrip Visibility="Visible"  HorizontalAlignment="Right" x:Name="WindowResizeGrip" VerticalAlignment="Bottom" />-->
                 </Grid>
             </Border>
         </DockPanel>
@@ -57,7 +55,7 @@
         <Setter Property="Template" Value="{StaticResource BaseWindowControlTemplate}"/>
         <Setter Property="AllowsTransparency" Value="True" />
         <Setter Property="WindowStyle" Value="None" />
-        <Setter Property="ResizeMode" Value="CanResizeWithGrip"/>
+        <Setter Property="ResizeMode" Value="CanResize"/>
         <Setter Property="MinHeight" Value="500"/>
         <Setter Property="MinWidth" Value="500"/>
     </Style>

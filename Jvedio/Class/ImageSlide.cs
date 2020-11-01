@@ -13,7 +13,13 @@ using System.Windows.Threading;
 
 namespace Jvedio
 {
-	//http://www.codescratcher.com/wpf/create-image-slideshow-wpf/#DownloadPopup
+	//来源：http://www.codescratcher.com/wpf/create-image-slideshow-wpf/#DownloadPopup
+
+
+
+	/// <summary>
+	/// 预览图展示效果
+	/// </summary>
 	public class ImageSlide
 	{
 		private Image[] ImageControls;
@@ -22,7 +28,15 @@ namespace Jvedio
 		private static string[] ValidImageExtensions = new[] { ".png", ".jpg", ".jpeg", ".bmp", ".gif" };
 		private string strImagePath = "";
 		private int CurrentSourceIndex, CurrentCtrlIndex, IntervalTimer = 2;
-		private int MaxViewNum = 10;
+		private int MaxViewNum = 10;//最多展示的图片数量
+
+
+		/// <summary>
+		/// 主界面的预览图展示
+		/// </summary>
+		/// <param name="imagepath">要展示的图片的路径</param>
+		/// <param name="image1">图片控件 1</param>
+		/// <param name="image2">图片控件 2</param>
 		public ImageSlide(string imagepath, Image image1, Image image2)
 		{
 			strImagePath = imagepath;
@@ -35,6 +49,9 @@ namespace Jvedio
 			timerImageChange.Tick += new EventHandler(timerImageChange_Tick);
 		}
 
+		/// <summary>
+		/// 开始图片展示
+		/// </summary>
 		public void Start()
 		{
 			timerImageChange.Start();

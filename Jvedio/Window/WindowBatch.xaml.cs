@@ -410,37 +410,41 @@ namespace Jvedio
             catch (OperationCanceledException ex) { return false; }
 
             //同步预览图
-            string cookies = "";
-            bool extraImageSuccess = false;
-            string filepath = "";
-            
-            for (int i = 0; i < extraImageList.Count; i++)
+            if (vieModel.Info_DE)
             {
-                try
+                string cookies = "";
+                bool extraImageSuccess = false;
+                string filepath = "";
+            
+                for (int i = 0; i < extraImageList.Count; i++)
                 {
-                    if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
-                    while (Pause) { Task.Delay(500).Wait(); }
-                    ct.ThrowIfCancellationRequested();
-                } catch (OperationCanceledException ex) { break; }
-
-                if (extraImageList[i].Length > 0)
-                {
-                    filepath = StaticVariable.BasePicPath + "ExtraPic\\" + movie.id + "\\" + Path.GetFileName(new Uri(extraImageList[i]).LocalPath);
-                    if (!File.Exists(filepath))
+                    try
                     {
-                        (extraImageSuccess, cookies) = await Task.Run(() => { return Net.DownLoadImage(extraImageList[i], ImageType.ExtraImage, movie.id, Cookie: cookies); });
-                        if (extraImageSuccess)
+                        if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
+                        while (Pause) { Task.Delay(500).Wait(); }
+                        ct.ThrowIfCancellationRequested();
+                    } catch (OperationCanceledException ex) { break; }
+
+                    if (extraImageList[i].Length > 0)
+                    {
+                        filepath = StaticVariable.BasePicPath + "ExtraPic\\" + movie.id + "\\" + Path.GetFileName(new Uri(extraImageList[i]).LocalPath);
+                        if (!File.Exists(filepath))
                         {
-                            Task.Delay(5000).Wait();
-                            ShowStatus($"下载预览图成功{i+1}/{extraImageList.Count}");
-                        }
-                        else
-                        {
-                            ShowStatus($"下载预览图失败{i + 1}/{extraImageList.Count}");
+                            (extraImageSuccess, cookies) = await Task.Run(() => { return Net.DownLoadImage(extraImageList[i], ImageType.ExtraImage, movie.id, Cookie: cookies); });
+                            if (extraImageSuccess)
+                            {
+                                Task.Delay(5000).Wait();
+                                ShowStatus($"下载预览图成功{i+1}/{extraImageList.Count}");
+                            }
+                            else
+                            {
+                                ShowStatus($"下载预览图失败{i + 1}/{extraImageList.Count}");
+                            }
                         }
                     }
+                    vieModel.Info_CurrentProgress_S++;
                 }
-                vieModel.Info_CurrentProgress_S++;
+
             }
             return true;
         }

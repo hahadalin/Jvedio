@@ -7,6 +7,11 @@ using static Jvedio.StaticVariable;
 
 namespace Jvedio
 {
+
+
+    /// <summary>
+    /// 下载类，分为FC2和非FC2，前者同时下载2个，后者同时下载3个
+    /// </summary>
     public class DownLoader
     {
         public event EventHandler InfoUpdate;
@@ -14,15 +19,17 @@ namespace Jvedio
         private Semaphore SemaphoreFC2;
         public DownLoadState State ;
         private bool Cancel { get; set; }
-
-
-
         public List<Movie> Movies { get; set; }
-
 
         public List<Movie> MoviesFC2 { get; set; }
 
 
+
+        /// <summary>
+        /// 初始化 DownLoader
+        /// </summary>
+        /// <param name="_movies">非 FC2 影片</param>
+        /// <param name="_moviesFC2">FC2 影片</param>
         public DownLoader(List<Movie> _movies, List<Movie> _moviesFC2)
         {
             Movies = _movies;
@@ -35,15 +42,19 @@ namespace Jvedio
         public DownLoadProgress downLoadProgress;
 
 
-
-        //取消下载
-
-        public  void  CancelDownload()
+        /// <summary>
+        /// 取消下载
+        /// </summary>
+        public void  CancelDownload()
         {
             Cancel = true;
             State = DownLoadState.Fail;
         }
 
+
+        /// <summary>
+        /// 开始下载
+        /// </summary>
         public void StartThread()
         {
             if (Movies.Count == 0 & MoviesFC2.Count==0) { this.State = DownLoadState.Completed; return; }
@@ -79,7 +90,7 @@ namespace Jvedio
                 if (movie.title == "" | movie.smallimageurl == "" | movie.bigimageurl == ""  | movie.sourceurl=="")
                 {
                     (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet(movie); });
-                    if (success) InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = movie, progress = downLoadProgress.value });
+                    if (success) InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = movie, progress = downLoadProgress.value });//委托到主界面显示
                 }
 
 
@@ -88,9 +99,9 @@ namespace Jvedio
                 //下载小图
                 await DownLoadSmallPic(dm);
                 dm.smallimage = StaticClass.GetBitmapImage(dm.id, "SmallPic");
-                InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State });
+                InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State });//委托到主界面显示
 
-                
+
                 if (dm.sourceurl?.IndexOf("fc2club") >= 0)
                 {
                     //复制大图
@@ -106,7 +117,7 @@ namespace Jvedio
                 }
                 dm.bigimage = StaticClass.GetBitmapImage(dm.id, "BigPic");
                 lock (downLoadProgress.lockobject) downLoadProgress.value += 1;
-                InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State });
+                InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State });//委托到主界面显示
 
                 Task.Delay(1000).Wait();
             }
