@@ -81,22 +81,3 @@ Winform 版本（3.0）：[Jvedio_Winform](https://github.com/hitchao/Jvedio_Win
 UI|青萍之末，Engine
 调试|Sheldon, SHAWN, dddsG, EEE, Jion 等人
 赞助支持|小猪培根 等众多网友
-
-
-
-## 赞助
-
-如果你喜欢该软件，欢迎赞助我
-
-
-**支付宝**
-
----
-
-![支付宝](https://img.kancloud.cn/31/90/3190b42a39efe88160c96a23f6224104_296x284.jpg)
-
-**微信**
-
----
-
-![微信](https://img.kancloud.cn/f8/0d/f80d98b8a4e4cca43f39942c723b06d3_285x276.jpg)
