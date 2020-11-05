@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -117,6 +118,49 @@ namespace Jvedio
             }
 
             return (HtmlText, StatusCode);
+        }
+
+
+        public async static Task<WebSite> CheckUrlType(string url)
+        {
+            WebSite webSite = WebSite.None;
+            bool enablecookie = false;
+            string label = "";
+            (bool result, string title) = await Net.TestAndGetTitle(url, enablecookie, "", label);
+            if (result)
+            {
+                //其他，进行判断
+                if (title.ToLower().IndexOf("javbus") >= 0 && title.IndexOf("歐美") < 0)
+                {
+                    webSite = WebSite.Bus;
+                }
+                else if (title.ToLower().IndexOf("javbus") >= 0 && title.IndexOf("歐美") >= 0)
+                {
+                    webSite = WebSite.BusEu;
+                }
+                else if (title.ToLower().IndexOf("javlibrary") >= 0)
+                {
+                    webSite = WebSite.Library;
+                }
+                else if (title.ToLower().IndexOf("fanza") >= 0)
+                {
+                    webSite = WebSite.DMM;
+                }
+                else if (title.ToLower().IndexOf("jav321") >= 0)
+                {
+                    webSite = WebSite.Jav321;
+                }
+                else if (title.ToLower().IndexOf("javdb") >= 0)
+                {
+                    webSite = WebSite.DB;
+
+                }
+                else
+                {
+                    webSite = WebSite.None;
+                }
+            }
+            return webSite;
         }
 
 
@@ -348,6 +392,106 @@ namespace Jvedio
             }
             else { Console.WriteLine($"无法访问 404：{Url}"); ResultMessage = "无法访问=>Bus"; Logger.LogN($"URL={Url},Message-{ResultMessage}"); }
             return result;
+        }
+
+
+        public async static Task<(bool, string)> DownLoadSmallPic(DetailMovie dm)
+        {
+            //不存在才下载
+            if (!File.Exists(StaticVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg"))
+            {
+                Console.WriteLine("开始下载小图");
+                Console.WriteLine(dm.source);
+                if (dm.source == "javdb") return (false, "");
+                else return await Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id);
+            }
+            else return (false, "");
+
+        }
+
+
+        public async static Task<(bool, string)> DownLoadBigPic(DetailMovie dm)
+        {
+            if (!File.Exists(StaticVariable.BasePicPath + $"BigPic\\{dm.id}.jpg"))
+            {
+                return await Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);
+            }
+            else
+            {
+                return (false, "");
+            }
+        }
+
+        public static async  Task<bool> ParseSpecifiedInfo(WebSite webSite,string id,string url)
+        {
+            string content = "";
+            int StatusCode = 404;
+            if (webSite==WebSite.DB) (content, StatusCode) = await Net.Http(url, Cookie: Properties.Settings.Default.DBCookie);
+            else ( content,  StatusCode) = await Net.Http(url);
+
+            if(StatusCode!=200 || content == "")
+            {
+                return false;
+            }
+            else
+            {
+                Dictionary<string, string> Info = new Dictionary<string, string>();
+                Info.Add("sourceurl", url);
+                if (webSite == WebSite.Bus)
+                {
+                    Info = new BusParse(id, content,Identify.GetVedioType(id)).Parse();
+                    Info.Add("source", "javbus");
+                }
+                else if (webSite == WebSite.BusEu)
+                {
+                    Info = new BusParse(id, content, VedioType.欧美).Parse();
+                    Info.Add("source", "javbus");
+                }
+                else if (webSite == WebSite.DB)
+                {
+                    Info = new JavDBParse(id, content,url.Split('/').Last()).Parse();
+                    Info.Add("source", "javdb");
+                }
+                else if (webSite == WebSite.Library)
+                {
+                    Info = new LibraryParse(id, content).Parse();
+                    Info.Add("source", "javlibrary");
+                }
+                if (Info.Count > 2)
+                {
+                    //保存信息
+                    Info["id"] = id;
+                    DataBase.UpdateInfoFromNet(Info, webSite);
+                    DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
+
+
+                    //nfo 信息保存到视频同目录
+                    if (Properties.Settings.Default.SaveInfoToNFO)
+                    {
+                        if (Directory.Exists(Properties.Settings.Default.NFOSavePath))
+                        {
+                            //固定位置
+                            StaticClass.SaveToNFO(detailMovie, Path.Combine(Properties.Settings.Default.NFOSavePath, $"{id}.nfo"));
+                        }
+                        else
+                        {
+                            //与视频同路径
+                            string path = detailMovie.filepath;
+                            if (System.IO.File.Exists(path))
+                            {
+                                StaticClass.SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{id}.nfo"));
+                            }
+                        }
+                    }
+                    return true;
+                }
+
+            }
+
+            return false;
+
+
+
         }
 
 

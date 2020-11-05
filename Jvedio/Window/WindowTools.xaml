@@ -93,7 +93,7 @@
 
         <DockPanel>
 
-            <Grid Background="Transparent" Margin="2 0 2 2" >
+            <Grid Background="Transparent"  >
                 <DockPanel >
                     <StackPanel x:Name="RadioButtonStackPanel"  Orientation="Vertical"  Background="{DynamicResource BackgroundSide}">
                         <RadioButton Click="ShowGrid"  Style="{StaticResource RadioButtonStyleSide}" Content="视频扫描" Margin="5 5 5 0"/>

@@ -567,7 +567,7 @@
 
 
 
-                    <StackPanel Margin="20 5" x:Name="BasicPanel" Background="Transparent" Visibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto">
+                    <StackPanel Margin="20 5" x:Name="BasicPanel" Background="Transparent" Visibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto">
                         <WrapPanel Orientation="Vertical" Margin="5">
 
 
@@ -578,6 +578,7 @@
                             <CheckBox IsChecked="{Binding SearchImmediately, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="搜索框变动时立即查询" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding OpenDataBaseDefault, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="开启时不显示库选择" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding AutoDeleteNotExistMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="自动删除不存在的影片" Height="40" VerticalContentAlignment="Center"/>
+                            <CheckBox IsChecked="{Binding DelInfoAfterDelFile, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="删除文件同时删除影片信息" Height="40" VerticalContentAlignment="Center"/>
                         </WrapPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="5 0" Height="35">
@@ -684,7 +685,7 @@
 
 
 
-                        <StackPanel Orientation="Horizontal" Margin="20 5">
+                        <StackPanel Orientation="Horizontal" Margin="20 5" Visibility="Collapsed">
                             <Label Style="{StaticResource InfoLabel}" Content="文件大小" Foreground="{DynamicResource ForegroundSearch}"  ToolTip="[0-2000]"/>
                             <hc:TextBox Style="{StaticResource BaseHcTextBox}"  TextChanged="ScanMinFileSizeTextBox_TextChanged"  Text="{Binding ScanMinFileSize, Mode=OneWay, Source={x:Static p:Settings.Default}}"   ToolTip="[0-2000]"/>
                             <Label  Style="{StaticResource InfoLabel}" Margin="20 0"  Content="MB"  />
@@ -736,7 +737,7 @@
                     </StackPanel>
 
 
-                    <StackPanel x:Name="WebsitePanel" Background="Transparent" Visibility="Visible">
+                    <StackPanel x:Name="WebsitePanel" Background="Transparent" Visibility="Hidden">
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Style="{StaticResource TextBlockTitle}" Text="服务器源" HorizontalAlignment="Left"/>
@@ -979,6 +980,7 @@
                             <CheckBox IsChecked="{Binding DisplayStatusBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="状态栏" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding DisplayFunBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="功能栏" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="仅显示可播放" Height="40" VerticalContentAlignment="Center"/>
+                            <CheckBox IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="仅显示分段视频" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding TitleShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="标题显示翻译结果" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="摘要显示翻译结果" Height="40" VerticalContentAlignment="Center"/>
                         </StackPanel>

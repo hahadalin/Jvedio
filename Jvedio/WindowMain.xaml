@@ -28,7 +28,7 @@
     ContentRendered="Window_ContentRendered"
     PreviewKeyUp="Window_PreviewKeyUp"
     Activated="Window_Activated"
-    
+    SizeChanged="Window_SizeChanged"
     PreviewKeyDown="Window_PreviewKeyDown"
     
 
@@ -61,9 +61,7 @@
         <local:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
 
         <!--高清、中字、流出-->
-        <local:HDVConverter x:Key="HDVConverter"/>
-        <local:CHSConverter x:Key="CHSConverter"/>
-        <local:OutFlowConverter x:Key="OutFlowConverter"/>
+        <local:TagStampsConverter x:Key="TagStampsConverter"/>
         <local:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
 
 
@@ -1528,12 +1526,21 @@
                         <Grid  DockPanel.Dock="Top"    VerticalAlignment="Top" Height="50"  Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
                             <Border CornerRadius="5" Background="Transparent" HorizontalAlignment="Stretch" Width="auto"/>
 
+                            <StackPanel Orientation="Horizontal" Margin="10 0">
+                                <Border ToolTip="后退"  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousCommand"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}"      Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
+                                </Border>
+
+
+                                <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="NextCommand"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="前进"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
+                                </Border>
+                            </StackPanel>
+
+
 
                             <!--搜索-->
-                            <Grid HorizontalAlignment="Left" x:Name="AllSearchGrid"   Height="40"  Width="200" Margin="10 0"   >
-
-
-
+                            <Grid HorizontalAlignment="Left" x:Name="AllSearchGrid"   Height="40"  Width="200" Margin="100 0"   >
                                 <Border x:Name="AllSearchBorder"    Style="{StaticResource SearchTextGrid}"   CornerRadius="2"  Background="Transparent" BorderBrush="{DynamicResource BackgroundSide}" BorderThickness="2" />
 
 
@@ -1621,6 +1628,10 @@
                                     <Image Source="Resources/Picture/随机.png" Height="20" Width="20"   Visibility="Visible" />
                                 </Border>
 
+                                <Border Visibility="Collapsed"  Cursor="Hand"      Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}"   Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowAdvanceSearch"  ToolTip="组合筛选">
+                                    <Image Source="Resources/Picture/筛选.png" Height="20" Width="20"   Visibility="Visible" />
+                                </Border>
+
                                 <Border Visibility="Collapsed"  Cursor="Hand"      Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}"   Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="Border_MouseLeftButtonUp_1"  ToolTip="随机展示">
                                     <Image Source="Resources/Picture/随机.png" Height="20" Width="20"   Visibility="Visible" />
                                 </Border>
@@ -1686,11 +1697,9 @@
 
 
 
-                        <!--进度条-->
-                        <ProgressBar DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged" x:Name="ProgressBar" Visibility="Visible" Foreground="LightGreen"   Height="5" Margin="20 5"   VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
 
                         <!--底部信息栏-->
-                        <Grid Panel.ZIndex="5" DockPanel.Dock="Bottom" Width="auto" HorizontalAlignment="Stretch"  Background="Transparent" VerticalAlignment="Bottom" Height="40" Margin="5 0 5 10" Visibility="{Binding DisplayStatusBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                        <Grid Panel.ZIndex="5" DockPanel.Dock="Bottom" Width="auto" HorizontalAlignment="Stretch"  Background="Transparent" VerticalAlignment="Bottom" Height="40" Margin="5 0 5 0" Visibility="{Binding DisplayStatusBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
@@ -1757,6 +1766,9 @@
 
 
                         </Grid>
+
+                        <!--进度条-->
+                        <ProgressBar DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged" x:Name="ProgressBar" Visibility="Visible" Foreground="LightGreen"   Height="5" Margin="20 0 20 5"   VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
 
 
                         <!--演员-->
@@ -1855,6 +1867,15 @@
                                             <MenuItem Header="刷新" Click="RefreshCurrentPage" />
                                             <MenuItem Header="选择/取消所有" Click="SelectAll" />
                                             <MenuItem Header="仅显示可播放" IsCheckable="True"  IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding ResetCommand}" />
+                                            <MenuItem Header="仅显示分段视频" IsCheckable="True"  IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding ResetCommand}" />
+                                            <MenuItem Header="标签戳显示模式" Visibility="Collapsed">
+                                                <MenuItem  Command="{Binding ResetCommand}"    IsCheckable="True"  IsChecked="{Binding ShowHDV, Mode=TwoWay}" Header="高清"    />
+                                                <MenuItem  Command="{Binding ResetCommand}"    IsCheckable="True"    IsChecked="{Binding ShowCHS, Mode=TwoWay}"   Header="中文" />
+                                                <MenuItem   Command="{Binding ResetCommand}"    IsCheckable="True"   IsChecked="{Binding ShowFlowOut, Mode=TwoWay}"   Header="流出" />
+                                            </MenuItem>
+
+
+
                                             <MenuItem Header="图片显示模式" >
                                                 <MenuItem  Click="SaveShowViewMode" IsCheckable="True"  IsChecked="{Binding Path=ShowViewMode, ConverterParameter=默认, Converter={StaticResource ViewTypeEnumConverter}, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Header="默认"    />
                                                 <MenuItem  Click="SaveShowViewMode" IsCheckable="True"    IsChecked="{Binding Path=ShowViewMode, ConverterParameter=有图, Converter={StaticResource ViewTypeEnumConverter}, Mode=TwoWay,Source={x:Static p:Settings.Default}}"   Header="有图" />
@@ -1878,12 +1899,8 @@
                                                         <StackPanel.ContextMenu>
                                                             <ContextMenu  PreviewKeyUp="ContextMenu_PreviewKeyUp">
                                                                 <MenuItem Header="立即同步(S)" Click="DownLoadSelectMovie"   ></MenuItem>
-                                                                <MenuItem Header="同步其它" Visibility="Collapsed"  >
-                                                                    <MenuItem Header="信息" Click="DownLoadSelectMovie"  ></MenuItem>
-                                                                    <MenuItem Header="缩略图" Click="DownLoadSelectMovie"  ></MenuItem>
-                                                                    <MenuItem Header="海报图" Click="DownLoadSelectMovie"  ></MenuItem>
-                                                                    <MenuItem Header="预览图" Click="DownLoadSelectMovie"  ></MenuItem>
-                                                                    <MenuItem Header="演员信息" Click="DownLoadSelectMovie"  ></MenuItem>
+                                                                <MenuItem Header="高级同步" Visibility="Visible"  >
+                                                                    <MenuItem Header="指定网址" Click="DownLoadWithUrl"   ></MenuItem>
                                                                 </MenuItem>
                                                                 <MenuItem Header="修改信息(E)" Click="EditInfo"  />
                                                                 <MenuItem Header="扩展功能"   >
@@ -2026,16 +2043,19 @@
 
                                                         <TextBox x:Name="idTextBox"  Text="{Binding id}" Visibility="Collapsed"/>
 
-                                                        <Grid HorizontalAlignment="Left"   Margin="5 0" >
+                                                        <Grid HorizontalAlignment="Stretch" Width="auto"   Margin="5 0"  >
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="auto"/>
                                                                 <ColumnDefinition Width="*"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <TextBox  HorizontalContentAlignment="Left" TextAlignment="Left"  Visibility="{Binding Path=DisplayID,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}" Width="auto" HorizontalAlignment="Left" Grid.Column="0" FontSize="18" FontFamily="Times New Roman"      Text="{Binding id}"    Foreground="{DynamicResource ForegroundSearch}"  Style="{StaticResource InfoTextBox}"  />
-                                                            <StackPanel  Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Right" Margin="0 0 10 0" >
-                                                                <Label BorderThickness="0" Visibility="{Binding filepath,Converter={StaticResource HDVConverter},Mode=OneWay}" Background="#9A58B7" Content="高清" Foreground="{DynamicResource ForegroundSearch}"/>
-                                                                <Label BorderThickness="0"  Visibility="{Binding filepath,Converter={StaticResource CHSConverter},Mode=OneWay}"  Background="YellowGreen"   Content="中文" Foreground="{DynamicResource ForegroundSearch}" />
-                                                                <Label BorderThickness="0"  Visibility="{Binding filepath,Converter={StaticResource OutFlowConverter},Mode=OneWay}" Background="LightGreen" Content="流出" Foreground="{DynamicResource ForegroundSearch}" />
+                                                            <TextBox   HorizontalContentAlignment="Left" TextAlignment="Left"  Visibility="{Binding Path=DisplayID,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}" Width="auto" HorizontalAlignment="Left" Grid.Column="0" FontSize="18" FontFamily="Times New Roman"      Text="{Binding id}"    Foreground="{DynamicResource ForegroundSearch}"  Style="{StaticResource InfoTextBox}"  />
+                                                            <StackPanel    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Right" Margin="0 0 10 0" >
+                                                                
+                                                                <!--标签戳-->
+
+                                                                <Label Margin="2 0"  BorderThickness="0" Visibility="{Binding tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=高清,Mode=OneWay}" Background="#9A58B7" Content="高清" Foreground="{DynamicResource ForegroundSearch}"/>
+                                                                <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=中文,Mode=OneWay}"  Background="YellowGreen"   Content="中文" Foreground="{DynamicResource ForegroundSearch}" />
+                                                                <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=流出,Mode=OneWay}" Background="LightGreen" Content="流出" Foreground="{DynamicResource ForegroundSearch}" />
 
                                                             </StackPanel>
                                                         </Grid>
@@ -2541,10 +2561,6 @@
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
-                            <StackPanel Orientation="Horizontal" Margin="20 0">
-                                <Image Source="Resources/Ico/gitee.ico" Width="25" />
-                                <TextBlock FontSize="20"    TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="2 10"><Hyperlink NavigateUri="https://gitee.com/hitchao/Jvedio" Click="OpenUrl" ><Run Text="Gitee"/></Hyperlink></TextBlock>
-                            </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="20 0">
                                 <Image Source="Resources/Ico/github.png" Width="25" />
@@ -2702,7 +2718,7 @@
 
 
 
-        <Grid x:Name="resizeGrid" Margin="5">
+        <Grid x:Name="resizeGrid" Margin="3">
             <Rectangle
                 
                             Stroke="{x:Null}"

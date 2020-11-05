@@ -10,125 +10,45 @@ namespace Jvedio
     public static class Identify
     {
 
+        public static string[] FLOWOUT = new string[] {"流出", "留出", "泄露", "泄密", "曝光" };
+        public static string[] CHS = new string[] { "-C", "_C", "中字", "中文字幕", "字幕" };
+        public static string[] HDV = new string[] { "hd", "high_definition", "high definition","高清" };
+
         public static void InitFanhaoList()
         {
             Qibing = new List<string>();
             Bubing = new List<string>();
-
-                foreach (var item in Resource_String.Qibing.Split(','))
-                {
-                    if (!string.IsNullOrEmpty(item) && item.Length > 0) { Qibing.Add(item.ToUpper()); }
-                }
-
-            foreach (var item in Resource_String.Bubing.Split(','))
-            {
-                if (!string.IsNullOrEmpty(item) && item.Length > 0) { Bubing.Add(item.ToUpper()); }
-            }
+            Qibing.AddRange(Resource_String.Qibing.Split(',').Where(arg => !string.IsNullOrEmpty(arg) && arg.Length > 0).ToList());
+            Bubing.AddRange(Resource_String.Bubing.Split(',').Where(arg => !string.IsNullOrEmpty(arg) && arg.Length > 0).ToList());
 
         }
 
         public static bool IsFlowOut(string filepath)
         {
-            bool result = false;
-            string name = "";
-            if (File.Exists(filepath))
-            {
-                FileInfo fi = new FileInfo(filepath);
-                name = fi.Name;
-            }
-            else
-            {
-                if (filepath.IndexOf("\\") > 0)
-                {
-                    var sp = filepath.Split('\\');
-                    name = sp[sp.Count() - 1];
-                }
-            }
-            if (name != "")
-            {
-                foreach (var item in new string[] { "流出", "留出", "泄露", "泄密", "曝光" })
-                {
-                    if (name.IndexOf(item) >= 0)
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-            }
-            return result;
+            string name = new FileInfo(filepath).Name;
+            return FLOWOUT.Any(arg => name.IndexOf(arg) >= 0);
+
         }
 
         public static bool IsCHS(string filepath)
         {
-            bool result = false;
-            string name = "";
-            if (File.Exists(filepath))
-            {
-                FileInfo fi = new FileInfo(filepath);
-                name = fi.Name;
-            }
-            else
-            {
-                if (filepath.IndexOf("\\") > 0)
-                {
-                    var sp = filepath.Split('\\');
-                    name = sp[sp.Count() - 1];
-                }
-            }
-            if (name != "")
-            {
-                foreach (var item in new string[] { "-C", "_C", "中字", "中文字幕", "字幕" })
-                {
-                    if (name.IndexOf(item) >= 0)
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-            }
-            return result;
+            string name = new FileInfo(filepath).Name;
+            return CHS.Any(arg => name.IndexOf(arg) >= 0);
         }
 
 
 
         public static bool IsHDV(string filepath)
         {
-            bool result = false;
-            string name = "";
-            double filesize = 0;
-
-
-            if (File.Exists(filepath))
+            FileInfo fileInfo = new FileInfo(filepath);
+            string name = fileInfo.Name;
+            if (!File.Exists(filepath))
             {
-                FileInfo fi = new FileInfo(filepath);
-                name = fi.Name;
-                filesize = fi.Length;
-            }
-            else
-            {
-                if (filepath.IndexOf("\\") > 0)
-                {
-                    var sp = filepath.Split('\\');
-                    name = sp[sp.Count() - 1];
-                }
+                return HDV.Any(arg => name.IndexOf(arg) >= 0);
             }
 
-            if (name != "")
-            {
-                foreach (var item in new string[] { "hd", "high_definition", "high definition" })
-                {
-                    if (name.ToLower().IndexOf(item) >= 0)
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-            }
-
-            if (filesize>0 && filesize / 1024 / 1024 / 1024 >= MinHDVFileSize)
-                result = true;
-
-            return result;
+            long filesize = fileInfo.Length;
+            return filesize > 0 && filesize / 1024 / 1024 / 1024 >= MinHDVFileSize;
         }
 
 

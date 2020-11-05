@@ -140,29 +140,16 @@ namespace Jvedio
 
         private async Task<(bool, string)> DownLoadSmallPic(DetailMovie dm)
         {
-            //不存在才下载
-            if (!File.Exists(StaticVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg"))
-            {
                 Console.WriteLine("开始下载小图");
                 Console.WriteLine(dm.source);
                 if (dm.source == "javdb") return (false, "");
                 else return await Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id);
-            }
-            else return  (false, ""); 
-
         }
 
 
         private async Task<(bool, string)> DownLoadBigPic(DetailMovie dm)
         {
-            if (!File.Exists(StaticVariable.BasePicPath + $"BigPic\\{dm.id}.jpg"))
-            {
                 return await Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);
-            }
-            else
-            {
-                return (false, "");
-            }
         }
     }
 

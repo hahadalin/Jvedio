@@ -874,6 +874,30 @@ namespace Jvedio
         }
 
 
+        public void RefreshFavorites()
+        {
+            windowMain = App.Current.Windows[0] as Main;
+            for (int i = 0; i < windowMain.vieModel.CurrentMovieList.Count; i++)
+            {
+                try
+                {
+                    if (windowMain.vieModel.CurrentMovieList[i]?.id == vieModel.DetailMovie.id)
+                    {
+                        Movie movie = windowMain.vieModel.CurrentMovieList[i];
+                        windowMain.vieModel.CurrentMovieList[i] = null;
+                        movie.favorites = vieModel.DetailMovie.favorites;
+                        windowMain.vieModel.CurrentMovieList[i] = movie;
+                    }
+                }
+                catch (Exception ex1)
+                {
+                    Console.WriteLine(ex1.StackTrace);
+                    Console.WriteLine(ex1.Message);
+                }
+            }
+        }
+
+
         public void CopyFile(object sender, RoutedEventArgs e)
         {
             string filepath = vieModel.DetailMovie.filepath;
@@ -893,26 +917,53 @@ namespace Jvedio
 
         public void DeleteFile(object sender, RoutedEventArgs e)
         {
-            string filepath = vieModel.DetailMovie.filepath;
-            if (File.Exists(filepath))
+            DetailMovie detailMovie = vieModel.DetailMovie;
+            if (detailMovie.subsectionlist.Count > 0)
             {
-                if (new Msgbox(this, $"是否确认删除 {filepath} 到回收站？").ShowDialog() == true)
+                if (new Msgbox(this, $"是否确认删除所有的分段视频到回收站？").ShowDialog() == true)
                 {
-                    try
+                    detailMovie.subsectionlist.ForEach(path =>
                     {
-                        FileSystem.DeleteFile(filepath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-                        HandyControl.Controls.Growl.Info($"已删除 {filepath} 到回收站", "DetailsGrowl");
-                        DeleteID(sender, e);
-                    }
-                    catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl"); }
 
+                        if (File.Exists(path))
+                        {
+                            try
+                            {
+                                FileSystem.DeleteFile(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                            }
+                            catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl"); }
+                        }
+                    });
+                    if (Properties.Settings.Default.DelInfoAfterDelFile) DeleteID(sender, e);
+                    HandyControl.Controls.Growl.Info($"已删除所有的分段视频到回收站", "DetailsGrowl");
                 }
             }
             else
             {
-                HandyControl.Controls.Growl.Warning($"删除文件失败，不存在： {filepath} ", "DetailsGrowl");
-                DeleteID(sender, e);
+                string filepath = detailMovie.filepath;
+                if (File.Exists(filepath))
+                {
+                    if (new Msgbox(this, $"是否确认删除 {filepath} 到回收站？").ShowDialog() == true)
+                    {
+                        try
+                        {
+                            FileSystem.DeleteFile(filepath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                            HandyControl.Controls.Growl.Info($"已删除 {filepath} 到回收站", "DetailsGrowl");
+                            if (Properties.Settings.Default.DelInfoAfterDelFile) DeleteID(sender, e);
+                        }
+                        catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl"); }
+
+                    }
+                }
+                else
+                {
+                    HandyControl.Controls.Growl.Warning($"删除文件失败，不存在： {filepath} ", "DetailsGrowl");
+                    DeleteID(sender, e);
+                }
             }
+
+
+
         }
 
         public void DeleteID(object sender, RoutedEventArgs e)
@@ -1156,10 +1207,8 @@ namespace Jvedio
             StackPanel stackPanel = button.Parent as StackPanel;
             TextBlock textBlock = stackPanel.Children.OfType<TextBlock>().Last();
             string filepath = textBlock.Text;
-            if (File.Exists(filepath))
-            {
-                if (File.Exists(filepath)) { Process.Start(filepath); } else { HandyControl.Controls.Growl.Info("无法打开 " + filepath, "DetailsGrowl"); }
-            }
+            if (File.Exists(filepath)) { Process.Start(filepath); } else { HandyControl.Controls.Growl.Info("无法打开 " + filepath, "DetailsGrowl"); }
+
 
         }
 
@@ -1319,7 +1368,6 @@ namespace Jvedio
 
         private void BigImage_Drop(object sender, DragEventArgs e)
         {
-            //分为文件夹和文件
             string[] dragdropFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             string file = dragdropFiles[0];
 
@@ -1328,23 +1376,37 @@ namespace Jvedio
                 FileInfo fileInfo = new FileInfo(file);
                 if (fileInfo.Extension.ToLower() == ".jpg")
                 {
-                    try
-                    {
+                    //try
+                    //{
                         File.Copy(fileInfo.FullName, BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg", true);
                         DetailMovie detailMovie = vieModel.DetailMovie;
                         detailMovie.bigimage = null;
-                        vieModel.DetailMovie = null;
                         detailMovie.bigimage = StaticClass.BitmapImageFromFile(fileInfo.FullName);
+
+                        if (vieModel.DetailMovie.extraimagelist.Count > 0)
+                        {
+                        detailMovie.extraimagelist[0] = detailMovie.bigimage;
+                        detailMovie.extraimagePath[0] = fileInfo.FullName;
+
+                        }
+                        else
+                        {
+                        detailMovie.extraimagelist.Add(detailMovie.bigimage);
+                        detailMovie.extraimagePath.Add(fileInfo.FullName);
+                    }
+
+
+                        vieModel.DetailMovie = null;
                         vieModel.DetailMovie = detailMovie;
-
                         RefreshUI("", fileInfo.FullName);
+                        SetImage(0);
 
 
-                    }
-                    catch (Exception ex)
-                    {
-                        HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl");
-                    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl");
+                    //}
                 }
                 else
                 {
@@ -1431,7 +1493,13 @@ namespace Jvedio
 
         private void Rate_ValueChanged(object sender, HandyControl.Data.FunctionEventArgs<double> e)
         {
-            vieModel.SaveLove();
+            if (vieModel.DetailMovie != null)
+            {
+                vieModel.SaveLove();
+                //更新主界面
+                RefreshFavorites();
+            }
+
         }
 
         private void Tag_Closing(object sender, EventArgs e)

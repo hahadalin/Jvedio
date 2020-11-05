@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Jvedio
 {
@@ -18,9 +19,7 @@ namespace Jvedio
         {
             InitializeComponent();
 
-            advanceSearchModel = new VieModel_AdvanceSearch();
-            advanceSearchModel.Reset();
-            this.DataContext = advanceSearchModel;
+
 
         }
 
@@ -32,9 +31,7 @@ namespace Jvedio
 
         private void GenerateCommand(object sender, RoutedEventArgs e)
         {
-            Main main=null;
-            Window window = Jvedio.GetWindow.Get("Main");
-            if (window != null) main = (Main)window;
+            Main main = App.Current.Windows[0] as Main;
 
             if (main.DownLoader?.State == DownLoadState.DownLoading) { new Msgbox(this, "请等待下载完成！").ShowDialog(); return; }
 
@@ -199,6 +196,15 @@ namespace Jvedio
                     if ((bool)cb.IsChecked) result.Add(cb.Content.ToString());
             }
             return result;
+        }
+
+        private void Jvedio_BaseWindow_ContentRendered(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.Wait;
+            advanceSearchModel = new VieModel_AdvanceSearch();
+            advanceSearchModel.Reset();
+            this.DataContext = advanceSearchModel;
+            this.Cursor = Cursors.Arrow;
         }
     }
 }

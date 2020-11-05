@@ -188,7 +188,8 @@ namespace Jvedio
                         else if (VedioType == VedioType.欧美)
                         {
                             //https://images.javbus.one/thumb/10jc.jpg
-                            result.Add("smallimageurl", RootUrl.BusEu.Replace("www", "images") + "thumbs/" + movieid + ".jpg");
+
+                            result.Add("smallimageurl", "https://images.javbus.one/thumb/" + movieid + ".jpg");
 
                         }
                     }
@@ -438,7 +439,7 @@ namespace Jvedio
                 {
                     try
                     {
-                        if (infoNode.InnerText.IndexOf("時間") >= 0)
+                        if (infoNode.InnerText.IndexOf("時間") >= 0 || infoNode.InnerText.IndexOf("日期")>=0)
                         {
                             content = infoNode.SelectSingleNode("span").InnerText;
                             if (content != "N/A") { result.Add("releasedate", content); }

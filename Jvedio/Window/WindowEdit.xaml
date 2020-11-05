@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Jvedio"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:p="clr-namespace:Jvedio.Properties"
         mc:Ignorable="d"
         Title="修改" Height="700" Width="1000"
@@ -174,15 +175,11 @@
                         </Grid>
                         <Grid Style="{StaticResource InfoGrid}">
                             <Label  Content="喜爱程度"  Style="{StaticResource BaseLabel2}"/>
-
-                            <StackPanel Orientation="Horizontal" Margin="120 0">
-                                <RadioButton  FontSize="15" Foreground="{DynamicResource ForegroundSearch}" IsChecked="{Binding Path=DetailMovie.favorites,ConverterParameter=0,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}" Content="0" Style="{StaticResource FlatRadioButton}"/>
-                                <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"  IsChecked="{Binding Path=DetailMovie.favorites,ConverterParameter=1,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="1"  Style="{StaticResource FlatRadioButton}"/>
-                                <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"   IsChecked="{Binding Path=DetailMovie.favorites,ConverterParameter=2,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="2"  Style="{StaticResource FlatRadioButton}"/>
-                                <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"    IsChecked="{Binding Path=DetailMovie.favorites,ConverterParameter=3,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="3"  Style="{StaticResource FlatRadioButton}"/>
-                                <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"    IsChecked="{Binding Path=DetailMovie.favorites,ConverterParameter=4,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="4"  Style="{StaticResource FlatRadioButton}"/>
-                                <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"    IsChecked="{Binding Path=DetailMovie.favorites,ConverterParameter=5,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="5"  Style="{StaticResource FlatRadioButton}"/>
+                            <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="130 5" Cursor="Hand">
+                                <hc:Rate AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   DefaultValue="0"/>
                             </StackPanel>
+
+
                         </Grid>
 
                         <Grid Style="{StaticResource InfoGrid}">

@@ -1,5 +1,6 @@
 ﻿using Jvedio.ViewModel;
 using System;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,18 +47,7 @@ namespace Jvedio
             OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                
-                if (!string.IsNullOrEmpty(vieModel.DetailMovie.id))
-                {
-                    vieModel.DetailMovie.filepath = OpenFileDialog1.FileName;
-                    vieModel.SaveModel();
-                    new PopupWindow(this, "修改已保存").Show();
-                    vieModel.Query(vieModel.id);
-                }
-                else
-                {
-                    vieModel.Refresh(OpenFileDialog1.FileName);
-                }
+                SaveInfo(OpenFileDialog1.FileName);
             }
             
         }
@@ -147,6 +137,32 @@ namespace Jvedio
                         }
                         main.vieModel.CurrentMovieList[i] = null;
                         main.vieModel.CurrentMovieList[i] = movie;
+                        break;
+                    }
+                }
+                catch { }
+            }
+
+
+            for (int i = 0; i < main.vieModel.MovieList.Count; i++)
+            {
+                try
+                {
+                    if (main.vieModel.MovieList[i]?.id.ToUpper() == vieModel.id.ToUpper())
+                    {
+                        Movie movie = DataBase.SelectMovieByID(vieModel.DetailMovie.id);
+
+                        if (Properties.Settings.Default.ShowImageMode == "预览图")
+                        {
+
+                        }
+                        else
+                        {
+                            movie.smallimage = StaticClass.GetBitmapImage(movie.id, "SmallPic");
+                            movie.bigimage = StaticClass.GetBitmapImage(movie.id, "BigPic");
+                        }
+                        main.vieModel.MovieList[i] = null;
+                        main.vieModel.MovieList[i] = movie;
                         break;
                     }
                 }
@@ -246,20 +262,42 @@ namespace Jvedio
                 {
                     if (Scan.IsProperMovie(dragdropFile))
                     {
-                        if (!string.IsNullOrEmpty(vieModel.DetailMovie.id))
-                        {
-                            vieModel.DetailMovie.filepath = dragdropFile;
-                            vieModel.SaveModel();
-                            new PopupWindow(this, "修改已保存").Show();
-                            vieModel.Query(vieModel.id);
-                        }
-                        else
-                        {
-                            vieModel.Refresh(dragdropFile);
-                        }
+                        SaveInfo(dragdropFile);
                         break;
                     }
                 }
+            }
+        }
+
+        private void SaveInfo(string filepath)
+        {
+            if (!string.IsNullOrEmpty(vieModel.DetailMovie.id))
+            {
+                //视频类型、文件大小、创建时间
+                vieModel.DetailMovie.filepath = filepath;
+
+                FileInfo fileInfo = new FileInfo(filepath);
+                
+                string id = Identify.GetFanhao(fileInfo.Name);
+                int vt = (int)Identify.GetVedioType(id);
+                if(vt>0)  vieModel.DetailMovie.vediotype = vt;
+                if (File.Exists(filepath)) { 
+                    
+                    vieModel.DetailMovie.filesize = fileInfo.Length;
+                    string createDate = "";
+                    try { createDate = fileInfo.CreationTime.ToString("yyyy-MM-dd HH:mm:ss"); }
+                    catch { }
+                    if (createDate == "") createDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    vieModel.DetailMovie.scandate = createDate;
+                }
+
+                vieModel.SaveModel();
+                new PopupWindow(this, "修改已保存").Show();
+                vieModel.Query(vieModel.id);
+            }
+            else
+            {
+                vieModel.Refresh(filepath);
             }
         }
     }

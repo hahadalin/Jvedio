@@ -9,6 +9,7 @@
         Title="组合检索" Height="500" Width="800"
         MinHeight="450"
         MinWidth="800"
+        ContentRendered="Jvedio_BaseWindow_ContentRendered"
         
         >
 
@@ -33,7 +34,7 @@
             <StackPanel  x:Name="FilterStackPanel" Background="{DynamicResource BackgroundMain}"   Height="auto">
                 
                 <TextBlock Text="视频类型：" Style="{StaticResource BaseTextBlock}"/>
-                <WrapPanel Orientation="Horizontal" Margin="50 5">
+                <WrapPanel Orientation="Horizontal" Margin="5">
                     <CheckBox Content="{Binding TypeName1,Source={x:Static p:Settings.Default}}" Margin="10 0"/>
                     <CheckBox Content="{Binding TypeName2,Source={x:Static p:Settings.Default}}"  Margin="10 0"/>
                     <CheckBox Content="{Binding TypeName3,Source={x:Static p:Settings.Default}}" Margin="10 0" />
@@ -46,7 +47,7 @@
                 </WrapPanel>-->
                 
                 <TextBlock Text="发行年份：" Style="{StaticResource BaseTextBlock}"/>
-                <WrapPanel Orientation="Horizontal" Margin="50 5">
+                <WrapPanel Orientation="Horizontal" Margin="5">
                     <ItemsControl ItemsSource="{Binding Year}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -69,7 +70,7 @@
                 </WrapPanel>
 
                 <TextBlock Text="视频时长：" Style="{StaticResource BaseTextBlock}"/>
-                <WrapPanel Orientation="Horizontal" Margin="50 5">
+                <WrapPanel Orientation="Horizontal" Margin="5">
                     <ItemsControl ItemsSource="{Binding Runtime}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -91,7 +92,7 @@
                 </WrapPanel>
 
                 <TextBlock Text="文件大小：" Style="{StaticResource BaseTextBlock}" ToolTip="（GB）"/>
-                <WrapPanel Orientation="Horizontal" Margin="50 5">
+                <WrapPanel Orientation="Horizontal" Margin="5">
                    
                     <ItemsControl ItemsSource="{Binding FileSize}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                         <ItemsControl.ItemsPanel>
@@ -114,7 +115,7 @@
                 </WrapPanel>
 
                 <TextBlock Text="影片评分：" Style="{StaticResource BaseTextBlock}" ToolTip="（0-100）"/>
-                <WrapPanel Orientation="Horizontal" Margin="50 5">
+                <WrapPanel Orientation="Horizontal" Margin="5">
                     
                     <ItemsControl ItemsSource="{Binding Rating}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                         <ItemsControl.ItemsPanel>
@@ -138,7 +139,7 @@
 
 
                 <TextBlock Text="影片类别：" Style="{StaticResource BaseTextBlock}"/>
-                <WrapPanel Orientation="Horizontal" Margin="50 5">
+                <WrapPanel Orientation="Horizontal" Margin="5">
                    
                     <ItemsControl ItemsSource="{Binding Genre}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                         <ItemsControl.ItemsPanel>
@@ -161,7 +162,7 @@
                 </WrapPanel>
 
                 <TextBlock Text="出演人员：" Style="{StaticResource BaseTextBlock}"/>
-                <WrapPanel Orientation="Horizontal" Margin="50 5">
+                <WrapPanel Orientation="Horizontal" Margin="5">
                    
                     <ItemsControl ItemsSource="{Binding Actor}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                         <ItemsControl.ItemsPanel>
@@ -184,7 +185,7 @@
                 </WrapPanel>
 
                 <TextBlock Text="影片标签：" Style="{StaticResource BaseTextBlock}"/>
-                <WrapPanel Orientation="Horizontal" Margin="50 5">
+                <WrapPanel Orientation="Horizontal" Margin="5">
                    
                     <ItemsControl ItemsSource="{Binding Label}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                         <ItemsControl.ItemsPanel>

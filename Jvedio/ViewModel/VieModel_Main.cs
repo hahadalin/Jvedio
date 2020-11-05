@@ -39,6 +39,10 @@ namespace Jvedio.ViewModel
 
         private DispatcherTimer SearchTimer = new DispatcherTimer();
 
+
+
+
+
         public VieModel_Main()
         {
             ResetCommand = new RelayCommand(Reset);
@@ -357,6 +361,43 @@ namespace Jvedio.ViewModel
 
 
         #region "Variable"
+
+        private bool _ShowHDV = true;
+        public bool ShowHDV
+        {
+            get { return _ShowHDV; }
+            set
+            {
+                _ShowHDV = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _ShowCHS = true;
+        public bool ShowCHS
+        {
+            get { return _ShowCHS; }
+            set
+            {
+                _ShowCHS = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _ShowFlowOut = true;
+        public bool ShowFlowOut
+        {
+            get { return _ShowFlowOut; }
+            set
+            {
+                _ShowFlowOut = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+
         private string _SortType = Properties.Settings.Default.SortType;
         public string SortType
         {
@@ -881,9 +922,6 @@ namespace Jvedio.ViewModel
         /// </summary>
         public bool FlipOver()
         {
-
-
-
             GetLabelList();
             if (Properties.Settings.Default.ShowImageMode == "列表模式")
             {
@@ -918,6 +956,40 @@ namespace Jvedio.ViewModel
                             if (Movies.Count == FlowNum) { break; }
 
                         }
+
+                        //添加标签戳
+                        for (int i = 0; i < Movies.Count; i++)
+                        {
+                            
+                            if (Identify.IsHDV(Movies[i].filepath)) Movies[i].tagstamps += "高清";
+                            if (Identify.IsCHS(Movies[i].filepath)) Movies[i].tagstamps += "中文";
+                            if (Identify.IsFlowOut(Movies[i].filepath)) Movies[i].tagstamps += "流出";
+                        }
+                        //List<Movie> movies = Movies;
+                        //Movies = new List<Movie>();
+
+
+                        //for (int i = 0; i < movies.Count; i++)
+                        //{
+                        //    if (!string.IsNullOrEmpty(movies[i].tagstamps))
+                        //    {
+                        //        if (ShowHDV && movies[i].tagstamps.IndexOf("高清") >=0 && !Movies.Contains(movies[i]))  Movies.Add(movies[i]); 
+                        //        if (ShowCHS && movies[i].tagstamps.IndexOf("中文") >= 0 && !Movies.Contains(movies[i])) Movies.Add(movies[i]); 
+                        //        if (ShowFlowOut && movies[i].tagstamps.IndexOf("流出") >= 0 && !Movies.Contains(movies[i])) Movies.Add(movies[i]); 
+
+                        //        if(!ShowHDV && !ShowCHS && !ShowFlowOut && !Movies.Contains(movies[i])) Movies.Add(movies[i]);
+
+                        //    }
+                        //}
+
+
+
+
+
+
+
+
+
 
 
                         App.Current.Dispatcher.Invoke((Action)delegate

@@ -337,7 +337,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int ScanMinFileSize {
             get {
                 return ((int)(this["ScanMinFileSize"]));
@@ -2012,6 +2012,30 @@ namespace Jvedio.Properties {
             }
             set {
                 this["BatchIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DelInfoAfterDelFile {
+            get {
+                return ((bool)(this["DelInfoAfterDelFile"]));
+            }
+            set {
+                this["DelInfoAfterDelFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OnlyShowSubSection {
+            get {
+                return ((bool)(this["OnlyShowSubSection"]));
+            }
+            set {
+                this["OnlyShowSubSection"] = value;
             }
         }
     }

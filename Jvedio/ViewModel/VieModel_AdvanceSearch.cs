@@ -1,9 +1,11 @@
 ﻿
+using DynamicData;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +21,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        public void Reset()
+        public  void Reset()
         {
             Year = new ObservableCollection<string>();
             Genre = new ObservableCollection<string>();
@@ -31,15 +33,19 @@ namespace Jvedio.ViewModel
 
 
             var models = DataBase.GetAllFilter();
+            Year.AddRange(models[0]);
+
+            Label.AddRange(models[3]);
+            Runtime.AddRange(models[4]);
+            FileSize.AddRange(models[5]);
+            Rating.AddRange(models[6]);
+
+                Genre.AddRange(models[1]);
+                Actor.AddRange(models[2]);
+
+
             
 
-            models[0].ForEach(arg => { Year.Add(arg); });
-            models[1].ForEach(arg => { Genre.Add(arg); });
-            models[2].ForEach(arg => { Actor.Add(arg); });
-            models[3].ForEach(arg => { Label.Add(arg); });
-            models[4].ForEach(arg => { Runtime.Add(arg); });
-            models[5].ForEach(arg => { FileSize.Add(arg); });
-            models[6].ForEach(arg => { Rating.Add(arg); });
 
         }
 

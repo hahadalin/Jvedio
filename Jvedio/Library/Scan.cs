@@ -24,7 +24,7 @@ namespace Jvedio
         {
             //视频后缀来自 Everything (位置：搜索-管理筛选器-视频-编辑)
 
-            MinFileSize = Properties.Settings.Default.ScanMinFileSize * 1024 * 1024;
+            MinFileSize = 0;
              SearchPattern = new List<string>();
             string ScanVetioType = Resource_String.ScanVetioType;
             foreach (var item in ScanVetioType.Split(','))
@@ -133,21 +133,43 @@ namespace Jvedio
 
 
         /// <summary>
-        /// 给出一组视频路径，判断是否是分段视频
+        /// 给出一组视频路径，返回否是分段视频，并返回分段的视频列表，以及不是分段的视频列表
         /// </summary>
         /// <param name="FilePathList"></param>
         /// <returns></returns>
 
-        public static bool IsSubSection(List<string> FilePathList)
+        public static (bool,List<string>, List<string>) IsSubSection(List<string> FilePathList)
         {
+
+            if (Identify.GetFanhao(FilePathList[0].ToUpper() ) == "FC2-1552855")
+            {
+                Console.WriteLine("123");
+            }
+
             bool result = true;
+            List<string> notSubSection = new List<string>();
             string FatherPath = new FileInfo(FilePathList[0]).Directory.FullName;
 
-            //只要目录不同即不为分段视频
-            for (int i = 0; i < FilePathList.Count; i++)
+            bool IsAllFileSameFP = FilePathList.All(arg => new FileInfo(arg).Directory.FullName == FatherPath);
+
+            if (!IsAllFileSameFP)
             {
-                if (new FileInfo(FilePathList[i]).Directory.FullName != FatherPath) { return false; }
+                //并不是所有父目录都相同，提取出父目录最多的文件
+                Dictionary<string, int> fatherpathDic = new Dictionary<string, int>();
+                FilePathList.ForEach(path => {
+                    string fatherPath = new FileInfo(path).Directory.FullName;
+                    if (fatherpathDic.ContainsKey(fatherPath))
+                        fatherpathDic[fatherPath] += 1;
+                    else
+                        fatherpathDic.Add(fatherPath, 1);
+                });
+                string maxValueKey = fatherpathDic.FirstOrDefault(x => x.Value == fatherpathDic.Values.Max()).Key;
+                var notsub = fatherpathDic.Where(arg => new FileInfo(arg.Key).Directory.FullName != maxValueKey).ToList();
+                notsub.ForEach(arg => notSubSection.Add(arg.Key));
+                FilePathList = FilePathList.Where(arg => new FileInfo(arg).Directory.FullName == maxValueKey).ToList();
+                
             }
+
 
             //目录都相同，判断是否分段视频的特征
 
@@ -189,7 +211,7 @@ namespace Jvedio
 
 
 
-            return result;
+            return (result,FilePathList, notSubSection);
 
         }
 
@@ -318,6 +340,12 @@ namespace Jvedio
             {
                 if (File.Exists(item))
                 {
+
+                    //if (Identify.GetFanhao(item) == "FC2-1552855")
+                    //{
+                    //    Console.WriteLine("123");
+                    //}
+
                     id = IsEurope ? Identify.GetEuFanhao(new FileInfo(item).Name) : Identify.GetFanhao(new FileInfo(item).Name);
                     if (!repeatlist.ContainsKey(id))
                     {
@@ -340,10 +368,23 @@ namespace Jvedio
             {
                 if (kvp.Value.Count > 1)
                 {
-                    bool issubsection = IsSubSection(kvp.Value);
+                    (bool issubsection,List<string> filepathlist,List<string> notsubsection) = IsSubSection(kvp.Value);
                     if (issubsection)
                     {
-                        subsectionlist.Add(kvp.Value);
+                        subsectionlist.Add(filepathlist);
+                        if(filepathlist.Count< kvp.Value.Count)
+                        {
+                            //其中几个不是分段视频
+                            c2 += $"   识别码为：{kvp.Key}" + Environment.NewLine;
+                            removelist.AddRange(notsubsection);
+                            c2 += $"      导入了 {filepathlist.Count} 个分段视频：{string.Join(";",filepathlist)}" + Environment.NewLine;
+                            notsubsection.ForEach(arg =>
+                            {
+                                c2 += $"      未导入：{arg}" + Environment.NewLine;
+                            });
+                        }
+
+
                     }
                     else
                     {

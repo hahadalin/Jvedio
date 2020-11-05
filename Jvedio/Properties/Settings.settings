@@ -81,7 +81,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ScanMinFileSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">500</Value>
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="VedioType" Type="System.String" Scope="User">
       <Value Profile="(Default)">Censored</Value>
@@ -499,6 +499,12 @@
     </Setting>
     <Setting Name="BatchIndex" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="DelInfoAfterDelFile" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="OnlyShowSubSection" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

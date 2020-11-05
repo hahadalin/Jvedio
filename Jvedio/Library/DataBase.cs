@@ -226,6 +226,7 @@ namespace Jvedio
                 {
                     cmd.Connection = cn;
                     List<Movie> result = new List<Movie>();
+
                     cmd.CommandText = $"{sql} {order}";
                     SQLiteDataReader sr = cmd.ExecuteReader();
                     while (sr.Read())
@@ -254,12 +255,22 @@ namespace Jvedio
                     //可播放/不可播放
                     if (Properties.Settings.Default.OnlyShowPlay)
                     {
-
                         foreach (var item in movies)
                         {
                             if (!File.Exists((item.filepath))) result.Remove(item);
                         }
                     }
+                    //分段/不分段
+                    if (Properties.Settings.Default.OnlyShowSubSection)
+                    {
+                        foreach (var item in movies)
+                        {
+                            if (item.subsectionlist.Count<=1) result.Remove(item);
+                        }
+                    }
+
+                    
+
                     movies.Clear();
                     movies.AddRange(result);
                     //有图/无图
@@ -1215,6 +1226,7 @@ namespace Jvedio
         /// <returns></returns>
         public static List<List<string>> GetAllFilter()
         {
+            stopwatch.Restart();
             Init();
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
             {
@@ -1405,6 +1417,10 @@ namespace Jvedio
                     result.Add(Runtime);
                     result.Add(FileSize);
                     result.Add(Rating);
+
+                    stopwatch.Stop();
+                    Console.WriteLine($"载入筛选耗时：  {stopwatch.ElapsedMilliseconds} ms " );
+
                     return result;
 
                 }

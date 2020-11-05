@@ -28,7 +28,7 @@
                 <ResourceDictionary Source="XAML/ComboBoxStyle.xaml"/>
                 <ResourceDictionary Source="XAML/CheckBoxStyle.xaml"/>
                 <ResourceDictionary Source="XAML/BasicStyle.xaml"/>
-                <ResourceDictionary Source="XAML/Jvedio_BaseWindowStyle.xaml"/>
+                <ResourceDictionary Source="Window/Jvedio_BaseWindowStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
 

@@ -221,7 +221,7 @@
     <Compile Include="Library\DB.cs" />
     <Compile Include="Library\MediaInfo.cs" />
     <Compile Include="Library\ImageProcess.cs" />
-    <Compile Include="Class\Jvedio_BaseWindow.cs" />
+    <Compile Include="Window\Jvedio_BaseWindow.cs" />
     <Compile Include="Class\MultiDownLoader.cs" />
     <Compile Include="Library\Translate.cs" />
     <Compile Include="Resource_IDData.Designer.cs">
@@ -364,7 +364,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="XAML\Jvedio_BaseWindowStyle.xaml">
+    <Page Include="Window\Jvedio_BaseWindowStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -439,6 +439,7 @@
     <Content Include="Lib\PInvoke.dll" />
     <Content Include="Lib\QueryEngine.dll" />
     <Content Include="Lib\UsnOperation.dll" />
+    <Resource Include="Resources\Picture\筛选.png" />
     <Resource Include="Resources\Skin\white\_score.png" />
     <Resource Include="Resources\Skin\black\_score.png" />
     <Resource Include="Resources\Picture\score.png" />

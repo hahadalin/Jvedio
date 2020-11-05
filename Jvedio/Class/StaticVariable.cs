@@ -33,6 +33,12 @@ namespace Jvedio
 
         public static Dictionary<string, string> Jav321IDDict = new Dictionary<string, string>();
 
+        //命令记录：前进后退
+        public const int MaxCommand = 10;
+        public static string[] SqlCommandList = new string[MaxCommand];
+        public static int CommandIndex = 0;
+        public static string CurrentCommand = "";
+
         //数据库
         public static string[] GenreEurope = new string[8];
         public static string[] GenreCensored = new string[7];
@@ -196,8 +202,7 @@ namespace Jvedio
             GenreUncensored[7] = Resource_String.GenreUncensored.Split('|')[7];
 
 
-
-        }
+    }
 
 
         public static void FormatUrl()
@@ -231,7 +236,7 @@ namespace Jvedio
 
         public enum JvedioWindowState { Normal, Minimized, Maximized, FullScreen, None }
 
-        public enum WebSite { Bus, BusEu, Library, DB, FC2Club, Jav321, DMM }
+        public enum WebSite { Bus, BusEu, Library, DB, FC2Club, Jav321, DMM,None }
 
         public enum Skin { 黑色,白色, 蓝色}
 
