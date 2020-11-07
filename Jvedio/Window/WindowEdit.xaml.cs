@@ -178,7 +178,7 @@ namespace Jvedio
             UpdateMain();//更新主窗口
             UpdateDetail();//更新详情窗口
 
-            new PopupWindow(this, "保存成功！").Show();
+            HandyControl.Controls.Growl.Success("保存成功", "EditGrowl");
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -292,8 +292,8 @@ namespace Jvedio
                 }
 
                 vieModel.SaveModel();
-                new PopupWindow(this, "修改已保存").Show();
                 vieModel.Query(vieModel.id);
+                HandyControl.Controls.Growl.Success("路径、视频类型、文件大小、创建时间成功更新！", "EditGrowl");
             }
             else
             {

@@ -138,13 +138,13 @@ namespace Jvedio
 
             Console.WriteLine(sql);
 
-            if (movies?.Count == 0) { new PopupWindow(this, "无结果").Show();  } else
+            if (movies?.Count == 0) { HandyControl.Controls.Growl.Info("无结果", "AdvanceSearchGrowl"); } else
             {
                 List<Movie> filtermovies = movies.Where(m => IsMoviesContainValue(m.genre.Split(' '), genre))
                                                                            .Where(m => IsMoviesContainValue(m.actor.Split(new char[]{' ','/'}), actor))
                                                                            .Where(m => IsMoviesContainValue(m.label.Split(' '), label)).ToList();
 
-                if (filtermovies.Count == 0) { new PopupWindow(this, "无结果").Show(); } else
+                if (filtermovies.Count == 0) { HandyControl.Controls.Growl.Info("无结果", "AdvanceSearchGrowl"); } else
                 {
                     //更新主界面
                     main.vieModel.MovieList = new List<Movie>();

@@ -252,9 +252,6 @@ namespace Jvedio
 
 
                 vieModel_DBManagement.DataBases.Add(name);
-
-
-                new PopupWindow(this, $"成功创建 {name}.sqlite").Show();
                 //刷新主界面
                 RefreshMain();
 

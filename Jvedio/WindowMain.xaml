@@ -2554,7 +2554,7 @@
 
                         <TextBlock  FontSize="20"  Text="本地视频与图片的管理" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10"/>
 
-                        <TextBox IsReadOnly="True" Background="Transparent" BorderThickness="0"  FontSize="15"  TextWrapping="Wrap" TextAlignment="Left"  Text="        Jvedio 是本地视频管理软件，支持扫描本地视频并导入软件，建立视频库， 提取出视频的 唯一识别码，自动分类视频，从网上下载信息以及图片， 添加标签管理视频，使用人工智能识别演员，支持翻译信息， 基于 FFmpeg 截取视频图片，Window 桌面端流畅美观的应用软件"  Foreground="{DynamicResource ForegroundSearch}" Margin="40 10"/>
+                        <TextBox IsReadOnly="True" Background="Transparent" BorderThickness="0"  FontSize="15"  TextWrapping="Wrap" TextAlignment="Left"  Text="        Jvedio 是本地视频管理软件，支持扫描本地视频并导入软件，建立视频库， 提取出视频的 唯一识别码，自动分类视频， 添加标签管理视频，使用人工智能识别演员，支持翻译信息， 基于 FFmpeg 截取视频图片，Window 桌面端流畅美观的应用软件"  Foreground="{DynamicResource ForegroundSearch}" Margin="40 10"/>
 
 
                         <TextBlock x:Name="VersionTextBlock" FontSize="20"  Text="版本：" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10"/>

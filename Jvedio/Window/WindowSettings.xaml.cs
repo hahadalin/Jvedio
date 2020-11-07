@@ -82,12 +82,7 @@ namespace Jvedio
             var RadioButtons = RadioButtonStackPanel.Children.OfType<RadioButton>().ToList();
             RadioButtons[Properties.Settings.Default.SettingsIndex].IsChecked = true;
 
-            //设置网址
-            //List<Server> servers = new List<Server>();
-            //servers.Add(new Server() { IsEnable = false, Url = "https://www.fanbus.cam/",  Avaliable = true, ServerTitle = "JavBus", LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") });
-            //servers.Add(new Server() { IsEnable = true, Url = "http://www.b47w.com/cn/", Avaliable = false, ServerTitle = "JavLibrary", LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") });
-            //servers.Add(new Server() { IsEnable = true,  Url = "https://javdb5.com/", Avaliable = true, ServerTitle = "JavDB", LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") });
-            ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
+             ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
 
 
         }
@@ -185,7 +180,7 @@ namespace Jvedio
 
             if (!containsFunKey | _key == Key.None)
             {
-                new Msgbox(this,"必须为 功能键 + 数字/字母").ShowDialog();
+                HandyControl.Controls.Growl.Error("必须为 功能键 + 数字/字母", "SettingsGrowl");
             }
             else
             {
@@ -212,7 +207,7 @@ namespace Jvedio
                         Properties.Settings.Default.HotKey_Enable = true;
                         Properties.Settings.Default.HotKey_String = hotkeyTextBox.Text;
                         Properties.Settings.Default.Save();
-                        new PopupWindow(this, "设置成功！").ShowDialog();
+                        HandyControl.Controls.Growl.Success("设置热键成功", "SettingsGrowl");
                     }
                     
                 }
@@ -226,10 +221,6 @@ namespace Jvedio
 
 
 
-        public void ShowHelp(object sender, RoutedEventArgs e)
-        {
-            new Msgbox(this, "将【-1,-2,-3…】或【_1,_2,_3…】或【cd1,cd2,cd3…】视为分段视频，暂不支持 【XXX-123A,XXX-123B】等的识别").ShowDialog();
-        }
 
 
         public void AddPath(object sender, MouseButtonEventArgs e)
@@ -275,14 +266,12 @@ namespace Jvedio
                     imageAwesome.Icon = FontAwesomeIcon.CheckCircle;
                     imageAwesome.Spin = false;
                     imageAwesome.Foreground = new SolidColorBrush(Color.FromRgb(32, 183, 89));
-                    new PopupWindow(this, "成功！").Show();
                 }
                 else
                 {
                     imageAwesome.Icon = FontAwesomeIcon.TimesCircle;
                     imageAwesome.Spin = false;
                     imageAwesome.Foreground = new SolidColorBrush(Colors.Red);
-                    new PopupWindow(this, "失败！").Show();
                 }
             }
         }
@@ -321,14 +310,12 @@ namespace Jvedio
                     imageAwesome.Icon = FontAwesomeIcon.CheckCircle;
                     imageAwesome.Spin = false;
                     imageAwesome.Foreground = new SolidColorBrush(Color.FromRgb(32, 183, 89));
-                    new PopupWindow(this, "成功！").Show();
                 }
                 else
                 {
                     imageAwesome.Icon = FontAwesomeIcon.TimesCircle;
                     imageAwesome.Spin = false;
                     imageAwesome.Foreground = new SolidColorBrush(Colors.Red);
-                    new PopupWindow(this, "失败！").Show();
                 }
             }
 
@@ -417,7 +404,7 @@ namespace Jvedio
 
                 Properties.Settings.Default.Save();
 
-                new PopupWindow(this, "已恢复默认设置").Show();
+                HandyControl.Controls.Growl.Success("已恢复默认设置", "SettingsGrowl");
             }
 
     }
@@ -528,7 +515,7 @@ namespace Jvedio
             if (url == "default" & labelcontent == "321") url = Properties.Settings.Default.Jav321;
             if (url == "default" & labelcontent == "DMM") url = Properties.Settings.Default.DMM;
             if (labelcontent == "DB") { enablecookie = true; cookie = Properties.Settings.Default.DBCookie; }
-            if (enablecookie & cookie == "") { new PopupWindow(this, "勾选后输入 Cookie 再尝试！").Show(); return; }
+            if (enablecookie & cookie == "") { HandyControl.Controls.Growl.Info("勾选后输入 Cookie 再尝试！", "SettingsGrowl");  return; }
 
             if (url.IndexOf("http") < 0) { url = "https://" + url; }
             if (url.Substring(url.Length - 1, 1) != "/") { url=url+"/"; }
@@ -555,7 +542,7 @@ namespace Jvedio
                 if (!TestListen())
                     checkBox.IsChecked = false;
                 else
-                    new PopupWindow(this, "重启后生效！").Show();
+                    HandyControl.Controls.Growl.Info("重启后生效！", "SettingsGrowl");
             }
         }
 
@@ -583,7 +570,7 @@ namespace Jvedio
                 }
                 catch
                 {
-                    new PopupWindow(this, $"无权限监听{drives[i]}").Show();
+                    HandyControl.Controls.Growl.Error($"无权限监听{drives[i]}", "SettingsGrowl");
                     return false;
                 }
             }
@@ -642,7 +629,7 @@ namespace Jvedio
             StaticVariable.InitVariable();
             Scan.InitSearchPattern();
             Net.Init();
-            new PopupWindow(this, "保存成功").Show();
+            HandyControl.Controls.Growl.Success("保存成功", "SettingsGrowl");
         }
 
         private void SetFFMPEGPath(object sender, RoutedEventArgs e)
@@ -864,7 +851,6 @@ namespace Jvedio
 
         private void delete_Click(object sender, RoutedEventArgs e)
         {
-            //if(new Msgbox(this, "删除后不可恢复，是否删除？").ShowDialog() == false) { return; }
             FocusTextBox.Focus();
 
             Server server = vieModel_Settings.Servers[ServersDataGrid_RowIndex];

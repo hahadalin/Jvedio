@@ -540,6 +540,13 @@
     </local:Jvedio_BaseWindow.Resources>
 
     <Grid  Background="Transparent"   >
+
+        <!--消息提示框-->
+        <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="10 120 30 80">
+            <StackPanel hc:Growl.GrowlParent="True" hc:Growl.Token="SettingsGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
+        </ScrollViewer>
+
+
         <Grid Margin="0 0 0 50" Background="{DynamicResource BackgroundMain}"   Height="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
