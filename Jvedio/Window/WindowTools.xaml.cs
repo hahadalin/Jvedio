@@ -32,7 +32,7 @@ namespace Jvedio
         public WindowTools()
         {
             InitializeComponent();
-            WinState = 0;
+            //WinState = 0;//每次重新打开窗体默认为Normal
             vieModel = new VieModel_Tools();
             this.DataContext = vieModel;
             cts = new CancellationTokenSource();

@@ -6,9 +6,10 @@
                 xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:local="clr-namespace:Jvedio"
         mc:Ignorable="d"
-        Title="组合检索" Height="500" Width="800"
+        Title="组合检索" 
         MinHeight="450"
         MinWidth="800"
+                         WindowStartupLocation="CenterScreen"
         ContentRendered="Jvedio_BaseWindow_ContentRendered"
         
         >

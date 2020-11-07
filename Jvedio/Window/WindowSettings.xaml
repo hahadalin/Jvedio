@@ -7,16 +7,16 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="Jvedio.Settings"
         mc:Ignorable="d"
         Title="设置" 
-        Height="800" Width="1000"
-        xmlns:hc="https://handyorg.github.io/handycontrol"
-        ResizeMode="CanResizeWithGrip"
-        WindowStartupLocation="CenterOwner"
+        MinHeight="500" MinWidth="800"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen"
         AllowDrop="True"
     
-    ContentRendered="Jvedio_BaseWindow_ContentRendered"
+        ContentRendered="Jvedio_BaseWindow_ContentRendered"
     
     
         >

@@ -25,6 +25,7 @@ namespace Jvedio
 
         public static bool IsFlowOut(string filepath)
         {
+            if (string.IsNullOrEmpty(filepath)) return false;
             string name = new FileInfo(filepath).Name;
             return FLOWOUT.Any(arg => name.IndexOf(arg) >= 0);
 
@@ -32,6 +33,7 @@ namespace Jvedio
 
         public static bool IsCHS(string filepath)
         {
+            if (string.IsNullOrEmpty(filepath)) return false;
             string name = new FileInfo(filepath).Name;
             return CHS.Any(arg => name.IndexOf(arg) >= 0);
         }
@@ -40,6 +42,7 @@ namespace Jvedio
 
         public static bool IsHDV(string filepath)
         {
+            if (string.IsNullOrEmpty(filepath)) return false;
             FileInfo fileInfo = new FileInfo(filepath);
             string name = fileInfo.Name;
             if (!File.Exists(filepath))

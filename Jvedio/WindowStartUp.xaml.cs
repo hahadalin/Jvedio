@@ -146,13 +146,15 @@ namespace Jvedio
 
             SetSkin();
             
-            statusText.Text = "启动中……";
+            statusText.Text = "初始化参数……";
             InitDataBase();//初始化数据库
-            InitJav321IDConverter();//初始化 jav321，多 30M 内存
+            //InitJav321IDConverter();
             //初始化参数
             Identify.InitFanhaoList();
             Scan.InitSearchPattern();
-            StaticVariable.InitVariable();
+            InitVariable();
+            SaveScanPathToXml();
+            SaveServersToXml();
             Net.Init();
 
             //创建图片文件夹

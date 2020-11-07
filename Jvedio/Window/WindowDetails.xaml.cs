@@ -53,9 +53,6 @@ namespace Jvedio
 
             }
             else { this.DataContext = null; }
-
-            AdjustWindow();
-
             FatherGrid.Focus();
 
             SetSkin();
@@ -116,7 +113,7 @@ namespace Jvedio
 
         public void DownLoad(object sender, RoutedEventArgs e)
         {
-            if (!CheckBeforeDownload())
+            if (!IsServersProper())
             {
                 HandyControl.Controls.Growl.Error("请在设置【同步信息】中添加服务器源并启用！", "DetailsGrowl");
 
@@ -278,30 +275,6 @@ namespace Jvedio
         {
             if (DetailDownLoad != null && DetailDownLoad.IsDownLoading == true) HandyControl.Controls.Growl.Warning("已取消同步！", "DetailsGrowl");
             DetailDownLoad?.CancelDownload();
-        }
-
-        public void AdjustWindow()
-        {
-            //读取窗体设置
-            WindowConfig cj = new WindowConfig(this.GetType().Name);
-            Rect rect;
-            (rect, WinState) = cj.GetValue();
-            if (rect.X != -1 && rect.Y != -1)
-            {
-                this.WindowState = WindowState.Normal;
-                this.Left = rect.X > 0 ? rect.X : 0;
-                this.Top = rect.Y > 0 ? rect.Y : 0;
-                this.Height = rect.Height <= SystemParameters.PrimaryScreenHeight ? rect.Height : SystemParameters.PrimaryScreenHeight / 2;
-                this.Width = rect.Width <= SystemParameters.PrimaryScreenWidth ? rect.Width : SystemParameters.PrimaryScreenWidth / 2;
-                if (this.Width == SystemParameters.WorkArea.Width | this.Height == SystemParameters.WorkArea.Height) { WinState = JvedioWindowState.Maximized; }
-            }
-            else
-            {
-                WinState = JvedioWindowState.Normal;
-                this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            }
-
-
         }
 
 
@@ -1341,24 +1314,9 @@ namespace Jvedio
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             StopDownLoad();
-            if (this.WindowState != WindowState.Minimized)
-            {
-                if (this.WindowState == WindowState.Normal) WinState = JvedioWindowState.Normal;
-                else if (this.WindowState == WindowState.Maximized) WinState = JvedioWindowState.FullScreen;
-                else if (this.Width == SystemParameters.WorkArea.Width & this.Height == SystemParameters.WorkArea.Height) WinState = JvedioWindowState.Maximized;
-
-
-                WindowConfig cj = new WindowConfig(this.GetType().Name);
-                Rect rect = new Rect(this.Left, this.Top, this.Width, this.Height);
-                cj.Save(rect, WinState);
-            }
 
         }
 
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Console.WriteLine(this.WindowState.ToString());
-        }
 
         private void BigImage_DragOver(object sender, DragEventArgs e)
         {
@@ -1649,6 +1607,23 @@ namespace Jvedio
 
             }
             contextMenu.IsOpen = false;
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (VedioInfoBorder == null || MovieInfoBorder == null) return;
+            RadioButton radioButton = (RadioButton)sender;
+            if ((bool)radioButton.IsChecked)
+            {
+                VedioInfoBorder.Visibility = Visibility.Collapsed;
+                MovieInfoBorder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                VedioInfoBorder.Visibility = Visibility.Visible;
+                MovieInfoBorder.Visibility = Visibility.Collapsed;
+            }
+
         }
     }
 

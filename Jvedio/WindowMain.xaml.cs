@@ -989,32 +989,9 @@ namespace Jvedio
 
         public void AdjustWindow()
         {
-            //读取窗体设置
-            WindowConfig cj = new WindowConfig(this.GetType().Name);
-            Rect rect;
-            (rect, WinState) = cj.GetValue();
+            SetWindowProperty();
 
-            if (rect.X != -1 && rect.Y != -1)
-            {
-                //读到属性值
-                if (WinState == JvedioWindowState.FullScreen)
-                {
-                    this.WindowState = WindowState.Maximized;
-                }
-                else
-                {
-                    this.Left = rect.X > 0 ? rect.X : 0;
-                    this.Top = rect.Y > 0 ? rect.Y : 0;
-                    this.Height = rect.Height > 100 ? rect.Height : 100;
-                    this.Width = rect.Width > 100 ? rect.Width : 100;
-                    if (this.Width == SystemParameters.WorkArea.Width | this.Height == SystemParameters.WorkArea.Height) { WinState = JvedioWindowState.Maximized; }
-                }
-            }
-            else
-            {
-                WinState = 0;
-                this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            }
+
             HideMargin();
 
             SideGridColumn.Width = new GridLength(Properties.Settings.Default.SideGridWidth);
@@ -1030,6 +1007,33 @@ namespace Jvedio
                 DetailGrid.Visibility = Visibility.Hidden;
             }
 
+        }
+
+        private void SetWindowProperty()
+        {
+            //读取窗体设置
+            WindowConfig cj = new WindowConfig(this.GetType().Name);
+            WindowProperty windowProperty = cj.Read();
+            Rect rect = new Rect() { Location = windowProperty.Location, Size = windowProperty.Size };
+            WinState = windowProperty.WinState;
+            //读到属性值
+            if (WinState == JvedioWindowState.FullScreen)
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+            else if (WinState == JvedioWindowState.None)
+            {
+                WinState = 0;
+                this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+            else
+            {
+                this.Left = rect.X >= 0 ? rect.X : 0;
+                this.Top = rect.Y >= 0 ? rect.Y : 0;
+                this.Height = rect.Height > 100 ? rect.Height : 100;
+                this.Width = rect.Width > 100 ? rect.Width : 100;
+                if (this.Width == SystemParameters.WorkArea.Width | this.Height == SystemParameters.WorkArea.Height) { WinState = JvedioWindowState.Maximized; }
+            }
         }
 
 
@@ -2525,8 +2529,7 @@ namespace Jvedio
                 int idx1 = vieModel.CurrentMovieList.IndexOf(vieModel.CurrentMovieList.Where(arg => arg.id == ID).First());
                 int idx2 = vieModel.MovieList.IndexOf(vieModel.MovieList.Where(arg => arg.id == ID).First());
 
-                movie.gif = null;
-
+                //movie.gif = null;
                 //if (File.Exists(BasePicPath + $"Gif\\{movie.id}.gif"))
                 //    movie.gif = new Uri("pack://siteoforigin:,,,/" + BasePicPath.Replace("\\", "/") + $"Gif/{movie.id}.gif");
                 //else
@@ -3196,7 +3199,7 @@ namespace Jvedio
             if (DownLoader?.State == DownLoadState.DownLoading)
             {
                 HandyControl.Controls.Growl.Info("已有任务在下载！");
-            }else if (!CheckBeforeDownload())
+            }else if (!IsServersProper())
             {
                 HandyControl.Controls.Growl.Error("请在设置【同步信息】中添加服务器源并启用！");
             }
@@ -3340,8 +3343,7 @@ namespace Jvedio
                 else if (this.Width == SystemParameters.WorkArea.Width & this.Height == SystemParameters.WorkArea.Height) WinState = JvedioWindowState.Maximized;
 
                 WindowConfig cj = new WindowConfig(this.GetType().Name);
-                Rect rect = new Rect(this.Left, this.Top, this.Width, this.Height);
-                cj.Save(rect, WinState);
+                cj.Save(new WindowProperty() { Location = new Point(this.Left, this.Top), Size = new Size(this.Width, this.Height), WinState = WinState });
             }
             Properties.Settings.Default.EditMode = false;
             Properties.Settings.Default.ActorEditMode = false;
@@ -3700,7 +3702,7 @@ namespace Jvedio
         {
             DownloadPopup.IsOpen = false;
 
-            if (!CheckBeforeDownload())
+            if (!IsServersProper())
             {
                 HandyControl.Controls.Growl.Error("请在设置【同步信息】中添加服务器源并启用！");
 

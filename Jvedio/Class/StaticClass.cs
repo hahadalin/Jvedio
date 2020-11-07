@@ -18,14 +18,18 @@ using System.Data.SqlClient;
 using System.Collections.Specialized;
 using System.IO.Compression;
 using System.Windows.Controls.Primitives;
+using System.Xml;
 
 namespace Jvedio
 {
     public static class StaticClass
     {
 
-
-        public static bool CheckBeforeDownload()
+        /// <summary>
+        /// 检查是否启用服务器源且地址不为空
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsServersProper()
         {
             bool result = false;
             result = (Properties.Settings.Default.Enable321 && !string.IsNullOrEmpty(Properties.Settings.Default.Jav321))
@@ -37,10 +41,15 @@ namespace Jvedio
 
             return result;
         }
+
+
+
+        /// <summary>
+        /// 加载 321 识别码与网站转换规则，多 30M 内存
+        /// </summary>
         public static void InitJav321IDConverter()
         {
-            //读取数据文件
-            var jav321 = Resource_IDData.jav321;//JavGo
+            var jav321 = Resource_IDData.jav321;//来自于JavGo
             Stream jav321_stream = new MemoryStream(jav321);
             string str = "";
             using (var zip = new ZipArchive(jav321_stream, ZipArchiveMode.Read))
@@ -50,7 +59,6 @@ namespace Jvedio
                 {
                     str = sr.ReadToEnd();
                 }
-
             }
             Jav321IDDict = new Dictionary<string, string>();
             str = str.Replace("\r\n", "\n").ToUpper();
@@ -67,7 +75,6 @@ namespace Jvedio
                     {
                         Jav321IDDict.Add(item.Split(',')[1], item.Split(',')[0]);
                     }
-                    
                 }
             }
 
@@ -76,11 +83,15 @@ namespace Jvedio
 
 
 
-
+        /// <summary>
+        /// 保存信息到 NFO 文件
+        /// </summary>
+        /// <param name="vedio"></param>
+        /// <param name="NfoPath"></param>
         public static void SaveToNFO(DetailMovie vedio, string NfoPath)
         {
             var nfo = new NFO(NfoPath, "movie");
-            // nfo.SetNodeText("source", Settings.BusWebSite)
+            nfo.SetNodeText("source", vedio.sourceurl);
             nfo.SetNodeText("title", vedio.title);
             nfo.SetNodeText("director", vedio.director);
             nfo.SetNodeText("rating", vedio.rating.ToString());
@@ -96,42 +107,58 @@ namespace Jvedio
             // 类别
             foreach (var item in vedio.genre.Split(' '))
             {
-                if (!string.IsNullOrEmpty(item))
-                {
-                    nfo.AppendNewNode("genre", item);
-                }
+                if (!string.IsNullOrEmpty(item)) nfo.AppendNewNode("genre", item);
             }
             // 系列
             foreach (var item in vedio.tag.Split(' '))
             {
-                if (!string.IsNullOrEmpty(item))
-                {
-                    nfo.AppendNewNode("tag", item);
-                }
-            }
-
-            // 演员
-            foreach (var item in vedio.actor.Split(actorSplitDict[vedio.vediotype]))
-            {
-                if (!string.IsNullOrEmpty(item))
-                {
-                    nfo.AppendNewNode("actor");
-                    nfo.AppendNodeToNode("actor", "name", item);
-                    nfo.AppendNodeToNode("actor", "type", "Actor");
-                }
+                if (!string.IsNullOrEmpty(item)) nfo.AppendNewNode("tag", item);
             }
 
             // Fanart
             nfo.AppendNewNode("fanart");
             foreach (var item in vedio.extraimageurl.Split(';'))
             {
-                if (!string.IsNullOrEmpty(item))
+                if (!string.IsNullOrEmpty(item)) nfo.AppendNodeToNode("fanart", "thumb", item, "preview", item);
+            }
+
+            // 演员
+            if (vedio.vediotype == (int)VedioType.欧美)
+            {
+                foreach (var item in vedio.actor.Split('/'))
                 {
-                    nfo.AppendNodeToNode("fanart", "thumb", item, "preview", item);
+                    if (!string.IsNullOrEmpty(item))
+                    {
+                        nfo.AppendNewNode("actor");
+                        nfo.AppendNodeToNode("actor", "name", item);
+                        nfo.AppendNodeToNode("actor", "type", "Actor");
+                    }
                 }
             }
+            else
+            {
+                foreach (var item in vedio.actor.Split(actorSplitDict[vedio.vediotype]))
+                {
+                    if (!string.IsNullOrEmpty(item))
+                    {
+                        nfo.AppendNewNode("actor");
+                        nfo.AppendNodeToNode("actor", "name", item);
+                        nfo.AppendNodeToNode("actor", "type", "Actor");
+                    }
+                }
+            }
+
+
+
         }
 
+
+
+        /// <summary>
+        /// 判断拖入的是文件夹还是文件
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static bool IsFile(string path)
         {
             try
@@ -149,172 +176,116 @@ namespace Jvedio
 
         }
 
-        public static void SavePathToConfig(string name,List<string> paths)
+
+        /// <summary>
+        /// 读取原有的 config.ini到 xml
+        /// </summary>
+        public static void SaveScanPathToXml( )
         {
-            string path = string.Join("*", paths);
-            name = name.ToLower();
-            if (!File.Exists(DataBaseConfigPath))  {
-                string content = $"{name}?{path}\n";
-                using(StreamWriter sw=new StreamWriter(DataBaseConfigPath))
-                {
-                    sw.Write(content);
-                }
-            }
-            else
+            if (!File.Exists("DataBase\\Config.ini")) return;
+            Dictionary<string, StringCollection> DataBases = new Dictionary<string, StringCollection>();
+            using (StreamReader sr = new StreamReader(DataBaseConfigPath))
             {
-                string content = "";
-                using (StreamReader sr = new StreamReader(DataBaseConfigPath))
+                try
                 {
-                    content = sr.ReadToEnd();
+                    string content = sr.ReadToEnd();
+                    List<string> info = content.Split('\n').ToList();
+                    info.ForEach(arg => {
+                        string name = arg.Split('?')[0];
+                        StringCollection stringCollection = new StringCollection();
+                        arg.Split('?')[1].Split('*').ToList().ForEach(path => { if (!string.IsNullOrEmpty(path)) stringCollection.Add(path); });
+                       if(!DataBases.ContainsKey(name))  DataBases.Add(name, stringCollection);
+                    });
                 }
-                List<string> info = content.Split('\n').ToList();
-
-                Dictionary<string, string> dic = new Dictionary<string, string>();
-                info.ForEach(arg => {
-                    if (!string.IsNullOrEmpty(arg) )
-                    {
-                        string key = arg.Split('?')[0].ToLower();
-                        string value = arg.Split('?')[1];
-                        if (!string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(key) && !dic.ContainsKey(key)) dic.Add(key, value);
-                    }
-
-                });
-
-                if (dic.ContainsKey(name))
-                    dic[name] = $"{path}";
-                else
-                    dic.Add(name, path);
-
-                content = "";
-                foreach (KeyValuePair<string,string> item in dic)
-                {
-                    content = content + $"{item.Key}?{item.Value}\n";
-                }
-
-                using(StreamWriter sw=new StreamWriter(DataBaseConfigPath))
-                {
-                    sw.Write(content);
-                }
+                catch { }
             }
+            foreach(var item in DataBases)
+            {
+                SaveScanPathToConfig(item.Key, item.Value.Cast<string>().ToList());
+            }
+            File.Delete("DataBase\\Config.ini");
+        }
+
+        public static StringCollection ReadScanPathFromConfig(string name)
+        {
+            return new ScanPathConfig(name).Read();
+        }
+
+
+        public static void SaveScanPathToConfig(string name,List<string> paths)
+        {
+            ScanPathConfig scanPathConfig = new ScanPathConfig(name);
+            scanPathConfig.Save(paths);
+        }
+
+
+        /// <summary>
+        /// 读取原有的 config.ini到 xml
+        /// </summary>
+        public static void SaveServersToXml()
+        {
+            if (!File.Exists("ServersConfig.ini")) return;
+            Dictionary<WebSite, Dictionary<string,string>> Servers = new Dictionary<WebSite, Dictionary<string, string>>();
+            using (StreamReader sr = new StreamReader("ServersConfig.ini"))
+            {
+                try
+                {
+                    string content = sr.ReadToEnd();
+                    List<string> rows = content.Split('\n').ToList();
+                    rows.ForEach(arg => {
+                        string name = arg.Split('?')[0];
+                        WebSite webSite = WebSite.None;
+                        Enum.TryParse<WebSite>(name, out webSite);
+                        string[] infos = arg.Split('?')[1].Split('*');
+                        Dictionary<string, string> info = new Dictionary<string, string>();
+                        info.Add("Url", infos[0]);
+                        info.Add("ServerName", infos[1]);
+                        info.Add("LastRefreshDate", infos[2]);
+                        if (!Servers.ContainsKey(webSite)) Servers.Add(webSite, info);
+                    });
+                }
+                catch { }
+            }
+            foreach (var item in Servers)
+            {
+                SaveServersInfoToConfig(item.Key, item.Value.Values.ToList<string>());
+            }
+            File.Delete("ServersConfig.ini");
         }
 
         public static void SaveServersInfoToConfig(WebSite webSite, List<string> infos)
         {
-            string info1 = string.Join("*", infos);
-            string url = webSite.ToString();
-            if (!File.Exists(ServersConfigPath))
-            {
-                string content = $"{url}?{info1}\n";
-                using (StreamWriter sw = new StreamWriter(ServersConfigPath))
-                {
-                    sw.Write(content);
-                }
-            }
-            else
-            {
-                string content = "";
-                using (StreamReader sr = new StreamReader(ServersConfigPath))
-                {
-                    content = sr.ReadToEnd();
-                }
-                List<string> info = content.Split('\n').ToList();
+            Dictionary<string, string> info = new Dictionary<string, string>();
+            info.Add("Url", infos[0]);
+            info.Add("ServerName", infos[1]);
+            info.Add("LastRefreshDate", infos[2]);
 
-                Dictionary<string, string> dic = new Dictionary<string, string>();
-                info.ForEach(arg => {
-                    if (!string.IsNullOrEmpty(arg))
-                    {
-                        string key = arg.Split('?')[0];
-                        string value = arg.Split('?')[1];
-                        if (!string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(key) && !dic.ContainsKey(key)) dic.Add(key, value);
-                    }
-
-                });
-
-                if (dic.ContainsKey(url))
-                    dic[url] = $"{info1}";
-                else
-                    dic.Add(url, info1);
-
-                content = "";
-                foreach (KeyValuePair<string, string> item in dic)
-                {
-                    content = content + $"{item.Key}?{item.Value}\n";
-                }
-
-                using (StreamWriter sw = new StreamWriter(ServersConfigPath))
-                {
-                    sw.Write(content);
-                }
-            }
+            ServerConfig serverConfig = new ServerConfig(webSite.ToString());
+            serverConfig.Save(info);
         }
 
         public static void DeleteServerInfoFromConfig(WebSite webSite)
         {
 
-            if (!File.Exists(ServersConfigPath)) return ;
-            string total = "";
-            string content = "";
-            using (StreamReader sr = new StreamReader(ServersConfigPath))
-            {
-                try
-                {
-                    total = sr.ReadToEnd();
-                    List<string> info = total.Split('\n').ToList();
-                    content = info.Where(arg => !string.IsNullOrEmpty(arg)).Where(arg => arg.Split('?')[0] == webSite.ToString()).First();
-                }
-                catch (Exception e) { Console.WriteLine(e.Message); }
-            }
-            if(total != "" && content!="")
-            {
-                total=total.Replace(content + "\n", "");
-                using(StreamWriter sw=new StreamWriter(ServersConfigPath))
-                {
-                    sw.Write(total);
-                }
-            }
-          
+            if (!File.Exists("ServersConfig.ini")) return;
+            ServerConfig serverConfig = new ServerConfig(webSite.ToString());
+            serverConfig.Delete();
         }
 
         public static List<string> ReadServerInfoFromConfig(WebSite webSite)
         {
             
-            if (!File.Exists(ServersConfigPath)) return new List<string>() { webSite.ToString(),"","" };
+            if (!File.Exists("ServersConfig.ini")) return new List<string>() { webSite.ToString(),"","" };
 
 
             List<string> result = new List<string>();
-            using (StreamReader sr = new StreamReader(ServersConfigPath))
-            {
-                try
-                {
-                    string content = sr.ReadToEnd();
-                    List<string> info = content.Split('\n').ToList();
-                    List<string> row = info.Where(arg => !string.IsNullOrEmpty(arg)).Where(arg => arg.Split('?')[0] == webSite.ToString()).First().Split('?')[1].Split('*').ToList();
-                    row.ForEach(arg => { result.Add(arg); });
-                }
-                catch(Exception e) { Console.WriteLine(e.Message); }
-            }
+
+            result = new ServerConfig(webSite.ToString()).Read();
             if (result.Count < 3) result= new List<string>() { webSite.ToString(), "", "" };
             return result;
         }
 
-        public static StringCollection ReadScanPathFromConfig(string name)
-        {
-            name = name.ToLower();
-            StringCollection result = new StringCollection();
-            if (!File.Exists(DataBaseConfigPath)) return result;
-            using(StreamReader sr=new StreamReader(DataBaseConfigPath))
-            {
-                try
-                {
-                    string content = sr.ReadToEnd();
-                    List<string> info = content.Split('\n').ToList();
-                    List<string> row = info.Where(arg=>!string.IsNullOrEmpty(arg)). Where(arg => arg.Split('?')[0].ToLower()==name).First().Split('?')[1].Split('*').ToList();
-                    row.ForEach(arg => { result.Add(arg); });
-                }
-                catch { }
-            }
-            return result;
-        }
+
 
 
 

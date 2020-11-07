@@ -11,6 +11,12 @@ namespace Jvedio
     public static class MediaParse
     {
 
+
+        /// <summary>
+        /// 获得影片长度（wmv  10ms，其他  100ms）
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string GetVedioDuration(string path)
         {
             MediaInfo mediaInfo = new MediaInfo();
@@ -18,7 +24,8 @@ namespace Jvedio
             string result = "00:00:00";
             try
             {
-                result = mediaInfo.Get(0, 0, "Duration/String3").Substring(0, mediaInfo.Get(0, 0, "Duration/String3").LastIndexOf("."));
+                string Duration = mediaInfo.Get(0, 0, "Duration/String3");
+                result = Duration.Substring(0, Duration.LastIndexOf("."));
             }
             catch { }
 
@@ -26,21 +33,25 @@ namespace Jvedio
         }
 
 
+        /// <summary>
+        /// 生成截图的时间节点（wmv  10ms，其他  100ms）
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string[] GetCutOffArray(string path)
         {
             if (Properties.Settings.Default.ScreenShotNum <= 0 || Properties.Settings.Default.ScreenShotNum > 30) Properties.Settings.Default.ScreenShotNum = 10;
             string[] result = new string[Properties.Settings.Default.ScreenShotNum+2];
             string Duration = GetVedioDuration(path);
-            uint Second = DurationToSecond(Duration);
+            double Second = DurationToSecond(Duration);
             
 
             if(Second <20) { return null; }
             else
             {
-                if (Second > 350)
-                    Second = Second - 300; //去掉开头结尾
+                if (Second > 350) Second = Second - 300; //去掉开头结尾
                     
-                // n 等分
+                // 按照秒 n 等分
                 uint splitLength =(uint)( Second / Properties.Settings.Default.ScreenShotNum);
                 if (splitLength == 0) splitLength = 1;
                 for (int i = 0; i < result.Count(); i++)
@@ -58,13 +69,12 @@ namespace Jvedio
             
         }
 
-        public static uint DurationToSecond(string Duration)
+        public static double DurationToSecond(string Duration)
         {
-            // 00:00:00
-            if (Duration.Split(':').Count() < 3) return 0;
-            uint Hour = uint.Parse( Duration.Split(':')[0]);
-            uint Minutes = uint.Parse(Duration.Split(':')[1]);
-            uint Seconds = uint.Parse(Duration.Split(':')[2]);
+            if (string.IsNullOrEmpty(Duration) || Duration.Split(':').Count() < 3) return 0;
+            double Hour = double.Parse( Duration.Split(':')[0]);
+            double Minutes = double.Parse(Duration.Split(':')[1]);
+            double Seconds = double.Parse(Duration.Split(':')[2]);
             return Hour * 3600 + Minutes * 60 + Seconds;
         }
 
@@ -74,19 +84,24 @@ namespace Jvedio
             if (Second ==0 ) return "00:00:00";
             TimeSpan timeSpan = TimeSpan.FromSeconds(Second);
             return $"{timeSpan.Hours.ToString().PadLeft(2,'0')}:{timeSpan.Minutes.ToString().PadLeft(2, '0')}:{timeSpan.Seconds.ToString().PadLeft(2, '0')}";
-
-
         }
 
-        public static string MediaInfo(string VideoName)
+
+
+        /// <summary>
+        /// 获取视频信息 （wmv  10ms，其他  100ms）
+        /// </summary>
+        /// <param name="VideoName"></param>
+        /// <returns></returns>
+        public static VedioInfo GetMediaInfo(string vediopath)
         {
-            string info = "无视频信息";
-            if (File.Exists(VideoName))
+            VedioInfo vedioInfo = new VedioInfo() { Format = "", BitRate = "", Duration = "", FileSize = "", Width = "", Height = "", Resolution = "", DisplayAspectRatio = "", FrameRate = "", BitDepth = "", PixelAspectRatio = "", Encoded_Library = "", FrameCount = "", AudioFormat = "", AudioBitRate = "", AudioSamplingRate = "", Channel = "" };
+            if (File.Exists(vediopath))
             {
                 MediaInfo MI = new MediaInfo();
-                MI.Open(VideoName);
+                MI.Open(vediopath);
                 //全局
-                string container = MI.Get(StreamKind.General, 0, "Format");
+                string format = MI.Get(StreamKind.General, 0, "Format");
                 string bitrate = MI.Get(StreamKind.General, 0, "BitRate/String");
                 string duration = MI.Get(StreamKind.General, 0, "Duration/String1");
                 string fileSize = MI.Get(StreamKind.General, 0, "FileSize/String");
@@ -117,39 +132,30 @@ namespace Jvedio
 
                 string audioInfo = MI.Get(StreamKind.Audio, 0, "Inform") + MI.Get(StreamKind.Audio, 1, "Inform") + MI.Get(StreamKind.Audio, 2, "Inform") + MI.Get(StreamKind.Audio, 3, "Inform");
                 string videoInfo = MI.Get(StreamKind.Video, 0, "Inform");
-
-                info = System.IO.Path.GetFileName(VideoName) + "\r\n" +
-                    "容器：" + container + "\r\n" +
-                    "总码率：" + bitrate + "\r\n" +
-                    "大小：" + fileSize + "\r\n" +
-                    "时长：" + duration + "\r\n" +
-                    "\r\n" +
-                    "视频(" + vid + ")：" + video + "\r\n" +
-                    "码率：" + vBitRate + "\r\n" +
-                    "大小：" + vSize + "\r\n" +
-                    "分辨率：" + width + "x" + height + "\r\n" +
-                    "宽高比：" + risplayAspectRatio + "(" + risplayAspectRatio2 + ")" + "\r\n" +
-                    "帧率：" + frameRate + "\r\n" +
-                    "位深度：" + bitDepth + "\r\n" +
-                    "像素宽高比：" + pixelAspectRatio + "\r\n" +
-                    "编码库：" + encodedLibrary + "\r\n" +
-                    "Profile：" + codecProfile + "\r\n" +
-                    "编码时间：" + encodeTime + "\r\n" +
-                    "总帧数：" + frameCount + "\r\n" +
-
-                    "\r\n" +
-                    "音频(" + aid + ")：" + audio + "\r\n" +
-                    "大小：" + aSize + "\r\n" +
-                    "码率：" + aBitRate + "\r\n" +
-                    "采样率：" + samplingRate + "\r\n" +
-                    "声道数：" + channel + "\r\n" +
-                    "\r\n====详细信息====\r\n" +
-                    videoInfo + "\r\n" +
-                    audioInfo + "\r\n"
-                    ;
                 MI.Close();
+
+                vedioInfo = new VedioInfo()
+                {
+                    Format = format,
+                    BitRate = vBitRate,
+                    Duration = duration.Replace("h", "小时").Replace("mn", "分钟").Replace("ms", "毫秒").Replace("s", "秒"),
+                    FileSize = fileSize,
+                    Width = width,
+                    Height = height,
+                    Resolution = width + "x" + height,
+                    DisplayAspectRatio = risplayAspectRatio,
+                    FrameRate = frameRate,
+                    BitDepth = bitDepth,
+                    PixelAspectRatio = pixelAspectRatio,
+                    Encoded_Library = encodedLibrary,
+                    FrameCount = frameCount,
+                    AudioFormat = audio,
+                    AudioBitRate = aBitRate,
+                    AudioSamplingRate = samplingRate,
+                    Channel = channel
+                };
             }
-            return info;
+            return vedioInfo;
         }
 
 

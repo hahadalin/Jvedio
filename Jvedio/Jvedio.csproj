@@ -214,6 +214,8 @@
     </Compile>
     <Compile Include="Class\JvedioClass.cs" />
     <Compile Include="Class\MediaParse.cs" />
+    <Compile Include="Config\ServerConfig.cs" />
+    <Compile Include="Config\ScanPathConfig.cs" />
     <Compile Include="Controls\WaitingPanel.xaml.cs">
       <DependentUpon>WaitingPanel.xaml</DependentUpon>
     </Compile>
@@ -221,6 +223,7 @@
     <Compile Include="Library\DB.cs" />
     <Compile Include="Library\MediaInfo.cs" />
     <Compile Include="Library\ImageProcess.cs" />
+    <Compile Include="Library\XML.cs" />
     <Compile Include="Window\Jvedio_BaseWindow.cs" />
     <Compile Include="Class\MultiDownLoader.cs" />
     <Compile Include="Library\Translate.cs" />
@@ -248,7 +251,7 @@
     <Compile Include="Library\NetParse.cs" />
     <Compile Include="Library\NFO.cs" />
     <Compile Include="Library\Scan.cs" />
-    <Compile Include="Library\WindowConfig.cs" />
+    <Compile Include="Config\WindowConfig.cs" />
     <Compile Include="Window\PopupWindow.xaml.cs">
       <DependentUpon>PopupWindow.xaml</DependentUpon>
     </Compile>
@@ -288,6 +291,9 @@
     <Compile Include="Window\WindowBatch.xaml.cs">
       <DependentUpon>WindowBatch.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Window\WindowTest.xaml.cs">
+      <DependentUpon>WindowTest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Window\WindowTools.xaml.cs">
       <DependentUpon>WindowTools.xaml</DependentUpon>
     </Compile>
@@ -311,6 +317,10 @@
     <Page Include="Window\WindowBatch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Window\WindowTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window\Window_DBManagement.xaml">
       <SubType>Designer</SubType>

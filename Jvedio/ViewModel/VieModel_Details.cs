@@ -37,6 +37,30 @@ namespace Jvedio.ViewModel
 
 
 
+        public string _SwitchInfo = "影片信息";
+        public string SwitchInfo
+        {
+            get { return _SwitchInfo; }
+            set
+            {
+                _SwitchInfo = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public VedioInfo _VedioInfo;
+
+        public VedioInfo VedioInfo
+        {
+            get { return _VedioInfo; }
+            set
+            {
+                _VedioInfo = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         public DetailMovie detailmovie;
 
@@ -163,10 +187,9 @@ namespace Jvedio.ViewModel
 
                 DetailMovie = detailMovie;
                 //QueryCompletedHandler?.Invoke(null, EventArgs.Empty);
+                VedioInfo = MediaParse.GetMediaInfo(DetailMovie.filepath);
             }
         }
-
-
     }
 
     public static class MyExtensions

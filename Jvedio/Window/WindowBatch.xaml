@@ -11,10 +11,10 @@
         x:Class="Jvedio.WindowBatch"
         mc:Ignorable="d"
         Title="批量处理" 
-        Height="500" Width="800"
+        MinHeight="500" MinWidth="800"
         xmlns:hc="https://handyorg.github.io/handycontrol"
-        ResizeMode="CanResizeWithGrip"
-        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen"
         AllowDrop="True"
 
     Closing="Jvedio_BaseWindow_Closing"

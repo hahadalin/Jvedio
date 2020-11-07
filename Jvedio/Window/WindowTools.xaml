@@ -9,9 +9,10 @@
         xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         x:Class="Jvedio.WindowTools"
         mc:Ignorable="d"
-        Title="工具" Height="500" Width="815.333"
+        Title="工具" 
         MinHeight="450"
         MinWidth="800"
+        WindowStartupLocation="CenterScreen"
     
         >
 

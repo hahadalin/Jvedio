@@ -28,11 +28,8 @@ namespace Jvedio
         public Jvedio_BaseWindow()
         {
             InitStyle();//窗体的 Style
-            AdjustWindow();
             this.Loaded += delegate { InitEvent(); };//初始化载入事件
-
-
-
+            AdjustWindow();
         }
 
         #region "改变窗体大小"
@@ -173,11 +170,11 @@ namespace Jvedio
             {
                 if (this.WindowState == WindowState.Normal) WinState =JvedioWindowState.Normal;
                 else if (this.WindowState == WindowState.Maximized) WinState = JvedioWindowState.FullScreen;
-                else if (this.Width == SystemParameters.WorkArea.Width & this.Height == SystemParameters.WorkArea.Height) WinState = JvedioWindowState.Maximized;
+
+                if (this.Width == SystemParameters.WorkArea.Width & this.Height == SystemParameters.WorkArea.Height) WinState = JvedioWindowState.Maximized;
 
                 WindowConfig cj = new WindowConfig(this.GetType().Name);
-                Rect rect = new Rect(this.Left, this.Top, this.Width, this.Height);
-                cj.Save(rect, WinState);
+                cj.Save(new WindowProperty() { Location=new Point(this.Left,this.Top),Size=new Size(this.Width,this.Height),WinState=WinState});
             }
         }
 
@@ -188,30 +185,26 @@ namespace Jvedio
         {
             //读取窗体设置
             WindowConfig cj = new WindowConfig(this.GetType().Name);
-            Rect rect;
-            (rect, WinState) = cj.GetValue();
-
-            if ( rect.X!=-1 && rect.Y!=-1)
+            WindowProperty windowProperty = cj.Read();
+            Rect rect = new Rect() { Location = windowProperty.Location, Size = windowProperty.Size };
+            WinState = windowProperty.WinState;
+            //读到属性值
+            if (WinState == JvedioWindowState.FullScreen)
             {
-                //读到属性值
-                if (WinState == JvedioWindowState.Maximized)
-                {
-                    MaxWindow(this, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-                }
-                else
-                {
-                    this.WindowState = WindowState.Normal;
-                    this.Left = rect.X > 0 ? rect.X : 0;
-                    this.Top = rect.Y > 0 ? rect.Y : 0;
-                    this.Height = rect.Height > 100 ? rect.Height : 100;
-                    this.Width = rect.Width > 100 ? rect.Width : 100;
-                    if (this.Width == SystemParameters.WorkArea.Width | this.Height == SystemParameters.WorkArea.Height) { WinState = JvedioWindowState.Maximized; }
-                }
+                this.WindowState = WindowState.Maximized;
+            }
+            else if (WinState == JvedioWindowState.None)
+            {
+                WinState = 0;
+                this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
             else
             {
-                WinState = JvedioWindowState.Normal;
-                this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                this.Left = rect.X >= 0 ? rect.X : 0;
+                this.Top = rect.Y >= 0 ? rect.Y : 0;
+                this.Height = rect.Height > 100 ? rect.Height : 100;
+                this.Width = rect.Width > 100 ? rect.Width : 100;
+                if (this.Width == SystemParameters.WorkArea.Width | this.Height == SystemParameters.WorkArea.Height) { WinState = JvedioWindowState.Maximized; }
             }
 
             HideMargin();
@@ -255,6 +248,8 @@ namespace Jvedio
             };
 
             this.SizeChanged += onSizeChanged;
+
+            this.ContentRendered += delegate { HideMargin(); };
 
 
 
@@ -395,7 +390,6 @@ namespace Jvedio
                 this.Width = WindowSize.Width;
                 this.Height = WindowSize.Height;
             }
-            this.WindowState = WindowState.Normal;
             HideMargin();
         }
 

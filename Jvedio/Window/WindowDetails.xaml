@@ -17,7 +17,6 @@
         Height="720"
         Width="1230"
         Closing="Window_Closing"
-        SizeChanged="Window_SizeChanged"
         >
     <Window.Resources>
 
@@ -238,17 +237,19 @@
 
 
 
-    <Grid x:Name="FatherGrid" PreviewKeyUp="Grid_PreviewKeyUp"   Focusable="True" Margin="5">
-        <Grid.Effect>
-            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
-        </Grid.Effect>
+    <Grid x:Name="FatherGrid" PreviewKeyUp="Grid_PreviewKeyUp"   Focusable="True" Margin="10">
+        <Border  x:Name="MainBorder"   Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="5"  >
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="5" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
+            </Border.Effect>
+        </Border>
 
         <!--消息提示框-->
         <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="20">
             <StackPanel hc:Growl.Token="DetailsGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
 
-        <Border x:Name="BackBorder"  CornerRadius="5" Background="{DynamicResource BackgroundMain}" BorderBrush="LightBlue" BorderThickness="0">
+        <Border Margin="5" x:Name="BackBorder"  CornerRadius="5" Background="{DynamicResource BackgroundMain}" BorderBrush="LightBlue" BorderThickness="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
@@ -501,250 +502,335 @@
 
 
 
+                            <Grid  Margin="0 0 0 20" Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                    <RadioButton Unchecked="RadioButton_Checked" Checked="RadioButton_Checked"   FontSize="12" Style="{StaticResource FlatRadioButton}" IsChecked="True" Content="影片信息" GroupName="InfoSwitchRadioButton"/>
+                                    <RadioButton  FontSize="12"  Style="{StaticResource FlatRadioButton}" Content="视频信息" GroupName="InfoSwitchRadioButton"/>
+                                </StackPanel>
+
+                                <Border x:Name="MovieInfoBorder" Grid.Row="1" Visibility="Visible"  >
+                                    <ScrollViewer Height="auto"  Margin="20 0 0 0" HorizontalAlignment="Stretch">
+                                        <StackPanel  >
+                                            <TextBox Margin="-1 20 0 16" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"></TextBox>
+                                            <StackPanel Orientation="Horizontal" >
+                                                <TextBlock   FontSize="14"  VerticalAlignment="Center" Style="{StaticResource ViewTextBlock}"  Foreground="{DynamicResource ForegroundSearch}" Text="{Binding DetailMovie.releasedate}" Margin="0 0 10 0"></TextBlock>
+
+                                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                                    <Image VerticalAlignment="Center" Source="{Binding Themes, Mode=OneWay, ConverterParameter=runtime,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" />
+                                                    <TextBlock FontSize="14" VerticalAlignment="Center" Style="{StaticResource ViewTextBlock}"  Foreground="{DynamicResource ForegroundSearch}" Text="{Binding  DetailMovie.runtime , StringFormat='\{0} 分钟'}" ></TextBlock>
+                                                </StackPanel>
+
+                                            </StackPanel>
+
+                                            <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="0 20" Cursor="Hand">
+                                                <hc:Rate AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"  ValueChanged="Rate_ValueChanged" DefaultValue="0"/>
+                                            </StackPanel>
 
 
 
-                            <Border Margin="0 0 0 20" Grid.Column="0" Background="Transparent"  BorderBrush="Gray" >
-                                <ScrollViewer Height="auto"  Margin="20 0 0 0" HorizontalAlignment="Stretch">
-                                    <StackPanel  >
-                                        <TextBox Margin="-1 20 0 16" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"></TextBox>
-                                        <StackPanel Orientation="Horizontal" >
-                                            <TextBlock   FontSize="14"  VerticalAlignment="Center" Style="{StaticResource ViewTextBlock}"  Foreground="{DynamicResource ForegroundSearch}" Text="{Binding DetailMovie.releasedate}" Margin="0 0 10 0"></TextBlock>
 
-                                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                                <Image VerticalAlignment="Center" Source="{Binding Themes, Mode=OneWay, ConverterParameter=runtime,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" />
-                                                <TextBlock FontSize="14" VerticalAlignment="Center" Style="{StaticResource ViewTextBlock}"  Foreground="{DynamicResource ForegroundSearch}" Text="{Binding  DetailMovie.runtime , StringFormat='\{0} 分钟'}" ></TextBlock>
+
+
+
+
+                                            <!--演员-->
+                                            <Grid  Margin="0 0 0 5" Height="auto">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="演员：" Style="{StaticResource ViewTextBlock2}" />
+                                                <ItemsControl  Grid.Column="1" ItemsSource="{Binding DetailMovie.actorlist}" Height="auto"  VerticalAlignment="Top"  Background="Transparent" >
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+
+                                                            <WrapPanel Orientation="Horizontal" >
+                                                            </WrapPanel>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <WrapPanel>
+                                                                <Border Margin="2 0" Padding="2 0"  Style="{StaticResource GenreBorder}" MouseUp="ShowSameActor"  MouseEnter="ShowActor" MouseLeave="HideActor" MouseMove="ActorMouseMove">
+                                                                    <StackPanel Background="Transparent"  >
+                                                                        <TextBlock Opacity="0.5" Text="{Binding name}"  FontFamily="微软雅黑" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Center" Margin="2 0"  FontSize="16"  >
+                                                                        </TextBlock>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </WrapPanel>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </Grid>
+
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <StackPanel.Style>
+                                                    <Style TargetType="StackPanel">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding DetailMovie.director}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </StackPanel.Style>
+                                                <TextBlock Text="导演："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <Border Style="{StaticResource GenreBorder}" >
+                                                    <Label  Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.director}" MouseLeftButtonUp="ShowSameDirector"      ></Label>
+                                                </Border>
+
+                                            </StackPanel>
+
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
+                                                <StackPanel.Style>
+                                                    <Style TargetType="StackPanel">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding DetailMovie.tag}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </StackPanel.Style>
+                                                <TextBlock Text="系列："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
+                                                <Border Style="{StaticResource GenreBorder}">
+                                                    <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.tag}" MouseLeftButtonUp="ShowSameTag"></Label>
+                                                </Border>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
+                                                <StackPanel.Style>
+                                                    <Style TargetType="StackPanel">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding DetailMovie.tag}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </StackPanel.Style>
+                                                <TextBlock Text="类型："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
+                                                <Border Style="{StaticResource GenreBorder}" Background="Transparent" Cursor="Arrow">
+                                                    <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.vediotype}" ></Label>
+                                                </Border>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
+                                                <StackPanel.Style>
+                                                    <Style TargetType="StackPanel">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding DetailMovie.rating}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </StackPanel.Style>
+                                                <TextBlock Text="评分："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
+                                                <TextBlock Style="{StaticResource ViewTextBlock}" Text="{Binding DetailMovie.rating}"></TextBlock>
+                                            </StackPanel>
+
+
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
+                                                <StackPanel.Style>
+                                                    <Style TargetType="StackPanel">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding DetailMovie.studio}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </StackPanel.Style>
+                                                <TextBlock Text="发行商："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
+                                                <Border Style="{StaticResource GenreBorder}">
+                                                    <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.studio}" MouseLeftButtonUp="ShowSameStudio"></Label>
+                                                </Border>
+                                            </StackPanel>
+
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
+                                                <StackPanel.Style>
+                                                    <Style TargetType="StackPanel">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding DetailMovie.studio}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </StackPanel.Style>
+                                                <TextBlock Text="创建日："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
+                                                <TextBlock   Style="{StaticResource ViewTextBlock}" Text="{Binding DetailMovie.scandate}" ></TextBlock>
+                                            </StackPanel>
+
+                                            <!--类别-->
+                                            <Grid  Margin="0 5" >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="类别：" Style="{StaticResource ViewTextBlock2}" />
+                                                <ItemsControl  Grid.Column="1" ItemsSource="{Binding DetailMovie.genrelist}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel Orientation="Horizontal">
+                                                            </WrapPanel>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border >
+                                                                <WrapPanel>
+                                                                    <Border Margin="2 0" Padding="2 0"   Style="{StaticResource GenreBorder}">
+                                                                        <Label Style="{StaticResource GenLabel}" Content="{Binding}"  MouseLeftButtonUp="ShowSameGenre"></Label>
+                                                                    </Border>
+                                                                </WrapPanel>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </Grid>
+
+                                            <!--标签-->
+                                            <Grid  Margin="0 5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="标签：" Style="{StaticResource ViewTextBlock2}" />
+
+                                                <ItemsControl  Grid.Column="1" ItemsSource="{Binding DetailMovie.labellist}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <hc:TagPanel  ShowAddButton="True"    TagMargin="20"    Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
+
+                                                            </hc:TagPanel>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border >
+                                                                <hc:TagPanel >
+                                                                    <hc:Tag Closing="Tag_Closing"  MouseLeftButtonUp="ShowSameLabel" Cursor="Hand"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}" FontSize="16" ShowCloseButton="True" Selectable="False"  Content="{Binding}"/>
+                                                                </hc:TagPanel>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </Grid>
+
+
+                                            <!--信息-->
+                                            <Grid Margin="0 5"  Background="Transparent">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding DetailMovie.plot}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
+
+
+
+                                                <TextBlock Grid.Column="0" Text="摘要："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+
+
+
+                                                <TextBlock Margin="5 0" Grid.Column="1"   Style="{StaticResource ViewTextBlock2}" Text="{Binding DetailMovie.plot}"  Height="auto" TextWrapping="Wrap"  ></TextBlock>
+                                            </Grid>
+
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Border>
+
+                                <Border x:Name="VedioInfoBorder"  Grid.Row="1" Visibility="Collapsed"  >
+                                    <ScrollViewer Height="auto"  Margin="20 0 0 0" HorizontalAlignment="Stretch">
+                                        <StackPanel  >
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80" Text="视频格式："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Format}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="总码率："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.BitRate}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="时长："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Duration}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="文件大小："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FileSize}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="分辨率："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Resolution}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock  Width="80" Text="宽高比："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.DisplayAspectRatio}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="帧率："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameRate}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock  Width="80" Text="位深度："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.BitDepth}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="总帧数："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameCount}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="音频格式："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioFormat}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock  Width="80" Text="音频码率："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioBitRate}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="采样率："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioSamplingRate}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="声道数："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Channel}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                         </StackPanel>
-
-                                        <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="0 20" Cursor="Hand">
-                                            <hc:Rate AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"  ValueChanged="Rate_ValueChanged" DefaultValue="0"/>
-                                        </StackPanel>
-
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
 
 
 
 
-
-
-
-                                        <!--演员-->
-                                        <Grid  Margin="0 0 0 5" Height="auto">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="演员：" Style="{StaticResource ViewTextBlock2}" />
-                                            <ItemsControl  Grid.Column="1" ItemsSource="{Binding DetailMovie.actorlist}" Height="auto"  VerticalAlignment="Top"  Background="Transparent" >
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-
-                                                        <WrapPanel Orientation="Horizontal" >
-                                                        </WrapPanel>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <WrapPanel>
-                                                            <Border Margin="2 0" Padding="2 0"  Style="{StaticResource GenreBorder}" MouseUp="ShowSameActor"  MouseEnter="ShowActor" MouseLeave="HideActor" MouseMove="ActorMouseMove">
-                                                                <StackPanel Background="Transparent"  >
-                                                                    <TextBlock Opacity="0.5" Text="{Binding name}"  FontFamily="微软雅黑" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Center" Margin="2 0"  FontSize="16"  >
-                                                                    </TextBlock>
-                                                                </StackPanel>
-                                                            </Border>
-                                                        </WrapPanel>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </Grid>
-
-
-                                        <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                            <StackPanel.Style>
-                                                <Style TargetType="StackPanel">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DetailMovie.director}" Value="">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </StackPanel.Style>
-                                            <TextBlock Text="导演："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                            <Border Style="{StaticResource GenreBorder}" >
-                                                <Label  Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.director}" MouseLeftButtonUp="ShowSameDirector"      ></Label>
-                                            </Border>
-
-                                        </StackPanel>
-
-
-                                        <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
-                                            <StackPanel.Style>
-                                                <Style TargetType="StackPanel">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DetailMovie.tag}" Value="">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </StackPanel.Style>
-                                            <TextBlock Text="系列："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                            <Border Style="{StaticResource GenreBorder}">
-                                                <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.tag}" MouseLeftButtonUp="ShowSameTag"></Label>
-                                            </Border>
-                                        </StackPanel>
-
-                                        <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
-                                            <StackPanel.Style>
-                                                <Style TargetType="StackPanel">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DetailMovie.tag}" Value="">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </StackPanel.Style>
-                                            <TextBlock Text="类型："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                            <Border Style="{StaticResource GenreBorder}" Background="Transparent" Cursor="Arrow">
-                                                <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.vediotype}" ></Label>
-                                            </Border>
-                                        </StackPanel>
-
-                                        <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
-                                            <StackPanel.Style>
-                                                <Style TargetType="StackPanel">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DetailMovie.rating}" Value="">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </StackPanel.Style>
-                                            <TextBlock Text="评分："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                            <TextBlock Style="{StaticResource ViewTextBlock}" Text="{Binding DetailMovie.rating}"></TextBlock>
-                                        </StackPanel>
-
-
-
-                                        <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
-                                            <StackPanel.Style>
-                                                <Style TargetType="StackPanel">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DetailMovie.studio}" Value="">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </StackPanel.Style>
-                                            <TextBlock Text="发行商："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                            <Border Style="{StaticResource GenreBorder}">
-                                                <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.studio}" MouseLeftButtonUp="ShowSameStudio"></Label>
-                                            </Border>
-                                        </StackPanel>
-
-
-                                        <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
-                                            <StackPanel.Style>
-                                                <Style TargetType="StackPanel">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DetailMovie.studio}" Value="">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </StackPanel.Style>
-                                            <TextBlock Text="创建日："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                            <TextBlock   Style="{StaticResource ViewTextBlock}" Text="{Binding DetailMovie.scandate}" ></TextBlock>
-                                        </StackPanel>
-
-                                        <!--类别-->
-                                        <Grid  Margin="0 5" >
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="类别：" Style="{StaticResource ViewTextBlock2}" />
-                                            <ItemsControl  Grid.Column="1" ItemsSource="{Binding DetailMovie.genrelist}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <WrapPanel Orientation="Horizontal">
-                                                        </WrapPanel>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border >
-                                                            <WrapPanel>
-                                                                <Border Margin="2 0" Padding="2 0"   Style="{StaticResource GenreBorder}">
-                                                                    <Label Style="{StaticResource GenLabel}" Content="{Binding}"  MouseLeftButtonUp="ShowSameGenre"></Label>
-                                                                </Border>
-                                                            </WrapPanel>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </Grid>
-
-                                        <!--标签-->
-                                        <Grid  Margin="0 5">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="标签：" Style="{StaticResource ViewTextBlock2}" />
-
-                                            <ItemsControl  Grid.Column="1" ItemsSource="{Binding DetailMovie.labellist}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <hc:TagPanel  ShowAddButton="True"    TagMargin="20"    Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
-
-                                                        </hc:TagPanel>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border >
-                                                            <hc:TagPanel >
-                                                                <hc:Tag Closing="Tag_Closing"  MouseLeftButtonUp="ShowSameLabel" Cursor="Hand"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}" FontSize="16" ShowCloseButton="True" Selectable="False"  Content="{Binding}"/>
-                                                            </hc:TagPanel>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </Grid>
-
-
-                                        <!--信息-->
-                                        <Grid Margin="0 5"  Background="Transparent">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.Style>
-                                                <Style TargetType="Grid">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DetailMovie.plot}" Value="">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Grid.Style>
-
-
-
-                                            <TextBlock Grid.Column="0" Text="摘要："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-
-
-
-                                            <TextBlock Margin="5 0" Grid.Column="1"   Style="{StaticResource ViewTextBlock2}" Text="{Binding DetailMovie.plot}"  Height="auto" TextWrapping="Wrap"  ></TextBlock>
-                                        </Grid>
-
-                                    </StackPanel>
-                                </ScrollViewer>
-                            </Border>
 
 
                             <Grid  PreviewMouseWheel="Border_PreviewMouseWheel" Background="{DynamicResource BackgroundMain}"  Grid.Column="1">

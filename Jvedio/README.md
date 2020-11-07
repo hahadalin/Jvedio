@@ -18,7 +18,7 @@
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jvedio 是本地视频管理软件，支持扫描本地视频并导入软件，建立视频库，
-提取出视频的 **唯一识别码**，自动分类视频，从网上下载信息以及图片，
+提取出视频的 **唯一识别码**，自动分类视频，
 添加标签管理视频，使用人工智能识别演员，支持翻译信息，
 基于 FFmpeg 截取视频图片，Window 桌面端流畅美观的应用软件
 
@@ -81,5 +81,3 @@ Winform 版本（3.0）：[Jvedio_Winform](https://github.com/hitchao/Jvedio_Win
 UI|青萍之末，Engine
 调试|Sheldon, SHAWN, dddsG, EEE, Jion 等人
 赞助支持|小猪培根 等众多网友
-
-

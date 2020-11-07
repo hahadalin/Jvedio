@@ -244,7 +244,7 @@ namespace Jvedio
                 if (vieModel_Settings.ScanPath == null) { vieModel_Settings.ScanPath = new ObservableCollection<string>(); }
                 if (!vieModel_Settings.ScanPath.Contains(folderBrowserDialog.SelectedPath)) { vieModel_Settings.ScanPath.Add(folderBrowserDialog.SelectedPath); }
                 //保存
-                Jvedio.StaticClass.SavePathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath?.ToList());
+                Jvedio.StaticClass.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath?.ToList());
             }
 
 
@@ -345,7 +345,7 @@ namespace Jvedio
                 }
             }
             if (vieModel_Settings.ScanPath != null)
-                SavePathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath.ToList());
+                SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath.ToList());
             
         }
 
@@ -353,7 +353,7 @@ namespace Jvedio
         {
 
             vieModel_Settings.ScanPath?.Clear();
-            SavePathToConfig(vieModel_Settings.DataBase, new List<string>());
+            SaveScanPathToConfig(vieModel_Settings.DataBase, new List<string>());
         }
 
 
@@ -793,7 +793,7 @@ namespace Jvedio
 
             }
             //保存
-            Jvedio.StaticClass.SavePathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath.ToList());
+            Jvedio.StaticClass.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath.ToList());
 
         }
 
