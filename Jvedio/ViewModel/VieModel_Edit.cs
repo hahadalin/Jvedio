@@ -60,7 +60,8 @@ namespace Jvedio.ViewModel
 
             models.id = Identify.GetFanhao(fileInfo.Name);
             models.vediotype =(int) Identify.GetVedioType(models.id);
-            models.scandate = createDate;
+            models.otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            models.scandate= createDate ;
             models.filesize = fileInfo.Length;
             if (models != null) { DetailMovie = models; }
         }

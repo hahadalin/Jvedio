@@ -11,7 +11,7 @@ namespace Jvedio
     {
 
         public static string[] FLOWOUT = new string[] {"流出", "留出", "泄露", "泄密", "曝光" };
-        public static string[] CHS = new string[] { "-C", "_C", "中字", "中文字幕", "字幕" };
+        public static string[] CHS = new string[] { "-C", "_C", "中字", "中文字幕", "字幕","中文" };
         public static string[] HDV = new string[] { "hd", "high_definition", "high definition","高清" };
 
         public static void InitFanhaoList()
@@ -45,10 +45,8 @@ namespace Jvedio
             if (string.IsNullOrEmpty(filepath)) return false;
             FileInfo fileInfo = new FileInfo(filepath);
             string name = fileInfo.Name;
-            if (!File.Exists(filepath))
-            {
-                return HDV.Any(arg => name.IndexOf(arg) >= 0);
-            }
+
+            if (!File.Exists(filepath)) return HDV.Any(arg => name.IndexOf(arg) >= 0);
 
             long filesize = fileInfo.Length;
             return filesize > 0 && filesize / 1024 / 1024 / 1024 >= MinHDVFileSize;

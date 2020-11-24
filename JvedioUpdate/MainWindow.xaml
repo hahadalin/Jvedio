@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JvedioUpdate"
         mc:Ignorable="d"
-        Title="Jvedio 更新与修复程序" Height="300" Width="500"
+        Title="Jvedio 更新与修复程序" Height="400" Width="600"
         WindowStyle="None"
         ResizeMode="NoResize"
         AllowsTransparency="True"
+        Background="Transparent"
         WindowStartupLocation="CenterScreen"
         ContentRendered="Window_ContentRendered"
         Icon="Resources/update.png"
@@ -128,13 +129,14 @@
     </Window.Resources>
 
 
-    <Grid  Margin="2">
-
-        <Border Background="#F2F3F4" MouseDown="MoveWindow">
+    <Grid  Margin="10">
+        <Border  x:Name="MainBorder"   Background="White" CornerRadius="5" Margin="5"  >
             <Border.Effect>
-                <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
+                <DropShadowEffect BlurRadius="5" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
             </Border.Effect>
+        </Border>
 
+        <Border Background="Transparent" MouseDown="MoveWindow">
             <Grid>
                 
                 
@@ -151,10 +153,10 @@
 
 
 
-            <Label Foreground="Black" Content="Jvedio 更新与修复程序" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            <Label Foreground="Black" Content="Jvedio 更新与下载" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 
 
-            <StackPanel Panel.ZIndex="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Panel.ZIndex="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 0">
                 <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}">
                     <Image Source="Resources/min.png" Height="20" Width="20"  MouseLeftButtonDown="MinWindow" />
                 </Border>
@@ -197,7 +199,7 @@
 
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Vertical">
+                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right" Margin="20 0">
                     <Button Visibility="Collapsed" x:Name="CheckUpdateButton" Margin="15 0"  Content="检查" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}"   HorizontalAlignment="Left" Click="Button_Click"></Button>
 
 
@@ -213,10 +215,15 @@
 
 
 
-            <StackPanel x:Name="InfoStackPanel" Visibility="Visible" Grid.Row="1" Height="auto" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="50 0 10 10" >
-                <TextBlock  HorizontalAlignment="Left"  FontSize="18"  Text="更新日志" TextAlignment="Center" Foreground="#1B1B1B" Margin="10 5" />
-                <TextBox  x:Name="UpdateTextBox" TextAlignment="Left" Text="4.0.0.9"  IsReadOnly="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Background="Transparent" BorderThickness="0" Height="80"    FontSize="13" Width="auto"   Foreground="#5C5C5C" Margin="10 0"   />
-            </StackPanel>
+            <Grid x:Name="InfoStackPanel" Visibility="Visible" Grid.Row="1" Height="auto"  HorizontalAlignment="Stretch" Margin="50 0 10 10" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                
+                <TextBlock Grid.Row="0"  HorizontalAlignment="Left"  FontSize="18"  Text="更新日志" TextAlignment="Center" Foreground="#1B1B1B" Margin="10 5" />
+                <TextBox Grid.Row="1"  x:Name="UpdateTextBox" TextAlignment="Left" Text="4.0.0.9" VerticalContentAlignment="Top" VerticalAlignment="Stretch"  IsReadOnly="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" Background="Transparent" BorderThickness="0" Height="auto"    FontSize="13" Width="auto"   Foreground="#5C5C5C" Margin="10"   />
+            </Grid>
 
 
             <StackPanel x:Name="ProgressStackPanel"  Grid.Row="1"       Height="auto" Visibility="Collapsed">

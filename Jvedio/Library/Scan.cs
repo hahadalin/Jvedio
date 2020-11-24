@@ -164,10 +164,15 @@ namespace Jvedio
                         fatherpathDic.Add(fatherPath, 1);
                 });
                 string maxValueKey = fatherpathDic.FirstOrDefault(x => x.Value == fatherpathDic.Values.Max()).Key;
-                var notsub = fatherpathDic.Where(arg => new FileInfo(arg.Key).Directory.FullName != maxValueKey).ToList();
-                notsub.ForEach(arg => notSubSection.Add(arg.Key));
-                FilePathList = FilePathList.Where(arg => new FileInfo(arg).Directory.FullName == maxValueKey).ToList();
-                
+                if (!string.IsNullOrEmpty(maxValueKey))
+                {
+                    try { 
+                    var notsub = fatherpathDic.Where(arg => arg.Key==null?false: new FileInfo(arg.Key)?.Directory.FullName != maxValueKey).ToList();
+                    notsub.ForEach(arg => notSubSection.Add(arg.Key));
+                    }
+                    catch (Exception e) { Logger.LogE(e); }
+                    FilePathList = FilePathList.Where(arg => new FileInfo(arg).Directory.FullName == maxValueKey).ToList();
+                }
             }
 
 
@@ -312,17 +317,12 @@ namespace Jvedio
                 {
                     
                     id = IsEurope ? Identify.GetEuFanhao(new FileInfo(item).Name) : Identify.GetFanhao(new FileInfo(item).Name);
-                    //Console.WriteLine($"{id}=>{item}");
-                    if (IsEurope) { if (string.IsNullOrEmpty(id)) vt = 0; else vt = VedioType.欧美; }
-                    else
-                    {
-                        vt = Identify.GetVedioType(id);
-                    }
 
-                    if (vt != 0)
-                    {
-                        r1.Add(item);
-                    }
+                    if (IsEurope) { if (string.IsNullOrEmpty(id)) vt = 0; else vt = VedioType.欧美; }
+                    else vt = Identify.GetVedioType(id);
+
+
+                    if (vt != 0) r1.Add(item);
                     else
                     {
                         //写日志
@@ -340,11 +340,6 @@ namespace Jvedio
             {
                 if (File.Exists(item))
                 {
-
-                    //if (Identify.GetFanhao(item) == "FC2-1552855")
-                    //{
-                    //    Console.WriteLine("123");
-                    //}
 
                     id = IsEurope ? Identify.GetEuFanhao(new FileInfo(item).Name) : Identify.GetFanhao(new FileInfo(item).Name);
                     if (!repeatlist.ContainsKey(id))
@@ -454,8 +449,9 @@ namespace Jvedio
                     filesize = filesize,
                     vediotype = (int)vt,
                     subsection = subsection.Substring(0, subsection.Length - 1),
-                    scandate = createDate
-                };
+                    otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    scandate= createDate 
+            };
                 DataBase.InsertScanMovie(movie); totalinsertnum += 1;
             }
 
@@ -492,6 +488,7 @@ namespace Jvedio
                     id = id,
                     filesize = fileinfo.Length,
                     vediotype = (int)vt,
+                    otherinfo= DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     scandate = createDate
                 };
                 DataBase.InsertScanMovie(movie); totalinsertnum += 1;

@@ -155,6 +155,7 @@ namespace Jvedio
             InitVariable();
             SaveScanPathToXml();
             SaveServersToXml();
+            SaveRecentWatchedToXml();
             Net.Init();
 
             //创建图片文件夹

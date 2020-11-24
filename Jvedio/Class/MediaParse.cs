@@ -41,32 +41,48 @@ namespace Jvedio
         public static string[] GetCutOffArray(string path)
         {
             if (Properties.Settings.Default.ScreenShotNum <= 0 || Properties.Settings.Default.ScreenShotNum > 30) Properties.Settings.Default.ScreenShotNum = 10;
-            string[] result = new string[Properties.Settings.Default.ScreenShotNum+2];
+            string[] result = new string[Properties.Settings.Default.ScreenShotNum];
             string Duration = GetVedioDuration(path);
             double Second = DurationToSecond(Duration);
-            
-
-            if(Second <20) { return null; }
+            if(Second <20) { return new string[1] { "00:00" }; }
             else
             {
-                if (Second > 350) Second = Second - 300; //去掉开头结尾
-                    
+                Second = GetProperSecond(Second);
+
                 // 按照秒 n 等分
                 uint splitLength =(uint)( Second / Properties.Settings.Default.ScreenShotNum);
-                if (splitLength == 0) splitLength = 1;
+                if (splitLength == 0) splitLength = 1;//如果只有几秒的视频
                 for (int i = 0; i < result.Count(); i++)
-                    result[i] = SecondToDuration(300 + splitLength * i);
-
-                if(Second-30> DurationToSecond(result[Properties.Settings.Default.ScreenShotNum - 1]))
                 {
-                    result[Properties.Settings.Default.ScreenShotNum] = SecondToDuration(Second - 60);
-                    result[Properties.Settings.Default.ScreenShotNum + 1] = SecondToDuration(Second - 30);
+                    if(Properties.Settings.Default.ScreenShotIgnoreStart * 60 + splitLength * (result.Count() - 1) >= Second)
+                        result[i] = SecondToDuration( splitLength * i);
+                    else
+                        result[i] = SecondToDuration(Properties.Settings.Default.ScreenShotIgnoreStart * 60 + splitLength * i);//加上跳过开头的部分
+                    
+                }
+                foreach (var item in result)
+                {
+                    Console.WriteLine(item);
                 }
 
+                Console.WriteLine(123);
                 return result;
             }
 
             
+        }
+        public static double GetProperSecond(double second)
+        {
+            double Second = second;
+            if (Properties.Settings.Default.ScreenShotIgnoreStart > 0) { 
+                Second -= Properties.Settings.Default.ScreenShotIgnoreStart * 60; 
+                if(Second <= 0) Second += Properties.Settings.Default.ScreenShotIgnoreStart * 60;
+            }
+            if (Properties.Settings.Default.ScreenShotIgnoreEnd > 0) { 
+                Second -= Properties.Settings.Default.ScreenShotIgnoreEnd * 60;
+                if (Second <= 0) Second += Properties.Settings.Default.ScreenShotIgnoreEnd * 60;
+            }
+            return Second;
         }
 
         public static double DurationToSecond(string Duration)
@@ -142,7 +158,7 @@ namespace Jvedio
                     FileSize = fileSize,
                     Width = width,
                     Height = height,
-                    Resolution = width + "x" + height,
+                    
                     DisplayAspectRatio = risplayAspectRatio,
                     FrameRate = frameRate,
                     BitDepth = bitDepth,
@@ -155,6 +171,7 @@ namespace Jvedio
                     Channel = channel
                 };
             }
+            if (!string.IsNullOrEmpty(vedioInfo.Width) && !string.IsNullOrEmpty(vedioInfo.Height)) vedioInfo.Resolution = vedioInfo.Width + "x" + vedioInfo.Height;
             return vedioInfo;
         }
 

@@ -19,6 +19,7 @@ using System.Collections.Specialized;
 using System.IO.Compression;
 using System.Windows.Controls.Primitives;
 using System.Xml;
+using System.Windows.Documents;
 
 namespace Jvedio
 {
@@ -105,19 +106,19 @@ namespace Jvedio
             nfo.SetNodeText("num", vedio.id);
 
             // 类别
-            foreach (var item in vedio.genre.Split(' '))
+            foreach (var item in vedio.genre?.Split(' '))
             {
                 if (!string.IsNullOrEmpty(item)) nfo.AppendNewNode("genre", item);
             }
             // 系列
-            foreach (var item in vedio.tag.Split(' '))
+            foreach (var item in vedio.tag?.Split(' '))
             {
                 if (!string.IsNullOrEmpty(item)) nfo.AppendNewNode("tag", item);
             }
 
             // Fanart
             nfo.AppendNewNode("fanart");
-            foreach (var item in vedio.extraimageurl.Split(';'))
+            foreach (var item in vedio.extraimageurl?.Split(';'))
             {
                 if (!string.IsNullOrEmpty(item)) nfo.AppendNodeToNode("fanart", "thumb", item, "preview", item);
             }
@@ -125,7 +126,7 @@ namespace Jvedio
             // 演员
             if (vedio.vediotype == (int)VedioType.欧美)
             {
-                foreach (var item in vedio.actor.Split('/'))
+                foreach (var item in vedio.actor?.Split('/'))
                 {
                     if (!string.IsNullOrEmpty(item))
                     {
@@ -137,7 +138,7 @@ namespace Jvedio
             }
             else
             {
-                foreach (var item in vedio.actor.Split(actorSplitDict[vedio.vediotype]))
+                foreach (var item in vedio.actor?.Split(actorSplitDict[vedio.vediotype]))
                 {
                     if (!string.IsNullOrEmpty(item))
                     {
@@ -176,6 +177,8 @@ namespace Jvedio
 
         }
 
+
+        #region "配置xml"
 
         /// <summary>
         /// 读取原有的 config.ini到 xml
@@ -287,6 +290,73 @@ namespace Jvedio
 
 
 
+        //最近观看
+
+        public static void SaveRecentWatchedToXml()
+        {
+            if (!File.Exists("RecentWatch.ini")) return;
+            Dictionary<string, List<string>> RecentWatchedes = new Dictionary<string, List<string>>();
+            using (StreamReader sr = new StreamReader("RecentWatch.ini"))
+            {
+                try
+                {
+                    string content = sr.ReadToEnd();
+                    List<string> rows = content.Split('\n').ToList();
+                    rows.ForEach(arg => {
+                        string date = arg.Split(':')[0];
+                        var IDs = arg.Split(':')[1].Split(',').ToList();
+                        if (!RecentWatchedes.ContainsKey(date)) RecentWatchedes.Add(date, IDs);
+                    });
+                }
+                catch { }
+            }
+            foreach (var item in RecentWatchedes)
+            {
+                SaveRecentWatchedToConfig(item.Key, item.Value);
+            }
+            File.Delete("RecentWatch.ini");
+        }
+
+        public static void SaveRecentWatchedToConfig(string date, List<string> IDs)
+        {
+            Dictionary<string, string> info = new Dictionary<string, string>();
+            RecentWatchedConfig  recentWatchedConfig = new RecentWatchedConfig(date);
+            recentWatchedConfig.Save(IDs);
+        }
+
+        public static void ReadRecentWatchedFromConfig()
+        {
+            if (!File.Exists("RecentWatch")) return;
+            RecentWatched = new RecentWatchedConfig("").Read();
+        }
+
+
+        public static void SaveRecentWatched()
+        {
+            foreach (var keyValuePair in RecentWatched)
+            {
+                if (keyValuePair.Key <= DateTime.Now && keyValuePair.Key >= DateTime.Now.AddDays(-1 * Properties.Settings.Default.RecentDays))
+                {
+                    if (keyValuePair.Value.Count > 0)
+                    {
+                        List<string> IDs = keyValuePair.Value.Where(arg => !string.IsNullOrEmpty(arg)).ToList();
+
+                        string date = keyValuePair.Key.Date.ToString("yyyy-MM-dd");
+                        RecentWatchedConfig recentWatchedConfig = new RecentWatchedConfig(date);
+                        recentWatchedConfig.Save(IDs);
+                    }
+                }
+            }
+
+
+
+
+
+
+        }
+
+
+        #endregion
 
 
         public static void CopyDatabaseInfo(string name)
@@ -516,16 +586,21 @@ namespace Jvedio
         {
             try
             {
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(filepath);
-                if (rotate) bitmap.Rotation = Rotation.Rotate90;
-                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.EndInit();
-                bitmap.Freeze();
-                return bitmap;
+                using (var fs = new FileStream(filepath, System.IO.FileMode.Open))
+                {
+                    var ms = new MemoryStream();
+                    fs.CopyTo(ms);
+                    ms.Position = 0;
+                    BitmapImage bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = ms;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                    return bitmap;
+                }
             }
-            catch (Exception e) { Logger.LogE(e); Console.WriteLine(e.Message); }
+            catch (Exception e) {  Console.WriteLine(e.Message); }
             return null;
 
         }

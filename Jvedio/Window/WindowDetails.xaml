@@ -17,6 +17,7 @@
         Height="720"
         Width="1230"
         Closing="Window_Closing"
+        ContentRendered="Window_ContentRendered"
         >
     <Window.Resources>
 
@@ -75,14 +76,13 @@
             <Setter Property="Source" Value="{Binding}" />
             <Style.Triggers>
                 <DataTrigger  Binding="{Binding}"  Value="{x:Null}">
-                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_S.jpg" />
+                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_S.png" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
 
         <Style x:Key="BigImage" TargetType="Image">
-            <Setter Property="Height" Value="490"/>
-            <Setter Property="Width" Value="740"/>
+
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5 5 0 5"/>
@@ -90,7 +90,7 @@
             <Setter Property="Source" Value="{Binding DetailMovie.bigimage,UpdateSourceTrigger=Explicit}" />
             <Style.Triggers>
                 <DataTrigger  Binding="{Binding DetailMovie.bigimage}"  Value="{x:Null}">
-                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_B.jpg" />
+                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_B.png" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -98,7 +98,7 @@
         <Style x:Key="ActorInfoImage" TargetType="{x:Type Image}">
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="10"/>
-            <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_A.jpg" />
+            <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_A.png" />
         </Style>
 
 
@@ -302,8 +302,8 @@
 
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="750"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="400"/>
 
                         </Grid.ColumnDefinitions>
 
@@ -312,8 +312,8 @@
                         <Grid Grid.Column="0">
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="510"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="200"/>
                             </Grid.RowDefinitions>
 
                             <StackPanel Margin="20" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right"    Panel.ZIndex="10"     >
@@ -394,11 +394,9 @@
 
                             <!--大图-->
                             <Grid Grid.Row="0" PreviewMouseWheel="Grid_PreviewMouseWheel"   MouseLeftButtonDown="Grid_MouseLeftButtonDown"   >
-
                                 <Border   Background="{DynamicResource BackgroundSide}"  CornerRadius="10" Padding="10"   >
-
-                                    <Grid Width="750" Height="510">
-                                        <Image Width="750" Height="510" x:Name="BigImage"  Style="{StaticResource BigImage}" MouseMove="MoveWindow" AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"    >
+                                    <Grid >
+                                        <Image Margin="0" HorizontalAlignment="Center"    x:Name="BigImage"  Style="{StaticResource BigImage}" MouseMove="MoveWindow" AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"    >
                                             <Image.ContextMenu>
                                                 <ContextMenu  PreviewKeyUp="ContextMenu_PreviewKeyUp">
                                                     <MenuItem Header="立即同步(S)" Click="DownLoad"/>
@@ -439,7 +437,7 @@
 
                                 <Border Margin="0 12" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
                                     <ScrollViewer Margin="5 0" VerticalContentAlignment="Center"   PreviewMouseWheel="scrollViewer_PreviewMouseWheel"   x:Name="scrollViewer"      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
-                                        <ItemsControl x:Name="imageItemsControl" VerticalContentAlignment="Center"  ItemsSource="{Binding DetailMovie.extraimagelist}" AlternationCount="99" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent">
+                                        <ItemsControl x:Name="imageItemsControl" VerticalContentAlignment="Center"   AlternationCount="99" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel    Orientation="Horizontal" >
@@ -663,8 +661,8 @@
                                                         </Style.Triggers>
                                                     </Style>
                                                 </StackPanel.Style>
-                                                <TextBlock Text="创建日："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                                <TextBlock   Style="{StaticResource ViewTextBlock}" Text="{Binding DetailMovie.scandate}" ></TextBlock>
+                                                <TextBlock Text="发行日："  Style="{StaticResource ViewTextBlock2}"></TextBlock>
+                                                <TextBlock   Style="{StaticResource ViewTextBlock}" Text="{Binding DetailMovie.releasedate}" ></TextBlock>
                                             </StackPanel>
 
                                             <!--类别-->

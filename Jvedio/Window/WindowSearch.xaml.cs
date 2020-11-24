@@ -133,11 +133,7 @@ namespace Jvedio
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            WindowAdvanceSearch windowAdvanceSearch;
-            Window window = Jvedio.GetWindow.Get("WindowAdvanceSearch");
-            if (window != null) { windowAdvanceSearch = (WindowAdvanceSearch)window; windowAdvanceSearch.Close(); }
-            windowAdvanceSearch = new WindowAdvanceSearch();
-            windowAdvanceSearch.Show();
+
         }
 
         private void SearchTextBox_PreviewKeyUp(object sender, KeyEventArgs e)

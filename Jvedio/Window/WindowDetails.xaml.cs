@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using static Jvedio.StaticVariable;
 using static Jvedio.StaticClass;
 using System.Windows.Controls.Primitives;
+using System.Collections.ObjectModel;
 
 namespace Jvedio
 {
@@ -36,29 +37,16 @@ namespace Jvedio
         public JvedioWindowState WinState = JvedioWindowState.Normal;
 
         public DetailDownLoad DetailDownLoad;
+        public List<string> MovieIDs = new List<string>();
+        public string MovieID = "";
 
         public WindowDetails(string movieid = "")
         {
             //movieid = "IPX-163";
             InitializeComponent();
-            if (movieid != "")
-            {
-                vieModel = new VieModel_Details();
-                vieModel.Query(movieid);
-                this.DataContext = vieModel;
-                vieModel.QueryCompletedHandler += (s, e) =>
-                {
-                    BigImage.Source = vieModel.DetailMovie.bigimage;
-                };
-
-            }
-            else { this.DataContext = null; }
-            FatherGrid.Focus();
-
-            SetSkin();
-
-            SetImage(0);
-
+            MovieID = movieid;
+            this.Height = SystemParameters.PrimaryScreenHeight *0.8;
+            this.Width = SystemParameters.PrimaryScreenHeight * 0.8 * 1230/720;
         }
 
 
@@ -100,9 +88,9 @@ namespace Jvedio
 
             string imagePath = BasePicPath + $"Actresses\\{textBlock.Text}.jpg";
             if (File.Exists(imagePath))
-                ActorImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(imagePath, UriKind.Absolute));
+                ActorImage.Source = StaticClass.GetBitmapImage(textBlock.Text, "Actresses");
             else
-                ActorImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Resources/Picture/NoPrinting_A.jpg", UriKind.Relative));
+                ActorImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Resources/Picture/NoPrinting_A.png", UriKind.Relative));
 
         }
 
@@ -560,56 +548,110 @@ namespace Jvedio
 
         public void PreviewMovie(object sender, MouseButtonEventArgs e)
         {
+
             StopDownLoad();
-            foreach (Window window in App.Current.Windows)
-            {
-                if (window.GetType().Name == "Main") { windowMain = (Main)window; break; }
-            }
             string id = "";
-            for (int i = 0; i < windowMain.vieModel.CurrentMovieList.Count; i++)
+            //加载所有影片
+            if (Properties.Settings.Default.DetialWindowShowAllMovie &&  MovieIDs.Count <= 0)
             {
-                if (vieModel.DetailMovie.id.ToLower() == windowMain.vieModel.CurrentMovieList[i].id.ToLower())
+                MovieIDs = DataBase.SelectPartialInfo("SELECT * FROM movie").Select(arg=> arg.id).ToList();
+
+
+            }
+
+            if (!Properties.Settings.Default.DetialWindowShowAllMovie) {
+
+                windowMain = App.Current.Windows[0] as Main;
+
+                for (int i = 0; i < windowMain.vieModel.CurrentMovieList.Count; i++)
                 {
-                    if (i == 0) { id = windowMain.vieModel.CurrentMovieList[windowMain.vieModel.CurrentMovieList.Count - 1].id; }
-                    else { id = windowMain.vieModel.CurrentMovieList[i - 1].id; }
-                    break;
+                    if (vieModel.DetailMovie.id.ToLower() == windowMain.vieModel.CurrentMovieList[i].id.ToLower())
+                    {
+                        if (i == 0) { id = windowMain.vieModel.CurrentMovieList[windowMain.vieModel.CurrentMovieList.Count - 1].id; }
+                        else { id = windowMain.vieModel.CurrentMovieList[i - 1].id; }
+                        break;
+                    }
+                }
+
+            }
+            else
+            {
+                for (int i = 0; i < MovieIDs.Count; i++)
+                {
+                    if (vieModel.DetailMovie.id.ToLower() == MovieIDs[i].ToLower())
+                    {
+                        if (i == 0) { id = MovieIDs[MovieIDs.Count - 1]; }
+                        else { id = MovieIDs[i - 1]; }
+                        break;
+                    }
                 }
             }
+
+
+
+
+
             if (id != "")
             {
                 vieModel.CleanUp();
                 vieModel.Query(id);
+                vieModel.SelectImageIndex = 0;
+                LoadImage();
             }
 
-            vieModel.SelectImageIndex = 0;
-            SetImage(0);
+
         }
 
         public void NextMovie(object sender, MouseButtonEventArgs e)
         {
             StopDownLoad();
 
-            windowMain = App.Current.Windows[0] as Main;
-
-
+            
             string id = "";
-            for (int i = 0; i < windowMain.vieModel.CurrentMovieList.Count; i++)
+            //加载所有影片
+            if (Properties.Settings.Default.DetialWindowShowAllMovie && MovieIDs.Count <= 0)
             {
-                if (vieModel.DetailMovie.id == windowMain.vieModel.CurrentMovieList[i].id)
+                MovieIDs = DataBase.SelectPartialInfo("SELECT * FROM movie").Select(arg => arg.id).ToList();
+
+            }
+            if (!Properties.Settings.Default.DetialWindowShowAllMovie)
+            {
+                windowMain = App.Current.Windows[0] as Main;
+
+                for (int i = 0; i < windowMain.vieModel.CurrentMovieList.Count; i++)
                 {
-                    if (i == windowMain.vieModel.CurrentMovieList.Count - 1) { id = windowMain.vieModel.CurrentMovieList[0].id; }
-                    else { id = windowMain.vieModel.CurrentMovieList[i + 1].id; }
-                    break;
+                    if (vieModel.DetailMovie.id == windowMain.vieModel.CurrentMovieList[i].id)
+                    {
+                        if (i == windowMain.vieModel.CurrentMovieList.Count - 1) { id = windowMain.vieModel.CurrentMovieList[0].id; }
+                        else { id = windowMain.vieModel.CurrentMovieList[i + 1].id; }
+                        break;
+                    }
                 }
             }
+            else
+            {
+
+                for (int i = 0; i < MovieIDs.Count; i++)
+                {
+                    if (vieModel.DetailMovie.id.ToLower() == MovieIDs[i].ToLower())
+                    {
+                        if (i == MovieIDs.Count - 1) { id = MovieIDs[0]; }
+                        else { id = MovieIDs[i + 1]; }
+                        break;
+                    }
+                }
+            }
+
             if (id != "")
             {
                 vieModel.CleanUp();
                 vieModel.Query(id);
+                vieModel.SelectImageIndex = 0;
+                LoadImage();
             }
+            
 
-            vieModel.SelectImageIndex = 0;
-            SetImage(0);
+
         }
 
 
@@ -1242,7 +1284,7 @@ namespace Jvedio
             if (vieModel.DetailMovie.extraimagelist.Count == 0)
             {
                 //设置为默认图片
-                BigImage.Source = new BitmapImage(new Uri("/Resources/Picture/NoPrinting_B.jpg", UriKind.Relative));
+                BigImage.Source = new BitmapImage(new Uri("/Resources/Picture/NoPrinting_B.png", UriKind.Relative));
             }
             else
             {
@@ -1424,11 +1466,11 @@ namespace Jvedio
             {
                 //更新UI
                 DetailMovie detailMovie = vieModel.DetailMovie;
-                List<BitmapSource> oldImageList = detailMovie.extraimagelist;
-                List<string> oldImagePath = detailMovie.extraimagePath;
+                ObservableRangeCollection<BitmapSource> oldImageList = detailMovie.extraimagelist;
+                ObservableRangeCollection<string> oldImagePath = detailMovie.extraimagePath;
 
-                detailMovie.extraimagelist = new List<BitmapSource>();
-                detailMovie.extraimagePath = new List<string>();
+                detailMovie.extraimagelist = new ObservableRangeCollection<BitmapSource>();
+                detailMovie.extraimagePath = new ObservableRangeCollection<string>();
                 vieModel.DetailMovie = null;
 
                 //载入默认的和新的
@@ -1625,6 +1667,82 @@ namespace Jvedio
             }
 
         }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            if (MovieID != "")
+            {
+                vieModel = new VieModel_Details();
+                vieModel.Query(MovieID);
+                this.DataContext = vieModel;
+                vieModel.QueryCompletedHandler += (s, ee) =>
+                {
+                    BigImage.Source = vieModel.DetailMovie.bigimage;
+                };
+
+            }
+            else { this.DataContext = null; }
+            FatherGrid.Focus();
+            SetSkin();
+
+
+            LoadImage();
+
+
+
+        }
+
+        private async void LoadImage()
+        {
+            //加载大图到预览图
+            vieModel.DetailMovie.extraimagelist = new ObservableRangeCollection<BitmapSource>();
+            vieModel.DetailMovie.extraimagePath = new ObservableRangeCollection<string>();
+            if (File.Exists(BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg"))
+            {
+                vieModel.DetailMovie.extraimagelist.Add(vieModel.DetailMovie.bigimage);
+                vieModel.DetailMovie.extraimagePath.Add(BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg");
+            }
+            App.Current.Dispatcher.Invoke((Action)delegate { imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist; SetImage(0); });
+            //扫描预览图目录
+            List<string> imagePathList = new List<string>();
+            await Task.Run(() => { 
+                if (Directory.Exists(StaticVariable.BasePicPath + $"ExtraPic\\{vieModel.DetailMovie.id}\\"))
+                {
+                    try
+                    {
+                        foreach (var path in Directory.GetFiles(StaticVariable.BasePicPath + $"ExtraPic\\{vieModel.DetailMovie.id}\\")) imagePathList.Add(path);
+                    }
+                    catch { }
+                    if (imagePathList.Count > 0) imagePathList = imagePathList.CustomSort().ToList();
+                }
+            });
+
+            //加载预览图
+            foreach (var path in imagePathList)
+            {
+                if (Path.GetDirectoryName(path).Split('\\').Last().ToUpper() != vieModel.DetailMovie.id) break;
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraImageDelegate(LoadExtraImage), StaticClass.GetExtraImage(path));
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraPathDelegate(LoadExtraPath), path);
+                 App.Current.Dispatcher.Invoke((Action)delegate { imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist; });
+            }
+
+            SetImage(0);
+        }
+
+
+        private delegate void LoadExtraImageDelegate(BitmapSource bitmapSource);
+        private void LoadExtraImage(BitmapSource bitmapSource)
+        {
+            vieModel.DetailMovie.extraimagelist.Add(bitmapSource);
+        }
+
+        private delegate void LoadExtraPathDelegate(string path);
+        private void LoadExtraPath(string path)
+        {
+            vieModel.DetailMovie.extraimagePath.Add(path);
+        }
+
+
     }
 
 

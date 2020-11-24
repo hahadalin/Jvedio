@@ -164,7 +164,7 @@
                         <Condition Binding="{Binding bigimage}" Value="{x:Null}"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Width" Value="280" />
-                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_B.jpg" />
+                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_B.png" />
                 </MultiDataTrigger>
 
 
@@ -174,7 +174,7 @@
                         <Condition Binding="{Binding smallimage}" Value="{x:Null}"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Height" Value="180" />
-                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_S.jpg" />
+                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_S.png" />
                 </MultiDataTrigger>
             </Style.Triggers>
         </Style>
@@ -566,6 +566,7 @@
                 <RadioButton Click="LabelMouseUp" Content="人工智能"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
                 <RadioButton Click="LabelMouseUp" Content="视频处理"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
                 <RadioButton  Visibility="Visible"  Click="LabelMouseUp" Content="自定外观"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
+                <RadioButton  Visibility="Visible"  Click="LabelMouseUp" Content="重命名"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
             </StackPanel>
 
 
@@ -574,7 +575,7 @@
 
 
 
-                    <StackPanel Margin="20 5" x:Name="BasicPanel" Background="Transparent" Visibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto">
+                    <StackPanel Margin="20 5" x:Name="BasicPanel" Background="Transparent" Visibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto">
                         <WrapPanel Orientation="Vertical" Margin="5">
 
 
@@ -586,6 +587,8 @@
                             <CheckBox IsChecked="{Binding OpenDataBaseDefault, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="开启时不显示库选择" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding AutoDeleteNotExistMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="自动删除不存在的影片" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding DelInfoAfterDelFile, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="删除文件同时删除影片信息" Height="40" VerticalContentAlignment="Center"/>
+                            <CheckBox IsChecked="{Binding ScanWhenRefresh, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="主界面刷新时同时扫描影片" Height="40" VerticalContentAlignment="Center"/>
+
                         </WrapPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="5 0" Height="35">
@@ -983,13 +986,13 @@
 
                         <StackPanel Orientation="Vertical"  Margin="20 5">
                             <CheckBox IsChecked="{Binding MainImageAutoMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="图片自动缩放" Height="40" VerticalContentAlignment="Center"/>
-                            <CheckBox IsChecked="{Binding AsyncShowImage, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="异步加载信息与图片" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding DisplayStatusBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="状态栏" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding DisplayFunBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="功能栏" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="仅显示可播放" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="仅显示分段视频" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding TitleShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="标题显示翻译结果" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="摘要显示翻译结果" Height="40" VerticalContentAlignment="Center"/>
+                            <CheckBox IsChecked="{Binding DetialWindowShowAllMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="详情窗口左右浏览数据库所有影片" Height="40" VerticalContentAlignment="Center"/>
                         </StackPanel>
                         <WrapPanel Orientation="Horizontal" Margin="20 0">
                             <TextBlock Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="0 2 20 0" Text="每页影片数目" />
@@ -1127,7 +1130,7 @@
                     </StackPanel>
 
 
-                    <StackPanel x:Name="FFMPEGPanel" Orientation="Vertical" Background="Transparent" Visibility="Hidden"  >
+                    <StackPanel x:Name="FFMPEGPanel" Orientation="Vertical" Background="Transparent" Visibility="Visible"  >
                         <CheckBox Margin="20 5" IsChecked="{Binding ScreenShotToExtraPicPath, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="截图到预览图目录" Height="40" VerticalContentAlignment="Center"/>
 
                         <StackPanel Orientation="Horizontal" Margin="20 5">
@@ -1142,6 +1145,16 @@
                             <Label  Content ="截取的图片总数" Style="{StaticResource InfoLabel}" Width="130"/>
                             <Slider x:Name="ScreenshotNumSlider" Value="{Binding ScreenShotNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="1" Maximum="30" SmallChange="1" LargeChange="2" TickFrequency="1" Width="200" VerticalAlignment="Center"/>
                             <Label    Style="{StaticResource InfoLabel}"   Content="{Binding Value, ElementName=ScreenshotNumSlider, Mode=OneWay}"  />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="20 5">
+                            <Label  Content ="跳过开头" Style="{StaticResource InfoLabel}" Width="130"/>
+                            <Slider x:Name="ScreenShotIgnoreSlider1" Value="{Binding ScreenShotIgnoreStart, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="0" Maximum="10" SmallChange="1" LargeChange="2" TickFrequency="1" Width="200" VerticalAlignment="Center"/>
+                            <TextBlock    Style="{StaticResource BaseTextBlock}"   Text="{Binding  ElementName=ScreenShotIgnoreSlider1, Mode=OneWay,Path=Value,StringFormat=\{0\} 分钟}"  />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="20 5">
+                            <Label  Content ="跳过结尾" Style="{StaticResource InfoLabel}" Width="130"/>
+                            <Slider x:Name="ScreenShotIgnoreSlider2" Value="{Binding ScreenShotIgnoreEnd, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="0" Maximum="10" SmallChange="1" LargeChange="2" TickFrequency="1" Width="200" VerticalAlignment="Center"/>
+                            <TextBlock    Style="{StaticResource BaseTextBlock}"   Text="{Binding ElementName=ScreenShotIgnoreSlider2, Mode=OneWay,Path=Value,StringFormat=\{0\} 分钟}"  />
                         </StackPanel>
                         <WrapPanel Visibility="Collapsed" Orientation="Horizontal" Margin="20 10">
                             <TextBlock  Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2" Text="线程数量"/>
@@ -1444,7 +1457,83 @@
 
                     </StackPanel>
 
+                    <StackPanel x:Name="RenamePanel" Orientation="Vertical" Background="Transparent" Visibility="Hidden"  >
+                        <WrapPanel x:Name="CheckedBoxWrapPanel" Orientation="Horizontal">
+                            <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Content="识别码" Width="100" Height="30"  Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="名称" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="中文名称" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="视频类型" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="发行日期" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="年份" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="时长" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="国家" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="导演" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="类别" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="标签" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="演员" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="发行商" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="评分" Width="100" Height="30" Margin="5"     Click="AddToRename"/>
+                            
+                        </WrapPanel>
 
+                        <CheckBox IsChecked="{Binding Path=DelRenameTitleSpace,Mode=TwoWay,Source={x:Static p:Settings.Default}}" Content="删除空格" Margin="10 5"/>
+                        <CheckBox IsChecked="{Binding Path=AddLabelTagWhenRename,Mode=TwoWay,Source={x:Static p:Settings.Default}}" Content="自动添加中字标签戳" Margin="10 5"/>
+
+                        <!--{'\\','#','%', '&', '*', '|', ':', '"', ' <', '>', '?', '/','.' }-->
+                            <StackPanel Orientation="Horizontal" Margin="10 5">
+                            <Label Content="信息外部分隔符" Style="{StaticResource InfoLabel}" Width="120"/>
+                            <ComboBox x:Name="OutComboBox" Width="100" SelectionChanged="OutComboBox_SelectionChanged" >
+                                <ComboBoxItem Content="_"/>
+                                <ComboBoxItem Content="-"/>
+                                <ComboBoxItem Content="$"/>
+                                <ComboBoxItem Content="%"/>
+                                <ComboBoxItem Content="^"/>
+                                <ComboBoxItem Content="@"/>
+                                <ComboBoxItem Content="+"/>
+                                <ComboBoxItem Content=","/>
+                            </ComboBox>
+                        </StackPanel>
+
+
+                        <StackPanel Orientation="Horizontal" Margin="10 5">
+                            <Label Content="信息内部分隔符" Style="{StaticResource InfoLabel}" Width="120"/>
+                            <ComboBox    x:Name="InComboBox"   Width="100" SelectionChanged="InComboBox_SelectionChanged">
+                                <ComboBoxItem Content="_"/>
+                                <ComboBoxItem Content="-"/>
+                                <ComboBoxItem Content="$"/>
+                                <ComboBoxItem Content="%"/>
+                                <ComboBoxItem Content="^"/>
+                                <ComboBoxItem Content="@"/>
+                                <ComboBoxItem Content="+"/>
+                                <ComboBoxItem Content=","/>
+                            </ComboBox>
+                        </StackPanel>
+
+
+                        <Grid  Margin="10 5" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="命名规则" Style="{StaticResource InfoLabel}"/>
+                            <TextBox TextChanged="TextBox_TextChanged" IsReadOnly="False" Text="{Binding RenameFormat,Mode=TwoWay,Source={x:Static p:Settings.Default}}" Grid.Column="1" Width="auto" HorizontalAlignment="Stretch"  Margin="0" Style="{StaticResource InfoTextBox}" Padding="10 5" CaretBrush="{DynamicResource ForegroundSearch}"  Foreground="{DynamicResource ForegroundSearch}" TextAlignment="Left"  FontSize="18" />
+                        </Grid>
+
+
+
+
+                        <Grid  Margin="10 5" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label  Grid.Column="0" Content="改名效果" Style="{StaticResource InfoLabel}"/>
+                            <TextBlock Text="{Binding ViewRenameFormat}"  TextAlignment="Left"  Grid.Column="1" Width="auto" HorizontalAlignment="Stretch"  Margin="0"  Style="{StaticResource BaseTextBlock}" FontSize="18"  Padding="10 5"/>
+                        </Grid>
+                        <TextBox ToolTip="如：{id}_（{title}），若 {title} 为空，则两边的括号不会自动删除" HorizontalAlignment="Left" Margin="10 5" Width="auto"   Grid.Column="0" Text="说明：如果在命名规则里添加内容，则命名的时候若对应字段为空，则新增的内容不会自动删除" Style="{StaticResource InfoTextBox}" Padding="10 5" CaretBrush="{DynamicResource ForegroundSearch}"  Foreground="{DynamicResource ForegroundSearch}" TextAlignment="Left"  FontSize="18" />
+
+
+                    </StackPanel>
 
                 </Grid>
             </ScrollViewer>

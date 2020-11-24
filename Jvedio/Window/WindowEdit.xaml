@@ -263,10 +263,14 @@
 
 
                     <Grid Style="{StaticResource InfoGrid}" >
-                        <Label  Content="创建时间"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox IsReadOnly="True"   GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.scandate}" Style="{StaticResource BaseTextBox}"/>
+                        <Label  Content="导入时间"  Style="{StaticResource BaseLabel2}"/>
+                                <TextBox IsReadOnly="True"   GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.otherinfo}" Style="{StaticResource BaseTextBox}"/>
                     </Grid>
-                        <Grid Style="{StaticResource InfoGrid}">
+                    <Grid Style="{StaticResource InfoGrid}" >
+                        <Label  Content="创建时间"  Style="{StaticResource BaseLabel2}"/>
+                                <TextBox IsReadOnly="True"   GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.scandate}" Style="{StaticResource BaseTextBox}"/>
+                    </Grid>
+                            <Grid Style="{StaticResource InfoGrid}">
                             <Label  Content="标题"  Style="{StaticResource BaseLabel2}"/>
                             <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.title}" Style="{StaticResource BaseTextBox}"/>
                         </Grid>

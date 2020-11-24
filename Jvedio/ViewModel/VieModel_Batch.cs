@@ -157,7 +157,9 @@ namespace Jvedio.ViewModel
                     break;
 
                 case 5:
-
+                    //重命名
+                    movies.ForEach(arg => { if (File.Exists(arg.filepath)) Movies.Add(arg.id); });
+                    Rename_TotalNum = Movies.Count;
                     break;
 
                 default:
@@ -255,6 +257,46 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        #region "Rename"
+
+
+
+
+        private int _Rename_TotalNum = 0;
+
+        public int Rename_TotalNum
+        {
+            get { return _Rename_TotalNum; }
+            set
+            {
+                _Rename_TotalNum = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 5) TotalNum = Rename_TotalNum;
+            }
+        }
+
+
+
+        private int _Rename_CurrentProgress = 0;
+
+        public int Rename_CurrentProgress
+        {
+            get { return _Rename_CurrentProgress; }
+            set
+            {
+                _Rename_CurrentProgress = value;
+                RaisePropertyChanged();
+                if (Properties.Settings.Default.BatchIndex == 5)
+                {
+                    CurrentNum = Rename_CurrentProgress;
+                    Progress = 100 * Rename_CurrentProgress / (Rename_TotalNum == 0 ? 1 : Rename_TotalNum);
+                }
+            }
+        }
+
+
+        #endregion
 
         #region "Gif"
 
@@ -396,6 +438,8 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+
 
 
 

@@ -163,7 +163,7 @@
                         <Condition Binding="{Binding bigimage}" Value="{x:Null}"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Width" Value="280" />
-                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_B.jpg" />
+                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_B.png" />
                 </MultiDataTrigger>
 
 
@@ -173,7 +173,7 @@
                         <Condition Binding="{Binding smallimage}" Value="{x:Null}"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Height" Value="180" />
-                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_S.jpg" />
+                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_S.png" />
                 </MultiDataTrigger>
             </Style.Triggers>
         </Style>
@@ -565,6 +565,7 @@
                 <RadioButton  Content="生成截图"  Click="ShowGrid"    Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
                 <RadioButton Visibility="Collapsed" Content="翻译"  Click="ShowGrid"    Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
                 <RadioButton Visibility="Collapsed"   Content="人工智能"  Click="ShowGrid"    Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
+                <RadioButton  Content="重命名"  Click="ShowGrid"    Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
             </StackPanel>
 
 
@@ -606,6 +607,11 @@
                     <StackPanel  Orientation="Horizontal"  Visibility="Hidden">
                             <TextBlock Text="人工智能" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" Margin="10"/>
                         </StackPanel>
+
+                        <StackPanel  Orientation="Horizontal"  Visibility="Hidden">
+                            <TextBlock Text="重命名" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" Margin="10"/>
+                        </StackPanel>
+
                     </Grid>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -705,6 +711,13 @@
 
                     <StackPanel  Orientation="Vertical"  Visibility="Collapsed" VerticalAlignment="Center" Margin="20 5">
 
+                    </StackPanel>
+
+                    <StackPanel  Orientation="Vertical"  Visibility="Collapsed" VerticalAlignment="Center" Margin="20 5">
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding RenameFormat,Mode=OneWay,Source={x:Static p:Settings.Default},StringFormat='重命名规则：{0}'}" Style="{StaticResource BaseTextBlock}"/>
+                        </StackPanel>
                     </StackPanel>
 
                 </Grid>

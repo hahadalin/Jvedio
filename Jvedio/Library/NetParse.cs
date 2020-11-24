@@ -573,7 +573,6 @@ namespace Jvedio
                             content = title;
                             if (content.IndexOf("无码") > 0) { result.Add("vediotype", "1"); }
                             else { result.Add("vediotype", "2"); }
-                            result.Add("otherinfo", content.Replace("资源参数：", "FC2资源参数：").Replace(" ", "").Replace("\n", "").Replace("\r", "") + " ");
                         }
                         else if (title.IndexOf("卖家信息") >= 0)
                         {

@@ -1,6 +1,7 @@
 ﻿using DynamicData.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -58,6 +59,7 @@ namespace Jvedio
                 if (value.Split(';').Count() >= 2)
                 {
                     hassubsection = true;
+                    subsectionlist = new List<string>();
                     foreach (var item in t)
                     {
                         if (!string.IsNullOrEmpty(item)) subsectionlist.Add(item);
@@ -205,16 +207,16 @@ namespace Jvedio
         public List<Actress> actorlist { get; set; }
         public List<string> labellist { get; set; }
 
-        public List<BitmapSource> extraimagelist { get; set; }
-        public List<string> extraimagePath { get; set; }
+        public ObservableRangeCollection<BitmapSource> extraimagelist { get; set; }
+        public ObservableRangeCollection<string> extraimagePath { get; set; }
 
         public DetailMovie()
         {
             genrelist = new List<string>();
             actorlist = new List<Actress>();
             labellist = new List<string>();
-            extraimagelist = new List<BitmapSource>();
-            extraimagePath = new List<string>();
+            extraimagelist = new ObservableRangeCollection<BitmapSource>();
+            extraimagePath = new ObservableRangeCollection<string>();
         }
 
 

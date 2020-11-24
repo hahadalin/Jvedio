@@ -214,8 +214,10 @@
     </Compile>
     <Compile Include="Class\JvedioClass.cs" />
     <Compile Include="Class\MediaParse.cs" />
+    <Compile Include="Config\RecentWatchedConfig.cs" />
     <Compile Include="Config\ServerConfig.cs" />
     <Compile Include="Config\ScanPathConfig.cs" />
+    <Compile Include="Config\JvedioConfig.cs" />
     <Compile Include="Controls\WaitingPanel.xaml.cs">
       <DependentUpon>WaitingPanel.xaml</DependentUpon>
     </Compile>
@@ -260,7 +262,6 @@
     </Compile>
     <Compile Include="Class\StaticClass.cs" />
     <Compile Include="Class\StaticVariable.cs" />
-    <Compile Include="ViewModel\VieModel_AdvanceSearch.cs" />
     <Compile Include="ViewModel\VieModel_Details.cs" />
     <Compile Include="ViewModel\VieMoel_DownLoad.cs" />
     <Compile Include="ViewModel\VieModel_Edit.cs" />
@@ -270,9 +271,6 @@
     <Compile Include="ViewModel\VieModel_DBManagement.cs" />
     <Compile Include="ViewModel\VieModel_StartUp.cs" />
     <Compile Include="ViewModel\VieModel_Settings.cs" />
-    <Compile Include="Window\WindowAdvanceSearch.xaml.cs">
-      <DependentUpon>WindowAdvanceSearch.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Window\WindowDetails.xaml.cs">
       <DependentUpon>WindowDetails.xaml</DependentUpon>
     </Compile>
@@ -329,6 +327,10 @@
     <Page Include="XAML\BasicStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAML\ToggleButtonStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="XAML\ListBoxStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -390,10 +392,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window\WindowAdvanceSearch.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Window\WindowDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -449,6 +447,10 @@
     <Content Include="Lib\PInvoke.dll" />
     <Content Include="Lib\QueryEngine.dll" />
     <Content Include="Lib\UsnOperation.dll" />
+    <Resource Include="Resources\Picture\收起.png" />
+    <Resource Include="Resources\Picture\NoPrinting_A.png" />
+    <Resource Include="Resources\Picture\NoPrinting_S.png" />
+    <Resource Include="Resources\Picture\NoPrinting_B.png" />
     <Resource Include="Resources\Picture\筛选.png" />
     <Resource Include="Resources\Skin\white\_score.png" />
     <Resource Include="Resources\Skin\black\_score.png" />
@@ -543,15 +545,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Picture\Title.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Picture\NoPrinting_S.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Picture\NoPrinting_B.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Picture\NoPrinting_A.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Picture\status_success.png" />

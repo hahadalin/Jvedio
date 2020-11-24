@@ -665,7 +665,52 @@ namespace Jvedio
 
                     break;
                 case 5:
+                    //重命名
+                    if (Properties.Settings.Default.RenameFormat.IndexOf("{") < 0)
+                    {
+                        HandyControl.Controls.Growl.Error("请在设置中配置【重命名】规则");
+                        cts.Dispose();
+                        Running = false;
+                        return;
+                    }
 
+
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            double totalcount = vieModel.Movies.Count;
+                            ShowStatus("------------开始重命名------------");
+                            for (int i = 0; i < totalcount; i++)
+                            {
+                                if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
+                                while (Pause) { Task.Delay(500).Wait(); }
+                                ct.ThrowIfCancellationRequested();
+                                (bool result,string message) = Rename(vieModel.Movies[i]);
+                                if (result)
+                                    ShowStatus($"\n{i + 1}/{totalcount} => 成功：{vieModel.Movies[i]}");
+                                else
+                                    ShowStatus($"\n{i + 1}/{totalcount} => 失败：{vieModel.Movies[i]}，原因为：{message}");
+
+                                //进度+1
+                                vieModel.Rename_CurrentProgress = i + 1;
+                            }
+
+                            ShowStatus("------------完成------------");
+
+
+                        }
+                        catch (OperationCanceledException ex)
+                        {
+                            ShowStatus("------------任务已取消------------");
+                            App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });
+                        }
+                        finally
+                        {
+                            cts.Dispose();
+                            Running = false;
+                        }
+                    }, ct);
                     break;
 
                 default:
@@ -676,6 +721,49 @@ namespace Jvedio
             SetEnable(true);
 
 
+        }
+
+
+
+        private (bool,string) Rename(string id)
+        {
+            DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
+
+            if (!File.Exists(detailMovie.filepath)) return (false,$"文件不存在：{detailMovie.filepath}");
+            DetailMovie movie = DataBase.SelectDetailMovieById(id);
+            //try
+            //{
+                string[] newPath = movie.ToFileName();
+                if (movie.hassubsection)
+                {
+                for (int i = 0; i < newPath.Length; i++)
+                {
+                    if (File.Exists(newPath[i])) return (false, $"新文件已存在：{newPath[i]}，原文件为：{detailMovie.filepath}");
+                }
+
+                for (int i = 0; i < newPath.Length; i++)
+                    {
+                        File.Move(movie.subsectionlist[i], newPath[i]);
+                    }
+                    movie.filepath = newPath[0];
+                    movie.subsection = string.Join(";", newPath);
+                    DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
+                    DataBase.UpdateMovieByID(movie.id, "subsection", movie.subsection, "string");//保存
+                    
+                }
+                else
+                {
+                    if(File.Exists(newPath[0])) return (false, $"新文件已存在：{newPath[0]}，原文件为：{detailMovie.filepath}");
+                    File.Move(movie.filepath, newPath[0]);
+                    movie.filepath = newPath[0];
+                    DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
+                }
+                return (true, "");
+            //}
+            //catch (Exception ex)
+            //{
+            //    return (false, ex.Message);
+            //}
         }
 
 

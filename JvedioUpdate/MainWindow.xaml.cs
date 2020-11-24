@@ -209,6 +209,9 @@ namespace JvedioUpdate
                 string filepath = Path.Combine(temppath, arg);
                 if (!File.Exists(filepath))
                 {
+                    if (arg.IndexOf("x64") >= 0) { 
+                        Console.WriteLine(123); 
+                    }
                     DownLoadFile(temppath, arg);
                     Task.Delay(300).Wait();
                 }
@@ -224,27 +227,25 @@ namespace JvedioUpdate
 
             });
 
-            //复制文件并覆盖
+            
             this.Dispatcher.Invoke((Action)delegate () { statusText.Text = "复制文件"; });
 
-            try
+            //复制文件并覆盖
+
+            foreach(var item in downloadlist)
             {
-                downloadlist.ForEach(arg => { File.Copy(Path.Combine(temppath, arg), Path.Combine(basepath, arg), true); });
+                if (item == "JvedioUpdate.exe") continue;
+                string src = Path.Combine(temppath, item);
+                string dst = Path.Combine(basepath, item);
+                if (!Directory.Exists(new FileInfo(dst).Directory.FullName)) Directory.CreateDirectory(new FileInfo(dst).Directory.FullName);
+                try { File.Copy(src, dst, true); }
+                catch (Exception e) { Console.WriteLine(e.Message); continue; }
             }
-            catch(Exception e) { Console.WriteLine(e.Message); }
-
-
             //删除 Temp 文件夹
-            try
-            {
-                if (Directory.Exists(temppath)) Directory.Delete(temppath, true);
-            }
+            try { if (Directory.Exists(temppath)) Directory.Delete(temppath, true); }
             catch { }
 
             //写入Version文件
-
-
-            
             this.Dispatcher.Invoke((Action)delegate () { statusText.Text = "更新完成！"; });
 
             this.Dispatcher.Invoke((Action)delegate () {
@@ -283,14 +284,29 @@ namespace JvedioUpdate
             }
 
 
-
+        /// <summary>
+        /// filename 有可能带文件夹
+        /// </summary>
+        /// <param name="temppath"></param>
+        /// <param name="filename"></param>
         public void DownLoadFile(string temppath,string filename)
         {
-            this.Dispatcher.Invoke((Action)delegate () { statusText.Text = $"下载 {filename}"; });
+
+            FileInfo fileInfo = new FileInfo(Path.Combine(temppath, filename));
+
+            this.Dispatcher.Invoke((Action)delegate () { statusText.Text = $"下载 {fileInfo.Name}"; });
+
+            if (fileInfo.Directory.FullName.IndexOf("en") >= 0)
+            {
+                Console.WriteLine(123);
+            }
+
+            if (!Directory.Exists(fileInfo.Directory.FullName)) Directory.CreateDirectory(fileInfo.Directory.FullName);//创建文件夹
+
             byte[] filebyte = GetFile($"http://hitchao.gitee.io/jvedioupdate/File/{filename}");
             try
             {
-                using (var fs = new FileStream(Path.Combine(temppath, filename), FileMode.Create, FileAccess.Write))
+                using (var fs = new FileStream(fileInfo.FullName, FileMode.Create, FileAccess.Write))
                 {
                     fs.Write(filebyte, 0, filebyte.Length);
                 }

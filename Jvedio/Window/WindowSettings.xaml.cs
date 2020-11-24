@@ -24,6 +24,8 @@ using DynamicData.Annotations;
 using System.Runtime.CompilerServices;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Jvedio
 {
@@ -36,7 +38,23 @@ namespace Jvedio
         //public Size WindowSize = new Size(1200, 700);
         //public int WinState = 0;\
 
-
+        public DetailMovie SampleMovie = new DetailMovie() {
+            id = "AAA-001",
+            title = "钢铁侠1",
+            vediotype = 1,
+            releasedate ="2020-01-01",
+            director = "乔恩·费儒",
+            genre = "动作 冒险 科幻",
+            tag = "彩色",
+            actor = "小罗伯特·唐尼/格温妮斯·帕特洛/泰伦斯·霍华德/杰夫·布里吉斯",
+            studio = "漫威电影工作室",
+            rating = 9.0f,
+            chinesetitle = "钢铁侠1",
+            label ="标签1",
+            year = 2020,
+            runtime =126,
+            country ="美国"
+        };
         public VieModel_Settings vieModel_Settings;
         public Settings()
         {
@@ -399,10 +417,8 @@ namespace Jvedio
                 Properties.Settings.Default.EnableFC2 = enableList[4];
                 Properties.Settings.Default.Enable321 = enableList[5];
                 Properties.Settings.Default.EnableDMM = enableList[6];
-
-
-
-                Properties.Settings.Default.Save();
+                Properties.Settings.Default.FirstRun = false;
+               Properties.Settings.Default.Save();
 
                 HandyControl.Controls.Growl.Success("已恢复默认设置", "SettingsGrowl");
             }
@@ -744,11 +760,41 @@ namespace Jvedio
 
             if (vieModel_Settings.DataBases.Count == 1) DatabaseComboBox.Visibility = Visibility.Hidden;
 
-            //ServersDataGrid.Columns[0].Header = "是否启用";
-            //ServersDataGrid.Columns[1].Header = "服务器地址";
-            //ServersDataGrid.Columns[2].Header = "是否可用";
-            //ServersDataGrid.Columns[3].Header = "服务器名称";
-            //ServersDataGrid.Columns[4].Header = "上一次更新时间";
+            ShowViewRename(Properties.Settings.Default.RenameFormat);
+
+            SetCheckedBoxChecked();
+
+
+            foreach (ComboBoxItem item in OutComboBox.Items)
+            {
+                if (item.Content.ToString() == Properties.Settings.Default.OutSplit)
+                {
+                    OutComboBox.SelectedIndex = OutComboBox.Items.IndexOf(item);
+                    break;
+                }
+            }
+
+
+            foreach (ComboBoxItem item in InComboBox.Items)
+            {
+                if (item.Content.ToString() == Properties.Settings.Default.InSplit)
+                {
+                    InComboBox.SelectedIndex = InComboBox.Items.IndexOf(item);
+                    break;
+                }
+            }
+
+        }
+
+        private void SetCheckedBoxChecked()
+        {
+            foreach (ToggleButton item in CheckedBoxWrapPanel.Children.OfType<ToggleButton>().ToList())
+            {
+                if(Properties.Settings.Default.RenameFormat.IndexOf(   item.Content.ToString().ToSqlField()) >= 0)
+                {
+                    item.IsChecked = true;
+                }
+            }
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -1172,6 +1218,126 @@ namespace Jvedio
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消之前的热键
+        }
+
+
+        private void ReplaceWithValue(string property)
+        {
+            string inSplit = InComboBox.Text.Replace("无", "");
+            PropertyInfo[] PropertyList = SampleMovie.GetType().GetProperties();
+            foreach (PropertyInfo item in PropertyList)
+            {
+                string name = item.Name;
+                if (name == property)
+                {
+                    object o = item.GetValue(SampleMovie);
+                    if (o != null)
+                    {
+                        string value = o.ToString();
+
+                        if (property == "actor" || property == "genre" || property == "label")
+                            value = value.Replace(" ", inSplit).Replace("/", inSplit);
+
+                        if (property == "vediotype")
+                        {
+                            int v = 1;
+                            int.TryParse(value, out v);
+                            if (v == 1)
+                                value = Properties.Settings.Default.TypeName1;
+                            else if(v==2)
+                                value = Properties.Settings.Default.TypeName2;
+                            else if (v == 3)
+                                value = Properties.Settings.Default.TypeName3;
+                        }
+                        vieModel_Settings.ViewRenameFormat = vieModel_Settings.ViewRenameFormat.Replace("{"+property+"}", value);
+                    }
+                    break;
+                }
+            }
+        }
+
+        private void AddToRename(object sender, RoutedEventArgs e)
+        {
+            ToggleButton toggleButton = sender as ToggleButton;
+            string text = toggleButton.Content.ToString();
+            bool ischecked= (bool)toggleButton.IsChecked;
+            string formatstring ="{" + text.ToSqlField() + "}";
+
+            string split = OutComboBox.Text.Replace("无", "");
+
+
+            if (ischecked)
+            {
+                if (string.IsNullOrEmpty(Properties.Settings.Default.RenameFormat))
+                {
+                    Properties.Settings.Default.RenameFormat +=   formatstring;
+                }
+                else
+                {
+                    Properties.Settings.Default.RenameFormat += split + formatstring;
+                }
+            }
+            else
+            {
+                int idx = Properties.Settings.Default.RenameFormat.IndexOf(formatstring);
+                if (idx == 0)
+                {
+                    Properties.Settings.Default.RenameFormat = Properties.Settings.Default.RenameFormat.Replace( formatstring, "");
+                }
+                else
+                {
+                    Properties.Settings.Default.RenameFormat = Properties.Settings.Default.RenameFormat.Replace(getSplit(formatstring) + formatstring, "");
+                }
+            }
+        }
+
+        private char getSplit(string formatstring)
+        {
+            int idx = Properties.Settings.Default.RenameFormat.IndexOf(formatstring);
+            if (idx > 0)
+               return Properties.Settings.Default.RenameFormat[idx - 1];
+            else
+                return '\0';
+
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (vieModel_Settings == null) return;
+            TextBox textBox =(TextBox) sender;
+            string txt = textBox.Text;
+            ShowViewRename(txt);
+        }
+
+        private void ShowViewRename(string txt)
+        {
+
+            MatchCollection matches = Regex.Matches(txt, "\\{[a-z]+\\}");
+            if (matches != null && matches.Count > 0)
+            {
+                vieModel_Settings.ViewRenameFormat = txt;
+                foreach (Match match in matches)
+                {
+                    string property = match.Value.Replace("{", "").Replace("}", "");
+                    ReplaceWithValue(property);
+                }
+            }
+            else
+            {
+                vieModel_Settings.ViewRenameFormat = "";
+            }
+        }
+
+        private void OutComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0) return;
+            Properties.Settings.Default.OutSplit = ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
+        }
+
+        private void InComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0) return;
+            Properties.Settings.Default.InSplit= ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
         }
     }
 

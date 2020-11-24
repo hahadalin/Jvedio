@@ -110,17 +110,7 @@ namespace Jvedio.ViewModel
             DataBase.UpdateMovieByID(movieid, "visits", detailMovie.visits);
             
 
-            //扫描目录
-            List<string> imagePathList = new List<string>();
-            if(Directory.Exists(StaticVariable.BasePicPath + $"ExtraPic\\{detailMovie.id}\\"))
-            {
-                try
-                {
-                    foreach (var path in Directory.GetFiles(StaticVariable.BasePicPath + $"ExtraPic\\{detailMovie.id}\\")) imagePathList.Add(path);
-                }
-                catch { }
-                if (imagePathList.Count > 0) imagePathList = imagePathList.CustomSort().ToList();
-            }
+
             //释放图片内存
             if (DetailMovie != null)
             {
@@ -142,28 +132,6 @@ namespace Jvedio.ViewModel
             if (detailMovie != null)
             {
                 detailMovie.bigimage = StaticClass.GetBitmapImage(detailMovie.id, "BigPic");
-
-                //if (File.Exists(BasePicPath + $"SmallPic\\{detailMovie.id}.jpg"))
-                //{
-                //    detailMovie.extraimagelist.Add(StaticClass.GetBitmapImage(detailMovie.id, "SmallPic"));
-                //    detailMovie.extraimagePath.Add(BasePicPath + $"SmallPic\\{detailMovie.id}.jpg");
-                //}
-
-                if (File.Exists(BasePicPath + $"BigPic\\{detailMovie.id}.jpg"))
-                {
-                    detailMovie.extraimagelist.Add(detailMovie.bigimage);
-                    detailMovie.extraimagePath.Add(BasePicPath + $"BigPic\\{detailMovie.id}.jpg");
-                }
-
-
-
-
-                foreach (var path in imagePathList) { 
-                    detailMovie.extraimagelist.Add(StaticClass.GetExtraImage(path));
-                    detailMovie.extraimagePath.Add(path);
-                }//加载预览图
-                
-
                 DB db = new DB("Translate");
                 //加载翻译结果
                 if (Properties.Settings.Default.TitleShowTranslate)

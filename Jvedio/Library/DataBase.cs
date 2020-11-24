@@ -172,6 +172,10 @@ namespace Jvedio
             {
                 result = $"ORDER BY filesize {(SortDescending ? "DESC" : "ASC")}";
             }
+            else if (SortType == Sort.导入时间.ToString())
+            {
+                result = $"ORDER BY otherinfo {(SortDescending ? "DESC" : "ASC")}";
+            }
             else if (SortType == Sort.创建时间.ToString())
             {
                 result = $"ORDER BY scandate {(SortDescending ? "DESC" : "ASC")}";
@@ -279,7 +283,7 @@ namespace Jvedio
 
 
                     stopwatch.Stop();
-                    Console.WriteLine($"\nSelectPartialInfo 用时：{stopwatch.ElapsedMilliseconds} ms");
+                    //Console.WriteLine($"\nSelectPartialInfo 用时：{stopwatch.ElapsedMilliseconds} ms");
                     MovieListChanged?.Invoke(null, EventArgs.Empty);
                     return result;
                 }
@@ -565,7 +569,7 @@ namespace Jvedio
         /// </summary>
         /// <param name="sqltext"></param>
         /// <returns></returns>
-        public static List<Movie> SelectMoviesBySql(string sqltext)
+        public static List<Movie> SelectMoviesBySql(string sqltext,bool filter=false)
         {
             Init();
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
@@ -592,6 +596,35 @@ namespace Jvedio
                     }
                     catch { }
                     sr.Close();
+                    List<Movie> movies = new List<Movie>();
+                    movies.AddRange(result);
+                    //可播放/不可播放
+                    if (Properties.Settings.Default.OnlyShowPlay)
+                    {
+                        foreach (var item in movies)
+                        {
+                            if (!File.Exists((item.filepath))) result.Remove(item);
+                        }
+                    }
+                    //分段/不分段
+                    if (Properties.Settings.Default.OnlyShowSubSection)
+                    {
+                        foreach (var item in movies)
+                        {
+                            if (item.subsectionlist.Count <= 1) result.Remove(item);
+                        }
+                    }
+
+
+
+                    movies.Clear();
+                    movies.AddRange(result);
+                    //有图/无图
+                    FilterImage(movies, ref result);
+                    //Console.WriteLine($"\nSelectPartialInfo 用时：{stopwatch.ElapsedMilliseconds} ms");
+                    MovieListChanged?.Invoke(null, EventArgs.Empty);
+
+
                     return result;
 
                 }
@@ -954,9 +987,10 @@ namespace Jvedio
                     string sqltext;
                     if (savetype == "Int") { sqltext = $"UPDATE movie SET {content} = {value} WHERE id = '{id}'"; }
                     else { sqltext = $"UPDATE movie SET {content} = '{value}' WHERE id = '{id}'"; }
+                    //Console.WriteLine(sqltext);
                     cmd.CommandText = sqltext;
-                    cmd.ExecuteNonQuery();
-
+                    int result=cmd.ExecuteNonQuery();
+                    //Console.WriteLine(result);
                 }
             }
 
@@ -1134,13 +1168,14 @@ namespace Jvedio
                 {
                     cmd.Connection = cn;
 
-                    string sqltext = "INSERT INTO movie(id , filesize ,filepath  , vediotype  ,scandate,subsection) values(@id , @filesize ,@filepath  , @vediotype  ,@scandate,@subsection) ON CONFLICT(id) DO UPDATE SET filesize=@filesize,filepath=@filepath,scandate=@scandate,vediotype=@vediotype,subsection=@subsection";
+                    string sqltext = "INSERT INTO movie(id , filesize ,filepath  , vediotype  ,scandate,subsection,otherinfo) values(@id , @filesize ,@filepath  , @vediotype  ,@scandate,@subsection,@otherinfo) ON CONFLICT(id) DO UPDATE SET filesize=@filesize,filepath=@filepath,scandate=@scandate,otherinfo=@otherinfo,vediotype=@vediotype,subsection=@subsection";
                     cmd.CommandText = sqltext;
                     cmd.Parameters.Add("id", DbType.String).Value = movie.id.ToUpper();
                     cmd.Parameters.Add("filesize", DbType.Double).Value = movie.filesize;
                     cmd.Parameters.Add("filepath", DbType.String).Value = movie.filepath;
                     cmd.Parameters.Add("vediotype", DbType.Int16).Value = movie.vediotype;
                     cmd.Parameters.Add("scandate", DbType.String).Value = movie.scandate;
+                    cmd.Parameters.Add("otherinfo", DbType.String).Value = movie.otherinfo;
                     cmd.Parameters.Add("subsection", DbType.String).Value = movie.subsection;
                     //Console.WriteLine(movie.subsection);
                     cmd.ExecuteNonQuery();
@@ -1461,6 +1496,12 @@ namespace Jvedio
                     {
                         try
                         {
+                            string t = string.IsNullOrEmpty(sr["daorushijian"].ToString()) ? "1900-01-01 01:01:01" : sr["daorushijian"].ToString();
+                            DateTime scandate = DateTime.Now;
+                            bool success=DateTime.TryParse(t, out scandate);
+                            if(!success && t.Length== "20200830221052".Length) { 
+                                DateTime.TryParse(t.Substring(0,4) + "-" + t.Substring(4,2) + "-" + t.Substring(6, 2) + " " + t.Substring(8, 2) + ":" + t.Substring(10, 2) + ":" + t.Substring(12, 2) , out scandate); 
+                            }
                             Movie AccessMovie = new Movie()
                             {
                                 id = sr["fanhao"].ToString(),
@@ -1468,7 +1509,7 @@ namespace Jvedio
                                 filesize = string.IsNullOrEmpty(sr["wenjiandaxiao"].ToString()) ? 0 : double.Parse(sr["wenjiandaxiao"].ToString()),
                                 filepath = sr["weizhi"].ToString(),
                                 vediotype = string.IsNullOrEmpty(sr["shipinleixing"].ToString()) ? 0 : int.Parse(sr["shipinleixing"].ToString()),
-                                scandate = string.IsNullOrEmpty(sr["daorushijian"].ToString()) ? "1900-01-01 01:01:01" : sr["daorushijian"].ToString(),
+                                scandate = "",
                                 releasedate = string.IsNullOrEmpty(sr["faxingriqi"].ToString()) ? "1900-01-01" : sr["faxingriqi"].ToString(),
                                 visits = string.IsNullOrEmpty(sr["fangwencishu"].ToString()) ? 0 : int.Parse(sr["fangwencishu"].ToString()),
                                 director = Unicode2String(sr["daoyan"].ToString()),
@@ -1485,7 +1526,7 @@ namespace Jvedio
                                 rating = 0,
                                 year = string.IsNullOrEmpty(sr["faxingriqi"].ToString()) ? 1900 : int.Parse(sr["faxingriqi"].ToString().Split('-')[0]),
                                 countrycode = 0,
-                                otherinfo = "",
+                                otherinfo = scandate.ToString("yyyy-MM-dd HH:mm:ss"),
                                 subsection = "",
                                 chinesetitle = "",
                                 plot = "",

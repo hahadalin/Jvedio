@@ -1982,18 +1982,6 @@ namespace Jvedio.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AsyncShowImage {
-            get {
-                return ((bool)(this["AsyncShowImage"]));
-            }
-            set {
-                this["AsyncShowImage"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool DisplayFavorites {
             get {
                 return ((bool)(this["DisplayFavorites"]));
@@ -2036,6 +2024,114 @@ namespace Jvedio.Properties {
             }
             set {
                 this["OnlyShowSubSection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DetialWindowShowAllMovie {
+            get {
+                return ((bool)(this["DetialWindowShowAllMovie"]));
+            }
+            set {
+                this["DetialWindowShowAllMovie"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ScanWhenRefresh {
+            get {
+                return ((bool)(this["ScanWhenRefresh"]));
+            }
+            set {
+                this["ScanWhenRefresh"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RenameFormat {
+            get {
+                return ((string)(this["RenameFormat"]));
+            }
+            set {
+                this["RenameFormat"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("_")]
+        public string OutSplit {
+            get {
+                return ((string)(this["OutSplit"]));
+            }
+            set {
+                this["OutSplit"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-")]
+        public string InSplit {
+            get {
+                return ((string)(this["InSplit"]));
+            }
+            set {
+                this["InSplit"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DelRenameTitleSpace {
+            get {
+                return ((bool)(this["DelRenameTitleSpace"]));
+            }
+            set {
+                this["DelRenameTitleSpace"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AddLabelTagWhenRename {
+            get {
+                return ((bool)(this["AddLabelTagWhenRename"]));
+            }
+            set {
+                this["AddLabelTagWhenRename"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ScreenShotIgnoreStart {
+            get {
+                return ((int)(this["ScreenShotIgnoreStart"]));
+            }
+            set {
+                this["ScreenShotIgnoreStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ScreenShotIgnoreEnd {
+            get {
+                return ((int)(this["ScreenShotIgnoreEnd"]));
+            }
+            set {
+                this["ScreenShotIgnoreEnd"] = value;
             }
         }
     }

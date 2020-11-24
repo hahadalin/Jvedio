@@ -288,12 +288,13 @@ namespace Jvedio
                     try { createDate = fileInfo.CreationTime.ToString("yyyy-MM-dd HH:mm:ss"); }
                     catch { }
                     if (createDate == "") createDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    vieModel.DetailMovie.otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     vieModel.DetailMovie.scandate = createDate;
                 }
 
                 vieModel.SaveModel();
                 vieModel.Query(vieModel.id);
-                HandyControl.Controls.Growl.Success("路径、视频类型、文件大小、创建时间成功更新！", "EditGrowl");
+                HandyControl.Controls.Growl.Success("路径、视频类型、文件大小、创建时间、导入时间成功更新！", "EditGrowl");
             }
             else
             {

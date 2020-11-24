@@ -41,7 +41,7 @@
                 <Line X1="0" Y1="10" X2="20" Y2="10" StrokeThickness="2" Stroke="Orange" Canvas.Left="10" Canvas.Top="10"/>
             </Canvas>
         </Grid>
-        <Image Stretch="Uniform"   x:Name="mainImage" Source="pack://application:,,,/Resources/Picture/NoPrinting_B.jpg"  Margin="0 10 0 250" />
+        <Image Stretch="Uniform"   x:Name="mainImage" Source="pack://application:,,,/Resources/Picture/NoPrinting_B.png"  Margin="0 10 0 250" />
 
         <Grid x:Name="ThumbGrid"  Margin="20" Height="200" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Visibility="Visible"   >
             <Border Background="{DynamicResource BackgroundTitle}" CornerRadius="20" Padding="20 5">

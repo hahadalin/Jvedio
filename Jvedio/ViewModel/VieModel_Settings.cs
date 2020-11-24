@@ -74,6 +74,19 @@ namespace Jvedio.ViewModel
         }
 
 
+        private string _ViewRenameFormat;
+
+        public string ViewRenameFormat
+        {
+            get { return _ViewRenameFormat; }
+            set
+            {
+                _ViewRenameFormat = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
 
 

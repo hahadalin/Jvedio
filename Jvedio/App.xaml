@@ -25,6 +25,7 @@
                 <ResourceDictionary Source="XAML/ProgressBarStyle.xaml"/>
                 <ResourceDictionary Source="XAML/ScrollViewStyle.xaml"/>
                 <ResourceDictionary Source="XAML/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="XAML/ToggleButtonStyle.xaml"/>
                 <ResourceDictionary Source="XAML/ComboBoxStyle.xaml"/>
                 <ResourceDictionary Source="XAML/CheckBoxStyle.xaml"/>
                 <ResourceDictionary Source="XAML/BasicStyle.xaml"/>
