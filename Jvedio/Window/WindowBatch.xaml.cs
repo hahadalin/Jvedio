@@ -63,14 +63,12 @@ namespace Jvedio
             if (Properties.Settings.Default.BatchIndex == 2 || Properties.Settings.Default.BatchIndex == 0) FirsrProgressBar.Visibility = Visibility.Visible;
             else FirsrProgressBar.Visibility = Visibility.Collapsed;
 
-            vieModel = new VieModel_Batch();
-            this.DataContext = vieModel;
+
 
             cts = new CancellationTokenSource();
             cts.Token.Register(() => { HandyControl.Controls.Growl.Info("取消当前任务！", "BatchGrowl"); });
             ct = cts.Token;
 
-            ResetTask();
         }
 
         private void ShowGrid(object sender, RoutedEventArgs e)
@@ -819,7 +817,10 @@ namespace Jvedio
                 HandyControl.Controls.Growl.Error("其他任务正在进行！", "BatchGrowl");
                 return;
             }
-            vieModel.Reset();
+            WaitingPanel.Visibility = Visibility.Visible;
+            Task.Run(() => {
+                vieModel.Reset((message) => { Dispatcher.BeginInvoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });  });
+            });
         }
 
 
@@ -836,6 +837,15 @@ namespace Jvedio
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             ResetTask();
+        }
+
+        private void Jvedio_BaseWindow_ContentRendered(object sender, EventArgs e)
+        {
+
+            vieModel = new VieModel_Batch();
+            this.DataContext = vieModel;
+            ResetTask();
+            //WaitingPanel.Visibility = Visibility.Visible;
         }
     }
 

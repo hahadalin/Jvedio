@@ -97,11 +97,7 @@ namespace Jvedio
                 this.State = DownLoadState.DownLoading;
 
                 Movie movie =  DataBase.SelectMovieByID(downLoadInfo.id);
-                
-                
-                string[] url = new string[] { Properties.Settings.Default.Bus, Properties.Settings.Default.BusEurope, Properties.Settings.Default.DB, Properties.Settings.Default.Library };
-                bool[] enableurl = new bool[] { Properties.Settings.Default.EnableBus, Properties.Settings.Default.EnableBusEu, Properties.Settings.Default.EnableDB, Properties.Settings.Default.EnableLibrary, Properties.Settings.Default.EnableFC2 };
-                string[] cookies = new string[] { Properties.Settings.Default.DBCookie };
+               
 
                 if (movie.title == "" | movie.smallimageurl == "" | movie.bigimageurl == "" | movie.sourceurl == "")
                     await Task.Run(() => { return Net.DownLoadFromNet(movie); });

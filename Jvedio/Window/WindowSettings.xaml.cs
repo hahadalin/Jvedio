@@ -387,7 +387,7 @@ namespace Jvedio
                 urlList.Add(Properties.Settings.Default.BusEurope);
                 urlList.Add(Properties.Settings.Default.Library);
                 urlList.Add(Properties.Settings.Default.DB);
-                urlList.Add(Properties.Settings.Default.Fc2Club);
+                urlList.Add(Properties.Settings.Default.FC2);
                 urlList.Add(Properties.Settings.Default.Jav321);
                 urlList.Add(Properties.Settings.Default.DMM);
 
@@ -406,7 +406,7 @@ namespace Jvedio
                 Properties.Settings.Default.BusEurope = urlList[1];
                 Properties.Settings.Default.Library = urlList[2];
                 Properties.Settings.Default.DB = urlList[3];
-                Properties.Settings.Default.Fc2Club = urlList[4];
+                Properties.Settings.Default.FC2 = urlList[4];
                 Properties.Settings.Default.Jav321 = urlList[5];
                 Properties.Settings.Default.DMM = urlList[6];
 
@@ -514,39 +514,6 @@ namespace Jvedio
 
 
 
-        public async  void Test(object sender, RoutedEventArgs e)
-        {
-           
-           
-            Button btn = sender as Button;
-            Grid grid = btn.Parent as Grid;
-            TextBox tb = grid.Children.OfType<TextBox>().First();
-            Image image= grid.Children.OfType<Image>().First();
-            Label label = grid.Children.OfType<Label>().First();
-            string url = tb.Text.ToLower();
-            string cookie="";bool enablecookie = false;
-            string labelcontent = label.Content.ToString();
-
-            if (url == "default" & labelcontent == "FC2") url = Properties.Settings.Default.Fc2Club;
-            if (url == "default" & labelcontent == "321") url = Properties.Settings.Default.Jav321;
-            if (url == "default" & labelcontent == "DMM") url = Properties.Settings.Default.DMM;
-            if (labelcontent == "DB") { enablecookie = true; cookie = Properties.Settings.Default.DBCookie; }
-            if (enablecookie & cookie == "") { HandyControl.Controls.Growl.Info("勾选后输入 Cookie 再尝试！", "SettingsGrowl");  return; }
-
-            if (url.IndexOf("http") < 0) { url = "https://" + url; }
-            if (url.Substring(url.Length - 1, 1) != "/") { url=url+"/"; }
-            
-            bool result = await Net.TestUrl(url, enablecookie, cookie, labelcontent);
-            if (result)
-            {
-                image.Source = new BitmapImage(new Uri(@"/Resources/Picture/status_success.png", UriKind.Relative));
-                if (label.Content.ToString() != "FC2" & label.Content.ToString() != "321" & label.Content.ToString() != "DMM") { tb.Text = url; }
-            }
-            else { image.Source = new BitmapImage(new Uri(@"/Resources/Picture/status_fail.png", UriKind.Relative)); }
-
-            Main main = App.Current.Windows[0] as Main;
-            main.BeginCheckurlThread();
-        }
 
         private void ListenCheckBox_Checked(object sender, RoutedEventArgs e)
         {
@@ -784,6 +751,7 @@ namespace Jvedio
                 }
             }
 
+
         }
 
         private void SetCheckedBoxChecked()
@@ -891,7 +859,6 @@ namespace Jvedio
             int rowIndex = ServersDataGrid_RowIndex;
             Server server = vieModel_Settings.Servers[rowIndex];
             CheckBox cb = GetVisualChild<CheckBox>(GetCell(rowIndex, 0));
-
             CheckUrl( server,cb);
         }
 
@@ -916,6 +883,7 @@ namespace Jvedio
             else if (server.ServerTitle == "JavDB" | server.Url.ToLower() == Properties.Settings.Default.DB.ToLower())
             {
                 Properties.Settings.Default.DB = "";
+                Properties.Settings.Default.DBCookie = "";
                 DeleteServerInfoFromConfig(WebSite.DB);
             }
                 
@@ -928,9 +896,16 @@ namespace Jvedio
             else if (server.ServerTitle == "FANZA" | server.Url.ToLower() == Properties.Settings.Default.DMM.ToLower())
             {
                 Properties.Settings.Default.DMM = "";
+                Properties.Settings.Default.DMMCookie = "";
                 DeleteServerInfoFromConfig(WebSite.DMM);
             }
-                
+
+            else if (server.ServerTitle == "FC2官网" | server.Url.ToLower() == Properties.Settings.Default.FC2.ToLower())
+            {
+                Properties.Settings.Default.FC2 = "";
+                DeleteServerInfoFromConfig(WebSite.FC2);
+            }
+
             else if (server.ServerTitle == "JAV321" | server.Url.ToLower() == Properties.Settings.Default.Jav321.ToLower())
             {
                 Properties.Settings.Default.Jav321 = "";
@@ -982,9 +957,9 @@ namespace Jvedio
             if (!server.Url.EndsWith("/")) server.Url = server.Url + "/";
 
             bool enablecookie = false;
-            string label = "";
+            if(server.ServerTitle=="FANZA" || server.ServerTitle == "JavDB")  enablecookie = true; 
 
-            (bool result,string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, label);
+            (bool result,string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.ServerTitle);
             if (result && title!="")
             {
                 server.Available = 1;
@@ -1009,9 +984,9 @@ namespace Jvedio
                 {
                     server.ServerTitle = "FANZA";
                 }
-                else if (title.IndexOf("FANZA") >= 0)
+                else if (title.IndexOf("FC2コンテンツマーケット") >= 0)
                 {
-                    server.ServerTitle = "FANZA";
+                    server.ServerTitle = "FC2官网";
                 }
                 else if (title.IndexOf("JAV321") >= 0)
                 {
@@ -1067,9 +1042,24 @@ namespace Jvedio
             }
             else if (server.ServerTitle == "FANZA")
             {
-                Properties.Settings.Default.DMM = server.Url;
-                Properties.Settings.Default.EnableDMM = (bool)checkBox.IsChecked;
-                SaveServersInfoToConfig(WebSite.DMM, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
+                //是否包含 cookie
+                if (server.Cookie == "无" || server.Cookie == "")
+                {
+                    new Msgbox(this, "FANZA 需要填入 Cookie !，填入后在测试一次！").ShowDialog();
+                }
+                else
+                {
+                    Properties.Settings.Default.DMM = server.Url;
+                    Properties.Settings.Default.EnableDMM = (bool)checkBox.IsChecked;
+                    Properties.Settings.Default.DMMCookie = server.Cookie;
+                    SaveServersInfoToConfig(WebSite.DMM, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
+                }
+            }
+            else if (server.ServerTitle == "FC2官网")
+            {
+                Properties.Settings.Default.FC2 = server.Url;
+                Properties.Settings.Default.EnableFC2 = (bool)checkBox.IsChecked;
+                SaveServersInfoToConfig(WebSite.FC2, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
             }
             else if (server.ServerTitle == "JAV321")
             {
@@ -1197,6 +1187,7 @@ namespace Jvedio
                 Properties.Settings.Default.Enable321 = enable;
 
             Properties.Settings.Default.Save();
+            InitVariable();
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -1339,6 +1330,7 @@ namespace Jvedio
             if (e.AddedItems.Count == 0) return;
             Properties.Settings.Default.InSplit= ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
         }
+
     }
 
 

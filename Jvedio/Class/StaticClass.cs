@@ -278,7 +278,7 @@ namespace Jvedio
         public static List<string> ReadServerInfoFromConfig(WebSite webSite)
         {
             
-            if (!File.Exists("ServersConfig.ini")) return new List<string>() { webSite.ToString(),"","" };
+            if (!File.Exists("ServersConfig")) return new List<string>() { webSite.ToString(),"","" };
 
 
             List<string> result = new List<string>();
@@ -443,7 +443,13 @@ namespace Jvedio
 
         }
 
-
+        public static bool IsToDownLoadInfo(Movie movie)
+        {
+            //if (!Properties.Settings.Default.DownLoadWhenNull)
+            //    return true;
+            //else
+                return movie != null && (movie.title == ""  || movie.sourceurl == "" || movie.smallimageurl=="" || movie.bigimageurl=="");
+        }
 
         public static bool IsProPerSqlite(string path)
         {

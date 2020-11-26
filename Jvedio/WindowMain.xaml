@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Jvedio"
     xmlns:p="clr-namespace:Jvedio.Properties"
+    xmlns:fa="http://schemas.fontawesome.io/icons/"
     xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
     xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -1213,7 +1214,7 @@
 
 
                     <!--侧边栏-->
-                    <Border PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}" x:Name="SideBorder" CornerRadius="0" BorderBrush="{DynamicResource BorderBursh}" BorderThickness="0" >
+                    <Border MouseEnter="SideBorder_MouseEnter" MouseLeave="SideBorder_MouseLeave" PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}" x:Name="SideBorder" CornerRadius="0" BorderBrush="{DynamicResource BorderBursh}" BorderThickness="0" >
                         <Grid   x:Name="Side_Grid"   HorizontalAlignment="Stretch" Height="auto" VerticalAlignment="Stretch" Width="auto">
 
                             <Grid.RowDefinitions>
@@ -1304,77 +1305,48 @@
                                     <TextBlock Text="{Binding RecentWatchedCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                 </Grid>
 
-
-                                <TreeView    BorderThickness="0" Background="Transparent" HorizontalAlignment="Stretch" Width="auto" Style="{DynamicResource TreeViewStyle1}" >
-                                    <TreeViewItem  Margin="10 5 0 0"   IsExpanded="{Binding IsExpanded1, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Foreground="{DynamicResource ForegroundGlobal}" Style="{DynamicResource RootTreeViewStyle}"  >
-                                        <TreeViewItem.Header>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Width="18" />
-                                                <TextBlock FontSize="16" Margin="8 0" Text="智能分类" VerticalAlignment="Center"/>
-
-                                            </StackPanel>
-                                        </TreeViewItem.Header>
-
-                                        <TreeViewItem HorizontalAlignment="Stretch" Width="auto"    Margin="5 5"  IsExpanded="True"  Foreground="{DynamicResource ForegroundGlobal}" Style="{DynamicResource ChildTreeViewStyle}"  >
-                                            <TreeViewItem.Header >
-                                                <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
-                                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                                    <RadioButton x:Name="GenreRB"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding GenreCommand}" Content="按类别"  Click="ShowGenreGrid" />
-                                                    <TextBlock Visibility="Collapsed" Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                                </Grid>
-                                            </TreeViewItem.Header>
-
-
-                                        </TreeViewItem>
-
-                                        <TreeViewItem Margin="5 5"  IsExpanded="True"  Foreground="{DynamicResource ForegroundGlobal}" Style="{DynamicResource ChildTreeViewStyle}"  >
-                                            <TreeViewItem.Header>
-                                                <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
-                                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                                    <RadioButton x:Name="ActorRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding ActorCommand}" Content="按演员" Click="ShowActorGrid" />
-                                                    <TextBlock Visibility="Collapsed"  Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                                </Grid>
-                                            </TreeViewItem.Header>
-
-
-                                        </TreeViewItem>
-
-                                        <TreeViewItem Margin="5 5"  IsExpanded="True"  Foreground="{DynamicResource ForegroundGlobal}" Style="{DynamicResource ChildTreeViewStyle}"  >
-                                            <TreeViewItem.Header>
-                                                <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
-                                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                                    <RadioButton x:Name="LabelRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding LabelCommand}" Content="按标签"  Click="ShowLabelGrid" />
-                                                    <TextBlock Visibility="Collapsed"  Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                                </Grid>
-                                            </TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Cursor="Hand" >
+                                        <Image x:Name="RBExpandImage1" Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0" RenderTransformOrigin=".5,.5"    >
+                                            <Image.RenderTransform>
+                                                <RotateTransform Angle="0" />
+                                            </Image.RenderTransform>
+                                        </Image>
+                                        <RadioButton x:Name="ExpandRadioButton1" Background="Transparent" Click="RadioButton_Click" Cursor="Hand"  GroupName="RBExpand1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="智能分类"    />
+                                    </Grid>
+                                    <StackPanel x:Name="StackPanelExpand1" Orientation="Vertical" Grid.Row="1" MaxHeight="0">
+                                        <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
+                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                            <RadioButton x:Name="GenreRB"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding GenreCommand}" Content="按类别"  Click="ShowGenreGrid" />
+                                            <TextBlock Visibility="Collapsed" Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                        </Grid>
+                                        <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
+                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                            <RadioButton x:Name="ActorRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding ActorCommand}" Content="按演员" Click="ShowActorGrid" />
+                                            <TextBlock Visibility="Collapsed"  Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                        </Grid>
+                                        <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
+                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                            <RadioButton x:Name="LabelRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding LabelCommand}" Content="按标签"  Click="ShowLabelGrid" />
+                                            <TextBlock Visibility="Collapsed"  Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                        </Grid>
+                                        <Grid x:Name="FilePathGrid"  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}" >
+                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                            <RadioButton x:Name="DirRB" IsEnabled="True" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="按文件夹" Click="ShowSameFilePath" />
+                                            <TextBlock Visibility="Collapsed"  Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                        </Grid>
+                                    </StackPanel>
 
 
-                                        </TreeViewItem>
-
-                                        <TreeViewItem x:Name="FilePathTreeViewItem" Margin="5 5"  IsExpanded="True"  Foreground="{DynamicResource ForegroundGlobal}" Style="{DynamicResource ChildTreeViewStyle}"  >
-                                            <TreeViewItem.Header>
-                                                <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}" >
-                                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                                    <RadioButton x:Name="DirRB" IsEnabled="True" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="按文件夹" Click="ShowSameFilePath" />
-                                                    <TextBlock Visibility="Collapsed"  Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                                </Grid>
-                                            </TreeViewItem.Header>
+                                </Grid>
 
 
 
-
-
-
-                                        </TreeViewItem>
-
-
-
-
-                                    </TreeViewItem>
-
-                                </TreeView>
-
-                                <Popup x:Name="FilePathPopup" Focusable="True"  VerticalOffset="2"  HorizontalOffset="0"      Width="auto" Visibility="Visible" PlacementTarget="{Binding ElementName=FilePathTreeViewItem}" AllowsTransparency="True" Placement="Right" IsOpen="False" StaysOpen="False" >
+                                <Popup x:Name="FilePathPopup" Focusable="True"  VerticalOffset="2"  HorizontalOffset="0"      Width="auto" Visibility="Visible" PlacementTarget="{Binding ElementName=FilePathGrid}" AllowsTransparency="True" Placement="Right" IsOpen="False" StaysOpen="False" >
                                     <Border  Panel.ZIndex="3" Width="auto" Height="auto" Opacity="1"  Background="{DynamicResource BackgroundMenu}"    CornerRadius="5" >
                                         <ItemsControl Background="Transparent"    ItemsSource="{Binding FilePathClassification}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
                                             <ItemsControl.ItemsPanel>
@@ -1396,81 +1368,70 @@
                                     </Border>
                                 </Popup>
 
-                                <TreeView    BorderThickness="0" Background="Transparent" HorizontalAlignment="Stretch" Width="auto" Style="{DynamicResource TreeViewStyle1}" >
-                                    <TreeViewItem  Margin="10 5 0 0"   IsExpanded="{Binding IsExpanded2, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Foreground="{DynamicResource ForegroundGlobal}" Style="{DynamicResource RootTreeViewStyle}"  >
-                                        <TreeViewItem.Header>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Width="18" />
-                                                <TextBlock FontSize="16" Margin="8 0" Text="视频类型" VerticalAlignment="Center"/>
 
-                                            </StackPanel>
-                                        </TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Cursor="Hand" >
+                                        <Image x:Name="RBExpandImage2" Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0" RenderTransformOrigin=".5,.5"    >
+                                            <Image.RenderTransform>
+                                                <RotateTransform Angle="0" />
+                                            </Image.RenderTransform>
+                                        </Image>
+                                        <RadioButton  x:Name="ExpandRadioButton2" Background="Transparent" Click="RadioButton_Click_1" Cursor="Hand"  GroupName="RBExpand1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="视频类型"     />
+                                    </Grid>
+                                    <StackPanel x:Name="StackPanelExpand2" Orientation="Vertical" Grid.Row="1" MaxHeight="0">
+                                        <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
+                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                            <RadioButton x:Name="TypeRB1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding UncensoredCommand}"  Click="ShowMovieGrid">
+                                                <RadioButton.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="重命名" Click="RenameType" />
+                                                    </ContextMenu>
+                                                </RadioButton.ContextMenu>
+                                                <RadioButton.Content>
+                                                    <TextBox x:Name="TypeNameTextBox1" PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="类型1"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <TextBlock Text="{Binding VedioTypeACount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                        </Grid>
 
-                                        <TreeViewItem MouseRightButtonUp="RenameChildTree" HorizontalAlignment="Stretch" Width="auto"    Margin="5 5"  IsExpanded="True"  Foreground="{DynamicResource ForegroundGlobal}" Style="{DynamicResource ChildTreeViewStyle}"  >
-                                            <TreeViewItem.Header >
-                                                <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
-                                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                                    <RadioButton x:Name="TypeRB1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding UncensoredCommand}"  Click="ShowMovieGrid">
-                                                        <RadioButton.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem Header="重命名" Click="RenameType" />
-                                                            </ContextMenu>
-                                                        </RadioButton.ContextMenu>
-                                                        <RadioButton.Content>
-                                                            <TextBox x:Name="TypeNameTextBox1" PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="类型1"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
-                                                        </RadioButton.Content>
-                                                    </RadioButton>
-                                                    <TextBlock Text="{Binding VedioTypeACount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                                </Grid>
-                                            </TreeViewItem.Header>
-                                        </TreeViewItem>
+                                        <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
+                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                            <RadioButton  x:Name="TypeRB2"   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding CensoredCommand}"  Click="ShowMovieGrid" >
+                                                <RadioButton.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="重命名" Click="RenameType" />
+                                                    </ContextMenu>
+                                                </RadioButton.ContextMenu>
+                                                <RadioButton.Content>
+                                                    <TextBox  x:Name="TypeNameTextBox2"  PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="类型2"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <TextBlock Text="{Binding VedioTypeBCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                        </Grid>
 
-                                        <TreeViewItem Margin="5 5"  IsExpanded="True"  Foreground="{DynamicResource ForegroundGlobal}" Style="{DynamicResource ChildTreeViewStyle}"  >
-                                            <TreeViewItem.Header>
-                                                <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
-                                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                                    <RadioButton  x:Name="TypeRB2"   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding CensoredCommand}"  Click="ShowMovieGrid" >
-                                                        <RadioButton.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem Header="重命名" Click="RenameType" />
-                                                            </ContextMenu>
-                                                        </RadioButton.ContextMenu>
-                                                        <RadioButton.Content>
-                                                            <TextBox  x:Name="TypeNameTextBox2"  PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="类型2"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
-                                                        </RadioButton.Content>
-                                                    </RadioButton>
-                                                    <TextBlock Text="{Binding VedioTypeBCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                                </Grid>
-                                            </TreeViewItem.Header>
+                                        <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
+                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                            <RadioButton  x:Name="TypeRB3"   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding EuropeCommand}"  Click="ShowMovieGrid" >
+                                                <RadioButton.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="重命名" Click="RenameType" />
+                                                    </ContextMenu>
+                                                </RadioButton.ContextMenu>
+                                                <RadioButton.Content>
+                                                    <TextBox  x:Name="TypeNameTextBox3"  PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="类型3"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <TextBlock Text="{Binding VedioTypeCCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                        </Grid>
+                                    </StackPanel>
 
+                                </Grid>
 
-                                        </TreeViewItem>
-
-                                        <TreeViewItem Margin="5 5"  IsExpanded="True"  Foreground="{DynamicResource ForegroundGlobal}" Style="{DynamicResource ChildTreeViewStyle}"  >
-                                            <TreeViewItem.Header>
-                                                <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
-                                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                                    <RadioButton  x:Name="TypeRB3"   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding EuropeCommand}"  Click="ShowMovieGrid" >
-                                                        <RadioButton.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem Header="重命名" Click="RenameType" />
-                                                            </ContextMenu>
-                                                        </RadioButton.ContextMenu>
-                                                        <RadioButton.Content>
-                                                            <TextBox  x:Name="TypeNameTextBox3"  PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="类型3"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
-                                                        </RadioButton.Content>
-                                                    </RadioButton>
-                                                    <TextBlock Text="{Binding VedioTypeCCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                                </Grid>
-                                            </TreeViewItem.Header>
-
-
-                                        </TreeViewItem>
-
-
-                                    </TreeViewItem>
-
-                                </TreeView>
+                             
 
                             </StackPanel>
 
@@ -1482,7 +1443,7 @@
                     </Border>
 
                     <!--左右调节-->
-                    <Rectangle MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Cursor="SizeWE" Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="6" x:Name="DragRectangle" Margin="0 0 -3 0" />
+                    <Rectangle MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="6" x:Name="DragRectangle" Margin="0 0 -3 0" />
 
                     <!--影片-->
                     <Grid  MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="1"   x:Name="Grid_Movie"  Visibility="Visible" >
@@ -1961,7 +1922,7 @@
                             </Grid>
 
                             <!--影片-->
-                            <Grid Grid.Column="1" FocusVisualStyle="{x:Null}" Panel.ZIndex="2"  Margin="10"     PreviewKeyDown="Grid_PreviewKeyDown"     AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver"    >
+                            <Grid Grid.Column="1" FocusVisualStyle="{x:Null}" Panel.ZIndex="2"  Margin="10"     PreviewKeyDown="Grid_PreviewKeyDown"  PreviewKeyUp="Grid_PreviewKeyUp"    AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver"    >
                                 <!--影片展示 Grid-->
                                 <Grid  FocusVisualStyle="{x:Null}" Visibility="Hidden" x:Name="MovieMainGrid" >
                                     <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True"  x:Name="ScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
@@ -2287,6 +2248,7 @@
 
                                 <!--<Border CornerRadius="5" Background="{DynamicResource  BackgroundTitle}" HorizontalAlignment="Stretch" Width="auto"/>-->
                                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right"  >
+                                    <fa:ImageAwesome x:Name="StatusSpin" Visibility="{Binding ElementName=ProgressBar,Path=Visibility}" Icon="Refresh" Spin="True" Height="20" Width="20" Foreground="{DynamicResource ForegroundGlobal}" Margin="10 0"/>
                                     <Image  ToolTip="信息"  Source="{Binding Themes, Mode=OneWay, ConverterParameter=info,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" HorizontalAlignment="Left" Height="27" Margin="5"/>
                                     <TextBlock Margin="10 0" x:Name="StatusTextBlock"  Text="{Binding TextType}" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center"/>
                                     <TextBlock x:Name="CountTextBlock"  Margin="10 0" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center">

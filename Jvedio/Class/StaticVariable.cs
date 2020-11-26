@@ -146,19 +146,19 @@ namespace Jvedio
                 Bus = Properties.Settings.Default.Bus,
                 BusEu = Properties.Settings.Default.BusEurope,
                 Library = Properties.Settings.Default.Library,
-                FC2Club = Properties.Settings.Default.Fc2Club,
+                FC2 = Properties.Settings.Default.FC2,
                 Jav321 = Properties.Settings.Default.Jav321,
                 DMM = Properties.Settings.Default.DMM,
                 DB = Properties.Settings.Default.DB
             };
 
-            //fc2 关站了
+            //fc2club 关站了
             EnableUrl = new enableUrl
             {
                 Bus = Properties.Settings.Default.EnableBus,
                 BusEu = Properties.Settings.Default.EnableBusEu,
                 Library = Properties.Settings.Default.EnableLibrary,
-                FC2Club = false,
+                FC2 = Properties.Settings.Default.EnableFC2,
                 Jav321 = Properties.Settings.Default.Enable321,
                 DMM = Properties.Settings.Default.EnableDMM,
                 DB = Properties.Settings.Default.EnableDB
@@ -169,9 +169,9 @@ namespace Jvedio
                 Bus = "",
                 BusEu = "",
                 Library = "",
-                FC2Club = "",
+                FC2 = "",
                 Jav321 = "",
-                DMM = "",
+                DMM = Properties.Settings.Default.DMMCookie,
                 DB = Properties.Settings.Default.DBCookie
             };
 
@@ -211,7 +211,7 @@ namespace Jvedio
             Properties.Settings.Default.DB = _FormatUrl(Properties.Settings.Default.DB);
             Properties.Settings.Default.Library = _FormatUrl(Properties.Settings.Default.Library);
             Properties.Settings.Default.Jav321 = _FormatUrl(Properties.Settings.Default.Jav321);
-            Properties.Settings.Default.Fc2Club = _FormatUrl(Properties.Settings.Default.Fc2Club);
+            Properties.Settings.Default.FC2 = _FormatUrl(Properties.Settings.Default.FC2);
             Properties.Settings.Default.DMM = _FormatUrl(Properties.Settings.Default.DMM);
         }
 
@@ -236,7 +236,7 @@ namespace Jvedio
 
         public enum JvedioWindowState { Normal, Minimized, Maximized, FullScreen, None }
 
-        public enum WebSite { Bus, BusEu, Library, DB, FC2Club, Jav321, DMM,None }
+        public enum WebSite { Bus, BusEu, Library, DB, FC2, Jav321, DMM,None }
 
         public enum Skin { 黑色,白色, 蓝色}
 
@@ -259,7 +259,7 @@ namespace Jvedio
             public string DB;
             public string Jav321;
             public string DMM;
-            public string FC2Club;
+            public string FC2;
         }
 
         public struct rootUrl
@@ -270,7 +270,7 @@ namespace Jvedio
             public string DB;
             public string Jav321;
             public string DMM;
-            public string FC2Club;
+            public string FC2;
         }
 
         public struct enableUrl
@@ -281,7 +281,7 @@ namespace Jvedio
             public bool DB;
             public bool Jav321;
             public bool DMM;
-            public bool FC2Club;
+            public bool FC2;
         }
 
         #endregion

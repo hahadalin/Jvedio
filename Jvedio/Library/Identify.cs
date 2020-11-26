@@ -23,6 +23,17 @@ namespace Jvedio
 
         }
 
+        public static string GetFanhaoFromDMMUrl(string url)
+        {
+            string result = "";
+            //https://www.dmm.co.jp/mono/dvd/-/detail/=/cid=apns006dod/?i3_ref=search&amp;i3_ord=1
+
+
+            return result;
+
+
+        }
+
         public static bool IsFlowOut(string filepath)
         {
             if (string.IsNullOrEmpty(filepath)) return false;

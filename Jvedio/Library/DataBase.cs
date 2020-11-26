@@ -22,16 +22,16 @@ namespace Jvedio
 {
 
 
-    public static  class DataBase
+    public static class DataBase
     {
-        
+
         public static StringBuilder Path { get; set; }
 
         public static event EventHandler MovieListChanged;
 
-        public static  void Init()
+        public static void Init()
         {
-            Path = File.Exists(Properties.Settings.Default.DataBasePath) ?   new StringBuilder(Properties.Settings.Default.DataBasePath): new StringBuilder("info.sqlite");
+            Path = File.Exists(Properties.Settings.Default.DataBasePath) ? new StringBuilder(Properties.Settings.Default.DataBasePath) : new StringBuilder("info.sqlite");
         }
 
 
@@ -53,7 +53,7 @@ namespace Jvedio
                     int result = 0;
                     cmd.CommandText = $"SELECT MAX(_ROWID_) FROM '{table}' LIMIT 1;";
 
-                    using(SQLiteDataReader sr = cmd.ExecuteReader())
+                    using (SQLiteDataReader sr = cmd.ExecuteReader())
                     {
                         while (sr.Read()) int.TryParse(sr[0].ToString(), out result);
                         return result;
@@ -62,7 +62,7 @@ namespace Jvedio
             }
 
 
-            
+
         }
 
 
@@ -83,7 +83,7 @@ namespace Jvedio
                     else
                         cmd.CommandText = "SELECT count(id) FROM movie " + sql;
 
-                    using(SQLiteDataReader sr = cmd.ExecuteReader())
+                    using (SQLiteDataReader sr = cmd.ExecuteReader())
                     {
                         while (sr.Read())
                         {
@@ -244,7 +244,7 @@ namespace Jvedio
                             title = sr["title"].ToString(),
                             actor = sr["actor"].ToString(),
                             releasedate = sr["releasedate"].ToString(),
-                            subsection=sr["subsection"].ToString()
+                            subsection = sr["subsection"].ToString()
                         };
                         int.TryParse(sr["releasedate"].ToString(), out vt);
                         int.TryParse(sr["favorites"].ToString(), out favorites);
@@ -269,16 +269,16 @@ namespace Jvedio
                     {
                         foreach (var item in movies)
                         {
-                            if (item.subsectionlist.Count<=1) result.Remove(item);
+                            if (item.subsectionlist.Count <= 1) result.Remove(item);
                         }
                     }
 
-                    
+
 
                     movies.Clear();
                     movies.AddRange(result);
                     //有图/无图
-                    FilterImage(movies,ref result);
+                    FilterImage(movies, ref result);
 
 
 
@@ -293,10 +293,10 @@ namespace Jvedio
         }
 
 
-        private static void FilterImage(List<Movie> allMovies, ref List<Movie>  movies)
+        private static void FilterImage(List<Movie> allMovies, ref List<Movie> movies)
         {
             MyViewType ShowViewMode = MyViewType.默认;
-            Enum.TryParse<MyViewType>(Properties.Settings.Default.ShowViewMode,out ShowViewMode);
+            Enum.TryParse<MyViewType>(Properties.Settings.Default.ShowViewMode, out ShowViewMode);
 
             MyImageType ShowImageMode = MyImageType.缩略图;
             Enum.TryParse<MyImageType>(Properties.Settings.Default.ShowImageMode, out ShowImageMode);
@@ -312,17 +312,17 @@ namespace Jvedio
                     {
                         if (!File.Exists(BasePicPath + $"SmallPic\\{item.id}.jpg")) { movies.Remove(item); }
                     }
-                        
+
                     else if (ShowImageMode == MyImageType.海报图)
                     {
                         if (!File.Exists(BasePicPath + $"BigPic\\{item.id}.jpg")) { movies.Remove(item); }
                     }
-                        
+
                     else if (ShowImageMode == MyImageType.动态图)
                     {
                         if (!File.Exists(BasePicPath + $"Gif\\{item.id}.gif")) { movies.Remove(item); }
                     }
-                        
+
                     else if (ShowImageMode == MyImageType.预览图)
                     {
                         if (!Directory.Exists(BasePicPath + $"ExtraPic\\{item.id}\\")) { movies.Remove(item); }
@@ -344,17 +344,17 @@ namespace Jvedio
                     {
                         if (File.Exists(BasePicPath + $"SmallPic\\{item.id}.jpg")) { movies.Remove(item); }
                     }
-                        
+
                     else if (ShowImageMode == MyImageType.海报图)
                     {
                         if (File.Exists(BasePicPath + $"BigPic\\{item.id}.jpg")) { movies.Remove(item); }
                     }
-                        
+
                     else if (ShowImageMode == MyImageType.动态图)
                     {
                         if (File.Exists(BasePicPath + $"Gif\\{item.id}.gif")) { movies.Remove(item); }
                     }
-                        
+
                     else if (ShowImageMode == MyImageType.预览图)
                     {
                         if (Directory.Exists(BasePicPath + $"ExtraPic\\{item.id}\\"))
@@ -427,7 +427,7 @@ namespace Jvedio
         /// </summary>
         /// <param name="vediotype"></param>
         /// <returns></returns>
-        public static  List<Genre> SelectGenreByVedioType(VedioType vediotype)
+        public static List<Genre> SelectGenreByVedioType(VedioType vediotype)
         {
             Init();
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
@@ -569,7 +569,7 @@ namespace Jvedio
         /// </summary>
         /// <param name="sqltext"></param>
         /// <returns></returns>
-        public static List<Movie> SelectMoviesBySql(string sqltext,bool filter=false)
+        public static List<Movie> SelectMoviesBySql(string sqltext, bool filter = false)
         {
             Init();
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
@@ -631,7 +631,7 @@ namespace Jvedio
             }
 
 
-            
+
         }
 
 
@@ -640,7 +640,7 @@ namespace Jvedio
         /// </summary>
         /// <param name="movieid"></param>
         /// <returns></returns>
-        public static  List<Movie> SelectMoviesById(string movieid)
+        public static List<Movie> SelectMoviesById(string movieid)
         {
             Init();
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
@@ -665,8 +665,8 @@ namespace Jvedio
                         Movie movie = (Movie)GetDetailMovieFromSQLiteDataReader(sr);
                         result.Add(movie);
                     }
-                    sr?.Close(); 
-                    
+                    sr?.Close();
+
                     return result;
 
                 }
@@ -679,7 +679,7 @@ namespace Jvedio
         /// </summary>
         /// <param name="movieid"></param>
         /// <returns></returns>
-        public static  Movie SelectMovieByID(string movieid)
+        public static Movie SelectMovieByID(string movieid)
         {
             if (movieid == "") return null;
 
@@ -703,10 +703,10 @@ namespace Jvedio
                             result = (Movie)GetDetailMovieFromSQLiteDataReader(sr);
                         }
                     }
-                    catch(Exception e) { Console.WriteLine(e.Message); }
+                    catch (Exception e) { Console.WriteLine(e.Message); }
                     finally
                     { sr.Close(); }
-                    
+
                     return result;
                 }
             }
@@ -736,10 +736,10 @@ namespace Jvedio
                         SQLiteDataReader sr = cmd.ExecuteReader();
                         if (sr != null && cn.State == ConnectionState.Open)
                         {
-                                while (sr.Read())
-                                {
-                                    result = GetDetailMovieFromSQLiteDataReader(sr);
-                                }
+                            while (sr.Read())
+                            {
+                                result = GetDetailMovieFromSQLiteDataReader(sr);
+                            }
 
                             sr.Close();
 
@@ -783,7 +783,7 @@ namespace Jvedio
                 }
             }
 
-            
+
         }
 
         /// <summary>
@@ -829,7 +829,7 @@ namespace Jvedio
             }
 
 
-            
+
         }
 
         /// <summary>
@@ -860,7 +860,7 @@ namespace Jvedio
             }
 
 
-            
+
         }
 
         public static bool IsMovieExist(string id)
@@ -879,7 +879,7 @@ namespace Jvedio
                         string sqltext = $"select * from movie where id='{id.ToUpper()}'";
                         cmd.CommandText = sqltext;
                         SQLiteDataReader sr = cmd.ExecuteReader();
-                        if (sr.HasRows) 
+                        if (sr.HasRows)
                             result = true;
                         else
                             result = false;
@@ -902,7 +902,7 @@ namespace Jvedio
         /// <param name="field"></param>
         /// <param name="fieldvalue"></param>
         /// <returns></returns>
-        public static string SelectInfoByID(string info, string table,string id)
+        public static string SelectInfoByID(string info, string table, string id)
         {
             Init();
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
@@ -930,7 +930,7 @@ namespace Jvedio
 
 
 
-            
+
 
         }
 
@@ -957,10 +957,6 @@ namespace Jvedio
                     cmd.ExecuteNonQuery();
                 }
             }
-
-
-
-            
         }
 
         #endregion
@@ -989,14 +985,61 @@ namespace Jvedio
                     else { sqltext = $"UPDATE movie SET {content} = '{value}' WHERE id = '{id}'"; }
                     //Console.WriteLine(sqltext);
                     cmd.CommandText = sqltext;
-                    int result=cmd.ExecuteNonQuery();
+                    int result = cmd.ExecuteNonQuery();
                     //Console.WriteLine(result);
                 }
             }
 
 
 
-            
+
+        }
+
+
+
+        /// <summary>
+        /// 删除已下载的信息
+        /// </summary>
+        /// <param name="id"></param>
+        public static void DeleteInfoByID(string id)
+        {
+            Init();
+            using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
+            {
+                cn.Open();
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = cn;
+                    string sqltext;
+                    sqltext = $"update movie SET title=@title,rating=@rating ,plot=@plot,outline=@outline,  releasedate=@releasedate , director=@director  ,actorid=@actorid, tag=@tag, genre=@genre  , actor=@actor , studio=@studio ,year=@year  , runtime=@runtime,bigimageurl=@bigimageurl ,smallimageurl=@smallimageurl ,extraimageurl=@extraimageurl,actressimageurl=@actressimageurl,sourceurl=@sourceurl,source=@source where id ='{id}'";
+                    cmd.CommandText = sqltext;
+                    cmd.Parameters.Add("actorid", DbType.String).Value = "";
+                    cmd.Parameters.Add("tag", DbType.String).Value = "";
+                    cmd.Parameters.Add("runtime", DbType.Int32).Value = 0;
+                    cmd.Parameters.Add("rating", DbType.Int32).Value = 0;
+                    cmd.Parameters.Add("actressimageurl", DbType.String).Value = "";
+                    cmd.Parameters.Add("title", DbType.String).Value = "";
+                    cmd.Parameters.Add("plot", DbType.String).Value = "";
+                    cmd.Parameters.Add("outline", DbType.String).Value = "";
+                    cmd.Parameters.Add("releasedate", DbType.String).Value = "1970-01-01";
+                    cmd.Parameters.Add("director", DbType.String).Value = "";
+                    cmd.Parameters.Add("genre", DbType.String).Value = "";
+                    cmd.Parameters.Add("actor", DbType.String).Value = "";
+                    cmd.Parameters.Add("studio", DbType.String).Value = "";
+                    cmd.Parameters.Add("year", DbType.Int32).Value = 1970;
+                    cmd.Parameters.Add("extraimageurl", DbType.String).Value = "";
+                    cmd.Parameters.Add("sourceurl", DbType.String).Value = "";
+                    cmd.Parameters.Add("source", DbType.String).Value = "";
+                    cmd.Parameters.Add("bigimageurl", DbType.String).Value = "";
+                    cmd.Parameters.Add("smallimageurl", DbType.String).Value = "";
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+
+
+
+
         }
 
 
@@ -1017,7 +1060,7 @@ namespace Jvedio
                     if (info == null) { return; }
                     if (info.ContainsKey("id") && info["id"] == null) { return; }
                     string sqltext;
-                    if (webSite == WebSite.FC2Club)
+                    if (webSite == WebSite.FC2)
                     {
                         sqltext = "update movie SET title=@title,releasedate=@releasedate,director=@director,genre=@genre,actor=@actor,studio=@studio," +
                            $"year=@year,bigimageurl=@bigimageurl ,smallimageurl=@smallimageurl,extraimageurl=@extraimageurl,rating=@rating,vediotype=@vediotype,otherinfo=@otherinfo,sourceurl=@sourceurl,source=@source where id ='{info["id"] }'";
@@ -1037,7 +1080,7 @@ namespace Jvedio
                     }
                     else if (webSite == WebSite.Library)
                     {
-                        sqltext = $"update movie SET title=@title ,  releasedate=@releasedate , director=@director  , genre=@genre  , actor=@actor , studio=@studio ,year=@year  , runtime=@runtime,smallimageurl=@smallimageurl,bigimageurl=@bigimageurl ,extraimageurl=@extraimageurl,sourceurl=@sourceurl,source=@source where id ='{info["id"] }'";
+                        sqltext = $"update movie SET title=@title ,  releasedate=@releasedate , director=@director  , genre=@genre  , actor=@actor , studio=@studio ,year=@year  , runtime=@runtime,smallimageurl=@smallimageurl,bigimageurl=@bigimageurl ,extraimageurl=@extraimageurl,rating=@rating,sourceurl=@sourceurl,source=@source where id ='{info["id"] }'";
                         cmd.CommandText = sqltext;
                         cmd.Parameters.Add("runtime", DbType.Int32).Value = int.Parse(info.ContainsKey("runtime") ? info["runtime"] : "0");
                         cmd.Parameters.Add("rating", DbType.Int32).Value = int.Parse(info.ContainsKey("rating") ? info["rating"] : "0");
@@ -1084,7 +1127,7 @@ namespace Jvedio
 
 
 
-           
+
         }
 
         #endregion
@@ -1151,7 +1194,7 @@ namespace Jvedio
 
 
 
-            
+
         }
 
         /// <summary>
@@ -1184,7 +1227,7 @@ namespace Jvedio
 
 
 
-         
+
         }
 
         public static void SaveMovieCodeByID(string id, string table, string code)
@@ -1206,7 +1249,7 @@ namespace Jvedio
 
 
 
-         
+
         }
 
 
@@ -1244,7 +1287,7 @@ namespace Jvedio
 
 
 
-           
+
         }
 
 
@@ -1454,7 +1497,7 @@ namespace Jvedio
                     result.Add(Rating);
 
                     stopwatch.Stop();
-                    Console.WriteLine($"载入筛选耗时：  {stopwatch.ElapsedMilliseconds} ms " );
+                    Console.WriteLine($"载入筛选耗时：  {stopwatch.ElapsedMilliseconds} ms ");
 
                     return result;
 
@@ -1463,7 +1506,7 @@ namespace Jvedio
 
 
 
-         
+
         }
 
         /// <summary>
@@ -1498,9 +1541,10 @@ namespace Jvedio
                         {
                             string t = string.IsNullOrEmpty(sr["daorushijian"].ToString()) ? "1900-01-01 01:01:01" : sr["daorushijian"].ToString();
                             DateTime scandate = DateTime.Now;
-                            bool success=DateTime.TryParse(t, out scandate);
-                            if(!success && t.Length== "20200830221052".Length) { 
-                                DateTime.TryParse(t.Substring(0,4) + "-" + t.Substring(4,2) + "-" + t.Substring(6, 2) + " " + t.Substring(8, 2) + ":" + t.Substring(10, 2) + ":" + t.Substring(12, 2) , out scandate); 
+                            bool success = DateTime.TryParse(t, out scandate);
+                            if (!success && t.Length == "20200830221052".Length)
+                            {
+                                DateTime.TryParse(t.Substring(0, 4) + "-" + t.Substring(4, 2) + "-" + t.Substring(6, 2) + " " + t.Substring(8, 2) + ":" + t.Substring(10, 2) + ":" + t.Substring(12, 2), out scandate);
                             }
                             Movie AccessMovie = new Movie()
                             {
@@ -1548,7 +1592,7 @@ namespace Jvedio
 
 
 
-       
+
         }
 
         public static string GetInfoBySql(string sql)
@@ -1576,7 +1620,7 @@ namespace Jvedio
 
 
 
-          
+
         }
 
         #endregion

@@ -11,7 +11,7 @@ using static Jvedio.StaticClass;
 using System.IO;
 namespace Jvedio
 {
-    public class Crawler 
+    public class Crawler
     {
         public static int TASKDELAY_SHORT = 300;//短时间暂停
         public static int TASKDELAY_MEDIUM = 1000;//长时间暂停
@@ -22,11 +22,11 @@ namespace Jvedio
         protected string resultMessage = "";
         protected string Url = "";
         protected string Content = "";
-        protected int StatusCode=404;
+        protected int StatusCode = 404;
         protected VedioType VedioType;
         protected string MovieCode;
         protected string Cookies = "";
-
+        protected object LockDb;
         protected WebSite webSite;
 
         public string ID { get; set; }
@@ -34,18 +34,20 @@ namespace Jvedio
         public Crawler(string Id)
         {
             ID = Id;
+            LockDb = new object();
         }
 
-        public static void SaveInfo(Dictionary<string, string> Info,WebSite webSite)
+        public void SaveInfo(Dictionary<string, string> Info, WebSite webSite)
         {
-            string id = "";
-            try { id = Info["id"].ToUpper(); }
-            catch { return; }
-            if (id == "") return;
+            if(!Info.ContainsKey("id")) Info.Add("id", ID);
             //保存信息
-            DataBase.UpdateInfoFromNet(Info, webSite);
-            DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
+            lock (LockDb)
+            {
+                DataBase.UpdateInfoFromNet(Info, webSite);
+            }
             
+            DetailMovie detailMovie = DataBase.SelectDetailMovieById(ID);
+
 
             //nfo 信息保存到视频同目录
             if (Properties.Settings.Default.SaveInfoToNFO)
@@ -53,7 +55,7 @@ namespace Jvedio
                 if (Directory.Exists(Properties.Settings.Default.NFOSavePath))
                 {
                     //固定位置
-                    SaveToNFO(detailMovie, Path.Combine(Properties.Settings.Default.NFOSavePath, $"{id}.nfo"));
+                    SaveToNFO(detailMovie, Path.Combine(Properties.Settings.Default.NFOSavePath, $"{ID}.nfo"));
                 }
                 else
                 {
@@ -61,7 +63,7 @@ namespace Jvedio
                     string path = detailMovie.filepath;
                     if (System.IO.File.Exists(path))
                     {
-                        SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{id}.nfo"));
+                        SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{ID}.nfo"));
                     }
                 }
             }
@@ -74,22 +76,23 @@ namespace Jvedio
 
         protected virtual async Task<(string, int)> GetMovieCode()
         {
-            return await Task.Run(() => { return ("",404); });
+            return await Task.Run(() => { return ("", 404); });
         }
 
-        public virtual async Task<bool> Crawl(Action<int> callback=null, Action<int> ICcallback = null)
+        public virtual async Task<bool> Crawl(Action<int> callback = null, Action<int> ICcallback = null)
         {
-            (Content, StatusCode) = await Net.Http(Url,Cookie: Cookies);
+            (Content, StatusCode) = await Net.Http(Url, Cookie: Cookies);
             if (StatusCode == 200 & Content != "") { SaveInfo(GetInfo(), webSite); return true; }
-            else { 
-                resultMessage = "Get html Fail"; 
-                Logger.LogN($"URL={Url},Message-{resultMessage}");
-                if(callback!=null) callback(StatusCode);
-                return false; 
+            else
+            {
+                resultMessage = $"地址：{Url}，错误原因：获取网页源码失败";
+                Logger.LogN(resultMessage);
+                callback?.Invoke(StatusCode);
+                return false;
             }
         }
 
-        protected virtual  Dictionary<string,string> GetInfo()
+        protected virtual Dictionary<string, string> GetInfo()
         {
             return new Dictionary<string, string>();
         }
@@ -99,18 +102,21 @@ namespace Jvedio
     public class BusCrawler : Crawler
     {
 
-        public BusCrawler(string Id,VedioType vedioType) :base(Id) {
+        public BusCrawler(string Id, VedioType vedioType) : base(Id)
+        {
             VedioType = vedioType;
             if (vedioType == VedioType.欧美) { Url = RootUrl.BusEu + ID.Replace(".", "-"); webSite = WebSite.BusEu; }
             else { Url = RootUrl.Bus + ID.ToUpper(); webSite = WebSite.Bus; }
-            
-            }
+
+        }
 
 
         protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new BusParse(ID, Content, VedioType).Parse();
-            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = "Parse Fail=>Bus"; Logger.LogN($"URL={Url},Message-{resultMessage}"); }
+            if (Info.Count <= 0) { 
+                Logger.LogN($"地址：{Url}，失败原因：信息解析失败"); 
+            }
             else
             {
                 Info.Add("sourceurl", Url);
@@ -122,39 +128,44 @@ namespace Jvedio
 
     }
 
-
-    public class Fc2ClubCrawler : Crawler
+    public class FC2Crawler : Crawler
     {
-        public Fc2ClubCrawler(string Id) : base(Id) { Url = "https://fc2club.com/html/" + ID + ".html"; webSite = WebSite.FC2Club; }
+
+        public FC2Crawler(string Id) : base(Id)
+        {
+             Url =$"{RootUrl.FC2}article/{ID.ToUpper().Replace("FC2-","")}/"; 
+             webSite = WebSite.FC2; 
+        }
 
 
         protected override Dictionary<string, string> GetInfo()
         {
-            Dictionary<string, string> Info = new Dictionary<string, string>();
-            Info = new Fc2ClubParse(ID, Content).Parse();
-            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = "Parse Fail=>FC2"; Logger.LogN($"URL={Url},Message-{resultMessage}"); }
+            Dictionary<string, string> Info = new FC2Parse(ID, Content).Parse();
+            if (Info.Count <= 0)
+            {
+                Logger.LogN($"地址：{Url}，失败原因：信息解析失败");
+            }
             else
             {
+                Info.Add("id", ID);
                 Info.Add("sourceurl", Url);
-                Info.Add("source", "fc2club");
-                Task.Delay(TASKDELAY_MEDIUM).Wait();
+                Info.Add("source", "fc2adult");
+                Task.Delay(TASKDELAY_SHORT).Wait();
             }
             return Info;
-
         }
 
     }
-
-
     public class DBCrawler : Crawler
     {
-        public DBCrawler(string Id) : base(Id) { 
+        public DBCrawler(string Id) : base(Id)
+        {
             Url = RootUrl.DB + $"search?q={ID}&f=all";
             Cookies = AllCookies.DB;
             webSite = WebSite.DB;
         }
 
-        protected override async Task<(string,int)> GetMovieCode()
+        protected override async Task<(string, int)> GetMovieCode()
         {
             string result = "";
             int statusCode = 404;
@@ -163,8 +174,8 @@ namespace Jvedio
             if (result == "")
             {
                 //从网络获取
-                string content; 
-                (content, statusCode) = await Net.Http(Url, Cookie: Cookies);
+                string content;
+                (content, statusCode) = await Net.Http(Url, Cookie: Cookies,allowRedirect:false);
 
                 if (statusCode == 200 & content != "")
                     result = GetMovieCodeFromSearchResult(content);
@@ -172,7 +183,7 @@ namespace Jvedio
 
             //存入数据库
             if (result != "") { DataBase.SaveMovieCodeByID(ID, "javdb", result); }
-            
+
             return (result, statusCode);
         }
 
@@ -199,10 +210,10 @@ namespace Jvedio
 
 
 
-        public override async Task<bool> Crawl(Action<int> callback=null,Action<int> ICcallback=null)
+        public override async Task<bool> Crawl(Action<int> callback = null, Action<int> ICcallback = null)
         {
             int statuscode = 404;
-            (MovieCode,statuscode) = await GetMovieCode();
+            (MovieCode, statuscode) = await GetMovieCode();
             if (MovieCode != "")
             {
                 //解析
@@ -211,7 +222,8 @@ namespace Jvedio
             }
             else
             {
-                if (ICcallback != null) ICcallback(statuscode);
+                if (statuscode==200) statuscode = 404;
+                ICcallback?.Invoke(statuscode);
                 return false;
             }
         }
@@ -220,10 +232,11 @@ namespace Jvedio
         protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new Dictionary<string, string>();
-            Info = new JavDBParse(ID,Content, MovieCode).Parse();
-            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = "Parse Fail=>DB"; Logger.LogN($"URL={Url},Message-{resultMessage}"); }
+            Info = new JavDBParse(ID, Content, MovieCode).Parse();
+            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
             else
             {
+                Info.Add("id", ID);
                 Info.Add("sourceurl", Url);
                 Info.Add("source", "javdb");
                 Task.Delay(TASKDELAY_MEDIUM).Wait();
@@ -242,30 +255,66 @@ namespace Jvedio
             webSite = WebSite.Library;
         }
 
-        protected override async Task<(string,int)> GetMovieCode()
+        protected override async Task<(string, int)> GetMovieCode()
         {
             int StatusCode = 404;
             string result;
             //先从数据库获取
             result = DataBase.SelectInfoByID("code", "library", ID);
-            if (result == "" || result.IndexOf("zh-cn")>=0)
+            if (string.IsNullOrEmpty(result) || result.IndexOf("zh-cn") >= 0)
             {
-                Console.WriteLine(Url);
                 //从网络获取
-                string Location; 
-                (Location, StatusCode) = await Net.Http(Url, Mode: HttpMode.RedirectGet);
+                string Location="";
+                string content = "";
+                (content, StatusCode) = await Net.Http(Url, Mode: HttpMode.RedirectGet);
+                if (StatusCode == (int)System.Net.HttpStatusCode.Redirect) Location = content;
+                else result = GetMovieCodeFromSearchResult(content);
 
-                if (Location.IndexOf("=") >= 0) result = Location.Split('=')[1];
+                if (Location.IndexOf("=") >= 0) result = Location.Split('=').Last();
             }
 
             //存入数据库
-            if (result != "" && result.IndexOf("zh-cn") < 0) { DataBase.SaveMovieCodeByID(ID, "library", result);  } else { result = ""; }
-            
-            return (result,StatusCode);
+            if (result != "" && result.IndexOf("zh-cn") < 0) { DataBase.SaveMovieCodeByID(ID, "library", result); } else { result = ""; }
+
+            return (result, StatusCode);
+        }
+
+        private string GetMovieCodeFromSearchResult(string html)
+        {
+            string result = "";
+            if (string.IsNullOrEmpty(html)) return result;
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//div[@class='id']");
+            if (nodes != null)
+            {
+                HtmlNode linknode = null;
+                string id = "";
+                foreach (HtmlNode node in nodes)
+                {
+                    if (node == null) continue;
+                    id = node.InnerText;
+                    if(!string.IsNullOrEmpty(id) && id.ToUpper() == ID.ToUpper())
+                    {
+                        linknode = node.ParentNode;
+                        if (linknode != null)
+                        {
+                            string link = linknode.Attributes["href"]?.Value;
+                            if (link.IndexOf("=") > 0) result = link.Split('=').Last();
+                        }
+                        break;
+
+                    }
+                }
+                }
+
+
+            return result;
+
         }
 
 
-        public override async Task<bool> Crawl(Action<int> callback =null, Action<int> ICcallback = null)
+        public override async Task<bool> Crawl(Action<int> callback = null, Action<int> ICcallback = null)
         {
             int statuscode = 404;
             (MovieCode, statuscode) = await GetMovieCode();
@@ -277,7 +326,8 @@ namespace Jvedio
             }
             else
             {
-                if (ICcallback != null) ICcallback(statuscode);
+                if (statuscode == 200) statuscode = 404;
+                ICcallback?.Invoke(statuscode);
                 return false;
             }
         }
@@ -287,9 +337,10 @@ namespace Jvedio
         {
             Dictionary<string, string> Info = new Dictionary<string, string>();
             Info = new LibraryParse(ID, Content).Parse();
-            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = "Parse Fail=>Library"; Logger.LogN($"URL={Url},Message-{resultMessage}"); }
+            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
             else
             {
+                Info.Add("id", ID);
                 Info.Add("sourceurl", Url);
                 Info.Add("source", "javlibrary");
                 Task.Delay(TASKDELAY_MEDIUM).Wait();
@@ -299,7 +350,116 @@ namespace Jvedio
 
     }
 
+    public class DMMCrawler : Crawler
+    {
+        public DMMCrawler(string Id) : base(Id)
+        {
+            //https://www.dmm.co.jp/search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr=fsdss-026&commit.x=5&commit.y=18 
+            Url = $"{RootUrl.DMM}search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr={ID}&commit.x=5&commit.y=18";
+            webSite = WebSite.DMM;
+        }
 
+        protected override async Task<(string, int)> GetMovieCode()
+        {
+            int StatusCode = 404;
+            string result="";
+
+            //从网络获取
+            string Location = "";
+            string content = "";
+            (content, StatusCode) = await Net.Http(Url, Mode: HttpMode.RedirectGet);
+            if (StatusCode == (int)System.Net.HttpStatusCode.Redirect) Location = content;
+            //https://www.dmm.co.jp/mono/dvd/-/search/=/searchstr=APNS-006/
+            if (Location.IsProperUrl())
+            {
+                content = "";StatusCode = 404;
+                (content, StatusCode) = await Net.Http(Location,Cookie:Properties.Settings.Default.DMMCookie, Mode: HttpMode.RedirectGet);
+                if(StatusCode==200 && !string.IsNullOrEmpty(content))
+                {
+                    result = GetLinkFromSearchResult(content);
+                }
+                else
+                {
+                    Console.WriteLine("无资源");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Location 不是正确的网络地址");
+            }
+
+            return (result, StatusCode);
+        }
+
+        private string GetLinkFromSearchResult(string html)
+        {
+            string result = "";
+            if (string.IsNullOrEmpty(html)) return result;
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//p[@class='tmd']/a");
+
+            if (nodes != null)
+            {
+                HtmlNode linknode = null;
+                foreach (HtmlNode node in nodes)
+                {
+                    if (node == null) continue;
+                    string link = node.Attributes["href"]?.Value;
+                    if (link.IsProperUrl())
+                    {
+                        if (Identify.GetFanhaoFromDMMUrl(link) == ID)
+                        {
+                            result = link;
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+            return result;
+
+        }
+
+
+        public override async Task<bool> Crawl(Action<int> callback = null, Action<int> ICcallback = null)
+        {
+            return false;
+            int statuscode = 404;
+            (MovieCode, statuscode) = await GetMovieCode();
+            if (MovieCode != "")
+            {
+                //解析
+                Url = RootUrl.Library + $"?v={MovieCode}";
+                return await base.Crawl(callback);
+            }
+            else
+            {
+                if (statuscode == 200) statuscode = 404;
+                ICcallback?.Invoke(statuscode);
+                return false;
+            }
+        }
+
+
+        protected override Dictionary<string, string> GetInfo()
+        {
+            Dictionary<string, string> Info = new Dictionary<string, string>();
+            return Info;
+            Info = new LibraryParse(ID, Content).Parse();
+            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
+            else
+            {
+                Info.Add("id", ID);
+                Info.Add("sourceurl", Url);
+                Info.Add("source", "dmm");
+                Task.Delay(TASKDELAY_MEDIUM).Wait();
+            }
+            return Info;
+        }
+
+    }
 
     public class Jav321Crawler : Crawler
     {
@@ -311,10 +471,11 @@ namespace Jvedio
 
 
 
-        public override async Task<bool> Crawl(Action<int> callback =null, Action<int> ICcallback = null)
+        public override async Task<bool> Crawl(Action<int> callback = null, Action<int> ICcallback = null)
         {
             (Content, StatusCode) = await Net.Http(Url, Cookie: Cookies);
-            if (StatusCode == 200 & Content != "") {
+            if (StatusCode == 200 & Content != "")
+            {
 
 
                 Dictionary<string, string> Info = GetInfo();
@@ -323,7 +484,7 @@ namespace Jvedio
 
 
             }
-            
+
 
 
 
@@ -344,7 +505,7 @@ namespace Jvedio
         {
             Dictionary<string, string> Info = new Dictionary<string, string>();
             Info = new Jav321Parse(ID, Content).Parse();
-            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = "Parse Fail=>Library"; Logger.LogN($"URL={Url},Message-{resultMessage}"); }
+            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
             else
             {
                 Info.Add("sourceurl", Url);

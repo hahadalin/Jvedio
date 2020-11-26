@@ -23,7 +23,7 @@
     <Setting Name="Library" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Fc2Club" Type="System.String" Scope="User">
+    <Setting Name="FC2" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DisplayID" Type="System.Boolean" Scope="User">
@@ -405,13 +405,13 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Timeout_forcestop" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">3</Value>
+      <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="Timeout_tcp" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">3</Value>
+      <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="Timeout_http" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">3</Value>
+      <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="Timeout_download" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
@@ -420,7 +420,7 @@
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="ScreenShot_ThreadNum" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2</Value>
+      <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="ScreenShot_TimeOut" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
@@ -529,6 +529,9 @@
     </Setting>
     <Setting Name="ScreenShotIgnoreEnd" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="DMMCookie" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

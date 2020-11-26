@@ -16,6 +16,7 @@
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         AllowDrop="True"
+    ContentRendered="Jvedio_BaseWindow_ContentRendered"
 
     Closing="Jvedio_BaseWindow_Closing"
         >
@@ -542,6 +543,9 @@
 
         <JvedioControls:WaitingPanel Visibility="Collapsed"  ShowCancelButton="Collapsed" x:Name="WaitingPanel"  Panel.ZIndex="5" ></JvedioControls:WaitingPanel>
 
+        
+        
+        
 
         <!--消息提示框-->
         <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="20 50">

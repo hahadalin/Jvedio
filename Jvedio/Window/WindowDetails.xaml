@@ -271,6 +271,24 @@
 
                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" Canvas.Left="9" Canvas.Top="11" Cursor="Hand"/>
                 </Border>
+
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Margin="0 20">
+                        <RadioButton x:Name="ExtraImageRadioButton" ToolTip="预览图" Height="30" IsChecked="True"  Style="{StaticResource RadioButtonStyleSide}" GroupName="ExtraImageView"  Margin="5 5 5 0" Background="{DynamicResource BackgroundSide}" Click="ExtraImageRadioButton_Click">
+                            <Image Source="/Resources/Picture/图像.png" Height="22" Width="22"  />
+                        </RadioButton>
+                        <RadioButton  x:Name="ScreenShotRadioButton"   ToolTip="截图"  Height="30"    Style="{StaticResource RadioButtonStyleSide}" GroupName="ExtraImageView"    Margin="5 5 5 0" Click="ScreenShotRadioButton_Click">
+                            <Image Source="/Resources/Picture/视频.png" Height="22" Width="22"  />
+                        </RadioButton>
+                        
+                        <!--<Border HorizontalAlignment="Right" ToolTip="影片预览图"   Height="30" Width="50" CornerRadius="3 0 0 3" Margin="5 5 0 5"  Style="{StaticResource BorderStyle}" Background="{DynamicResource BackgroundSide}" >
+                            <Image Source="/Resources/Picture/图像.png" Height="25" Width="25"  />
+                        </Border>
+                        <Border HorizontalAlignment="Right" ToolTip="影片截图"   Height="30" Width="50" CornerRadius="3 0 0 3" Margin="5 5 0 5"  Style="{StaticResource BorderStyle}" Background="{DynamicResource BackgroundSide}" >
+                            <Image Source="/Resources/Picture/视频.png" Height="25" Width="25"  />
+                        </Border>-->
+                    </StackPanel>
+                    
+                    
                 </Grid>
 
                 <Grid Grid.Column="1">
@@ -419,7 +437,8 @@
 
                                                     <MenuItem Header="打开网址(W)" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
                                                     <MenuItem Header="复制文件(C)" Click="CopyFile" />
-                                                    <MenuItem Header="删除信息(D)"  Click="DeleteID"   />
+                                                    <MenuItem Header="清空信息"  Click="DeleteInfo"   />
+                                                    <MenuItem Header="删除影片(D)"  Click="DeleteID"   />
                                                     <MenuItem Header="删除文件(T)" Click="DeleteFile" Icon="pack://application:,,,/Resources/menuitem/clear.png" />
 
                                                 </ContextMenu>
@@ -433,9 +452,11 @@
 
                             <!--预览图-->
                             <Grid Grid.Row="1" x:Name="ThumbGrid"      >
+
+
                                 <ProgressBar  x:Name="ProgressBar" Visibility="Collapsed" Foreground="LightGreen"   Height="5" Margin="20 4"   VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
 
-                                <Border Margin="0 12" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
+                                <Border x:Name="ExtraImageBorder" Visibility="Visible" Margin="0 12" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
                                     <ScrollViewer Margin="5 0" VerticalContentAlignment="Center"   PreviewMouseWheel="scrollViewer_PreviewMouseWheel"   x:Name="scrollViewer"      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
                                         <ItemsControl x:Name="imageItemsControl" VerticalContentAlignment="Center"   AlternationCount="99" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent">
                                             <ItemsControl.ItemsPanel>
@@ -477,6 +498,7 @@
                                         </ItemsControl>
                                     </ScrollViewer>
                                 </Border>
+                                
                             </Grid>
 
 

@@ -110,12 +110,12 @@ namespace Jvedio.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Fc2Club {
+        public string FC2 {
             get {
-                return ((string)(this["Fc2Club"]));
+                return ((string)(this["FC2"]));
             }
             set {
-                this["Fc2Club"] = value;
+                this["FC2"] = value;
             }
         }
         
@@ -1633,7 +1633,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
         public int Timeout_forcestop {
             get {
                 return ((int)(this["Timeout_forcestop"]));
@@ -1645,7 +1645,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
         public int Timeout_tcp {
             get {
                 return ((int)(this["Timeout_tcp"]));
@@ -1657,7 +1657,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
         public int Timeout_http {
             get {
                 return ((int)(this["Timeout_http"]));
@@ -1693,7 +1693,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
         public int ScreenShot_ThreadNum {
             get {
                 return ((int)(this["ScreenShot_ThreadNum"]));
@@ -2132,6 +2132,18 @@ namespace Jvedio.Properties {
             }
             set {
                 this["ScreenShotIgnoreEnd"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DMMCookie {
+            get {
+                return ((string)(this["DMMCookie"]));
+            }
+            set {
+                this["DMMCookie"] = value;
             }
         }
     }

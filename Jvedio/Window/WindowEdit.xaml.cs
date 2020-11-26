@@ -29,11 +29,10 @@ namespace Jvedio
             ID = id;
             vieModel = new VieModel_Edit();
             
-            if (id != "")
+            if (ID == "")
                 vieModel.Reset();
             else
-                vieModel.Query(id);
-
+                vieModel.Query(ID);
             this.DataContext = vieModel;
         }
 

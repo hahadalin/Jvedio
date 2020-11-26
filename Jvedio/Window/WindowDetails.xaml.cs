@@ -122,7 +122,7 @@ namespace Jvedio
             }
         }
 
-        public void GetScreenShot(object sender, RoutedEventArgs e)
+        public async void GetScreenShot(object sender, RoutedEventArgs e)
         {
 
             if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { HandyControl.Controls.Growl.Info("请设置 ffmpeg.exe 的路径 ", "DetailsGrowl"); return; }
@@ -135,13 +135,31 @@ namespace Jvedio
                 
                 if (!File.Exists(movie.filepath)) { HandyControl.Controls.Growl.Error("视频不存在", "DetailsGrowl"); return; }
 
-                try { ScreenShot(movie); } catch (Exception ex) { Logger.LogF(ex); }
+                bool success = false;
+                string message = "";
+
+                ScreenShotRadioButton.IsChecked = true;
+                ExtraImageRadioButton.IsChecked = false;
+                vieModel.DetailMovie.extraimagelist = new ObservableRangeCollection<BitmapSource>();
+                vieModel.DetailMovie.extraimagePath = new ObservableRangeCollection<string>();
+                App.Current.Dispatcher.Invoke((Action)delegate { imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist; });
+
+                ScreenShot screenShot = new ScreenShot();
+                screenShot.SingleScreenShotCompleted += (s, ev) => {
+                    App.Current.Dispatcher.Invoke((Action)delegate {
+                        if (Path.GetDirectoryName(((ScreenShotEventArgs)ev).FilePath).Split('\\').Last().ToUpper() != vieModel.DetailMovie.id) return;
+                        vieModel.DetailMovie.extraimagePath.Add(((ScreenShotEventArgs)ev).FilePath);
+                        vieModel.DetailMovie.extraimagelist.Add(StaticClass.GetExtraImage(((ScreenShotEventArgs)ev).FilePath));
+                        imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist;
+                        if (vieModel.DetailMovie.extraimagelist.Count==1) SetImage(0);
+                    });
+                };
+                (success, message) = await screenShot.AsyncScreenShot(movie);
+
+                if (success) HandyControl.Controls.Growl.Success("成功生成截图！", "DetailsGrowl");
+                else HandyControl.Controls.Growl.Error(message, "DetailsGrowl");
             }
            
-            if (Properties.Settings.Default.ScreenShotToExtraPicPath)
-                HandyControl.Controls.Growl.Info("开始截图到【预览图】", "DetailsGrowl");
-            else
-                HandyControl.Controls.Growl.Warning("开始截图到【影片截图】", "DetailsGrowl");
 
         }
 
@@ -243,7 +261,55 @@ namespace Jvedio
             //监听取消下载：
             DetailDownLoad.CancelEvent += (s, e) => { Dispatcher.Invoke((Action)delegate () { ProgressBar.Visibility = Visibility.Hidden; }); };
 
-            //更新 UI
+            //显示详细信息
+            DetailDownLoad.InfoDownloadCompleted += (s, e) => {
+                MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
+                if (vieModel.DetailMovie.id == eventArgs.Message)
+                {
+                    //判断是否是当前番号
+
+                    //vieModel.DetailMovie = new DetailMovie();
+                    DetailMovie detailMovie = DataBase.SelectDetailMovieById(eventArgs.Message);
+                    if (detailMovie != null)
+                    {
+                        DB db = new DB("Translate");
+                        //加载翻译结果
+                        if (Properties.Settings.Default.TitleShowTranslate)
+                        {
+                            string translate_title = db.GetInfoBySql($"select translate_title from youdao where id='{detailMovie.id}'");
+                            if (translate_title != "") detailMovie.title = translate_title;
+                        }
+
+                        if (Properties.Settings.Default.PlotShowTranslate)
+                        {
+                            string translate_plot = db.GetInfoBySql($"select translate_plot from youdao where id='{detailMovie.id}'");
+                            if (translate_plot != "") detailMovie.plot = translate_plot;
+                        }
+                        db.CloseDB();
+
+                        //显示新增按钮
+                        List<string> labels = detailMovie.labellist;
+                        detailMovie.labellist = new List<string>();
+                        detailMovie.labellist.Add("+");
+                        detailMovie.labellist.AddRange(labels);
+                        detailMovie.extraimagelist = vieModel.DetailMovie.extraimagelist;
+                        detailMovie.extraimagePath = vieModel.DetailMovie.extraimagePath;
+                        detailMovie.bigimage = vieModel.DetailMovie.bigimage;
+
+                        vieModel.DetailMovie = detailMovie;
+                        vieModel.VedioInfo = MediaParse.GetMediaInfo(detailMovie.filepath);
+                    }
+
+                    //显示到主界面
+                    this.Dispatcher.Invoke((Action)delegate { 
+                        Main main = App.Current.Windows[0] as Main;
+                        main.RefreshMovieByID(eventArgs.Message);
+                    });
+                }
+
+            };
+
+            //进度
             DetailDownLoad.InfoUpdate += (s, e) =>
             {
                 Dispatcher.Invoke((Action)delegate ()
@@ -251,8 +317,80 @@ namespace Jvedio
                     DetailMovieEventArgs eventArgs = e as DetailMovieEventArgs;
                     ProgressBar.Value = (eventArgs.value / eventArgs.maximum) * 100; ProgressBar.Visibility = Visibility.Visible;
                     if (ProgressBar.Value == ProgressBar.Maximum) ProgressBar.Visibility = Visibility.Hidden;
-                    //判断是否是当前番号
-                    if (vieModel.DetailMovie.id == eventArgs.DetailMovie.id) vieModel.Query(eventArgs.DetailMovie.id);
+                });
+            };
+
+
+            //显示错误消息
+            DetailDownLoad.MessageCallBack += (s, e) =>
+            {
+                Dispatcher.Invoke((Action)delegate ()
+                {
+                    MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
+                    HandyControl.Controls.Growl.Error(eventArgs.Message, "DetailsGrowl");
+                });
+            };
+
+
+
+            //显示大图
+            DetailDownLoad.BigImageDownLoadCompleted += (s, e) =>
+            {
+                if (!File.Exists(BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg")) return;
+                MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
+                if (vieModel.DetailMovie.id == eventArgs.Message)
+                {
+                    Dispatcher.Invoke((Action)delegate ()
+                {
+                    vieModel.DetailMovie.bigimage = null;
+                    vieModel.DetailMovie.bigimage = GetBitmapImage(vieModel.DetailMovie.id, "BigPic");
+                    BigImage.Source = vieModel.DetailMovie.bigimage;
+                    if (vieModel.DetailMovie.extraimagelist.Count == 0)
+                    {
+                        vieModel.DetailMovie.extraimagelist = new ObservableRangeCollection<BitmapSource>();
+                        vieModel.DetailMovie.extraimagePath = new ObservableRangeCollection<string>();
+                    }
+                    vieModel.DetailMovie.extraimagelist.Insert(0, vieModel.DetailMovie.bigimage);
+                    vieModel.DetailMovie.extraimagePath.Insert(0, BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg");
+                    imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist;
+
+                });
+                }
+
+                Dispatcher.Invoke((Action)delegate ()
+                {
+                    //显示到主界面
+                    Main main = App.Current.Windows[0] as Main;
+                    main.RefreshMovieByID(vieModel.DetailMovie.id);
+                });
+            };
+
+
+            //显示小图
+            DetailDownLoad.SmallImageDownLoadCompleted += (s, e) =>
+            {
+                if (!File.Exists(BasePicPath + $"SmallPic\\{vieModel.DetailMovie.id}.jpg")) return;
+                MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
+                Dispatcher.Invoke((Action)delegate ()
+                {
+                    //显示到主界面
+                    Main main = App.Current.Windows[0] as Main;
+                    main.RefreshMovieByID(vieModel.DetailMovie.id);
+                });
+            };
+
+
+            //显示预览图
+            DetailDownLoad.ExtraImageDownLoadCompleted += (s, e) =>
+            {
+                Dispatcher.Invoke((Action)delegate ()
+                {
+                    MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
+                    if (!File.Exists(eventArgs.Message)) return;
+                    vieModel.DetailMovie.extraimagelist.Add(GetExtraImage(eventArgs.Message));
+                    vieModel.DetailMovie.extraimagePath.Add(eventArgs.Message);
+                    imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist;
+                    
                 });
             };
 
@@ -596,7 +734,8 @@ namespace Jvedio
                 vieModel.CleanUp();
                 vieModel.Query(id);
                 vieModel.SelectImageIndex = 0;
-                LoadImage();
+                if ((bool)ExtraImageRadioButton.IsChecked) LoadImage();
+                else LoadScreenShotImage();
             }
 
 
@@ -647,7 +786,8 @@ namespace Jvedio
                 vieModel.CleanUp();
                 vieModel.Query(id);
                 vieModel.SelectImageIndex = 0;
-                LoadImage();
+                if ((bool)ExtraImageRadioButton.IsChecked) LoadImage();
+                else LoadScreenShotImage();
             }
             
 
@@ -978,6 +1118,19 @@ namespace Jvedio
             }
 
 
+
+        }
+
+
+        public void DeleteInfo(object sender, RoutedEventArgs e)
+        {
+            DataBase.DeleteInfoByID(vieModel.DetailMovie.id);
+            windowMain = App.Current.Windows[0] as Main;
+            windowMain.RefreshMovieByID(vieModel.DetailMovie.id);
+
+            vieModel.Query(vieModel.DetailMovie.id);
+            HandyControl.Controls.Growl.Info($"已清空 {vieModel.DetailMovie.id} 信息", "DetailsGrowl");
+            LoadImage();
 
         }
 
@@ -1615,7 +1768,7 @@ namespace Jvedio
             ContextMenu contextMenu = sender as ContextMenu;
             if (e.Key == Key.D)
             {
-                MenuItem menuItem = GetMenuItem(contextMenu, "删除信息(D)");
+                MenuItem menuItem = GetMenuItem(contextMenu, "删除影片(D)");
                 if (menuItem != null) DeleteID(menuItem, new RoutedEventArgs());
             }
             else if (e.Key == Key.T)
@@ -1684,12 +1837,8 @@ namespace Jvedio
             else { this.DataContext = null; }
             FatherGrid.Focus();
             SetSkin();
-
-
-            LoadImage();
-
-
-
+            if ((bool)ExtraImageRadioButton.IsChecked) LoadImage();
+            else LoadScreenShotImage();
         }
 
         private async void LoadImage()
@@ -1730,6 +1879,38 @@ namespace Jvedio
         }
 
 
+        private async void LoadScreenShotImage()
+        {
+            vieModel.DetailMovie.extraimagelist = new ObservableRangeCollection<BitmapSource>();
+            vieModel.DetailMovie.extraimagePath = new ObservableRangeCollection<string>();
+            App.Current.Dispatcher.Invoke((Action)delegate { imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist; });
+            //扫描截图目录
+            List<string> imagePathList = new List<string>();
+            await Task.Run(() => {
+                if (Directory.Exists(StaticVariable.BasePicPath + $"ScreenShot\\{vieModel.DetailMovie.id}\\"))
+                {
+                    try
+                    {
+                        foreach (var path in Directory.GetFiles(StaticVariable.BasePicPath + $"ScreenShot\\{vieModel.DetailMovie.id}\\")) imagePathList.Add(path);
+                    }
+                    catch { }
+                    if (imagePathList.Count > 0) imagePathList = imagePathList.CustomSort().ToList();
+                }
+            });
+
+            //加载影片截图
+            foreach (var path in imagePathList)
+            {
+                if (Path.GetDirectoryName(path).Split('\\').Last().ToUpper() != vieModel.DetailMovie.id) break;
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraImageDelegate(LoadExtraImage), StaticClass.GetExtraImage(path));
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraPathDelegate(LoadExtraPath), path);
+                App.Current.Dispatcher.Invoke((Action)delegate { imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist; });
+            }
+
+            SetImage(0);
+        }
+
+
         private delegate void LoadExtraImageDelegate(BitmapSource bitmapSource);
         private void LoadExtraImage(BitmapSource bitmapSource)
         {
@@ -1742,19 +1923,35 @@ namespace Jvedio
             vieModel.DetailMovie.extraimagePath.Add(path);
         }
 
+        private void ExtraImageRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            //切换为预览图
+            LoadImage();
+        }
 
+        private void ScreenShotRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            //切换为截图
+            LoadScreenShotImage();
+        }
     }
 
 
 
     public class DetailDownLoad
     {
+        public event EventHandler MessageCallBack;
+        public event EventHandler SmallImageDownLoadCompleted;
+        public event EventHandler BigImageDownLoadCompleted;
+        public event EventHandler InfoDownloadCompleted;
+        public event EventHandler ExtraImageDownLoadCompleted;
         public event EventHandler InfoUpdate;
         public event EventHandler CancelEvent;
         private object lockobject;
         private double Maximum;
         private double Value;
         public bool IsDownLoading = false;
+        public static int DelayInterval = 1500;
 
         //线程 Token
         CancellationTokenSource cts;
@@ -1783,60 +1980,57 @@ namespace Jvedio
         {
             IsDownLoading = true;
             //下载信息
-            if (DetailMovie.title == "" | DetailMovie.bigimageurl == "" | DetailMovie.extraimageurl == "" | DetailMovie.sourceurl == "")
+            if (IsToDownLoadInfo(DetailMovie))
             {
-                string[] url = new string[] { Properties.Settings.Default.Bus, Properties.Settings.Default.BusEurope, Properties.Settings.Default.DB, Properties.Settings.Default.Library };
-                bool[] enableurl = new bool[] { Properties.Settings.Default.EnableBus, Properties.Settings.Default.EnableBusEu, Properties.Settings.Default.EnableDB, Properties.Settings.Default.EnableLibrary, Properties.Settings.Default.EnableFC2 };
-                string[] cookies = new string[] { Properties.Settings.Default.DBCookie };
-
                 bool success; string resultMessage;
-                (success, resultMessage) = await Task.Run(() =>
-                {
-                    return Net.DownLoadFromNet((Movie)DetailMovie);
-                });
-            }
+                (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet((Movie)DetailMovie); });
+                if (!success) MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id} 信息下载失败，原因：{resultMessage.ToStatusMessage()}"));
 
+            }
             DetailMovie dm = new DetailMovie();
             dm = DataBase.SelectDetailMovieById(DetailMovie.id);
-
+            if (string.IsNullOrEmpty(dm.title)) {
+                InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = 1, maximum =1 });
+                return; 
+            }
             InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = Value, maximum = Maximum });
+            InfoDownloadCompleted?.Invoke(this,new MessageCallBackEventArgs(DetailMovie.id));
 
-            if (!File.Exists(StaticVariable.BasePicPath + $"BigPic\\{dm.id}.jpg")) DownLoadBigPic(dm); //下载大图
-            if (!File.Exists(StaticVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg")) DownLoadSmallPic(dm); //下载小图
+            if (!File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg")) DownLoadBigPic(dm); //下载大图
+            if (!File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg")) DownLoadSmallPic(dm); //下载小图
 
             List<string> urlList = new List<string>();
             foreach (var item in dm.extraimageurl?.Split(';')) { if (!string.IsNullOrEmpty(item)) urlList.Add(item); }
-            Maximum = urlList.Count() == 0 ? 1 : urlList.Count();
+            Maximum = urlList.Count() == 0 ? 1 : urlList.Count;
 
-            //下载预览图
-            DownLoadExtraPic(dm);
-
-
-
+            DownLoadExtraPic(dm);//下载预览图
         }
 
         private async void DownLoadSmallPic(DetailMovie dm)
         {
+            string message = "";
             if (dm.smallimageurl != "")
             {
-                await Task.Run(() =>
-               {
-
-                   return Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id);
-               });
+                (bool success,string cookie)=  await Task.Run(() => {  return Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id, callback: (statuscode) => { message = statuscode.ToString(); }); });
+                message = message == "504" ? "网络可能被屏蔽了" : message;
+                if (success) SmallImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
+                else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"下载缩略图失败，原因：{message.ToStatusMessage()}，具体请看日志"));
             }
         }
 
 
         private async void DownLoadBigPic(DetailMovie dm)
         {
+            string message = "";
             if (dm.bigimageurl != "")
             {
-                await Task.Run(() =>
-                {
-
-                    return Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);
+                (bool success,string cookie)= await Task.Run(() => {
+                    return Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id,callback:(statuscode)=> { message = statuscode.ToString(); }); 
                 });
+                message=message == "504" ? "网络可能被屏蔽了" : message;
+                if (success) BigImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
+                else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"下载海报图失败，原因：{message.ToStatusMessage()}，具体请看日志"));
+                
             }
             InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = Value, maximum = Maximum });
         }
@@ -1846,24 +2040,27 @@ namespace Jvedio
 
         private async void DownLoadExtraPic(DetailMovie dm)
         {
-            List<string> urlList = new List<string>();
-            foreach (var item in dm.extraimageurl?.Split(';'))
-            {
-                if (!string.IsNullOrEmpty(item)) urlList.Add(item);
-            }
+            List<string> urlList = dm.extraimageurl?.Split(';').Where(arg => arg.IsProperUrl()).ToList();
             bool dlimageSuccess = false; string cookies = "";
             for (int i = 0; i < urlList.Count(); i++)
             {
+                string message = "";
                 if (cts.IsCancellationRequested) { CancelEvent?.Invoke(this, EventArgs.Empty); break; }
                 string filepath = "";
-                if (urlList[i].Length > 0)
+                filepath = BasePicPath + "ExtraPic\\" + dm.id + "\\" + Path.GetFileName(new Uri(urlList[i]).LocalPath);
+                if (!File.Exists(filepath))
                 {
-                    filepath = StaticVariable.BasePicPath + "ExtraPic\\" + dm.id + "\\" + Path.GetFileName(new Uri(urlList[i]).LocalPath);
-                    if (!File.Exists(filepath))
-                    {
-                        (dlimageSuccess, cookies) = await Task.Run(() => { return Net.DownLoadImage(urlList[i], ImageType.ExtraImage, dm.id, Cookie: cookies); });
-                        if (dlimageSuccess) Thread.Sleep(1500);
+                    (dlimageSuccess, cookies) = await Task.Run(() => { return Net.DownLoadImage(urlList[i], ImageType.ExtraImage, dm.id, Cookie: cookies, callback: (statuscode) => { message = statuscode.ToString(); }); });
+                    if (dlimageSuccess) {
+                        ExtraImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(filepath));
+                        Thread.Sleep(DelayInterval);
                     }
+                    else
+                    {
+                        Logger.LogN($"第 {i+1} 张预览图：{urlList[i]}下载失败，原因：{message.ToStatusMessage()}");
+                        MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"第 {i + 1} 张预览图下载失败，原因：{message.ToStatusMessage()}，具体请看日志"));
+                    }
+                    
                 }
                 lock (lockobject) Value += 1;
                 InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = Value, maximum = Maximum });

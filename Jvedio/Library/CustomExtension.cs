@@ -36,6 +36,24 @@ namespace Jvedio
 
 
 
+
+        public static string ToStatusMessage(this string status)
+        {
+            switch (status)
+            {
+                case "404":
+                    return "网址无该资源";
+                case "504":
+                    return "网关请求超时，网址可能被屏蔽了";
+                case "302":
+                    return "检索过于频繁，稍后再试";
+                default:
+                    return status;
+            }
+        }
+
+        public static bool IsProperUrl(this string source) => Uri.TryCreate(source, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+
         public static string ToSqlField(this string content)
         {
             switch (content)

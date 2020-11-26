@@ -46,7 +46,7 @@ namespace Jvedio
 
 
 
-        public static async Task<(string, int)> Http(string Url, string Method = "GET", HttpMode Mode = HttpMode.Normal, WebProxy Proxy = null, string Cookie = "")
+        public static async Task<(string, int)> Http(string Url, string Method = "GET", HttpMode Mode = HttpMode.Normal, WebProxy Proxy = null, string Cookie = "",bool allowRedirect=true)
         {
             string HtmlText = "";
             int StatusCode = 404;
@@ -69,6 +69,7 @@ namespace Jvedio
                             Request.Timeout = REQUESTTIMEOUT;
                             Request.Method = Method;
                             Request.KeepAlive = false;
+                            Request.AllowAutoRedirect = allowRedirect;
                             if (Mode == HttpMode.RedirectGet) Request.AllowAutoRedirect = false;
                             Request.Referer = Url;
                             Request.UserAgent = UserAgent;
@@ -77,7 +78,7 @@ namespace Jvedio
                             Response = (HttpWebResponse)Request.GetResponse();
 
 
-
+                            StatusCode = (int)Response.StatusCode;
                             if (Response.StatusCode == HttpStatusCode.OK)
                             {
                                 var SR = new StreamReader(Response.GetResponseStream());
@@ -87,6 +88,7 @@ namespace Jvedio
                             }
                             else if (Response.StatusCode == HttpStatusCode.Redirect && Mode == HttpMode.RedirectGet)
                             {
+                                StatusCode=(int)Response.StatusCode;
                                 result = Response.Headers["Location"];// 获得 library 影片 Code
                             }
                             else { num = 2; }
@@ -94,7 +96,7 @@ namespace Jvedio
                         }
                         catch (WebException e)
                         {
-                            Logger.LogN($"URL={Url},Message-{e.Message}");
+                            Logger.LogN($"地址：{Url}，失败原因：{e.Message}");
                             if (e.Status == WebExceptionStatus.Timeout)
                                 num += 1;
                             else
@@ -102,7 +104,7 @@ namespace Jvedio
                         }
                         catch (Exception e)
                         {
-                            Logger.LogN($"URL={Url},Message-{e.Message}");
+                            Logger.LogN($"地址：{Url}，失败原因：{e.Message}");
                             num = 2;
                         }
                         finally
@@ -114,7 +116,7 @@ namespace Jvedio
                     }).TimeoutAfter(TimeSpan.FromSeconds(HTTPTIMEOUT));
 
                 }
-                catch (TimeoutException ex) { Logger.LogN($"URL={Url},Message-{ex.Message}"); num = 2; }
+                catch (TimeoutException ex) { Logger.LogN($"地址：{Url}，失败原因：{ex.Message}"); num = 2; }
             }
 
             return (HtmlText, StatusCode);
@@ -173,12 +175,20 @@ namespace Jvedio
                 string content = ""; int statusCode = 404;
                 if (EnableCookie)
                 {
-                    if (Label == "DB")
+                    if (Label == "JavDB")
                     {
                         (content, statusCode) = await Http(Url + "v/P2Rz9", Proxy: null, Cookie: Cookie);
                         if (content != "")
                         {
-                            if (content.IndexOf("FC2-659341") >= 0) result = true;
+                            if (content.IndexOf("FC2-659341") >= 0) { result = true; title = "JavDB"; }
+                            else result = false;
+                        }
+                    }else if (Label == "FANZA")
+                    {
+                        (content, statusCode) = await Http($"{Url}mono/dvd/-/search/=/searchstr=APNS-006/ ", Proxy: null, Cookie: Cookie);
+                        if (statusCode == 200)
+                        {
+                            if (content.IndexOf("里美まゆ・川") >= 0) { result = true; title = "FANZA"; }
                             else result = false;
                         }
                     }
@@ -259,17 +269,17 @@ namespace Jvedio
             {
                 Console.WriteLine(e.StackTrace);
                 Console.WriteLine(e.Message);
-                Logger.LogN($"URL={aDomain},Message-{e.Message}");
+                Logger.LogN($"地址：{aDomain}，失败原因：{e.Message}");
             }
             return false;
         }
-        public static (byte[], string cookies) DownLoadFile(string Url, WebProxy Proxy = null, string Host = "", string SetCookie = "")
+        public static (byte[], string cookies, int statuscode) DownLoadFile(string Url, WebProxy Proxy = null, string Host = "", string SetCookie = "")
         {
-            if (Url.IndexOf("fc2club.com") < 0)
-                if (!IsDomainAlive(new Uri(Url).Host, TCPTIMEOUT)) { Logger.LogN($"URL={Url},Message-Tcp连接超时"); return (null, ""); }
+            //if (!IsDomainAlive(new Uri(Url).Host, TCPTIMEOUT)) { Logger.LogN($"地址：{Url}，失败原因：Tcp链接超时"); return (null, ""); }
             Util.SetCertificatePolicy();
             byte[] ImageByte = null;
             string Cookies = SetCookie;
+            int statuscode = 404;
             int num = 0;
             while (num < ATTEMPTNUM && ImageByte == null)
             {
@@ -280,7 +290,7 @@ namespace Jvedio
                 try
                 {
                     Request = (HttpWebRequest)HttpWebRequest.Create(Url);
-                    if (Host != "") Request.Host = Host;
+                    Request.Host = new Uri(Url).Host;
                     if (Proxy != null) Request.Proxy = Proxy;
                     if (SetCookie != "") Request.Headers.Add("Cookie", SetCookie);
                     Request.Accept = "*/*";
@@ -291,6 +301,7 @@ namespace Jvedio
                     Request.UserAgent = UserAgent;
                     Request.ReadWriteTimeout = READWRITETIMEOUT;
                     Response = (HttpWebResponse)Request.GetResponse();
+                    statuscode = (int)Response.StatusCode;
                     if (Response.StatusCode == HttpStatusCode.OK)
                     {
                         using (MemoryStream ms = new MemoryStream())
@@ -303,7 +314,7 @@ namespace Jvedio
                         if (Headers != null & SetCookie == "")
                         {
                             if (Headers["Set-Cookie"] != null) Cookies = Headers["Set-Cookie"].Split(';')[0];
-                            Console.WriteLine(Cookies);
+                            //Console.WriteLine(Cookies);
                         }
                     }
                     else
@@ -314,7 +325,9 @@ namespace Jvedio
                 }
                 catch (WebException e)
                 {
-                    Logger.LogN($"URL={Url},Message-{e.Message}");
+                    HttpWebResponse res = (HttpWebResponse)e.Response;
+                    if(res!=null) statuscode = (int)res.StatusCode;
+                    Logger.LogN($"地址：{Url}，失败原因：{e.Message}");
                     if (e.Status == WebExceptionStatus.Timeout) { num += 1; } else { num = 2; }
                 }
                 catch (Exception e)
@@ -322,39 +335,40 @@ namespace Jvedio
                     Logger.LogE(e);
                     num = 2;
                 }
-                finally
-                {
-                    if (Response != null) Response.Close();
-                }
+                finally { Response?.Close(); }
             }
-            return (ImageByte, Cookies);
+            return (ImageByte, Cookies,statuscode);
         }
 
-        public static async Task<(bool, string)> DownLoadImage(string Url, ImageType imageType, string ID, string Cookie = "")
+
+
+        /// <summary>
+        /// 异步下载图片
+        /// </summary>
+        /// <param name="Url"></param>
+        /// <param name="imageType"></param>
+        /// <param name="ID"></param>
+        /// <param name="Cookie"></param>
+        /// <returns></returns>
+        public static async Task<(bool, string)> DownLoadImage(string Url, ImageType imageType, string ID, string Cookie = "",Action<int> callback=null)
         {
-            if (Url.IndexOf('/') < 0) { return (false, ""); }
-            bool result = false; string cookies = Cookie;
+            if (!Url.IsProperUrl()) return (false, ""); 
+            bool result = false; 
+            string cookies = Cookie;
+            int statuscode = 404;
             byte[] ImageBytes = null;
-            (ImageBytes, cookies) = await Task.Run(() =>
+            (ImageBytes, cookies, statuscode) = await Task.Run(() =>
             {
-                string Host = "";
-                if (Url.IndexOf("pics.dmm") >= 0) { Host = "pics.dmm.co.jp"; }
-                else if (Url.IndexOf("pics.javcdn.pw") >= 0)
-                { Host = "pics.javcdn.pw"; }
-                else if (Url.IndexOf("images.javcdn.pw") >= 0) { Host = "images.javcdn.pw"; }
-
-                //if (Url.IndexOf("jdbimgs") >= 0) cookies = AllCookies.DB;
-
-                //if (imageType == ImageType.ExtraImage)
-                //{
-                (ImageBytes, cookies) = DownLoadFile(Url, Host: Host, SetCookie: cookies);
-                //}
-                //else { (ImageBytes, cookies) = DownLoadFile(Url, Host: Host, SetCookie: Cookie); }
-                return (ImageBytes, cookies);
+                (ImageBytes, cookies, statuscode) = DownLoadFile(Url, SetCookie: cookies);
+                return (ImageBytes, cookies, statuscode);
             });
 
 
-            if (ImageBytes == null) { result = false; }
+            if (ImageBytes == null) {
+                Logger.LogN($"图片下载失败：{Url}");
+                callback?.Invoke(statuscode);
+                result = false; 
+            }
             else
             {
                 result = true;
@@ -427,6 +441,7 @@ namespace Jvedio
             string content = "";
             int StatusCode = 404;
             if (webSite==WebSite.DB) (content, StatusCode) = await Net.Http(url, Cookie: Properties.Settings.Default.DBCookie);
+            if (webSite == WebSite.DMM) (content, StatusCode) = await Net.Http(url, Cookie: Properties.Settings.Default.DMMCookie);
             else ( content,  StatusCode) = await Net.Http(url);
 
             if(StatusCode!=200 || content == "")
@@ -496,69 +511,79 @@ namespace Jvedio
 
 
 
-
+        /// <summary>
+        /// 从网络山下载信息
+        /// </summary>
+        /// <param name="movie"></param>
+        /// <returns></returns>
         public static async Task<(bool, string)> DownLoadFromNet(Movie movie)
         {
             bool success = false;
-            string message = "";
+            string message = "网址未配置";
             Movie newMovie;
             if (movie.vediotype == (int)VedioType.欧美)
             {
-                if (!string.IsNullOrEmpty( RootUrl.BusEu) && EnableUrl.BusEu) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl((statuscode)=> { message = statuscode.ToString(); } );
-                else if (!string.IsNullOrEmpty(RootUrl.BusEu)) message = "未开启欧美网址";
-                else message = "网址未正确配置";
+                if (RootUrl.BusEu.IsProperUrl() && EnableUrl.BusEu) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl((statuscode)=> { message = statuscode.ToString(); } );
+                else if (RootUrl.BusEu.IsProperUrl() && !EnableUrl.BusEu) message = "未开启欧美网址";
             }
             else
             {
                 if (movie.id.ToUpper().IndexOf("FC2") >= 0)
                 {
-                        if (!string.IsNullOrEmpty(RootUrl.DB) && EnableUrl.DB) {  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
-                        else if (!string.IsNullOrEmpty(RootUrl.DB)) message = "未开启 DB 网址";
-                    else message = "网址未正确配置";
+                    //优先从 db 下载
+                    if (RootUrl.DB.IsProperUrl() && EnableUrl.DB) {  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
+                    else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB) message = "未开启 DB 网址";
+
+                    //db 未下载成功则去 fc2官网
+                    newMovie = DataBase.SelectMovieByID(movie.id);
+                    if (StaticClass.IsToDownLoadInfo(newMovie))
+                    {
+                        if (!string.IsNullOrEmpty(RootUrl.FC2) && EnableUrl.FC2) { await new LibraryCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
+                        else if (!string.IsNullOrEmpty(RootUrl.FC2)) message = "未开启 FC2 官网地址";
+                    }
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(RootUrl.Bus) && EnableUrl.Bus) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl((statuscode) => { message = statuscode.ToString(); });
-                    else if (!string.IsNullOrEmpty(RootUrl.Bus)) message = "未开启 Bus 网址";
-                    else message = "网址未正确配置";
+                    //优先从 Bus 下载
+                    if (RootUrl.Bus.IsProperUrl() && EnableUrl.Bus) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl((statuscode) => { message = statuscode.ToString(); });
+                    else if (RootUrl.Bus.IsProperUrl() && !EnableUrl.Bus) message = "未开启 Bus 网址";
 
+                    //Bus 未下载成功则去 library
                     newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (newMovie != null && (newMovie.title=="" || newMovie.smallimageurl=="" || newMovie.bigimageurl=="" || newMovie.extraimageurl=="" ) )
+                    if (StaticClass.IsToDownLoadInfo(newMovie))
                     {
-                        if (!string.IsNullOrEmpty(RootUrl.Library) && EnableUrl.Library) { await new LibraryCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); }); }
-                        else if(!string.IsNullOrEmpty(RootUrl.Library)) message = "未开启 Library 网址";
-                        else message = "网址未正确配置";
+                        if (RootUrl.Library.IsProperUrl() && EnableUrl.Library) { await new LibraryCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); }); }
+                        else if(RootUrl.Library.IsProperUrl() && !EnableUrl.Library) message = "未开启 Library 网址";
                     }
 
-                   
 
+                    //library 未下载成功则去 DB
                     newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (newMovie != null && (newMovie.title == "" || newMovie.smallimageurl == "" || newMovie.bigimageurl == "" || newMovie.extraimageurl == ""))
+                    if (StaticClass.IsToDownLoadInfo(newMovie))
                     {
-                        if (!string.IsNullOrEmpty(RootUrl.DB) && EnableUrl.DB)  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); });
-                        else if (!string.IsNullOrEmpty(RootUrl.DB)) message = "未开启 DB 网址";
-                        else message = "网址未正确配置";
+                        if (RootUrl.DB.IsProperUrl() && EnableUrl.DB)  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); });
+                        else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB) message = "未开启 DB 网址";
                     }
-                        
+
+                    //DB 未下载成功则去 FANZA
+                    //newMovie = DataBase.SelectMovieByID(movie.id);
+                    //if (StaticClass.IsToDownLoadInfo(newMovie))
+                    //{
+                    //    if (RootUrl.DMM.IsProperUrl() && EnableUrl.DMM) await new DMMCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); });
+                    //    else if (RootUrl.DMM.IsProperUrl() && !EnableUrl.DMM) message = "未开启 FANZA 网址";
+                    //}
 
                 }
 
             }
 
             newMovie = DataBase.SelectMovieByID(movie.id);
-            if (newMovie != null )
-            {
-                if (newMovie.title != "")
-                    success = true;
-                else
-                    success = false;
-            }
+            if (newMovie != null && newMovie.title != "")
+                success = true;
             else
                 success = false;
 
-
             return (success,message);
-
         }
 
     }

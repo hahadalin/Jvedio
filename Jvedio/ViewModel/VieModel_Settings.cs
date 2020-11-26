@@ -54,6 +54,11 @@ namespace Jvedio.ViewModel
                 List<string> infos = ReadServerInfoFromConfig(WebSite.DB);
                 Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableDB, Url = Properties.Settings.Default.DB, Cookie = Properties.Settings.Default.DBCookie, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
             }
+            if (Properties.Settings.Default.FC2 != "")
+            {
+                List<string> infos = ReadServerInfoFromConfig(WebSite.FC2);
+                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableFC2, Url = Properties.Settings.Default.FC2, Cookie = "", Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
+            }
             if (Properties.Settings.Default.Library != "")
             {
                 List<string> infos = ReadServerInfoFromConfig(WebSite.Library);
@@ -63,7 +68,7 @@ namespace Jvedio.ViewModel
             if (Properties.Settings.Default.DMM != "")
             {
                 List<string> infos = ReadServerInfoFromConfig(WebSite.DMM);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableDMM, Url = Properties.Settings.Default.DMM, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
+                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableDMM, Url = Properties.Settings.Default.DMM, Cookie=Properties.Settings.Default.DMMCookie,Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
             }
             if (Properties.Settings.Default.Jav321 != "")
             {

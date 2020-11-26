@@ -108,7 +108,6 @@ namespace Jvedio.ViewModel
             //访问次数+1
             detailMovie.visits += 1;
             DataBase.UpdateMovieByID(movieid, "visits", detailMovie.visits);
-            
 
 
             //释放图片内存
@@ -128,6 +127,8 @@ namespace Jvedio.ViewModel
                 }
             }
             GC.Collect();
+
+
             DetailMovie = new DetailMovie();
             if (detailMovie != null)
             {

@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using static Jvedio.StaticVariable;
 
 namespace Jvedio
 {
@@ -154,4 +157,118 @@ namespace Jvedio
         }
 
     }
+
+
+    public class ScreenShot
+    {
+        public event EventHandler SingleScreenShotCompleted;
+        public void BeginScreenShot(object o)
+        {
+            List<object> list = o as List<object>;
+            string cutoffTime = list[0] as string;
+            string i = list[1] as string;
+            string filePath = list[2] as string;
+            string ScreenShotPath = list[3] as string;
+            string output = $"{ScreenShotPath}\\ScreenShot-{i.PadLeft(2, '0')}.jpg";
+
+            if (string.IsNullOrEmpty(cutoffTime)) return;
+            SemaphoreScreenShot.WaitOne();
+
+            //--使用 ffmpeg.exe 截图
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.FileName = Properties.Settings.Default.FFMPEG_Path;
+            startInfo.CreateNoWindow = true;
+            string str = $"-y -threads 1 -ss {cutoffTime} -i \"{filePath}\" -f image2 -frames:v 1 \"{output}\"";
+            startInfo.UseShellExecute = false;
+            startInfo.Arguments = str;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardError = true;
+            process.StartInfo = startInfo;
+            process.Start();
+            StreamReader readerOut = process.StandardOutput;
+            StreamReader readerErr = process.StandardError;
+            string errors = readerErr.ReadToEnd();
+            string output2 = readerOut.ReadToEnd();
+            while (!process.HasExited) { continue; }
+            //--使用 ffmpeg.exe 截图
+            SemaphoreScreenShot.Release();
+            SingleScreenShotCompleted?.Invoke(this,new ScreenShotEventArgs(str, output));
+            //App.Current.Dispatcher.Invoke((Action)delegate { cmdTextBox.AppendText(str + "\n"); cmdTextBox.ScrollToEnd(); });
+            lock (ScreenShotLockObject) { ScreenShotCurrent += 1; }
+        }
+
+
+        public Semaphore SemaphoreScreenShot;
+        public int ScreenShotCurrent = 0;
+        public object ScreenShotLockObject = 0;
+
+        public async Task<(bool, string)> AsyncScreenShot(Movie movie)
+        {
+            bool result = true;
+            string message = "";
+            List<string> outputPath = new List<string>();
+            await Task.Run(() => {
+                // n 个线程截图
+                if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = "未配置 FFmpeg.exe 路径"; return; }
+
+                int num = Properties.Settings.Default.ScreenShot_ThreadNum;
+                string ScreenShotPath = "";
+                if (Properties.Settings.Default.ScreenShotToExtraPicPath) ScreenShotPath = BasePicPath + "ExtraPic\\" + movie.id;
+                else ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
+
+                if (!Directory.Exists(ScreenShotPath)) Directory.CreateDirectory(ScreenShotPath);
+
+                string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
+                int SemaphoreNum = cutoffArray.Length > 10 ? 10 : cutoffArray.Length;//最多 10 个线程截图
+                SemaphoreScreenShot = new Semaphore(SemaphoreNum, SemaphoreNum);
+
+                if (cutoffArray.Count() == 0) { result = false; message = "未成功分割影片截图"; return; }
+
+                ScreenShotCurrent = 0;
+                int ScreenShotTotal = cutoffArray.Count();
+                ScreenShotLockObject = new object();
+
+                for (int i = 0; i < cutoffArray.Count(); i++)
+                {
+                    outputPath.Add($"{ScreenShotPath}\\ScreenShot-{i.ToString().PadLeft(2, '0')}.jpg");
+                    List<object> list = new List<object>() { cutoffArray[i], i.ToString(), movie.filepath, ScreenShotPath };
+                    Thread threadObject = new Thread(BeginScreenShot);
+                    threadObject.Start(list);
+                }
+
+                //等待直到所有线程结束
+                while (ScreenShotCurrent != ScreenShotTotal)
+                {
+                    Task.Delay(100).Wait();
+                }
+                //cmdTextBox.AppendText($"已启用 {cutoffArray.Count()} 个线程， 3-10S 后即可截图成功\n");
+            });
+            foreach (var item in outputPath)
+            {
+                if (!File.Exists(item))
+                {
+                    result = false;
+                    message = $"未成功生成 {item}";
+                    break;
+                }
+            }
+            return (result, message);
+        }
+    }
+
+
+    public class ScreenShotEventArgs : EventArgs
+    {
+        public string FFmpegCommand;
+        public string FilePath;
+
+        public ScreenShotEventArgs(string _FFmpegCommand,string filepath)
+        {
+            FFmpegCommand = _FFmpegCommand;
+            FilePath = filepath;
+        }
+    }
+
 }

@@ -1043,9 +1043,13 @@ namespace Jvedio.ViewModel
 
                 }
 
+                
+
                 App.Current.Dispatcher.Invoke((Action)delegate
                 {
-                    CurrentCount = CurrentMovieList.Count+ Movies.Count;
+                    if (CurrentMovieList != null) CurrentCount = CurrentMovieList.Count + Movies.Count;
+                    if (CurrentCount > MovieList.Count) CurrentCount = MovieList.Count;
+
                 });
 
                 foreach (Movie movie in Movies)
@@ -1066,6 +1070,7 @@ namespace Jvedio.ViewModel
                         main.SetSelected();
                         CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
                     }
+                    
                 });
 
 
@@ -1243,6 +1248,7 @@ namespace Jvedio.ViewModel
                                 main.SetSelected();
                                 CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
                             }
+                            
                         });
                     }
                 });
