@@ -100,8 +100,16 @@ namespace Jvedio
 
             //启动主窗口
             Main main = new Main();
-            statusText.Text = "初始化影片";
-            main.InitMovie();
+            statusText.Text = "初始化影片……";
+            try
+            {
+                main.InitMovie();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.LogE(ex);
+            }
 
 
             main.Show();
@@ -111,7 +119,7 @@ namespace Jvedio
         private  void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
-            //更新配置文件
+            statusText.Text = "更新配置文件……";
             if (Properties.Settings.Default.UpgradeRequired)
             {
                 Properties.Settings.Default.Upgrade();
@@ -119,46 +127,44 @@ namespace Jvedio
                 Properties.Settings.Default.Save();
             }
 
-
-            //判断文件是否存在
-            CheckFile();
-
-
-            //修复设置错误
-            CheckSettings();
-
-
-            //Properties.Settings.Default.Reset();
+            statusText.Text = "修复设置错误……";
+            CheckFile(); //判断文件是否存在
+            CheckSettings();//修复设置错误
             if (!Directory.Exists(Properties.Settings.Default.BasePicPath)) Properties.Settings.Default.BasePicPath = AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
 
 
-            //创建 Log文件夹
-            if (!Directory.Exists("log")) { Directory.CreateDirectory("log"); }
-            //创建 ScanLog 文件夹
-            if (!Directory.Exists("log\\scanlog")) { Directory.CreateDirectory("log\\scanlog"); }
-            //创建 DataBase 文件夹
-            if (!Directory.Exists("DataBase")) { Directory.CreateDirectory("DataBase"); }
-
-            //创建备份文件夹
-            if (!Directory.Exists("BackUp")) { Directory.CreateDirectory("BackUp"); }
-
-
-
+            statusText.Text = "创建文件夹……";
+            if (!Directory.Exists("log")) { Directory.CreateDirectory("log"); }//创建 Log文件夹
+            if (!Directory.Exists("log\\scanlog")) { Directory.CreateDirectory("log\\scanlog"); }//创建 ScanLog 文件夹
+            if (!Directory.Exists("DataBase")) { Directory.CreateDirectory("DataBase"); }            //创建 DataBase 文件夹
+            if (!Directory.Exists("BackUp")) { Directory.CreateDirectory("BackUp"); }            //创建备份文件夹
             SetSkin();
-            
-            statusText.Text = "初始化参数……";
+            statusText.Text = "初始化数据库……";
             InitDataBase();//初始化数据库
             //InitJav321IDConverter();
             //初始化参数
+            statusText.Text = "初始化识别码参数……";
             Identify.InitFanhaoList();
+            statusText.Text = "初始化扫描参数……";
             Scan.InitSearchPattern();
+            statusText.Text = "初始化变量……";
             InitVariable();
-            SaveScanPathToXml();
-            SaveServersToXml();
-            SaveRecentWatchedToXml();
+            statusText.Text = "修改配置到 XML……";
+            try
+            {
+                SaveScanPathToXml();
+                SaveServersToXml();
+                SaveRecentWatchedToXml();
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.LogE(ex);
+            }
+
+            statusText.Text = "网络配置初始化……";
             Net.Init();
 
-            //创建图片文件夹
+            statusText.Text = "创建图片文件夹……";
             if (!Directory.Exists(StaticVariable.BasePicPath + "ScreenShot\\")) { Directory.CreateDirectory(StaticVariable.BasePicPath + "ScreenShot\\"); }
             if (!Directory.Exists(StaticVariable.BasePicPath + "SmallPic\\")) { Directory.CreateDirectory(StaticVariable.BasePicPath + "SmallPic\\"); }
             if (!Directory.Exists(StaticVariable.BasePicPath + "BigPic\\")) { Directory.CreateDirectory(StaticVariable.BasePicPath + "BigPic\\"); }
@@ -173,9 +179,15 @@ namespace Jvedio
                 OpenDefaultDatabase();
                 //启动主窗口
                 Main main = new Main();
-                statusText.Text = "初始化影片";
-                main.InitMovie();
-
+                statusText.Text = "初始化影片……";
+                try
+                {
+                    main.InitMovie();
+                }catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    Logger.LogE(ex);
+                }
 
                 main.Show();
                 this.Close();
@@ -240,7 +252,6 @@ namespace Jvedio
         }
         private void InitDataBase()
         {
-            LockDataBase = new List<string>();
 
             if (!File.Exists(InfoDataBasePath))
             {
@@ -249,20 +260,21 @@ namespace Jvedio
                 db.CreateTable(StaticVariable.SQLITETABLE_ACTRESS);
                 db.CreateTable(StaticVariable.SQLITETABLE_LIBRARY);
                 db.CreateTable(StaticVariable.SQLITETABLE_JAVDB);
-                
+                db.CloseDB();
             }
             else
             {
                 //是否具有表结构
                 DB db = new DB("Info");
-                if (!db.IsTableExist("movie") | !db.IsTableExist("actress") | !db.IsTableExist("library") | !db.IsTableExist("javdb"))
+                if (!db.IsTableExist("movie") || !db.IsTableExist("actress") || !db.IsTableExist("library") || !db.IsTableExist("javdb"))
                 {
                     db.CreateTable(StaticVariable.SQLITETABLE_MOVIE);
                     db.CreateTable(StaticVariable.SQLITETABLE_ACTRESS);
                     db.CreateTable(StaticVariable.SQLITETABLE_LIBRARY);
                     db.CreateTable(StaticVariable.SQLITETABLE_JAVDB);
                 }
-                
+                db.CloseDB();
+
             }
 
 
@@ -270,14 +282,14 @@ namespace Jvedio
             {
                 DB db = new DB("AI");
                 db.CreateTable(StaticVariable.SQLITETABLE_BAIDUAI);
-                
+                db.CloseDB();
             }
             else
             {
                 //是否具有表结构
                 DB db = new DB("AI");
                 if (!db.IsTableExist("baidu")) db.CreateTable(StaticVariable.SQLITETABLE_BAIDUAI);
-                
+                db.CloseDB();
             }
 
 
@@ -286,7 +298,7 @@ namespace Jvedio
                 DB db = new DB("Translate");
                 db.CreateTable(StaticVariable.SQLITETABLE_YOUDAO);
                 db.CreateTable(StaticVariable.SQLITETABLE_BAIDUTRANSLATE);
-                
+                db.CloseDB();
             }
             else
             {
@@ -294,7 +306,7 @@ namespace Jvedio
                 DB db = new DB("Translate");
                 if (!db.IsTableExist("youdao")) db.CreateTable(StaticVariable.SQLITETABLE_YOUDAO);
                 if (!db.IsTableExist("baidu")) db.CreateTable(StaticVariable.SQLITETABLE_BAIDUTRANSLATE);
-                
+                db.CloseDB();
             }
 
             

@@ -32,14 +32,6 @@ namespace Jvedio
         {
             LockObject = new object();
             this.dbName = DatabaseName;
-            if (!LockDataBase.Contains(DatabaseName))
-            {
-                LockDataBase.Add(DatabaseName);
-            }
-            else
-            {
-                //IsLock = true;//如果列表包含该数据库，说明数据库并未关闭
-            }
 
 
 
@@ -61,7 +53,6 @@ namespace Jvedio
 
         public void CloseDB()
         {
-            if (LockDataBase.Contains(dbName)) { LockDataBase.Remove(dbName); }
             cn?.Close();
         }
 

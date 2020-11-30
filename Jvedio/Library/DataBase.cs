@@ -1321,10 +1321,15 @@ namespace Jvedio
                     while (sr.Read())
                     {
                         string date = sr[0].ToString();
-                        try { year = Regex.Match(date, @"\d{4}").Value; }
-                        catch { }
-                        if (year == "0000") year = "1900";
-                        if (!Year.Contains(year)) Year.Add(year);
+                        if(!string.IsNullOrEmpty(date) && date.IndexOf(" ") < 0)
+                        {
+                            try { year = Regex.Match(date, @"\d{4}").Value; }
+                            catch { }
+                            if (year == "0000") year = "1900";
+                            if (!Year.Contains(year)) Year.Add(year);
+
+                        }
+
                     }
                     sr.Close();
                     Year.Sort();
@@ -1408,7 +1413,7 @@ namespace Jvedio
 
                     }
                     sr.Close();
-                    Runtime.Sort();
+                    Runtime.Sort(new RatingComparer());
 
                     //文件大小
                     //1 2 3 
@@ -1443,7 +1448,7 @@ namespace Jvedio
 
                     }
                     sr.Close();
-                    FileSize.Sort();
+                    FileSize.Sort(new RatingComparer());
 
 
                     //评分
@@ -1484,7 +1489,7 @@ namespace Jvedio
 
                     }
                     sr.Close();
-                    Rating.Sort();
+                    Rating.Sort(new RatingComparer());
 
                     List<List<string>> result = new List<List<string>>();
 

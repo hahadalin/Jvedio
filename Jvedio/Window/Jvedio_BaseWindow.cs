@@ -35,7 +35,8 @@ namespace Jvedio
         #region "改变窗体大小"
         private void ResizeRectangle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (WinState == JvedioWindowState.Maximized || WinState == JvedioWindowState.FullScreen) return;
+            if (this.WindowState == WindowState.Maximized) return;
+            if (this.Width == SystemParameters.WorkArea.Width || this.Height == SystemParameters.WorkArea.Height) return;
             Rectangle rectangle = sender as Rectangle;
 
             if (rectangle != null)
@@ -89,7 +90,8 @@ namespace Jvedio
 
         private void ResizeRectangle_MouseMove(object sender, MouseEventArgs e)
         {
-            if (WinState == JvedioWindowState.Maximized || WinState == JvedioWindowState.FullScreen) return;
+            if (this.WindowState == WindowState.Maximized) return;
+            if (this.Width == SystemParameters.WorkArea.Width || this.Height == SystemParameters.WorkArea.Height) return;
             Rectangle rectangle = sender as Rectangle;
 
             if (rectangle != null)
@@ -207,6 +209,11 @@ namespace Jvedio
                 if (this.Width == SystemParameters.WorkArea.Width | this.Height == SystemParameters.WorkArea.Height) { WinState = JvedioWindowState.Maximized; }
             }
 
+
+            this.Width = SystemParameters.WorkArea.Width * 0.6;
+            this.Height = SystemParameters.WorkArea.Height * 0.6;
+            
+
             HideMargin();
         }
 
@@ -218,17 +225,17 @@ namespace Jvedio
         private void InitEvent()
         {
             ControlTemplate baseWindowTemplate = (ControlTemplate)App.Current.Resources["BaseWindowControlTemplate"];
-            Border minBtn = (Border)baseWindowTemplate.FindName("BorderMin", this);
-            minBtn.MouseLeftButtonUp += delegate (object sender, MouseButtonEventArgs e)
+            Button minBtn = (Button)baseWindowTemplate.FindName("BorderMin", this);
+            minBtn.Click += delegate (object sender, RoutedEventArgs e)
             {
                 MinWindow();
             };
 
-            Border maxBtn = (Border)baseWindowTemplate.FindName("BorderMax", this);
-            maxBtn.MouseLeftButtonUp += MaxWindow;
+            Button maxBtn = (Button)baseWindowTemplate.FindName("BorderMax", this);
+            maxBtn.Click += MaxWindow;
 
-            Border closeBtn = (Border)baseWindowTemplate.FindName("BorderClose", this);
-            closeBtn.MouseLeftButtonUp += delegate (object sender, MouseButtonEventArgs e)
+            Button closeBtn = (Button)baseWindowTemplate.FindName("BorderClose", this);
+            closeBtn.Click += delegate (object sender, RoutedEventArgs e)
             {
                 FadeOut();
             };
@@ -239,7 +246,7 @@ namespace Jvedio
             {
                 if (e.ClickCount >= 2)
                 {
-                    MaxWindow(this, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
+                    MaxWindow(this, new RoutedEventArgs());
                 }
             };
 
@@ -368,7 +375,7 @@ namespace Jvedio
 
 
 
-        public void MaxWindow(object sender, MouseButtonEventArgs e)
+        public void MaxWindow(object sender, RoutedEventArgs e)
         {
             if (WinState == JvedioWindowState.Normal)
             {
@@ -376,18 +383,18 @@ namespace Jvedio
                 WinState = JvedioWindowState.Maximized;
                 WindowPoint = new Point(this.Left, this.Top);
                 WindowSize = new Size(this.Width, this.Height);
-                this.Height = SystemParameters.WorkArea.Height;
                 this.Width = SystemParameters.WorkArea.Width;
-                this.Left = SystemParameters.WorkArea.Left;
+                this.Height = SystemParameters.WorkArea.Height;
                 this.Top = SystemParameters.WorkArea.Top;
+                this.Left = SystemParameters.WorkArea.Left;
 
             }
             else 
             {
                 WinState = JvedioWindowState.Normal;
                 this.Left = WindowPoint.X;
-                this.Top = WindowPoint.Y;
                 this.Width = WindowSize.Width;
+                this.Top = WindowPoint.Y;
                 this.Height = WindowSize.Height;
             }
             HideMargin();
@@ -396,8 +403,23 @@ namespace Jvedio
         private void MoveWindow(object sender, MouseEventArgs e)
         {
             //移动窗口
-            if (e.LeftButton == MouseButtonState.Pressed && WinState == JvedioWindowState.Normal)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
+                if (this.WindowState == WindowState.Maximized || (this.Width == SystemParameters.WorkArea.Width && this.Height == SystemParameters.WorkArea.Height))
+                {
+                    ControlTemplate baseWindowTemplate = (ControlTemplate)App.Current.Resources["BaseWindowControlTemplate"];
+                    Border BorderTitle = (Border)baseWindowTemplate.FindName("BorderTitle", this);
+
+                    WinState = 0;
+                    double fracWidth = e.GetPosition(BorderTitle).X / BorderTitle.ActualWidth;
+                    this.Width = WindowSize.Width;
+                    this.Height = WindowSize.Height;
+                    this.WindowState = WindowState.Normal;
+                    this.Left = e.GetPosition(BorderTitle).X - BorderTitle.ActualWidth * fracWidth;
+                    this.Top = e.GetPosition(BorderTitle).Y - BorderTitle.ActualHeight / 2;
+                    this.OnLocationChanged(EventArgs.Empty);
+                    HideMargin();
+                }
                 this.DragMove();
             }
         }

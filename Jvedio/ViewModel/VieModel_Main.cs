@@ -17,6 +17,7 @@ using System.IO;
 using System.Windows.Threading;
 using System.Diagnostics;
 using static Jvedio.StaticVariable;
+using static Jvedio.StaticClass;
 using System.Windows.Input;
 using System.Drawing;
 using DynamicData;
@@ -1028,9 +1029,7 @@ namespace Jvedio.ViewModel
                         {
                             Movie movie = MovieList[i];
                             //添加标签戳
-                            if (Identify.IsHDV(movie.filepath)) movie.tagstamps += "高清";
-                            if (Identify.IsCHS(movie.filepath)) movie.tagstamps += "中文";
-                            if (Identify.IsFlowOut(movie.filepath)) movie.tagstamps += "流出";
+                            addTag(ref movie);
 
                             if (!string.IsNullOrEmpty(movie.id)) Movies.Add(movie);
                         }
@@ -1214,13 +1213,13 @@ namespace Jvedio.ViewModel
 
                         }
 
-                        //添加标签戳
+                        
                         for (int i = 0; i < Movies.Count; i++)
                         {
-
-                            if (Identify.IsHDV(Movies[i].filepath)) Movies[i].tagstamps += "高清";
-                            if (Identify.IsCHS(Movies[i].filepath)) Movies[i].tagstamps += "中文";
-                            if (Identify.IsFlowOut(Movies[i].filepath)) Movies[i].tagstamps += "流出";
+                            //添加标签戳
+                            if (Identify.IsHDV(Movies[i].filepath) || Movies[i].genre.IndexOf("高清") >= 0 || Movies[i].tag.IndexOf("高清") >= 0 || Movies[i].label.IndexOf("高清") >= 0) Movies[i].tagstamps += "高清";
+                            if (Identify.IsCHS(Movies[i].filepath) || Movies[i].genre.IndexOf("中文") >= 0 || Movies[i].tag.IndexOf("中文") >= 0 || Movies[i].label.IndexOf("中文") >= 0) Movies[i].tagstamps += "中文";
+                            if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre.IndexOf("流出") >= 0 || Movies[i].tag.IndexOf("流出") >= 0 || Movies[i].label.IndexOf("流出") >= 0) Movies[i].tagstamps += "流出";
                         }
 
 

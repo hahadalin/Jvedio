@@ -6,8 +6,22 @@
     <Style x:Key="BorderStyle" TargetType="Border">
         <Setter Property="Background" Value="Transparent"/>
         <Style.Triggers>
+
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource BackgroundTab}"/>
+                <Trigger.EnterActions>
+                    <BeginStoryboard >
+                        <Storyboard FillBehavior="HoldEnd" >
+                            <ColorAnimation Duration="0:0:0.5"  Storyboard.TargetProperty="Background.Color" To="Gray" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard >
+                            <ColorAnimation Duration="0:0:0.15"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -16,7 +30,20 @@
         <Setter Property="Background" Value="Transparent"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="Red"/>
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="HoldEnd">
+                            <ColorAnimation Duration="0:0:0.3"  Storyboard.TargetProperty="Background.Color" To="Red" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard >
+                            <ColorAnimation Duration="0:0:0.15"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
             </Trigger>
         </Style.Triggers>
     </Style>

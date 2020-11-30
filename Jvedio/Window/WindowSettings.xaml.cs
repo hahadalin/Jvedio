@@ -984,7 +984,7 @@ namespace Jvedio
                 {
                     server.ServerTitle = "FANZA";
                 }
-                else if (title.IndexOf("FC2コンテンツマーケット") >= 0)
+                else if (title.IndexOf("FC2コンテンツマーケット") >= 0 || title.IndexOf("FC2电子市场") >= 0)
                 {
                     server.ServerTitle = "FC2官网";
                 }

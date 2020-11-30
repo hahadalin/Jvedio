@@ -138,12 +138,47 @@ namespace Jvedio
         }
 
 
+        public override async Task<bool> Crawl(Action<int> callback = null, Action<int> ICcallback = null)
+        {
+            (Content, StatusCode) = await Net.Http(Url, Cookie: Cookies);
+            if (StatusCode == 200 && Content .IndexOf("非常抱歉，此商品未在您的居住国家公开")<0 && Content.IndexOf("非常抱歉，找不到您要的商品") <0) { 
+                SaveInfo(GetInfo(), webSite);
+                await Task.Delay(TASKDELAY_LONG);
+                return true; 
+            }
+            else if (Content.IndexOf("非常抱歉，此商品未在您的居住国家公开")> 0 || Content.IndexOf("お探しの商品が見つかりません") > 0)
+            {
+                resultMessage = $"地址：{Url}，错误原因：非常抱歉，此商品未在您的居住国家公开";
+                Logger.LogN(resultMessage);
+                callback?.Invoke(403);
+                return false;
+            }else if (Content.IndexOf("非常抱歉，找不到您要的商品")>0)
+            {
+                resultMessage = $"地址：{Url}，错误原因：非常抱歉，找不到您要的商品";
+                Logger.LogN(resultMessage);
+                callback?.Invoke(404);
+                return false;
+            }
+            else
+            {
+                resultMessage = $"地址：{Url}，错误原因：获取网页源码失败";
+                Logger.LogN(resultMessage);
+                callback?.Invoke(StatusCode);
+                return false;
+            }
+        }
+
+
         protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new FC2Parse(ID, Content).Parse();
             if (Info.Count <= 0)
             {
                 Logger.LogN($"地址：{Url}，失败原因：信息解析失败");
+            }
+            else if (Content.IndexOf("非常抱歉，此商品未在您的居住国家公开")>0)
+            {
+                Logger.LogN($"非常抱歉，此商品未在您的居住国家公开");
             }
             else
             {
@@ -391,6 +426,7 @@ namespace Jvedio
             return (result, StatusCode);
         }
 
+        //HACK
         private string GetLinkFromSearchResult(string html)
         {
             string result = "";
@@ -423,6 +459,7 @@ namespace Jvedio
         }
 
 
+        //TODO
         public override async Task<bool> Crawl(Action<int> callback = null, Action<int> ICcallback = null)
         {
             return false;
@@ -442,7 +479,7 @@ namespace Jvedio
             }
         }
 
-
+        //UNDONE
         protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new Dictionary<string, string>();

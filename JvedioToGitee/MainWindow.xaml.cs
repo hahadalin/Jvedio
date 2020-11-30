@@ -125,26 +125,23 @@ namespace JvedioToGitee
 
                     }
                 }
+                string[] deleteFilePaths = new string[] { "AI.sqlite", "Info.sqlite", "Translate.sqlite", "OldVersion", "RecentWatch", "WindowConfig", "ServersConfig" };
+                foreach (var item in deleteFilePaths)
+                {
+                    if (File.Exists(basePath + item)) { File.Delete(basePath + item); opTextBox.AppendText($"删除文件 {item}\n"); }
+                }
+                string[] deleteDirPaths = new string[] { "app.publish", "BackUp", "DataBase", "log", "Pic" };
 
-                if (File.Exists(basePath + "AI.sqlite")) { File.Delete(basePath + "AI.sqlite"); opTextBox.AppendText($"删除文件 AI.sqlite\n"); }
-                if (File.Exists(basePath + "Info.sqlite")) { File.Delete(basePath + "Info.sqlite"); opTextBox.AppendText($"删除文件 Info.sqlite\n"); }
-                if (File.Exists(basePath + "Translate.sqlite")) { File.Delete(basePath + "Translate.sqlite"); opTextBox.AppendText($"删除文件 Translate.sqlite\n"); }
-
-                if (File.Exists(basePath + "OldVersion")) { File.Delete(basePath + "OldVersion"); opTextBox.AppendText($"删除文件 OldVersion\n"); }
-                if (File.Exists(basePath + "RecentWatch")) { File.Delete(basePath + "RecentWatch"); opTextBox.AppendText($"RecentWatch\n"); }
-                if (File.Exists(basePath + "WindowConfig")) { File.Delete(basePath + "WindowConfig"); opTextBox.AppendText($"删除文件 WindowConfig\n"); }
-
-
-                if (Directory.Exists(basePath + "app.publish")) { Directory.Delete(basePath + "app.publish", true); opTextBox.AppendText($"删除目录 app.publish\n"); }
-                if (Directory.Exists(basePath + "BackUp")) { Directory.Delete(basePath + "BackUp", true); opTextBox.AppendText($"删除目录 BackUp\n"); }
-                if (Directory.Exists(basePath + "DataBase")) { Directory.Delete(basePath + "DataBase", true); opTextBox.AppendText($"删除目录 DataBase\n"); }
-                if (Directory.Exists(basePath + "log")) { Directory.Delete(basePath + "log", true); opTextBox.AppendText($"删除目录 log\n"); }
-                if (Directory.Exists(basePath + "Pic")) { Directory.Delete(basePath + "Pic", true); opTextBox.AppendText($"删除目录 Pic\n"); }
+                foreach (var item in deleteDirPaths)
+                {
+                    if (Directory.Exists(basePath + item)) { Directory.Delete(basePath + item,true); opTextBox.AppendText($"删除目录 {item}\n"); }
+                }
 
 
-                if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "public\\DataBase")) { Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + "public\\DataBase", true); opTextBox.AppendText($"删除目录 DataBase\n"); }
-                if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "public\\log")) { Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + "public\\log", true); opTextBox.AppendText($"删除目录 log\n"); }
-                if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "public\\BackUp")) { Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + "public\\BackUp", true); opTextBox.AppendText($"删除目录 BackUp\n"); }
+
+                //if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "public\\DataBase")) { Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + "public\\DataBase", true); opTextBox.AppendText($"删除目录 DataBase\n"); }
+                //if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "public\\log")) { Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + "public\\log", true); opTextBox.AppendText($"删除目录 log\n"); }
+                //if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "public\\BackUp")) { Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + "public\\BackUp", true); opTextBox.AppendText($"删除目录 BackUp\n"); }
 
 
                 opTextBox.ScrollToEnd();

@@ -842,12 +842,40 @@ namespace Jvedio
 
         public void OpenExtraImagePath(object sender, RoutedEventArgs e)
         {
-            string filepath = BasePicPath + $"ExtraPic\\{vieModel.DetailMovie.id}\\";
-            if (Directory.Exists(filepath)) { Process.Start("explorer.exe", filepath); }
-            else
+            //string filepath = BasePicPath + $"ExtraPic\\{vieModel.DetailMovie.id}\\";
+            //if ((bool)ScreenShotRadioButton.IsChecked) filepath = BasePicPath + $"ScreenShot\\{vieModel.DetailMovie.id}\\";
+            //if (Directory.Exists(filepath)) { Process.Start("explorer.exe", filepath); }
+            //else
+            //{
+            //    HandyControl.Controls.Growl.Info($"打开失败，不存在 ：{filepath}", "DetailsGrowl");
+            //}
+
+            MenuItem m1 = sender as MenuItem;
+
+            ContextMenu contextMenu = m1.Parent as ContextMenu;
+
+            Border border = contextMenu.PlacementTarget as Border;
+            Grid grid = border.Parent as Grid;
+            TextBlock textBox = grid.Children.OfType<TextBlock>().First();
+
+            int idx = int.Parse(textBox.Text);
+
+            string path = vieModel.DetailMovie.extraimagePath[idx];
+            if (File.Exists(path))
             {
-                HandyControl.Controls.Growl.Info($"打开失败，不存在 ：{filepath}", "DetailsGrowl");
-            }
+                try
+                {
+                    Process.Start("explorer.exe", "/select, \"" + path + "\"");
+                }catch(Exception ex)
+                {
+                    HandyControl.Controls.Growl.Error(ex.Message);
+                }
+
+            } else
+                HandyControl.Controls.Growl.Error($"不存在：{path}");
+
+            
+
         }
 
         public void DeleteImage(object sender, RoutedEventArgs e)
@@ -869,6 +897,10 @@ namespace Jvedio
                 File.Delete(path);
                 HandyControl.Controls.Growl.Success("已成功删除！", "DetailsGrowl");
                 vieModel.Query(vieModel.DetailMovie.id);
+                if ((bool)ScreenShotRadioButton.IsChecked)
+                    LoadScreenShotImage();
+                else
+                    LoadImage();
             }
             catch (Exception ex)
             {
@@ -1927,13 +1959,17 @@ namespace Jvedio
         {
             //切换为预览图
             LoadImage();
+            scrollViewer.ScrollToHorizontalOffset(0);
         }
 
         private void ScreenShotRadioButton_Click(object sender, RoutedEventArgs e)
         {
             //切换为截图
             LoadScreenShotImage();
+            scrollViewer.ScrollToHorizontalOffset(0);
         }
+
+
     }
 
 

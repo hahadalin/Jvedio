@@ -73,6 +73,7 @@ namespace Jvedio
                             if (Mode == HttpMode.RedirectGet) Request.AllowAutoRedirect = false;
                             Request.Referer = Url;
                             Request.UserAgent = UserAgent;
+                            Request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
                             Request.ReadWriteTimeout = READWRITETIMEOUT;
                             if (Proxy != null) Request.Proxy = Proxy;
                             Response = (HttpWebResponse)Request.GetResponse();
@@ -273,7 +274,7 @@ namespace Jvedio
             }
             return false;
         }
-        public static (byte[], string cookies, int statuscode) DownLoadFile(string Url, WebProxy Proxy = null, string Host = "", string SetCookie = "")
+        public static (byte[] filebytes, string cookies, int statuscode) DownLoadFile(string Url, WebProxy Proxy = null, string SetCookie = "")
         {
             //if (!IsDomainAlive(new Uri(Url).Host, TCPTIMEOUT)) { Logger.LogN($"地址：{Url}，失败原因：Tcp链接超时"); return (null, ""); }
             Util.SetCertificatePolicy();
@@ -359,7 +360,7 @@ namespace Jvedio
             byte[] ImageBytes = null;
             (ImageBytes, cookies, statuscode) = await Task.Run(() =>
             {
-                (ImageBytes, cookies, statuscode) = DownLoadFile(Url, SetCookie: cookies);
+                (ImageBytes, cookies, statuscode) = DownLoadFile(Url.Replace("\"", "'"), SetCookie: cookies);
                 return (ImageBytes, cookies, statuscode);
             });
 
@@ -379,7 +380,7 @@ namespace Jvedio
 
 
 
-        public static async Task<bool> DownActress(string ID, string Name)
+        public static async Task<bool> DownActress(string ID, string Name,Action<string> callback)
         {
             bool result = false;
             string Url = RootUrl.Bus + $"star/{ID}";
@@ -390,8 +391,12 @@ namespace Jvedio
                 //id搜索
                 BusParse busParse = new BusParse(ID, Content, VedioType.骑兵);
                 Actress actress = busParse.ParseActress();
-                if (actress.birthday == "" && actress.age == 0 && actress.birthplace == "")
-                { Console.WriteLine($"该网址无演员信息：{Url}"); ResultMessage = "该网址无演员信息=>Bus"; Logger.LogN($"URL={Url},Message-{ResultMessage}"); }
+                if (string.IsNullOrEmpty(actress.birthday)  && actress.age == 0 && string.IsNullOrEmpty(actress.birthplace))
+                { 
+                    ResultMessage = $"该网址无演员信息：{Url}";
+                    callback.Invoke(ResultMessage);
+                    Logger.LogN($"URL={Url},Message-{ResultMessage}"); 
+                }
                 else
                 {
                     actress.sourceurl = Url;
@@ -404,7 +409,11 @@ namespace Jvedio
                     result = true;
                 }
             }
-            else { Console.WriteLine($"无法访问 404：{Url}"); ResultMessage = "无法访问=>Bus"; Logger.LogN($"URL={Url},Message-{ResultMessage}"); }
+            else { 
+                Console.WriteLine($"无法访问 404：{Url}"); 
+                ResultMessage = "Bus 无法访问";
+                callback.Invoke(ResultMessage);
+                Logger.LogN($"URL={Url},Message-{ResultMessage}"); }
             return result;
         }
 
@@ -538,7 +547,7 @@ namespace Jvedio
                     newMovie = DataBase.SelectMovieByID(movie.id);
                     if (StaticClass.IsToDownLoadInfo(newMovie))
                     {
-                        if (!string.IsNullOrEmpty(RootUrl.FC2) && EnableUrl.FC2) { await new LibraryCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
+                        if (!string.IsNullOrEmpty(RootUrl.FC2) && EnableUrl.FC2) { await new FC2Crawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
                         else if (!string.IsNullOrEmpty(RootUrl.FC2)) message = "未开启 FC2 官网地址";
                     }
                 }

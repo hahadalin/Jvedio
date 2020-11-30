@@ -38,6 +38,7 @@ namespace Jvedio
                 || (Properties.Settings.Default.EnableBusEu && !string.IsNullOrEmpty(Properties.Settings.Default.BusEurope))
                 || (Properties.Settings.Default.EnableLibrary && !string.IsNullOrEmpty(Properties.Settings.Default.Library))
                 || (Properties.Settings.Default.EnableDB && !string.IsNullOrEmpty(Properties.Settings.Default.DB))
+                || (Properties.Settings.Default.EnableFC2 && !string.IsNullOrEmpty(Properties.Settings.Default.FC2))
                 || (Properties.Settings.Default.EnableDMM && !string.IsNullOrEmpty(Properties.Settings.Default.DMM));
 
             return result;
@@ -151,6 +152,15 @@ namespace Jvedio
 
 
 
+        }
+
+
+        public static  void addTag(ref Movie movie)
+        {
+            //添加标签戳
+            if (Identify.IsHDV(movie.filepath) || movie.genre.IndexOf("高清") >= 0 || movie.tag.IndexOf("高清") >= 0 || movie.label.IndexOf("高清") >= 0) movie.tagstamps += "高清";
+            if (Identify.IsCHS(movie.filepath) || movie.genre.IndexOf("中文") >= 0 || movie.tag.IndexOf("中文") >= 0 || movie.label.IndexOf("中文") >= 0) movie.tagstamps += "中文";
+            if (Identify.IsFlowOut(movie.filepath) || movie.genre.IndexOf("流出") >= 0 || movie.tag.IndexOf("流出") >= 0 || movie.label.IndexOf("流出") >= 0) movie.tagstamps += "流出";
         }
 
 

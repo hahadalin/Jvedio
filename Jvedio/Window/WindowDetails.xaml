@@ -548,7 +548,7 @@
                                             </StackPanel>
 
                                             <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="0 20" Cursor="Hand">
-                                                <hc:Rate AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"  ValueChanged="Rate_ValueChanged" DefaultValue="0"/>
+                                                <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"  ValueChanged="Rate_ValueChanged" DefaultValue="0"/>
                                             </StackPanel>
 
 

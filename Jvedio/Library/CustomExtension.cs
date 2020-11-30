@@ -41,8 +41,10 @@ namespace Jvedio
         {
             switch (status)
             {
+                case "403":
+                    return "此商品未在您的居住国家公开";
                 case "404":
-                    return "网址无该资源";
+                    return "网址无该资源，或找不到该商品";
                 case "504":
                     return "网关请求超时，网址可能被屏蔽了";
                 case "302":
@@ -313,6 +315,15 @@ namespace Jvedio
 
 
 
+
+    public class RatingComparer : IComparer<string>
+    {
+        public int Compare(string x, string y)
+        {
+            return Comparer<double>.Default.Compare(double.Parse(x.Split('-').First()), double.Parse(y.Split('-').First()));
+
+        }
+    }
 
 
 }
