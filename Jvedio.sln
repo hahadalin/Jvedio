@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "关于项目", "关于项�
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		README.md = README.md
+		README_EN.md = README_EN.md
+		README_JP.md = README_JP.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JvedioUpdate", "JvedioUpdate\JvedioUpdate.csproj", "{FC180030-C340-4240-BDA6-4888CCA874F8}"

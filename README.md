@@ -1,4 +1,8 @@
 ﻿
+[中文](Readme.md) [English](Readme_en.md) [日本語](Readme_jp.md)
+
+
+
 <h1 align="center">Jvedio</h1>
 
 
@@ -58,19 +62,6 @@
 
 
 
-
-## 关于其它版本的源代码
-
-
-
-Winform 版本（1.0）：
-
-Winform 版本（2.0）：
-
-Winform 版本（3.0）：[Jvedio_Winform](https://github.com/hitchao/Jvedio_Winform)
-
-
-
 ## 鸣谢
 
 **感谢以下网友在 Jvedio 4.0 开发中的贡献**，除此之外，收到了许多网友的赞助，非常抱歉没能把每个人一一列出，在这里我表示由衷的感谢，希望在大家的支持下， `Jvedio` 发展的越来越好！
@@ -78,6 +69,7 @@ Winform 版本（3.0）：[Jvedio_Winform](https://github.com/hitchao/Jvedio_Win
 
 板块|网友
 :--:|:--:
-UI|青萍之末，Engine
+UI|青萍之末, Engine, Erdon, Erik
+技术支持|[JavGO](https://github.com/javgo-2020/JavGo), [JavSDT](https://github.com/junerain123/javsdt)
 调试|Sheldon, SHAWN, dddsG, EEE, Jion 等人
 赞助支持|小猪培根 等众多网友
