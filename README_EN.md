@@ -1,5 +1,5 @@
 ﻿
-[中文](Readme.md) [English](Readme_en.md) [日本語](Readme_jp.md)
+[中文](README.md) [English](README_EN.md) [日本語](README_JP.md)
 
 
 
