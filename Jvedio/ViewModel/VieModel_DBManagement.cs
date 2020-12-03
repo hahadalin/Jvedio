@@ -9,7 +9,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 using System.IO;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 using LiveCharts;
 using LiveCharts.Wpf;
 
@@ -23,8 +23,6 @@ namespace Jvedio.ViewModel
         {
             ListDatabaseCommand = new RelayCommand(ListDatabase);
             StatisticCommand = new RelayCommand(Statistic);
-            Page2Command = new RelayCommand(Page2);
-            Page3Command = new RelayCommand(Page3);
 
 
         }
@@ -32,48 +30,27 @@ namespace Jvedio.ViewModel
         #region "RelayCommand"
         public RelayCommand ListDatabaseCommand { get; set; }
         public RelayCommand StatisticCommand { get; set; }
-        public RelayCommand Page2Command { get; set; }
-        public RelayCommand Page3Command { get; set; }
 
         #endregion
 
 
-      
+
 
 
         public void ListDatabase()
         {
             DataBases = new ObservableCollection<string>();
-            var fiels = Directory.GetFiles("DataBase","*.sqlite", SearchOption.TopDirectoryOnly).ToList();
-            fiels.ForEach(arg => DataBases.Add(arg.Split('\\').Last().Split('.').First().ToLower()));
-
+            try
+            {
+                var fiels = Directory.GetFiles("DataBase", "*.sqlite", SearchOption.TopDirectoryOnly).ToList();
+                fiels.ForEach(arg => DataBases.Add(arg.Split('\\').Last().Split('.').First().ToLower()));
+            }
+            catch { }
             if (!DataBases.Contains("info")) DataBases.Add("info");
 
         }
 
 
-
-        public  void Page2()
-        {
-
-            //LoadID();
-            //LoadGenre();
-            //LoadTag();
-            //LoadActor();
-
-
-        }
-
-        public void Page3()
-        {
-
-            //LoadID();
-            //LoadGenre();
-            //LoadTag();
-            //LoadActor();
-
-
-        }
 
 
 
@@ -85,14 +62,14 @@ namespace Jvedio.ViewModel
             if (name != "info") name = "DataBase\\" + name;
             DB db = new DB(name);
             Movies = await db.SelectMoviesById("");
-            
+            db.CloseDB();
 
             AllCount = Movies.Count;
             UncensoredCount = Movies.Where(arg => arg.vediotype == 1).Count();
             CensoredCount = Movies.Where(arg => arg.vediotype == 2).Count();
             EuropeCount = Movies.Where(arg => arg.vediotype == 3).Count();
 
-            CensoredCountPercent=(int)(100* CensoredCount / (AllCount == 0 ? 1 : AllCount));
+            CensoredCountPercent = (int)(100 * CensoredCount / (AllCount == 0 ? 1 : AllCount));
             UncensoredCountPercent = (int)(100 * UncensoredCount / (AllCount == 0 ? 1 : AllCount));
             EuropeCountPercent = (int)(100 * EuropeCount / (AllCount == 0 ? 1 : AllCount));
 
@@ -107,23 +84,16 @@ namespace Jvedio.ViewModel
             LoadGenre();
             LoadTag();
             LoadActor();
-
-
             Formatter = value => value.ToString("N");
-
         }
-
-
-
-
-
-
 
         private void LoadActor()
         {
             Dictionary<string, double> dic = new Dictionary<string, double>();
-            Movies.ForEach(arg => {
-                arg.actor.Split(new char[] { ' ','/'}).ToList().ForEach(item => {
+            Movies.ForEach(arg =>
+            {
+                arg.actor.Split(new char[] { ' ', '/' }).ToList().ForEach(item =>
+                {
                     if (!string.IsNullOrEmpty(item))
                     {
                         if (!dic.ContainsKey(item))
@@ -133,17 +103,10 @@ namespace Jvedio.ViewModel
                     }
 
                 });
-
-
-
             });
 
             var dicSort = dic.OrderByDescending(arg => arg.Value).ToDictionary(x => x.Key, y => y.Value);
-
-
-
             ActorLabels = dicSort.Keys.ToArray();
-
             ChartValues<double> cv = new ChartValues<double>();
             dicSort.Values.ToList().ForEach(arg => cv.Add(arg));
 
@@ -161,8 +124,10 @@ namespace Jvedio.ViewModel
         private void LoadTag()
         {
             Dictionary<string, double> dic = new Dictionary<string, double>();
-            Movies.ForEach(arg => {
-                arg.tag.Split(' ').ToList().ForEach(item => {
+            Movies.ForEach(arg =>
+            {
+                arg.tag.Split(' ').ToList().ForEach(item =>
+                {
                     if (!string.IsNullOrEmpty(item))
                     {
                         if (!dic.ContainsKey(item))
@@ -170,17 +135,10 @@ namespace Jvedio.ViewModel
                         else
                             dic[item] += 1;
                     }
-
                 });
-
-
-
             });
 
             var dicSort = dic.OrderByDescending(arg => arg.Value).ToDictionary(x => x.Key, y => y.Value);
-
-
-
             TagLabels = dicSort.Keys.ToArray();
 
             ChartValues<double> cv = new ChartValues<double>();
@@ -200,8 +158,10 @@ namespace Jvedio.ViewModel
         private void LoadGenre()
         {
             Dictionary<string, double> dic = new Dictionary<string, double>();
-            Movies.ForEach(arg => {
-                arg.genre.Split(' ').ToList().ForEach(item => {
+            Movies.ForEach(arg =>
+            {
+                arg.genre.Split(' ').ToList().ForEach(item =>
+                {
                     if (!string.IsNullOrEmpty(item))
                     {
                         if (!dic.ContainsKey(item))
@@ -209,17 +169,10 @@ namespace Jvedio.ViewModel
                         else
                             dic[item] += 1;
                     }
-
                 });
-
-
-               
             });
 
             var dicSort = dic.OrderByDescending(arg => arg.Value).ToDictionary(x => x.Key, y => y.Value);
-
-
-
             GenreLabels = dicSort.Keys.ToArray();
 
             ChartValues<double> cv = new ChartValues<double>();
@@ -239,7 +192,8 @@ namespace Jvedio.ViewModel
         private void LoadID()
         {
             Dictionary<string, double> dic = new Dictionary<string, double>();
-            Movies.ForEach(arg => {
+            Movies.ForEach(arg =>
+            {
                 string id = "";
                 if (arg.vediotype == 3)
                     id = Identify.GetEuFanhao(arg.id).Split('.')[0];
@@ -252,15 +206,9 @@ namespace Jvedio.ViewModel
             });
 
             var dicSort = dic.OrderByDescending(arg => arg.Value).ToDictionary(x => x.Key, y => y.Value);
-
-
-
             Labels = dicSort.Keys.ToArray();
-
             ChartValues<double> cv = new ChartValues<double>();
             dicSort.Values.ToList().ForEach(arg => cv.Add(arg));
-
-
             SeriesCollection = new SeriesCollection
             {
                 new ColumnSeries
@@ -274,7 +222,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public SeriesCollection _ActorSeriesCollection;
+        private SeriesCollection _ActorSeriesCollection;
         public SeriesCollection ActorSeriesCollection
         {
             get { return _ActorSeriesCollection; }
@@ -287,7 +235,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public string[] _ActorLabels;
+        private string[] _ActorLabels;
 
         public string[] ActorLabels
         {
@@ -305,7 +253,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public SeriesCollection _TagSeriesCollection;
+        private SeriesCollection _TagSeriesCollection;
         public SeriesCollection TagSeriesCollection
         {
             get { return _TagSeriesCollection; }
@@ -318,7 +266,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public string[] _TagLabels;
+        private string[] _TagLabels;
 
         public string[] TagLabels
         {
@@ -332,7 +280,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        public SeriesCollection _GenreSeriesCollection;
+        private SeriesCollection _GenreSeriesCollection;
         public SeriesCollection GenreSeriesCollection
         {
             get { return _GenreSeriesCollection; }
@@ -345,7 +293,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public string[] _GenreLabels;
+        private string[] _GenreLabels;
 
         public string[] GenreLabels
         {
@@ -359,8 +307,9 @@ namespace Jvedio.ViewModel
         }
 
 
-        public SeriesCollection _SeriesCollection;
-        public SeriesCollection SeriesCollection {
+        private SeriesCollection _SeriesCollection;
+        public SeriesCollection SeriesCollection
+        {
             get { return _SeriesCollection; }
             set
             {
@@ -371,7 +320,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public string[] _Labels;
+        private string[] _Labels;
 
         public string[] Labels
         {
@@ -413,7 +362,7 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
-        public ChartValues<double> _ChartValuesEuropeCount { get; set; }
+        private ChartValues<double> _ChartValuesEuropeCount { get; set; }
 
 
         public ChartValues<double> ChartValuesEuropeCount

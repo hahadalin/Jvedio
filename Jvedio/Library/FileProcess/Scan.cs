@@ -8,8 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Security.Permissions;
-using static Jvedio.StaticVariable;
-using static Jvedio.StaticClass;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
@@ -103,7 +102,7 @@ namespace Jvedio
                 return FilePathList
                     .Where(s => SearchPattern.Contains(Path.GetExtension(s).ToLower()))
                     .Where(s => !File.Exists(s) || new FileInfo(s).Length >= MinFileSize)
-                    .Where(s => { try { return Identify.GetFanhao(new FileInfo(s).Name).ToUpper() == ID.ToUpper(); } catch(Exception ex) { Logger.LogScanInfo($"错误路径：{s}"); return false; } })
+                    .Where(s => { try { return Identify.GetFanhao(new FileInfo(s).Name).ToUpper() == ID.ToUpper(); } catch{ Logger.LogScanInfo($"错误路径：{s}"); return false; } })
                     .OrderBy(s => s).ToList();
             }
         }
@@ -167,7 +166,7 @@ namespace Jvedio
                 if (!string.IsNullOrEmpty(maxValueKey))
                 {
                     try { 
-                    var notsub = fatherpathDic.Where(arg => arg.Key==null?false: new FileInfo(arg.Key)?.Directory.FullName != maxValueKey).ToList();
+                    var notsub = fatherpathDic.Where(arg => arg.Key!=null && new FileInfo(arg.Key)?.Directory.FullName != maxValueKey).ToList();
                     notsub.ForEach(arg => notSubSection.Add(arg.Key));
                     }
                     catch (Exception e) { Logger.LogE(e); }
@@ -231,7 +230,7 @@ namespace Jvedio
             foreach (var item in stringCollection) { result.AddRange(GetAllFilesFromFolder(item, cancellationToken)); }
             var result2 = result
                 .Where(s => SearchPattern.Contains(System.IO.Path.GetExtension(s).ToLower()))
-                .Where(s => File.Exists(s) ? new System.IO.FileInfo(s).Length >= MinFileSize : 1 > 0).OrderBy(s => s).ToList();
+                .Where(s => !File.Exists(s) || new System.IO.FileInfo(s).Length >= MinFileSize).OrderBy(s => s).ToList();
             return result2;
         }
 
@@ -268,7 +267,7 @@ namespace Jvedio
                 {
                     string[] filesInCurrent = System.IO.Directory.GetFiles(currentFolder, pattern == "" ? "*.*" : pattern, System.IO.SearchOption.TopDirectoryOnly);
                     files.AddRange(filesInCurrent);
-                    foreach(var file in filesInCurrent) {if(callBack!=null) callBack(file); }
+                    foreach(var file in filesInCurrent) { callBack?.Invoke(file); }
                 }
                 catch
                 {
@@ -279,7 +278,7 @@ namespace Jvedio
                     foreach (string _current in foldersInCurrent)
                     {
                         folders.Enqueue(_current);
-                        if (callBack != null) callBack(_current); 
+                        callBack?.Invoke(_current);
                     }
                 }
                 catch
@@ -344,8 +343,7 @@ namespace Jvedio
                     id = IsEurope ? Identify.GetEuFanhao(new FileInfo(item).Name) : Identify.GetFanhao(new FileInfo(item).Name);
                     if (!repeatlist.ContainsKey(id))
                     {
-                        List<string> pathlist = new List<string>();
-                        pathlist.Add(item);
+                        List<string> pathlist = new List<string> { item };
                         repeatlist.Add(id, pathlist);
                     }
                     else
@@ -503,7 +501,7 @@ namespace Jvedio
                 try
                 {
                     //待修复 的 bug
-                    CopyDatabaseInfo(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower());
+                    DataBase. CopyDatabaseInfo(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower());
                 }
                 catch { }
             }
@@ -518,13 +516,12 @@ namespace Jvedio
         {
             double maxsize = 0;
             int maxsizeindex = 0;
-            double filesize = 0;
             int i = 0;
             foreach (var item in pathlist)
             {
                 if (File.Exists(item))
                 {
-                    filesize = new FileInfo(item).Length;
+                    double filesize = new FileInfo(item).Length;
                     if (maxsize < filesize) { maxsize = filesize; maxsizeindex = i; }
                 }
                 i++;

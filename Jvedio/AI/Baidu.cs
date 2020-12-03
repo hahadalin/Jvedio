@@ -14,10 +14,9 @@ namespace Jvedio
     public static class AccessToken
 
     {
-        // 百度云中开通对应服务应用的 API Key 建议开通应用的时候多选服务
-        private static string clientId ;
-        // 百度云中开通对应服务应用的 Secret Key
-        private static string clientSecret ;
+        
+        private static string clientId;// 百度云中开通对应服务应用的 API Key 建议开通应用的时候多选服务
+        private static string clientSecret; // 百度云中开通对应服务应用的 Secret Key
 
         public static void Init()
         {

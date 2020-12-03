@@ -6,8 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Jvedio.Net;
-using static Jvedio.StaticVariable;
-using static Jvedio.StaticClass;
+using static Jvedio.GlobalVariable;
 using System.IO;
 namespace Jvedio
 {
@@ -55,7 +54,7 @@ namespace Jvedio
                 if (Directory.Exists(Properties.Settings.Default.NFOSavePath))
                 {
                     //固定位置
-                    SaveToNFO(detailMovie, Path.Combine(Properties.Settings.Default.NFOSavePath, $"{ID}.nfo"));
+                    nfo.SaveToNFO(detailMovie, Path.Combine(Properties.Settings.Default.NFOSavePath, $"{ID}.nfo"));
                 }
                 else
                 {
@@ -63,7 +62,7 @@ namespace Jvedio
                     string path = detailMovie.filepath;
                     if (System.IO.File.Exists(path))
                     {
-                        SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{ID}.nfo"));
+                        nfo.SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{ID}.nfo"));
                     }
                 }
             }
@@ -202,10 +201,9 @@ namespace Jvedio
 
         protected override async Task<(string, int)> GetMovieCode()
         {
-            string result = "";
+            string result = DataBase.SelectInfoByID("code", "javdb", ID);
             int statusCode = 404;
             //先从数据库获取
-            result = DataBase.SelectInfoByID("code", "javdb", ID);
             if (result == "")
             {
                 //从网络获取
@@ -266,8 +264,7 @@ namespace Jvedio
 
         protected override Dictionary<string, string> GetInfo()
         {
-            Dictionary<string, string> Info = new Dictionary<string, string>();
-            Info = new JavDBParse(ID, Content, MovieCode).Parse();
+            Dictionary<string, string> Info = new JavDBParse(ID, Content, MovieCode).Parse();
             if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
             else
             {
@@ -370,8 +367,7 @@ namespace Jvedio
 
         protected override Dictionary<string, string> GetInfo()
         {
-            Dictionary<string, string> Info = new Dictionary<string, string>();
-            Info = new LibraryParse(ID, Content).Parse();
+            Dictionary<string, string> Info = new LibraryParse(ID, Content).Parse();
             if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
             else
             {
@@ -437,7 +433,6 @@ namespace Jvedio
 
             if (nodes != null)
             {
-                HtmlNode linknode = null;
                 foreach (HtmlNode node in nodes)
                 {
                     if (node == null) continue;
@@ -513,13 +508,7 @@ namespace Jvedio
             (Content, StatusCode) = await Net.Http(Url, Cookie: Cookies);
             if (StatusCode == 200 & Content != "")
             {
-
-
                 Dictionary<string, string> Info = GetInfo();
-
-
-
-
             }
 
 
@@ -540,8 +529,7 @@ namespace Jvedio
 
         protected override Dictionary<string, string> GetInfo()
         {
-            Dictionary<string, string> Info = new Dictionary<string, string>();
-            Info = new Jav321Parse(ID, Content).Parse();
+            Dictionary<string, string> Info = new Jav321Parse(ID, Content).Parse();
             if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
             else
             {

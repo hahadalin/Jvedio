@@ -7,8 +7,9 @@ using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using System.Threading.Tasks;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 
 namespace Jvedio
@@ -44,6 +45,22 @@ namespace Jvedio
             RedirectGet = 1
         }
 
+        public static async Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, TimeSpan timeout)
+        {
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource())
+            {
+                var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token));
+                if (completedTask == task)
+                {
+                    timeoutCancellationTokenSource.Cancel();
+                    return await task;  // Very important in order to propagate exceptions
+                }
+                else
+                {
+                    throw new TimeoutException("超时！");
+                }
+            }
+        }
 
 
         public static async Task<(string, int)> Http(string Url, string Method = "GET", HttpMode Mode = HttpMode.Normal, WebProxy Proxy = null, string Cookie = "",bool allowRedirect=true)
@@ -373,7 +390,7 @@ namespace Jvedio
             else
             {
                 result = true;
-                StaticClass.SaveImage(ID, ImageBytes, imageType, Url);
+                ImageProcess.SaveImage(ID, ImageBytes, imageType, Url);
             }
             return (result, cookies);
         }
@@ -421,7 +438,7 @@ namespace Jvedio
         public async static Task<(bool, string)> DownLoadSmallPic(DetailMovie dm)
         {
             //不存在才下载
-            if (!File.Exists(StaticVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg"))
+            if (!File.Exists(GlobalVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg"))
             {
                 Console.WriteLine("开始下载小图");
                 Console.WriteLine(dm.source);
@@ -435,7 +452,7 @@ namespace Jvedio
 
         public async static Task<(bool, string)> DownLoadBigPic(DetailMovie dm)
         {
-            if (!File.Exists(StaticVariable.BasePicPath + $"BigPic\\{dm.id}.jpg"))
+            if (!File.Exists(GlobalVariable.BasePicPath + $"BigPic\\{dm.id}.jpg"))
             {
                 return await Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);
             }
@@ -495,7 +512,7 @@ namespace Jvedio
                         if (Directory.Exists(Properties.Settings.Default.NFOSavePath))
                         {
                             //固定位置
-                            StaticClass.SaveToNFO(detailMovie, Path.Combine(Properties.Settings.Default.NFOSavePath, $"{id}.nfo"));
+                            nfo.SaveToNFO(detailMovie, Path.Combine(Properties.Settings.Default.NFOSavePath, $"{id}.nfo"));
                         }
                         else
                         {
@@ -503,7 +520,7 @@ namespace Jvedio
                             string path = detailMovie.filepath;
                             if (System.IO.File.Exists(path))
                             {
-                                StaticClass.SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{id}.nfo"));
+                                nfo.SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{id}.nfo"));
                             }
                         }
                     }
@@ -521,7 +538,7 @@ namespace Jvedio
 
 
         /// <summary>
-        /// 从网络山下载信息
+        /// 从网络上下载信息
         /// </summary>
         /// <param name="movie"></param>
         /// <returns></returns>
@@ -545,7 +562,7 @@ namespace Jvedio
 
                     //db 未下载成功则去 fc2官网
                     newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (StaticClass.IsToDownLoadInfo(newMovie))
+                    if (IsToDownLoadInfo(newMovie))
                     {
                         if (!string.IsNullOrEmpty(RootUrl.FC2) && EnableUrl.FC2) { await new FC2Crawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
                         else if (!string.IsNullOrEmpty(RootUrl.FC2)) message = "未开启 FC2 官网地址";
@@ -559,7 +576,7 @@ namespace Jvedio
 
                     //Bus 未下载成功则去 library
                     newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (StaticClass.IsToDownLoadInfo(newMovie))
+                    if (IsToDownLoadInfo(newMovie))
                     {
                         if (RootUrl.Library.IsProperUrl() && EnableUrl.Library) { await new LibraryCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); }); }
                         else if(RootUrl.Library.IsProperUrl() && !EnableUrl.Library) message = "未开启 Library 网址";
@@ -568,7 +585,7 @@ namespace Jvedio
 
                     //library 未下载成功则去 DB
                     newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (StaticClass.IsToDownLoadInfo(newMovie))
+                    if (IsToDownLoadInfo(newMovie))
                     {
                         if (RootUrl.DB.IsProperUrl() && EnableUrl.DB)  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); });
                         else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB) message = "未开启 DB 网址";
@@ -593,6 +610,29 @@ namespace Jvedio
                 success = false;
 
             return (success,message);
+        }
+
+        public static bool IsToDownLoadInfo(Movie movie)
+        {
+            return movie != null && (movie.title == "" || movie.sourceurl == "" || movie.smallimageurl == "" || movie.bigimageurl == "");
+        }
+
+
+        /// <summary>
+        /// 检查是否启用服务器源且地址不为空
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsServersProper()
+        {
+            bool result = Properties.Settings.Default.Enable321 && !string.IsNullOrEmpty(Properties.Settings.Default.Jav321)
+                                || Properties.Settings.Default.EnableBus && !string.IsNullOrEmpty(Properties.Settings.Default.Bus)
+                                || Properties.Settings.Default.EnableBusEu && !string.IsNullOrEmpty(Properties.Settings.Default.BusEurope)
+                                || Properties.Settings.Default.EnableLibrary && !string.IsNullOrEmpty(Properties.Settings.Default.Library)
+                                || Properties.Settings.Default.EnableDB && !string.IsNullOrEmpty(Properties.Settings.Default.DB)
+                                || Properties.Settings.Default.EnableFC2 && !string.IsNullOrEmpty(Properties.Settings.Default.FC2)
+                                || Properties.Settings.Default.EnableDMM && !string.IsNullOrEmpty(Properties.Settings.Default.DMM);
+
+            return result;
         }
 
     }

@@ -14,23 +14,33 @@ using System.Windows.Media.Imaging;
 
 namespace Jvedio
 {
-    public static class StaticVariable
+    public static class GlobalVariable
     {
         public static Stopwatch stopwatch = new Stopwatch();//计时
 
+        //路径
+        public static string InfoDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "Info.sqlite";
+        public static string DataBaseConfigPath = "DataBase\\Config.ini";
+        public static string ServersConfigPath = "ServersConfig.ini";
 
-        //软件的全局变量
+        //禁止的文件名
+        public static readonly char[] BANFILECHAR = { '\\', '#', '%', '&', '*', '|', ':', '"', '<', '>', '?', '/', '.' }; //https://docs.microsoft.com/zh-cn/previous-versions/s6feh8zw(v=vs.110)?redirectedfrom=MSDN
+
+
+        //全局变量
         public static string BasePicPath;
-
         public static rootUrl RootUrl;
         public static enableUrl EnableUrl;
         public static Cookie AllCookies;
 
+        //骑兵、步兵识别码
         public static List<string> Qibing = new List<string>();
         public static List<string> Bubing = new List<string>();
 
-        public static double MinHDVFileSize = 2;//多少 GB 视为高清
+        //多少 GB 视为高清
+        public static double MinHDVFileSize = 2;
 
+        // jav321 转换规则
         public static Dictionary<string, string> Jav321IDDict = new Dictionary<string, string>();
 
         //命令记录：前进后退
@@ -39,34 +49,17 @@ namespace Jvedio
         public static int CommandIndex = 0;
         public static string CurrentCommand = "";
 
-        //数据库
+        //按类别中分类
         public static string[] GenreEurope = new string[8];
         public static string[] GenreCensored = new string[7];
         public static string[] GenreUncensored = new string[8];
-        public static string InfoDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "Info.sqlite";
-
-
-        //新建表 sqlite 语句
-        public static string SQLITETABLE_MOVIE = "create table if not exists movie (id VARCHAR(50) PRIMARY KEY , title TEXT , filesize DOUBLE DEFAULT 0 , filepath TEXT , subsection TEXT , vediotype INT , scandate VARCHAR(30) , releasedate VARCHAR(10) DEFAULT '1900-01-01', visits INT  DEFAULT 0, director VARCHAR(50) , genre TEXT , tag TEXT , actor TEXT , actorid TEXT ,studio VARCHAR(50) , rating FLOAT  DEFAULT 0, chinesetitle TEXT , favorites INT  DEFAULT 0, label TEXT , plot TEXT , outline TEXT , year INT  DEFAULT 1900, runtime INT  DEFAULT 0, country VARCHAR(50) , countrycode INT DEFAULT 0 ,otherinfo TEXT, sourceurl TEXT, source VARCHAR(10),actressimageurl TEXT,smallimageurl TEXT,bigimageurl TEXT,extraimageurl TEXT)";
-        public static string SQLITETABLE_ACTRESS = "create table if not exists actress ( id VARCHAR(50) PRIMARY KEY, name VARCHAR(50) ,birthday VARCHAR(10) ,age INT ,height INT ,cup VARCHAR(1), chest INT ,waist INT ,hipline INT ,birthplace VARCHAR(50) ,hobby TEXT, sourceurl TEXT, source VARCHAR(10),imageurl TEXT)";
-        public static string SQLITETABLE_LIBRARY = "create table if not exists library ( id VARCHAR(50) PRIMARY KEY, code VARCHAR(50))";
-        public static string SQLITETABLE_JAVDB = "create table if not exists javdb ( id VARCHAR(50) PRIMARY KEY, code VARCHAR(50))";
-        public static string SQLITETABLE_BAIDUAI = "create table if not exists baidu (id VARCHAR(50) PRIMARY KEY , age INT DEFAULT 0 , beauty FLOAT DEFAULT 0 , expression VARCHAR(20), face_shape VARCHAR(20), gender VARCHAR(20), glasses VARCHAR(20), race VARCHAR(20), emotion VARCHAR(20), mask VARCHAR(20))";
-        public static string SQLITETABLE_BAIDUTRANSLATE = "create table if not exists baidu (id VARCHAR(50) PRIMARY KEY , title TEXT , translate_title TEXT, plot TEXT, translate_plot TEXT)";
-        public static string SQLITETABLE_YOUDAO = "create table if not exists youdao (id VARCHAR(50) PRIMARY KEY , title TEXT , translate_title TEXT, plot TEXT, translate_plot TEXT)";
-
-        public static string DataBaseConfigPath = "DataBase\\Config.ini";
-        public static string ServersConfigPath = "ServersConfig.ini";
-
-        //禁止的文件名
-        public static readonly char[] BANFILECHAR =  {'\\','#','%', '&', '*', '|', ':', '"', '<', '>', '?', '/','.' }; //https://docs.microsoft.com/zh-cn/previous-versions/s6feh8zw(v=vs.110)?redirectedfrom=MSDN
 
         //演员分隔符
         public static Dictionary<int, char[]> actorSplitDict = new Dictionary<int, char[]>();
 
 
-
-        public static Dictionary<DateTime, List<string>> RecentWatched =new Dictionary<DateTime, List<string>>();//最近播放
+        //最近播放
+        public static Dictionary<DateTime, List<string>> RecentWatched =new Dictionary<DateTime, List<string>>();
 
         #region "热键"
         [DllImport("user32.dll")]
@@ -120,24 +113,22 @@ namespace Jvedio
                 BasePicPath = AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
 
 
-            if (Properties.Settings.Default.Bus == "") Properties.Settings.Default.EnableBus = false;
-            if (Properties.Settings.Default.BusEurope == "") Properties.Settings.Default.EnableBusEu = false;
-            if (Properties.Settings.Default.DB == "") Properties.Settings.Default.EnableDB = false;
-            if (Properties.Settings.Default.Library == "") Properties.Settings.Default.EnableLibrary = false;
-            if (Properties.Settings.Default.DMM == "") Properties.Settings.Default.EnableDMM = false;
-            if (Properties.Settings.Default.Jav321 == "") Properties.Settings.Default.Enable321 = false;
+            if (string.IsNullOrEmpty(Properties.Settings.Default.Bus)) Properties.Settings.Default.EnableBus = false;
+            if (string.IsNullOrEmpty(Properties.Settings.Default.BusEurope)) Properties.Settings.Default.EnableBusEu = false;
+            if (string.IsNullOrEmpty(Properties.Settings.Default.DB)) Properties.Settings.Default.EnableDB = false;
+            if (string.IsNullOrEmpty(Properties.Settings.Default.Library)) Properties.Settings.Default.EnableLibrary = false;
+            if (string.IsNullOrEmpty(Properties.Settings.Default.DMM)) Properties.Settings.Default.EnableDMM = false;
+            if (string.IsNullOrEmpty(Properties.Settings.Default.Jav321)) Properties.Settings.Default.Enable321 = false;
+            if (string.IsNullOrEmpty(Properties.Settings.Default.FC2)) Properties.Settings.Default.EnableFC2 = false;
             Properties.Settings.Default.Save();
 
             //添加演员分隔符
             if(!actorSplitDict.ContainsKey(0)) actorSplitDict.Add(0, new char[] { ' ', '/' });
             if (!actorSplitDict.ContainsKey(1)) actorSplitDict.Add(1, new char[] { ' ', '/' });
             if (!actorSplitDict.ContainsKey(2)) actorSplitDict.Add(2, new char[] { ' ', '/' });
-            if (!actorSplitDict.ContainsKey(3)) actorSplitDict.Add(3, new char[] {'/' });
+            if (!actorSplitDict.ContainsKey(3)) actorSplitDict.Add(3, new char[] {'/' });//欧美
 
-
-
-            //格式化网址
-            FormatUrl();
+            FormatUrl();//格式化网址
 
 
             RootUrl = new rootUrl
@@ -151,7 +142,6 @@ namespace Jvedio
                 DB = Properties.Settings.Default.DB
             };
 
-            //fc2club 关站了
             EnableUrl = new enableUrl
             {
                 Bus = Properties.Settings.Default.EnableBus,
@@ -206,26 +196,19 @@ namespace Jvedio
 
         public static void FormatUrl()
         {
-            Properties.Settings.Default.Bus = _FormatUrl(Properties.Settings.Default.Bus);
-            Properties.Settings.Default.DB = _FormatUrl(Properties.Settings.Default.DB);
-            Properties.Settings.Default.Library = _FormatUrl(Properties.Settings.Default.Library);
-            Properties.Settings.Default.Jav321 = _FormatUrl(Properties.Settings.Default.Jav321);
-            Properties.Settings.Default.FC2 = _FormatUrl(Properties.Settings.Default.FC2);
-            Properties.Settings.Default.DMM = _FormatUrl(Properties.Settings.Default.DMM);
+            Properties.Settings.Default.Bus = Properties.Settings.Default.Bus.ToProperUrl();
+            Properties.Settings.Default.DB =Properties.Settings.Default.DB.ToProperUrl();
+            Properties.Settings.Default.Library = Properties.Settings.Default.Library.ToProperUrl();
+            Properties.Settings.Default.Jav321 = Properties.Settings.Default.Jav321.ToProperUrl();
+            Properties.Settings.Default.FC2 = Properties.Settings.Default.FC2.ToProperUrl();
+            Properties.Settings.Default.DMM = Properties.Settings.Default.DMM.ToProperUrl();
         }
 
-        private static string _FormatUrl(string url)
-        {
-            url = url.ToLower();
-            if (string.IsNullOrEmpty(url)) return "";
-            if(url.IndexOf("http") < 0) url = "https://" + url;
-            if (!url.EndsWith("/"))  url += "/";
-            return url;
-        }
+
 
 
         #region "enum"
-        public enum MyViewType { 默认, 有图, 无图 }
+        public enum ViewType { 默认, 有图, 无图 }
         public enum MyImageType { 缩略图, 海报图, 预览图, 动态图, 列表模式 }
         public enum MovieStampType { 无, 高清中字, 无码流出 }
 

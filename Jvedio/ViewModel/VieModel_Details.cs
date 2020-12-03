@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.IO;
@@ -17,7 +17,6 @@ namespace Jvedio.ViewModel
     public class VieModel_Details : ViewModelBase
     {
 
-        public event EventHandler QueryCompletedHandler;
         public VieModel_Details()
         {
             QueryCommand = new RelayCommand<string>(Query);
@@ -37,7 +36,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public string _SwitchInfo = "影片信息";
+        private string _SwitchInfo = "影片信息";
         public string SwitchInfo
         {
             get { return _SwitchInfo; }
@@ -48,7 +47,7 @@ namespace Jvedio.ViewModel
             }
         }
 
-        public VedioInfo _VedioInfo;
+        private VedioInfo _VedioInfo;
 
         public VedioInfo VedioInfo
         {
@@ -62,7 +61,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public DetailMovie detailmovie;
+        private DetailMovie detailmovie;
 
         public DetailMovie DetailMovie
         {
@@ -132,7 +131,7 @@ namespace Jvedio.ViewModel
             DetailMovie = new DetailMovie();
             if (detailMovie != null)
             {
-                detailMovie.bigimage = StaticClass.GetBitmapImage(detailMovie.id, "BigPic");
+                detailMovie.bigimage = ImageProcess.GetBitmapImage(detailMovie.id, "BigPic");
                 DB db = new DB("Translate");
                 //加载翻译结果
                 if (Properties.Settings.Default.TitleShowTranslate)
@@ -161,20 +160,5 @@ namespace Jvedio.ViewModel
         }
     }
 
-    public static class MyExtensions
-    {
-        public static IEnumerable<string> CustomSort(this IEnumerable<string> list)
-        {
-            int maxLen = list.Select(s => s.Length).Max();
 
-            return list.Select(s => new
-            {
-                OrgStr = s,
-                SortStr = Regex.Replace(s, @"(\d+)|(\D+)", m => m.Value.PadLeft(maxLen, char.IsDigit(m.Value[0]) ? ' ' : '\xffff'))
-            })
-            .OrderBy(x => x.SortStr)
-            .Select(x => x.OrgStr);
-        }
-
-    }
 }

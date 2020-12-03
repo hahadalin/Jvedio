@@ -9,8 +9,8 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 using System.IO;
-using static Jvedio.StaticVariable;
-using static Jvedio.StaticClass;
+using static Jvedio.GlobalVariable;
+using static Jvedio.FileProcess;
 
 namespace Jvedio.ViewModel
 {

@@ -196,7 +196,7 @@ namespace Jvedio
             //http://api.fanyi.baidu.com/doc/21
             //appid+q+salt+密钥 
             string r = appid + query + salt + pwd;
-            return StaticClass.CalculateMD5Hash(r);
+            return FileProcess.CalculateMD5Hash(r);
         }
 
 

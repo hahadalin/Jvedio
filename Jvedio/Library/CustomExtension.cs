@@ -14,12 +14,92 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
     public static class CustomExtension
     {
+
+        public static string ToSqlString(this Sort sort)
+        {
+            string result;
+            if (sort == Sort.识别码)
+            {
+                result = "id";
+            }
+            else if (sort == Sort.文件大小)
+            {
+                result = "filesize";
+            }
+            else if (sort == Sort.导入时间)
+            {
+                result = "otherinfo";
+            }
+            else if (sort == Sort.创建时间)
+            {
+                result = "scandate";
+            }
+            else if (sort == Sort.喜爱程度)
+            {
+                result = "favorites";
+            }
+            else if (sort == Sort.名称)
+            {
+                result = "title";
+            }
+            else if (sort == Sort.访问次数)
+            {
+                result = "visits";
+            }
+            else if (sort == Sort.发行日期)
+            {
+                result = "releasedate";
+            }
+            else if (sort == Sort.评分)
+            {
+                result = "rating";
+            }
+            else if (sort == Sort.时长)
+            {
+                result = "runtime";
+            }
+            else if (sort == Sort.演员)
+            {
+                result = "actor";
+            }
+            else
+            {
+                result = "id";
+            }
+
+            return result;
+
+
+        }
+
+
+
+
+        /// <summary>
+        /// 根据文件的实际数字大小排序而不是 1,10,100,1000
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> CustomSort(this IEnumerable<string> list)
+        {
+            int maxLen = list.Select(s => s.Length).Max();
+
+            return list.Select(s => new
+            {
+                OrgStr = s,
+                SortStr = Regex.Replace(s, @"(\d+)|(\D+)", m => m.Value.PadLeft(maxLen, char.IsDigit(m.Value[0]) ? ' ' : '\xffff'))
+            })
+            .OrderBy(x => x.SortStr)
+            .Select(x => x.OrgStr);
+        }
+
+        
         public static string ToJav321(this string ID)
         {
             ID = ID.ToUpper();
@@ -32,6 +112,15 @@ namespace Jvedio
         public static string ToProperSql(this string sql)
         {
             return sql.Replace(" ", "").Replace("%", "").Replace("'", "").ToUpper();
+        }
+
+        public static string ToProperUrl(this string url)
+        {
+            url = url.ToLower();
+            if (string.IsNullOrEmpty(url)) return "";
+            if (url.IndexOf("http") < 0) url = "https://" + url;
+            if (!url.EndsWith("/")) url += "/";
+            return url;
         }
 
 
@@ -127,7 +216,7 @@ namespace Jvedio
             }
 
             //替换掉特殊字符
-            foreach (char item in StaticVariable.BANFILECHAR) { newName = newName.Replace(item.ToString(), ""); }
+            foreach (char item in GlobalVariable.BANFILECHAR) { newName = newName.Replace(item.ToString(), ""); }
 
             if (Properties.Settings.Default.DelRenameTitleSpace) newName = newName.Replace(" ", "");
             if (movie.hassubsection)

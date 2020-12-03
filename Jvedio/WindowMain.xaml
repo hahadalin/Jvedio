@@ -1971,9 +1971,9 @@
                                                     </DataTemplate.Triggers>
 
                                                     <WrapPanel  x:Name="MovieWrapPanel"  >
-
-                                                        <Border MinWidth="200" x:Name="MovieBorder"   CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"  MouseEnter="BorderMouseEnter" MouseLeave="BorderMouseLeave"  >
-                                                            <StackPanel Style="{StaticResource ViewStackPanel}" Margin="5"  >
+                                                        <Grid>
+                                                            <Border MinWidth="200" x:Name="MovieBorder"   CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"  MouseEnter="BorderMouseEnter" MouseLeave="BorderMouseLeave"  >
+                                                                <StackPanel Style="{StaticResource ViewStackPanel}" Margin="5"  >
                                                                 <StackPanel.ContextMenu>
                                                                     <ContextMenu  PreviewKeyUp="ContextMenu_PreviewKeyUp">
                                                                         <MenuItem Header="立即同步(S)" Click="DownLoadSelectMovie"   ></MenuItem>
@@ -2159,8 +2159,10 @@
 
 
                                                             </StackPanel>
+                                                            
+                                                            
                                                         </Border>
-
+                                                        </Grid>
                                                     </WrapPanel>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>

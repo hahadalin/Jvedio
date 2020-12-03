@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {

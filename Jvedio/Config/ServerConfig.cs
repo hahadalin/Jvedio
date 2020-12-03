@@ -6,10 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
+    /// <summary>
+    /// 保存服务器配置到XML文件
+    /// </summary>
     public class ServerConfig
     {
 
@@ -19,7 +22,7 @@ namespace Jvedio
 
         public ServerConfig(string website)
         {
-            Enum.TryParse<WebSite>(website, out WebSite);
+            Enum.TryParse(website, out WebSite);
         }
 
         public bool InitXML()
@@ -55,7 +58,7 @@ namespace Jvedio
                     XmlDoc.AppendChild(xm);
                 }
                 XmlElement rootElement = XmlDoc.DocumentElement;
-                XmlNode node = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']");
+                XmlNode node = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']");
                 if (node == null)
                 {
                     //不存在该节点
@@ -75,9 +78,9 @@ namespace Jvedio
                 }
                 else
                 {
-                    XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']/Url");
-                    XmlNode x2 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']/ServerName");
-                    XmlNode x3 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']/LastRefreshDate");
+                    XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/Url");
+                    XmlNode x2 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/ServerName");
+                    XmlNode x3 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/LastRefreshDate");
 
                     if (x1 == null)
                     {
@@ -116,9 +119,9 @@ namespace Jvedio
             InitXML();
             XmlDocument XmlDoc = new XmlDocument();
             XmlDoc.Load(filepath);
-            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']/Url");
-            XmlNode x2 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']/ServerName");
-            XmlNode x3 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']/LastRefreshDate");
+            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/Url");
+            XmlNode x2 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/ServerName");
+            XmlNode x3 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/LastRefreshDate");
             if (x1 != null) x1.InnerText = Infos["Url"];
             if (x2 != null) x2.InnerText = Infos["ServerName"];
             if (x3 != null) x3.InnerText = Infos["LastRefreshDate"];
@@ -137,9 +140,9 @@ namespace Jvedio
             XmlDocument XmlDoc = new XmlDocument();
             XmlDoc.Load(filepath);
 
-            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']/Url");
-            XmlNode x2 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']/ServerName");
-            XmlNode x3 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']/LastRefreshDate");
+            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/Url");
+            XmlNode x2 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/ServerName");
+            XmlNode x3 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/LastRefreshDate");
 
             if (x1 != null) result.Add( x1.InnerText) ;
             if (x2 != null)  result.Add(x2.InnerText);
@@ -153,7 +156,7 @@ namespace Jvedio
 
             XmlDocument XmlDoc = new XmlDocument();
             XmlDoc.Load(filepath);
-            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite.ToString()}']");
+            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']");
             XmlElement root = XmlDoc.DocumentElement;
             if (x1 != null) root.RemoveChild(x1);
             XmlDoc.Save(filepath);

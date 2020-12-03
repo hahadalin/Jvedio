@@ -7,10 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
+
+    /// <summary>
+    /// 使用XML 文件存储最近观看的影片
+    /// </summary>
     public class RecentWatchedConfig
     {
 
@@ -81,7 +85,6 @@ namespace Jvedio
 
         public void Save(List<string> IDs)
         {
-            
             InitXML();
             XmlDocument XmlDoc = new XmlDocument();
             XmlDoc.Load(filepath);
@@ -125,8 +128,6 @@ namespace Jvedio
             if (!File.Exists(filepath)) InitXML();
             XmlDocument XmlDoc = new XmlDocument();
             XmlDoc.Load(filepath);
-
-
             XmlNodeList dateNodes = XmlDoc.SelectNodes($"/RecentWatch/Date");
             
             if (dateNodes != null && dateNodes.Count > 0)
@@ -150,12 +151,25 @@ namespace Jvedio
                         }
 
                     }
-
-
-                    
                 }
             }
             return result;
+        }
+
+        public void Remove(DateTime dateTime)
+        {
+            InitXML();
+            XmlDocument XmlDoc = new XmlDocument();
+            XmlDoc.Load(filepath);
+
+            XmlNode root = XmlDoc.SelectSingleNode($"/RecentWatch");
+            XmlNode node = XmlDoc.SelectSingleNode($"/RecentWatch/Date[@Name='{dateTime.ToString("yyyy-MM-dd")}']");
+            if (root != null && node!=null)
+            {
+                root.RemoveChild(node);
+            }
+
+            XmlDoc.Save(filepath);
         }
 
 

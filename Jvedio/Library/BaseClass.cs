@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
@@ -247,6 +247,7 @@ namespace Jvedio
                 DateTime dateTime = new DateTime(1900, 01, 01);
                 if (DateTime.TryParse(value, out dateTime)) _birthday = dateTime.ToString("yyyy-MM-dd");
                 else _birthday = "";
+                OnPropertyChanged();
             }
         }
 
@@ -256,10 +257,10 @@ namespace Jvedio
             get { return _age; }
             set
             {
-                int a = 0;
-                int.TryParse(value.ToString(), out a);
+                int.TryParse(value.ToString(), out int a);
                 if (a < 0 || a > 200) a = 0;
                 _age = a;
+                OnPropertyChanged();
             }
         }
 
@@ -269,17 +270,21 @@ namespace Jvedio
             get { return _height; }
             set
             {
-                int a = 0;
-                int.TryParse(value.ToString(), out a);
+                int.TryParse(value.ToString(), out int a);
                 if (a < 0 || a > 300) a = 0;
                 _height = a;
+                OnPropertyChanged();
             }
         }
 
         private string _cup;
         public string cup { get { return _cup; } set { 
-                if (string.IsNullOrEmpty( value )) _cup = ""; 
-                else _cup = value[0].ToString().ToUpper(); } 
+                if (string.IsNullOrEmpty( value )) 
+                    _cup = ""; 
+                else 
+                    _cup = value[0].ToString().ToUpper(); 
+                OnPropertyChanged();
+            } 
         }
 
 
@@ -289,10 +294,10 @@ namespace Jvedio
             get { return _hipline; }
             set
             {
-                int a = 0;
-                int.TryParse(value.ToString(), out a);
+                int.TryParse(value.ToString(), out int a);
                 if (a < 0 || a > 500) a = 0;
                 _hipline = a;
+                OnPropertyChanged();
             }
         }
 
@@ -303,10 +308,10 @@ namespace Jvedio
             get { return _waist; }
             set
             {
-                int a = 0;
-                int.TryParse(value.ToString(), out a);
+                int.TryParse(value.ToString(), out int a);
                 if (a < 0 || a > 500) a = 0;
                 _waist = a;
+                OnPropertyChanged();
             }
         }
 
@@ -317,8 +322,7 @@ namespace Jvedio
             get { return _chest; }
             set
             {
-                int a = 0;
-                int.TryParse(value.ToString(), out a);
+                int.TryParse(value.ToString(), out int a);
                 if (a < 0 || a > 500) a = 0;
                 _chest = a;
             }

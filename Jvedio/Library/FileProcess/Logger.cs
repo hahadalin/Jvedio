@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace Jvedio
 {
+  
+    /// <summary>
+    /// 日志记录静态类
+    /// </summary>
     public static class Logger
     {
         private static object NetWorkLock = new object();

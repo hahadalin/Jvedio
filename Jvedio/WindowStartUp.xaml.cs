@@ -9,8 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using static Jvedio.StaticClass;
-using static Jvedio.StaticVariable;
+using static Jvedio.FileProcess;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
@@ -116,17 +116,51 @@ namespace Jvedio
             this.Close();
         }
 
+        public void ClearDateBefore(DateTime dateTime)
+        {
+            RecentWatchedConfig recentWatchedConfig = new RecentWatchedConfig();
+            for (int i = 1; i < 60; i++)
+            {
+                DateTime date=dateTime.AddDays(-1 * i);
+                recentWatchedConfig.Remove(date);
+            }
+
+        }
+
+
+        public void ClearLogBefore(DateTime dateTime,string filepath)
+        {
+            if (!Directory.Exists(filepath)) return;
+            try
+            {
+                string[] files = Directory.GetFiles(filepath, "*.log", SearchOption.TopDirectoryOnly);
+                foreach (var file in files)
+                {
+                    DateTime.TryParse(file.Split('\\').Last().Replace(".log", ""), out DateTime date);
+                    if (date < dateTime) File.Delete(file);
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+
+        }
         private  void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
             statusText.Text = "更新配置文件……";
-            if (Properties.Settings.Default.UpgradeRequired)
+            try
             {
-                Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default.UpgradeRequired = false;
-                Properties.Settings.Default.Save();
+                if (Properties.Settings.Default.UpgradeRequired)
+                {
+                    Properties.Settings.Default.Upgrade();
+                    Properties.Settings.Default.UpgradeRequired = false;
+                    Properties.Settings.Default.Save();
+                }
             }
-
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
             statusText.Text = "修复设置错误……";
             CheckFile(); //判断文件是否存在
             CheckSettings();//修复设置错误
@@ -160,17 +194,24 @@ namespace Jvedio
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
+            statusText.Text = "清除超于10天的最近观看……";
+            ClearDateBefore(DateTime.Now.AddDays(-10));
+            statusText.Text = "清除超于10天的日志文件……";
+            ClearLogBefore(DateTime.Now.AddDays(-10),AppDomain.CurrentDomain.BaseDirectory + "log");
+            ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\NetWork");
+            ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\scanlog");
+            ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\file");
 
             statusText.Text = "网络配置初始化……";
             Net.Init();
 
             statusText.Text = "创建图片文件夹……";
-            if (!Directory.Exists(StaticVariable.BasePicPath + "ScreenShot\\")) { Directory.CreateDirectory(StaticVariable.BasePicPath + "ScreenShot\\"); }
-            if (!Directory.Exists(StaticVariable.BasePicPath + "SmallPic\\")) { Directory.CreateDirectory(StaticVariable.BasePicPath + "SmallPic\\"); }
-            if (!Directory.Exists(StaticVariable.BasePicPath + "BigPic\\")) { Directory.CreateDirectory(StaticVariable.BasePicPath + "BigPic\\"); }
-            if (!Directory.Exists(StaticVariable.BasePicPath + "ExtraPic\\")) { Directory.CreateDirectory(StaticVariable.BasePicPath + "ExtraPic\\"); }
-            if (!Directory.Exists(StaticVariable.BasePicPath + "Actresses\\")) { Directory.CreateDirectory(StaticVariable.BasePicPath + "Actresses\\"); }
-            if (!Directory.Exists(StaticVariable.BasePicPath + "Gif\\")) { Directory.CreateDirectory(StaticVariable.BasePicPath + "Gif\\"); }
+            if (!Directory.Exists(BasePicPath + "ScreenShot\\")) { Directory.CreateDirectory(BasePicPath + "ScreenShot\\"); }
+            if (!Directory.Exists(BasePicPath + "SmallPic\\")) { Directory.CreateDirectory(BasePicPath + "SmallPic\\"); }
+            if (!Directory.Exists(BasePicPath + "BigPic\\")) { Directory.CreateDirectory(BasePicPath + "BigPic\\"); }
+            if (!Directory.Exists(BasePicPath + "ExtraPic\\")) { Directory.CreateDirectory(BasePicPath + "ExtraPic\\"); }
+            if (!Directory.Exists(BasePicPath + "Actresses\\")) { Directory.CreateDirectory(BasePicPath + "Actresses\\"); }
+            if (!Directory.Exists(BasePicPath + "Gif\\")) { Directory.CreateDirectory(BasePicPath + "Gif\\"); }
 
 
             //默认打开某个数据库
@@ -223,9 +264,9 @@ namespace Jvedio
                 Properties.Settings.Default.Save();
             }
 
-            if (!Enum.IsDefined(typeof(StaticVariable.Language), Properties.Settings.Default.Language))
+            if (!Enum.IsDefined(typeof(Language), Properties.Settings.Default.Language))
             {
-                Properties.Settings.Default.Language = StaticVariable. Language.中文.ToString();
+                Properties.Settings.Default.Language = GlobalVariable.Language.中文.ToString();
                 Properties.Settings.Default.Save();
             }
 
@@ -256,10 +297,10 @@ namespace Jvedio
             if (!File.Exists(InfoDataBasePath))
             {
                 DB db = new DB("Info");
-                db.CreateTable(StaticVariable.SQLITETABLE_MOVIE);
-                db.CreateTable(StaticVariable.SQLITETABLE_ACTRESS);
-                db.CreateTable(StaticVariable.SQLITETABLE_LIBRARY);
-                db.CreateTable(StaticVariable.SQLITETABLE_JAVDB);
+                db.CreateTable(DataBase.SQLITETABLE_MOVIE);
+                db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
+                db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
+                db.CreateTable(DataBase.SQLITETABLE_JAVDB);
                 db.CloseDB();
             }
             else
@@ -268,10 +309,10 @@ namespace Jvedio
                 DB db = new DB("Info");
                 if (!db.IsTableExist("movie") || !db.IsTableExist("actress") || !db.IsTableExist("library") || !db.IsTableExist("javdb"))
                 {
-                    db.CreateTable(StaticVariable.SQLITETABLE_MOVIE);
-                    db.CreateTable(StaticVariable.SQLITETABLE_ACTRESS);
-                    db.CreateTable(StaticVariable.SQLITETABLE_LIBRARY);
-                    db.CreateTable(StaticVariable.SQLITETABLE_JAVDB);
+                    db.CreateTable(DataBase.SQLITETABLE_MOVIE);
+                    db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
+                    db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
+                    db.CreateTable(DataBase.SQLITETABLE_JAVDB);
                 }
                 db.CloseDB();
 
@@ -281,14 +322,14 @@ namespace Jvedio
             if (!File.Exists(AIDataBasePath))
             {
                 DB db = new DB("AI");
-                db.CreateTable(StaticVariable.SQLITETABLE_BAIDUAI);
+                db.CreateTable(DataBase.SQLITETABLE_BAIDUAI);
                 db.CloseDB();
             }
             else
             {
                 //是否具有表结构
                 DB db = new DB("AI");
-                if (!db.IsTableExist("baidu")) db.CreateTable(StaticVariable.SQLITETABLE_BAIDUAI);
+                if (!db.IsTableExist("baidu")) db.CreateTable(DataBase.SQLITETABLE_BAIDUAI);
                 db.CloseDB();
             }
 
@@ -296,16 +337,16 @@ namespace Jvedio
             if (!File.Exists(TranslateDataBasePath))
             {
                 DB db = new DB("Translate");
-                db.CreateTable(StaticVariable.SQLITETABLE_YOUDAO);
-                db.CreateTable(StaticVariable.SQLITETABLE_BAIDUTRANSLATE);
+                db.CreateTable(DataBase.SQLITETABLE_YOUDAO);
+                db.CreateTable(DataBase.SQLITETABLE_BAIDUTRANSLATE);
                 db.CloseDB();
             }
             else
             {
                 //是否具有表结构
                 DB db = new DB("Translate");
-                if (!db.IsTableExist("youdao")) db.CreateTable(StaticVariable.SQLITETABLE_YOUDAO);
-                if (!db.IsTableExist("baidu")) db.CreateTable(StaticVariable.SQLITETABLE_BAIDUTRANSLATE);
+                if (!db.IsTableExist("youdao")) db.CreateTable(DataBase.SQLITETABLE_YOUDAO);
+                if (!db.IsTableExist("baidu")) db.CreateTable(DataBase.SQLITETABLE_BAIDUTRANSLATE);
                 db.CloseDB();
             }
 
@@ -383,7 +424,7 @@ namespace Jvedio
                     string name = item.Split('\\').Last().Split('.').First().ToLower();
                     if (name == "info" || name == "新建视频库") return;
 
-                    if (!IsProPerSqlite(item)) continue;
+                    if (!DataBase.IsProPerSqlite(item)) continue;
 
 
 
@@ -502,10 +543,10 @@ namespace Jvedio
                 {
                 //新建
                 DB db = new DB("DataBase\\" + name);
-                db.CreateTable(StaticVariable.SQLITETABLE_MOVIE);
-                db.CreateTable(StaticVariable.SQLITETABLE_ACTRESS);
-                db.CreateTable(StaticVariable.SQLITETABLE_LIBRARY);
-                db.CreateTable(StaticVariable.SQLITETABLE_JAVDB);
+                db.CreateTable(DataBase.SQLITETABLE_MOVIE);
+                db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
+                db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
+                db.CreateTable(DataBase.SQLITETABLE_JAVDB);
                 
                 if (vieModel_StartUp.DataBases.Contains("新建视频库")) vieModel_StartUp.DataBases.Remove("新建视频库");
 

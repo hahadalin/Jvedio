@@ -17,10 +17,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using static Jvedio.StaticVariable;
-using static Jvedio.StaticClass;
-using System.Windows.Controls.Primitives;
-using System.Collections.ObjectModel;
+using static Jvedio.GlobalVariable;
+using static Jvedio.ImageProcess;
+using static Jvedio.FileProcess;
 
 namespace Jvedio
 {
@@ -88,7 +87,7 @@ namespace Jvedio
 
             string imagePath = BasePicPath + $"Actresses\\{textBlock.Text}.jpg";
             if (File.Exists(imagePath))
-                ActorImage.Source = StaticClass.GetBitmapImage(textBlock.Text, "Actresses");
+                ActorImage.Source = GetBitmapImage(textBlock.Text, "Actresses");
             else
                 ActorImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Resources/Picture/NoPrinting_A.png", UriKind.Relative));
 
@@ -101,7 +100,7 @@ namespace Jvedio
 
         public void DownLoad(object sender, RoutedEventArgs e)
         {
-            if (!IsServersProper())
+            if (!Net.IsServersProper())
             {
                 HandyControl.Controls.Growl.Error("请在设置【同步信息】中添加服务器源并启用！", "DetailsGrowl");
 
@@ -124,15 +123,12 @@ namespace Jvedio
 
         public async void GetScreenShot(object sender, RoutedEventArgs e)
         {
-
             if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { HandyControl.Controls.Growl.Info("请设置 ffmpeg.exe 的路径 ", "DetailsGrowl"); return; }
-            MenuItem mnu = ((MenuItem)(sender)).Parent as MenuItem;
-            StackPanel sp = null;
 
-            if (mnu != null)
+            if (((MenuItem)(sender)).Parent is MenuItem mnu)
             {
                 DetailMovie movie = vieModel.DetailMovie;
-                
+
                 if (!File.Exists(movie.filepath)) { HandyControl.Controls.Growl.Error("视频不存在", "DetailsGrowl"); return; }
 
                 bool success = false;
@@ -145,13 +141,15 @@ namespace Jvedio
                 App.Current.Dispatcher.Invoke((Action)delegate { imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist; });
 
                 ScreenShot screenShot = new ScreenShot();
-                screenShot.SingleScreenShotCompleted += (s, ev) => {
-                    App.Current.Dispatcher.Invoke((Action)delegate {
+                screenShot.SingleScreenShotCompleted += (s, ev) =>
+                {
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
                         if (Path.GetDirectoryName(((ScreenShotEventArgs)ev).FilePath).Split('\\').Last().ToUpper() != vieModel.DetailMovie.id) return;
                         vieModel.DetailMovie.extraimagePath.Add(((ScreenShotEventArgs)ev).FilePath);
-                        vieModel.DetailMovie.extraimagelist.Add(StaticClass.GetExtraImage(((ScreenShotEventArgs)ev).FilePath));
+                        vieModel.DetailMovie.extraimagelist.Add(GetExtraImage(((ScreenShotEventArgs)ev).FilePath));
                         imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist;
-                        if (vieModel.DetailMovie.extraimagelist.Count==1) SetImage(0);
+                        if (vieModel.DetailMovie.extraimagelist.Count == 1) SetImage(0);
                     });
                 };
                 (success, message) = await screenShot.AsyncScreenShot(movie);
@@ -159,7 +157,7 @@ namespace Jvedio
                 if (success) HandyControl.Controls.Growl.Success("成功生成截图！", "DetailsGrowl");
                 else HandyControl.Controls.Growl.Error(message, "DetailsGrowl");
             }
-           
+
 
         }
 
@@ -249,7 +247,7 @@ namespace Jvedio
         {
             List<string> urlList = new List<string>();
             foreach (var item in vieModel.DetailMovie.extraimageurl?.Split(';')) { if (!string.IsNullOrEmpty(item)) urlList.Add(item); }
-            if (vieModel.DetailMovie.extraimagelist.Count >= urlList.Count & vieModel.DetailMovie.bigimage != null & vieModel.DetailMovie.title != "") return;
+            if (vieModel.DetailMovie.extraimagelist.Count-1 >= urlList.Count && vieModel.DetailMovie.bigimage != null && vieModel.DetailMovie.title != "") return;
 
 
 
@@ -802,9 +800,7 @@ namespace Jvedio
             try
             {
                 MenuItem _mnu = sender as MenuItem;
-                MenuItem mnu = _mnu.Parent as MenuItem;
-                StackPanel sp = null;
-                if (mnu != null)
+                if (_mnu.Parent is MenuItem mnu)
                 {
                     DetailMovie detailMovie = vieModel.DetailMovie;
                     int index = mnu.Items.IndexOf(_mnu);
@@ -913,9 +909,8 @@ namespace Jvedio
             try
             {
                 MenuItem _mnu = sender as MenuItem;
-                MenuItem mnu = _mnu.Parent as MenuItem;
                 DetailMovie detailMovie = vieModel.DetailMovie;
-                if (mnu != null)
+                if (_mnu.Parent is MenuItem mnu)
                 {
                     if (File.Exists(detailMovie.filepath)) { Process.Start("explorer.exe", "/select, \"" + detailMovie.filepath + "\""); }
                     else
@@ -1043,8 +1038,8 @@ namespace Jvedio
                         if (smallPicPath != "") movie.bigimage = null;
                         if (BigPicPath != "") movie.smallimage = null;
                         windowMain.vieModel.CurrentMovieList[i] = null;
-                        if (smallPicPath != "") movie.smallimage = StaticClass.BitmapImageFromFile(smallPicPath);
-                        if (BigPicPath != "") movie.bigimage = StaticClass.BitmapImageFromFile(BigPicPath);
+                        if (smallPicPath != "") movie.smallimage =BitmapImageFromFile(smallPicPath);
+                        if (BigPicPath != "") movie.bigimage = BitmapImageFromFile(BigPicPath);
 
                         if (movie.bigimage == null && bigimage != null) movie.bigimage = bigimage;
                         if (movie.smallimage == null && smallimage != null) movie.smallimage = smallimage;
@@ -1090,8 +1085,7 @@ namespace Jvedio
             string filepath = vieModel.DetailMovie.filepath;
             if (File.Exists(filepath))
             {
-                StringCollection paths = new StringCollection();
-                paths.Add(filepath);
+                StringCollection paths = new StringCollection { filepath };
                 try
                 {
                     Clipboard.SetFileDropList(paths);
@@ -1250,7 +1244,6 @@ namespace Jvedio
         {
             if (!Properties.Settings.Default.Enable_TL_BAIDU & !Properties.Settings.Default.Enable_TL_YOUDAO) { HandyControl.Controls.Growl.Warning("请设置【有道翻译】并测试", "DetailsGrowl"); return; }
             MenuItem mnu = ((MenuItem)(sender)).Parent as MenuItem;
-            StackPanel sp = null;
             if (mnu != null)
             {
 
@@ -1332,7 +1325,7 @@ namespace Jvedio
                             }
                             catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl"); }
 
-                            movie.smallimage = StaticClass.GetBitmapImage(movie.id, "SmallPic");
+                            movie.smallimage = GetBitmapImage(movie.id, "SmallPic");
                             UpdateInfo(movie);
                         HandyControl.Controls.Growl.Info($"成功切割缩略图", "DetailsGrowl");
                     }
@@ -1359,44 +1352,42 @@ namespace Jvedio
         {
             if (!Properties.Settings.Default.Enable_BaiduAI) { HandyControl.Controls.Growl.Info("请设置【百度 AI】并测试", "DetailsGrowl"); return; }
             MenuItem _mnu = sender as MenuItem;
-            MenuItem mnu = _mnu.Parent as MenuItem;
-            StackPanel sp = null;
-            if (mnu != null)
+            if (_mnu.Parent is MenuItem mnu)
             {
 
                 DetailMovie movie = vieModel.DetailMovie;
 
-                
 
-                    if (movie.actor == "") { HandyControl.Controls.Growl.Error("该影片无演员", "DetailsGrowl"); return; }
-                    string BigPicPath = Properties.Settings.Default.BasePicPath + $"BigPic\\{movie.id}.jpg";
-                    string name = movie.actor.Split(actorSplitDict[movie.vediotype])[0];
+
+                if (movie.actor == "") { HandyControl.Controls.Growl.Error("该影片无演员", "DetailsGrowl"); return; }
+                string BigPicPath = Properties.Settings.Default.BasePicPath + $"BigPic\\{movie.id}.jpg";
+                string name = movie.actor.Split(actorSplitDict[movie.vediotype])[0];
                 this.Cursor = Cursors.Wait;
                 string ActressesPicPath = Properties.Settings.Default.BasePicPath + $"Actresses\\{name}.jpg";
-                    if (File.Exists(BigPicPath))
+                if (File.Exists(BigPicPath))
+                {
+                    Int32Rect int32Rect = await FaceDetect.GetAIResult(movie, BigPicPath);
+                    if (int32Rect != Int32Rect.Empty)
                     {
-                        Int32Rect int32Rect = await FaceDetect.GetAIResult(movie, BigPicPath);
-                        if (int32Rect != Int32Rect.Empty)
-                        {
-                            await Task.Delay(500);
-                            //切割演员头像
-                            System.Drawing.Bitmap SourceBitmap = new System.Drawing.Bitmap(BigPicPath);
-                            BitmapImage bitmapImage = ImageProcess.BitmapToBitmapImage(SourceBitmap);
-                            ImageSource actressImage = ImageProcess.CutImage(bitmapImage, ImageProcess.GetActressRect(bitmapImage, int32Rect));
-                            System.Drawing.Bitmap bitmap = ImageProcess.ImageSourceToBitmap(actressImage);
-                            try { bitmap.Save(ActressesPicPath, System.Drawing.Imaging.ImageFormat.Jpeg); }
-                            catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl"); }
+                        await Task.Delay(500);
+                        //切割演员头像
+                        System.Drawing.Bitmap SourceBitmap = new System.Drawing.Bitmap(BigPicPath);
+                        BitmapImage bitmapImage = ImageProcess.BitmapToBitmapImage(SourceBitmap);
+                        ImageSource actressImage = ImageProcess.CutImage(bitmapImage, ImageProcess.GetActressRect(bitmapImage, int32Rect));
+                        System.Drawing.Bitmap bitmap = ImageProcess.ImageSourceToBitmap(actressImage);
+                        try { bitmap.Save(ActressesPicPath, System.Drawing.Imaging.ImageFormat.Jpeg); }
+                        catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl"); }
                         HandyControl.Controls.Growl.Info($"成功切割【{name}】头像", "DetailsGrowl");
                     }
                     else
                     {
                         HandyControl.Controls.Growl.Warning($"失败：人工智能识别失败！", "DetailsGrowl");
                     }
-                    }
-                    else
-                    {
-                        HandyControl.Controls.Growl.Error($"海报图必须存在才能切割！", "DetailsGrowl");
-                    }
+                }
+                else
+                {
+                    HandyControl.Controls.Growl.Error($"海报图必须存在才能切割！", "DetailsGrowl");
+                }
 
             }
             this.Cursor = Cursors.Arrow;
@@ -1440,26 +1431,6 @@ namespace Jvedio
 
         }
 
-
-
-        private void RefreshMain(string movieid)
-        {
-            foreach (Window window in App.Current.Windows)
-            {
-                if (window.GetType().Name == "Main") { windowMain = (Main)window; break; }
-            }
-            if (windowMain != null)
-            {
-                for (int i = 0; i < windowMain.vieModel.CurrentMovieList.Count; i++)
-                {
-                    if (windowMain.vieModel.CurrentMovieList[i].id == movieid)
-                    {
-                        windowMain.vieModel.CurrentMovieList[i] = (Movie)vieModel.DetailMovie;
-                        break;
-                    }
-                }
-            }
-        }
 
 
 
@@ -1556,7 +1527,7 @@ namespace Jvedio
             string[] dragdropFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             string file = dragdropFiles[0];
 
-            if (StaticClass.IsFile(file))
+            if (IsFile(file))
             {
                 FileInfo fileInfo = new FileInfo(file);
                 if (fileInfo.Extension.ToLower() == ".jpg")
@@ -1566,7 +1537,7 @@ namespace Jvedio
                         File.Copy(fileInfo.FullName, BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg", true);
                         DetailMovie detailMovie = vieModel.DetailMovie;
                         detailMovie.bigimage = null;
-                        detailMovie.bigimage = StaticClass.BitmapImageFromFile(fileInfo.FullName);
+                        detailMovie.bigimage =BitmapImageFromFile(fileInfo.FullName);
 
                         if (vieModel.DetailMovie.extraimagelist.Count > 0)
                         {
@@ -1665,7 +1636,7 @@ namespace Jvedio
 
                 foreach (var item in filepaths)
                 {
-                    detailMovie.extraimagelist.Add(StaticClass.GetExtraImage(item));
+                    detailMovie.extraimagelist.Add(GetExtraImage(item));
                     detailMovie.extraimagePath.Add(path + item.Split('\\').Last());
                 }
 
@@ -1860,10 +1831,6 @@ namespace Jvedio
                 vieModel = new VieModel_Details();
                 vieModel.Query(MovieID);
                 this.DataContext = vieModel;
-                vieModel.QueryCompletedHandler += (s, ee) =>
-                {
-                    BigImage.Source = vieModel.DetailMovie.bigimage;
-                };
 
             }
             else { this.DataContext = null; }
@@ -1887,11 +1854,11 @@ namespace Jvedio
             //扫描预览图目录
             List<string> imagePathList = new List<string>();
             await Task.Run(() => { 
-                if (Directory.Exists(StaticVariable.BasePicPath + $"ExtraPic\\{vieModel.DetailMovie.id}\\"))
+                if (Directory.Exists(GlobalVariable.BasePicPath + $"ExtraPic\\{vieModel.DetailMovie.id}\\"))
                 {
                     try
                     {
-                        foreach (var path in Directory.GetFiles(StaticVariable.BasePicPath + $"ExtraPic\\{vieModel.DetailMovie.id}\\")) imagePathList.Add(path);
+                        foreach (var path in Directory.GetFiles(GlobalVariable.BasePicPath + $"ExtraPic\\{vieModel.DetailMovie.id}\\")) imagePathList.Add(path);
                     }
                     catch { }
                     if (imagePathList.Count > 0) imagePathList = imagePathList.CustomSort().ToList();
@@ -1902,7 +1869,7 @@ namespace Jvedio
             foreach (var path in imagePathList)
             {
                 if (Path.GetDirectoryName(path).Split('\\').Last().ToUpper() != vieModel.DetailMovie.id) break;
-                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraImageDelegate(LoadExtraImage), StaticClass.GetExtraImage(path));
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraImageDelegate(LoadExtraImage), GetExtraImage(path));
                 await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraPathDelegate(LoadExtraPath), path);
                  App.Current.Dispatcher.Invoke((Action)delegate { imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist; });
             }
@@ -1919,11 +1886,11 @@ namespace Jvedio
             //扫描截图目录
             List<string> imagePathList = new List<string>();
             await Task.Run(() => {
-                if (Directory.Exists(StaticVariable.BasePicPath + $"ScreenShot\\{vieModel.DetailMovie.id}\\"))
+                if (Directory.Exists(GlobalVariable.BasePicPath + $"ScreenShot\\{vieModel.DetailMovie.id}\\"))
                 {
                     try
                     {
-                        foreach (var path in Directory.GetFiles(StaticVariable.BasePicPath + $"ScreenShot\\{vieModel.DetailMovie.id}\\")) imagePathList.Add(path);
+                        foreach (var path in Directory.GetFiles(GlobalVariable.BasePicPath + $"ScreenShot\\{vieModel.DetailMovie.id}\\")) imagePathList.Add(path);
                     }
                     catch { }
                     if (imagePathList.Count > 0) imagePathList = imagePathList.CustomSort().ToList();
@@ -1934,7 +1901,7 @@ namespace Jvedio
             foreach (var path in imagePathList)
             {
                 if (Path.GetDirectoryName(path).Split('\\').Last().ToUpper() != vieModel.DetailMovie.id) break;
-                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraImageDelegate(LoadExtraImage), StaticClass.GetExtraImage(path));
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraImageDelegate(LoadExtraImage), GetExtraImage(path));
                 await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraPathDelegate(LoadExtraPath), path);
                 App.Current.Dispatcher.Invoke((Action)delegate { imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist; });
             }
@@ -2016,7 +1983,7 @@ namespace Jvedio
         {
             IsDownLoading = true;
             //下载信息
-            if (IsToDownLoadInfo(DetailMovie))
+            if (Net.IsToDownLoadInfo(DetailMovie))
             {
                 bool success; string resultMessage;
                 (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet((Movie)DetailMovie); });

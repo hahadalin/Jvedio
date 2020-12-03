@@ -7,10 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
+
+    /// <summary>
+    /// 数据库扫描路径
+    /// </summary>
     public class ScanPathConfig
     {
 

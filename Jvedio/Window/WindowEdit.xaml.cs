@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using static Jvedio.StaticClass;
+using static Jvedio.FileProcess;
 
 namespace Jvedio
 {
@@ -46,6 +46,7 @@ namespace Jvedio
             OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                if (vieModel.DetailMovie == null) vieModel.DetailMovie = new DetailMovie();
                 SaveInfo(OpenFileDialog1.FileName);
             }
             
@@ -113,7 +114,7 @@ namespace Jvedio
             }
         }
 
-        private async void UpdateMain()
+        private  void UpdateMain()
         {
             Main main = App.Current.Windows[0] as Main;
 
@@ -131,8 +132,8 @@ namespace Jvedio
                         }
                         else
                         {
-                            movie.smallimage = StaticClass.GetBitmapImage(movie.id, "SmallPic");
-                            movie.bigimage = StaticClass.GetBitmapImage(movie.id, "BigPic");
+                            movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
+                            movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
                         }
                         main.vieModel.CurrentMovieList[i] = null;
                         main.vieModel.CurrentMovieList[i] = movie;
@@ -157,8 +158,8 @@ namespace Jvedio
                         }
                         else
                         {
-                            movie.smallimage = StaticClass.GetBitmapImage(movie.id, "SmallPic");
-                            movie.bigimage = StaticClass.GetBitmapImage(movie.id, "BigPic");
+                            movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
+                            movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
                         }
                         main.vieModel.MovieList[i] = null;
                         main.vieModel.MovieList[i] = movie;
@@ -270,6 +271,7 @@ namespace Jvedio
 
         private void SaveInfo(string filepath)
         {
+            if (vieModel.DetailMovie == null) return;
             if (!string.IsNullOrEmpty(vieModel.DetailMovie.id))
             {
                 //视频类型、文件大小、创建时间
@@ -309,8 +311,7 @@ namespace Jvedio
             if (value == null) return "0 GB";
 
             //保留2位小数
-            double filesize = 0;
-            double.TryParse(value.ToString(), out filesize);
+            double.TryParse(value.ToString(), out double filesize);
 
             filesize = filesize / 1024 / 1024 / 1024;//GB
             if (filesize >= 0.9)

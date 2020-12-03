@@ -13,7 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using static Jvedio.StaticClass;
+using static Jvedio.FileProcess;
 
 namespace Jvedio
 {
@@ -245,10 +245,10 @@ namespace Jvedio
 
 
                 DB db = new DB("DataBase\\" + name);
-                db.CreateTable(StaticVariable.SQLITETABLE_MOVIE);
-                db.CreateTable(StaticVariable.SQLITETABLE_ACTRESS);
-                db.CreateTable(StaticVariable.SQLITETABLE_LIBRARY);
-                db.CreateTable(StaticVariable.SQLITETABLE_JAVDB);
+                db.CreateTable(DataBase.SQLITETABLE_MOVIE);
+                db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
+                db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
+                db.CreateTable(DataBase.SQLITETABLE_JAVDB);
 
 
                 vieModel_DBManagement.DataBases.Add(name);
@@ -278,7 +278,7 @@ namespace Jvedio
                     string name = item.Split('\\').Last().Split('.').First().ToLower();
                     if (name == "info") continue;
 
-                    if (!IsProPerSqlite(item)) continue;
+                    if (!DataBase.IsProPerSqlite(item)) continue;
 
                     if (File.Exists($"DataBase\\{name}.sqlite"))
                     {
@@ -361,7 +361,7 @@ namespace Jvedio
             {
                 //重置信息
                 db.DeleteTable("movie");
-                db.CreateTable(StaticVariable.SQLITETABLE_MOVIE);
+                db.CreateTable(DataBase.SQLITETABLE_MOVIE);
                 HandyControl.Controls.Growl.Success("成功重置信息", "DBManageGrowl");
             }
 

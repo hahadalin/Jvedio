@@ -48,8 +48,7 @@ namespace Jvedio.ViewModel
 
         public void Refresh(string filepath)
         {
-            DetailMovie models = new DetailMovie();
-            models.filepath = filepath;
+            DetailMovie models = new DetailMovie { filepath = filepath };
             FileInfo fileInfo = new FileInfo(filepath);
 
             //获取创建日期

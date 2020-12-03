@@ -14,9 +14,8 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using static Jvedio.StaticVariable;
-using static Jvedio.StaticClass;
-using System.Data;
+using static Jvedio.GlobalVariable;
+using static Jvedio.FileProcess;
 using System.Windows.Controls.Primitives;
 using FontAwesome.WPF;
 using System.ComponentModel;
@@ -253,7 +252,7 @@ namespace Jvedio
                 if (vieModel_Settings.ScanPath == null) { vieModel_Settings.ScanPath = new ObservableCollection<string>(); }
                 if (!vieModel_Settings.ScanPath.Contains(folderBrowserDialog.SelectedPath)) { vieModel_Settings.ScanPath.Add(folderBrowserDialog.SelectedPath); }
                 //保存
-                Jvedio.StaticClass.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath?.ToList());
+                FileProcess.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath?.ToList());
             }
 
 
@@ -609,7 +608,7 @@ namespace Jvedio
 
             ////UpdateServersEnable();
 
-            StaticVariable.InitVariable();
+            GlobalVariable.InitVariable();
             Scan.InitSearchPattern();
             Net.Init();
             HandyControl.Controls.Growl.Success("保存成功", "SettingsGrowl");
@@ -794,7 +793,7 @@ namespace Jvedio
 
             }
             //保存
-            Jvedio.StaticClass.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath.ToList());
+            FileProcess.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath.ToList());
 
         }
 

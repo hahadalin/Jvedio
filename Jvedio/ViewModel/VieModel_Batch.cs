@@ -9,19 +9,14 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 using System.IO;
-using static Jvedio.StaticVariable;
-using static Jvedio.StaticClass;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio.ViewModel
 {
     public class VieModel_Batch : ViewModelBase
     {
 
-        public VieModel_Batch()
-        {
 
-
-        }
 
 
         /// <summary>
@@ -31,24 +26,22 @@ namespace Jvedio.ViewModel
         /// <returns></returns>
         private bool IsToDownload(Movie movie)
         {
-            if (movie.title == "" || movie.smallimageurl=="" || movie.bigimageurl=="" || movie.extraimageurl=="")
+            if (Net.IsToDownLoadInfo(movie) || movie.extraimageurl=="")
                 return true;
             else
             {
                 //判断预览图个数
                 List<string> extraImageList = new List<string>();
-
-                
                 if (!string.IsNullOrEmpty(movie.extraimageurl) && movie.extraimageurl.IndexOf(";") > 0)
                 {
                     //预览图地址不为空
-                    extraImageList = movie.extraimageurl.Split(';').ToList().Where(arg => !string.IsNullOrEmpty(arg) && arg.IndexOf("http") >= 0 && arg.IndexOf("dmm") >= 0).ToList();
+                    extraImageList = movie.extraimageurl.Split(';').ToList().Where(arg => !string.IsNullOrEmpty(arg) && arg.IndexOf("http") >= 0 && arg.IndexOf("dmm") >= 0)?.ToList(); 
+
                     int count = 0;
                     try
                     {
                         var files = Directory.GetFiles(BasePicPath + "ExtraPic\\" + movie.id + "\\", "*.*", SearchOption.TopDirectoryOnly);
-                        if (files != null) { count = files.Count(); }
-
+                        if (files != null)  count = files.Count(); 
                     } catch { }
 
                     if (extraImageList.Count > count)
@@ -83,15 +76,14 @@ namespace Jvedio.ViewModel
         {
             Movies = new ObservableCollection<string>();
             var movies = DataBase.SelectMoviesBySql("SELECT * FROM movie");
-            int idx = Properties.Settings.Default.BatchIndex;
+            int idx = Properties.Settings.Default.BatchIndex;//侧边栏哪个被选中了
 
             switch (idx)
             {
                 case 0:
                     if (Info_ForceDownload)
                     {
-                        movies.ForEach(arg => { Movies.Add(arg.id); });
-
+                        movies.ForEach(arg => Movies.Add(arg.id));
                     }
                     else
                     {
@@ -110,6 +102,7 @@ namespace Jvedio.ViewModel
                 case 1:
                     if (Gif_Skip)
                     {
+                        //跳过已截取的
                         string path = Properties.Settings.Default.BasePicPath + "Gif\\";
                         movies.ForEach(arg => { 
                             if(!File.Exists(path + arg.id + ".gif"))
@@ -166,10 +159,7 @@ namespace Jvedio.ViewModel
 
                     break;
             }
-
             callback.Invoke("完成");
-
-
         }
 
 
@@ -512,8 +502,6 @@ namespace Jvedio.ViewModel
 
 
         #endregion
-
-
 
 
         #region "Download"

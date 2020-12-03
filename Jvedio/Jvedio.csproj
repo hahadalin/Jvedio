@@ -212,23 +212,23 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Class\JvedioClass.cs" />
-    <Compile Include="Class\MediaParse.cs" />
+    <Compile Include="Library\BaseClass.cs" />
+    <Compile Include="Library\FileProcess\FileProcess.cs" />
+    <Compile Include="Library\ImageAndVedio\MediaParse.cs" />
     <Compile Include="Config\RecentWatchedConfig.cs" />
     <Compile Include="Config\ServerConfig.cs" />
     <Compile Include="Config\ScanPathConfig.cs" />
-    <Compile Include="Config\JvedioConfig.cs" />
     <Compile Include="Controls\WaitingPanel.xaml.cs">
       <DependentUpon>WaitingPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Library\CustomExtension.cs" />
     <Compile Include="Library\DB.cs" />
-    <Compile Include="Library\MediaInfo.cs" />
-    <Compile Include="Library\ImageProcess.cs" />
-    <Compile Include="Library\XML.cs" />
+    <Compile Include="Library\ImageAndVedio\MediaInfo.cs" />
+    <Compile Include="Library\ImageAndVedio\ImageProcess.cs" />
+    <Compile Include="Library\FileProcess\XML.cs" />
     <Compile Include="Window\Jvedio_BaseWindow.cs" />
-    <Compile Include="Class\MultiDownLoader.cs" />
-    <Compile Include="Library\Translate.cs" />
+    <Compile Include="Library\Net\MultiDownLoader.cs" />
+    <Compile Include="Library\Net\Translate.cs" />
     <Compile Include="Resource_IDData.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -243,16 +243,16 @@
     <Compile Include="Window\DialogInput.xaml.cs">
       <DependentUpon>DialogInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Class\DownLoader.cs" />
-    <Compile Include="Class\ImageSlide.cs" />
-    <Compile Include="Library\Crawler.cs" />
+    <Compile Include="Library\Net\DownLoader.cs" />
+    <Compile Include="Library\ImageAndVedio\ImageSlide.cs" />
+    <Compile Include="Library\Net\Crawler.cs" />
     <Compile Include="Library\DataBase.cs" />
-    <Compile Include="Library\Identify.cs" />
-    <Compile Include="Library\Logger.cs" />
-    <Compile Include="Library\Net.cs" />
-    <Compile Include="Library\NetParse.cs" />
-    <Compile Include="Library\NFO.cs" />
-    <Compile Include="Library\Scan.cs" />
+    <Compile Include="Library\FileProcess\Identify.cs" />
+    <Compile Include="Library\FileProcess\Logger.cs" />
+    <Compile Include="Library\Net\Net.cs" />
+    <Compile Include="Library\Net\NetParse.cs" />
+    <Compile Include="Library\FileProcess\NFO.cs" />
+    <Compile Include="Library\FileProcess\Scan.cs" />
     <Compile Include="Config\WindowConfig.cs" />
     <Compile Include="Window\PopupWindow.xaml.cs">
       <DependentUpon>PopupWindow.xaml</DependentUpon>
@@ -260,10 +260,8 @@
     <Compile Include="Window\Msgbox.xaml.cs">
       <DependentUpon>Msgbox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Class\StaticClass.cs" />
-    <Compile Include="Class\StaticVariable.cs" />
+    <Compile Include="Library\GlobalVariable.cs" />
     <Compile Include="ViewModel\VieModel_Details.cs" />
-    <Compile Include="ViewModel\VieMoel_DownLoad.cs" />
     <Compile Include="ViewModel\VieModel_Edit.cs" />
     <Compile Include="ViewModel\VieModel_ImageViewer.cs" />
     <Compile Include="ViewModel\VieModel_Main.cs" />
@@ -273,9 +271,6 @@
     <Compile Include="ViewModel\VieModel_Settings.cs" />
     <Compile Include="Window\WindowDetails.xaml.cs">
       <DependentUpon>WindowDetails.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Window\WindowDownLoad.xaml.cs">
-      <DependentUpon>WindowDownLoad.xaml</DependentUpon>
     </Compile>
     <Compile Include="Window\WindowEdit.xaml.cs">
       <DependentUpon>WindowEdit.xaml</DependentUpon>
@@ -396,10 +391,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window\WindowDownLoad.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Window\WindowEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -462,7 +453,6 @@
     <Resource Include="Resources\Picture\NoPrinting_B.gif" />
     <Resource Include="Resources\Skin\white\create.png" />
     <Resource Include="Resources\Skin\black\create.png" />
-    <None Include="Resources\jav321.zip" />
     <Resource Include="Resources\Gif\loading.gif" />
     <Resource Include="Resources\Picture\sort_up.png" />
     <Resource Include="Resources\Picture\sort_down.png" />
@@ -505,6 +495,7 @@
     <EmbeddedResource Include="Resource_IDData.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource_IDData.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource_String.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -513,7 +504,6 @@
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="Data\BusActress.sqlite" />
-    <Content Include="Data\git.txt" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -750,6 +740,7 @@
     <Content Include="Lib\MediaInfo.dll" />
     <Content Include="Lib\MediaInfoNET.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -770,7 +761,6 @@ XCOPY "$(ProjectDir)Data\BusActress.sqlite" "$(TargetDir)" /E /Y /i
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>XCOPY  "$(ProjectDir)bin\Debug"  "$(SolutionDir)ToGitee\public\File"    /E /Y /i
-XCOPY "$(ProjectDir)Data\git.txt" "$(SolutionDir)ToGitee" /E /Y /i</PostBuildEvent>
+    <PostBuildEvent>XCOPY  "$(ProjectDir)bin\Debug"  "$(SolutionDir)ToGitee\public\File"    /E /Y /i</PostBuildEvent>
   </PropertyGroup>
 </Project>

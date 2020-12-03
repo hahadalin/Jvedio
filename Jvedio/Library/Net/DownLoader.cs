@@ -1,10 +1,12 @@
-﻿using Jvedio.ViewModel;
+﻿using DynamicData.Annotations;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
@@ -99,7 +101,7 @@ namespace Jvedio
             bool success; string resultMessage;
             //下载信息
             State = DownLoadState.DownLoading;
-            if (StaticClass.IsToDownLoadInfo(movie))
+            if (Net.IsToDownLoadInfo(movie))
             {
                 //满足一定条件才下载信息
                 (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet(movie); });
@@ -137,9 +139,9 @@ namespace Jvedio
                     //if (!success1) MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {dm.id} 缩略图下载失败，原因：{message.ToStatusMessage()}"));
                 }
             }
-            dm.smallimage = StaticClass.GetBitmapImage(dm.id, "SmallPic");
+            dm.smallimage = ImageProcess.GetBitmapImage(dm.id, "SmallPic");
             InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State });//委托到主界面显示
-            dm.bigimage = StaticClass.GetBitmapImage(dm.id, "BigPic");
+            dm.bigimage = ImageProcess.GetBitmapImage(dm.id, "BigPic");
             lock (downLoadProgress.lockobject) downLoadProgress.value += 1;//完全下载完一个影片
             InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State,Success=true });//委托到主界面显示
             Task.Delay(DelayInvterval).Wait();//每个线程之间暂停
@@ -257,8 +259,8 @@ namespace Jvedio
                     imageBytes = await Task.Run(() => { return Net.DownLoadFile(url).filebytes; });
                     if (imageBytes != null)
                     {
-                        StaticClass.SaveImage(actress.name, imageBytes, ImageType.ActorImage, url);
-                        actress.smallimage = StaticClass.GetBitmapImage(actress.name, "Actresses");
+                        ImageProcess.SaveImage(actress.name, imageBytes, ImageType.ActorImage, url);
+                        actress.smallimage = ImageProcess.GetBitmapImage(actress.name, "Actresses");
                     }
 
                 }
@@ -292,5 +294,65 @@ namespace Jvedio
     {
         public double value;
         public double maximum;
+    }
+
+
+    public class DownLoadInfo : INotifyPropertyChanged
+    {
+        public string id { get; set; }
+        public double speed { get; set; }
+
+
+        private double _progressbarvalue = 0;
+        public double progressbarvalue
+        {
+
+
+            get { return _progressbarvalue; }
+
+            set
+            {
+                _progressbarvalue = value;
+                OnPropertyChanged();
+            }
+
+        }
+
+        private double _progress;
+
+
+
+        public double progress
+        {
+            get { return _progress; }
+            set
+            {
+                _progress = value;
+                progressbarvalue = (int)(value / maximum * 100);
+
+                OnPropertyChanged();
+            }
+        }
+        public double maximum { get; set; }
+
+        private DownLoadState _state;
+        public DownLoadState state
+        {
+            get { return _state; }
+            set
+            {
+                _state = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

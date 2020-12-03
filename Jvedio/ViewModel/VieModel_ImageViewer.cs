@@ -25,14 +25,14 @@ namespace Jvedio.ViewModel
             List<string> imagePathList = new List<string>();
             try
             {
-                foreach (var path in Directory.GetFiles(StaticVariable.BasePicPath + $"ExtraPic\\{models.id}\\")) imagePathList.Add(path);
+                foreach (var path in Directory.GetFiles(GlobalVariable.BasePicPath + $"ExtraPic\\{models.id}\\")) imagePathList.Add(path);
             }
             catch (Exception e) { Logger.LogE(e); }
             if (imagePathList.Count > 0) imagePathList = imagePathList.CustomSort().ToList();
             DetailMovie = new DetailMovie();
             if (models != null)
             {
-                foreach (var path in imagePathList) models.extraimagelist.Add(StaticClass.GetExtraImage(path));//加载预览图
+                foreach (var path in imagePathList) models.extraimagelist.Add(ImageProcess.GetExtraImage(path));//加载预览图
                 DetailMovie = models;
             }
         }

@@ -14,7 +14,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
@@ -30,10 +29,10 @@ namespace JvedioUpdate
         public Size WindowSize = new Size(500, 500);
         public int WinState = 1;
 
-        static string basepath = AppDomain.CurrentDomain.BaseDirectory;
-        string temppath = basepath + "Temp";
+        public static  string basepath = AppDomain.CurrentDomain.BaseDirectory;
+        public string temppath = basepath + "Temp";
 
-        Dictionary<string, string> filemd5 = new Dictionary<string, string>();
+        public Dictionary<string, string> filemd5 = new Dictionary<string, string>();
 
         public List<string> downloadlist = new List<string>();
 
@@ -329,7 +328,6 @@ namespace JvedioUpdate
         public byte[] GetFile(string URL, int TryNum = 2, WebProxy Proxy = null, string host = "", string setCookie = "")
         {
             byte[] imagebyte = null;
-            string cookies = setCookie;
             int num = 0;
             while (num < TryNum & imagebyte == null)
             {
@@ -443,6 +441,7 @@ namespace JvedioUpdate
                     }
                     catch (Exception e)
                     {
+                        Console.WriteLine(e.Message);
                         num = 2;
                     }
                     finally

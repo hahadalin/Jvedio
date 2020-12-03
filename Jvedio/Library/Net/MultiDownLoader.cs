@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
@@ -131,7 +131,7 @@ namespace Jvedio
                 bool dlimageSuccess ; string cookie = "";
                     for (int i = 0; i < extrapicurlList.Count(); i++)
                     {
-                    if (!File.Exists(StaticVariable.BasePicPath + $"Extrapic\\{movie.id.ToUpper()}\\{movie.id.ToUpper()}.jpg"))
+                    if (!File.Exists(GlobalVariable.BasePicPath + $"Extrapic\\{movie.id.ToUpper()}\\{movie.id.ToUpper()}.jpg"))
                     {
                         if (Cancel) return;
                         while (Pause & !Cancel) Task.Delay(300).Wait();
@@ -178,7 +178,7 @@ namespace Jvedio
 
         private Task<(bool, string)> DownLoadExtraPic(string id, string url, string cookies)
         {
-            string filepath = StaticVariable.BasePicPath + "ExtraPic\\" + id + "\\" + System.IO.Path.GetFileName(new Uri(url).LocalPath);
+            string filepath = GlobalVariable.BasePicPath + "ExtraPic\\" + id + "\\" + System.IO.Path.GetFileName(new Uri(url).LocalPath);
             if (!File.Exists(filepath))
             {
                 return Task.Run(() => {  return Net.DownLoadImage(url,ImageType.ExtraImage, id , Cookie: cookies); });
@@ -196,7 +196,7 @@ namespace Jvedio
         private Task<(bool, string)> DownLoadSmallPic(Movie dm)
         {
             //不存在才下载
-            if (!File.Exists(StaticVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg"))
+            if (!File.Exists(GlobalVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg"))
             {
                 
                 return Task.Run(() => {
@@ -212,7 +212,7 @@ namespace Jvedio
 
         private Task<(bool, string)> DownLoadBigPic(Movie dm)
         {
-            if (!File.Exists(StaticVariable.BasePicPath + $"BigPic\\{dm.id}.jpg"))
+            if (!File.Exists(GlobalVariable.BasePicPath + $"BigPic\\{dm.id}.jpg"))
             {
                 return Task.Run(() =>
                 {

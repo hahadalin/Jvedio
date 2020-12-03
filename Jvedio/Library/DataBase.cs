@@ -13,8 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using static Jvedio.StaticClass;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 //https://www.cnblogs.com/leemano/p/6578050.html
 
@@ -22,8 +21,22 @@ namespace Jvedio
 {
 
 
+    /// <summary>
+    /// 静态类的数据库
+    /// </summary>
     public static class DataBase
     {
+
+        //新建表 sqlite 语句
+        public static string SQLITETABLE_MOVIE = "create table if not exists movie (id VARCHAR(50) PRIMARY KEY , title TEXT , filesize DOUBLE DEFAULT 0 , filepath TEXT , subsection TEXT , vediotype INT , scandate VARCHAR(30) , releasedate VARCHAR(10) DEFAULT '1900-01-01', visits INT  DEFAULT 0, director VARCHAR(50) , genre TEXT , tag TEXT , actor TEXT , actorid TEXT ,studio VARCHAR(50) , rating FLOAT  DEFAULT 0, chinesetitle TEXT , favorites INT  DEFAULT 0, label TEXT , plot TEXT , outline TEXT , year INT  DEFAULT 1900, runtime INT  DEFAULT 0, country VARCHAR(50) , countrycode INT DEFAULT 0 ,otherinfo TEXT, sourceurl TEXT, source VARCHAR(10),actressimageurl TEXT,smallimageurl TEXT,bigimageurl TEXT,extraimageurl TEXT)";
+        public static string SQLITETABLE_ACTRESS = "create table if not exists actress ( id VARCHAR(50) PRIMARY KEY, name VARCHAR(50) ,birthday VARCHAR(10) ,age INT ,height INT ,cup VARCHAR(1), chest INT ,waist INT ,hipline INT ,birthplace VARCHAR(50) ,hobby TEXT, sourceurl TEXT, source VARCHAR(10),imageurl TEXT)";
+        public static string SQLITETABLE_LIBRARY = "create table if not exists library ( id VARCHAR(50) PRIMARY KEY, code VARCHAR(50))";
+        public static string SQLITETABLE_JAVDB = "create table if not exists javdb ( id VARCHAR(50) PRIMARY KEY, code VARCHAR(50))";
+        public static string SQLITETABLE_BAIDUAI = "create table if not exists baidu (id VARCHAR(50) PRIMARY KEY , age INT DEFAULT 0 , beauty FLOAT DEFAULT 0 , expression VARCHAR(20), face_shape VARCHAR(20), gender VARCHAR(20), glasses VARCHAR(20), race VARCHAR(20), emotion VARCHAR(20), mask VARCHAR(20))";
+        public static string SQLITETABLE_BAIDUTRANSLATE = "create table if not exists baidu (id VARCHAR(50) PRIMARY KEY , title TEXT , translate_title TEXT, plot TEXT, translate_plot TEXT)";
+        public static string SQLITETABLE_YOUDAO = "create table if not exists youdao (id VARCHAR(50) PRIMARY KEY , title TEXT , translate_title TEXT, plot TEXT, translate_plot TEXT)";
+
+
 
         public static StringBuilder Path { get; set; }
 
@@ -32,6 +45,104 @@ namespace Jvedio
         public static void Init()
         {
             Path = File.Exists(Properties.Settings.Default.DataBasePath) ? new StringBuilder(Properties.Settings.Default.DataBasePath) : new StringBuilder("info.sqlite");
+        }
+
+
+        public static string Unicode2String(string unicode)
+        {
+            return new Regex(@"\\u([0-9A-F]{4})", RegexOptions.IgnoreCase | RegexOptions.Compiled).Replace(
+                         unicode, x => string.Empty + Convert.ToChar(Convert.ToUInt16(x.Result("$1"), 16)));
+        }
+        public static bool IsProPerSqlite(string path)
+        {
+            if (!File.Exists(path)) return false;
+            //是否具有表结构
+            bool result = true;
+            DB db = new DB(path, true);
+            if (!db.IsTableExist("movie") || !db.IsTableExist("actress") || !db.IsTableExist("library") || !db.IsTableExist("javdb"))
+                result = false;
+            db.CloseDB();
+            return result;
+        }
+        public static void CopyDatabaseInfo(string name)
+        {
+            string infoPath = AppDomain.CurrentDomain.BaseDirectory + "info.sqlite";
+            string path = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
+            DataTable dataTable = dataTable = new DataTable();
+            using (SQLiteConnection conn = new SQLiteConnection("data source=" + infoPath))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+                    cmd.CommandText = "SELECT * FROM movie";
+                    SQLiteDataReader sQLiteDataReader = cmd.ExecuteReader();
+                    dataTable.Load(sQLiteDataReader);
+                }
+            }
+
+            //获取新数据库需要更新的值
+            DataTable newdataTable = new DataTable();
+            using (SQLiteConnection conn = new SQLiteConnection("data source=" + path))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+                    cmd.CommandText = "SELECT id FROM movie";
+                    SQLiteDataReader sQLiteDataReader = cmd.ExecuteReader();
+                    newdataTable.Load(sQLiteDataReader);
+                }
+            }
+
+            string sqltext = "UPDATE movie SET title=@title,releasedate=@releasedate,visits=@visits,director=@director,genre=@genre,tag=@tag," +
+                "actor=@actor,studio=@studio,rating=@rating,chinesetitle=@chinesetitle,favorites=@favorites,label=@label,plot=@plot,outline=@outline,year=@year,runtime=@runtime,country=@country,countrycode=@countrycode,otherinfo=@otherinfo,extraimageurl=@extraimageurl where id=@id";
+
+
+
+            using (SQLiteConnection conn = new SQLiteConnection("data source=" + path))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+
+                    foreach (DataRow row in newdataTable.Rows)
+                    {
+                        EnumerableRowCollection<DataRow> dataRows = dataTable.AsEnumerable().Where(myRow => myRow.Field<string>("id") == row["id"].ToString());
+                        DataRow dataRow = null;
+                        if (dataRows != null && dataRows.Count() > 0)
+                            dataRow = dataRows.First();
+                        else continue;
+                        cmd.CommandText = sqltext;
+                        cmd.Parameters.Add("id", DbType.String).Value = dataRow["id"];
+                        cmd.Parameters.Add("title", DbType.String).Value = dataRow["title"];
+                        cmd.Parameters.Add("releasedate", DbType.String).Value = dataRow["releasedate"];
+                        cmd.Parameters.Add("visits", DbType.Int16).Value = dataRow["visits"];
+                        cmd.Parameters.Add("director", DbType.String).Value = dataRow["director"];
+                        cmd.Parameters.Add("genre", DbType.String).Value = dataRow["genre"];
+                        cmd.Parameters.Add("tag", DbType.String).Value = dataRow["tag"];
+                        cmd.Parameters.Add("actor", DbType.String).Value = dataRow["actor"];
+                        cmd.Parameters.Add("actorid", DbType.String).Value = dataRow["actorid"];
+                        cmd.Parameters.Add("studio", DbType.String).Value = dataRow["studio"];
+                        cmd.Parameters.Add("rating", DbType.Double).Value = dataRow["rating"];
+                        cmd.Parameters.Add("chinesetitle", DbType.String).Value = dataRow["chinesetitle"];
+                        cmd.Parameters.Add("favorites", DbType.Int16).Value = dataRow["favorites"];
+                        cmd.Parameters.Add("label", DbType.String).Value = dataRow["label"];
+                        cmd.Parameters.Add("plot", DbType.String).Value = dataRow["plot"];
+                        cmd.Parameters.Add("outline", DbType.String).Value = dataRow["outline"];
+                        cmd.Parameters.Add("year", DbType.Int16).Value = dataRow["year"];
+                        cmd.Parameters.Add("runtime", DbType.Int16).Value = dataRow["runtime"];
+                        cmd.Parameters.Add("country", DbType.String).Value = dataRow["country"];
+                        cmd.Parameters.Add("countrycode", DbType.Int16).Value = dataRow["countrycode"];
+                        cmd.Parameters.Add("otherinfo", DbType.String).Value = dataRow["otherinfo"];
+                        cmd.Parameters.Add("sourceurl", DbType.String).Value = dataRow["sourceurl"];
+                        cmd.Parameters.Add("source", DbType.String).Value = dataRow["source"];
+                        cmd.Parameters.Add("extraimageurl", DbType.String).Value = dataRow["extraimageurl"];
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
         }
 
 
@@ -158,69 +269,22 @@ namespace Jvedio
 
         }
 
+
+        /// <summary>
+        /// 创建排序 sql 语句
+        /// </summary>
+        /// <returns></returns>
         public static string GenerateSort()
         {
             Init();
-            string result = "";
-            string SortType = Properties.Settings.Default.SortType;
+            Sort SortType = Sort.识别码;
+            Enum.TryParse(Properties.Settings.Default.SortType, out SortType);
             bool SortDescending = Properties.Settings.Default.SortDescending;
-            if (SortType == Sort.识别码.ToString())
-            {
-                result = $"ORDER BY id {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else if (SortType == Sort.文件大小.ToString())
-            {
-                result = $"ORDER BY filesize {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else if (SortType == Sort.导入时间.ToString())
-            {
-                result = $"ORDER BY otherinfo {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else if (SortType == Sort.创建时间.ToString())
-            {
-                result = $"ORDER BY scandate {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else if (SortType == Sort.喜爱程度.ToString())
-            {
-                result = $"ORDER BY favorites {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else if (SortType == Sort.名称.ToString())
-            {
-                result = $"ORDER BY title {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else if (SortType == Sort.访问次数.ToString())
-            {
-                result = $"ORDER BY visits {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else if (SortType == Sort.发行日期.ToString())
-            {
-                result = $"ORDER BY releasedate {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else if (SortType == Sort.评分.ToString())
-            {
-                result = $"ORDER BY rating {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else if (SortType == Sort.时长.ToString())
-            {
-                result = $"ORDER BY runtime {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else if (SortType == Sort.演员.ToString())
-            {
-                result = $"ORDER BY actor {(SortDescending ? "DESC" : "ASC")}";
-            }
-            else
-            {
-                result = $"ORDER BY id {(SortDescending ? "DESC" : "ASC")}";
-            }
-            return result;
-
-
+            return $"ORDER BY {SortType.ToSqlString()} {(SortDescending ? "DESC" : "ASC")}";
         }
 
         public static List<Movie> SelectPartialInfo(string sql)
         {
-
-            stopwatch.Restart();
             Init();
             string order = GenerateSort();
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
@@ -235,8 +299,9 @@ namespace Jvedio
                     SQLiteDataReader sr = cmd.ExecuteReader();
                     while (sr.Read())
                     {
+#pragma warning disable IDE0018 // 内联变量声明
                         int vt = 1;
-                        int favorites = 0;
+#pragma warning restore IDE0018 // 内联变量声明
                         Movie movie = new Movie()
                         {
                             id = sr["id"].ToString(),
@@ -247,7 +312,7 @@ namespace Jvedio
                             subsection = sr["subsection"].ToString()
                         };
                         int.TryParse(sr["releasedate"].ToString(), out vt);
-                        int.TryParse(sr["favorites"].ToString(), out favorites);
+                        int.TryParse(sr["favorites"].ToString(), out int favorites);
                         movie.vediotype = vt;
                         movie.favorites = favorites;
                         result.Add(movie);
@@ -279,11 +344,6 @@ namespace Jvedio
                     movies.AddRange(result);
                     //有图/无图
                     FilterImage(movies, ref result);
-
-
-
-                    stopwatch.Stop();
-                    //Console.WriteLine($"\nSelectPartialInfo 用时：{stopwatch.ElapsedMilliseconds} ms");
                     MovieListChanged?.Invoke(null, EventArgs.Empty);
                     return result;
                 }
@@ -295,16 +355,15 @@ namespace Jvedio
 
         private static void FilterImage(List<Movie> allMovies, ref List<Movie> movies)
         {
-            MyViewType ShowViewMode = MyViewType.默认;
-            Enum.TryParse<MyViewType>(Properties.Settings.Default.ShowViewMode, out ShowViewMode);
+            ViewType ShowViewMode = ViewType.默认;
+            Enum.TryParse(Properties.Settings.Default.ShowViewMode, out ShowViewMode);
 
             MyImageType ShowImageMode = MyImageType.缩略图;
-            Enum.TryParse<MyImageType>(Properties.Settings.Default.ShowImageMode, out ShowImageMode);
-
-            Console.WriteLine(ShowViewMode.ToString());
+            Enum.TryParse(Properties.Settings.Default.ShowImageMode, out ShowImageMode);
 
 
-            if (ShowViewMode == MyViewType.有图)
+
+            if (ShowViewMode == ViewType.有图)
             {
                 foreach (var item in allMovies)
                 {
@@ -336,7 +395,7 @@ namespace Jvedio
 
 
             }
-            else if (ShowViewMode == MyViewType.无图)
+            else if (ShowViewMode == ViewType.无图)
             {
                 foreach (var item in allMovies)
                 {
@@ -569,7 +628,7 @@ namespace Jvedio
         /// </summary>
         /// <param name="sqltext"></param>
         /// <returns></returns>
-        public static List<Movie> SelectMoviesBySql(string sqltext, bool filter = false)
+        public static List<Movie> SelectMoviesBySql(string sqltext)
         {
             Init();
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
@@ -807,13 +866,13 @@ namespace Jvedio
                     SQLiteDataReader sr = cmd.ExecuteReader();
                     while (sr.Read())
                     {
-                        int v1, v2, v3, v4, v5 = 0;
                         actress.birthday = sr["birthday"].ToString();
-                        int.TryParse(sr["age"].ToString(), out v1); actress.age = v1;
-                        int.TryParse(sr["height"].ToString(), out v2); actress.height = v2;
-                        int.TryParse(sr["chest"].ToString(), out v3); actress.chest = v3;
-                        int.TryParse(sr["waist"].ToString(), out v4); actress.waist = v4;
-                        int.TryParse(sr["hipline"].ToString(), out v5); actress.hipline = v5;
+                        actress.id = sr["id"].ToString();
+                        int.TryParse(sr["age"].ToString(), out int v1); actress.age = v1;
+                        int.TryParse(sr["height"].ToString(), out int v2); actress.height = v2;
+                        int.TryParse(sr["chest"].ToString(), out int v3); actress.chest = v3;
+                        int.TryParse(sr["waist"].ToString(), out int v4); actress.waist = v4;
+                        int.TryParse(sr["hipline"].ToString(), out int v5); actress.hipline = v5;
 
                         actress.cup = sr["cup"].ToString();
                         actress.birthplace = sr["birthplace"].ToString();
@@ -1355,8 +1414,7 @@ namespace Jvedio
                     List<string> Actor = new List<string>();
                     while (sr.Read())
                     {
-                        int vt = 0;
-                        int.TryParse(sr[1].ToString(), out vt);
+                        int.TryParse(sr[1].ToString(), out int vt);
                         sr[0].ToString().Split(actorSplitDict[vt]).ToList().ForEach(arg =>
                         {
                             if (arg.Length > 0 & arg.IndexOf(' ') < 0)
@@ -1423,9 +1481,8 @@ namespace Jvedio
                     while (sr.Read())
                     {
                         if (FileSize.Count >= 4) break;
-                        double filesize = 0;
-                        double.TryParse(sr[0].ToString(), out filesize);
-                        filesize = filesize / 1073741824D;// B to GB
+                        double.TryParse(sr[0].ToString(), out double filesize);
+                        filesize /= 1073741824D;// B to GB
                         if (filesize <= 1)
                         {
                             if (!FileSize.Contains("0-1")) FileSize.Add("0-1");
@@ -1459,8 +1516,7 @@ namespace Jvedio
                     while (sr.Read())
                     {
                         if (Rating.Count >= 4) break;
-                        double rating = 0;
-                        double.TryParse(sr[0].ToString(), out rating);
+                        double.TryParse(sr[0].ToString(), out double rating);
                         if (rating <= 20)
                         {
                             if (!Rating.Contains("0-20")) Rating.Add("0-20");
@@ -1491,15 +1547,16 @@ namespace Jvedio
                     sr.Close();
                     Rating.Sort(new RatingComparer());
 
-                    List<List<string>> result = new List<List<string>>();
-
-                    result.Add(Year);
-                    result.Add(Genre);
-                    result.Add(Actor);
-                    result.Add(Label);
-                    result.Add(Runtime);
-                    result.Add(FileSize);
-                    result.Add(Rating);
+                    List<List<string>> result = new List<List<string>>
+                    {
+                        Year,
+                        Genre,
+                        Actor,
+                        Label,
+                        Runtime,
+                        FileSize,
+                        Rating
+                    };
 
                     stopwatch.Stop();
                     Console.WriteLine($"载入筛选耗时：  {stopwatch.ElapsedMilliseconds} ms ");

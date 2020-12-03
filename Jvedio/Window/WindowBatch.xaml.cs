@@ -14,8 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using static Jvedio.StaticVariable;
-using static Jvedio.StaticClass;
+using static Jvedio.GlobalVariable;
 using System.Data;
 using System.Windows.Controls.Primitives;
 using FontAwesome.WPF;
@@ -89,7 +88,6 @@ namespace Jvedio
 
             var wrapPanels = SettingsGrid.Children.OfType<StackPanel>().ToList();
             foreach (var item in wrapPanels) item.Visibility = Visibility.Collapsed;
-            var RadioButtons = SideStackPanel.Children.OfType<RadioButton>().ToList();
 
 
             stackPanels[Properties.Settings.Default.BatchIndex].Visibility = Visibility.Visible;
@@ -225,7 +223,7 @@ namespace Jvedio
 
             p.StandardInput.WriteLine(str + "&exit");
             p.StandardInput.AutoFlush = true;
-            string output = p.StandardOutput.ReadToEnd();
+            _ = p.StandardOutput.ReadToEnd();
             //App.Current.Dispatcher.Invoke((Action)delegate { cmdTextBox.AppendText(output + "\n"); });
             p.WaitForExit();//等待程序执行完退出进程
             p.Close();
@@ -281,7 +279,7 @@ namespace Jvedio
             string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t {vieModel.Gif_Length} -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifSavePath}\"";
             p.StandardInput.WriteLine(str + "&exit");
             p.StandardInput.AutoFlush = true;
-            string output = p.StandardOutput.ReadToEnd();
+            _ = p.StandardOutput.ReadToEnd();
             p.WaitForExit();//等待程序执行完退出进程
             p.Close();
 
@@ -425,7 +423,7 @@ namespace Jvedio
 
                     if (extraImageList[i].Length > 0)
                     {
-                        filepath = StaticVariable.BasePicPath + "ExtraPic\\" + movie.id + "\\" + Path.GetFileName(new Uri(extraImageList[i]).LocalPath);
+                        filepath = GlobalVariable.BasePicPath + "ExtraPic\\" + movie.id + "\\" + Path.GetFileName(new Uri(extraImageList[i]).LocalPath);
                         if (!File.Exists(filepath))
                         {
                             (extraImageSuccess, cookies) = await Task.Run(() => { return Net.DownLoadImage(extraImageList[i], ImageType.ExtraImage, movie.id, Cookie: cookies); });
@@ -452,7 +450,7 @@ namespace Jvedio
         {
             if(movie.smallimageurl.IndexOf("pics.dmm")<=0) return (false, "失败，原因：链接仅支持 dmm");
 
-            if (!File.Exists(StaticVariable.BasePicPath + $"SmallPic\\{movie.id}.jpg"))  
+            if (!File.Exists(GlobalVariable.BasePicPath + $"SmallPic\\{movie.id}.jpg"))  
             {
                 if (movie.source == "javdb" ) return (false, "失败，原因：链接仅支持 dmm");
                 else return await Net.DownLoadImage(movie.smallimageurl, ImageType.SmallImage, movie.id);
@@ -465,7 +463,7 @@ namespace Jvedio
         {
             if (movie.smallimageurl.IndexOf("pics.dmm") <= 0) return (false, "失败，原因：链接仅支持 dmm");
 
-            if ( !File.Exists(StaticVariable.BasePicPath + $"BigPic\\{movie.id}.jpg"))
+            if ( !File.Exists(GlobalVariable.BasePicPath + $"BigPic\\{movie.id}.jpg"))
             {
                 if (movie.source == "javdb") return (false, "失败，原因：链接仅支持 dmm");
                 else return await Net.DownLoadImage(movie.bigimageurl, ImageType.BigImage, movie.id);

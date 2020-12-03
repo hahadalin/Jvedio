@@ -6,10 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
+    /// <summary>
+    /// 保存窗体的启动位置、状态
+    /// </summary>
     public class WindowConfig
     {
 

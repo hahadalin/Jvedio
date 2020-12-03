@@ -13,7 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
-using static Jvedio.StaticClass;
+using static Jvedio.FileProcess;
 
 
 namespace Jvedio
@@ -484,7 +484,7 @@ namespace Jvedio
                     if (!CanScan) { LoadingStackPanel.Visibility = Visibility.Hidden;HandyControl.Controls.Growl.Error($"权限不够！"); break; }
 
 
-                    bool IsEurope = (bool)ScanTypeRadioButton.IsChecked ? false : true;
+                    bool IsEurope = !(bool)ScanTypeRadioButton.IsChecked;
 
                     totalnum = 0;
                     insertnum = 0;
@@ -527,10 +527,6 @@ namespace Jvedio
             Window window = Jvedio.GetWindow.Get("Main");
             if (window != null) main = (Main)window;
 
-            WindowDownLoad WindowDownLoad = null;
-            window = Jvedio.GetWindow.Get("WindowDownLoad");
-            if (window != null) WindowDownLoad = (WindowDownLoad)window;
-
 
             if (main?.DownLoader != null)
             {
@@ -543,14 +539,6 @@ namespace Jvedio
 
             }
 
-            if (WindowDownLoad?.MultiDownLoader != null)
-            {
-                if (WindowDownLoad.MultiDownLoader.State == DownLoadState.DownLoading | WindowDownLoad.MultiDownLoader.State == DownLoadState.Pause)
-                {
-                    Console.WriteLine("WindowDownLoad.MultiDownLoader.State   " + WindowDownLoad.MultiDownLoader.State);
-                    result = true;
-                }
-            }
 
             return result;
         }
@@ -664,13 +652,13 @@ namespace Jvedio
                     {
                         if (item.ToLower().IndexOf("poster") >= 0 || item.ToLower().IndexOf($"{id.ToLower()}_s") >= 0)
                         {
-                            try { File.Copy(item, StaticVariable.BasePicPath + $"SmallPic\\{id}.jpg", true); }
+                            try { File.Copy(item, GlobalVariable.BasePicPath + $"SmallPic\\{id}.jpg", true); }
                             catch { }
 
                         }
                         else if (item.ToLower().IndexOf("fanart") >= 0 || item.ToLower().IndexOf($"{id.ToLower()}_b") >= 0)
                         {
-                            try { File.Copy(item, StaticVariable.BasePicPath + $"BigPic\\{id}.jpg", true); }
+                            try { File.Copy(item, GlobalVariable.BasePicPath + $"BigPic\\{id}.jpg", true); }
                             catch { }
                         }
                     }
@@ -701,6 +689,7 @@ namespace Jvedio
                     switch (node.Name)
                     {
                         case "id": movie.id = node.InnerText.ToUpper(); break;
+                        case "num": movie.id = node.InnerText.ToUpper(); break;
                         case "title": movie.title = node.InnerText; break;
                         case "release": movie.releasedate = node.InnerText; break;
                         case "director": movie.director = node.InnerText; break;
@@ -836,12 +825,6 @@ namespace Jvedio
             if (Running) {  HandyControl.Controls.Growl.Warning("其他任务正在进行！"); return; }
             if (IsDownLoading()) {  HandyControl.Controls.Growl.Warning("请等待下载结束！"); return; }
 
-            WindowDownLoad WindowDownLoad = null;
-            Window window = Jvedio.GetWindow.Get("WindowDownLoad");
-            if (window != null) { WindowDownLoad = (WindowDownLoad)window; WindowDownLoad.Close(); }
-            WindowDownLoad = new WindowDownLoad();
-            WindowDownLoad.Show();
-
 
 
         }
@@ -850,8 +833,8 @@ namespace Jvedio
 
         private void InsertOneMovie(object sender, RoutedEventArgs e)
         {
-            WindowEdit windowEdit = null;
             Window window = Jvedio.GetWindow.Get("WindowEdit");
+            WindowEdit windowEdit;
             if (window != null) { windowEdit = (WindowEdit)window; windowEdit.Close(); }
             windowEdit = new WindowEdit();
             windowEdit.Show();

@@ -107,8 +107,9 @@
 
 
                 <Grid x:Name="ManageGrid" Visibility="{Binding ElementName=ManageRadioButton,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                    <!--<Grid x:Name="ManageGrid" Visibility="Hidden">-->
 
-                    <Grid.RenderTransform>
+                        <Grid.RenderTransform>
                         <TranslateTransform  />
                     </Grid.RenderTransform>
 
@@ -238,8 +239,9 @@
 
 
                 <Grid x:Name="StatisticGrid" Visibility="{Binding ElementName=StatisticRadioButton,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                    <!--<Grid x:Name="StatisticGrid" Visibility="Visible">-->
 
-                    <Grid.RowDefinitions >
+                        <Grid.RowDefinitions >
                         <RowDefinition Height="200"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
@@ -294,8 +296,8 @@
 
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" Visibility="Visible" Background="{DynamicResource BackgroundSide}">
-                        <ComboBox SelectionChanged="DatabaseComboBox_SelectionChanged"  x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" >
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" Visibility="Visible" Margin="5 0" >
+                        <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="DatabaseComboBox_SelectionChanged"  x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" >
 
                         </ComboBox>
 

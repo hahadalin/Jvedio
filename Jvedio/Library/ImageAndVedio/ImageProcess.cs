@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
@@ -155,6 +155,117 @@ namespace Jvedio
                 return result;
             }
         }
+
+
+        public static void SaveImage(string ID, byte[] ImageByte, ImageType imageType, string Url)
+        {
+            string FilePath;
+            string ImageDir;
+            if (imageType == ImageType.BigImage)
+            {
+                ImageDir = BasePicPath + $"BigPic\\";
+                FilePath = ImageDir + $"{ID}.jpg";
+            }
+            else if (imageType == ImageType.ExtraImage)
+            {
+                ImageDir = BasePicPath + $"ExtraPic\\{ID}\\";
+                FilePath = ImageDir + Path.GetFileName(new Uri(Url).LocalPath);
+            }
+            else if (imageType == ImageType.SmallImage)
+            {
+                ImageDir = BasePicPath + $"SmallPic\\";
+                FilePath = ImageDir + $"{ID}.jpg";
+            }
+            else
+            {
+                ImageDir = BasePicPath + $"Actresses\\";
+                FilePath = ImageDir + $"{ID}.jpg";
+            }
+
+            if (!Directory.Exists(ImageDir)) Directory.CreateDirectory(ImageDir);
+           FileProcess.  ByteArrayToFile(ImageByte, FilePath);
+        }
+
+        /// <summary>
+        /// 加载 Gif
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <param name="rotate"></param>
+        /// <returns></returns>
+        public static BitmapImage GifFromFile(string filepath)
+        {
+            try
+            {
+                using (var fs = new FileStream(filepath, System.IO.FileMode.Open))
+                {
+                    var ms = new MemoryStream();
+                    fs.CopyTo(ms);
+                    ms.Position = 0;
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = ms;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                    return bitmap;
+                }
+            }
+            catch (Exception e) { Console.WriteLine(e.Message); }
+            return null;
+        }
+
+
+        /// <summary>
+        /// 防止图片被占用
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns></returns>
+        public static BitmapImage BitmapImageFromFile(string filepath)
+        {
+            try
+            {
+                using (var fs = new FileStream(filepath, System.IO.FileMode.Open))
+                {
+                    var ms = new MemoryStream();
+                    fs.CopyTo(ms);
+                    ms.Position = 0;
+                    BitmapImage bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = ms;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                    return bitmap;
+                }
+            }
+            catch (Exception e) { Console.WriteLine(e.Message); }
+            return null;
+
+        }
+
+
+
+
+
+
+
+        public static BitmapImage GetBitmapImage(string filename, string imagetype)
+        {
+            filename = BasePicPath + $"{imagetype}\\{filename}.jpg";
+            if (File.Exists(filename))
+                return BitmapImageFromFile(filename);
+            else
+                return null;
+        }
+
+        public static BitmapImage GetExtraImage(string filepath)
+        {
+            if (File.Exists(filepath))
+                return BitmapImageFromFile(filepath);
+            else
+                return null;
+        }
+
 
     }
 

@@ -7,7 +7,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
@@ -222,8 +222,7 @@ namespace Jvedio
                         }
                         else if (info.IndexOf("年齡") >= 0)
                         {
-                            int age = 0;
-                            int.TryParse(info.Replace("年齡: ", ""), out age);
+                            int.TryParse(info.Replace("年齡: ", ""), out int age);
                             result.age = age;
                         }
                         else if (info.IndexOf("身高") >= 0)
@@ -877,8 +876,6 @@ namespace Jvedio
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
             if (HtmlText == "") { return result; }
-            string content; string id = "";
-
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(HtmlText);
 

@@ -11,8 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using static Jvedio.StaticClass;
-using static Jvedio.StaticVariable;
+using static Jvedio.GlobalVariable;
 
 //https://www.cnblogs.com/leemano/p/6578050.html
 

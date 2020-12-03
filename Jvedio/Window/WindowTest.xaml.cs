@@ -81,7 +81,7 @@ namespace Jvedio
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             WindowConfig windowConfig = new WindowConfig("Main");
-            windowConfig.Save(new WindowProperty() { Location=new Point(123,456),Size=new Size(789,777),WinState=StaticVariable.JvedioWindowState.FullScreen});
+            windowConfig.Save(new WindowProperty() { Location=new Point(123,456),Size=new Size(789,777),WinState=GlobalVariable.JvedioWindowState.FullScreen});
 
             WindowProperty windowProperty = windowConfig.Read();
             Console.WriteLine(123);
