@@ -501,7 +501,9 @@ namespace Jvedio
                 try
                 {
                     //待修复 的 bug
-                    DataBase. CopyDatabaseInfo(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower());
+                    string src= AppDomain.CurrentDomain.BaseDirectory + "info.sqlite";
+                    string dst = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower()}.sqlite"; ;
+                    DataBase. CopyDatabaseInfo(src,dst);
                 }
                 catch { }
             }

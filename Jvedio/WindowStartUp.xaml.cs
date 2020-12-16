@@ -347,7 +347,7 @@ namespace Jvedio
 
             if (!File.Exists(InfoDataBasePath))
             {
-                DB db = new DB("Info");
+                MySqlite db = new MySqlite("Info");
                 db.CreateTable(DataBase.SQLITETABLE_MOVIE);
                 db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
                 db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
@@ -357,7 +357,7 @@ namespace Jvedio
             else
             {
                 //是否具有表结构
-                DB db = new DB("Info");
+                MySqlite db = new MySqlite("Info");
                 if (!db.IsTableExist("movie") || !db.IsTableExist("actress") || !db.IsTableExist("library") || !db.IsTableExist("javdb"))
                 {
                     db.CreateTable(DataBase.SQLITETABLE_MOVIE);
@@ -372,14 +372,14 @@ namespace Jvedio
 
             if (!File.Exists(AIDataBasePath))
             {
-                DB db = new DB("AI");
+                MySqlite db = new MySqlite("AI");
                 db.CreateTable(DataBase.SQLITETABLE_BAIDUAI);
                 db.CloseDB();
             }
             else
             {
                 //是否具有表结构
-                DB db = new DB("AI");
+                MySqlite db = new MySqlite("AI");
                 if (!db.IsTableExist("baidu")) db.CreateTable(DataBase.SQLITETABLE_BAIDUAI);
                 db.CloseDB();
             }
@@ -387,7 +387,7 @@ namespace Jvedio
 
             if (!File.Exists(TranslateDataBasePath))
             {
-                DB db = new DB("Translate");
+                MySqlite db = new MySqlite("Translate");
                 db.CreateTable(DataBase.SQLITETABLE_YOUDAO);
                 db.CreateTable(DataBase.SQLITETABLE_BAIDUTRANSLATE);
                 db.CloseDB();
@@ -395,7 +395,7 @@ namespace Jvedio
             else
             {
                 //是否具有表结构
-                DB db = new DB("Translate");
+                MySqlite db = new MySqlite("Translate");
                 if (!db.IsTableExist("youdao")) db.CreateTable(DataBase.SQLITETABLE_YOUDAO);
                 if (!db.IsTableExist("baidu")) db.CreateTable(DataBase.SQLITETABLE_BAIDUTRANSLATE);
                 db.CloseDB();
@@ -594,7 +594,7 @@ namespace Jvedio
                 if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrEmpty(name) && !vieModel_StartUp.DataBases.Contains(name) && name.IndexOfAny(Path.GetInvalidFileNameChars()) == -1)
                 {
                     //新建
-                    DB db = new DB("DataBase\\" + name);
+                    MySqlite db = new MySqlite("DataBase\\" + name);
                     db.CreateTable(DataBase.SQLITETABLE_MOVIE);
                     db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
                     db.CreateTable(DataBase.SQLITETABLE_LIBRARY);

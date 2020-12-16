@@ -222,7 +222,8 @@
       <DependentUpon>WaitingPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Library\CustomExtension.cs" />
-    <Compile Include="Library\DB.cs" />
+    <Compile Include="Library\Sqlite.cs" />
+    <Compile Include="Library\MySqlite.cs" />
     <Compile Include="Library\ImageAndVedio\MediaInfo.cs" />
     <Compile Include="Library\ImageAndVedio\ImageProcess.cs" />
     <Compile Include="Library\FileProcess\XML.cs" />
@@ -438,6 +439,7 @@
     <Content Include="Lib\PInvoke.dll" />
     <Content Include="Lib\QueryEngine.dll" />
     <Content Include="Lib\UsnOperation.dll" />
+    <Resource Include="Resources\Picture\其他.png" />
     <Resource Include="Resources\Skin\white\add.png" />
     <Resource Include="Resources\Skin\black\add.png" />
     <Resource Include="Resources\Picture\视频.png" />

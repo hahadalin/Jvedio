@@ -131,7 +131,7 @@ namespace Jvedio.ViewModel
             if (detailMovie != null)
             {
                 detailMovie.bigimage = ImageProcess.GetBitmapImage(detailMovie.id, "BigPic");
-                DB db = new DB("Translate");
+                MySqlite db = new MySqlite("Translate");
                 //加载翻译结果
                 if (Properties.Settings.Default.TitleShowTranslate)
                 {

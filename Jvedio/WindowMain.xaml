@@ -1893,23 +1893,26 @@
                             </Grid.ColumnDefinitions>
 
                             <!--演员-->
-                            <Grid Grid.Column="0" Visibility="Collapsed" x:Name="ActorInfoGrid"  HorizontalAlignment="Right" Width="200" Height="auto" VerticalAlignment="Stretch" Margin="10">
+                            <Grid Grid.Column="0" Visibility="Collapsed" x:Name="ActorInfoGrid"  HorizontalAlignment="Right" Width="auto" Height="auto" VerticalAlignment="Stretch" Margin="10">
                                 <Border Background="{DynamicResource BackgroundTitle}" Opacity="0.8" CornerRadius="10"/>
                                 <ScrollViewer VerticalScrollBarVisibility="Hidden">
                                     <StackPanel>
                                         <Image  Style="{StaticResource ActorInfoImage}" DragOver="Image_DragOver" Drop="Image_Drop"  AllowDrop="True"   />
-                                        <TextBox Background="Transparent" IsReadOnly="True" Width="auto" Text="{Binding Actress.name}"  FontSize="20" HorizontalAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" FontWeight="Bold" Style="{StaticResource ActorTextBlock}" />
+                                        <TextBox Background="Transparent" IsReadOnly="True" Width="auto" MaxWidth="200" Text="{Binding Actress.name}"  FontSize="20" HorizontalAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" FontWeight="Bold" Style="{StaticResource ActorTextBlock}" />
 
                                         <StackPanel Orientation="Horizontal">
-                                            <Border MouseLeftButtonUp="EditActress" HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="5" Margin="10 3" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
+                                            <Border MouseLeftButtonUp="EditActress" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="10 3" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
                                                 <Image Source="pack://application:,,,/Resources/Picture/edit.png" Margin="5"  Height="15"  />
                                             </Border>
-                                            <Border MouseLeftButtonUp="BeginDownLoadActress" HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="5" Margin="0" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
+                                            <Border MouseLeftButtonUp="BeginDownLoadActress" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="0" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
                                                 <Image Source="pack://application:,,,/Resources/Picture/download.png" Margin="5"  Height="20"  />
+                                            </Border>
+                                            <Border  ToolTip="加载该演员其他作品"  HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="5 0" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
+                                                <Image Source="pack://application:,,,/Resources/Picture/其他.png" Margin="5"  Height="17"  />
                                             </Border>
                                             <hc:Rate ToolTip="双击取消" Visibility="Visible" AllowClear="True" Margin="10 0" Value="{Binding Actress.like,Mode=TwoWay}" Count="1" VerticalAlignment="Center" Background="{DynamicResource BackgroundSide}" Foreground="#FF7B3B" ValueChanged="Rate_ValueChanged_1"   />
 
-
+                                         
 
                                         </StackPanel>
 

@@ -270,7 +270,7 @@ namespace Jvedio
                     DetailMovie detailMovie = DataBase.SelectDetailMovieById(eventArgs.Message);
                     if (detailMovie != null)
                     {
-                        DB db = new DB("Translate");
+                        MySqlite db = new MySqlite("Translate");
                         //加载翻译结果
                         if (Properties.Settings.Default.TitleShowTranslate)
                         {
@@ -1239,12 +1239,12 @@ namespace Jvedio
             {
 
                 string result = "";
-                DB dataBase = new DB("Translate");
+                MySqlite dataBase = new MySqlite("Translate");
 
                 DetailMovie movie = vieModel.DetailMovie;
 
                 //检查是否已经翻译过，如有则跳过
-                if (!string.IsNullOrEmpty(dataBase.SelectInfoByID("translate_title", "youdao", movie.id))) { HandyControl.Controls.Growl.Warning("影片已经翻译过！", "DetailsGrowl"); return; }
+                if (!string.IsNullOrEmpty(dataBase.SelectByField("translate_title", "youdao", movie.id))) { HandyControl.Controls.Growl.Warning("影片已经翻译过！", "DetailsGrowl"); return; }
                 if (movie.title != "")
                 {
 

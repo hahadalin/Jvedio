@@ -244,7 +244,7 @@ namespace Jvedio
 
 
 
-                DB db = new DB("DataBase\\" + name);
+                MySqlite db = new MySqlite("DataBase\\" + name);
                 db.CreateTable(DataBase.SQLITETABLE_MOVIE);
                 db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
                 db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
@@ -352,7 +352,7 @@ namespace Jvedio
                 path = $"{vieModel_DBManagement.CurrentDataBase}";
             else
                 path = $"DataBase\\{vieModel_DBManagement.CurrentDataBase}";
-            DB db = new DB(path);
+            MySqlite db = new MySqlite(path);
 
 
             if ((bool)cb[1].IsChecked || (bool)cb[2].IsChecked) WaitingPanel.Visibility = Visibility.Visible;
@@ -380,7 +380,7 @@ namespace Jvedio
                         ct.ThrowIfCancellationRequested();
                         if (!File.Exists(movie.filepath))
                         {
-                            db.DelInfoByType("movie", "id", movie.id);
+                            db.DeleteByField("movie", "id", movie.id);
                             num++;
                         }
 
@@ -414,7 +414,7 @@ namespace Jvedio
                             ct.ThrowIfCancellationRequested();
                             if (!IsPathIn(movie.filepath, ScanPath))
                             {
-                                db.DelInfoByType("movie", "id", movie.id);
+                                db.DeleteByField("movie", "id", movie.id);
                                 num++;
                             }
                         });

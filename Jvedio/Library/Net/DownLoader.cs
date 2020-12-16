@@ -211,7 +211,7 @@ namespace Jvedio
                 if (item.smallimage == null || string.IsNullOrEmpty(item.birthday))
                 {
                     Actress actress = item;
-                    DB db = new DB("BusActress");
+                    MySqlite db = new MySqlite("BusActress");
                     if (item.id == "")
                     {
 
@@ -240,8 +240,7 @@ namespace Jvedio
 
         private async void DownLoad(object o)
         {
-            try
-            {
+
                 Semaphore.WaitOne();
                 Actress actress = o as Actress;
                 if (Cancel | actress.id == "")
@@ -249,6 +248,8 @@ namespace Jvedio
                     Semaphore.Release();
                     return;
                 }
+            try
+            {
                 this.State = DownLoadState.DownLoading;
 
                 //下载头像
@@ -275,6 +276,9 @@ namespace Jvedio
                 if (success) actress = DataBase.SelectInfoFromActress(actress);
                 ProgressBarUpdate.value += 1;
                 InfoUpdate?.Invoke(this, new ActressUpdateEventArgs() { Actress = actress, progressBarUpdate = ProgressBarUpdate, state = State });
+            }catch(Exception e)
+            {
+
             }
             finally
             {

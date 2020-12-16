@@ -1272,7 +1272,6 @@ namespace Jvedio.ViewModel
             //TextType = "演员";
             Statistic();
             stopwatch.Restart();
-
             List<Actress> Actresses = DataBase.SelectAllActorName(VedioType);
             stopwatch.Stop();
             Console.WriteLine($"\n加载演员用时：{stopwatch.ElapsedMilliseconds} ms");
@@ -1359,7 +1358,7 @@ namespace Jvedio.ViewModel
                 fanhao = Identify.GetFanhao(FormatSearch);
 
             string searchContent;
-            if (!string.IsNullOrEmpty(fanhao)) searchContent = FormatSearch;
+            if (string.IsNullOrEmpty(fanhao)) searchContent = FormatSearch;
             else searchContent = fanhao;
 
 

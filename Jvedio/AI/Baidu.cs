@@ -102,7 +102,7 @@ namespace Jvedio
                 (result, int32Rect) = FaceParse.Parse(FaceJson);
                 if (result != null && int32Rect != Int32Rect.Empty)
                 {
-                    DB dataBase = new DB("AI");
+                    MySqlite dataBase = new MySqlite("AI");
                     dataBase.SaveBaiduAIByID(movie.id, result);
                     dataBase.CloseDB();
                     return int32Rect;

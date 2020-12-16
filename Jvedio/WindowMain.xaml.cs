@@ -2245,7 +2245,7 @@ namespace Jvedio
                 Movie CurrentMovie = GetMovieFromVieModel(TB.Text);
                 if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedMovie.Add(CurrentMovie);
                 string result = "";
-                DB dataBase = new DB("Translate");
+                MySqlite dataBase = new MySqlite("Translate");
 
 
                 int successNum = 0;
@@ -2256,7 +2256,7 @@ namespace Jvedio
                 {
 
                     //检查是否已经翻译过，如有则跳过
-                    if (!string.IsNullOrEmpty(dataBase.SelectInfoByID("translate_title", "youdao", movie.id))) { translatedNum++; continue; }
+                    if (!string.IsNullOrEmpty(dataBase.SelectByField("translate_title", "youdao", movie.id))) { translatedNum++; continue; }
                     if (movie.title != "")
                     {
 
@@ -2740,7 +2740,7 @@ namespace Jvedio
                     {
                         string num = oldID.Split('-').Last();
                         string eng = oldID.Remove(oldID.Length - num.Length,num.Length);
-                        if (num.Length == 5 &&  eng.All(char.IsLetter))
+                        if (num.Length == 5 &&  eng.Replace("-","").All(char.IsLetter))
                         {
                            string newID=eng+  num.Remove(0, 2);
                             if (DataBase.SelectMovieByID(newID) == null)
@@ -4069,7 +4069,7 @@ namespace Jvedio
 
         private void InitList()
         {
-            DB dB = new DB("mylist");
+            MySqlite dB = new MySqlite("mylist");
             List<string> tables = dB.GetAllTable();
             
             vieModel.MyList = new ObservableCollection<MyListItem>();
@@ -5541,7 +5541,7 @@ namespace Jvedio
 
         private bool Rename(string oldName,string newName)
         {
-            DB dB = new DB("mylist");
+            MySqlite dB = new MySqlite("mylist");
             if (!dB.IsTableExist(oldName))
             {
                 dB.CloseDB();
@@ -5607,7 +5607,7 @@ namespace Jvedio
 
         private bool AddToMyList(string name)
         {
-            DB dB = new DB("mylist");
+            MySqlite dB = new MySqlite("mylist");
             if (dB.IsTableExist(name))
             {
                 dB.CloseDB();
@@ -5632,7 +5632,7 @@ namespace Jvedio
 
         private void ReMoveFromMyList(string name)
         {
-            DB dB = new DB("mylist");
+            MySqlite dB = new MySqlite("mylist");
             if (dB.IsTableExist(name)) dB.DeleteTable(name);
             dB.CloseDB();
         }
@@ -5681,7 +5681,7 @@ namespace Jvedio
                 foreach (Movie movie in vieModel.SelectedMovie)
                 {
                     Movie newMovie = DataBase.SelectMovieByID(movie.id);
-                    DB dB = new DB("mylist");
+                    MySqlite dB = new MySqlite("mylist");
                     dB.InsertFullMovie(newMovie, table);
                     dB.CloseDB();
                     InitList();
@@ -5706,7 +5706,7 @@ namespace Jvedio
             //        var TB = sp.Children.OfType<TextBox>().First();
             //        string id = TB.Text;
             //        Movie movie = DataBase.SelectMovieByID(id);
-            //        DB dB = new DB("mylist");
+            //        MySqlite dB = new MySqlite("mylist");
             //        dB.InsertFullMovie(movie, table);
             //        dB.CloseDB();
             //        InitList();

@@ -55,13 +55,13 @@ namespace Jvedio.ViewModel
 
 
 
-        public async void Statistic()
+        public  void Statistic()
         {
             Movies = new List<Movie>();
             string name = Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower();
             if (name != "info") name = "DataBase\\" + name;
-            DB db = new DB(name);
-            Movies = await db.SelectMoviesById("");
+            MySqlite db = new MySqlite(name);
+            Movies =  db.SelectMoviesBySql("SELECT * FROM movie");
             db.CloseDB();
 
             AllCount = Movies.Count;
