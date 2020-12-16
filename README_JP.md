@@ -26,7 +26,7 @@
 ウィンドウデスクトップ上のFFmpeg、スムーズで美しいアプリケーションソフトウェアに基づいてビデオ写真をキャプチャします
 
 
-公式ウェブサイト：[Jvedio](https://hitchao.gitee.io/jvediowebpage/) | ダウンロードリンク：[最新バージョン](https://hitchao.gitee.io/jvediowebpage/download.html)
+公式ウェブサイト：[Jvedio](https://hitchao.github.io/JvedioWebPage/) | ダウンロードリンク：[最新バージョン](https://hitchao.github.io/JvedioWebPage/)
 
 
 

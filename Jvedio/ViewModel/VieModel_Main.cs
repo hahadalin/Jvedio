@@ -174,6 +174,18 @@ namespace Jvedio.ViewModel
         #region "ObservableCollection"
 
 
+        private ObservableCollection<MyListItem> _MyList;
+
+
+        public ObservableCollection<MyListItem> MyList
+        {
+            get { return _MyList; }
+            set
+            {
+                _MyList = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private ObservableCollection<string> _DataBases;
 
@@ -222,7 +234,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public ObservableCollection<Movie> selectedMovie = new ObservableCollection<Movie>();
+        private ObservableCollection<Movie> selectedMovie = new ObservableCollection<Movie>();
 
         public ObservableCollection<Movie> SelectedMovie
         {
@@ -253,7 +265,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        public ObservableCollection<Actress> actorlist;
+        private ObservableCollection<Actress> actorlist;
         public ObservableCollection<Actress> ActorList
         {
             get { return actorlist; }
@@ -265,7 +277,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        public ObservableCollection<Actress> _CurrentActorList;
+        private ObservableCollection<Actress> _CurrentActorList;
 
 
         public ObservableCollection<Actress> CurrentActorList
@@ -279,7 +291,7 @@ namespace Jvedio.ViewModel
             }
         }
 
-        public ObservableCollection<string> labellist;
+        private ObservableCollection<string> labellist;
         public ObservableCollection<string> LabelList
         {
             get { return labellist; }
@@ -293,7 +305,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public ObservableCollection<string> _AllSearchCandidate;
+        private ObservableCollection<string> _AllSearchCandidate;
 
 
         public ObservableCollection<string> AllSearchCandidate
@@ -308,7 +320,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        public ObservableCollection<string> _FilePathClassification;
+        private ObservableCollection<string> _FilePathClassification;
 
 
         public ObservableCollection<string> FilePathClassification
@@ -323,7 +335,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        public ObservableCollection<string> _CurrentSearchCandidate;
+        private ObservableCollection<string> _CurrentSearchCandidate;
 
 
         public ObservableCollection<string> CurrentSearchCandidate
@@ -339,7 +351,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public ObservableCollection<Movie> _SearchCandidate;
+        private ObservableCollection<Movie> _SearchCandidate;
 
 
         public ObservableCollection<Movie> SearchCandidate
@@ -998,12 +1010,12 @@ namespace Jvedio.ViewModel
             if (MovieList != null)
             {
                 CurrentMovieListHideOrChanged?.Invoke(this, EventArgs.Empty); //停止下载
-                int DisPlayNum = Properties.Settings.Default.DisplayNumber;
-                int SetFlowNum = Properties.Settings.Default.FlowNum;
+                int DisPlayNum = Properties.Settings.Default.DisplayNumber;//每页展示数目
+                int SetFlowNum = Properties.Settings.Default.FlowNum;//流动数目
                 Movies = new List<Movie>();
                 for (int i = (CurrentPage - 1) * DisPlayNum + FlowNum * SetFlowNum; i < (CurrentPage - 1) * DisPlayNum + (FlowNum + 1) * SetFlowNum; i++)
                 {
-                    if (CurrentMovieList.Count < DisPlayNum)
+                    if (CurrentMovieList.Count + Movies.Count< DisPlayNum)
                     {
                         if (i <= MovieList.Count - 1)
                         {
@@ -1387,7 +1399,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public void ExecutiveSqlCommand(int sideIndex, string textType, string sql)
+        public void ExecutiveSqlCommand(int sideIndex, string textType, string sql,string dbName="")
         {
 
             Dictionary<string, string> sqlInfo = new Dictionary<string, string>
@@ -1416,7 +1428,7 @@ namespace Jvedio.ViewModel
                 }
                 else
                 {
-                    MovieList = DataBase.SelectMoviesBySql(sql);
+                    MovieList = DataBase.SelectMoviesBySql(sql,dbName);
                 }
                 Statistic();
                 FlipOver();

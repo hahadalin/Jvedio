@@ -584,7 +584,7 @@
                             <CheckBox Visibility="Collapsed" IsChecked="{Binding ShowNotice, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="启动后显示公告" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox Visibility="Collapsed" IsChecked="{Binding AutoCheckUpdate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="启动后检查更新" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding RandomDisplay, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="启动后随机展示" Height="40" VerticalContentAlignment="Center"/>
-                            <CheckBox IsChecked="{Binding SearchImmediately, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="搜索框变动时立即查询" Height="40" VerticalContentAlignment="Center"/>
+                            <CheckBox Visibility="Collapsed" IsChecked="{Binding SearchImmediately, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="搜索框变动时立即查询" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding OpenDataBaseDefault, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="开启时不显示库选择" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding AutoDeleteNotExistMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="自动删除不存在的影片" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding DelInfoAfterDelFile, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 0 10 0" Content="删除文件同时删除影片信息" Height="40" VerticalContentAlignment="Center"/>
@@ -754,8 +754,7 @@
                             <TextBlock Style="{StaticResource TextBlockTitle}" Text="服务器源" HorizontalAlignment="Left"/>
 
                             <Button Content="添加" Style="{DynamicResource ButtonStyleFill}" Width="100" Height="25" Click="Button_Click_4" />
-
-                           
+                            <TextBlock Style="{StaticResource TextBlockTitle}" Text="注：新添加的网址测试通过才能保存" HorizontalAlignment="Left"/>
                         </StackPanel>
 
 

@@ -732,8 +732,6 @@ namespace Jvedio
                 vieModel.CleanUp();
                 vieModel.Query(id);
                 vieModel.SelectImageIndex = 0;
-                if ((bool)ExtraImageRadioButton.IsChecked) LoadImage();
-                else LoadScreenShotImage();
             }
 
 
@@ -784,8 +782,6 @@ namespace Jvedio
                 vieModel.CleanUp();
                 vieModel.Query(id);
                 vieModel.SelectImageIndex = 0;
-                if ((bool)ExtraImageRadioButton.IsChecked) LoadImage();
-                else LoadScreenShotImage();
             }
             
 
@@ -893,10 +889,6 @@ namespace Jvedio
                 File.Delete(path);
                 HandyControl.Controls.Growl.Success("已成功删除！", "DetailsGrowl");
                 vieModel.Query(vieModel.DetailMovie.id);
-                if ((bool)ScreenShotRadioButton.IsChecked)
-                    LoadScreenShotImage();
-                else
-                    LoadImage();
             }
             catch (Exception ex)
             {
@@ -1156,7 +1148,6 @@ namespace Jvedio
 
             vieModel.Query(vieModel.DetailMovie.id);
             HandyControl.Controls.Growl.Info($"已清空 {vieModel.DetailMovie.id} 信息", "DetailsGrowl");
-            LoadImage();
 
         }
 
@@ -1512,7 +1503,7 @@ namespace Jvedio
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             StopDownLoad();
-
+            DisposeImage();
         }
 
 
@@ -1829,6 +1820,16 @@ namespace Jvedio
             if (MovieID != "")
             {
                 vieModel = new VieModel_Details();
+
+                vieModel.QueryCompleted += delegate
+                {
+                    if ((bool)ExtraImageRadioButton.IsChecked) LoadImage();
+                    else LoadScreenShotImage();
+
+                    Task.Run(() => {
+                        vieModel.VedioInfo = MediaParse.GetMediaInfo(vieModel.DetailMovie.filepath);
+                    });
+                };
                 vieModel.Query(MovieID);
                 this.DataContext = vieModel;
 
@@ -1836,13 +1837,26 @@ namespace Jvedio
             else { this.DataContext = null; }
             FatherGrid.Focus();
             SetSkin();
-            if ((bool)ExtraImageRadioButton.IsChecked) LoadImage();
-            else LoadScreenShotImage();
+
+        }
+
+
+        private void DisposeImage()
+        {
+            if (vieModel.DetailMovie.extraimagelist != null)
+            {
+                for (int i = 0; i < vieModel.DetailMovie.extraimagelist.Count; i++)
+                {
+                    vieModel.DetailMovie.extraimagelist[i] = null;
+                }
+            }
+            //if (vieModel.DetailMovie.bigimage != null) vieModel.DetailMovie.bigimage = null;
         }
 
         private async void LoadImage()
         {
             //加载大图到预览图
+            DisposeImage();
             vieModel.DetailMovie.extraimagelist = new ObservableRangeCollection<BitmapSource>();
             vieModel.DetailMovie.extraimagePath = new ObservableRangeCollection<string>();
             if (File.Exists(BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg"))

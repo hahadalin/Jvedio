@@ -438,6 +438,8 @@
     <Content Include="Lib\PInvoke.dll" />
     <Content Include="Lib\QueryEngine.dll" />
     <Content Include="Lib\UsnOperation.dll" />
+    <Resource Include="Resources\Skin\white\add.png" />
+    <Resource Include="Resources\Skin\black\add.png" />
     <Resource Include="Resources\Picture\视频.png" />
     <Resource Include="Resources\Picture\图像.png" />
     <Resource Include="Resources\Picture\收起.png" />

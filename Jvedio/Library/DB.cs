@@ -67,6 +67,24 @@ namespace Jvedio
         }
 
 
+        public List<string> GetAllTable()
+        {
+            cmd.CommandText = "SELECT name FROM sqlite_master WHERE TYPE='table' ";
+            List<string> tables = new List<string>();
+            try
+            {
+                SQLiteDataReader sr = cmd.ExecuteReader();
+                while (sr.Read())
+                {
+                    tables.Add(sr.GetString(0));
+                }
+            }
+            catch (System.Data.SQLite.SQLiteException ex) { Console.WriteLine(ex.Message); }
+
+            return tables;
+        }
+
+
         /// <summary>
         /// 删除表
         /// </summary>
@@ -96,6 +114,34 @@ namespace Jvedio
         #endregion
 
         #region "SELECT"
+
+
+        public  double SelectCountByTable(string table)
+        {
+            using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
+            {
+                cn.Open();
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = cn;
+                    double result = 0;
+
+                    cmd.CommandText = $"SELECT count(id) FROM {table}";
+
+
+                    using (SQLiteDataReader sr = cmd.ExecuteReader())
+                    {
+                        while (sr.Read())
+                        {
+                            double.TryParse(sr[0].ToString(), out result);
+                        }
+                        return result;
+                    }
+
+
+                }
+            }
+        }
 
         public DetailMovie GetDetailMovieFromSQLiteDataReader(SQLiteDataReader sr)
         {
@@ -277,13 +323,13 @@ namespace Jvedio
         /// 插入 完整 的数据
         /// </summary>
         /// <param name="movie"></param>
-        public void InsertFullMovie(Movie movie)
+        public void InsertFullMovie(Movie movie,string table)
         {
             if (movie.vediotype == 0) return;
             //将 id中的 FC2PPV 替换成 FC2
             movie.id = movie.id.Replace("FC2PPV", "FC2");
 
-            string sqltext = "INSERT INTO movie(id , title,filesize ,filepath ,subsection , vediotype  ,scandate,releasedate,visits,director,genre,tag, actor, studio ,rating,chinesetitle,favorites, label ,plot,outline,year ,runtime  ,country,countrycode,otherinfo,extraimageurl) " +
+            string sqltext = $"INSERT INTO {table}(id , title,filesize ,filepath ,subsection , vediotype  ,scandate,releasedate,visits,director,genre,tag, actor, studio ,rating,chinesetitle,favorites, label ,plot,outline,year ,runtime  ,country,countrycode,otherinfo,extraimageurl) " +
                 "values(@id , @title ,@filesize ,@filepath ,@subsection, @vediotype  ,@scandate,@releasedate,@visits,@director,@genre,@tag,@actor,@studio,@rating,@chinesetitle,@favorites,@label,@plot,@outline,@year,@runtime ,@country,@countrycode,@otherinfo,@extraimageurl) " +
                 "ON CONFLICT(id) DO UPDATE SET title=@title,filesize=@filesize,filepath=@filepath,subsection=@subsection,vediotype=@vediotype,scandate=@scandate,releasedate=@releasedate,visits=@visits,director=@director,genre=@genre,tag=@tag," +
                 "actor=@actor,studio=@studio,rating=@rating,chinesetitle=@chinesetitle,favorites=@favorites,label=@label,plot=@plot,outline=@outline,year=@year,runtime=@runtime,country=@country,countrycode=@countrycode,otherinfo=@otherinfo,extraimageurl=@extraimageurl";

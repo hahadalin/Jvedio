@@ -34,7 +34,7 @@ namespace Jvedio
             this.DataContext = vieModel_StartUp;
 
             cts = new CancellationTokenSource();
-            cts.Token.Register(() =>  Console.WriteLine("取消任务"));
+            cts.Token.Register(() => Console.WriteLine("取消任务"));
             ct = cts.Token;
         }
 
@@ -86,9 +86,9 @@ namespace Jvedio
                         this.Dispatcher.BeginInvoke(new Action(() => { statusText.Text = $"扫描指定文件夹"; }), System.Windows.Threading.DispatcherPriority.Render);
                         List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First()), ct);
                         Scan.DistinctMovieAndInsert(filepaths, ct);
-                        
+
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Logger.LogF(ex);
                     }
@@ -118,17 +118,18 @@ namespace Jvedio
 
         public void ClearDateBefore(DateTime dateTime)
         {
+            if (!File.Exists("RecentWatch")) return;
             RecentWatchedConfig recentWatchedConfig = new RecentWatchedConfig();
             for (int i = 1; i < 60; i++)
             {
-                DateTime date=dateTime.AddDays(-1 * i);
+                DateTime date = dateTime.AddDays(-1 * i);
                 recentWatchedConfig.Remove(date);
             }
 
         }
 
 
-        public void ClearLogBefore(DateTime dateTime,string filepath)
+        public void ClearLogBefore(DateTime dateTime, string filepath)
         {
             if (!Directory.Exists(filepath)) return;
             try
@@ -140,14 +141,14 @@ namespace Jvedio
                     if (date < dateTime) File.Delete(file);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
 
 
         }
-        private  void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
             statusText.Text = "更新配置文件……";
@@ -160,71 +161,125 @@ namespace Jvedio
                     Properties.Settings.Default.Save();
                 }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.LogE(ex);
+            }
             statusText.Text = "修复设置错误……";
-            CheckFile(); //判断文件是否存在
-            CheckSettings();//修复设置错误
+            try
+            {
+                CheckFile(); //判断文件是否存在
+                CheckSettings();//修复设置错误
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.LogE(ex);
+            }
             if (!Directory.Exists(Properties.Settings.Default.BasePicPath)) Properties.Settings.Default.BasePicPath = AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
 
 
             statusText.Text = "创建文件夹……";
-            if (!Directory.Exists("log")) { Directory.CreateDirectory("log"); }//创建 Log文件夹
-            if (!Directory.Exists("log\\scanlog")) { Directory.CreateDirectory("log\\scanlog"); }//创建 ScanLog 文件夹
-            if (!Directory.Exists("DataBase")) { Directory.CreateDirectory("DataBase"); }            //创建 DataBase 文件夹
-            if (!Directory.Exists("BackUp")) { Directory.CreateDirectory("BackUp"); }            //创建备份文件夹
-            SetSkin();
+            try
+            {
+                if (!Directory.Exists("log")) { Directory.CreateDirectory("log"); }//创建 Log文件夹
+                if (!Directory.Exists("log\\scanlog")) { Directory.CreateDirectory("log\\scanlog"); }//创建 ScanLog 文件夹
+                if (!Directory.Exists("DataBase")) { Directory.CreateDirectory("DataBase"); }            //创建 DataBase 文件夹
+                if (!Directory.Exists("BackUp")) { Directory.CreateDirectory("BackUp"); }            //创建备份文件夹
+                SetSkin();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.LogE(ex);
+            }
             statusText.Text = "初始化数据库……";
-            InitDataBase();//初始化数据库
-            //InitJav321IDConverter();
-            //初始化参数
-            statusText.Text = "初始化识别码参数……";
-            Identify.InitFanhaoList();
-            statusText.Text = "初始化扫描参数……";
-            Scan.InitSearchPattern();
-            statusText.Text = "初始化变量……";
-            InitVariable();
+            try
+            {
+                InitDataBase();//初始化数据库
+                //InitJav321IDConverter();
+                //初始化参数
+                statusText.Text = "初始化识别码参数……";
+                Identify.InitFanhaoList();
+                statusText.Text = "初始化扫描参数……";
+                Scan.InitSearchPattern();
+                statusText.Text = "初始化变量……";
+                InitVariable();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.LogE(ex);
+            }
             statusText.Text = "修改配置到 XML……";
             try
             {
                 SaveScanPathToXml();
                 SaveServersToXml();
                 SaveRecentWatchedToXml();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
-            statusText.Text = "清除超于10天的最近观看……";
-            ClearDateBefore(DateTime.Now.AddDays(-10));
-            statusText.Text = "清除超于10天的日志文件……";
-            ClearLogBefore(DateTime.Now.AddDays(-10),AppDomain.CurrentDomain.BaseDirectory + "log");
-            ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\NetWork");
-            ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\scanlog");
-            ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\file");
-
+            try
+            {
+                statusText.Text = "清除超于10天的最近观看……";
+                ClearDateBefore(DateTime.Now.AddDays(-10));
+                statusText.Text = "清除超于10天的日志文件……";
+                ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log");
+                ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\NetWork");
+                ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\scanlog");
+                ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\file");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.LogE(ex);
+            }
             statusText.Text = "网络配置初始化……";
-            Net.Init();
+            try
+            {
 
-            statusText.Text = "创建图片文件夹……";
-            if (!Directory.Exists(BasePicPath + "ScreenShot\\")) { Directory.CreateDirectory(BasePicPath + "ScreenShot\\"); }
-            if (!Directory.Exists(BasePicPath + "SmallPic\\")) { Directory.CreateDirectory(BasePicPath + "SmallPic\\"); }
-            if (!Directory.Exists(BasePicPath + "BigPic\\")) { Directory.CreateDirectory(BasePicPath + "BigPic\\"); }
-            if (!Directory.Exists(BasePicPath + "ExtraPic\\")) { Directory.CreateDirectory(BasePicPath + "ExtraPic\\"); }
-            if (!Directory.Exists(BasePicPath + "Actresses\\")) { Directory.CreateDirectory(BasePicPath + "Actresses\\"); }
-            if (!Directory.Exists(BasePicPath + "Gif\\")) { Directory.CreateDirectory(BasePicPath + "Gif\\"); }
 
+                Net.Init();
+                statusText.Text = "创建图片文件夹……";
+                if (!Directory.Exists(BasePicPath + "ScreenShot\\")) { Directory.CreateDirectory(BasePicPath + "ScreenShot\\"); }
+                if (!Directory.Exists(BasePicPath + "SmallPic\\")) { Directory.CreateDirectory(BasePicPath + "SmallPic\\"); }
+                if (!Directory.Exists(BasePicPath + "BigPic\\")) { Directory.CreateDirectory(BasePicPath + "BigPic\\"); }
+                if (!Directory.Exists(BasePicPath + "ExtraPic\\")) { Directory.CreateDirectory(BasePicPath + "ExtraPic\\"); }
+                if (!Directory.Exists(BasePicPath + "Actresses\\")) { Directory.CreateDirectory(BasePicPath + "Actresses\\"); }
+                if (!Directory.Exists(BasePicPath + "Gif\\")) { Directory.CreateDirectory(BasePicPath + "Gif\\"); }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logger.LogE(ex);
+            }
 
             //默认打开某个数据库
             if (Properties.Settings.Default.OpenDataBaseDefault && File.Exists(Properties.Settings.Default.DataBasePath))
             {
-                OpenDefaultDatabase();
+                try
+                {
+                    OpenDefaultDatabase();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    Logger.LogE(ex);
+                }
+
                 //启动主窗口
                 Main main = new Main();
                 statusText.Text = "初始化影片……";
                 try
                 {
                     main.InitMovie();
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                     Logger.LogE(ex);
@@ -258,7 +313,7 @@ namespace Jvedio
 
         public void CheckSettings()
         {
-            if (!Enum.IsDefined(typeof(Skin),Properties.Settings.Default.Themes))
+            if (!Enum.IsDefined(typeof(Skin), Properties.Settings.Default.Themes))
             {
                 Properties.Settings.Default.Themes = Skin.黑色.ToString();
                 Properties.Settings.Default.Save();
@@ -286,10 +341,6 @@ namespace Jvedio
                 MessageBox.Show("缺失 BusActress.sqlite", "Jvedio");
                 this.Close();
             }
-
-
-
-
         }
         private void InitDataBase()
         {
@@ -350,7 +401,7 @@ namespace Jvedio
                 db.CloseDB();
             }
 
-            
+
         }
 
 
@@ -401,7 +452,7 @@ namespace Jvedio
         private void MoveWindow(object sender, MouseEventArgs e)
         {
             //移动窗口
-            if (e.LeftButton == MouseButtonState.Pressed )
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
                 this.DragMove();
             }
@@ -419,7 +470,7 @@ namespace Jvedio
             {
                 string[] names = OpenFileDialog1.FileNames;
 
-                foreach(var item in names)
+                foreach (var item in names)
                 {
                     string name = item.Split('\\').Last().Split('.').First().ToLower();
                     if (name == "info" || name == "新建视频库") return;
@@ -430,11 +481,11 @@ namespace Jvedio
 
                     if (File.Exists($"DataBase\\{name}.sqlite"))
                     {
-                        if(new Msgbox(this,$"已存在 {name}，是否覆盖？").ShowDialog() == true)
+                        if (new Msgbox(this, $"已存在 {name}，是否覆盖？").ShowDialog() == true)
                         {
                             File.Copy(item, $"DataBase\\{name}.sqlite", true);
 
-                            if(!vieModel_StartUp.DataBases.Contains(name)) vieModel_StartUp.DataBases.Add(name);
+                            if (!vieModel_StartUp.DataBases.Contains(name)) vieModel_StartUp.DataBases.Add(name);
 
                         }
                     }
@@ -498,7 +549,7 @@ namespace Jvedio
             }
         }
 
-        public string beforeRename="";
+        public string beforeRename = "";
 
         private void RenameSqlite(object sender, RoutedEventArgs e)
         {
@@ -527,35 +578,36 @@ namespace Jvedio
         {
             Console.WriteLine("Rename");
             string name = textBox.Text.ToLower();
-            if (name == beforeRename) {
+            if (name == beforeRename)
+            {
 
                 textBox.IsEnabled = false;
                 textBox.IsReadOnly = true;
                 textBox.Cursor = Cursors.Hand;
                 beforeRename = "";
-                return; 
+                return;
             }
 
 
             if (beforeRename == "")
             {
-                if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrEmpty(name) && !vieModel_StartUp.DataBases.Contains(name) && name.IndexOfAny(Path.GetInvalidFileNameChars()) ==-1 )
+                if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrEmpty(name) && !vieModel_StartUp.DataBases.Contains(name) && name.IndexOfAny(Path.GetInvalidFileNameChars()) == -1)
                 {
-                //新建
-                DB db = new DB("DataBase\\" + name);
-                db.CreateTable(DataBase.SQLITETABLE_MOVIE);
-                db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
-                db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
-                db.CreateTable(DataBase.SQLITETABLE_JAVDB);
-                
-                if (vieModel_StartUp.DataBases.Contains("新建视频库")) vieModel_StartUp.DataBases.Remove("新建视频库");
+                    //新建
+                    DB db = new DB("DataBase\\" + name);
+                    db.CreateTable(DataBase.SQLITETABLE_MOVIE);
+                    db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
+                    db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
+                    db.CreateTable(DataBase.SQLITETABLE_JAVDB);
 
-                textBox.IsEnabled = false;
-                textBox.IsReadOnly = true;
-                textBox.Cursor = Cursors.Hand;
-                
-                vieModel_StartUp.DataBases.Add(name);
-                vieModel_StartUp.DataBases.Add("新建视频库");
+                    if (vieModel_StartUp.DataBases.Contains("新建视频库")) vieModel_StartUp.DataBases.Remove("新建视频库");
+
+                    textBox.IsEnabled = false;
+                    textBox.IsReadOnly = true;
+                    textBox.Cursor = Cursors.Hand;
+
+                    vieModel_StartUp.DataBases.Add(name);
+                    vieModel_StartUp.DataBases.Add("新建视频库");
                 }
                 else
                 {
@@ -599,7 +651,7 @@ namespace Jvedio
             textBox.IsEnabled = false;
             textBox.IsReadOnly = true;
             textBox.Cursor = Cursors.Hand;
-           
+
         }
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)

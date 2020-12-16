@@ -18,14 +18,14 @@ namespace Jvedio
 
     public static class Net
     {
-        public static int TCPTIMEOUT = 2;   // TCP 超时
-        public static int HTTPTIMEOUT = 2; // HTTP 超时
+        public static int TCPTIMEOUT = 10;   // TCP 超时
+        public static int HTTPTIMEOUT = 10; // HTTP 超时
         public static int ATTEMPTNUM = 2; // 最大尝试次数
         public static string UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36";
 
-        public static int REQUESTTIMEOUT = 3000;//网站 HTML 获取超时
-        public static int FILE_REQUESTTIMEOUT = 5000;//图片下载超时
-        public static int READWRITETIMEOUT = 3000;
+        public static int REQUESTTIMEOUT = 10000;//网站 HTML 获取超时
+        public static int FILE_REQUESTTIMEOUT = 10000;//图片下载超时
+        public static int READWRITETIMEOUT = 10000;
 
 
         public static void Init()
@@ -195,6 +195,7 @@ namespace Jvedio
                 {
                     if (Label == "JavDB")
                     {
+                        title = "JavDB";
                         (content, statusCode) = await Http(Url + "v/P2Rz9", Proxy: null, Cookie: Cookie);
                         if (content != "")
                         {

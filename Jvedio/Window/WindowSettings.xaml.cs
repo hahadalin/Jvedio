@@ -859,6 +859,7 @@ namespace Jvedio
             Server server = vieModel_Settings.Servers[rowIndex];
             CheckBox cb = GetVisualChild<CheckBox>(GetCell(rowIndex, 0));
             CheckUrl( server,cb);
+
         }
 
         private void delete_Click(object sender, RoutedEventArgs e)
@@ -959,6 +960,11 @@ namespace Jvedio
             if(server.ServerTitle=="FANZA" || server.ServerTitle == "JavDB")  enablecookie = true; 
 
             (bool result,string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.ServerTitle);
+            if(!result && title.IndexOf("JavDB") >= 0)
+            {
+                HandyControl.Controls.Growl.Error("测试不通过：1.若 Cookie 失效了请重新复制Cookie 或 2.重新测试 或 3. 设置网络超时");
+                return;
+            }
             if (result && title!="")
             {
                 server.Available = 1;

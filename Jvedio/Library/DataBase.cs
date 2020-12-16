@@ -30,6 +30,7 @@ namespace Jvedio
         //新建表 sqlite 语句
         public static string SQLITETABLE_MOVIE = "create table if not exists movie (id VARCHAR(50) PRIMARY KEY , title TEXT , filesize DOUBLE DEFAULT 0 , filepath TEXT , subsection TEXT , vediotype INT , scandate VARCHAR(30) , releasedate VARCHAR(10) DEFAULT '1900-01-01', visits INT  DEFAULT 0, director VARCHAR(50) , genre TEXT , tag TEXT , actor TEXT , actorid TEXT ,studio VARCHAR(50) , rating FLOAT  DEFAULT 0, chinesetitle TEXT , favorites INT  DEFAULT 0, label TEXT , plot TEXT , outline TEXT , year INT  DEFAULT 1900, runtime INT  DEFAULT 0, country VARCHAR(50) , countrycode INT DEFAULT 0 ,otherinfo TEXT, sourceurl TEXT, source VARCHAR(10),actressimageurl TEXT,smallimageurl TEXT,bigimageurl TEXT,extraimageurl TEXT)";
         public static string SQLITETABLE_ACTRESS = "create table if not exists actress ( id VARCHAR(50) PRIMARY KEY, name VARCHAR(50) ,birthday VARCHAR(10) ,age INT ,height INT ,cup VARCHAR(1), chest INT ,waist INT ,hipline INT ,birthplace VARCHAR(50) ,hobby TEXT, sourceurl TEXT, source VARCHAR(10),imageurl TEXT)";
+        public static string SQLITETABLE_ACTRESS_LOVE = "create table if not exists actresslove ( name VARCHAR(50) PRIMARY KEY,islove INT )";
         public static string SQLITETABLE_LIBRARY = "create table if not exists library ( id VARCHAR(50) PRIMARY KEY, code VARCHAR(50))";
         public static string SQLITETABLE_JAVDB = "create table if not exists javdb ( id VARCHAR(50) PRIMARY KEY, code VARCHAR(50))";
         public static string SQLITETABLE_BAIDUAI = "create table if not exists baidu (id VARCHAR(50) PRIMARY KEY , age INT DEFAULT 0 , beauty FLOAT DEFAULT 0 , expression VARCHAR(20), face_shape VARCHAR(20), gender VARCHAR(20), glasses VARCHAR(20), race VARCHAR(20), emotion VARCHAR(20), mask VARCHAR(20))";
@@ -45,6 +46,21 @@ namespace Jvedio
         public static void Init()
         {
             Path = File.Exists(Properties.Settings.Default.DataBasePath) ? new StringBuilder(Properties.Settings.Default.DataBasePath) : new StringBuilder("info.sqlite");
+        }
+
+        public static void CreateTable(string sqltext)
+        {
+            using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
+            {
+                cn.Open();
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = cn;
+                     cmd.CommandText = sqltext;
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
         }
 
 
@@ -628,9 +644,12 @@ namespace Jvedio
         /// </summary>
         /// <param name="sqltext"></param>
         /// <returns></returns>
-        public static List<Movie> SelectMoviesBySql(string sqltext)
+        public static List<Movie> SelectMoviesBySql(string sqltext,string dbName="")
         {
-            Init();
+            if (dbName=="")
+                Init();
+            else
+                Path = new StringBuilder($"{dbName}.sqlite");
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
             {
                 cn.Open();
@@ -883,6 +902,28 @@ namespace Jvedio
                         break;
                     }
                     sr.Close();
+
+
+                    cmd.CommandText = $"select * from actresslove where name='{actress.name}'";
+                    try
+                    {
+                        sr = cmd.ExecuteReader();
+                        while (sr.Read())
+                        {
+                            int.TryParse(sr["islove"].ToString(), out int v1); actress.like = v1;
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        actress.like = 0;
+                    }
+                    finally
+                    {
+                        sr?.Close();
+                    }
+
+                   
                     return actress;
                 }
             }
@@ -890,6 +931,46 @@ namespace Jvedio
 
 
         }
+
+
+        public static List<string> SelectActressNameByLove(int islove)
+        {
+            Init();
+            List<string> result = new List<string>();
+            using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
+            {
+                cn.Open();
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = cn;
+                    SQLiteDataReader sr=null;
+                    cmd.CommandText = $"select * from actresslove where islove={islove}";
+                    try
+                    {
+                         sr = cmd.ExecuteReader();
+                        while (sr.Read())
+                        {
+                            result.Add(sr["name"].ToString());
+                        }
+                    }
+                    catch
+                    {
+                        
+                    }
+                    finally
+                    {
+                        sr?.Close();
+                    }
+
+
+                    return result;
+                }
+            }
+
+
+
+        }
+
 
         /// <summary>
         /// 表是否存在
@@ -974,15 +1055,23 @@ namespace Jvedio
                     string result = "";
                     string sqltext = $"select {info} from {table} where id ='{id}'";
                     cmd.CommandText = sqltext;
-                    SQLiteDataReader sr = cmd.ExecuteReader();
-                    if (sr != null)
+                    SQLiteDataReader sr = null;
+                    try
                     {
-                        while (sr.Read())
+                        sr = cmd.ExecuteReader();
+                        if (sr != null)
                         {
-                            result = sr[0].ToString();
+                            while (sr.Read())
+                            {
+                                result = sr[0].ToString();
+                            }
                         }
+                    } catch {  }
+                    finally
+                    {
+                        sr?.Close();
                     }
-                    sr?.Close();
+                     
                     return result;
                 }
             }
@@ -1311,6 +1400,28 @@ namespace Jvedio
 
         }
 
+
+        public static void SaveActressLikeByName(string name,int like)
+        {
+            Init();
+            using (SQLiteConnection cn = new SQLiteConnection("data source=" + Path))
+            {
+                cn.Open();
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = cn;
+
+                    cmd.CommandText = $"insert into  actresslove(name,islove) values(@name,@islove) ON CONFLICT(name) DO UPDATE SET islove=@islove";
+                    cmd.Parameters.Add("name", DbType.String).Value = name;
+                    cmd.Parameters.Add("islove", DbType.Int32).Value =  like;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+
+
+
+        }
 
         public static void InsertActress(Actress actress)
         {

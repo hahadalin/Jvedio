@@ -476,7 +476,7 @@ namespace JvedioUpdate
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://hitchao.gitee.io/jvediowebpage/");
+            Process.Start("https://hitchao.github.io/JvedioWebPage/");
         }
     }
 }

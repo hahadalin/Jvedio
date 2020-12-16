@@ -45,7 +45,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="Address" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://hitchao.gitee.io/jvediowebpage/</Value>
+      <Value Profile="(Default)">https://hitchao.github.io/JvedioWebPage/</Value>
     </Setting>
     <Setting Name="Username" Type="System.String" Scope="User">
       <Value Profile="(Default)">Chao</Value>

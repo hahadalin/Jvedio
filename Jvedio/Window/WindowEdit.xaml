@@ -169,7 +169,7 @@
                     <StackPanel   HorizontalAlignment="Stretch" Width="auto" Margin="5 20 5 20" VerticalAlignment="Stretch" Height="auto">
                         <Grid Style="{StaticResource InfoGrid}">
                         <Label  Content="识别码"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.id}" Style="{StaticResource BaseTextBox}"/>
+                            <TextBox x:Name="idTextBox"  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.id,Mode=OneWay}" Style="{StaticResource BaseTextBox}"/>
                     </Grid>
                         <Grid Style="{StaticResource InfoGrid}">
                             <Label  Content="视频类型"  Style="{StaticResource BaseLabel2}"/>

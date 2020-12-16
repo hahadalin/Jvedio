@@ -17,6 +17,7 @@ namespace Jvedio.ViewModel
     public class VieModel_Details : ViewModelBase
     {
 
+        public event EventHandler QueryCompleted; 
         public VieModel_Details()
         {
             QueryCommand = new RelayCommand<string>(Query);
@@ -101,8 +102,6 @@ namespace Jvedio.ViewModel
 
         public void Query(string movieid)
         {
-
-            
             DetailMovie detailMovie = DataBase.SelectDetailMovieById(movieid);
             //访问次数+1
             detailMovie.visits += 1;
@@ -152,10 +151,9 @@ namespace Jvedio.ViewModel
                 detailMovie.labellist = new List<string>();
                 detailMovie.labellist.Add("+");
                 detailMovie.labellist.AddRange(labels);
-
                 DetailMovie = detailMovie;
-                //QueryCompletedHandler?.Invoke(null, EventArgs.Empty);
-                VedioInfo = MediaParse.GetMediaInfo(DetailMovie.filepath);
+                if (string.IsNullOrEmpty(DetailMovie.title)) DetailMovie.title = Path.GetFileNameWithoutExtension(DetailMovie.filepath);
+                 QueryCompleted?.Invoke(this, new EventArgs());
             }
         }
     }

@@ -89,23 +89,34 @@ namespace Jvedio.ViewModel
         }
 
 
-        public void SaveModel()
+        public bool SaveModel(string ID="")
         {
+            if (ID == "" && DetailMovie != null && DetailMovie.id.ToUpper() == id.ToUpper())
+            {
+                DataBase.InsertFullMovie(DetailMovie);
+                return true;
+            }
+
             
-            if (MovieIDList == null ) id = DetailMovie.id; //是否导入单个视频
+            id = ID;
+            //if (MovieIDList == null ) id = DetailMovie.id; //是否导入单个视频
             
             if (DetailMovie != null)
             {
                 
                 if (DetailMovie.id.ToUpper() != id.ToUpper())
                 {
-                    //先删除原来的
-                    DataBase.DelInfoByType("movie", "id",id);
+                    //修改了原来的识别码
+                    if (DataBase.SelectMovieByID(ID) != null) return false;
+                    DataBase.DelInfoByType("movie", "id", DetailMovie.id);
+                    DetailMovie.id = id;
                     DataBase.InsertFullMovie(DetailMovie);
                 }
                 else { DataBase.InsertFullMovie(DetailMovie); }
-                
+
+                return true;
             }
+            return false;
            
         }
 

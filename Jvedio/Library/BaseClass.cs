@@ -335,6 +335,8 @@ namespace Jvedio
         public string source { get; set; }
         public string imageurl { get; set; }
 
+        public int like { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -354,5 +356,21 @@ namespace Jvedio
         public JvedioWindowState WinState { get; set; }
     }
 
+
+    public class MyListItem
+    {
+        private string name;
+        private long number = 0;
+
+        public string Name { get => name; set => name = value; }
+        public long Number { get => number; set => number = value; }
+
+        public MyListItem(string name,long number)
+        {
+            this.Name = name;
+            this.Number = number;
+        }
+
+    }
 
 }

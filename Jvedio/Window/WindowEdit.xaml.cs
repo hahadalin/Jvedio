@@ -114,7 +114,7 @@ namespace Jvedio
             }
         }
 
-        private  void UpdateMain()
+        private  void UpdateMain(string oldID,string newID)
         {
             Main main = App.Current.Windows[0] as Main;
 
@@ -122,19 +122,11 @@ namespace Jvedio
             {
                 try
                 {
-                    if (main.vieModel.CurrentMovieList[i]?.id.ToUpper() == vieModel.id.ToUpper())
+                    if (main.vieModel.CurrentMovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
-                        Movie movie =  DataBase.SelectMovieByID(vieModel.DetailMovie.id);
-                        
-                        if (Properties.Settings.Default.ShowImageMode == "预览图")
-                        {
-
-                        }
-                        else
-                        {
-                            movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
-                            movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
-                        }
+                        Movie movie =  DataBase.SelectMovieByID(newID);
+                        movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
+                        movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
                         main.vieModel.CurrentMovieList[i] = null;
                         main.vieModel.CurrentMovieList[i] = movie;
                         break;
@@ -148,19 +140,12 @@ namespace Jvedio
             {
                 try
                 {
-                    if (main.vieModel.MovieList[i]?.id.ToUpper() == vieModel.id.ToUpper())
+                    if (main.vieModel.MovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
-                        Movie movie = DataBase.SelectMovieByID(vieModel.DetailMovie.id);
-
-                        if (Properties.Settings.Default.ShowImageMode == "预览图")
-                        {
-
-                        }
-                        else
-                        {
-                            movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
-                            movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
-                        }
+                        Movie movie = DataBase.SelectMovieByID(newID);
+                        movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
+                        movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
+                        
                         main.vieModel.MovieList[i] = null;
                         main.vieModel.MovieList[i] = movie;
                         break;
@@ -174,11 +159,21 @@ namespace Jvedio
         {
             if (vieModel.DetailMovie.id == "") { new Msgbox(this, "识别码为空！").ShowDialog(); return; }
             if (vieModel.DetailMovie.vediotype <= 0) { new Msgbox(this, "请选择视频类型！").ShowDialog(); return; }
-            this.vieModel.SaveModel();
-            UpdateMain();//更新主窗口
-            UpdateDetail();//更新详情窗口
 
-            HandyControl.Controls.Growl.Success("保存成功", "EditGrowl");
+            string oldID = vieModel.DetailMovie.id;
+            string newID = idTextBox.Text;
+            bool success=vieModel.SaveModel(idTextBox.Text);
+            if (success)
+            {
+                UpdateMain(oldID,newID);//更新主窗口
+                UpdateDetail();//更新详情窗口
+                HandyControl.Controls.Growl.Success("保存成功", "EditGrowl");
+            }
+            else
+            {
+                HandyControl.Controls.Growl.Error("保存失败，已存在该识别码", "EditGrowl");
+            }
+
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -293,7 +288,7 @@ namespace Jvedio
                     vieModel.DetailMovie.scandate = createDate;
                 }
 
-                vieModel.SaveModel();
+               vieModel.SaveModel();
                 vieModel.Query(vieModel.id);
                 HandyControl.Controls.Growl.Success("路径、视频类型、文件大小、创建时间、导入时间成功更新！", "EditGrowl");
             }

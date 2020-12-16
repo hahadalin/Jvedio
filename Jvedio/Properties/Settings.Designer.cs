@@ -193,7 +193,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://hitchao.gitee.io/jvediowebpage/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://hitchao.github.io/JvedioWebPage/")]
         public string Address {
             get {
                 return ((string)(this["Address"]));
