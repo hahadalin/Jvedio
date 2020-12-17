@@ -2146,5 +2146,17 @@ namespace Jvedio.Properties {
                 this["DMMCookie"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFileNameIfTitleEmpty {
+            get {
+                return ((bool)(this["ShowFileNameIfTitleEmpty"]));
+            }
+            set {
+                this["ShowFileNameIfTitleEmpty"] = value;
+            }
+        }
     }
 }

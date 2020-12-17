@@ -25,7 +25,6 @@ namespace Jvedio
         protected VedioType VedioType;
         protected string MovieCode;
         protected string Cookies = "";
-        protected object LockDb;
         protected WebSite webSite;
 
         public string ID { get; set; }
@@ -33,18 +32,13 @@ namespace Jvedio
         public Crawler(string Id)
         {
             ID = Id;
-            LockDb = new object();
         }
 
         public void SaveInfo(Dictionary<string, string> Info, WebSite webSite)
         {
             if(!Info.ContainsKey("id")) Info.Add("id", ID);
             //保存信息
-            lock (LockDb)
-            {
-                DataBase.UpdateInfoFromNet(Info);
-            }
-            
+            DataBase.UpdateInfoFromNet(Info);
             DetailMovie detailMovie = DataBase.SelectDetailMovieById(ID);
 
 

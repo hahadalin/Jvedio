@@ -19,14 +19,6 @@ namespace Jvedio
     public class MySqlite : Sqlite
     {
 
-        public MySqlite(string path, bool absolute) : base(path)
-        {
-            this.SqlitePath = path;
-            cn = new SQLiteConnection("data source=" + SqlitePath);
-            cn.Open();
-            cmd = new SQLiteCommand();
-            cmd.Connection = cn;
-        }
 
 
         /// <summary>
@@ -34,12 +26,12 @@ namespace Jvedio
         /// </summary>
         /// <param name="path"></param>
         /// <param name="DatabaseName"></param>
-        public MySqlite(string path) : base(path)
+        public MySqlite(string path,bool absolute=false) : base(path)
         {
             if (path == "")
                 SqlitePath = Properties.Settings.Default.DataBasePath;
             else
-                SqlitePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path + ".sqlite");
+                SqlitePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path.EndsWith(".sqlite")?path:path + ".sqlite");
             cn = new SQLiteConnection("data source=" + SqlitePath);
             cn.Open();
             cmd = new SQLiteCommand();
@@ -103,6 +95,12 @@ namespace Jvedio
                 sourceurl = sr["sourceurl"].ToString(),
                 source = sr["source"].ToString()
             };
+            if (Properties.Settings.Default.ShowFileNameIfTitleEmpty &&
+                string.IsNullOrEmpty(detailMovie.title) &&
+                !string.IsNullOrEmpty(detailMovie.filepath))
+            {
+                detailMovie.title = Path.GetFileNameWithoutExtension(detailMovie.filepath);
+            } 
             return detailMovie;
         }
 

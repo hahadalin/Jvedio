@@ -18,14 +18,14 @@ namespace Jvedio
 
     public static class Net
     {
-        public static int TCPTIMEOUT = 10;   // TCP 超时
-        public static int HTTPTIMEOUT = 10; // HTTP 超时
+        public static int TCPTIMEOUT = 30;   // TCP 超时
+        public static int HTTPTIMEOUT = 30; // HTTP 超时
         public static int ATTEMPTNUM = 2; // 最大尝试次数
         public static string UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36";
 
-        public static int REQUESTTIMEOUT = 10000;//网站 HTML 获取超时
-        public static int FILE_REQUESTTIMEOUT = 10000;//图片下载超时
-        public static int READWRITETIMEOUT = 10000;
+        public static int REQUESTTIMEOUT = 30000;//网站 HTML 获取超时
+        public static int FILE_REQUESTTIMEOUT = 30000;//图片下载超时
+        public static int READWRITETIMEOUT = 30000;
 
 
         public static void Init()
@@ -83,7 +83,7 @@ namespace Jvedio
                             Request = (HttpWebRequest)HttpWebRequest.Create(Url);
                             if (Cookie != "") Request.Headers.Add("Cookie", Cookie);
                             Request.Accept = "*/*";
-                            Request.Timeout = REQUESTTIMEOUT;
+                            Request.Timeout = 50000;
                             Request.Method = Method;
                             Request.KeepAlive = false;
                             Request.AllowAutoRedirect = allowRedirect;

@@ -754,7 +754,7 @@
                             <TextBlock Style="{StaticResource TextBlockTitle}" Text="服务器源" HorizontalAlignment="Left"/>
 
                             <Button Content="添加" Style="{DynamicResource ButtonStyleFill}" Width="100" Height="25" Click="Button_Click_4" />
-                            <TextBlock Style="{StaticResource TextBlockTitle}" Text="注：新添加的网址测试通过才能保存" HorizontalAlignment="Left"/>
+                            <TextBlock Style="{StaticResource TextBlockTitle}" Text="注：新添加的网址测试通过才能保存，服务器名称不为空才能修改【启用】" HorizontalAlignment="Left"/>
                         </StackPanel>
 
 
@@ -868,31 +868,31 @@
 
                         <StackPanel Orientation="Horizontal" Margin="10 10">
                             <TextBlock Text="强制关闭连接" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                            <Slider x:Name="HttpTimeoutSlider" Value="{Binding Timeout_forcestop, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="10" Width="100" VerticalAlignment="Center"/>
+                            <Slider x:Name="HttpTimeoutSlider" Value="{Binding Timeout_forcestop, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="40" Width="100" VerticalAlignment="Center"/>
                             <TextBlock Text="{Binding Value, ElementName=HttpTimeoutSlider, StringFormat=\{0\} 秒}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="10">
                             <TextBlock Text="Http 超时" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                            <Slider x:Name="RequestTimeoutSlider" Value="{Binding Timeout_http, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="10" Width="100" VerticalAlignment="Center"/>
+                            <Slider x:Name="RequestTimeoutSlider" Value="{Binding Timeout_http, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="40" Width="100" VerticalAlignment="Center"/>
                             <TextBlock Text="{Binding Value, ElementName=RequestTimeoutSlider, StringFormat=\{0\} 秒}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="10">
                             <TextBlock Text="Tcp 超时" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                            <Slider x:Name="TcpTimeoutSlider" Value="{Binding Timeout_tcp, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="10" Width="100" VerticalAlignment="Center"/>
+                            <Slider x:Name="TcpTimeoutSlider" Value="{Binding Timeout_tcp, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="40" Width="100" VerticalAlignment="Center"/>
                             <TextBlock Text="{Binding Value, ElementName=TcpTimeoutSlider, StringFormat=\{0\} 秒}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="10">
                             <TextBlock Text="图片下载超时" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                            <Slider x:Name="DownloadTimeoutSlider" Value="{Binding Timeout_download, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="5" Maximum="20" Width="100" VerticalAlignment="Center"/>
+                            <Slider x:Name="DownloadTimeoutSlider" Value="{Binding Timeout_download, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="5" Maximum="40" Width="100" VerticalAlignment="Center"/>
                             <TextBlock Text="{Binding Value, ElementName=DownloadTimeoutSlider, StringFormat=\{0\} 秒}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="10">
                             <TextBlock Text="流读取超时" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                            <Slider x:Name="StreamTimeoutSlider" Value="{Binding Timeout_stream, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="3" Maximum="10" Width="100" VerticalAlignment="Center"/>
+                            <Slider x:Name="StreamTimeoutSlider" Value="{Binding Timeout_stream, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="3" Maximum="40" Width="100" VerticalAlignment="Center"/>
                             <TextBlock Text="{Binding Value, ElementName=StreamTimeoutSlider, StringFormat=\{0\} 秒}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                         </StackPanel>
 
@@ -911,6 +911,7 @@
                             <CheckBox IsChecked="{Binding DisplayFunBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="功能栏" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="仅显示可播放" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="仅显示分段视频" Height="40" VerticalContentAlignment="Center"/>
+                            <CheckBox IsChecked="{Binding ShowFileNameIfTitleEmpty, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="标题为空时显示文件名" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding TitleShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="标题显示翻译结果" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="摘要显示翻译结果" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding DetialWindowShowAllMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="详情窗口左右浏览数据库所有影片" Height="40" VerticalContentAlignment="Center"/>

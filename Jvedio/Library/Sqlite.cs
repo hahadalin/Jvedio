@@ -15,11 +15,7 @@ namespace MyLibrary.SQL
 
         public Sqlite(string path)
         {
-            this.SqlitePath = path;
-            cn = new SQLiteConnection("data source=" + SqlitePath);
-            cn.Open();
-            cmd = new SQLiteCommand();
-            cmd.Connection = cn;
+
         }
 
 

@@ -165,7 +165,16 @@ namespace Jvedio
             string filepath = "WindowConfig";
             if (!File.Exists(filepath)) InitXML();
             XmlDocument XmlDoc = new XmlDocument();
-            XmlDoc.Load(filepath);
+            
+            try
+            {
+                XmlDoc.Load(filepath);
+            }catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return windowProperty;//缺少根元素
+            }
+            
             XmlNode x1 = XmlDoc.SelectSingleNode($"/Windows/Window[@Name='{WindowName}']/X");
             XmlNode x2 = XmlDoc.SelectSingleNode($"/Windows/Window[@Name='{WindowName}']/Y");
             XmlNode x3 = XmlDoc.SelectSingleNode($"/Windows/Window[@Name='{WindowName}']/Width");

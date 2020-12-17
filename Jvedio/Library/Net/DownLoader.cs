@@ -27,6 +27,7 @@ namespace Jvedio
         private Semaphore SemaphoreFC2;
         public DownLoadProgress downLoadProgress;
 
+        protected object LockDataBase;
         
         private bool Cancel { get; set; }
         public List<Movie> Movies { get; set; }
@@ -68,6 +69,7 @@ namespace Jvedio
         public void StartThread()
         {
             if (Movies.Count == 0 & MoviesFC2.Count==0) { this.State = DownLoadState.Completed; return; }
+            LockDataBase = new object();
             for (int i = 0; i < Movies.Count; i++)
             {
                 Thread threadObject = new Thread(DownLoad);

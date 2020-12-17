@@ -241,7 +241,7 @@
       <DependentUpon>Resource_String.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\VieModel_Batch.cs" />
-    <Compile Include="Window\DialogInput.xaml.cs">
+    <Compile Include="Controls\DialogInput.xaml.cs">
       <DependentUpon>DialogInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Library\Net\DownLoader.cs" />
@@ -376,7 +376,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window\DialogInput.xaml">
+    <Page Include="Controls\DialogInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

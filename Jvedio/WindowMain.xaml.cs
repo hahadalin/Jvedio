@@ -2310,6 +2310,7 @@ namespace Jvedio
 
         public void ClearSearch(object sender, MouseButtonEventArgs e)
         {
+            if (AllSearchTextBox.Text == "") return;
             AllSearchTextBox.Text = "";
             vieModel.Reset();
         }

@@ -853,7 +853,7 @@ namespace Jvedio
 
         private void CancelRun(object sender, RoutedEventArgs e)
         {
-            cts.Cancel();
+           if(!cts.IsCancellationRequested) cts.Cancel();
             LoadingStackPanel.Visibility = Visibility.Hidden;
 
             HandyControl.Controls.Growl.Info("已取消！");

@@ -20,17 +20,27 @@ namespace Jvedio
     /// <summary>
     /// Jvedio 影片
     /// </summary>
-    public class Movie
+    public class Movie:IDisposable
     {
-        private string _id;
-        public string id
+        public Movie()
         {
-            get { return _id; }
-            set
-            {
-                _id = value;
-            }
+            subsectionlist = new List<string>();
         }
+        public Movie(string id)
+        {
+            this.id = id;
+            subsectionlist = new List<string>();
+        }
+
+        public virtual void Dispose()
+        {
+            subsectionlist.Clear();
+            smallimage = null;
+            bigimage = null;
+        }
+
+
+        public string id { get; set; }
         private string _title;
         public string title { get { return _title; } set { _title = value; OnPropertyChanged(); } }
         public double filesize { get; set; }
@@ -55,12 +65,12 @@ namespace Jvedio
             set
             {
                 _subsection = value;
-                string[] t = value.Split(';');
-                if (value.Split(';').Count() >= 2)
+                string[] subsections = value.Split(';');
+                if (subsections.Length >= 2)
                 {
                     hassubsection = true;
                     subsectionlist = new List<string>();
-                    foreach (var item in t)
+                    foreach (var item in subsections)
                     {
                         if (!string.IsNullOrEmpty(item)) subsectionlist.Add(item);
                     }
@@ -73,7 +83,6 @@ namespace Jvedio
 
         public string tagstamps { get; set; }
 
-
         public int vediotype { get; set; }
         public string scandate { get; set; }
 
@@ -84,7 +93,7 @@ namespace Jvedio
             get { return _releasedate; }
             set
             {
-                DateTime dateTime = new DateTime(1900, 01, 01);
+                DateTime dateTime = new DateTime(1970, 01, 01);
                 DateTime.TryParse(value.ToString(), out dateTime);
                 _releasedate = dateTime.ToString("yyyy-MM-dd");
             }
@@ -117,13 +126,10 @@ namespace Jvedio
 
 
         private BitmapSource _smallimage;
-        private BitmapSource _bigimage;
-        //private Uri _gif;
-
-
         public BitmapSource smallimage { get { return _smallimage; } set { _smallimage = value; OnPropertyChanged(); } }
+
+        private BitmapSource _bigimage;
         public BitmapSource bigimage { get { return _bigimage; } set { _bigimage = value; OnPropertyChanged(); } }
-        //public Uri gif { get { return _gif; } set { _gif = value; OnPropertyChanged(); } }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -134,12 +140,48 @@ namespace Jvedio
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Movie()
-        {
-            subsectionlist = new List<string>();
-        }
+
 
     }
+
+
+
+
+    /// <summary>
+    /// 详情页面的 Jvedio 影片，多了预览图、类别、演员、标签
+    /// </summary>
+    public class DetailMovie : Movie
+    {
+        public List<string> genrelist { get; set; }
+        public List<Actress> actorlist { get; set; }
+        public List<string> labellist { get; set; }
+
+        public ObservableRangeCollection<BitmapSource> extraimagelist { get; set; }
+        public ObservableRangeCollection<string> extraimagePath { get; set; }
+
+        public DetailMovie()
+        {
+            genrelist = new List<string>();
+            actorlist = new List<Actress>();
+            labellist = new List<string>();
+            extraimagelist = new ObservableRangeCollection<BitmapSource>();
+            extraimagePath = new ObservableRangeCollection<string>();
+        }
+
+        public override void Dispose()
+        {
+            genrelist.Clear();
+            actorlist.Clear();
+            labellist.Clear();
+            extraimagelist.Clear();
+            extraimagePath.Clear();
+            base.Dispose();
+        }
+
+
+    }
+
+
 
     /// <summary>
     /// 视频信息
@@ -196,37 +238,10 @@ namespace Jvedio
         }
 
     }
-
-
-    /// <summary>
-    /// 详情页面的 Jvedio 影片，多了预览图、类别、演员、标签
-    /// </summary>
-    public class DetailMovie : Movie
-    {
-        public List<string> genrelist { get; set; }
-        public List<Actress> actorlist { get; set; }
-        public List<string> labellist { get; set; }
-
-        public ObservableRangeCollection<BitmapSource> extraimagelist { get; set; }
-        public ObservableRangeCollection<string> extraimagePath { get; set; }
-
-        public DetailMovie()
-        {
-            genrelist = new List<string>();
-            actorlist = new List<Actress>();
-            labellist = new List<string>();
-            extraimagelist = new ObservableRangeCollection<BitmapSource>();
-            extraimagePath = new ObservableRangeCollection<string>();
-        }
-
-
-    }
-
-
     /// <summary>
     /// 主界面演员
     /// </summary>
-    public class Actress : INotifyPropertyChanged
+    public class Actress : INotifyPropertyChanged,IDisposable
     {
         public int num { get; set; }//仅仅用于计数
         public string id { get; set; }
@@ -345,6 +360,11 @@ namespace Jvedio
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void Dispose() {
+            smallimage = null;
+            bigimage = null;
+        }
+
     }
 
 
@@ -359,10 +379,9 @@ namespace Jvedio
 
     public class MyListItem
     {
-        private string name;
         private long number = 0;
 
-        public string Name { get => name; set => name = value; }
+        public string Name { get; set; }
         public long Number { get => number; set => number = value; }
 
         public MyListItem(string name,long number)

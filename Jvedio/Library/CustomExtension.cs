@@ -20,7 +20,6 @@ namespace Jvedio
 {
     public static class CustomExtension
     {
-
         public static string ToSqlString(this Sort sort)
         {
             string result;
@@ -216,7 +215,7 @@ namespace Jvedio
             }
 
             //替换掉特殊字符
-            foreach (char item in GlobalVariable.BANFILECHAR) { newName = newName.Replace(item.ToString(), ""); }
+            foreach (char item in BANFILECHAR) { newName = newName.Replace(item.ToString(), ""); }
 
             if (Properties.Settings.Default.DelRenameTitleSpace) newName = newName.Replace(" ", "");
             if (movie.hassubsection)
@@ -331,6 +330,20 @@ namespace Jvedio
     /// <typeparam name="T"></typeparam> 
     public class ObservableRangeCollection<T> : ObservableCollection<T>
     {
+
+        /// <summary> 
+        /// Initializes a new instance of the System.Collections.ObjectModel.ObservableCollection(Of T) class. 
+        /// </summary> 
+        public ObservableRangeCollection() : base() { }
+
+        /// <summary> 
+        /// Initializes a new instance of the System.Collections.ObjectModel.ObservableCollection(Of T) class that contains elements copied from the specified collection. 
+        /// </summary> 
+        /// <param name="collection">collection: The collection from which the elements are copied.</param> 
+        /// <exception cref="System.ArgumentNullException">The collection parameter cannot be null.</exception> 
+        public ObservableRangeCollection(IEnumerable<T> collection) : base(collection) { }
+
+
         /// <summary> 
         /// Adds the elements of the specified collection to the end of the ObservableCollection(Of T). 
         /// </summary> 
@@ -373,19 +386,6 @@ namespace Jvedio
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-        /// <summary> 
-        /// Initializes a new instance of the System.Collections.ObjectModel.ObservableCollection(Of T) class. 
-        /// </summary> 
-        public ObservableRangeCollection()
-            : base() { }
-
-        /// <summary> 
-        /// Initializes a new instance of the System.Collections.ObjectModel.ObservableCollection(Of T) class that contains elements copied from the specified collection. 
-        /// </summary> 
-        /// <param name="collection">collection: The collection from which the elements are copied.</param> 
-        /// <exception cref="System.ArgumentNullException">The collection parameter cannot be null.</exception> 
-        public ObservableRangeCollection(IEnumerable<T> collection)
-            : base(collection) { }
     }
 
 

@@ -39,7 +39,7 @@ namespace Jvedio
 
         public static void CreateTable(string sqltext)
         {
-            Sqlite sqlite = new Sqlite(SqlitePath);
+            MySqlite sqlite = new MySqlite(SqlitePath);
             sqlite.ExecuteSql(sqltext);
             sqlite.Close();
         }
@@ -146,7 +146,7 @@ namespace Jvedio
 
         public static double SelectCountBySql(string sql)
         {
-            using (Sqlite sqlite = new Sqlite(SqlitePath))
+            using (MySqlite sqlite = new MySqlite(SqlitePath,true))
             {
                 return sqlite.SelectCountByTable("movie", "id", sql);
             }
