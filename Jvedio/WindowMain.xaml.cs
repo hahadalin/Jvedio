@@ -627,7 +627,7 @@ namespace Jvedio
                     {
                         if (!File.Exists(movie.filepath))
                         {
-                            DataBase.DelInfoByType("movie", "id", movie.id);
+                            DataBase.DeleteByField("movie", "id", movie.id);
                         }
                     });
 
@@ -777,7 +777,7 @@ namespace Jvedio
         {
             if (Properties.Settings.Default.ListenAllDir & Properties.Settings.Default.DelFromDBIfDel)
             {
-                DataBase.DelInfoByType("movie", "filepath", e.FullPath);
+                DataBase.DeleteByField("movie", "filepath", e.FullPath);
             }
             Console.WriteLine("成功删除" + e.FullPath);
         }
@@ -2746,7 +2746,7 @@ namespace Jvedio
                             if (DataBase.SelectMovieByID(newID) == null)
                             {
                                 Movie newMovie = DataBase.SelectMovieByID(oldID);
-                                DataBase.DelInfoByType("movie", "id", oldID);
+                                DataBase.DeleteByField("movie", "id", oldID);
                                 newMovie.id = newID;
                                 DataBase.InsertFullMovie(newMovie);
                                 UpdateMain(oldID, newID);
@@ -2905,7 +2905,7 @@ namespace Jvedio
                     {
                         vieModel.SelectedMovie.ToList().ForEach(arg =>
                         {
-                            DataBase.DelInfoByType("movie", "id", arg.id);
+                            DataBase.DeleteByField("movie", "id", arg.id);
                             vieModel.CurrentMovieList.Remove(arg); //从主界面删除
                             vieModel.MovieList.Remove(arg);
                         });
@@ -2978,7 +2978,7 @@ namespace Jvedio
 
                     vieModel.SelectedMovie.ToList().ForEach(arg =>
                     {
-                        DataBase.DelInfoByType("movie", "id", arg.id);
+                        DataBase.DeleteByField("movie", "id", arg.id);
                         vieModel.CurrentMovieList.Remove(arg); //从主界面删除
                         vieModel.MovieList.Remove(arg);
                     });
@@ -4071,15 +4071,14 @@ namespace Jvedio
         {
             MySqlite dB = new MySqlite("mylist");
             List<string> tables = dB.GetAllTable();
-            
             vieModel.MyList = new ObservableCollection<MyListItem>();
-
             foreach (string table in tables)
             {
                 vieModel.MyList.Add(new MyListItem(table,(long)dB.SelectCountByTable(table)));
             }
+            dB.Close();
 
-            dB.CloseDB();
+
         }
 
 

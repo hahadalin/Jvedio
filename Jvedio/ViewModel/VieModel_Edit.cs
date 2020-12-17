@@ -108,7 +108,7 @@ namespace Jvedio.ViewModel
                 {
                     //修改了原来的识别码
                     if (DataBase.SelectMovieByID(ID) != null) return false;
-                    DataBase.DelInfoByType("movie", "id", DetailMovie.id);
+                    DataBase.DeleteByField("movie", "id", DetailMovie.id);
                     DetailMovie.id = id;
                     DataBase.InsertFullMovie(DetailMovie);
                 }

@@ -42,7 +42,7 @@ namespace Jvedio
             //保存信息
             lock (LockDb)
             {
-                DataBase.UpdateInfoFromNet(Info, webSite);
+                DataBase.UpdateInfoFromNet(Info);
             }
             
             DetailMovie detailMovie = DataBase.SelectDetailMovieById(ID);

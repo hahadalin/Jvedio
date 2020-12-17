@@ -503,7 +503,7 @@ namespace Jvedio
                 {
                     //保存信息
                     Info["id"] = id;
-                    DataBase.UpdateInfoFromNet(Info, webSite);
+                    DataBase.UpdateInfoFromNet(Info);
                     DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
 
 

@@ -1142,7 +1142,7 @@ namespace Jvedio
 
         public void DeleteInfo(object sender, RoutedEventArgs e)
         {
-            DataBase.DeleteInfoByID(vieModel.DetailMovie.id);
+            DataBase.ClearInfoByID(vieModel.DetailMovie.id);
             windowMain = App.Current.Windows[0] as Main;
             windowMain.RefreshMovieByID(vieModel.DetailMovie.id);
 
@@ -1153,7 +1153,7 @@ namespace Jvedio
 
         public void DeleteID(object sender, RoutedEventArgs e)
         {
-            DataBase.DelInfoByType("movie", "id", vieModel.DetailMovie.id);
+            DataBase.DeleteByField("movie", "id", vieModel.DetailMovie.id);
             windowMain = App.Current.Windows[0] as Main;
             var movie = windowMain.vieModel.CurrentMovieList.Where(arg => arg.id == vieModel.DetailMovie.id).First();
 

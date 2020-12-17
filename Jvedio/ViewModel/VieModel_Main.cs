@@ -1623,10 +1623,9 @@ namespace Jvedio.ViewModel
                 {
                     foreach (var item in keyValuePair.Value)
                     {
-                        if (DataBase.IsMovieExist(item))
-                        {
-                            movies.Add(DataBase.SelectMovieByID(item));
-                        }
+                        Movie movie = DataBase.SelectMovieByID(item);
+                        if (movie != null) movies.Add(movie);
+                        
 
                     }
                 }

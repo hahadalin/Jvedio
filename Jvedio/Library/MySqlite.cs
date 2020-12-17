@@ -16,10 +16,10 @@ using MyLibrary.SQL;
 
 namespace Jvedio
 {
-    public class MySqlite:Sqlite
+    public class MySqlite : Sqlite
     {
 
-        public MySqlite(string path, bool absolute ):base(path)
+        public MySqlite(string path, bool absolute) : base(path)
         {
             this.SqlitePath = path;
             cn = new SQLiteConnection("data source=" + SqlitePath);
@@ -34,12 +34,12 @@ namespace Jvedio
         /// </summary>
         /// <param name="path"></param>
         /// <param name="DatabaseName"></param>
-        public MySqlite(string path):base(path)
+        public MySqlite(string path) : base(path)
         {
             if (path == "")
-                SqlitePath = Properties.Settings.Default.DataBasePath; 
+                SqlitePath = Properties.Settings.Default.DataBasePath;
             else
-                SqlitePath = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory , path + ".sqlite");
+                SqlitePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path + ".sqlite");
             cn = new SQLiteConnection("data source=" + SqlitePath);
             cn.Open();
             cmd = new SQLiteCommand();
@@ -118,7 +118,7 @@ namespace Jvedio
             if (string.IsNullOrEmpty(sqltext)) return result;
             else cmd.CommandText = sqltext;
 
-            using(SQLiteDataReader sr = cmd.ExecuteReader())
+            using (SQLiteDataReader sr = cmd.ExecuteReader())
             {
                 try
                 {
@@ -126,11 +126,11 @@ namespace Jvedio
                     {
 
                         Movie movie = GetDetailMovieFromSQLiteDataReader(sr);
-                        if(movie!=null) result.Add(movie);
+                        if (movie != null) result.Add(movie);
                     }
 
                 }
-                catch(Exception e) { Logger.LogD(e); }
+                catch (Exception e) { Logger.LogD(e); }
             }
             return result;
         }
@@ -142,6 +142,27 @@ namespace Jvedio
             Movie result = null;
             if (string.IsNullOrEmpty(sqltext)) return result;
             else cmd.CommandText = sqltext;
+            try
+            {
+                using (SQLiteDataReader sr = cmd.ExecuteReader())
+                {
+                    while (sr.Read())
+                    {
+                        Movie movie = GetDetailMovieFromSQLiteDataReader(sr);
+                        if (movie != null) return movie;
+                    }
+                }
+            }
+            catch (Exception e) { Logger.LogD(e); }
+            return result;
+        }
+
+
+        public DetailMovie SelectDetailMovieBySql(string sqltext)
+        {
+            DetailMovie result = null;
+            if (string.IsNullOrEmpty(sqltext)) return result;
+            else cmd.CommandText = sqltext;
 
             using (SQLiteDataReader sr = cmd.ExecuteReader())
             {
@@ -149,8 +170,8 @@ namespace Jvedio
                 {
                     while (sr.Read())
                     {
-                        Movie movie = GetDetailMovieFromSQLiteDataReader(sr);
-                        if (movie != null) return movie;
+                        DetailMovie detailMovie = GetDetailMovieFromSQLiteDataReader(sr);
+                        if (detailMovie != null) return detailMovie;
                     }
 
                 }
@@ -165,15 +186,14 @@ namespace Jvedio
         /// 插入 完整 的数据
         /// </summary>
         /// <param name="movie"></param>
-        public void InsertFullMovie(Movie movie,string table)
+        public void InsertFullMovie(Movie movie, string table)
         {
             if (movie.vediotype == 0) return;
             movie.id = movie.id.Replace("FC2PPV", "FC2");
+            string sqltext = $"INSERT INTO {table}(id  , title  , filesize  , filepath  , subsection  , vediotype  , scandate  , releasedate , visits , director  , genre  , tag  , actor  , actorid  ,studio  , rating , chinesetitle  , favorites  , label  , plot  , outline  , year   , runtime , country  , countrycode ,otherinfo , sourceurl , source ,actressimageurl ,smallimageurl ,bigimageurl ,extraimageurl ) " +
+               "values(@id  , @title  , @filesize  , @filepath  , @subsection  , @vediotype  , @scandate  , @releasedate , @visits , @director  , @genre  , @tag  , @actor  , @actorid  ,@studio  , @rating , @chinesetitle  , @favorites  ,@label  , @plot  , @outline  , @year   , @runtime , @country  , @countrycode ,@otherinfo , @sourceurl , @source ,@actressimageurl ,@smallimageurl ,@bigimageurl ,@extraimageurl) " +
+               "ON CONFLICT(id) DO UPDATE SET title=@title  , filesize=@filesize  , filepath=@filepath  , subsection=@subsection  , vediotype=@vediotype  , scandate=@scandate  , releasedate=@releasedate , visits=@visits , director=@director  , genre=@genre  , tag=@tag  , actor=@actor  , actorid=@actorid  ,studio=@studio  , rating=@rating , chinesetitle=@chinesetitle  ,favorites=@favorites  ,label=@label  , plot=@plot  , outline=@outline  , year=@year   , runtime=@runtime , country=@country  , countrycode=@countrycode ,otherinfo=@otherinfo , sourceurl=@sourceurl , source=@source ,actressimageurl=@actressimageurl ,smallimageurl=@smallimageurl ,bigimageurl=@bigimageurl ,extraimageurl=@extraimageurl";
 
-            string sqltext = $"INSERT INTO {table}(id , title,filesize ,filepath ,subsection , vediotype  ,scandate,releasedate,visits,director,genre,tag, actor, studio ,rating,chinesetitle,favorites, label ,plot,outline,year ,runtime  ,country,countrycode,otherinfo,extraimageurl) " +
-                "values(@id , @title ,@filesize ,@filepath ,@subsection, @vediotype  ,@scandate,@releasedate,@visits,@director,@genre,@tag,@actor,@studio,@rating,@chinesetitle,@favorites,@label,@plot,@outline,@year,@runtime ,@country,@countrycode,@otherinfo,@extraimageurl) " +
-                "ON CONFLICT(id) DO UPDATE SET title=@title,filesize=@filesize,filepath=@filepath,subsection=@subsection,vediotype=@vediotype,scandate=@scandate,releasedate=@releasedate,visits=@visits,director=@director,genre=@genre,tag=@tag," +
-                "actor=@actor,studio=@studio,rating=@rating,chinesetitle=@chinesetitle,favorites=@favorites,label=@label,plot=@plot,outline=@outline,year=@year,runtime=@runtime,country=@country,countrycode=@countrycode,otherinfo=@otherinfo,extraimageurl=@extraimageurl";
             cmd.CommandText = sqltext;
             cmd.Parameters.Add("id", DbType.String).Value = movie.id;
             cmd.Parameters.Add("title", DbType.String).Value = movie.title;
@@ -203,10 +223,68 @@ namespace Jvedio
             cmd.Parameters.Add("otherinfo", DbType.String).Value = movie.otherinfo;
             cmd.Parameters.Add("sourceurl", DbType.String).Value = movie.sourceurl;
             cmd.Parameters.Add("source", DbType.String).Value = movie.source;
+            cmd.Parameters.Add("smallimageurl", DbType.String).Value = movie.smallimageurl;
+            cmd.Parameters.Add("bigimageurl", DbType.String).Value = movie.bigimageurl;
             cmd.Parameters.Add("extraimageurl", DbType.String).Value = movie.extraimageurl;
+            cmd.Parameters.Add("actressimageurl", DbType.String).Value = movie.actressimageurl;
             cmd.ExecuteNonQuery();
         }
 
+
+
+        public void InsertCrawledMovie(Movie movie, string table)
+        {
+            //20个数据
+            string sqltext = $"INSERT INTO {table}(id  , title    , releasedate  , director  , genre  , tag  , actor  , actorid  ,studio  , rating       , plot  , outline  , year   , runtime     , sourceurl , source ,actressimageurl ,smallimageurl ,bigimageurl ,extraimageurl ) " +
+               "values(@id  , @title    , @releasedate ,  @director  , @genre  , @tag  , @actor  , @actorid  ,@studio  , @rating    , @plot  , @outline  , @year   , @runtime  , @sourceurl , @source ,@actressimageurl ,@smallimageurl ,@bigimageurl ,@extraimageurl) " +
+               "ON CONFLICT(id) DO UPDATE SET title=@title    , releasedate=@releasedate  , director=@director  , genre=@genre  , tag=@tag  , actor=@actor  , actorid=@actorid  ,studio=@studio  , rating=@rating   , plot=@plot  , outline=@outline  , year=@year   , runtime=@runtime  , sourceurl=@sourceurl , source=@source ,actressimageurl=@actressimageurl ,smallimageurl=@smallimageurl ,bigimageurl=@bigimageurl ,extraimageurl=@extraimageurl";
+            cmd.CommandText = sqltext;
+            cmd.Parameters.Add("id", DbType.String).Value = movie.id;
+            cmd.Parameters.Add("title", DbType.String).Value = movie.title;
+            cmd.Parameters.Add("releasedate", DbType.String).Value = movie.releasedate;
+            cmd.Parameters.Add("director", DbType.String).Value = movie.director;
+            cmd.Parameters.Add("genre", DbType.String).Value = movie.genre;
+            cmd.Parameters.Add("tag", DbType.String).Value = movie.tag;
+            cmd.Parameters.Add("actor", DbType.String).Value = movie.actor;
+            cmd.Parameters.Add("actorid", DbType.String).Value = movie.actorid;
+            cmd.Parameters.Add("studio", DbType.String).Value = movie.studio;
+            cmd.Parameters.Add("rating", DbType.Double).Value = movie.rating;
+            cmd.Parameters.Add("plot", DbType.String).Value = movie.plot;
+            cmd.Parameters.Add("outline", DbType.String).Value = movie.outline;
+            cmd.Parameters.Add("year", DbType.Int16).Value = movie.year;
+            cmd.Parameters.Add("runtime", DbType.Int16).Value = movie.runtime;
+            cmd.Parameters.Add("sourceurl", DbType.String).Value = movie.sourceurl;
+            cmd.Parameters.Add("source", DbType.String).Value = movie.source;
+            cmd.Parameters.Add("smallimageurl", DbType.String).Value = movie.smallimageurl;
+            cmd.Parameters.Add("bigimageurl", DbType.String).Value = movie.bigimageurl;
+            cmd.Parameters.Add("extraimageurl", DbType.String).Value = movie.extraimageurl;
+            cmd.Parameters.Add("actressimageurl", DbType.String).Value = movie.actressimageurl;
+            cmd.ExecuteNonQuery();
+        }
+
+
+        public void InsertScanedMovie(Movie movie)
+        {
+            string sqltext = "INSERT INTO movie(id , filesize ,filepath  , vediotype  ,scandate,subsection,otherinfo) values(@id , @filesize ,@filepath  , @vediotype  ,@scandate,@subsection,@otherinfo) ON CONFLICT(id) DO UPDATE SET filesize=@filesize,filepath=@filepath,scandate=@scandate,otherinfo=@otherinfo,vediotype=@vediotype,subsection=@subsection";
+            cmd.CommandText = sqltext;
+            cmd.Parameters.Add("id", DbType.String).Value = movie.id.ToUpper();
+            cmd.Parameters.Add("filesize", DbType.Double).Value = movie.filesize;
+            cmd.Parameters.Add("filepath", DbType.String).Value = movie.filepath;
+            cmd.Parameters.Add("vediotype", DbType.Int16).Value = movie.vediotype;
+            cmd.Parameters.Add("scandate", DbType.String).Value = movie.scandate;
+            cmd.Parameters.Add("otherinfo", DbType.String).Value = movie.otherinfo;
+            cmd.Parameters.Add("subsection", DbType.String).Value = movie.subsection;
+            cmd.ExecuteNonQuery();
+        }
+
+
+        public void InsertByField(string table,string field,string value,string id)
+        {
+                cmd.CommandText = $"insert into  {table}(id,{field}) values(@id,@{field}) ON CONFLICT(id) DO UPDATE SET {field}=@{field}";
+                cmd.Parameters.Add("id", DbType.String).Value = id;
+                cmd.Parameters.Add(field, DbType.String).Value = value;
+                cmd.ExecuteNonQuery();
+        }
 
         public void SaveBaiduAIByID(string id, Dictionary<string, string> dic)
         {
@@ -239,14 +317,38 @@ namespace Jvedio
         {
             string result = "";
             cmd.CommandText = sql;
-            using(SQLiteDataReader sr = cmd.ExecuteReader())
+            try
             {
-                while (sr.Read())
+                using (SQLiteDataReader sr = cmd.ExecuteReader())
                 {
-                    if (sr[0] != null) result = sr[0].ToString();
-                    if (result != "") { break; }
+                    while (sr.Read())
+                    {
+                        if (sr[0] != null) result = sr[0].ToString();
+                        if (result != "") { break; }
+                    }
                 }
             }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return result;
+        }
+
+
+        public List<string> GetInfosBySql(string sql)
+        {
+            List<string> result = new List<string>();
+            cmd.CommandText = sql;
+            try
+            {
+                using (SQLiteDataReader sr = cmd.ExecuteReader())
+                {
+                    while (sr.Read())
+                    {
+                        if (sr[0] != null) result.Add(sr[0].ToString());
+                    }
+                }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
             return result;
         }
 

@@ -60,10 +60,12 @@ namespace MyLibrary.SQL
             List<string> tables = new List<string>();
             try
             {
-                SQLiteDataReader sr = cmd.ExecuteReader();
-                while (sr.Read())
+                using(SQLiteDataReader sr = cmd.ExecuteReader())
                 {
-                    tables.Add(sr.GetString(0));
+                    while (sr.Read())
+                    {
+                        tables.Add(sr.GetString(0));
+                    }
                 }
             }
             catch (System.Data.SQLite.SQLiteException ex) { Console.WriteLine(ex.Message); }
