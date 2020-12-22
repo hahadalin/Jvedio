@@ -1,14 +1,13 @@
 ﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:fa="http://schemas.fontawesome.io/icons/"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Jvedio"
-    xmlns:p="clr-namespace:Jvedio.Properties"
-    xmlns:fa="http://schemas.fontawesome.io/icons/"
-    xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
     xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
+    xmlns:p="clr-namespace:Jvedio.Properties"
+    xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     x:Class="Jvedio.Main"
     mc:Ignorable="d"
@@ -1214,7 +1213,7 @@
 
 
                     <!--侧边栏-->
-                    <Border MouseEnter="SideBorder_MouseEnter" MouseLeave="SideBorder_MouseLeave" PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}" x:Name="SideBorder" CornerRadius="0" BorderBrush="{DynamicResource BorderBursh}" BorderThickness="0" >
+                    <Border Visibility="Visible" MouseEnter="SideBorder_MouseEnter" MouseLeave="SideBorder_MouseLeave" PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}" x:Name="SideBorder" CornerRadius="0" BorderBrush="{DynamicResource BorderBursh}" BorderThickness="0" >
                         <Grid   x:Name="Side_Grid"   HorizontalAlignment="Stretch" Height="auto" VerticalAlignment="Stretch" Width="auto">
 
                             <Grid.RowDefinitions>
@@ -1245,6 +1244,11 @@
                                                 <MenuItem  Header="反馈" Click="OpenFeedBack"  />
                                                 <MenuItem Header="官网" Click="OpenJvedioWebPage"/>
                                                 <MenuItem  Header="鸣谢"   Click="ShowThanks"  />
+                                            </MenuItem>
+                                            <MenuItem   Header="打开位置" >
+                                                <MenuItem  Header="日志" Click="OpenLogPath"     />
+                                                <MenuItem  Header="图片" Click="OpenImageSavePath"   />
+                                                <MenuItem  Header="软件目录" Click="OpenApplicationPath"  />
                                             </MenuItem>
                                             <MenuItem  Header="升级" PreviewMouseLeftButtonUp="ShowUpdate"   />
                                             <MenuItem  Header="安全" Visibility="Collapsed"  >
@@ -1303,7 +1307,7 @@
                                     <Grid Grid.Row="0" Cursor="Hand" >
                                         <Image x:Name="RBExpandImage1" Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0" RenderTransformOrigin=".5,.5"    >
                                             <Image.RenderTransform>
-                                                <RotateTransform Angle="0" />
+                                                <RotateTransform Angle="180" />
                                             </Image.RenderTransform>
                                         </Image>
                                         <RadioButton x:Name="ExpandRadioButton1" Background="Transparent" Click="RadioButton_Click" Cursor="Hand"  GroupName="RBExpand1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="智能分类"    />
@@ -1367,7 +1371,7 @@
                                     <Grid Grid.Row="0" Cursor="Hand" >
                                         <Image x:Name="RBExpandImage2" Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0" RenderTransformOrigin=".5,.5"    >
                                             <Image.RenderTransform>
-                                                <RotateTransform Angle="0" />
+                                                <RotateTransform Angle="180" />
                                             </Image.RenderTransform>
                                         </Image>
                                         <RadioButton  x:Name="ExpandRadioButton2" Background="Transparent" Click="RadioButton_Click_1" Cursor="Hand"  GroupName="RBExpand1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="视频类型"     />
@@ -1507,19 +1511,44 @@
 
 
                             <Grid Grid.Row="0">
+
+                                <StackPanel  Orientation="Horizontal" Visibility="Collapsed">
+                                    <Border x:Name="BackBorder"  IsEnabled="True"   Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousRecord"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="后退"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
+                                    </Border>
+
+                                    <Border  x:Name="ForwardBorder"   IsEnabled="True"  Cursor="Hand"  PreviewMouseLeftButtonDown="NextRecord"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="前进"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
+                                    </Border>
+                                </StackPanel>
+                                
+                                
+                                
+                                
+                                
+                                
+                                
                                 <!--搜索-->
-                                <Grid  HorizontalAlignment="Left" x:Name="AllSearchGrid"   Height="40"  Width="200" Margin="10 5"   >
+                                <Grid  HorizontalAlignment="Left" x:Name="AllSearchGrid"   Height="40"  Width="300" Margin="10 5"   >
                                     <Border x:Name="AllSearchBorder"    Style="{StaticResource SearchTextGrid}"   CornerRadius="2"  Background="Transparent" BorderBrush="{DynamicResource BackgroundSide}" BorderThickness="2" />
 
 
                                     <Grid x:Name="SearchOptionGrid"  Width="25" Panel.ZIndex="3" HorizontalAlignment="Left" Margin="10 0 0 0" MouseUp="ShowSearchMenu" Cursor="Hand">
-                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=search,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"/>
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  RenderTransformOrigin=".5,.5"   >
+                                            <Image.RenderTransform>
+                                                <RotateTransform Angle="180" />
+                                            </Image.RenderTransform>
+                                        </Image>
                                         <Popup VerticalOffset="5" HorizontalOffset="-15" x:Name="SearchOptionPopup" Placement="Bottom" PopupAnimation="Fade"  PlacementTarget="{Binding ElementName=SearchOptionGrid}" AllowsTransparency="True" StaysOpen="False" IsOpen="False">
                                             <Border Background="{DynamicResource BackgroundMenu}" CornerRadius="5">
                                                 <StackPanel Margin="5">
                                                     <RadioButton Click="SaveAllSearchType" IsChecked="{Binding AllSearchType, ConverterParameter=识别码, Converter={StaticResource SearchTypeEnumConverter}, Mode=TwoWay}" Content="识别码" Style="{StaticResource RadioButtonStyle}"  GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                     <RadioButton Click="SaveAllSearchType"   IsChecked="{Binding AllSearchType, ConverterParameter=名称, Converter={StaticResource SearchTypeEnumConverter},Mode=TwoWay}"   Content="名称" Style="{StaticResource RadioButtonStyle}" GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                     <RadioButton Click="SaveAllSearchType"   IsChecked="{Binding AllSearchType, ConverterParameter=演员, Converter={StaticResource SearchTypeEnumConverter}, Mode=TwoWay}"   Content="演员" Style="{StaticResource RadioButtonStyle}" GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+
+                                                    <CheckBox x:Name="SearchInCurrentCheckBox"  Margin="5 0" IsChecked="{Binding SearchInCurrent,Mode=TwoWay}" Content="再检索" Style="{StaticResource CheckBoxStyle1}"/>
+
+
                                                 </StackPanel>
                                             </Border>
                                         </Popup>
@@ -1528,7 +1557,7 @@
 
 
 
-                                    <TextBox ToolTip="搜索 识别码、演员、名称" x:Name="AllSearchTextBox" PreviewMouseLeftButtonDown="AllSearchTextBox_PreviewMouseLeftButtonDown"  PreviewKeyUp="SearchTextBox_PreviewKeyUp" TextChanged="SearchTextBox_TextChanged"  Style="{StaticResource SearchTextBox}" Text=""  GotFocus="SearchTextBox_GotFocus" LostFocus="SearchTextBox_LostFocus" CaretBrush="{DynamicResource ForegroundSearch}"   FontSize="16"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="40 0 40 0" Background="Transparent" BorderThickness="0"  >
+                                    <TextBox ToolTip="搜索 识别码、演员、名称"  x:Name="AllSearchTextBox" PreviewMouseLeftButtonDown="AllSearchTextBox_PreviewMouseLeftButtonDown"  PreviewKeyUp="SearchTextBox_PreviewKeyUp" TextChanged="SearchTextBox_TextChanged"  Style="{StaticResource SearchTextBox}" Text="搜索识别码、演员、名称"  GotFocus="SearchTextBox_GotFocus" LostFocus="SearchTextBox_LostFocus" CaretBrush="{DynamicResource ForegroundSearch}"   FontSize="16"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="40 0 40 0" Background="Transparent" BorderThickness="0"  >
                                         <TextBox.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Command="ApplicationCommands.Copy" />
@@ -1568,7 +1597,7 @@
                                     </Popup>
 
 
-                                    <Image Height="20" Width="20"    HorizontalAlignment="Right" Margin="0 0 10 0" MouseLeftButtonDown="ClearSearch" Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}"   />
+                                    <Image x:Name="ClearImage" Visibility="Hidden" Height="20" Width="20"    HorizontalAlignment="Right" Margin="0 0 10 0" MouseLeftButtonDown="ClearSearch" Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}"   />
 
 
 
@@ -1894,6 +1923,9 @@
 
                             <!--演员-->
                             <Grid Grid.Column="0" Visibility="Collapsed" x:Name="ActorInfoGrid"  HorizontalAlignment="Right" Width="auto" Height="auto" VerticalAlignment="Stretch" Margin="10">
+                                <Border HorizontalAlignment="Right" VerticalAlignment="Top"     Height="27" Width="27" Margin="0" CornerRadius="20"  Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="HideActressGrid" Panel.ZIndex="5">
+                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                </Border>
                                 <Border Background="{DynamicResource BackgroundTitle}" Opacity="0.8" CornerRadius="10"/>
                                 <ScrollViewer VerticalScrollBarVisibility="Hidden">
                                     <StackPanel>
@@ -1973,7 +2005,7 @@
                             <Grid Grid.Column="1" FocusVisualStyle="{x:Null}" Panel.ZIndex="2"  Margin="10"     PreviewKeyDown="Grid_PreviewKeyDown"  PreviewKeyUp="Grid_PreviewKeyUp"    AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver"    >
                                 <!--影片展示 Grid-->
                                 <Grid  FocusVisualStyle="{x:Null}" Visibility="Hidden" x:Name="MovieMainGrid" >
-                                    <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True"  x:Name="ScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
+                                    <ScrollViewer IsDeferredScrollingEnabled="False"  FocusVisualStyle="{x:Null}"  CanContentScroll="True"  x:Name="ScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
                                         <ScrollViewer.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Header="刷新" Click="RefreshCurrentPage" />
@@ -1994,7 +2026,7 @@
                                             </ContextMenu>
                                         </ScrollViewer.ContextMenu>
 
-                                        <ItemsControl  FocusVisualStyle="{x:Null}"   x:Name="MovieItemsControl" AlternationCount="999"  ItemsSource="{Binding CurrentMovieList}" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent" >
+                                        <ItemsControl   FocusVisualStyle="{x:Null}"   x:Name="MovieItemsControl" AlternationCount="999"  ItemsSource="{Binding CurrentMovieList}" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent" >
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <WrapPanel   />
@@ -2007,8 +2039,8 @@
                                                     <DataTemplate.Triggers>
                                                         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                                                             <BeginStoryboard  >
-                                                                <Storyboard  AutoReverse="False">
-                                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                <Storyboard  AutoReverse="False" >
+                                                                    <DoubleAnimationUsingKeyFrames  Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
                                                                         <EasingDoubleKeyFrame KeyTime="0" Value="0" />
                                                                         <EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="1" />
                                                                     </DoubleAnimationUsingKeyFrames>
@@ -2059,6 +2091,7 @@
                                                                             </MenuItem>
                                                                             <MenuItem Header="打开网址(W)" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
                                                                             <MenuItem Header="复制文件(C)" Click="CopyFile" />
+                                                                            <MenuItem ToolTip="从当前数据库中删除该影片" Header="清空信息"  Click="DeleteInfo"   />
                                                                             <MenuItem ToolTip="从当前数据库中删除该影片" Header="删除信息(D)"  Click="DeleteID"   />
                                                                             <MenuItem ToolTip="删除文件到回收站" Header="删除文件(T)" Click="DeleteFile" Icon="pack://application:,,,/Resources/menuitem/clear.png" />
 
@@ -2171,7 +2204,7 @@
                                                                         <StackPanel    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Right" Margin="0 0 10 0" >
                                                                             <Label Margin="2 0"  BorderThickness="0" Visibility="{Binding tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=高清,Mode=OneWay}" Background="#9A58B7" Content="高清" Foreground="{DynamicResource ForegroundSearch}"/>
                                                                             <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=中文,Mode=OneWay}"  Background="YellowGreen"   Content="中文" Foreground="{DynamicResource ForegroundSearch}" />
-                                                                            <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=流出,Mode=OneWay}" Background="LightGreen" Content="流出" Foreground="{DynamicResource ForegroundSearch}" />
+                                                                            <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=流出,Mode=OneWay}" Background="#00B0F0" Content="流出" Foreground="{DynamicResource ForegroundSearch}" />
 
                                                                         </StackPanel>
                                                                     </Grid>

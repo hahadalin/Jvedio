@@ -125,6 +125,7 @@ namespace Jvedio
                     if (main.vieModel.CurrentMovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
                         Movie movie =  DataBase.SelectMovieByID(newID);
+                        addTag(ref movie);
                         movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
                         movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
                         main.vieModel.CurrentMovieList[i] = null;
@@ -143,6 +144,7 @@ namespace Jvedio
                     if (main.vieModel.MovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
                         Movie movie = DataBase.SelectMovieByID(newID);
+                        addTag(ref movie);
                         movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
                         movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
                         

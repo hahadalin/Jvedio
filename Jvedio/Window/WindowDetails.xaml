@@ -21,11 +21,28 @@
         >
     <Window.Resources>
 
+
+        <local:TagStampsConverter x:Key="TagStampsConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther"/>
         <local:PlotToVisibilityConverter x:Key="PlotToVisibilityConverter"/>
         <local:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
+
+        <Style x:Key="GenBorder" TargetType="{x:Type Border}">
+            <Setter Property="Width" Value="auto" />
+            <Setter Property="Height" Value="auto" />
+            <Setter Property="Background" Value="{DynamicResource BackgroundSide}" />
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource BackgroundTitle}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
         <Style x:Key="InfoStackPanel" TargetType="{x:Type StackPanel}">
             <Setter Property="Margin" Value="0 5"/>
@@ -244,6 +261,8 @@
             </Border.Effect>
         </Border>
 
+      
+
         <!--消息提示框-->
         <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="20">
             <StackPanel hc:Growl.Token="DetailsGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
@@ -414,7 +433,7 @@
                             <Grid Grid.Row="0" PreviewMouseWheel="Grid_PreviewMouseWheel"   MouseLeftButtonDown="Grid_MouseLeftButtonDown"   >
                                 <Border   Background="{DynamicResource BackgroundSide}"  CornerRadius="10" Padding="10"   >
                                     <Grid >
-                                        <Image Margin="0" HorizontalAlignment="Center"    x:Name="BigImage"  Style="{StaticResource BigImage}" MouseMove="MoveWindow" AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"    >
+                                        <Image ContextMenuOpening="BigImage_ContextMenuOpening" Margin="0" HorizontalAlignment="Center"    x:Name="BigImage"  Style="{StaticResource BigImage}" MouseMove="MoveWindow" AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"    >
                                             <Image.ContextMenu>
                                                 <ContextMenu  PreviewKeyUp="ContextMenu_PreviewKeyUp">
                                                     <MenuItem Header="立即同步(S)" Click="DownLoad"/>
@@ -434,6 +453,10 @@
                                                         <MenuItem Header="影片截图" Click="OpenImagePath"   ></MenuItem>
                                                         <MenuItem Header="头像" Click="OpenImagePath"   ></MenuItem>
                                                     </MenuItem>
+
+                                                    <MenuItem Header="加入清单"   Name="ListMenuItem"   />
+
+                                                    <MenuItem Header="添加到标签"   Click="AddNewLabel" />
 
                                                     <MenuItem Header="打开网址(W)" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
                                                     <MenuItem Header="复制文件(C)" Click="CopyFile" />
@@ -537,6 +560,13 @@
                                     <ScrollViewer Height="auto"  Margin="20 0 0 0" HorizontalAlignment="Stretch">
                                         <StackPanel  >
                                             <TextBox Margin="-1 20 0 16" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"></TextBox>
+                                            <StackPanel x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 7 0 10" >
+                                                <Label Margin="5 0"  BorderThickness="0" Visibility="{Binding DetailMovie.tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=高清,Mode=OneWay}" Background="#9A58B7" Content="高清" Foreground="{DynamicResource ForegroundSearch}"/>
+                                                <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=中文,Mode=OneWay}"  Background="YellowGreen"   Content="中文" Foreground="{DynamicResource ForegroundSearch}" />
+                                                <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=流出,Mode=OneWay}" Background="#00B0F0" Content="流出" Foreground="{DynamicResource ForegroundSearch}" />
+
+                                            </StackPanel>
+
                                             <StackPanel Orientation="Horizontal" >
                                                 <TextBlock   FontSize="14"  VerticalAlignment="Center" Style="{StaticResource ViewTextBlock}"  Foreground="{DynamicResource ForegroundSearch}" Text="{Binding DetailMovie.releasedate}" Margin="0 0 10 0"></TextBlock>
 
@@ -879,5 +909,55 @@
         </Border>
 
 
+        <!--标签-->
+
+        <Grid x:Name="LabelGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300" Width="500" Visibility="Hidden" >
+            <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
+                </Border.Effect>
+            </Border>
+
+            <Border Height="30" Width="30" HorizontalAlignment="Right"  VerticalAlignment="Top" PreviewMouseLeftButtonUp="HideGrid"   CornerRadius="3" Style="{StaticResource CloseBorderStyle}" >
+                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+            </Border>
+
+            <TextBlock Text="添加到标签" Style="{StaticResource ViewTextBlock}" Margin="20" Height="auto" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+
+            <Grid  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20 50 20 5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+
+                <ItemsControl x:Name="LabelItemsControl"  Grid.Row="0" ItemsSource="{Binding LabelList}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel  Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
+
+                            </WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel x:Name="LabelWrapPanel">
+                                <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Padding="5" Margin="10" FontSize="15" BorderThickness="0" Content="{Binding }"  Foreground="{DynamicResource ForegroundSearch}">
+                                </ToggleButton>
+                            </WrapPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+                    <Button  Style="{StaticResource ButtonStyleFill}" Content="确定" Width="100" Height="25" Click="Button_Click"/>
+                    <Button  Style="{StaticResource ButtonStyleFill}" Content="取消" Width="100" Height="25" Click="Button_Click_1"/>
+                </StackPanel>
+
+
+            </Grid>
+
+
+        </Grid>
     </Grid>
 </Window>

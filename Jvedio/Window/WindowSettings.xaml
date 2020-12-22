@@ -916,7 +916,7 @@
                             <CheckBox IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="摘要显示翻译结果" Height="40" VerticalContentAlignment="Center"/>
                             <CheckBox IsChecked="{Binding DetialWindowShowAllMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="详情窗口左右浏览数据库所有影片" Height="40" VerticalContentAlignment="Center"/>
                         </StackPanel>
-                        <WrapPanel Orientation="Horizontal" Margin="20 0">
+                        <WrapPanel Visibility="Collapsed" Orientation="Horizontal" Margin="20 0">
                             <TextBlock Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="0 2 20 0" Text="每页影片数目" />
                             <hc:NumericUpDown Maximum="100" Minimum="4" Increment="1"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"   BorderThickness="0" Value="{Binding DisplayNumber, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"    />
                             <TextBlock   Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="每次滚动数目"/>

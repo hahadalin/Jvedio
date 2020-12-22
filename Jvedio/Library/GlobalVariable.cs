@@ -122,6 +122,11 @@ namespace Jvedio
             if (string.IsNullOrEmpty(Properties.Settings.Default.FC2)) Properties.Settings.Default.EnableFC2 = false;
             Properties.Settings.Default.Save();
 
+            //每页数目
+            Properties.Settings.Default.DisplayNumber = 100;
+            Properties.Settings.Default.FlowNum = 20;
+            Properties.Settings.Default.ActorDisplayNum = 30;
+
             //添加演员分隔符
             if(!actorSplitDict.ContainsKey(0)) actorSplitDict.Add(0, new char[] { ' ', '/' });
             if (!actorSplitDict.ContainsKey(1)) actorSplitDict.Add(1, new char[] { ' ', '/' });

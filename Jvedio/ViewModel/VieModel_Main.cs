@@ -44,6 +44,9 @@ namespace Jvedio.ViewModel
         public int SideIdx = 0;
 
 
+        public FixedList<List<string>> Record = new FixedList<List<string>>(10);//固定长度
+        public int RecordIndex= 0;
+
         public VieModel_Main()
         {
             ResetCommand = new RelayCommand(Reset);
@@ -248,9 +251,6 @@ namespace Jvedio.ViewModel
 
 
         public List<Movie> MovieList;
-
-
-
 
         private ObservableCollection<Genre> genrelist;
         public ObservableCollection<Genre> GenreList
@@ -773,6 +773,18 @@ namespace Jvedio.ViewModel
             }
         }
 
+
+        private bool searchInCurrent = false;
+
+        public bool SearchInCurrent
+        {
+            get { return searchInCurrent; }
+            set
+            {
+                searchInCurrent = value;
+            }
+        }
+
         #endregion
 
 
@@ -1057,7 +1069,7 @@ namespace Jvedio.ViewModel
                     IsFlipOvering = false;
                     if (main != null)
                     {
-                        main.IsFlowing = false;
+                        //main.IsFlowing = false;
                         main.SetSelected();
                         CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
                     }
@@ -1087,7 +1099,8 @@ namespace Jvedio.ViewModel
             App.Current.Windows[0].Cursor = Cursors.Wait;
             List<string> CurrentID = new List<string>();
             foreach (Movie movie in CurrentMovieList) CurrentID.Add(movie.id);
-            Reset();
+            CurrentMovieList = new ObservableCollection<Movie>();
+            FlipOver();
             App.Current.Windows[0].Cursor = Cursors.Arrow;
         }
 
@@ -1200,8 +1213,6 @@ namespace Jvedio.ViewModel
                             if (Movies.Count == FlowNum) { break; }
 
                         }
-
-                        
                         for (int i = 0; i < Movies.Count; i++)
                         {
                             //添加标签戳
@@ -1209,7 +1220,6 @@ namespace Jvedio.ViewModel
                             if (Identify.IsCHS(Movies[i].filepath) || Movies[i].genre?.IndexOf("中文") >= 0 || Movies[i].tag?.IndexOf("中文") >= 0 || Movies[i].label?.IndexOf("中文") >= 0) Movies[i].tagstamps += "中文";
                             if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOf("流出") >= 0 || Movies[i].tag?.IndexOf("流出") >= 0 || Movies[i].label?.IndexOf("流出") >= 0) Movies[i].tagstamps += "流出";
                         }
-
 
 
 
@@ -1231,7 +1241,7 @@ namespace Jvedio.ViewModel
                             IsFlipOvering = false;
                             if (main != null)
                             {
-                                main.IsFlowing = false;
+                                //main.IsFlowing = false;
                                 main.SetSelected();
                                 CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
                             }
@@ -1361,24 +1371,36 @@ namespace Jvedio.ViewModel
             if (string.IsNullOrEmpty(fanhao)) searchContent = FormatSearch;
             else searchContent = fanhao;
 
-
+            List<Movie> oldMovieList = MovieList.ToList();
 
             if (Properties.Settings.Default.AllSearchType == "识别码")
             {
                 TextType = "搜索识别码：" + searchContent;
-                MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where id like '%{searchContent}%'");
+
+                if (SearchInCurrent)
+                    MovieList = oldMovieList.Where(arg => arg.id.IndexOf(searchContent) >= 0).ToList();
+                else
+                    MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where id like '%{searchContent}%'");
+
+                
             }
 
             else if (Properties.Settings.Default.AllSearchType == "名称")
             {
                 TextType = "搜索名称：" + searchContent;
-                MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where title like '%{searchContent}%'");
+                if (SearchInCurrent)
+                    MovieList = oldMovieList.Where(arg => arg.title.IndexOf(searchContent) >= 0).ToList();
+                else
+                    MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where title like '%{searchContent}%'");
             }
 
             else if (Properties.Settings.Default.AllSearchType == "演员")
             {
                 TextType = "搜索演员：" + searchContent;
-                MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where actor like '%{searchContent}%'");
+                if (SearchInCurrent)
+                    MovieList = oldMovieList.Where(arg => arg.actor.IndexOf(searchContent) >= 0).ToList();
+                else
+                    MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where actor like '%{searchContent}%'");
             }
 
 
@@ -1410,6 +1432,10 @@ namespace Jvedio.ViewModel
             SqlCommands.Add(sqlInfo);
             SqlIndex = SqlCommands.Count - 1;
             TextType = textType;
+            if (Properties.Settings.Default.ShowViewMode != "默认") TextType = TextType + "，" + Properties.Settings.Default.ShowViewMode;
+            if (Properties.Settings.Default.OnlyShowPlay ) TextType = TextType + "，可播放" ;
+            if (Properties.Settings.Default.OnlyShowSubSection) TextType = TextType + "，仅分段";
+
             Task.Run(() =>
             {
                 if (sideIndex == 5 || sideIndex == 6 || sideIndex == 7)
@@ -1429,6 +1455,8 @@ namespace Jvedio.ViewModel
                 {
                     MovieList = DataBase.SelectMoviesBySql(sql,dbName);
                 }
+                Record.Add(MovieList.Select(arg=>arg.id).ToList());
+                RecordIndex = Record.Count-1;
                 Statistic();
                 FlipOver();
             });
@@ -1462,6 +1490,10 @@ namespace Jvedio.ViewModel
                         movies?.ForEach(arg => { if (arg.label.Split(' ').Any(m => m.ToUpper() == textType.ToUpper())) MovieList.Add(arg); });
 
                     CurrentPage = 1;
+
+                    Record.Add(MovieList.Select(arg => arg.id).ToList());
+                    RecordIndex = Record.Count-1;
+
                     FlipOver();
                     SetSideButtonChecked(5);
                 }
@@ -1473,6 +1505,10 @@ namespace Jvedio.ViewModel
                     {
                         Statistic();
                         MovieList = DataBase.SelectPartialInfo(sqlInfo["SqlCommand"]);
+
+                        Record.Add(MovieList.Select(arg => arg.id).ToList());
+                        RecordIndex = Record.Count - 1;
+
                         FlipOver();
                     });
                     SetSideButtonChecked(sideIndex);
@@ -1636,6 +1672,10 @@ namespace Jvedio.ViewModel
             MovieList = new List<Movie>();
             MovieList.AddRange(movies);
             CurrentPage = 1;
+
+            Record.Add(MovieList.Select(arg => arg.id).ToList());
+            RecordIndex = Record.Count - 1;
+
             FlipOver();
             //if (MovieList.Count == 0 && RecentWatchedCount > 0)
             //    HandyControl.Controls.Growl.Info("该库中无最近播放，请切换到其他库！");
@@ -1665,6 +1705,10 @@ namespace Jvedio.ViewModel
             MovieList = new List<Movie>();
             MovieList.AddRange(movies);
             CurrentPage = 1;
+
+            Record.Add(MovieList.Select(arg => arg.id).ToList());
+            RecordIndex = Record.Count - 1;
+
             FlipOver();
         }
 
@@ -1716,6 +1760,10 @@ namespace Jvedio.ViewModel
             {
                 if (arg.actor.Split(actorSplitDict[arg.vediotype]).Any(m => m.ToUpper() == actress.name.ToUpper())) MovieList.Add(arg);
             });
+
+            Record.Add(MovieList.Select(arg => arg.id).ToList());
+            RecordIndex = Record.Count - 1;
+
             CurrentPage = 1;
             FlipOver();
         }
@@ -1752,7 +1800,8 @@ namespace Jvedio.ViewModel
 
             }
             CurrentPage = 1;
-
+            Record.Add(MovieList.Select(arg => arg.id).ToList());
+            RecordIndex = Record.Count - 1;
 
         }
 

@@ -20,6 +20,9 @@ using System.Windows.Threading;
 using static Jvedio.GlobalVariable;
 using static Jvedio.ImageProcess;
 using static Jvedio.FileProcess;
+using System.Collections.ObjectModel;
+using System.Windows.Controls.Primitives;
+using System.Text.RegularExpressions;
 
 namespace Jvedio
 {
@@ -247,7 +250,7 @@ namespace Jvedio
         {
             List<string> urlList = new List<string>();
             foreach (var item in vieModel.DetailMovie.extraimageurl?.Split(';')) { if (!string.IsNullOrEmpty(item)) urlList.Add(item); }
-            if (vieModel.DetailMovie.extraimagelist.Count-1 >= urlList.Count && vieModel.DetailMovie.bigimage != null && vieModel.DetailMovie.title != "") return;
+            if (vieModel.DetailMovie.extraimagelist.Count-1 >= urlList.Count && vieModel.DetailMovie.bigimage != null && vieModel.DetailMovie.title != "" && vieModel.DetailMovie.sourceurl!="") return;
 
 
 
@@ -524,6 +527,9 @@ namespace Jvedio
                             vieModel.DetailMovie.labellist.Add(text);
                             vieModel.SaveLabel();
                             vieModel.Query(vieModel.DetailMovie.id);
+                            //显示到主界面
+                            Main main = App.Current.Windows[0] as Main;
+                            main.RefreshMovieByID(vieModel.DetailMovie.id);
                         }
 
                     }
@@ -788,6 +794,25 @@ namespace Jvedio
 
         }
 
+
+        private void ShowTagStamps()
+        {
+            var labels = TagStampsStackPanel.Children.OfType<Label>().ToList();
+            if (vieModel.DetailMovie.tagstamps.IndexOf("高清") >= 0)
+                labels[0].Visibility = Visibility.Visible;
+            else
+                labels[0].Visibility = Visibility.Collapsed;
+
+            if (vieModel.DetailMovie.tagstamps.IndexOf("中文") >= 0)
+                labels[1].Visibility = Visibility.Visible;
+            else
+                labels[1].Visibility = Visibility.Collapsed;
+
+            if (vieModel.DetailMovie.tagstamps.IndexOf("流出") >= 0)
+                labels[2].Visibility = Visibility.Visible;
+            else
+                labels[2].Visibility = Visibility.Collapsed;
+        }
 
 
 
@@ -1823,6 +1848,7 @@ namespace Jvedio
 
                 vieModel.QueryCompleted += delegate
                 {
+                    ShowTagStamps();
                     if ((bool)ExtraImageRadioButton.IsChecked) LoadImage();
                     else LoadScreenShotImage();
 
@@ -1837,6 +1863,20 @@ namespace Jvedio
             else { this.DataContext = null; }
             FatherGrid.Focus();
             SetSkin();
+            InitList();
+        }
+
+        private void InitList()
+        {
+            MySqlite dB = new MySqlite("mylist");
+            List<string> tables = dB.GetAllTable();
+            vieModel.MyList = new ObservableCollection<MyListItem>();
+            foreach (string table in tables)
+            {
+                vieModel.MyList.Add(new MyListItem(table, (long)dB.SelectCountByTable(table)));
+            }
+            dB.Close();
+
 
         }
 
@@ -1950,7 +1990,121 @@ namespace Jvedio
             scrollViewer.ScrollToHorizontalOffset(0);
         }
 
+        private void BigImage_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
 
+            Image image = sender as Image;
+            ContextMenu contextMenu = image.ContextMenu;
+            if (contextMenu.Visibility != Visibility.Visible) return;
+            Task.Run(() => {
+                Task.Delay(100).Wait();
+                this.Dispatcher.Invoke(() => {
+                    MenuItem menuItem = FindElementByName<MenuItem>(contextMenu, "ListMenuItem");
+                    if (menuItem != null)
+                    {
+                        menuItem.Items.Clear();
+                        foreach (var item in vieModel.MyList)
+                        {
+                            MenuItem menuItem1 = new MenuItem();
+                            menuItem1.Header = item.Name;
+                            menuItem1.Name = item.Name;
+                            menuItem1.Click += MyListItemClick;
+                            menuItem.Items.Add(menuItem1);
+                        }
+                    }
+                });
+            });
+
+        }
+
+        private void MyListItemClick(object sender, EventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            string table = menuItem.Header.ToString();
+            Movie newMovie = DataBase.SelectMovieByID(vieModel.DetailMovie.id);
+            MySqlite dB = new MySqlite("mylist");
+            dB.InsertFullMovie(newMovie, table);
+            dB.CloseDB();
+            Main main = App.Current.Windows[0] as Main;
+            main.InitList();
+            InitList();
+        }
+
+        private void AddNewLabel(object sender, RoutedEventArgs e)
+        {
+            vieModel.GetLabelList();
+            LabelGrid.Visibility = Visibility.Visible;
+            for (int i = 0; i < vieModel.LabelList.Count; i++)
+            {
+                ContentPresenter c = (ContentPresenter)LabelItemsControl.ItemContainerGenerator.ContainerFromItem(LabelItemsControl.Items[i]);
+                WrapPanel wrapPanel = FindElementByName<WrapPanel>(c, "LabelWrapPanel");
+                if (wrapPanel != null)
+                {
+                    ToggleButton toggleButton = wrapPanel.Children.OfType<ToggleButton>().First();
+                    toggleButton.IsChecked = false;
+                }
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //获得选中的标签
+            List<string> originLabels = new List<string>();
+            for (int i = 0; i < vieModel.LabelList.Count; i++)
+            {
+                ContentPresenter c = (ContentPresenter)LabelItemsControl.ItemContainerGenerator.ContainerFromItem(LabelItemsControl.Items[i]);
+                WrapPanel wrapPanel = FindElementByName<WrapPanel>(c, "LabelWrapPanel");
+                if (wrapPanel != null)
+                {
+                    ToggleButton toggleButton = wrapPanel.Children.OfType<ToggleButton>().First();
+                    if ((bool)toggleButton.IsChecked)
+                    {
+                        Match match = Regex.Match(toggleButton.Content.ToString(), @"\( \d+ \)");
+                        if (match != null && match.Value != "")
+                        {
+                            string label = toggleButton.Content.ToString().Replace(match.Value, "");
+                            if (!originLabels.Contains(label)) originLabels.Add(label);
+                        }
+
+                    }
+                }
+            }
+
+            if (originLabels.Count <= 0)
+            {
+                HandyControl.Controls.Growl.Warning("请选择标签！", "DetailsGrowl");
+                return;
+            }
+
+
+            List<string> labels = LabelToList(vieModel.DetailMovie.label);
+            labels = labels.Union(originLabels).ToList();
+            vieModel.DetailMovie.label = string.Join(" ", labels);
+            DataBase.UpdateMovieByID(vieModel.DetailMovie.id, "label", vieModel.DetailMovie.label, "String");
+            
+            HandyControl.Controls.Growl.Info($"成功添加标签！", "DetailsGrowl");
+            LabelGrid.Visibility = Visibility.Hidden;
+
+            vieModel.Query(vieModel.DetailMovie.id);
+            //显示到主界面
+            Main main = App.Current.Windows[0] as Main;
+            main.RefreshMovieByID(vieModel.DetailMovie.id);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            StackPanel stackPanel = (StackPanel)button.Parent;
+            Grid grid = (Grid)stackPanel.Parent;
+            ((Grid)grid.Parent).Visibility = Visibility.Hidden;
+        }
+
+        private void HideGrid(object sender, MouseButtonEventArgs e)
+        {
+            Grid grid = ((Border)sender).Parent as Grid;
+            grid.Visibility = Visibility.Hidden;
+
+        }
     }
 
 

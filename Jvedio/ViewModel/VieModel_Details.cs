@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.IO;
 using System.Text.RegularExpressions;
-
+using DynamicData;
 
 namespace Jvedio.ViewModel
 {
@@ -74,9 +74,46 @@ namespace Jvedio.ViewModel
             }
         }
 
+
+        private ObservableCollection<string> labellist;
+        public ObservableCollection<string> LabelList
+        {
+            get { return labellist; }
+            set
+            {
+                labellist = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private ObservableCollection<MyListItem> _MyList;
+
+
+        public ObservableCollection<MyListItem> MyList
+        {
+            get { return _MyList; }
+            set
+            {
+                _MyList = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public void CleanUp()
         {
             MessengerInstance.Unregister(this);
+        }
+
+        public void GetLabelList()
+        {
+            //TextType = "标签";
+            List<string> labels = DataBase.SelectLabelByVedioType(VedioType.所有);
+
+            App.Current.Dispatcher.Invoke((Action)delegate
+            {
+                LabelList = new ObservableCollection<string>();
+                LabelList.AddRange(labels);
+            });
         }
 
 
@@ -152,6 +189,8 @@ namespace Jvedio.ViewModel
                 detailMovie.labellist.Add("+");
                 detailMovie.labellist.AddRange(labels);
                 DetailMovie = detailMovie;
+                detailMovie.tagstamps = "";
+                FileProcess.addTag(ref detailMovie);
                 if (string.IsNullOrEmpty(DetailMovie.title)) DetailMovie.title = Path.GetFileNameWithoutExtension(DetailMovie.filepath);
                  QueryCompleted?.Invoke(this, new EventArgs());
             }

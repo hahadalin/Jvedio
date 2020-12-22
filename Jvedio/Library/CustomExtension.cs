@@ -392,9 +392,16 @@ namespace Jvedio
 
     public class FixedList<T> : List<T>
     {
+
+        private int max;
+
+        public FixedList(int max=10){ this.max = max; }
+
+
+
         public new void Add(T item)
         {
-            if (Count > 9)
+            if (Count >= max)
             {
                 Remove(this[0]);
             }

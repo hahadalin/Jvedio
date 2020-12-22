@@ -436,23 +436,25 @@ namespace Jvedio
         }
 
 
-        public async static Task<(bool, string)> DownLoadSmallPic(DetailMovie dm)
+        public async static Task<(bool, string)> DownLoadSmallPic(DetailMovie dm,bool overWrite=false)
         {
+            if (overWrite) return await Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id);
             //不存在才下载
             if (!File.Exists(GlobalVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg"))
             {
-                Console.WriteLine("开始下载小图");
-                Console.WriteLine(dm.source);
-                if (dm.source == "javdb") return (false, "");
-                else return await Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id);
+                 return await Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id);
             }
             else return (false, "");
 
         }
 
 
-        public async static Task<(bool, string)> DownLoadBigPic(DetailMovie dm)
+        public async static Task<(bool, string)> DownLoadBigPic(DetailMovie dm,bool overWrite=false)
         {
+
+            if(overWrite) return await Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);
+
+
             if (!File.Exists(GlobalVariable.BasePicPath + $"BigPic\\{dm.id}.jpg"))
             {
                 return await Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);

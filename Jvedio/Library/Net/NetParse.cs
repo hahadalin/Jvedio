@@ -102,7 +102,14 @@ namespace Jvedio
                 if (VedioType == VedioType.欧美)
                     result.Add("title", titleNodes[0].InnerText.Replace(ID, ""));
                 else
-                    result.Add("title", titleNodes[0].InnerText.Replace(ID, "").Substring(1));
+                {
+                    string title = titleNodes[0].InnerText.ToUpper().Replace(ID.ToUpper(), "");
+                    if(title.StartsWith(" "))
+                        result.Add("title", title.Substring(1));
+                    else
+                        result.Add("title", title);
+                }
+                    
             }
 
 

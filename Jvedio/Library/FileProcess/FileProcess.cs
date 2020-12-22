@@ -36,6 +36,23 @@ namespace Jvedio
 
         }
 
+        public static List<string> LabelToList(string label)
+        {
+
+            List<string> result = new List<string>();
+            if (string.IsNullOrEmpty(label)) return result;
+            if (label.IndexOf(' ') > 0)
+            {
+                foreach (var item in label.Split(' '))
+                {
+                    if (item.Length > 0)
+                        if (!result.Contains(item)) result.Add(item);
+                }
+            }
+            else { if (label.Length > 0) result.Add(label.Replace(" ", "")); }
+            return result;
+        }
+
         public static void ByteArrayToFile(byte[] byteArray, string fileName)
         {
             try
@@ -119,6 +136,14 @@ namespace Jvedio
         }
 
         public static void addTag(ref Movie movie)
+        {
+            //添加标签戳
+            if (Identify.IsHDV(movie.filepath) || movie.genre?.IndexOf("高清") >= 0 || movie.tag?.IndexOf("高清") >= 0 || movie.label?.IndexOf("高清") >= 0) movie.tagstamps += "高清";
+            if (Identify.IsCHS(movie.filepath) || movie.genre?.IndexOf("中文") >= 0 || movie.tag?.IndexOf("中文") >= 0 || movie.label?.IndexOf("中文") >= 0) movie.tagstamps += "中文";
+            if (Identify.IsFlowOut(movie.filepath) || movie.genre?.IndexOf("流出") >= 0 || movie.tag?.IndexOf("流出") >= 0 || movie.label?.IndexOf("流出") >= 0) movie.tagstamps += "流出";
+        }
+
+        public static void addTag(ref DetailMovie movie)
         {
             //添加标签戳
             if (Identify.IsHDV(movie.filepath) || movie.genre?.IndexOf("高清") >= 0 || movie.tag?.IndexOf("高清") >= 0 || movie.label?.IndexOf("高清") >= 0) movie.tagstamps += "高清";

@@ -102,6 +102,8 @@ namespace Jvedio
         public string director { get; set; }
         public string genre { get; set; }
         public string tag { get; set; }
+
+
         public string actor { get; set; }
         public string actorid { get; set; }
         public string studio { get; set; }

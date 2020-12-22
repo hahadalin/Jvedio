@@ -11,7 +11,7 @@ namespace Jvedio
     {
 
         public static string[] FLOWOUT = new string[] {"流出", "留出", "泄露", "泄密", "曝光" };
-        public static string[] CHS = new string[] { "-C", "_C", "中字", "中文字幕", "字幕","中文" };
+        public static string[] CHS = new string[] { "-c", "_c", "中字", "中文字幕", "字幕","中文" };
         public static string[] HDV = new string[] { "hd", "high_definition", "high definition","高清" };
 
         public static void InitFanhaoList()
@@ -37,7 +37,7 @@ namespace Jvedio
         public static bool IsFlowOut(string filepath)
         {
             if (string.IsNullOrEmpty(filepath)) return false;
-            string name = new FileInfo(filepath).Name;
+            string name = new FileInfo(filepath).Name.ToLower();
             return FLOWOUT.Any(arg => name.IndexOf(arg) >= 0);
 
         }
@@ -45,7 +45,7 @@ namespace Jvedio
         public static bool IsCHS(string filepath)
         {
             if (string.IsNullOrEmpty(filepath)) return false;
-            string name = new FileInfo(filepath).Name;
+            string name = new FileInfo(filepath).Name.ToLower();
             return CHS.Any(arg => name.IndexOf(arg) >= 0);
         }
 
@@ -55,7 +55,7 @@ namespace Jvedio
         {
             if (string.IsNullOrEmpty(filepath)) return false;
             FileInfo fileInfo = new FileInfo(filepath);
-            string name = fileInfo.Name;
+            string name = fileInfo.Name.ToLower();
 
             if (!File.Exists(filepath)) return HDV.Any(arg => name.IndexOf(arg) >= 0);
 
@@ -314,7 +314,8 @@ namespace Jvedio
             }
             else
             {
-                if (char.IsLetter(str1[index-1])) return true;
+                char c= str1[index - 1];
+                if ((c>'a' && c<'z') || (c>'A' && c<'Z')) return true;
                 else return false;
             }
         }

@@ -373,9 +373,13 @@ namespace Jvedio
             vieModel.CurrentMovieListHideOrChanged += (s, ev) => { StopDownLoad(); };
             vieModel.CurrentMovieListChangedCompleted += (s, ev) =>
             {
-                //Console.WriteLine("加载完成");
-                //if (vieModel.CurrentMovieList.Count == 0 && vieModel.AllVedioCount > 0)
-                //    HandyControl.Controls.Growl.Info("无视频，请右键切换显示模式");
+                //等待加载
+                
+                Task.Run(() => {
+                    if(!IsToScrollToEnd) Task.Delay(500).Wait();
+                    IsFlowing = false;
+                });
+                
             };
             FlowTimer.Interval = TimeSpan.FromMilliseconds(1);
             FlowTimer.Tick += new EventHandler(FlowTimer_Tick);
@@ -436,7 +440,6 @@ namespace Jvedio
 
         private void FlipoverTimer_Tick(object sender, EventArgs e)
         {
-            //Console.WriteLine("翻页");
             vieModel.FlipOver();
             ScrollViewer.ScrollToTop();
             FlipoverTimer.Stop();
@@ -677,6 +680,7 @@ namespace Jvedio
                 {
                     this.Dispatcher.Invoke((Action)delegate
                     {
+                        IsToScrollToEnd = true;
                         ScrollViewer.ScrollToBottom();
                     });
                     Task.Delay(100).Wait();
@@ -703,6 +707,7 @@ namespace Jvedio
         public void RefreshMovieByID(string ID)
         {
             Movie movie = DataBase.SelectMovieByID(ID);
+            addTag(ref movie);
             if (Properties.Settings.Default.ShowImageMode == "预览图")
             {
 
@@ -711,7 +716,6 @@ namespace Jvedio
             {
                 movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
                 movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
-                addTag(ref movie);
             }
             (Movie currentMovie1, int idx1) = GetMovieFromCurrentMovie(ID);
             (Movie currentMovie2, int idx2) = GetMovieFromAllMovie(ID);
@@ -1300,9 +1304,18 @@ namespace Jvedio
             //if (SearchCandidate != null & !vieModel.SearchAll) SearchCandidate.Visibility = Visibility.Visible;
 
             //动画
-            DoubleAnimation doubleAnimation = new DoubleAnimation(200, 300, new Duration(TimeSpan.FromMilliseconds(200)));
+            DoubleAnimation doubleAnimation = new DoubleAnimation(300, 400, new Duration(TimeSpan.FromMilliseconds(200)));
             AllSearchGrid.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation);
-            AllSearchBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Application.Current.Resources["ForegroundSearch"].ToString()));
+            //边框颜色
+            Color color1 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["BackgroundSide"].ToString());
+            Color color2 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["ForegroundSearch"].ToString());
+            AllSearchBorder.BorderBrush = new SolidColorBrush(color1);
+            ColorAnimation colorAnimation = new ColorAnimation(color1, color2, new Duration(TimeSpan.FromMilliseconds(200)));
+            AllSearchBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
+            if (AllSearchTextBox.Text == "搜索识别码、演员、名称")
+            {
+                AllSearchTextBox.Text = "";
+            }
 
 
         }
@@ -1311,9 +1324,28 @@ namespace Jvedio
         {
             AllSearchPopup.IsOpen = false;
 
-            DoubleAnimation doubleAnimation = new DoubleAnimation(300, 200, new Duration(TimeSpan.FromMilliseconds(200)));
+            DoubleAnimation doubleAnimation = new DoubleAnimation(400, 300, new Duration(TimeSpan.FromMilliseconds(200)));
             AllSearchGrid.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation);
-            AllSearchBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Application.Current.Resources["BackgroundSide"].ToString()));
+            //边框颜色
+            Color color1 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["BackgroundSide"].ToString());
+            Color color2 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["ForegroundSearch"].ToString());
+            AllSearchBorder.BorderBrush = new SolidColorBrush(color2);
+            ColorAnimation colorAnimation = new ColorAnimation(color2, color1, new Duration(TimeSpan.FromMilliseconds(200)));
+            AllSearchBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
+            if (AllSearchTextBox.Text == "")
+            {
+                AllSearchTextBox.Text = "搜索识别码、演员、名称";
+            }
+            //Task.Run(() => {
+            //    Task.Delay(200).Wait();
+            //    App.Current.Dispatcher.Invoke((Action)delegate {
+
+            //    });
+            
+            //});
+
+
+            
 
         }
 
@@ -1322,7 +1354,14 @@ namespace Jvedio
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (AllSearchTextBox.Text == "") return;
+            if (AllSearchTextBox.Text == "" || AllSearchTextBox.Text== "搜索识别码、演员、名称")
+            {
+                if(ClearImage!=null) ClearImage.Visibility = Visibility.Hidden;
+                return;
+            }
+            if (ClearImage != null) ClearImage.Visibility = Visibility.Visible;
+
+
             TextBox SearchTextBox = sender as TextBox;
             Grid grid = SearchTextBox.Parent as Grid;
             string searchtext = SearchTextBox.Text;
@@ -2028,6 +2067,8 @@ namespace Jvedio
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
+
+            //无进度条时
             ScrollViewer sv = sender as ScrollViewer;
 
             if (sv.VerticalOffset == 0 && sv.VerticalOffset == sv.ScrollableHeight && vieModel.CurrentMovieList.Count < Properties.Settings.Default.DisplayNumber && !IsFlowing)
@@ -2035,7 +2076,6 @@ namespace Jvedio
                 IsFlowing = true;
                 FlowTimer.Start();
             }
-
         }
 
 
@@ -2048,13 +2088,12 @@ namespace Jvedio
             else
                 GoToTopCanvas.Visibility = Visibility.Hidden;
 
-            if (sv.ScrollableHeight - sv.VerticalOffset <= 10 && sv.VerticalOffset != 0)
+            if (!IsFlowing && sv.ScrollableHeight - sv.VerticalOffset <= 10 && sv.VerticalOffset != 0)
             {
 
-                if (vieModel.CurrentMovieList.Count < Properties.Settings.Default.DisplayNumber && vieModel.CurrentMovieList.Count < vieModel.MovieList.Count && vieModel.CurrentMovieList.Count + (vieModel.CurrentPage - 1) * Properties.Settings.Default.DisplayNumber < vieModel.MovieList.Count)
+                if ( vieModel.CurrentMovieList.Count < Properties.Settings.Default.DisplayNumber && vieModel.CurrentMovieList.Count < vieModel.MovieList.Count && vieModel.CurrentMovieList.Count + (vieModel.CurrentPage - 1) * Properties.Settings.Default.DisplayNumber < vieModel.MovieList.Count)
                 {
                     IsFlowing = true;
-                    sv.ScrollToVerticalOffset(sv.VerticalOffset - 20);
                     FlowTimer.Start();
                 }
 
@@ -2063,6 +2102,7 @@ namespace Jvedio
             {
                 SetSelected();
             }
+            if (vieModel.CurrentMovieList!=null && sv.VerticalOffset == sv.ScrollableHeight && vieModel.CurrentMovieList.Count == Properties.Settings.Default.DisplayNumber) IsToScrollToEnd = false;
 
         }
 
@@ -2323,9 +2363,6 @@ namespace Jvedio
             StackPanel sp = null;
             if (_mnu.Parent is MenuItem mnu)
             {
-
-
-
                 sp = ((ContextMenu)mnu.Parent).PlacementTarget as StackPanel;
                 var TB = sp.Children.OfType<TextBox>().First();
                 Movie CurrentMovie = GetMovieFromVieModel(TB.Text);
@@ -2371,6 +2408,17 @@ namespace Jvedio
                     }
                 }
                 HandyControl.Controls.Growl.Info($"成功切割 {successNum} / {vieModel.SelectedMovie.Count} 个头像", "Main");
+                //更新到窗口中
+                foreach(Movie movie1 in vieModel.SelectedMovie)
+                {
+                    if(!string.IsNullOrEmpty(movie1.actor) && movie1.actor.IndexOf(vieModel.Actress.name) >= 0)
+                    {
+                        vieModel.Actress.smallimage= ImageProcess.GetBitmapImage(vieModel.Actress.name, "Actresses");
+                        break;
+                    }
+                }
+
+
             }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             this.Cursor = Cursors.Arrow;
@@ -2418,7 +2466,7 @@ namespace Jvedio
         }
 
 
-
+        private bool IsToScrollToEnd = false;
         public async void GetScreenShot(object sender, RoutedEventArgs e)
         {
 
@@ -2449,6 +2497,7 @@ namespace Jvedio
                         {
                             Console.WriteLine(((ScreenShotEventArgs)ev).FFmpegCommand);
                             cmdTextBox.AppendText($"成功截图到 {((ScreenShotEventArgs)ev).FilePath}\n");
+
                             cmdTextBox.ScrollToEnd();
                         });
                     };
@@ -3012,6 +3061,37 @@ namespace Jvedio
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
         }
 
+
+        public async void DeleteInfo(object sender, RoutedEventArgs e)
+        {
+            if (DownLoader?.State == DownLoadState.DownLoading) { HandyControl.Controls.Growl.Warning("请等待下载完成！", "Main"); return; }
+            if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
+            MenuItem mnu = sender as MenuItem;
+            StackPanel sp = null;
+            if (mnu != null)
+            {
+                sp = ((ContextMenu)mnu.Parent).PlacementTarget as StackPanel;
+                if (sp != null)
+                {
+
+
+                    var TB = sp.Children.OfType<TextBox>().First();
+                    Movie CurrentMovie = GetMovieFromVieModel(TB.Text);
+                    if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedMovie.Add(CurrentMovie);
+
+                    if (Properties.Settings.Default.EditMode)
+                        if (new Msgbox(this, $"是否清空 {vieModel.SelectedMovie.Count}个视频的下载信息？（保留文件、数据库）").ShowDialog() == false) { return; }
+
+                    vieModel.SelectedMovie.ToList().ForEach(arg =>
+                    {
+                        DataBase.ClearInfoByID(arg.id);
+                        RefreshMovieByID(arg.id);
+                    });
+                }
+            }
+            if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
+        }
+
         public Movie GetMovieFromVieModel(string id)
         {
             foreach (Movie movie in vieModel.CurrentMovieList)
@@ -3235,22 +3315,7 @@ namespace Jvedio
 
 
 
-        public List<string> LabelToList(string label)
-        {
 
-            List<string> result = new List<string>();
-            if (string.IsNullOrEmpty(label)) return result;
-            if (label.IndexOf(' ') > 0)
-            {
-                foreach (var item in label.Split(' '))
-                {
-                    if (item.Length > 0)
-                        if (!result.Contains(item)) result.Add(item);
-                }
-            }
-            else { if (label.Length > 0) result.Add(label.Replace(" ", "")); }
-            return result;
-        }
 
         //设置喜爱
         public void SetFavorites(object sender, RoutedEventArgs e)
@@ -3608,8 +3673,8 @@ namespace Jvedio
 
         private void NextPage(object sender, MouseButtonEventArgs e)
         {
-            //Console.WriteLine("IsFlipOvering=" + vieModel.IsFlipOvering);
-            vieModel.CurrentMovieList = new ObservableCollection<Movie>();
+            //vieModel.CurrentMovieList = new ObservableCollection<Movie>();
+            
             if (vieModel.TotalPage <= 1 || vieModel.IsFlipOvering) return;
             FlipoverTimer.Stop();
             if (vieModel.CurrentPage + 1 > vieModel.TotalPage)
@@ -3620,7 +3685,51 @@ namespace Jvedio
 
         }
 
+        private void PreviousRecord(object sender, MouseButtonEventArgs e)
+        {
+            if (vieModel.IsFlipOvering || vieModel.Record == null || vieModel.Record.Count == 0) return;
+            FlipoverTimer.Stop();
+            vieModel.RecordIndex--;
+            if (vieModel.RecordIndex < 0)
+            {
+                vieModel.RecordIndex = 0;
+                BackBorder.IsEnabled = false;
+                return;
+            }
+            vieModel.MovieList = new List<Movie>();
 
+            foreach (var item in vieModel.Record[vieModel.RecordIndex])
+            {
+                vieModel.MovieList.Add(DataBase.SelectMovieByID(item));
+            }
+            vieModel.CurrentPage = 1;
+            vieModel.FlipOver();
+        }
+
+        private void NextRecord(object sender, MouseButtonEventArgs e)
+        {
+            if (vieModel.IsFlipOvering || vieModel.Record==null || vieModel.Record.Count==0) return;
+            FlipoverTimer.Stop();
+
+            vieModel.RecordIndex++;
+            if (vieModel.RecordIndex >=vieModel.Record.Count)
+            {
+                vieModel.RecordIndex = vieModel.Record.Count-1;
+                ForwardBorder.IsEnabled = false;
+                return;
+            }
+            vieModel.MovieList = new List<Movie>();
+            foreach (var item in vieModel.Record[vieModel.RecordIndex])
+            {
+                vieModel.MovieList.Add(DataBase.SelectMovieByID(item));
+            }
+            vieModel.CurrentPage = 1;
+            vieModel.FlipOver();
+
+
+
+
+        }
 
 
 
@@ -4045,8 +4154,7 @@ namespace Jvedio
             ReadRecentWatchedFromConfig();//显示最近播放
             vieModel.AddToRecentWatch("");
             vieModel.GetFilterInfo();
-            ExpandSide1();
-            ExpandSide2();
+
             var radioButtons = SortStackPanel.Children.OfType<RadioButton>().ToList();
             for (int i = 0; i < radioButtons.Count; i++)
             {
@@ -4063,12 +4171,15 @@ namespace Jvedio
 
 
             //WaitingPanel.Visibility = Visibility.Visible;
-
-
             InitList();
+
+            ExpandSide1(true);
+            ExpandSide2(true);
+
+
         }
 
-        private void InitList()
+        public void InitList()
         {
             MySqlite dB = new MySqlite("mylist");
             List<string> tables = dB.GetAllTable();
@@ -4253,7 +4364,7 @@ namespace Jvedio
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            AllSearchTextBox.Focus();
+            //AllSearchTextBox.Focus();
         }
 
         private void DatabaseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -5063,7 +5174,7 @@ namespace Jvedio
                                 //下载图片
                                 DetailMovie dm = DataBase.SelectDetailMovieById(id);
                                 //下载小图
-                                await Net.DownLoadSmallPic(dm);
+                                await Net.DownLoadSmallPic(dm,true);
                                 dm.smallimage = ImageProcess.GetBitmapImage(dm.id, "SmallPic");
                                 RefreshMovieByID(id);
 
@@ -5079,7 +5190,7 @@ namespace Jvedio
                                 else
                                 {
                                     //下载大图
-                                    await Net.DownLoadBigPic(dm);
+                                    await Net.DownLoadBigPic(dm,true);
                                 }
                                 dm.bigimage = ImageProcess.GetBitmapImage(dm.id, "BigPic");
                                 RefreshMovieByID(id);
@@ -5417,8 +5528,9 @@ namespace Jvedio
             }
         }
 
-        private void ExpandSide1()
+        private void ExpandSide1(bool init=false)
         {
+            if (init && !Properties.Settings.Default.IsExpanded1) return;
             if (Properties.Settings.Default.IsExpanded1)
             {
                 DoubleAnimation dbAscending = new DoubleAnimation(180, 0, new Duration(TimeSpan.FromMilliseconds(300)));
@@ -5445,8 +5557,9 @@ namespace Jvedio
         }
 
 
-        private void ExpandSide2()
+        private void ExpandSide2(bool init=false)
         {
+            if (init && !Properties.Settings.Default.IsExpanded2) return;
             if (Properties.Settings.Default.IsExpanded2)
             {
                 DoubleAnimation dbAscending = new DoubleAnimation(180, 0, new Duration(TimeSpan.FromMilliseconds(300)));
@@ -5750,6 +5863,32 @@ namespace Jvedio
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             vieModel.GetActorList();
+        }
+
+        private void OpenLogPath(object sender,EventArgs e)
+        {
+            string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log");
+            if (Directory.Exists(path)) { Process.Start("explorer.exe", "\"" + path + "\""); }
+        }
+
+        private void OpenImageSavePath(object sender, EventArgs e)
+        {
+            if (Directory.Exists(Properties.Settings.Default.BasePicPath)) { Process.Start("explorer.exe", "\"" + Properties.Settings.Default.BasePicPath + "\""); }
+        }
+
+        private void OpenApplicationPath(object sender, EventArgs e)
+        {
+            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory)) { Process.Start("explorer.exe", "\"" + AppDomain.CurrentDomain.BaseDirectory + "\""); }
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void HideActressGrid(object sender, MouseButtonEventArgs e)
+        {
+            ActorInfoGrid.Visibility = Visibility.Collapsed;
         }
     }
 
