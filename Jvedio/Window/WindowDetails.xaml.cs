@@ -2105,6 +2105,29 @@ namespace Jvedio
             grid.Visibility = Visibility.Hidden;
 
         }
+
+        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported)
+            {
+                var taskbarInstance = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
+                taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal);
+                taskbarInstance.SetProgressValue((int)e.NewValue, 100);
+                if (e.NewValue == 100) taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress);
+            }
+        }
+
+        private void ProgressBar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (ProgressBar.Visibility == Visibility.Hidden)
+            {
+                if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported)
+                {
+                    var taskbarInstance = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
+                    taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress);
+                }
+            }
+        }
     }
 
 

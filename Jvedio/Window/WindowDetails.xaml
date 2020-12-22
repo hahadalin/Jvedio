@@ -477,7 +477,7 @@
                             <Grid Grid.Row="1" x:Name="ThumbGrid"      >
 
 
-                                <ProgressBar  x:Name="ProgressBar" Visibility="Collapsed" Foreground="LightGreen"   Height="5" Margin="20 4"   VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
+                                <ProgressBar IsVisibleChanged="ProgressBar_IsVisibleChanged"  x:Name="ProgressBar" ValueChanged="ProgressBar_ValueChanged" Visibility="Collapsed" Foreground="LightGreen"   Height="5" Margin="20 4"   VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
 
                                 <Border x:Name="ExtraImageBorder" Visibility="Visible" Margin="0 12" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
                                     <ScrollViewer Margin="5 0" VerticalContentAlignment="Center"   PreviewMouseWheel="scrollViewer_PreviewMouseWheel"   x:Name="scrollViewer"      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">

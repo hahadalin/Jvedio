@@ -2375,7 +2375,7 @@
                             </Grid>
 
                             <!--进度条-->
-                            <ProgressBar Grid.Row="1" DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged" x:Name="ProgressBar" Visibility="Visible" Foreground="LightGreen"   Height="5" Margin="20 0 20 5"   VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
+                            <ProgressBar  ValueChanged="ProgressBar_ValueChanged" Grid.Row="1" DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged" x:Name="ProgressBar" Visibility="Visible" Foreground="LightGreen"   Height="5" Margin="20 0 20 5"   VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
                         </Grid>
 
 
