@@ -1926,7 +1926,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!--演员-->
-                            <Grid Grid.Column="0" Visibility="Visible" x:Name="ActorInfoGrid"  HorizontalAlignment="Right" Width="auto" Height="auto" VerticalAlignment="Stretch" Margin="10">
+                            <Grid Grid.Column="0" Visibility="Collapsed" x:Name="ActorInfoGrid"  HorizontalAlignment="Right" Width="auto" Height="auto" VerticalAlignment="Stretch" Margin="10">
                                 <Border HorizontalAlignment="Right" VerticalAlignment="Top"     Height="27" Width="27" Margin="0" CornerRadius="20"  Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="HideActressGrid" Panel.ZIndex="5">
                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                 </Border>

@@ -754,7 +754,9 @@
     <Resource Include="Resources\Picture\delete.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Jvedio.ico" />
+    <Content Include="Resources\Jvedio.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lib\MediaInfo.dll" />

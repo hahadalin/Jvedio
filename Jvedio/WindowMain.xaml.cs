@@ -85,7 +85,16 @@ namespace Jvedio
 
         public Main()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+                MessageBox.Show(e.StackTrace);
+            }
+            
 
             SettingsContextMenu.Placement = PlacementMode.Mouse;
 
@@ -6162,6 +6171,7 @@ namespace Jvedio
 
         private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            return;
             if (!(Jvedio.GetWindow.Get("LoadActorMovies") is LoadActorMovies loadActorMovies))
                 loadActorMovies = new LoadActorMovies();
             loadActorMovies.Show();
