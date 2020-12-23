@@ -540,7 +540,7 @@ namespace Jvedio
 
         public DownLoader DownLoader;
 
-        public void StartDownload(List<Movie> movieslist)
+        public void StartDownload(List<Movie> movieslist,bool force=false)
         {
             List<Movie> movies = new List<Movie>();
             List<Movie> moviesFC2 = new List<Movie>();
@@ -554,7 +554,7 @@ namespace Jvedio
 
             //添加到下载列表
             DownLoader?.CancelDownload();
-            DownLoader = new DownLoader(movies, moviesFC2);
+            DownLoader = new DownLoader(movies, moviesFC2,true);
             DownLoader.StartThread();
             double totalcount = moviesFC2.Count + movies.Count;
             Console.WriteLine(totalcount);
@@ -3447,7 +3447,42 @@ namespace Jvedio
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
         }
 
+        private void ForceToDownLoad(object sender, RoutedEventArgs e)
+        {
+            if (DownLoader?.State == DownLoadState.DownLoading)
+            {
+                HandyControl.Controls.Growl.Info("已有任务在下载！", "Main");
+            }
+            else if (!Net.IsServersProper())
+            {
+                HandyControl.Controls.Growl.Error("请在设置【同步信息】中添加服务器源并启用！", "Main");
+            }
+            else
+            {
+                try
+                {
+                    if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
+                    MenuItem _mnu = sender as MenuItem;
+                    MenuItem mnu = _mnu.Parent as MenuItem;
+                    StackPanel sp = null;
 
+                    if (mnu != null)
+                    {
+                        sp = ((ContextMenu)mnu.Parent).PlacementTarget as StackPanel;
+                        var TB = sp.Children.OfType<TextBox>().First();
+                        Movie CurrentMovie = GetMovieFromVieModel(TB.Text);
+                        if (CurrentMovie != null)
+                        {
+                            if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedMovie.Add(CurrentMovie);
+                            StartDownload(vieModel.SelectedMovie.ToList(),true);
+                        }
+
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine(ex.StackTrace); Console.WriteLine(ex.Message); }
+            }
+            if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
+        }
         private void Canvas_MouseEnter(object sender, MouseEventArgs e)
         {
             if (ImageSlides == null) return;
@@ -3881,15 +3916,6 @@ namespace Jvedio
                         }
                     }
                 };
-
-
-                downLoadActress.MessageCallBack += (s, ev) => {
-                    HandyControl.Controls.Growl.Info(((MessageCallBackEventArgs)ev).Message);
-                
-                };
-
-
-
             }
             catch (Exception e) { Console.WriteLine(e.Message); }
 
@@ -3958,8 +3984,6 @@ namespace Jvedio
         private async void Grid_Drop(object sender, DragEventArgs e)
         {
             WaitingPanel.Visibility = Visibility.Visible;
-
-            //异步导入
             await Task.Run(() =>
             {
                 //分为文件夹和文件
@@ -3979,11 +4003,51 @@ namespace Jvedio
                     filepaths = Scan.ScanPaths(stringCollection, new CancellationToken());
 
                 if (files.Count > 0) filepaths.AddRange(files);
-                double _num = Scan.DistinctMovieAndInsert(filepaths, new CancellationToken());
-                HandyControl.Controls.Growl.Info($"总计导入{_num}个文件", "Main");
+
+                List<string> nfopaths = new List<string>();
+                List<string> vediopaths = new List<string>();
+
+                foreach (var item in filepaths)
+                {
+                    if (item.EndsWith(".nfo"))
+                        nfopaths.Add(item);
+                    else
+                        vediopaths.Add(item);
+                }
+
+                //先导入 nfo 再导入视频，避免路径覆盖
+                if (nfopaths.Count > 0)
+                {
+                    double total = 0;
+                    //导入 nfo 文件
+                    nfopaths.ForEach(item =>
+                    {
+                        if (File.Exists(item))
+                        {
+                            Movie movie = GetInfoFromNfo(item);
+                            if (movie != null && !string.IsNullOrEmpty(movie.id))
+                            {
+                                DataBase.InsertFullMovie(movie);
+                                total += 1;
+                                Logger.LogScanInfo($"\n成功导入数据库 => {item}  ");
+                            }
+
+                        }
+                    });
+
+                    HandyControl.Controls.Growl.Info($"总计导入{total}个 nfo 文件", "Main");
+
+                }
+
+
+                //导入视频
+                if (vediopaths.Count > 0)
+                {
+                    double _num = Scan.DistinctMovieAndInsert(vediopaths, new CancellationToken());
+                    HandyControl.Controls.Growl.Info($"总计导入{_num}个视频，详情请看日志", "Main");
+                }
                 Task.Delay(300).Wait();
             });
-
             WaitingPanel.Visibility = Visibility.Hidden;
             vieModel.Reset();
         }
@@ -5760,10 +5824,67 @@ namespace Jvedio
         }
 
 
+
         private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
+            bool isInList = false;
+            for (int i = 0; i < ListItemsControl.Items.Count; i++)
+            {
+                ContentPresenter c = (ContentPresenter)ListItemsControl.ItemContainerGenerator.ContainerFromItem(ListItemsControl.Items[i]);
+                StackPanel sp = FindElementByName<StackPanel>(c, "ListStackPanel");
+                if (sp != null)
+                {
+                    var grids = sp.Children.OfType<Grid>().ToList();
+                    foreach (Grid grid in grids)
+                    {
+                        RadioButton radioButton = grid.Children.OfType<RadioButton>().First();
+                        if(radioButton!=null && (bool)radioButton.IsChecked)
+                        {
+                            isInList = true;
+                            break;
+                           
+                        }
+                    }
+                    
+                }
+            }
+
             StackPanel stackPanel = sender as StackPanel;
             ContextMenu contextMenu = stackPanel.ContextMenu;
+
+            if (isInList)
+            {
+                foreach (MenuItem item in contextMenu.Items)
+                {
+                    if (item.Header.ToString() != "移出清单")
+                    {
+                        item.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        item.Visibility = Visibility.Visible;
+                    }
+                }
+            }
+            else
+            {
+                foreach (MenuItem item in contextMenu.Items)
+                {
+                    if (item.Header.ToString() == "移出清单")
+                    {
+                        item.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        item.Visibility = Visibility.Visible;
+                    }
+                }
+            }
+            
+
+
+
+
             if (contextMenu.Visibility != Visibility.Visible) return;
             Task.Run(() => {
                 Task.Delay(100).Wait();
@@ -5776,7 +5897,7 @@ namespace Jvedio
                         {
                             MenuItem menuItem1 = new MenuItem();
                             menuItem1.Header = item.Name;
-                            menuItem1.Name = item.Name;
+                            //menuItem1.Name = item.Name;
                             menuItem1.Click += MyListItemClick;
                             menuItem.Items.Add(menuItem1);
                         }
@@ -5911,7 +6032,135 @@ namespace Jvedio
             }
         }
 
-    }
+        private void Button_Click_7(object sender, RoutedEventArgs e)
+        {
+            var di = new DialogInput(this, "请输入需添加的识别码", "");
+            di.ShowDialog();
+            if (di.DialogResult == true & di.Text != "")
+            {
+                string id = di.Text;
+                Movie movie = DataBase.SelectMovieByID(id);
+                if (movie != null)
+                {
+                    HandyControl.Controls.Growl.Info("已存在该影片！", "Main");
+                }
+                else
+                {
+                    Movie movie1 = new Movie() {
+                        id = id,
+                        vediotype = 1,
+                        otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    };
+                    DataBase.InsertScanMovie(movie1);
+                    vieModel.MovieList.Insert(0, movie1);
+                    vieModel.CurrentMovieList.Insert(0, movie1);
+                    HandyControl.Controls.Growl.Info("成功导入！", "Main");
+                }
+            }
+        }
+
+        private async void RemoveFromList(object sender, RoutedEventArgs e)
+        {
+            string table = "";
+            for (int i = 0; i < ListItemsControl.Items.Count; i++)
+            {
+                ContentPresenter c = (ContentPresenter)ListItemsControl.ItemContainerGenerator.ContainerFromItem(ListItemsControl.Items[i]);
+                StackPanel stackPanel = FindElementByName<StackPanel>(c, "ListStackPanel");
+                if (stackPanel != null)
+                {
+                    var grids = stackPanel.Children.OfType<Grid>().ToList();
+                    foreach (Grid grid in grids)
+                    {
+                        RadioButton radioButton = grid.Children.OfType<RadioButton>().First();
+                        if (radioButton != null && (bool)radioButton.IsChecked)
+                        {
+                            table = radioButton.Content.ToString();
+                            break;
+                        }
+                    }
+
+                }
+            }
+            if (string.IsNullOrEmpty(table)) return;
+
+
+
+
+            if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
+                MenuItem mnu = sender as MenuItem;
+                StackPanel sp = null;
+                if (mnu != null)
+                {
+                    sp = ((ContextMenu)mnu.Parent).PlacementTarget as StackPanel;
+                    if (sp != null)
+                    {
+                        var TB = sp.Children.OfType<TextBox>().First();
+                        Movie CurrentMovie = GetMovieFromVieModel(TB.Text);
+                        if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedMovie.Add(CurrentMovie);
+
+                        if (Properties.Settings.Default.EditMode)
+                            if (new Msgbox(this, $"是否从清单【{table}】移除 {vieModel.SelectedMovie.Count}个视频？").ShowDialog() == false) { return; }
+                    MySqlite dB = new MySqlite("mylist");
+                    vieModel.SelectedMovie.ToList().ForEach(arg =>
+                        {
+                            
+                            dB.DeleteByField(table, "id", arg.id);
+                            
+                            vieModel.CurrentMovieList.Remove(arg); //从主界面删除
+                            vieModel.MovieList.Remove(arg);
+                        });
+                    dB.Close();
+                    //从详情窗口删除
+                    if (Jvedio.GetWindow.Get("WindowDetails") != null)
+                        {
+                            WindowDetails windowDetails = Jvedio.GetWindow.Get("WindowDetails") as WindowDetails;
+                            foreach (var item in vieModel.SelectedMovie.ToList())
+                            {
+                                if (windowDetails.vieModel.DetailMovie.id == item.id)
+                                {
+                                    windowDetails.Close();
+                                    break;
+                                }
+                            }
+                        }
+
+                        HandyControl.Controls.Growl.Info($"已从清单【{table}】移除 {vieModel.SelectedMovie.Count}个视频 ", "Main");
+                        //修复数字显示
+                        vieModel.CurrentCount -= vieModel.SelectedMovie.Count;
+                        vieModel.TotalCount -= vieModel.SelectedMovie.Count;
+
+                        vieModel.SelectedMovie.Clear();
+                        InitList();
+                        await Task.Run(() => { Task.Delay(100).Wait(); });
+
+
+                    //侧边栏选项选中
+                    for (int i = 0; i < ListItemsControl.Items.Count; i++)
+                    {
+                        ContentPresenter c = (ContentPresenter)ListItemsControl.ItemContainerGenerator.ContainerFromItem(ListItemsControl.Items[i]);
+                        StackPanel stackPanel = FindElementByName<StackPanel>(c, "ListStackPanel");
+                        if (stackPanel != null)
+                        {
+                            var grids = stackPanel.Children.OfType<Grid>().ToList();
+                            foreach (Grid grid in grids)
+                            {
+                                RadioButton radioButton = grid.Children.OfType<RadioButton>().First();
+                                if (radioButton != null && radioButton.Content.ToString()==table)
+                                {
+                                    radioButton.IsChecked = true;
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+                }
+                if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
+            }
+        }
+    
 
     public class DownLoadProgress
     {

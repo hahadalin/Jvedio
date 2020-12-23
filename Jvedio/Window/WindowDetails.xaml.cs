@@ -2007,7 +2007,7 @@ namespace Jvedio
                         {
                             MenuItem menuItem1 = new MenuItem();
                             menuItem1.Header = item.Name;
-                            menuItem1.Name = item.Name;
+                            //menuItem1.Name = item.Name;
                             menuItem1.Click += MyListItemClick;
                             menuItem.Items.Add(menuItem1);
                         }

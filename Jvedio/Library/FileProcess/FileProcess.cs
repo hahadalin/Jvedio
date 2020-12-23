@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Xml;
 using static Jvedio.GlobalVariable;
 
 namespace Jvedio
@@ -34,6 +35,157 @@ namespace Jvedio
                 return true;
             }
 
+        }
+
+
+        public static Movie GetInfoFromNfo(string path)
+        {
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(path);
+            }
+            catch { return null; }
+            XmlNode rootNode = doc.SelectSingleNode("movie");
+            if (rootNode == null) return null;
+            Movie movie = new Movie();
+            foreach (XmlNode node in rootNode.ChildNodes)
+            {
+                try
+                {
+                    switch (node.Name)
+                    {
+                        case "id": movie.id = node.InnerText.ToUpper(); break;
+                        case "num": movie.id = node.InnerText.ToUpper(); break;
+                        case "title": movie.title = node.InnerText; break;
+                        case "release": movie.releasedate = node.InnerText; break;
+                        case "releasedate": movie.releasedate = node.InnerText; break;
+                        case "director": movie.director = node.InnerText; break;
+                        case "studio": movie.studio = node.InnerText; break;
+                        case "rating": movie.rating = node.InnerText == "" ? 0 : float.Parse(node.InnerText); break;
+                        case "plot": movie.plot = node.InnerText; break;
+                        case "outline": movie.outline = node.InnerText; break;
+                        case "year": movie.year = node.InnerText == "" ? 1970 : int.Parse(node.InnerText); break;
+                        case "runtime": movie.runtime = node.InnerText == "" ? 0 : int.Parse(node.InnerText); break;
+                        case "country": movie.country = node.InnerText; break;
+                        case "source": movie.sourceurl = node.InnerText; break;
+                        default: break;
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.StackTrace);
+                    Console.WriteLine(ex.Message);
+                    continue;
+                }
+            }
+            if (movie.id == "") { return null; }
+            //视频类型
+
+            movie.vediotype = (int)Identify.GetVedioType(movie.id);
+
+            //扫描视频获得文件大小
+            if (File.Exists(path))
+            {
+                string fatherpath = new FileInfo(path).DirectoryName;
+                string[] files = null;
+                try
+                {
+                    files = Directory.GetFiles(fatherpath, "*.*", SearchOption.TopDirectoryOnly);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogE(e);
+                }
+
+                if (files != null)
+                {
+
+                    var movielist = Scan.FirstFilter(files.ToList(), movie.id);
+                    if (movielist.Count == 1)
+                    {
+                        movie.filepath = movielist[0];
+                    }
+                    else if (movielist.Count > 1)
+                    {
+                        //分段视频
+                        movie.filepath = movielist[0];
+                        string subsection = "";
+                        movielist.ForEach(arg => { subsection += arg + ";"; });
+                        movie.subsection = subsection;
+                    }
+                }
+
+
+
+            }
+
+            //tag
+            XmlNodeList tagNodes = doc.SelectNodes("/movie/tag");
+            if (tagNodes != null)
+            {
+                string tags = "";
+                foreach (XmlNode item in tagNodes)
+                {
+                    if (item.InnerText != "") { tags += item.InnerText + " "; }
+
+                }
+                if (tags.Length > 0)
+                {
+
+                    if (movie.id.IndexOf("FC2") >= 0)
+                    {
+                        movie.genre = tags.Substring(0, tags.Length - 1);
+                    }
+                    else
+                    {
+                        movie.tag = tags.Substring(0, tags.Length - 1);
+                    }
+
+
+                }
+            }
+
+            //genre
+            XmlNodeList genreNodes = doc.SelectNodes("/movie/genre");
+            if (genreNodes != null)
+            {
+                string genres = "";
+                foreach (XmlNode item in genreNodes)
+                {
+                    if (item.InnerText != "") { genres += item.InnerText + " "; }
+
+                }
+                if (genres.Length > 0) { movie.genre = genres.Substring(0, genres.Length - 1); }
+            }
+
+            //actor
+            XmlNodeList actorNodes = doc.SelectNodes("/movie/actor/name");
+            if (actorNodes != null)
+            {
+                string actors = "";
+                foreach (XmlNode item in actorNodes)
+                {
+                    if (item.InnerText != "") { actors += item.InnerText + " "; }
+                }
+                if (actors.Length > 0) { movie.actor = actors.Substring(0, actors.Length - 1); }
+            }
+
+            //fanart
+            XmlNodeList fanartNodes = doc.SelectNodes("/movie/fanart/thumb");
+            if (fanartNodes != null)
+            {
+                string extraimageurl = "";
+                foreach (XmlNode item in fanartNodes)
+                {
+                    if (item.InnerText != "") { extraimageurl += item.InnerText + ";"; }
+                }
+                if (extraimageurl.Length > 0) { movie.extraimageurl = extraimageurl.Substring(0, extraimageurl.Length - 1); }
+            }
+
+
+            return movie;
         }
 
         public static List<string> LabelToList(string label)
@@ -138,6 +290,7 @@ namespace Jvedio
         public static void addTag(ref Movie movie)
         {
             //添加标签戳
+            if (movie == null) return;
             if (Identify.IsHDV(movie.filepath) || movie.genre?.IndexOf("高清") >= 0 || movie.tag?.IndexOf("高清") >= 0 || movie.label?.IndexOf("高清") >= 0) movie.tagstamps += "高清";
             if (Identify.IsCHS(movie.filepath) || movie.genre?.IndexOf("中文") >= 0 || movie.tag?.IndexOf("中文") >= 0 || movie.label?.IndexOf("中文") >= 0) movie.tagstamps += "中文";
             if (Identify.IsFlowOut(movie.filepath) || movie.genre?.IndexOf("流出") >= 0 || movie.tag?.IndexOf("流出") >= 0 || movie.label?.IndexOf("流出") >= 0) movie.tagstamps += "流出";

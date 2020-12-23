@@ -520,6 +520,7 @@ namespace Jvedio
                         try
                         {
                             ShowStatus("------------开始同步------------");
+                            if (vieModel.Movies == null) return;
                             for (int i = 0; i < vieModel.Info_TotalNum; i++)
                             {
 
@@ -529,6 +530,7 @@ namespace Jvedio
 
                                 vieModel.Info_TotalNum_S = GetInfoNum_S();
                                 vieModel.Info_CurrentProgress_S = 0;
+                                if ( i >= vieModel.Movies.Count) break;
 
                                 bool result =  await DownLoad(vieModel.Movies[i]);
                                 vieModel.Info_CurrentProgress = i + 1;

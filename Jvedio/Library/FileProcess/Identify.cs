@@ -140,8 +140,9 @@ namespace Jvedio
         {
             if (string.IsNullOrEmpty(FileName)) return VedioType.所有;
             if (FileName.ToLower().IndexOf("s2m") >= 0) return VedioType.步兵;
+            if (FileName.ToLower().IndexOf("CW3D2DBD".ToLower()) >= 0) return VedioType.步兵;
             if (FileName.ToLower().IndexOf("t28") >= 0) return VedioType.骑兵;
-
+            
 
 
             // 一本道、メス豚、天然むすめ
@@ -266,6 +267,9 @@ namespace Jvedio
 
             Fanhao = GetFanhaoByRegExp(FileName, @"s2m[a-z]{0,2}(-|_)?\d{2,}");
             if (Fanhao != "") return GetFanhaoByRegExp(Fanhao, @"s2m[a-z]{0,2}") + "-"+ GetFanhaoByRegExp(Fanhao, @"\d{2,}");
+
+            Fanhao = GetFanhaoByRegExp(FileName, @"cw3d2dbd(-|_)?\d{2,}");
+            if (Fanhao != "") return "cw3d2dbd".ToUpper() + "-" + GetFanhaoByRegExp(Fanhao, @"\d{2,}");
 
             Fanhao = GetFanhaoByRegExp(FileName, @"ibw(-|_)?\d{2,}z?");
             if (Fanhao != "") return "IBW-" + GetFanhaoByRegExp(Fanhao, @"\d{2,}z?");

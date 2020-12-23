@@ -1606,6 +1606,8 @@
 
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                    <Button Content="快速添加 +" Style="{StaticResource ButtonStyleFill}" Height="30" Width="80" Click="Button_Click_7"/>
                                     <Border Cursor="Hand" x:Name="ImageSortBorder" Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="图片类型"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowImagePopup">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=image,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
@@ -2058,6 +2060,7 @@
                                                                             <MenuItem Header="立即同步(S)" Click="DownLoadSelectMovie"   ></MenuItem>
                                                                             <MenuItem Header="高级同步" Visibility="Visible"  >
                                                                                 <MenuItem Header="指定网址" Click="DownLoadWithUrl"   ></MenuItem>
+                                                                                <MenuItem Header="强制同步" Click="ForceToDownLoad"   ></MenuItem>
                                                                             </MenuItem>
                                                                             <MenuItem Header="修改信息(E)" Click="EditInfo"  />
                                                                             <MenuItem Header="扩展功能"   >
@@ -2071,7 +2074,7 @@
                                                                             </MenuItem>
 
                                                                             <MenuItem Header="加入清单"   Name="ListMenuItem"   />
-
+                                                                            <MenuItem Visibility="Collapsed" Header="移出清单" Click="RemoveFromList"      />
 
                                                                             <MenuItem Header="标签管理"   Click="ShowLabelEditGrid" >
                                                                                 <MenuItem Header="添加已有的标签" Click="MenuItem_Click_1"  ></MenuItem>
@@ -2374,9 +2377,7 @@
 
                             </Grid>
 
-                            <!--进度条-->
-                            <ProgressBar  ValueChanged="ProgressBar_ValueChanged" Grid.Row="1" DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged" x:Name="ProgressBar" Visibility="Visible" Foreground="LightGreen"   Height="5" Margin="20 0 20 5"   VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
-                        </Grid>
+                           </Grid>
 
 
                     </Grid>
@@ -2731,6 +2732,11 @@
                             </Grid>
                         </Grid>
                     </Grid>
+
+                    <!--进度条-->
+                    <ProgressBar Grid.Column="1"  ValueChanged="ProgressBar_ValueChanged" Grid.Row="1" DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged" x:Name="ProgressBar" Visibility="Visible" Foreground="LightGreen"   Height="5" Margin="20 0 20 2"   VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
+
+
                 </Grid>
 
 

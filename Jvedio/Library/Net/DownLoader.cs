@@ -28,7 +28,9 @@ namespace Jvedio
         public DownLoadProgress downLoadProgress;
 
         protected object LockDataBase;
-        
+
+
+        public bool enforce = false;
         private bool Cancel { get; set; }
         public List<Movie> Movies { get; set; }
 
@@ -50,7 +52,13 @@ namespace Jvedio
             downLoadProgress = new DownLoadProgress() { lockobject = new object(), value = 0, maximum = Movies.Count+ MoviesFC2.Count };//所有影片的进度
         }
 
-        
+
+        public DownLoader(List<Movie> _movies, List<Movie> _moviesFC2,bool force):this(_movies, _moviesFC2)
+        {
+            enforce = force;
+        }
+
+
 
 
         /// <summary>
@@ -103,7 +111,7 @@ namespace Jvedio
             bool success; string resultMessage;
             //下载信息
             State = DownLoadState.DownLoading;
-            if (Net.IsToDownLoadInfo(movie))
+            if (Net.IsToDownLoadInfo(movie) || enforce)
             {
                 //满足一定条件才下载信息
                 (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet(movie); });
@@ -115,7 +123,7 @@ namespace Jvedio
             DetailMovie dm = new DetailMovie();
             dm = DataBase.SelectDetailMovieById(movie.id);
 
-            if(!File.Exists(BasePicPath +$"BigPic\\{dm.id}.jpg"))
+            if(!File.Exists(BasePicPath +$"BigPic\\{dm.id}.jpg") || enforce)
             {
                 string message2 = "";
                 (bool success2, string cookie2) = await Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id, callback: (sc) => { message2 = sc.ToString(); });//下载大图
@@ -133,7 +141,7 @@ namespace Jvedio
             }
             else
             {
-                if (!File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg"))
+                if (!File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg") || enforce)
                 { 
 
                         string message = "";
