@@ -294,6 +294,9 @@
     <Compile Include="Window\WindowBatch.xaml.cs">
       <DependentUpon>WindowBatch.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Window\WindowLoadActorMovies.xaml.cs">
+      <DependentUpon>WindowLoadActorMovies.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Window\WindowTest.xaml.cs">
       <DependentUpon>WindowTest.xaml</DependentUpon>
     </Compile>
@@ -318,6 +321,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window\WindowBatch.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Window\WindowLoadActorMovies.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

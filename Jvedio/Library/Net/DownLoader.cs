@@ -218,7 +218,7 @@ namespace Jvedio
             List<Actress> actresslist = new List<Actress>();
             foreach (Actress item in ActorList)
             {
-                if (item.smallimage == null || string.IsNullOrEmpty(item.birthday))
+                if (item!=null && (item.smallimage == null || string.IsNullOrEmpty(item.birthday)))
                 {
                     Actress actress = item;
                     MySqlite db = new MySqlite("BusActress");

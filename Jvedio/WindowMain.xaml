@@ -1069,6 +1069,8 @@
             </hc:NotifyIcon.ContextMenu>
         </hc:NotifyIcon>
 
+        <TextBox  Text="" Name="FocusTextBlock" Visibility="Visible" Width="10" Height="20" Panel.ZIndex="-1" Style="{StaticResource  InfoTextBox}" Foreground="White"/>
+
 
         <Grid x:Name="cmdGrid" Visibility="Collapsed" Panel.ZIndex="5">
 
@@ -1500,7 +1502,7 @@
 
 
                         <!--工具栏-->
-                        <Grid  Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                        <Grid Background="{DynamicResource BackgroundMain}" PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown"  Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -1924,7 +1926,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!--演员-->
-                            <Grid Grid.Column="0" Visibility="Collapsed" x:Name="ActorInfoGrid"  HorizontalAlignment="Right" Width="auto" Height="auto" VerticalAlignment="Stretch" Margin="10">
+                            <Grid Grid.Column="0" Visibility="Visible" x:Name="ActorInfoGrid"  HorizontalAlignment="Right" Width="auto" Height="auto" VerticalAlignment="Stretch" Margin="10">
                                 <Border HorizontalAlignment="Right" VerticalAlignment="Top"     Height="27" Width="27" Margin="0" CornerRadius="20"  Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="HideActressGrid" Panel.ZIndex="5">
                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                 </Border>
@@ -1941,7 +1943,7 @@
                                             <Border MouseLeftButtonUp="BeginDownLoadActress" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="0" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
                                                 <Image Source="pack://application:,,,/Resources/Picture/download.png" Margin="5"  Height="20"  />
                                             </Border>
-                                            <Border  ToolTip="加载该演员其他作品"  HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="5 0" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
+                                            <Border  ToolTip="加载该演员其他作品"  HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="5 0" PreviewMouseLeftButtonUp="Border_PreviewMouseLeftButtonUp" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
                                                 <Image Source="pack://application:,,,/Resources/Picture/其他.png" Margin="5"  Height="17"  />
                                             </Border>
                                             <hc:Rate ToolTip="双击取消" Visibility="Visible" AllowClear="True" Margin="10 0" Value="{Binding Actress.like,Mode=TwoWay}" Count="1" VerticalAlignment="Center" Background="{DynamicResource BackgroundSide}" Foreground="#FF7B3B" ValueChanged="Rate_ValueChanged_1"   />
@@ -3021,6 +3023,7 @@
 
 
                 </Grid>
+
 
             </Grid>
 

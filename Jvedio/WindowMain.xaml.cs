@@ -6159,8 +6159,20 @@ namespace Jvedio
                 }
                 if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             }
+
+        private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (!(Jvedio.GetWindow.Get("LoadActorMovies") is LoadActorMovies loadActorMovies))
+                loadActorMovies = new LoadActorMovies();
+            loadActorMovies.Show();
         }
-    
+
+        private void Grid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            FocusTextBlock.Focus();
+        }
+    }
+
 
     public class DownLoadProgress
     {
