@@ -21,7 +21,7 @@
         >
     <Window.Resources>
 
-
+        <local:FilePathToFileNameConverter x:Key="FilePathToFileNameConverter"/>
         <local:TagStampsConverter x:Key="TagStampsConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther"/>
@@ -871,6 +871,12 @@
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock Width="80"  Text="声道数："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
                                                 <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Channel}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="文件名："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+
+                                                <TextBlock FontSize="16" FontFamily="微软雅黑"    TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="5 0"><Hyperlink Click="Hyperlink_Click"   ><Run Text="{Binding DetailMovie.filepath,Converter={StaticResource FilePathToFileNameConverter}}"/></Hyperlink></TextBlock>
                                             </StackPanel>
 
                                         </StackPanel>

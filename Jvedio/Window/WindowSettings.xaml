@@ -627,6 +627,8 @@
                             <hc:TextBox ShowClearButton="True" Style="{StaticResource BaseHcTextBox}"  Text="{Binding VedioPlayerPath, Mode=TwoWay, Source={x:Static p:Settings.Default}}"    />
                             <Button Style="{StaticResource ButtonStyleFill}" Content="选择程序" Height="25" Width="100" Click="SetVediaPlaterPath" Margin="5 2" HorizontalAlignment="Right"/>
                         </StackPanel>
+                        
+                        
 
 
                         <CheckBox IsChecked="False" Content="---显示其他选项---" Margin="20 5" x:Name="AdvanceCheckBox"/>
@@ -748,7 +750,7 @@
                     </StackPanel>
 
 
-                    <StackPanel x:Name="WebsitePanel" Background="Transparent" Visibility="Visible">
+                    <StackPanel x:Name="WebsitePanel" Background="Transparent" Visibility="Collapsed">
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Style="{StaticResource TextBlockTitle}" Text="服务器源" HorizontalAlignment="Left"/>
@@ -1379,7 +1381,18 @@
 
                     </StackPanel>
 
-                    <StackPanel x:Name="RenamePanel" Orientation="Vertical" Background="Transparent" Visibility="Hidden"  >
+                    <StackPanel x:Name="RenamePanel" Orientation="Vertical" Background="Transparent" Visibility="Visible"  >
+                        <StackPanel Orientation="Horizontal"  Margin="5 5">
+                            <Label Style="{StaticResource InfoLabel}" Width="auto"   Content="喜爱程度对应文件名前缀( lv1=>lv5 )" Foreground="{DynamicResource ForegroundSearch}"  />
+                            <hc:TextBox ShowClearButton="True" Style="{StaticResource BaseHcTextBox}"  Text="NotBad" Width="auto"  Margin="5 0"   />
+                            <hc:TextBox ShowClearButton="True" Style="{StaticResource BaseHcTextBox}"  Text="Normal" Width="auto"  Margin="5 0"     />
+                            <hc:TextBox ShowClearButton="True" Style="{StaticResource BaseHcTextBox}"  Text="Good" Width="auto"  Margin="5 0"     />
+                            <hc:TextBox ShowClearButton="True" Style="{StaticResource BaseHcTextBox}"  Text="Better" Width="auto"  Margin="5 0"     />
+                            <hc:TextBox ShowClearButton="True" Style="{StaticResource BaseHcTextBox}"  Text="Great" Width="auto"  Margin="5 0"     />
+                            <Button Style="{StaticResource ButtonStyleFill}" Content="恢复默认" Height="25" Width="100"  Margin="5 2" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                        <CheckBox Content="按照喜爱程度添加前缀" Margin="10 5"/>
+
                         <WrapPanel x:Name="CheckedBoxWrapPanel" Orientation="Horizontal">
                             <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Content="识别码" Width="100" Height="30"  Margin="5"  Click="AddToRename" />
                             <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="名称" Width="100" Height="30" Margin="5"  Click="AddToRename" />

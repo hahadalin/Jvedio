@@ -2128,6 +2128,15 @@ namespace Jvedio
                 }
             }
         }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(vieModel.DetailMovie.filepath)) { Process.Start("explorer.exe", "/select, \"" + vieModel.DetailMovie.filepath + "\""); }
+            else
+            {
+                HandyControl.Controls.Growl.Info($"打开失败，不存在 ：\n{vieModel.DetailMovie.filepath}", "DetailsGrowl");
+            }
+        }
     }
 
 
@@ -2289,6 +2298,18 @@ namespace Jvedio
         }
     }
 
+    public class FilePathToFileNameConverter : IValueConverter
+    {
+        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null || string.IsNullOrEmpty(value.ToString())) return "";
+             return Path.GetFileNameWithoutExtension(value.ToString());
+        }
 
+        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
+        }
+    }
 
 }
