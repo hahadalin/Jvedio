@@ -694,7 +694,6 @@ namespace Jvedio
                     });
                     Task.Delay(100).Wait();
                 }
-
             });
         }
 
@@ -966,16 +965,17 @@ namespace Jvedio
             HideMargin();
 
             SideGridColumn.Width = new GridLength(Properties.Settings.Default.SideGridWidth);
+            if (Properties.Settings.Default.SideGridWidth < 200) ShowSideGrid.Visibility =Visibility.Visible;
 
             if (Properties.Settings.Default.ShowImageMode == "列表模式")
             {
                 MovieMainGrid.Visibility = Visibility.Hidden;
-                DetailGrid.Visibility = Visibility.Visible;
+                //DetailGrid.Visibility = Visibility.Visible;
             }
             else
             {
                 MovieMainGrid.Visibility = Visibility.Visible;
-                DetailGrid.Visibility = Visibility.Hidden;
+                //DetailGrid.Visibility = Visibility.Hidden;
             }
 
         }
@@ -1470,6 +1470,9 @@ namespace Jvedio
             BeginScanStackPanel.Visibility = Visibility.Hidden;
             ExpandRadioButton1.IsChecked = false;
             ExpandRadioButton2.IsChecked = false;
+            ScrollViewer.ScrollToTop();
+
+
         }
 
 
@@ -1710,6 +1713,7 @@ namespace Jvedio
                         break; 
                     }
                 }
+                actress.id = "";//不按照 id 选取演员
                 vieModel.GetMoviebyActressAndVetioType(actress);
                 vieModel.Actress = actress;
                 vieModel.FlipOver();
@@ -1899,7 +1903,23 @@ namespace Jvedio
             }
 
             vieModel.VedioType = (VedioType)Enum.Parse(typeof(VedioType), Properties.Settings.Default.VedioType);
-        }
+            //刷新侧边栏显示
+            if (Grid_Genre.Visibility == Visibility.Visible)
+            {
+                vieModel.GetGenreList();
+            }else if (Grid_Actor.Visibility == Visibility.Visible)
+            {
+                vieModel.GetActorList();
+            }
+            else if (Grid_Label.Visibility == Visibility.Visible)
+            {
+                vieModel.GetLabelList();
+            }
+
+
+
+
+}
 
 
         public void ShowDownloadActorMenu(object sender, MouseButtonEventArgs e)
@@ -2020,13 +2040,13 @@ namespace Jvedio
             if (mode == "列表模式")
             {
                 MovieMainGrid.Visibility = Visibility.Hidden;
-                DetailGrid.Visibility = Visibility.Visible;
+                //DetailGrid.Visibility = Visibility.Visible;
                 vieModel.ShowDetailsData();
             }
             else
             {
                 MovieMainGrid.Visibility = Visibility.Visible;
-                DetailGrid.Visibility = Visibility.Hidden;
+                //DetailGrid.Visibility = Visibility.Hidden;
                 vieModel.FlowNum = 0;
                 vieModel.FlipOver();
             }
@@ -2099,19 +2119,18 @@ namespace Jvedio
 
             if (!IsFlowing && sv.ScrollableHeight - sv.VerticalOffset <= 10 && sv.VerticalOffset != 0)
             {
-
-                if ( vieModel.CurrentMovieList.Count < Properties.Settings.Default.DisplayNumber && vieModel.CurrentMovieList.Count < vieModel.MovieList.Count && vieModel.CurrentMovieList.Count + (vieModel.CurrentPage - 1) * Properties.Settings.Default.DisplayNumber < vieModel.MovieList.Count)
+                Console.WriteLine("1");
+                if (!IsFlowing && vieModel.CurrentMovieList.Count < Properties.Settings.Default.DisplayNumber && vieModel.CurrentMovieList.Count < vieModel.MovieList.Count && vieModel.CurrentMovieList.Count + (vieModel.CurrentPage - 1) * Properties.Settings.Default.DisplayNumber < vieModel.MovieList.Count)
                 {
                     IsFlowing = true;
                     FlowTimer.Start();
+                    if (Properties.Settings.Default.EditMode) SetSelected();
+
+                    if (vieModel.CurrentMovieList != null && sv.VerticalOffset == sv.ScrollableHeight && vieModel.CurrentMovieList.Count == Properties.Settings.Default.DisplayNumber) IsToScrollToEnd = false;
+
                 }
 
             }
-            if (Properties.Settings.Default.EditMode)
-            {
-                SetSelected();
-            }
-            if (vieModel.CurrentMovieList!=null && sv.VerticalOffset == sv.ScrollableHeight && vieModel.CurrentMovieList.Count == Properties.Settings.Default.DisplayNumber) IsToScrollToEnd = false;
 
         }
 
@@ -2593,7 +2612,7 @@ namespace Jvedio
 
 
             string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
-
+            if (cutoffArray.Length == 0) return;
             string startTime = cutoffArray[new Random().Next(cutoffArray.Length)];
 
             List<object> list = new List<object>() { startTime, movie.filepath, GifSavePath, movie.id };
@@ -4499,25 +4518,7 @@ namespace Jvedio
 
         }
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
 
-        }
-
-        private void SideBorder_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (SideGridColumn.Width.Value <= 15)
-            {
-                SideBorder.Background = (SolidColorBrush)Application.Current.Resources["BackgroundTitle"];
-                SideBorder.Cursor = Cursors.Hand;
-            }
-        }
-
-        private void SideBorder_MouseLeave(object sender, MouseEventArgs e)
-        {
-                SideBorder.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
-            SideBorder.Cursor = Cursors.Arrow;
-        }
 
         private bool IsDragingSideGrid = false;
         public bool CanSideExpand = true;
@@ -4529,29 +4530,8 @@ namespace Jvedio
             {
                 this.Cursor = Cursors.SizeWE;
                 double width = e.GetPosition(this).X;
-                if (width >= 500)
+                if (width >= 500 || width<=200)
                     return;
-                else if (width <= 150)
-                {
-                    //缩放到侧边栏
-                    IsDragingSideGrid = false;
-                    //DoubleAnimation doubleAnimation1 = new DoubleAnimation(300, 10, new Duration(TimeSpan.FromMilliseconds(300)));
-                    //SideGridColumn.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation1);
-                    //Side_Grid.Visibility = Visibility.Collapsed;
-                    //SideGridColumn.Width = new GridLength(10);
-                    this.Cursor = Cursors.Arrow;
-                    CanSideExpand = false;
-                    Task.Run(() =>
-                    {
-                        for (int i = 15; i >= 1; i--)
-                        {
-                            this.Dispatcher.Invoke((Action)delegate { SideGridColumn.Width = new GridLength(10 * i); });
-                            Task.Delay(1).Wait();
-                        }
-                    });
-                    //Resizing = true;
-                    //ResizingTimer.Start();
-                }
                 else
                 {
                     Side_Grid.Visibility = Visibility.Visible;
@@ -4572,29 +4552,10 @@ namespace Jvedio
         private void DragRectangle_MouseUp(object sender, MouseButtonEventArgs e)
         {
 
-            
-            
-            if (SideGridColumn.Width.Value <= 15 && CanSideExpand)
-            {
-                if (sender.GetType().ToString() == "System.Windows.Controls.Grid") return;
-                SideGridColumn.Width = new GridLength(150);
-                SideBorder.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
-                this.Cursor = Cursors.Arrow;
-                Task.Run(() =>
-                {
-                    for (int i = 1; i <= 20; i++)
-                    {
-                        this.Dispatcher.Invoke((Action)delegate { SideGridColumn.Width = new GridLength(10 * i); });
-                        Task.Delay(1).Wait();
-                    }
-                });
-            }
-            else
-            {
-                IsDragingSideGrid = false;
-                Properties.Settings.Default.SideGridWidth = SideGridColumn.Width.Value;
-                Properties.Settings.Default.Save();
-            }
+
+            IsDragingSideGrid = false;
+            Properties.Settings.Default.SideGridWidth = SideGridColumn.Width.Value;
+            Properties.Settings.Default.Save();
             CanSideExpand = true;
         }
 
@@ -4826,25 +4787,6 @@ namespace Jvedio
         }
 
 
-
-        public List<Image> images1 = new List<Image>();
-
-        public List<Image> images2 = new List<Image>();
-
-        private void myImage_Loaded(object sender, RoutedEventArgs e)
-        {
-            //Image image = sender as Image;
-            //if (image.Name.ToString() == "myImage")
-            //{
-            //   if(!images1.Contains(image))  images1.Add(image);
-            //}
-            //else
-            //{
-            //    if (!images2.Contains(image)) images2.Add(image);
-            //}
-
-        }
-
         private void Rate_ValueChanged(object sender, HandyControl.Data.FunctionEventArgs<double> e)
         {
             if (!CanRateChange) return;
@@ -4861,7 +4803,21 @@ namespace Jvedio
                     {
                         if (item.id.ToUpper() == textBox.Text.ToUpper())
                         {
-                            DataBase.UpdateMovieByID(item.id, "favorites", item.favorites, "string");
+                            string table = GetCurrentList();
+                            if (!string.IsNullOrEmpty(table))
+                            {
+                                using (MySqlite mySqlite = new MySqlite("mylist"))
+                                {
+                                    mySqlite.ExecuteSql($"update {table} set favorites={ item.favorites} where id='{item.id}'");
+                                }
+                            }
+                            else
+                            {
+                                DataBase.UpdateMovieByID(item.id, "favorites", item.favorites, "string");
+                            }
+
+
+                            
                             break;
                         }
                     }
@@ -6068,7 +6024,8 @@ namespace Jvedio
             }
         }
 
-        private async void RemoveFromList(object sender, RoutedEventArgs e)
+
+        public string GetCurrentList()
         {
             string table = "";
             for (int i = 0; i < ListItemsControl.Items.Count; i++)
@@ -6090,6 +6047,12 @@ namespace Jvedio
 
                 }
             }
+            return table;
+        }
+
+        private async void RemoveFromList(object sender, RoutedEventArgs e)
+        {
+            string table = GetCurrentList();
             if (string.IsNullOrEmpty(table)) return;
 
 
@@ -6181,6 +6144,44 @@ namespace Jvedio
         {
             FocusTextBlock.Focus();
         }
+
+        private async  void HideSide(object sender, MouseButtonEventArgs e)
+        {
+            ShowSideGrid.Visibility = Visibility.Visible;
+             await Task.Run(() =>
+            {
+                for (double i = Properties.Settings.Default.SideGridWidth; i >= 0; i -=10)
+                {
+                    if (i <=0) i = 0;
+                    this.Dispatcher.Invoke((Action)delegate { SideGridColumn.Width = new GridLength(i); });
+                    Task.Delay(1).Wait();
+                }
+            });
+            SideGridColumn.Width = new GridLength(0);
+
+
+        }
+
+        private  void ShowSide(object sender, MouseButtonEventArgs e)
+        {
+            ShowSideGrid.Visibility = Visibility.Collapsed;
+            if(Properties.Settings.Default.SideGridWidth<200)
+            {
+                Properties.Settings.Default.SideGridWidth = 200;
+                Properties.Settings.Default.Save();
+            }
+            Task.Run(() =>
+            {
+                for (double i = 0; i <= Properties.Settings.Default.SideGridWidth; i+=10)
+                {
+                    if (i > Properties.Settings.Default.SideGridWidth) i = Properties.Settings.Default.SideGridWidth;
+                    this.Dispatcher.Invoke((Action)delegate { SideGridColumn.Width = new GridLength( i); });
+                    Task.Delay(1).Wait();
+                }
+            });
+        }
+
+        
     }
 
 

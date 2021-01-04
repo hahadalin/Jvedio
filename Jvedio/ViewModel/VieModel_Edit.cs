@@ -70,10 +70,22 @@ namespace Jvedio.ViewModel
 
         public RelayCommand<string> QueryCommand { get; set; }
 
-        public void Query(string movieid)
+        public void Query(string movieid,string tablename="")
         {
+            DetailMovie models = null;
+            if (string.IsNullOrEmpty(tablename))
+            {
+                models = DataBase.SelectDetailMovieById(movieid);
+            }
+            else
+            {
+                using(MySqlite mySqlite=new MySqlite("mylist"))
+                {
+                    models = mySqlite.SelectDetailMovieBySql($"select * from {tablename} where id='{movieid}'");
+                }
+            }
             
-            DetailMovie models = DataBase.SelectDetailMovieById(movieid);
+            
             
             DetailMovie = new DetailMovie();
             if (models != null) { DetailMovie = models; }
@@ -91,33 +103,66 @@ namespace Jvedio.ViewModel
 
         public bool SaveModel(string ID="")
         {
+            string table = ((Main)Jvedio.GetWindow.Get("Main")).GetCurrentList();
+
+
             if (ID == "" && DetailMovie != null && DetailMovie.id.ToUpper() == id.ToUpper())
             {
-                DataBase.InsertFullMovie(DetailMovie);
+                InsertMovie(table);
                 return true;
             }
 
             
             id = ID;
-            //if (MovieIDList == null ) id = DetailMovie.id; //是否导入单个视频
-            
             if (DetailMovie != null)
             {
                 
                 if (DetailMovie.id.ToUpper() != id.ToUpper())
                 {
                     //修改了原来的识别码
-                    if (DataBase.SelectMovieByID(ID) != null) return false;
-                    DataBase.DeleteByField("movie", "id", DetailMovie.id);
-                    DetailMovie.id = id;
-                    DataBase.InsertFullMovie(DetailMovie);
+                    if (string.IsNullOrEmpty(table))
+                    {
+                        if (DataBase.SelectMovieByID(ID) != null) return false;
+                        DataBase.DeleteByField("movie", "id", DetailMovie.id);
+                        DetailMovie.id = id;
+                        DataBase.InsertFullMovie(DetailMovie);
+                    }
+                    else
+                    {
+                        //修改了清单中的识别码
+                        using(MySqlite mySqlite=new MySqlite("mylist"))
+                        {
+                            if (mySqlite.SelectMovieBySql($"select * from {table} where id='{ID}'") != null) return false;
+
+                            mySqlite.DeleteByField(table, "id", DetailMovie.id);
+                            DetailMovie.id = id;
+                            mySqlite.InsertFullMovie(DetailMovie, table);
+                        }
+
+                    }
+
                 }
-                else { DataBase.InsertFullMovie(DetailMovie); }
+                else {
+                    InsertMovie(table);
+                }
 
                 return true;
             }
             return false;
            
+        }
+
+        private void InsertMovie(string table)
+        {
+            if (string.IsNullOrEmpty(table))
+                DataBase.InsertFullMovie(DetailMovie);
+            else
+            {
+                using (MySqlite mySqlite = new MySqlite("mylist"))
+                {
+                    mySqlite.InsertFullMovie(DetailMovie, table);
+                }
+            }
         }
 
 

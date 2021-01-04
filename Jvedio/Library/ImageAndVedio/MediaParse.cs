@@ -44,43 +44,57 @@ namespace Jvedio
             string[] result = new string[Properties.Settings.Default.ScreenShotNum];
             string Duration = GetVedioDuration(path);
             double Second = DurationToSecond(Duration);
-            if(Second <20) { return new string[1] { "00:00" }; }
+            Second = GetProperSecond(Second);
+            if (Second <result.Length ) {
+                if (Second > 0)
+                {
+                    result = new string[(int)Second];
+                    for (int i = 0; i < result.Length; i++)
+                    {
+                        result[i] = SecondToDuration(i);
+                    }
+                    return result;
+                }
+                else
+                {
+                    //掐头去尾发现过少，则不截图
+                    return new string[0];
+                }
+
+            }
             else
             {
-                Second = GetProperSecond(Second);
-
                 // 按照秒 n 等分
                 uint splitLength =(uint)( Second / Properties.Settings.Default.ScreenShotNum);
-                if (splitLength == 0) splitLength = 1;//如果只有几秒的视频
-                for (int i = 0; i < result.Count(); i++)
+                for (int i = 0; i < result.Length; i++)
                 {
-                    if(Properties.Settings.Default.ScreenShotIgnoreStart * 60 + splitLength * (result.Count() - 1) >= Second)
-                        result[i] = SecondToDuration( splitLength * i);
-                    else
                         result[i] = SecondToDuration(Properties.Settings.Default.ScreenShotIgnoreStart * 60 + splitLength * i);//加上跳过开头的部分
-                    
                 }
                 foreach (var item in result)
                 {
                     Console.WriteLine(item);
                 }
-
-                Console.WriteLine(123);
                 return result;
             }
 
             
         }
+
+        /// <summary>
+        /// 去掉开头和结尾的秒数
+        /// </summary>
+        /// <param name="second"></param>
+        /// <returns></returns>
         public static double GetProperSecond(double second)
         {
             double Second = second;
             if (Properties.Settings.Default.ScreenShotIgnoreStart > 0) { 
                 Second -= Properties.Settings.Default.ScreenShotIgnoreStart * 60; 
-                if(Second <= 0) Second += Properties.Settings.Default.ScreenShotIgnoreStart * 60;
+                //if(Second <= 0) Second += Properties.Settings.Default.ScreenShotIgnoreStart * 60;
             }
             if (Properties.Settings.Default.ScreenShotIgnoreEnd > 0) { 
                 Second -= Properties.Settings.Default.ScreenShotIgnoreEnd * 60;
-                if (Second <= 0) Second += Properties.Settings.Default.ScreenShotIgnoreEnd * 60;
+                //if (Second <= 0) Second += Properties.Settings.Default.ScreenShotIgnoreEnd * 60;
             }
             return Second;
         }
@@ -111,7 +125,7 @@ namespace Jvedio
         /// <returns></returns>
         public static VedioInfo GetMediaInfo(string vediopath)
         {
-            VedioInfo vedioInfo = new VedioInfo() { Format = "", BitRate = "", Duration = "", FileSize = "", Width = "", Height = "", Resolution = "", DisplayAspectRatio = "", FrameRate = "", BitDepth = "", PixelAspectRatio = "", Encoded_Library = "", FrameCount = "", AudioFormat = "", AudioBitRate = "", AudioSamplingRate = "", Channel = "" };
+            VedioInfo vedioInfo = new VedioInfo() ;
             if (File.Exists(vediopath))
             {
                 MediaInfo MI = new MediaInfo();
@@ -172,6 +186,8 @@ namespace Jvedio
                 };
             }
             if (!string.IsNullOrEmpty(vedioInfo.Width) && !string.IsNullOrEmpty(vedioInfo.Height)) vedioInfo.Resolution = vedioInfo.Width + "x" + vedioInfo.Height;
+            vedioInfo.Extension = Path.GetExtension(vediopath).ToUpper().Replace(".","");
+            vedioInfo.FileName = Path.GetFileNameWithoutExtension(vediopath);
             return vedioInfo;
         }
 

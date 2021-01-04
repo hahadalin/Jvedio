@@ -23,7 +23,6 @@ namespace Jvedio
             ID = id;
             HtmlText = htmlText;
             VedioType = vedioType;
-
         }
 
 
@@ -42,11 +41,10 @@ namespace Jvedio
 
         public override Dictionary<string, string> Parse()
         {
+            if (string.IsNullOrEmpty(HtmlText)) return base.Parse();
             Dictionary<string, string> result = new Dictionary<string, string>();
-            if (HtmlText == "") return result;
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(HtmlText);
-
             //基本信息
             HtmlNodeCollection headerNodes = doc.DocumentNode.SelectNodes("//span[@class='header']");
             if (headerNodes != null)
@@ -208,8 +206,9 @@ namespace Jvedio
 
         public Actress ParseActress()
         {
+            if (string.IsNullOrEmpty(HtmlText)) return null;
             Actress result = new Actress();
-            if (HtmlText == "") { return result; }
+           
             string info;
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(HtmlText);

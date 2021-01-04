@@ -38,6 +38,13 @@ namespace Jvedio
         }
 
 
+        public static bool IsLetter(char c)
+        {
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) return true;
+            else return false;
+        }
+
+
         public static Movie GetInfoFromNfo(string path)
         {
             XmlDocument doc = new XmlDocument();

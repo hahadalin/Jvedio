@@ -146,6 +146,7 @@ namespace Jvedio
 
 
             string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
+            if (cutoffArray.Length == 0) return false;
             SemaphoreScreenShot = new Semaphore(SemaphoreNum, SemaphoreNum);
             vieModel.ScreenShot_TotalNum_S = cutoffArray.Count();
             vieModel.ScreenShot_CurrentProgress_S = 0;

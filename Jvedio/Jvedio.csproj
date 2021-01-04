@@ -260,7 +260,7 @@
     <Compile Include="Library\FileProcess\Identify.cs" />
     <Compile Include="Library\FileProcess\Logger.cs" />
     <Compile Include="Library\Net\Net.cs" />
-    <Compile Include="Library\Net\NetParse.cs" />
+    <Compile Include="Library\Net\CrawlerParse.cs" />
     <Compile Include="Library\FileProcess\NFO.cs" />
     <Compile Include="Library\FileProcess\Scan.cs" />
     <Compile Include="Config\WindowConfig.cs" />
@@ -455,6 +455,8 @@
     <Content Include="Lib\PInvoke.dll" />
     <Content Include="Lib\QueryEngine.dll" />
     <Content Include="Lib\UsnOperation.dll" />
+    <Resource Include="Resources\Skin\black\hide.png" />
+    <Resource Include="Resources\Skin\white\hide.png" />
     <Resource Include="Resources\Picture\其他.png" />
     <Resource Include="Resources\Skin\white\add.png" />
     <Resource Include="Resources\Skin\black\add.png" />

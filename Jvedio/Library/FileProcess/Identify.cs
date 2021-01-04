@@ -11,7 +11,7 @@ namespace Jvedio
     {
 
         public static string[] FLOWOUT = new string[] {"流出", "留出", "泄露", "泄密", "曝光" };
-        public static string[] CHS = new string[] { "-c", "_c", "中字", "中文字幕", "字幕","中文" };
+        public static string[] CHS = new string[] {  "中字", "中文字幕", "字幕","中文" };
         public static string[] HDV = new string[] { "hd", "high_definition", "high definition","高清" };
 
         public static void InitFanhaoList()
@@ -45,8 +45,27 @@ namespace Jvedio
         public static bool IsCHS(string filepath)
         {
             if (string.IsNullOrEmpty(filepath)) return false;
-            string name = new FileInfo(filepath).Name.ToLower();
-            return CHS.Any(arg => name.IndexOf(arg) >= 0);
+            string name = Path.GetFileNameWithoutExtension(filepath).ToLower();
+            //-c后面没有英文
+            if(name.IndexOf("-c")>0 || name.IndexOf("_c") > 0)
+            {
+                int idx = name.LastIndexOf("-c");
+                if (idx > 0 && idx == name.Length - 2) return true;
+                else if (idx > 0 && idx < name.Length - 2 && !FileProcess.IsLetter(name[idx + 2])) return true;
+
+                idx = name.LastIndexOf("_c");
+                if (idx > 0 && idx == name.Length - 2) return true;
+                else if (idx > 0 && idx < name.Length - 2 && !FileProcess.IsLetter(name[idx + 2])) return true;
+                return CHS.Any(arg => name.IndexOf(arg) >= 0);
+            }
+            else
+            {
+                return CHS.Any(arg => name.IndexOf(arg) >= 0);
+            }
+
+
+
+            
         }
 
 
@@ -313,15 +332,9 @@ namespace Jvedio
 
             int index = str1.ToUpper().IndexOf(str2.ToUpper());
             if (index <= 0)
-            {
                 return false;
-            }
             else
-            {
-                char c= str1[index - 1];
-                if ((c>'a' && c<'z') || (c>'A' && c<'Z')) return true;
-                else return false;
-            }
+                return FileProcess.IsLetter(str1[index - 1]);
         }
 
         public static string AddGang(string Fanhao)

@@ -578,7 +578,7 @@
                                             </StackPanel>
 
                                             <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="0 20" Cursor="Hand">
-                                                <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"  ValueChanged="Rate_ValueChanged" DefaultValue="0"/>
+                                                <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0"/>
                                             </StackPanel>
 
 
@@ -815,19 +815,23 @@
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                <TextBlock Width="80"  Text="总码率："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.BitRate}" Margin="0"   ></TextBox>
-                                            </StackPanel>
-
-                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock Width="80"  Text="时长："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
                                                 <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Duration}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                <TextBlock Width="80"  Text="文件大小："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FileSize}" Margin="0"   ></TextBox>
+                                                <TextBlock Width="80"  Text="帧率："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameRate}" Margin="0"   ></TextBox>
                                             </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="总码率："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.BitRate}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+
+
+
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock Width="80"  Text="分辨率："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
@@ -839,10 +843,7 @@
                                                 <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.DisplayAspectRatio}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
-                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                <TextBlock Width="80"  Text="帧率："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameRate}" Margin="0"   ></TextBox>
-                                            </StackPanel>
+
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Width="80" Text="位深度："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
@@ -853,6 +854,8 @@
                                                 <TextBlock Width="80"  Text="总帧数："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
                                                 <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameCount}" Margin="0"   ></TextBox>
                                             </StackPanel>
+
+                                            <Rectangle Fill="{DynamicResource ForegroundGlobal}" Height="2" Width="auto" Margin="0 5"/>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock Width="80"  Text="音频格式："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
@@ -872,6 +875,23 @@
                                                 <TextBlock Width="80"  Text="声道数："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
                                                 <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Channel}" Margin="0"   ></TextBox>
                                             </StackPanel>
+
+                                            <Rectangle Fill="{DynamicResource ForegroundGlobal}" Height="2" Width="auto" Margin="0 5"/>
+
+
+
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="文件后缀："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Extension}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0 5" Orientation="Horizontal" >
+                                                <TextBlock Width="80"  Text="文件大小："  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FileSize}" Margin="0"   ></TextBox>
+                                            </StackPanel>
+
+                                            <TextBlock TextWrapping="Wrap" Cursor="Hand" Foreground="SkyBlue" MouseEnter="TextBox_MouseEnter" MouseLeave="TextBox_MouseLeave" PreviewMouseLeftButtonUp="TextBox_PreviewMouseLeftButtonUp"  Style="{StaticResource  ViewTextBlock2}" Text="{Binding VedioInfo.FileName}" Margin="0"   ></TextBlock>
 
                                         </StackPanel>
                                     </ScrollViewer>

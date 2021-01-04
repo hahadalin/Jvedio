@@ -36,6 +36,15 @@ namespace Jvedio
             this.DataContext = vieModel;
         }
 
+        public WindowEdit(string id ,string tablename)
+        {
+            InitializeComponent();
+            ID = id;
+            vieModel = new VieModel_Edit();
+            vieModel.Query(ID, tablename);
+            this.DataContext = vieModel;
+        }
+
         public void ChoseMovie(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -101,8 +110,14 @@ namespace Jvedio
 
         private void IdListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            string table = ((Main)Jvedio.GetWindow.Get("Main")).GetCurrentList();
             string movieid = IdListBox.SelectedItem.ToString();
-            vieModel.Query(movieid);
+            if (string.IsNullOrEmpty(table))
+                vieModel.Query(movieid);
+            else
+                vieModel.Query(movieid,table);
+
+
         }
 
         private void UpdateDetail()
@@ -111,6 +126,23 @@ namespace Jvedio
             {
                 WindowDetails windowDetails = Jvedio.GetWindow.Get("WindowDetails") as WindowDetails;
                 windowDetails.vieModel.Query(vieModel.DetailMovie.id);
+            }
+        }
+
+
+        public Movie SelectMovie(string ID)
+        {
+            string table = ((Main)Jvedio.GetWindow.Get("Main")).GetCurrentList();
+            if (string.IsNullOrEmpty(table))
+            {
+                return DataBase.SelectMovieByID(ID); ;
+            }
+            else
+            {
+                using(MySqlite mySqlite=new MySqlite("mylist"))
+                {
+                    return mySqlite.SelectMovieBySql($"select * from {table} where id='{ID}'");
+                }
             }
         }
 
@@ -124,7 +156,7 @@ namespace Jvedio
                 {
                     if (main.vieModel.CurrentMovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
-                        Movie movie =  DataBase.SelectMovieByID(newID);
+                        Movie movie = SelectMovie(newID);
                         addTag(ref movie);
                         movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
                         movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
@@ -143,7 +175,7 @@ namespace Jvedio
                 {
                     if (main.vieModel.MovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
-                        Movie movie = DataBase.SelectMovieByID(newID);
+                        Movie movie = SelectMovie(newID);
                         addTag(ref movie);
                         movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
                         movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
@@ -291,7 +323,12 @@ namespace Jvedio
                 }
 
                vieModel.SaveModel();
-                vieModel.Query(vieModel.id);
+
+                string table = ((Main)Jvedio.GetWindow.Get("Main")).GetCurrentList();
+                if (string.IsNullOrEmpty(table))
+                    vieModel.Query(vieModel.id);
+                else
+                    vieModel.Query(vieModel.id, table);
                 HandyControl.Controls.Growl.Success("路径、视频类型、文件大小、创建时间、导入时间成功更新！", "EditGrowl");
             }
             else

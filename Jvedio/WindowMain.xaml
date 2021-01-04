@@ -1141,7 +1141,7 @@
             <Grid Grid.Row="1" Margin="0"   Width="auto"  Background="Transparent" Grid.RowSpan="2">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition x:Name="SideGridColumn" Width="200"/>
+                        <ColumnDefinition x:Name="SideGridColumn" Width="200" />
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
@@ -1214,9 +1214,16 @@
                     </Grid>
 
 
+                    <Grid   ToolTip="隐藏侧边栏"  Panel.ZIndex="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10"   >
+                        <Border   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="HideSide"  >
+                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                        </Border>
+                    </Grid>
+
+
                     <!--侧边栏-->
-                    <Border Visibility="Visible" MouseEnter="SideBorder_MouseEnter" MouseLeave="SideBorder_MouseLeave" PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}" x:Name="SideBorder" CornerRadius="0" BorderBrush="{DynamicResource BorderBursh}" BorderThickness="0" >
-                        <Grid   x:Name="Side_Grid"   HorizontalAlignment="Stretch" Height="auto" VerticalAlignment="Stretch" Width="auto">
+                    <Border   Visibility="Visible" PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}" x:Name="SideBorder" CornerRadius="0" BorderBrush="{DynamicResource BorderBursh}" BorderThickness="0" >
+                        <Grid   x:Name="Side_Grid"   HorizontalAlignment="Stretch" Height="auto" VerticalAlignment="Stretch" >
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="50"/>
@@ -1489,7 +1496,7 @@
                     </Border>
 
                     <!--左右调节-->
-                    <Rectangle MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="6" x:Name="DragRectangle" Margin="0 0 -3 0" />
+                    <Rectangle IsEnabled="True" MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="6" x:Name="DragRectangle" Margin="0 0 -3 0" />
 
                     <!--影片-->
                     <Grid  MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="1"   x:Name="Grid_Movie"  Visibility="Visible" >
@@ -2040,13 +2047,13 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate  >
                                                     <!--动画-->
-                                                    <DataTemplate.Triggers>
-                                                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                                    <DataTemplate.Triggers >
+                                                        <EventTrigger   RoutedEvent="FrameworkElement.Loaded">
                                                             <BeginStoryboard  >
-                                                                <Storyboard  AutoReverse="False" >
-                                                                    <DoubleAnimationUsingKeyFrames  Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                <Storyboard   AutoReverse="False" >
+                                                                    <DoubleAnimationUsingKeyFrames    Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
                                                                         <EasingDoubleKeyFrame KeyTime="0" Value="0" />
-                                                                        <EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="1" />
+                                                                        <EasingDoubleKeyFrame x:Name="EasingDoubleKeyFrame_2"  KeyTime="0:0:0.25" Value="1" />
                                                                     </DoubleAnimationUsingKeyFrames>
                                                                 </Storyboard>
                                                             </BeginStoryboard>
@@ -2110,14 +2117,14 @@
                                                                         <!--显示预览图-->
                                                                         <Canvas  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails" x:Name="ExtraImageCanvas"  Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode, Converter={StaticResource StringToVisibilityConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}" >
                                                                             <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16" Foreground="{DynamicResource ForegroundSearch}" Height="20"  ></TextBlock>
-                                                                            <Image Loaded="myImage_Loaded" x:Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}">
+                                                                            <Image  x:Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}">
                                                                                 <Image.RenderTransform>
                                                                                     <TransformGroup>
                                                                                         <TranslateTransform X="0" Y="0" />
                                                                                     </TransformGroup>
                                                                                 </Image.RenderTransform>
                                                                             </Image>
-                                                                            <Image  Loaded="myImage_Loaded" x:Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}">
+                                                                            <Image   x:Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}">
                                                                                 <Image.RenderTransform>
                                                                                     <TransformGroup>
                                                                                         <TranslateTransform X="0" Y="0" />
@@ -2235,13 +2242,7 @@
                                                                      BorderThickness="0" 
                                                                      ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"/>
                                                                     <TextBox Text="{Binding filepath}"  Visibility="Collapsed"/>
-
-
-
-
                                                                 </StackPanel>
-
-
                                                             </Border>
                                                         </Grid>
                                                     </WrapPanel>
@@ -2250,51 +2251,7 @@
                                         </ItemsControl>
                                     </ScrollViewer>
                                 </Grid>
-                                <!--详情模式-->
-                                <Grid x:Name="DetailGrid" Visibility="Collapsed">
-                                    <DataGrid Padding="5 0"  x:Name="DetailsDataGrid"   ItemsSource="{Binding DetailsDataList}" Visibility="Visible" Background="{DynamicResource BackgroundSide}"   HorizontalScrollBarVisibility="Auto"     VerticalScrollBarVisibility="Auto"   Foreground="{DynamicResource ForegroundSearch}" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="True"   Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
-                                        <DataGrid.Columns>
 
-                                            <DataGridTextColumn  IsReadOnly="True" MinWidth="50"   Header="识别码" Width="auto" Binding="{Binding id}" />
-                                            <DataGridTextColumn IsReadOnly="True" MinWidth="50"    Header="文件大小" Width="auto" Binding="{Binding filesize,Converter={StaticResource BitToGBConverter},Mode=OneWay}" />
-                                            <DataGridTextColumn  IsReadOnly="True" MinWidth="50"     Header="创建日期" Width="auto" Binding="{Binding scandate}" />
-                                            <DataGridTextColumn  IsReadOnly="True" MinWidth="50"     Header="导入日期" Width="auto" Binding="{Binding otherinfo}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="标题" Width="100" Binding="{Binding title}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="文件路径" Width="100" Binding="{Binding filepath}" />
-
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="发行日期" Width="auto" Binding="{Binding releasedate}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="时长" Width="50" Binding="{Binding runtime}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="视频类型" Width="60" Binding="{Binding vediotype,Converter={StaticResource IntToVedioTypeConverter},Mode=OneWay}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="导演" Width="auto" Binding="{Binding director}" />
-                                            <DataGridTextColumn  IsReadOnly="True" MinWidth="50"     Header="类别" Width="auto" Binding="{Binding genre}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="系列" Width="auto" Binding="{Binding tag}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="演员" Width="auto" Binding="{Binding actor}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="制作商" Width="auto" Binding="{Binding studio}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="评分" Width="50" Binding="{Binding rating}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="喜爱程度" Width="60" Binding="{Binding favorites}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="标签" Width="50" Binding="{Binding label}" />
-
-
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="分段视频路径" Width="100" Binding="{Binding subsection}" />
-                                            <DataGridTextColumn  IsReadOnly="True"   MinWidth="50"   Header="发行年份" Width="60" Binding="{Binding year}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="访问次数" Width="60" Binding="{Binding visits}" />
-                                            <DataGridTextColumn  IsReadOnly="True" MinWidth="50"     Header="演员 id" Width="60" Binding="{Binding actorid}" />
-                                            <DataGridTextColumn  IsReadOnly="True" MinWidth="50"     Header="中文标题" Width="60" Binding="{Binding chinesetitle}" />
-                                            <DataGridTextColumn  IsReadOnly="True" MinWidth="50"     Header="摘要" Width="50" Binding="{Binding plot}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="大纲" Width="50" Binding="{Binding outline}" />
-                                            <DataGridTextColumn  IsReadOnly="True"   MinWidth="50"   Header="国家" Width="50" Binding="{Binding country}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="国家代码" Width="60" Binding="{Binding countrycode}" />
-                                            <DataGridTextColumn  IsReadOnly="True" MinWidth="50"     Header="演员头像地址" Width="100" Binding="{Binding actressimageurl}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="缩略图地址" Width="100" Binding="{Binding smallimageurl}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="海报图地址" Width="100" Binding="{Binding bigimageurl}" />
-                                            <DataGridTextColumn  IsReadOnly="True"   MinWidth="50"   Header="预览图地址" Width="100" Binding="{Binding extraimageurl}" />
-                                            <DataGridTextColumn  IsReadOnly="True"  MinWidth="50"    Header="源网站" Width="100" Binding="{Binding sourceurl}" />
-                                            <DataGridTextColumn  IsReadOnly="True" MinWidth="50"     Header="源网站类型" Width="100" Binding="{Binding source}" />
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-
-
-                                </Grid>
 
                                 <!--返回顶部-->
                                 <Canvas Panel.ZIndex="5" MouseLeftButtonUp="GotoTop" x:Name="GoToTopCanvas" Cursor="Hand" Width="20" Height="20"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 50 50"  Visibility="Hidden">
@@ -2789,7 +2746,22 @@
                 </Grid>
 
 
+
+                <Grid x:Name="ShowSideGrid"   ToolTip="显示侧边栏"  Panel.ZIndex="5"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 10 40" Visibility="Collapsed"   >
+                    <Border   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowSide"  >
+                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" RenderTransformOrigin=".5,.5"  >
+                            <Image.RenderTransform>
+                                <RotateTransform Angle="180" />
+                            </Image.RenderTransform>
+                        </Image>
+                    </Border>
+                </Grid>
+
+
                 <!--关于-->
+
+
+                
 
                 <Grid x:Name="AboutGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="500" Visibility="Hidden" >
                     <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >

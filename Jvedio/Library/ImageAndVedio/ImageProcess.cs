@@ -232,6 +232,7 @@ namespace Jvedio
                     BitmapImage bitmap = new BitmapImage();
                     bitmap.BeginInit();
                     bitmap.StreamSource = ms;
+                    //bitmap.DecodePixelWidth = Properties.Settings.Default.GlobalImageWidth;
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
                     bitmap.Freeze();
@@ -332,10 +333,11 @@ namespace Jvedio
                 if (!Directory.Exists(ScreenShotPath)) Directory.CreateDirectory(ScreenShotPath);
 
                 string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
+                if (cutoffArray.Length == 0) { result = false; message = "未成功分割影片截图"; return; }
                 int SemaphoreNum = cutoffArray.Length > 10 ? 10 : cutoffArray.Length;//最多 10 个线程截图
                 SemaphoreScreenShot = new Semaphore(SemaphoreNum, SemaphoreNum);
 
-                if (cutoffArray.Count() == 0) { result = false; message = "未成功分割影片截图"; return; }
+               
 
                 ScreenShotCurrent = 0;
                 int ScreenShotTotal = cutoffArray.Count();

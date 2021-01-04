@@ -208,6 +208,16 @@ namespace Jvedio
         public string AudioBitRate { get; set; }//码率
         public string AudioSamplingRate { get; set; }//采样率
         public string Channel { get; set; }//声道数
+
+        public string Extension { get; set; }
+
+        public string FileName { get; set; }
+
+        public VedioInfo()
+        {
+            Format = ""; BitRate = ""; Duration = ""; FileSize = ""; Width = ""; Height = ""; Resolution = ""; DisplayAspectRatio = ""; FrameRate = ""; BitDepth = ""; PixelAspectRatio = ""; Encoded_Library = ""; FrameCount = ""; AudioFormat = ""; AudioBitRate = ""; AudioSamplingRate = ""; Channel = "";Extension = ""; FileName = "";
+        }
+
     }
 
 

@@ -16,7 +16,6 @@ namespace Jvedio
         public static int TASKDELAY_MEDIUM = 1000;//长时间暂停
         public static int TASKDELAY_LONG = 2000;//长时间暂停
 
-
         protected bool result = false;
         protected string resultMessage = "";
         protected string Url = "";
@@ -34,7 +33,7 @@ namespace Jvedio
             ID = Id;
         }
 
-        public void SaveInfo(Dictionary<string, string> Info, WebSite webSite)
+        public void SaveInfo(Dictionary<string, string> Info)
         {
             if(!Info.ContainsKey("id")) Info.Add("id", ID);
             //保存信息
@@ -54,7 +53,7 @@ namespace Jvedio
                 {
                     //与视频同路径
                     string path = detailMovie.filepath;
-                    if (System.IO.File.Exists(path))
+                    if (File.Exists(path))
                     {
                         nfo.SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{ID}.nfo"));
                     }
@@ -75,10 +74,10 @@ namespace Jvedio
         public virtual async Task<bool> Crawl(Action<int> callback = null, Action<int> ICcallback = null)
         {
             (Content, StatusCode) = await Net.Http(Url, Cookie: Cookies);
-            if (StatusCode == 200 & Content != "") { SaveInfo(GetInfo(), webSite); return true; }
+            if (StatusCode == 200 & Content != "") { SaveInfo(GetInfo()); return true; }
             else
             {
-                resultMessage = $"地址：{Url}，错误原因：获取网页源码失败";
+                resultMessage = $"地址：{Url}，错误原因：{StatusCode.ToString().ToStatusMessage()}";
                 Logger.LogN(resultMessage);
                 callback?.Invoke(StatusCode);
                 return false;
@@ -107,11 +106,8 @@ namespace Jvedio
         protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new BusParse(ID, Content, VedioType).Parse();
-            if (Info.Count <= 0) { 
-                Logger.LogN($"地址：{Url}，失败原因：信息解析失败"); 
-            }
-            else
-            {
+            if (Info.Count >0) 
+            { 
                 Info.Add("sourceurl", Url);
                 Info.Add("source", "javbus");
                 Task.Delay(TASKDELAY_SHORT).Wait();
@@ -135,19 +131,19 @@ namespace Jvedio
         {
             (Content, StatusCode) = await Net.Http(Url, Cookie: Cookies);
             if (StatusCode == 200 && Content .IndexOf("非常抱歉，此商品未在您的居住国家公开")<0 && Content.IndexOf("非常抱歉，找不到您要的商品") <0) { 
-                SaveInfo(GetInfo(), webSite);
+                SaveInfo(GetInfo());
                 await Task.Delay(TASKDELAY_LONG);
                 return true; 
             }
             else if (Content.IndexOf("非常抱歉，此商品未在您的居住国家公开")> 0 || Content.IndexOf("お探しの商品が見つかりません") > 0)
             {
-                resultMessage = $"地址：{Url}，错误原因：非常抱歉，此商品未在您的居住国家公开";
+                resultMessage = $"地址：{Url}，错误原因：该商品未在您的居住国家公开，请设置相应代理";
                 Logger.LogN(resultMessage);
                 callback?.Invoke(403);
                 return false;
             }else if (Content.IndexOf("非常抱歉，找不到您要的商品")>0)
             {
-                resultMessage = $"地址：{Url}，错误原因：非常抱歉，找不到您要的商品";
+                resultMessage = $"地址：{Url}，错误原因：该商品未在您的居住国家公开，请设置相应代理";
                 Logger.LogN(resultMessage);
                 callback?.Invoke(404);
                 return false;
@@ -535,4 +531,7 @@ namespace Jvedio
         }
 
     }
+
+
+   
 }

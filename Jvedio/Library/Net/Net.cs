@@ -409,7 +409,7 @@ namespace Jvedio
                 //id搜索
                 BusParse busParse = new BusParse(ID, Content, VedioType.骑兵);
                 Actress actress = busParse.ParseActress();
-                if (string.IsNullOrEmpty(actress.birthday)  && actress.age == 0 && string.IsNullOrEmpty(actress.birthplace))
+                if (actress ==null && string.IsNullOrEmpty(actress.birthday)  && actress.age == 0 && string.IsNullOrEmpty(actress.birthplace))
                 { 
                     ResultMessage = $"该网址无演员信息：{Url}";
                     callback.Invoke(ResultMessage);
@@ -568,21 +568,18 @@ namespace Jvedio
                     if (IsToDownLoadInfo(newMovie))
                     {
                         if (!string.IsNullOrEmpty(RootUrl.FC2) && EnableUrl.FC2) { await new FC2Crawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
-                        else if (!string.IsNullOrEmpty(RootUrl.FC2)) message = "未开启 FC2 官网地址";
                     }
                 }
                 else
                 {
                     //优先从 Bus 下载
                     if (RootUrl.Bus.IsProperUrl() && EnableUrl.Bus) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl((statuscode) => { message = statuscode.ToString(); });
-                    else if (RootUrl.Bus.IsProperUrl() && !EnableUrl.Bus) message = "未开启 Bus 网址";
 
                     //Bus 未下载成功则去 library
                     newMovie = DataBase.SelectMovieByID(movie.id);
                     if (IsToDownLoadInfo(newMovie))
                     {
                         if (RootUrl.Library.IsProperUrl() && EnableUrl.Library) { await new LibraryCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); }); }
-                        else if(RootUrl.Library.IsProperUrl() && !EnableUrl.Library) message = "未开启 Library 网址";
                     }
 
 
@@ -591,7 +588,6 @@ namespace Jvedio
                     if (IsToDownLoadInfo(newMovie))
                     {
                         if (RootUrl.DB.IsProperUrl() && EnableUrl.DB)  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); });
-                        else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB) message = "未开启 DB 网址";
                     }
 
                     //DB 未下载成功则去 FANZA

@@ -17,7 +17,7 @@ namespace Jvedio.ViewModel
     public class VieModel_Details : ViewModelBase
     {
 
-        public event EventHandler QueryCompleted; 
+        public event EventHandler QueryCompleted;
         public VieModel_Details()
         {
             QueryCommand = new RelayCommand<string>(Query);
@@ -122,9 +122,20 @@ namespace Jvedio.ViewModel
 
         public void SaveLove()
         {
+            string table = GetCurrentListFromMain();
+            if (!string.IsNullOrEmpty(table))
+            {
+                using(MySqlite mySqlite=new MySqlite("mylist"))
+                {
+                    mySqlite.ExecuteSql($"update {table} set favorites={ DetailMovie.favorites} where id='{DetailMovie.id}'");
+                }
+            }
+            else
+            {
+                DataBase.UpdateMovieByID(DetailMovie.id, "favorites", DetailMovie.favorites, "string");
+            }
 
-            DataBase.UpdateMovieByID(DetailMovie.id, "favorites",DetailMovie.favorites, "string");
-            
+
         }
 
         public void SaveLabel()
@@ -132,17 +143,44 @@ namespace Jvedio.ViewModel
             List<string> labels = DetailMovie.labellist;
             labels.Remove("+");
 
-            DataBase.UpdateMovieByID(DetailMovie.id, "label", string.Join(" ",labels), "string");
-            
+            DataBase.UpdateMovieByID(DetailMovie.id, "label", string.Join(" ", labels), "string");
+
+        }
+
+
+        public string GetCurrentListFromMain()
+        {
+            Main main = Jvedio.GetWindow.Get("Main") as Main;
+            return main.GetCurrentList();
         }
 
 
         public void Query(string movieid)
         {
-            DetailMovie detailMovie = DataBase.SelectDetailMovieById(movieid);
-            //访问次数+1
-            detailMovie.visits += 1;
-            DataBase.UpdateMovieByID(movieid, "visits", detailMovie.visits);
+            DetailMovie detailMovie = null;
+            string table = GetCurrentListFromMain();
+            if (!string.IsNullOrEmpty(table))
+            {
+                //清单
+                using (MySqlite mySqlite = new MySqlite("mylist.sqlite"))
+                {
+                    detailMovie = mySqlite.SelectDetailMovieBySql($"select * from {table} where id='{movieid}'");
+                }
+            }
+            else
+            {
+                detailMovie = DataBase.SelectDetailMovieById(movieid);
+                //访问次数+1
+                if (detailMovie != null)
+                {
+                    detailMovie.visits += 1;
+                    DataBase.UpdateMovieByID(movieid, "visits", detailMovie.visits);
+                }
+            }
+
+
+
+
 
 
             //释放图片内存
@@ -192,7 +230,7 @@ namespace Jvedio.ViewModel
                 detailMovie.tagstamps = "";
                 FileProcess.addTag(ref detailMovie);
                 if (string.IsNullOrEmpty(DetailMovie.title)) DetailMovie.title = Path.GetFileNameWithoutExtension(DetailMovie.filepath);
-                 QueryCompleted?.Invoke(this, new EventArgs());
+                QueryCompleted?.Invoke(this, new EventArgs());
             }
         }
     }
