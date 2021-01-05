@@ -27,7 +27,7 @@ Add tags to manage videos, use artificial intelligence to identify actors, suppo
 Capture video pictures based on FFmpeg, smooth and beautiful application software on Window desktop
 
 
-WebSite：[Jvedio](https://hitchao.github.io/JvedioWebPage/) | Download：[Latest Version](https://hitchao.github.io/JvedioWebPage/)
+WebSite：[Jvedio](https://hitchao.github.io/JvedioWebPage/) | Download：[Latest Version](https://github.com/hitchao/Jvedio/releases)
 
 
 
@@ -53,7 +53,7 @@ or use git
 
 ### For User
 
-Please See：[Jvedio Introduction](https://www.kancloud.cn/hitchao/jvedio)
+Please See：[Jvedio Introduction](https://github.com/hitchao/Jvedio/wiki)
 
 
 

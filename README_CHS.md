@@ -26,7 +26,7 @@
 基于 FFmpeg 截取视频图片，Window 桌面端流畅美观的应用软件
 
 
-官方网址：[Jvedio](https://hitchao.github.io/JvedioWebPage/) | 下载地址：[最新版本](https://hitchao.github.io/JvedioWebPage/)
+官方网址：[Jvedio](https://hitchao.github.io/JvedioWebPage/) | 下载地址：[最新版本](https://github.com/hitchao/Jvedio/releases)
 
 
 
@@ -54,7 +54,7 @@
 
 ### 普通用户
 
-教程请看：[jvedio 使用说明](https://www.kancloud.cn/hitchao/jvedio)
+教程请看：[jvedio 使用说明](https://github.com/hitchao/Jvedio/wiki)
 
 
 
