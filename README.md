@@ -33,9 +33,8 @@ WebSite：[Jvedio](https://hitchao.github.io/JvedioWebPage/) | Download：[Lates
 
 
 
-
-[![sFIEZV.png](https://s3.ax1x.com/2021/01/05/sFIEZV.png)](https://imgchr.com/i/sFIEZV)
-[![sFIVaT.png](https://s3.ax1x.com/2021/01/05/sFIVaT.png)](https://imgchr.com/i/sFIVaT)
+[![Click to view the software](https://s3.ax1x.com/2021/01/05/sFIEZV.png)](https://imgchr.com/i/sFIEZV)
+[![Click to view the software](https://s3.ax1x.com/2021/01/05/sFIVaT.png)](https://imgchr.com/i/sFIVaT)
 
 ---
 
