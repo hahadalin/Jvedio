@@ -30,10 +30,8 @@
 
 
 
-![主界面](https://img.kancloud.cn/1f/fa/1ffa50abdbca0c625f8ddf6b5516406d_1175x895.png)
-
-![详情页](https://img.kancloud.cn/11/ba/11baccb48d9ca5a6fa04440b3b7ade5f_1200x700.png)
-
+[![sFIEZV.png](https://s3.ax1x.com/2021/01/05/sFIEZV.png)](https://imgchr.com/i/sFIEZV)
+[![sFIVaT.png](https://s3.ax1x.com/2021/01/05/sFIVaT.png)](https://imgchr.com/i/sFIVaT)
 
 ---
 

@@ -33,9 +33,8 @@
 
 
 
-![主界面](1.png)
-
-![详情页](2.png)
+[![sFIEZV.png](https://s3.ax1x.com/2021/01/05/sFIEZV.png)](https://imgchr.com/i/sFIEZV)
+[![sFIVaT.png](https://s3.ax1x.com/2021/01/05/sFIVaT.png)](https://imgchr.com/i/sFIVaT)
 
 
 ---
