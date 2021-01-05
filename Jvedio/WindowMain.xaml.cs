@@ -1229,12 +1229,12 @@ namespace Jvedio
 
         private void OpenFeedBack(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://docs.qq.com/form/page/DRkFITmFxUmt3ZnpQ");
+            Process.Start("https://github.com/hitchao/Jvedio/issues");
         }
 
         private void OpenHelp(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://www.kancloud.cn/hitchao/jvedio/content/Jvedio.md");
+            Process.Start("https://github.com/hitchao/Jvedio/wiki");
         }
 
         private void OpenThanks(object sender, RoutedEventArgs e)
@@ -4469,7 +4469,7 @@ namespace Jvedio
 
         private void GotoDownloadUrl(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://hitchao.github.io/JvedioWebPage/download.html");
+            Process.Start("https://github.com/hitchao/Jvedio/releases");
         }
 
         private void RandomDisplay(object sender, MouseButtonEventArgs e)

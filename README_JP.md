@@ -1,5 +1,5 @@
 ﻿
-[中文](README.md) [English](README_EN.md) [日本語](README_JP.md)
+[中文](README_CHS.md) [English](README.md) [日本語](README_JP.md)
 
 
 <h1 align="center">Jvedio</h1>
@@ -33,10 +33,9 @@
 
 
 
-![主界面](https://img.kancloud.cn/1f/fa/1ffa50abdbca0c625f8ddf6b5516406d_1175x895.png)
+![主界面](1.png)
 
-![详情页](https://img.kancloud.cn/11/ba/11baccb48d9ca5a6fa04440b3b7ade5f_1200x700.png)
-
+![详情页](2.png)
 
 ---
 

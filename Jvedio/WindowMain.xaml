@@ -2895,7 +2895,7 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0"  HorizontalAlignment="Left"  FontSize="18"  Text="更新日志" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" FontWeight="Bold"/>
-                            <TextBox Grid.Row="1" HorizontalScrollBarVisibility="Auto" x:Name="UpdateContentTextBox" HorizontalAlignment="Stretch" TextAlignment="Left" VerticalContentAlignment="Top" IsReadOnly="True" VerticalScrollBarVisibility="Auto"  Background="Transparent" VerticalAlignment="Stretch" BorderThickness="0" Height="auto"    FontSize="18" Width="auto"  Text="111111111111111111111111111111111111111111111111111111111111111111111111" Foreground="{DynamicResource ForegroundGlobal}" Margin="10"   />
+                            <TextBox Grid.Row="1" HorizontalScrollBarVisibility="Auto" x:Name="UpdateContentTextBox" HorizontalAlignment="Stretch" TextAlignment="Left" VerticalContentAlignment="Top" IsReadOnly="True" VerticalScrollBarVisibility="Auto"  Background="Transparent" VerticalAlignment="Stretch" BorderThickness="0" Height="auto"    FontSize="18" Width="auto"  Text="前往下载：https://github.com/hitchao/Jvedio/releases" Foreground="{DynamicResource ForegroundGlobal}" Margin="10"   />
 
                         </Grid>
                     </Grid>
