@@ -634,7 +634,7 @@
                             <!--<RadioButton Foreground="{DynamicResource ForegroundSearch}" FontSize="15"  Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"  IsChecked="{Binding Info_Skip}" Margin="5 0"  VerticalAlignment="Center" Content="名称为空则同步"/>
                             <RadioButton Foreground="{DynamicResource ForegroundSearch}" FontSize="15"    Margin="5 0"  VerticalAlignment="Center" Content="强制同步信息"/>-->
 
-                            <CheckBox  Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"    IsChecked="{Binding Info_ForceDownload}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="强制同步覆盖信息（不选则跳过已同步的）"/>
+                            <CheckBox  PreviewMouseLeftButtonUp="ResetTaskWithCheckbox"    IsChecked="{Binding Info_ForceDownload}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="强制同步覆盖信息（不选则跳过已同步的）"/>
 
                         </StackPanel>
 
@@ -653,7 +653,7 @@
 
 
                     <StackPanel Orientation="Vertical" Visibility="Collapsed" VerticalAlignment="Center" Margin="20 5">
-                        <CheckBox  Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"  IsChecked="{Binding Gif_Skip}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="跳过已截取"/>
+                        <CheckBox  PreviewMouseLeftButtonUp="ResetTaskWithCheckbox"  IsChecked="{Binding Gif_Skip}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="跳过已截取"/>
 
                         <StackPanel Orientation="Horizontal">
 
@@ -681,7 +681,7 @@
 
                     <StackPanel Orientation="Vertical" Visibility="Collapsed" VerticalAlignment="Center" Margin="20 5">
                         <StackPanel Orientation="Horizontal">
-                            <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding ScreenShot_Skip}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="保存位置若有图片则跳过"/>
+                            <CheckBox PreviewMouseLeftButtonUp="ResetTaskWithCheckbox" IsChecked="{Binding ScreenShot_Skip}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="保存位置若有图片则跳过"/>
                         </StackPanel>
                        <StackPanel Orientation="Horizontal">
                             <TextBlock  Margin="5 0" Width="100" TextAlignment="Left"  Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="保存选项："/>

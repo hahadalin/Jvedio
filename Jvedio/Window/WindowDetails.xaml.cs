@@ -70,6 +70,18 @@ namespace Jvedio
 
                     break;
             }
+
+            //设置背景
+            if (File.Exists(Properties.Settings.Default.BackgroundImage))
+            {
+                BackGroundImage.Source = ImageProcess.BitmapImageFromFile(Properties.Settings.Default.BackgroundImage);
+            }
+            else
+            {
+                if(File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"background.jpg")))
+                    BackGroundImage.Source = ImageProcess.BitmapImageFromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "background.jpg"));
+            }
+
         }
 
 

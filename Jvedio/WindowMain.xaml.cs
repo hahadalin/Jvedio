@@ -612,10 +612,17 @@ namespace Jvedio
             }
             else
             {
-                if (Properties.Settings.Default.ScanWhenRefresh) await ScanWhenRefresh();
+                if (Properties.Settings.Default.ScanWhenRefresh) {
+                    WaitingPanel.Visibility = Visibility.Visible;
+                    await ScanWhenRefresh();
+                    WaitingPanel.Visibility = Visibility.Collapsed;
+                }
             }
             CancelSelect();
-            vieModel.Refresh();
+            if (Properties.Settings.Default.ScanWhenRefresh)
+                vieModel.Reset();
+            else
+                vieModel.Refresh();
             this.Cursor = Cursors.Arrow;
         }
 
@@ -628,7 +635,7 @@ namespace Jvedio
             await Task.Run(() =>
             {
                 List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First()), RefreshScanCT);
-                double num = Scan.DistinctMovieAndInsert(filepaths, RefreshScanCT);
+                double num = Scan.InsertWithNfo(filepaths, RefreshScanCT);
                 vieModel.IsScanning = false;
 
                 if (Properties.Settings.Default.AutoDeleteNotExistMovie)
@@ -647,8 +654,8 @@ namespace Jvedio
 
                 this.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    vieModel.Reset();
-                    if (num > 0) HandyControl.Controls.Growl.Info($"扫描并导入 {num} 个视频，详细请看 log\\scanlog\\ 文件夹当天日志文件", "Main");
+                    //vieModel.Reset();
+                    if (num > 0) HandyControl.Controls.Growl.Info($"扫描并导入 {num} 个视频，详细请看日志文件", "Main");
                 }), System.Windows.Threading.DispatcherPriority.Render);
 
 
@@ -1708,8 +1715,10 @@ namespace Jvedio
                 foreach (Actress item in vieModel.ActorList)
                 {
                     if (item.name == name) 
-                    { 
-                        actress = DataBase.SelectInfoFromActress(item); 
+                    {
+                        actress.name = name;
+                        actress.smallimage = item.smallimage;
+                        actress = DataBase.SelectInfoFromActress(actress); 
                         break; 
                     }
                 }
@@ -4032,48 +4041,7 @@ namespace Jvedio
 
                 if (files.Count > 0) filepaths.AddRange(files);
 
-                List<string> nfopaths = new List<string>();
-                List<string> vediopaths = new List<string>();
-
-                foreach (var item in filepaths)
-                {
-                    if (item.EndsWith(".nfo"))
-                        nfopaths.Add(item);
-                    else
-                        vediopaths.Add(item);
-                }
-
-                //先导入 nfo 再导入视频，避免路径覆盖
-                if (nfopaths.Count > 0)
-                {
-                    double total = 0;
-                    //导入 nfo 文件
-                    nfopaths.ForEach(item =>
-                    {
-                        if (File.Exists(item))
-                        {
-                            Movie movie = GetInfoFromNfo(item);
-                            if (movie != null && !string.IsNullOrEmpty(movie.id))
-                            {
-                                DataBase.InsertFullMovie(movie);
-                                total += 1;
-                                Logger.LogScanInfo($"\n成功导入数据库 => {item}  ");
-                            }
-
-                        }
-                    });
-
-                    HandyControl.Controls.Growl.Info($"总计导入{total}个 nfo 文件", "Main");
-
-                }
-
-
-                //导入视频
-                if (vediopaths.Count > 0)
-                {
-                    double _num = Scan.DistinctMovieAndInsert(vediopaths, new CancellationToken());
-                    HandyControl.Controls.Growl.Info($"总计导入{_num}个视频，详情请看日志", "Main");
-                }
+                Scan.InsertWithNfo(filepaths, new CancellationToken(), (message)=> { HandyControl.Controls.Growl.Info(message, "Main"); });
                 Task.Delay(300).Wait();
             });
             WaitingPanel.Visibility = Visibility.Hidden;
@@ -4362,6 +4330,18 @@ namespace Jvedio
                 myLinearGradientBrush2.GradientStops.Add(new GradientStop(Color.FromRgb(62, 191, 223), 0));
                 TopBorder.Background = myLinearGradientBrush2;
 
+            }
+
+
+            //设置背景
+            if (File.Exists(Properties.Settings.Default.BackgroundImage))
+            {
+                BackGroundImage.Source = ImageProcess.BitmapImageFromFile(Properties.Settings.Default.BackgroundImage);
+            }
+            else
+            {
+                if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "background.jpg")))
+                    BackGroundImage.Source = ImageProcess.BitmapImageFromFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "background.jpg"));
             }
 
         }
@@ -6181,7 +6161,18 @@ namespace Jvedio
             });
         }
 
-        
+        private void ClearActressInfo(object sender, RoutedEventArgs e)
+        {
+            string name = vieModel.Actress.name;
+            DataBase.DeleteByField("actress", "name", name);
+
+            Actress actress = new Actress(vieModel.Actress.name);
+            actress.like = vieModel.Actress.like;
+            actress.smallimage = vieModel.Actress.smallimage;
+
+            vieModel.Actress = actress;
+
+        }
     }
 
 

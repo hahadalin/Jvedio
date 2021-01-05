@@ -85,7 +85,7 @@ namespace Jvedio
                     {
                         this.Dispatcher.BeginInvoke(new Action(() => { statusText.Text = $"扫描指定文件夹"; }), System.Windows.Threading.DispatcherPriority.Render);
                         List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First()), ct);
-                        Scan.DistinctMovieAndInsert(filepaths, ct);
+                        Scan.InsertWithNfo(filepaths, ct);
 
                     }
                     catch (Exception ex)
@@ -305,7 +305,7 @@ namespace Jvedio
                 {
                     this.Dispatcher.BeginInvoke(new Action(() => { statusText.Text = $"扫描指定文件夹"; }), System.Windows.Threading.DispatcherPriority.Render);
                     List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First()), ct);
-                    Scan.DistinctMovieAndInsert(filepaths, ct);
+                    Scan.InsertWithNfo(filepaths, ct);
                 }, cts.Token);
 
             }

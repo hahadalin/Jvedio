@@ -718,6 +718,10 @@ namespace Jvedio
             }
         }
 
+
+
+
+
         #endregion
 
 
@@ -936,8 +940,8 @@ namespace Jvedio
                     cmd.Parameters.Add("sourceurl", DbType.String).Value = actress.sourceurl;
                     cmd.Parameters.Add("source", DbType.String).Value = actress.source;
                     cmd.Parameters.Add("imageurl", DbType.String).Value = actress.imageurl;
-                    cmd.ExecuteNonQuery();
-
+                    var success=cmd.ExecuteNonQuery();
+                    Console.WriteLine(success);
                 }
             }
         }

@@ -255,10 +255,11 @@
 
 
     <Grid x:Name="FatherGrid" PreviewKeyUp="Grid_PreviewKeyUp"   Focusable="True" Margin="10">
-        <Border  x:Name="MainBorder"   Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="5"  >
+        <Border  x:Name="MainBorder" Background="{DynamicResource BackgroundMain}"    CornerRadius="5" Margin="5"  >
             <Border.Effect>
                 <DropShadowEffect BlurRadius="5" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
             </Border.Effect>
+            <Image Grid.Row="1" x:Name="BackGroundImage"  Stretch="UniformToFill"></Image>
         </Border>
 
       
@@ -268,14 +269,16 @@
             <StackPanel hc:Growl.Token="DetailsGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
 
-        <Border Margin="5" x:Name="BackBorder"  CornerRadius="5" Background="{DynamicResource BackgroundMain}" BorderBrush="LightBlue" BorderThickness="0">
+        <Border Margin="5" x:Name="BackBorder"  CornerRadius="5"  BorderBrush="LightBlue" BorderThickness="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0" PreviewMouseWheel="Border_PreviewMouseWheel" Background="{DynamicResource BackgroundMain}">
+
+
+                <Grid Grid.Column="0" PreviewMouseWheel="Border_PreviewMouseWheel" >
                     <Border  Cursor="Hand"  Height="60"      ToolTip="上一个"    Width="30" Margin="5 0" CornerRadius="10" MouseLeftButtonUp="PreviewMovie">
                     <Border.Style>
                         <Style TargetType="Border">
@@ -479,7 +482,7 @@
 
                                 <ProgressBar IsVisibleChanged="ProgressBar_IsVisibleChanged"  x:Name="ProgressBar" ValueChanged="ProgressBar_ValueChanged" Visibility="Collapsed" Foreground="LightGreen"   Height="5" Margin="20 4"   VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
 
-                                <Border x:Name="ExtraImageBorder" Visibility="Visible" Margin="0 12" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
+                                <Border x:Name="ExtraImageBorder" Visibility="Visible" Margin="0 10 0 10" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
                                     <ScrollViewer Margin="5 0" VerticalContentAlignment="Center"   PreviewMouseWheel="scrollViewer_PreviewMouseWheel"   x:Name="scrollViewer"      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
                                         <ItemsControl x:Name="imageItemsControl" VerticalContentAlignment="Center"   AlternationCount="99" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent">
                                             <ItemsControl.ItemsPanel>
@@ -529,7 +532,7 @@
 
 
                         <!--信息-->
-                        <Grid Grid.Column="1" x:Name="InfoGrid"        >
+                        <Grid Grid.Column="1" x:Name="InfoGrid"     Margin="10 0 0 0"   >
 
                             <Grid.ColumnDefinitions >
                                 <ColumnDefinition Width="*"/>
@@ -543,13 +546,14 @@
                                 </Grid>
                             </Canvas>
 
-
-
-                            <Grid  Margin="0 0 0 20" Grid.Column="0">
+                            <Border Margin="0 0 0 10" Grid.Column="0" Background="{DynamicResource BackgroundMain}" CornerRadius="5" Opacity="0.9">
+                                <Grid  >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
+                                
+                                
 
                                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                                     <RadioButton Unchecked="RadioButton_Checked" Checked="RadioButton_Checked"   FontSize="12" Style="{StaticResource FlatRadioButton}" IsChecked="True" Content="影片信息" GroupName="InfoSwitchRadioButton"/>
@@ -898,12 +902,12 @@
                                 </Border>
                             </Grid>
 
+                            </Border>
 
 
 
 
-
-                            <Grid  PreviewMouseWheel="Border_PreviewMouseWheel" Background="{DynamicResource BackgroundMain}"  Grid.Column="1">
+                            <Grid  PreviewMouseWheel="Border_PreviewMouseWheel"  Grid.Column="1">
                                 
 
 

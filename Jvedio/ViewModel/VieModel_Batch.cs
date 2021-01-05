@@ -72,7 +72,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        public void Reset(Action<string> callback)
+        public bool Reset(Action<string> callback)
         {
             Movies = new ObservableCollection<string>();
             var movies = DataBase.SelectMoviesBySql("SELECT * FROM movie");
@@ -160,6 +160,7 @@ namespace Jvedio.ViewModel
                     break;
             }
             callback.Invoke("完成");
+            return true;
         }
 
 

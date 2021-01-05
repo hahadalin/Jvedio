@@ -31,6 +31,62 @@ namespace Jvedio
         }
 
 
+        public static double InsertWithNfo(List<string> filepaths, CancellationToken ct, Action<string> messageCallBack = null,bool IsEurope=false)
+        {
+            List<string> nfopaths = new List<string>();
+            List<string> vediopaths = new List<string>();
+
+            foreach (var item in filepaths)
+            {
+                if (item.ToLower().EndsWith(".nfo"))
+                    nfopaths.Add(item);
+                else
+                    vediopaths.Add(item);
+            }
+
+            //先导入 nfo 再导入视频，避免路径覆盖
+            if (nfopaths.Count > 0 && Properties.Settings.Default.ScanNfo)
+            {
+                Logger.LogScanInfo(Environment.NewLine + "-----【" + DateTime.Now.ToString() + "】-----");
+                Logger.LogScanInfo(Environment.NewLine + $"扫描出NFO => {nfopaths.Count}  个 \n");
+
+                double total = 0;
+                //导入 nfo 文件
+                nfopaths.ForEach(item =>
+                {
+                    if (File.Exists(item))
+                    {
+                        Movie movie = FileProcess. GetInfoFromNfo(item);
+                        if (movie != null && !string.IsNullOrEmpty(movie.id))
+                        {
+                            DataBase.InsertFullMovie(movie);
+                            total += 1;
+                            Logger.LogScanInfo($"\n成功导入数据库 => {item}  ");
+                        }
+
+                    }
+                });
+
+                
+                Logger.LogScanInfo(Environment.NewLine + $"总计导入{total}个 nfo 文件" + Environment.NewLine );
+                messageCallBack?.Invoke($"总计导入{total}个 nfo 文件");
+
+                
+
+            }
+
+
+            //导入视频
+            if (vediopaths.Count > 0)
+            {
+                double _num = Scan.DistinctMovieAndInsert(vediopaths, ct, IsEurope);
+                messageCallBack?.Invoke($"总计导入{_num}个视频，详情请看日志");
+                return _num;
+            }
+            return 0;
+        }
+
+
 
 
         public static bool IsProperMovie(string FilePath)
@@ -300,7 +356,7 @@ namespace Jvedio
         public static double DistinctMovieAndInsert(List<string> MoviePaths , CancellationToken ct, bool IsEurope = false)
         {
             Logger.LogScanInfo(Environment.NewLine +  "-----【" + DateTime.Now.ToString() + "】-----");
-            Logger.LogScanInfo(Environment.NewLine +  $"扫描出 => {MoviePaths.Count}  个 \n");
+            Logger.LogScanInfo(Environment.NewLine +  $"扫描出视频 => {MoviePaths.Count}  个 \n");
 
 
             //检查未识别出番号的视频
@@ -352,8 +408,6 @@ namespace Jvedio
                     }
                 }
             }
-
-            Console.WriteLine("repeatlist:" + repeatlist.Count);
 
             List<string> removelist = new List<string>();
             List<List<string>> subsectionlist = new List<List<string>>();
@@ -450,7 +504,8 @@ namespace Jvedio
                     otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     scandate= createDate 
             };
-                DataBase.InsertScanMovie(movie); totalinsertnum += 1;
+                DataBase.InsertScanMovie(movie); 
+                totalinsertnum += 1;
             }
 
             Console.WriteLine("insertList:" + insertList.Count);
@@ -489,10 +544,11 @@ namespace Jvedio
                     otherinfo= DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     scandate = createDate
                 };
-                DataBase.InsertScanMovie(movie); totalinsertnum += 1;
+                DataBase.InsertScanMovie(movie); 
+                totalinsertnum += 1;
             }
             
-            Logger.LogScanInfo(Environment.NewLine + $"总计导入 => {totalinsertnum}个" + Environment.NewLine);
+            Logger.LogScanInfo(Environment.NewLine + $"总计导入 => {totalinsertnum}个，由于数据库中可能有重复视频，故导入数目大于实际影片数目" + Environment.NewLine);
 
 
             //从 主数据库中 复制信息

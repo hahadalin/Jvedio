@@ -496,7 +496,8 @@ namespace Jvedio
                 HandyControl.Controls.Growl.Error("其他任务正在进行！", "BatchGrowl");
                 return;
             }
-            ResetTask();
+            bool success=await ResetTask();
+            if (!success) return;
             SetEnable(false);
 
 
@@ -587,17 +588,14 @@ namespace Jvedio
                                 if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
                                 while (Pause) { Task.Delay(500).Wait(); }
                                 ct.ThrowIfCancellationRequested();
+
+                                if (i >= vieModel.Movies.Count) break;
                                 bool result = GenGif(vieModel.Movies[i]);
                                 if (result)
                                     ShowStatus($"{i+1}/{vieModel.Gif_TotalNum} => 成功");
                                 else
                                     ShowStatus($"{i + 1}/{vieModel.Gif_TotalNum} => 失败");
-
                                 vieModel.Gif_CurrentProgress = i + 1;
-
-                                
-
-
                             }
                             ShowStatus("------------完成------------");
 
@@ -630,6 +628,7 @@ namespace Jvedio
                                 while (Pause) { Task.Delay(500).Wait(); }
                                 ct.ThrowIfCancellationRequested();
 
+                                if (i >= vieModel.Movies.Count) break;
                                 bool result = ScreenShot(vieModel.Movies[i]);
                                 if (result)
                                     ShowStatus($"\n{i + 1}/{vieModel.ScreenShot_TotalNum} => 成功：{vieModel.Movies[i]}");
@@ -685,6 +684,8 @@ namespace Jvedio
                                 if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
                                 while (Pause) { Task.Delay(500).Wait(); }
                                 ct.ThrowIfCancellationRequested();
+
+                                if (i >= vieModel.Movies.Count) break;
                                 (bool result,string message) = Rename(vieModel.Movies[i]);
                                 if (result)
                                     ShowStatus($"\n{i + 1}/{totalcount} => 成功：{vieModel.Movies[i]}");
@@ -811,16 +812,16 @@ namespace Jvedio
             if (Running) { cts.Cancel(); }
         }
 
-        private void ResetTask()
+        private async Task<bool>  ResetTask()
         {
             if (Running)
             {
                 HandyControl.Controls.Growl.Error("其他任务正在进行！", "BatchGrowl");
-                return;
+                return false;
             }
             WaitingPanel.Visibility = Visibility.Visible;
-            Task.Run(() => {
-                vieModel.Reset((message) => { Dispatcher.BeginInvoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });  });
+            return await Task.Run(() => {
+                return vieModel.Reset((message) => { Dispatcher.BeginInvoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });  });
             });
         }
 
@@ -830,23 +831,19 @@ namespace Jvedio
             StatusTextBox.Clear();
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            ResetTask();
-        }
 
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ResetTask();
-        }
-
-        private void Jvedio_BaseWindow_ContentRendered(object sender, EventArgs e)
+        private async void Jvedio_BaseWindow_ContentRendered(object sender, EventArgs e)
         {
 
             vieModel = new VieModel_Batch();
             this.DataContext = vieModel;
-            ResetTask();
+            await ResetTask();
             //WaitingPanel.Visibility = Visibility.Visible;
+        }
+
+        private async void ResetTaskWithCheckbox(object sender, MouseButtonEventArgs e)
+        {
+            await ResetTask();
         }
     }
 

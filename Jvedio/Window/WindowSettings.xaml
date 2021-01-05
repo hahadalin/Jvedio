@@ -712,6 +712,9 @@
                                 <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="DatabaseComboBox_SelectionChanged" x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150"  Height="30" HorizontalAlignment="Left" Margin="20 5" ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                             </StackPanel>
 
+                            <CheckBox IsChecked="{Binding ScanNfo, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 5 10 5" Content="同时导入扫描出的NFO文件（覆盖已存在的信息）" Height="40"/>
+
+
                             <StackPanel Orientation="Vertical" >
                                 <ListBox AllowDrop="True"  Drop="PathListBox_Drop"  DragOver="PathListBox_DragOver" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding ScanPath}" x:Name="PathListBox" Margin="5 5" Width="auto" Height="150"    >
                                     <ListBox.ItemsPanel>
@@ -748,7 +751,7 @@
                     </StackPanel>
 
 
-                    <StackPanel x:Name="WebsitePanel" Background="Transparent" Visibility="Visible">
+                    <StackPanel x:Name="WebsitePanel" Background="Transparent" Visibility="Hidden">
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Style="{StaticResource TextBlockTitle}" Text="服务器源" HorizontalAlignment="Left"/>
@@ -1103,7 +1106,7 @@
 
                     </StackPanel>
 
-                    <StackPanel x:Name="CustomPanel" Background="Transparent" Visibility="Hidden" VerticalAlignment="Stretch" Height="auto" Margin="20 5">
+                    <StackPanel x:Name="CustomPanel" Background="Transparent" Visibility="Visible" VerticalAlignment="Stretch" Height="auto" Margin="20 5">
 
 
 
@@ -1195,6 +1198,14 @@
                                 <CheckBox IsChecked="{Binding DisplayFavorites, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="10 5 10 5" Content="喜爱" Height="40" VerticalContentAlignment="Center"/>
                             </WrapPanel>
                         </Border>
+
+
+
+                        <StackPanel Orientation="Horizontal" Margin="20 5">
+                            <Label Content="背景图" Style="{StaticResource InfoLabel}" Width="auto" />
+                            <hc:TextBox   Style="{StaticResource BaseHcTextBox}"  Text="{Binding BackgroundImage, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  />
+                            <Button Style="{StaticResource ButtonStyleFill}" Content="选择图片" Height="25" Width="80" Click="SetBackgroundImage" Margin="5 2"/>
+                        </StackPanel>
 
 
                         <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10" Visibility="Collapsed">

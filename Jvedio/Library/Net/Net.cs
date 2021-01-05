@@ -480,7 +480,7 @@ namespace Jvedio
             else
             {
                 Dictionary<string, string> Info = new Dictionary<string, string>();
-                Info.Add("sourceurl", url);
+                
                 if (webSite == WebSite.Bus)
                 {
                     Info = new BusParse(id, content,Identify.GetVedioType(id)).Parse();
@@ -501,6 +501,7 @@ namespace Jvedio
                     Info = new LibraryParse(id, content).Parse();
                     Info.Add("source", "javlibrary");
                 }
+                Info.Add("sourceurl", url);
                 if (Info.Count > 2)
                 {
                     //保存信息

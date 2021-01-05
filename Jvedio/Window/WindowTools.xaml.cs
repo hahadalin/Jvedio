@@ -278,7 +278,7 @@ namespace Jvedio
 
                                 List<string> filepaths = Scan.ScanAllDrives();
                                 totalnum = filepaths.Count;
-                                insertnum = Scan.DistinctMovieAndInsert(filepaths, ct);
+                                insertnum = Scan.InsertWithNfo(filepaths, ct);
                             });
                         }
                         else
@@ -299,7 +299,7 @@ namespace Jvedio
                             }
                             List<string> filepaths = Scan.ScanPaths(stringCollection, ct);
                             totalnum = filepaths.Count;
-                            insertnum = Scan.DistinctMovieAndInsert(filepaths, ct);
+                            insertnum = Scan.InsertWithNfo(filepaths, ct);
                         }, cts.Token);
 
                         }
@@ -454,7 +454,7 @@ namespace Jvedio
                             foreach (var item in vieModel.ScanEuPath) if (Directory.Exists(item)) { stringCollection.Add(item); }
                             List<string> filepaths = Scan.ScanPaths(stringCollection, ct);
                             totalnum = filepaths.Count;
-                            insertnum = Scan.DistinctMovieAndInsert(filepaths, ct, true);
+                            insertnum = Scan.InsertWithNfo(filepaths, ct, IsEurope:true);
                         });
 
                         LoadingStackPanel.Visibility = Visibility.Hidden;
@@ -506,7 +506,7 @@ namespace Jvedio
                             stringCollection.Add(path);
                             List<string> filepaths = Scan.ScanPaths(stringCollection, ct);
                             totalnum = filepaths.Count;
-                            insertnum = Scan.DistinctMovieAndInsert(filepaths, ct, IsEurope);
+                            insertnum = Scan.InsertWithNfo(filepaths, ct, IsEurope:IsEurope);
                         });
 
                         LoadingStackPanel.Visibility = Visibility.Hidden;

@@ -258,6 +258,10 @@ namespace Jvedio
                         {
                             result.hobby = info.Replace("愛好: ", "");
                         }
+                        else if (info.IndexOf("出生地") >= 0)
+                        {
+                            result.birthplace = info.Replace("出生地: ", "");
+                        }
                     }
                     catch { continue; }
                 }

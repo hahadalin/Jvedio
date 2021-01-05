@@ -123,7 +123,7 @@
                         </Trigger>
                         <Trigger Property="IsChecked" Value="true">
                             <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
-                            <Setter Property="Background" TargetName="templateRoot" Value="{DynamicResource  BackgroundTitle}"/>
+                            <!--<Setter Property="Background" TargetName="templateRoot" Value="{DynamicResource  BackgroundTitle}"/>-->
                         </Trigger>
                         <Trigger Property="IsChecked" Value="{x:Null}">
                             <Setter Property="Opacity" TargetName="optionMark" Value="0.56"/>

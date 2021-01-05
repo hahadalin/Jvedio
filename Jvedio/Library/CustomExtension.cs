@@ -20,6 +20,7 @@ namespace Jvedio
 {
     public static class CustomExtension
     {
+
         public static string ToSqlString(this Sort sort)
         {
             string result;

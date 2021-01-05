@@ -455,6 +455,7 @@
     <Content Include="Lib\PInvoke.dll" />
     <Content Include="Lib\QueryEngine.dll" />
     <Content Include="Lib\UsnOperation.dll" />
+    <Resource Include="Resources\Picture\bg.jpg" />
     <Resource Include="Resources\Skin\black\hide.png" />
     <Resource Include="Resources\Skin\white\hide.png" />
     <Resource Include="Resources\Picture\其他.png" />

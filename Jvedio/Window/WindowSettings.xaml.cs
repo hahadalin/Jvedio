@@ -1338,6 +1338,29 @@ namespace Jvedio
             Properties.Settings.Default.InSplit= ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
         }
 
+        private void SetBackgroundImage(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            OpenFileDialog1.Title = "选择图片";
+            OpenFileDialog1.FileName = "background.jpg";
+            OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            OpenFileDialog1.Filter = "jpg|*.jpg";
+            OpenFileDialog1.FilterIndex = 1;
+            OpenFileDialog1.RestoreDirectory = true;
+            if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = OpenFileDialog1.FileName;
+                if (File.Exists(path))
+                {
+                    Properties.Settings.Default.BackgroundImage = path;
+                    Main main = ((Main)Jvedio.GetWindow.Get("Main"));
+                    if (main != null) main.SetSkin();
+
+                    WindowDetails windowDetails = ((WindowDetails)Jvedio.GetWindow.Get("WindowDetails"));
+                    if (windowDetails != null) windowDetails.SetSkin();
+                }
+            }
+        }
     }
 
 

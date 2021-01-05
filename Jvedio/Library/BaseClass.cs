@@ -255,6 +255,15 @@ namespace Jvedio
     /// </summary>
     public class Actress : INotifyPropertyChanged,IDisposable
     {
+
+        public Actress(string name = "")
+        {
+            this.name = name;
+            birthday = "";
+            cup = "";
+            birthplace = "";
+
+        }
         public int num { get; set; }//仅仅用于计数
         public string id { get; set; }
         public string name { get; set; }
