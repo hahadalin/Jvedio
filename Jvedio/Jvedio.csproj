@@ -765,7 +765,12 @@
     <Content Include="Lib\MediaInfo.dll" />
     <Content Include="Lib\MediaInfoNET.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Jvedio.Language\Jvedio.Language.csproj">
+      <Project>{d7a06c53-5742-4894-820e-3697f81a3785}</Project>
+      <Name>Jvedio.Language</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

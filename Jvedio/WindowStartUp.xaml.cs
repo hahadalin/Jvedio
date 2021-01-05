@@ -319,9 +319,9 @@ namespace Jvedio
                 Properties.Settings.Default.Save();
             }
 
-            if (!Enum.IsDefined(typeof(Language), Properties.Settings.Default.Language))
+            if (!Enum.IsDefined(typeof(MyLanguage), Properties.Settings.Default.Language))
             {
-                Properties.Settings.Default.Language = GlobalVariable.Language.中文.ToString();
+                Properties.Settings.Default.Language = GlobalVariable.MyLanguage.中文.ToString();
                 Properties.Settings.Default.Save();
             }
 

@@ -646,10 +646,19 @@ namespace Jvedio
 
         
 
-                    private void SetLanguage(object sender, RoutedEventArgs e)
+     private void SetLanguage(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.Language = (sender as RadioButton).Content.ToString();
             Properties.Settings.Default.Save();
+            string language = Properties.Settings.Default.Language;
+            string hint = "";
+            if (language == "English")
+                hint = "Take effect after restart";
+            else if(language=="日本語")
+                hint = "再起動後に有効になります";
+            else
+                hint = "重启后生效";
+            HandyControl.Controls.Growl.Success(hint, "SettingsGrowl");
         }
 
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -962,7 +971,7 @@ namespace Jvedio
             (bool result,string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.ServerTitle);
             if(!result && title.IndexOf("JavDB") >= 0)
             {
-                HandyControl.Controls.Growl.Error("测试不通过：1.若 Cookie 失效了请重新复制Cookie 或 2.重新测试 或 3. 设置网络超时");
+                HandyControl.Controls.Growl.Error("测试不通过：1.若 Cookie 失效了请重新复制Cookie 或 2.重新测试 或 3. 设置网络超时", "SettingsGrowl");
                 return;
             }
             if (result && title!="")
@@ -1457,12 +1466,12 @@ namespace Jvedio
         {
             if (value == null)
                 return false;
-            return (((Language)value).ToString() == parameter.ToString());
+            return (((MyLanguage)value).ToString() == parameter.ToString());
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return (bool)value ? Enum.Parse(typeof(Language), parameter.ToString(), true) : null;
+            return (bool)value ? Enum.Parse(typeof(MyLanguage), parameter.ToString(), true) : null;
         }
     }
 

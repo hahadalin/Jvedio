@@ -227,7 +227,7 @@ namespace Jvedio
 
         public enum Skin { 黑色,白色, 蓝色}
 
-        public enum Language { 中文, English, 日本語 }
+        public enum MyLanguage { 中文, English, 日本語 }
 
         public enum Sort { 识别码, 文件大小, 创建时间,导入时间, 喜爱程度, 名称, 访问次数 , 发行日期 , 评分, 时长 , 演员 }
         #endregion

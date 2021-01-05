@@ -9,6 +9,7 @@
     xmlns:p="clr-namespace:Jvedio.Properties"
     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
     x:Class="Jvedio.Main"
     mc:Ignorable="d"
     Title="Jvedio" Height="600" Width="1100"
@@ -1233,9 +1234,9 @@
                                 <RowDefinition Height="40"/>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0" Panel.ZIndex="3" Height="auto" VerticalAlignment="Top" Margin="0,10,0,0" Background="Transparent">
-                                <ComboBox FontSize="16"  Text="历史电影库" Style="{StaticResource SideComboBoxStyle}" HorizontalAlignment="Left" Margin="5 0"  SelectionChanged="DatabaseComboBox_SelectionChanged" x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150"  Height="30"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
+                                <ComboBox FontSize="16"  Style="{StaticResource SideComboBoxStyle}" HorizontalAlignment="Left" Margin="5 0"  SelectionChanged="DatabaseComboBox_SelectionChanged" x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150"  Height="30"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
 
-                                <Border HorizontalAlignment="Right"  ToolTip="选项" ContextMenuService.IsEnabled="False" x:Name="SettingsBorder" Width="27" Height="27"  Margin="5 0"  CornerRadius="3" Style="{StaticResource BorderStyle}"  MouseLeftButtonUp="ShowSettingsPopup">
+                                <Border HorizontalAlignment="Right"  ToolTip="{x:Static lang:Resources.Settings}" ContextMenuService.IsEnabled="False" x:Name="SettingsBorder" Width="27" Height="27"  Margin="5 0"  CornerRadius="3" Style="{StaticResource BorderStyle}"  MouseLeftButtonUp="ShowSettingsPopup">
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=menu,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" Margin="4,4,3.2,0" VerticalAlignment="Center"   />
 
                                     <Border.ContextMenu >
@@ -1244,26 +1245,23 @@
                                                 <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
                                             </ContextMenu.Effect>
 
-                                            <MenuItem   Header="设置" Click="OpenSet_MouseDown"  />
-                                            <MenuItem   Header="工具"  Click="OpenTools"    />
-                                            <MenuItem   Header="库管理"  Click="OpenDataBase"    />
-                                            <MenuItem    Header="批处理"  Click="OpenBatching"    />
-                                            <MenuItem   Header="关于" >
-                                                <MenuItem  Header="关于 Jvedio" Click="ShowAbout"     />
-                                                <MenuItem  Header="帮助" Click="OpenHelp"   />
-                                                <MenuItem  Header="反馈" Click="OpenFeedBack"  />
-                                                <MenuItem Header="官网" Click="OpenJvedioWebPage"/>
-                                                <MenuItem  Header="鸣谢"   Click="ShowThanks"  />
+                                            <MenuItem   Header="{x:Static lang:Resources.Settings}" Click="OpenSet_MouseDown"  />
+                                            <MenuItem   Header="{x:Static lang:Resources.Tools}"  Click="OpenTools"    />
+                                            <MenuItem   Header="{x:Static lang:Resources.MovieManagement}"  Click="OpenDataBase"    />
+                                            <MenuItem    Header="{x:Static lang:Resources.BatchProcessing}"  Click="OpenBatching"    />
+                                            <MenuItem   Header="Jvedio" >
+                                                <MenuItem  Header="{x:Static lang:Resources.About}" Click="ShowAbout"     />
+                                                <MenuItem  Header="{x:Static lang:Resources.Help}" Click="OpenHelp"   />
+                                                <MenuItem  Header="{x:Static lang:Resources.FeedBack}" Click="OpenFeedBack"  />
+                                                <MenuItem Header="{x:Static lang:Resources.WebSite}" Click="OpenJvedioWebPage"/>
+                                                <MenuItem  Header="{x:Static lang:Resources.Thanks}"   Click="ShowThanks"  />
                                             </MenuItem>
-                                            <MenuItem   Header="打开位置" >
-                                                <MenuItem  Header="日志" Click="OpenLogPath"     />
-                                                <MenuItem  Header="图片" Click="OpenImageSavePath"   />
-                                                <MenuItem  Header="软件目录" Click="OpenApplicationPath"  />
+                                            <MenuItem   Header="{x:Static lang:Resources.OpenPath}" >
+                                                <MenuItem  Header="{x:Static lang:Resources.Log}" Click="OpenLogPath"     />
+                                                <MenuItem  Header="{x:Static lang:Resources.Picture}" Click="OpenImageSavePath"   />
+                                                <MenuItem  Header="{x:Static lang:Resources.SoftWare}" Click="OpenApplicationPath"  />
                                             </MenuItem>
-                                            <MenuItem  Header="升级" PreviewMouseLeftButtonUp="ShowUpdate"   />
-                                            <MenuItem  Header="安全" Visibility="Collapsed"  >
-                                                <MenuItem Header="备份与恢复"/>
-                                            </MenuItem>
+                                            <MenuItem  Header="{x:Static lang:Resources.Upgrade}" PreviewMouseLeftButtonUp="ShowUpdate"   />
                                             <MenuItem Visibility="Collapsed"  Header="赞助"   Click="OpenThanks"  />
                                         </ContextMenu>
                                     </Border.ContextMenu>
@@ -1278,7 +1276,7 @@
 
                                 <Grid>
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=all,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                    <RadioButton IsChecked="True" Padding="20 0"   x:Name="AllRB"   Style="{StaticResource SideRadioButtonStyle}"  Command="{Binding ResetCommand}" Content="全部视频" Click="ShowMovieGrid"     />
+                                    <RadioButton IsChecked="True" Padding="20 0"   x:Name="AllRB"   Style="{StaticResource SideRadioButtonStyle}"  Command="{Binding ResetCommand}" Content="{x:Static lang:Resources.AllVideo}" Click="ShowMovieGrid"     />
                                     <TextBlock Text="{Binding AllVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
 
 
@@ -1286,20 +1284,20 @@
 
                                 <Grid>
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=like,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                    <RadioButton x:Name="LoveRB"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding FavoritesCommand}" Content="特别收藏"  Click="ShowMovieGrid"  />
+                                    <RadioButton x:Name="LoveRB"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding FavoritesCommand}" Content="{x:Static lang:Resources.Favorites}"  Click="ShowMovieGrid"  />
                                     <TextBlock Text="{Binding FavoriteVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
 
                                 </Grid>
 
                                 <Grid>
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=create,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                    <RadioButton x:Name="CreateRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding RecentCommand}" Content="最近创建"  Click="ShowMovieGrid"  />
+                                    <RadioButton x:Name="CreateRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding RecentCommand}" Content="{x:Static lang:Resources.RecentCreate}"  Click="ShowMovieGrid"  />
                                     <TextBlock Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                 </Grid>
 
                                 <Grid>
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=recent,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                    <RadioButton x:Name="PlayRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding RecentWatchCommand}" Content="最近播放"  Click="ShowMovieGrid"  >
+                                    <RadioButton x:Name="PlayRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding RecentWatchCommand}" Content="{x:Static lang:Resources.RecentPlay}"  Click="ShowMovieGrid"  >
                                         <RadioButton.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Header="清空" Click="ClearRecentWatched" />
@@ -1320,27 +1318,27 @@
                                                 <RotateTransform Angle="180" />
                                             </Image.RenderTransform>
                                         </Image>
-                                        <RadioButton x:Name="ExpandRadioButton1" Background="Transparent" Click="RadioButton_Click" Cursor="Hand"  GroupName="RBExpand1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="智能分类"    />
+                                        <RadioButton x:Name="ExpandRadioButton1" Background="Transparent" Click="RadioButton_Click" Cursor="Hand"  GroupName="RBExpand1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="{x:Static lang:Resources.AutoClassification}"    />
                                     </Grid>
                                     <StackPanel x:Name="StackPanelExpand1" Orientation="Vertical" Grid.Row="1" MaxHeight="0">
                                         <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
                                             <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                            <RadioButton x:Name="GenreRB"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding GenreCommand}" Content="按类别"  Click="ShowGenreGrid" />
+                                            <RadioButton x:Name="GenreRB"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding GenreCommand}" Content="{x:Static lang:Resources.WithGenre}"  Click="ShowGenreGrid" />
                                             <TextBlock Visibility="Collapsed" Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                         </Grid>
                                         <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
                                             <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                            <RadioButton x:Name="ActorRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding ActorCommand}" Content="按演员" Click="ShowActorGrid" />
+                                            <RadioButton x:Name="ActorRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding ActorCommand}" Content="{x:Static lang:Resources.WithActress}" Click="ShowActorGrid" />
                                             <TextBlock Visibility="Collapsed"  Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                         </Grid>
                                         <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
                                             <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                            <RadioButton x:Name="LabelRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding LabelCommand}" Content="按标签"  Click="ShowLabelGrid" />
+                                            <RadioButton x:Name="LabelRB" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding LabelCommand}" Content="{x:Static lang:Resources.WithLabel}"  Click="ShowLabelGrid" />
                                             <TextBlock Visibility="Collapsed"  Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                         </Grid>
                                         <Grid x:Name="FilePathGrid"  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}" >
                                             <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                            <RadioButton x:Name="DirRB" IsEnabled="True" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="按文件夹" Click="ShowSameFilePath" />
+                                            <RadioButton x:Name="DirRB" IsEnabled="True" Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="{x:Static lang:Resources.WithPath}" Click="ShowSameFilePath" />
                                             <TextBlock Visibility="Collapsed"  Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                         </Grid>
                                     </StackPanel>
@@ -1384,7 +1382,7 @@
                                                 <RotateTransform Angle="180" />
                                             </Image.RenderTransform>
                                         </Image>
-                                        <RadioButton  x:Name="ExpandRadioButton2" Background="Transparent" Click="RadioButton_Click_1" Cursor="Hand"  GroupName="RBExpand1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="视频类型"     />
+                                        <RadioButton  x:Name="ExpandRadioButton2" Background="Transparent" Click="RadioButton_Click_1" Cursor="Hand"  GroupName="RBExpand1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="{x:Static lang:Resources.VedioType}"     />
                                     </Grid>
                                     <StackPanel x:Name="StackPanelExpand2" Orientation="Vertical" Grid.Row="1" MaxHeight="0">
                                         <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
@@ -1392,7 +1390,7 @@
                                             <RadioButton x:Name="TypeRB1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding UncensoredCommand}"  Click="ShowMovieGrid">
                                                 <RadioButton.ContextMenu>
                                                     <ContextMenu>
-                                                        <MenuItem Header="重命名" Click="RenameType" />
+                                                        <MenuItem Header="{x:Static lang:Resources.Raname}" Click="RenameType" />
                                                     </ContextMenu>
                                                 </RadioButton.ContextMenu>
                                                 <RadioButton.Content>
@@ -1447,8 +1445,8 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="我的清单" Style="{StaticResource BaseTextBlock }" HorizontalAlignment="Left" Margin="20 5"/>
-                                    <Button Click="HideListScrollViewer" HorizontalAlignment="Right" Height="20" Width="30" Padding="0" Grid.Column="1"  Content="隐藏" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                    <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.MyList}" Style="{StaticResource BaseTextBlock }" HorizontalAlignment="Left" Margin="20 5"/>
+                                    <Button Click="HideListScrollViewer" HorizontalAlignment="Right" Height="20" Width="30" Padding="0" Grid.Column="1"  Content="{x:Static lang:Resources.Hide}" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                     <Border MouseLeftButtonUp="AddListItem" HorizontalAlignment="Right"     Height="20" Width="20" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" Grid.Column="2">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=add,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="15" Width="15"   />
                                     </Border>
@@ -1552,11 +1550,11 @@
                                         <Popup VerticalOffset="5" HorizontalOffset="-15" x:Name="SearchOptionPopup" Placement="Bottom" PopupAnimation="Fade"  PlacementTarget="{Binding ElementName=SearchOptionGrid}" AllowsTransparency="True" StaysOpen="False" IsOpen="False">
                                             <Border Background="{DynamicResource BackgroundMenu}" CornerRadius="5">
                                                 <StackPanel Margin="5">
-                                                    <RadioButton Click="SaveAllSearchType" IsChecked="{Binding AllSearchType, ConverterParameter=识别码, Converter={StaticResource SearchTypeEnumConverter}, Mode=TwoWay}" Content="识别码" Style="{StaticResource RadioButtonStyle}"  GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                    <RadioButton Click="SaveAllSearchType"   IsChecked="{Binding AllSearchType, ConverterParameter=名称, Converter={StaticResource SearchTypeEnumConverter},Mode=TwoWay}"   Content="名称" Style="{StaticResource RadioButtonStyle}" GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                    <RadioButton Click="SaveAllSearchType"   IsChecked="{Binding AllSearchType, ConverterParameter=演员, Converter={StaticResource SearchTypeEnumConverter}, Mode=TwoWay}"   Content="演员" Style="{StaticResource RadioButtonStyle}" GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                    <RadioButton Click="SaveAllSearchType"  Content="{x:Static lang:Resources.ID}" Style="{StaticResource RadioButtonStyle}"  GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                    <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Title}" Style="{StaticResource RadioButtonStyle}" GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                    <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Actor}" Style="{StaticResource RadioButtonStyle}" GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
 
-                                                    <CheckBox x:Name="SearchInCurrentCheckBox"  Margin="5 0" IsChecked="{Binding SearchInCurrent,Mode=TwoWay}" Content="再检索" Style="{StaticResource CheckBoxStyle1}"/>
+                                                    <CheckBox x:Name="SearchInCurrentCheckBox"  Margin="5 0" IsChecked="{Binding SearchInCurrent,Mode=TwoWay}" Content="{x:Static lang:Resources.SearchCurrent}" Style="{StaticResource CheckBoxStyle1}"/>
 
 
                                                 </StackPanel>
@@ -1567,7 +1565,7 @@
 
 
 
-                                    <TextBox ToolTip="搜索 识别码、演员、名称"  x:Name="AllSearchTextBox" PreviewMouseLeftButtonDown="AllSearchTextBox_PreviewMouseLeftButtonDown"  PreviewKeyUp="SearchTextBox_PreviewKeyUp" TextChanged="SearchTextBox_TextChanged"  Style="{StaticResource SearchTextBox}" Text="搜索识别码、演员、名称"  GotFocus="SearchTextBox_GotFocus" LostFocus="SearchTextBox_LostFocus" CaretBrush="{DynamicResource ForegroundSearch}"   FontSize="16"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="40 0 40 0" Background="Transparent" BorderThickness="0"  >
+                                    <TextBox ToolTip="{x:Static lang:Resources.SearchHint}"  x:Name="AllSearchTextBox" PreviewMouseLeftButtonDown="AllSearchTextBox_PreviewMouseLeftButtonDown"  PreviewKeyUp="SearchTextBox_PreviewKeyUp" TextChanged="SearchTextBox_TextChanged"  Style="{StaticResource SearchTextBox}" Text="{x:Static lang:Resources.SearchHint}"  GotFocus="SearchTextBox_GotFocus" LostFocus="SearchTextBox_LostFocus" CaretBrush="{DynamicResource ForegroundSearch}"   FontSize="16"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="40 0 40 0" Background="Transparent" BorderThickness="0"  >
                                         <TextBox.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Command="ApplicationCommands.Copy" />
@@ -1617,7 +1615,7 @@
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
-                                    <Button Content="快速添加 +" Style="{StaticResource ButtonStyleFill}" Height="30" Width="80" Click="Button_Click_7"/>
+                                    <Button Content="{x:Static lang:Resources.FastImport}" Style="{StaticResource ButtonStyleFill}" Height="30" Width="80" Click="Button_Click_7"/>
                                     <Border Cursor="Hand" x:Name="ImageSortBorder" Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="图片类型"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowImagePopup">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=image,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
@@ -1720,22 +1718,15 @@
 
 
                                         <WrapPanel  >
-                                            <TextBlock Text="视频类型：" Style="{StaticResource BaseFilterTextBlock}"/>
+                                            <TextBlock Text="{x:Static lang:Resources.VedioType}" Style="{StaticResource BaseFilterTextBlock}"/>
                                             <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{Binding TypeName1,Source={x:Static p:Settings.Default}}" />
                                             <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{Binding TypeName2,Source={x:Static p:Settings.Default}}"  />
                                             <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{Binding TypeName3,Source={x:Static p:Settings.Default}}" />
                                         </WrapPanel>
 
-                                        <!--<TextBlock Text="其它选项：" Style="{StaticResource BaseFilterTextBlock}"/>
-                                    <WrapPanel Orientation="Horizontal">
-                                        <ToggleButton Style="{StaticResource ToggleButtonStyle2}" Content="中文" Margin="10 0"/>
-                                        <ToggleButton Style="{StaticResource ToggleButtonStyle2}" Content="高清"  Margin="10 0"/>
-                                        <ToggleButton Style="{StaticResource ToggleButtonStyle2}" Content="流出"  Margin="10 0"/>
-                                    </WrapPanel>-->
-
 
                                         <WrapPanel  >
-                                            <TextBlock Text="发行年份：" Style="{StaticResource BaseFilterTextBlock}"/>
+                                            <TextBlock Text="{x:Static lang:Resources.ReleaseYear}" Style="{StaticResource BaseFilterTextBlock}"/>
                                             <ItemsControl ItemsSource="{Binding Year}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
@@ -1758,7 +1749,7 @@
 
 
                                         <WrapPanel  >
-                                            <TextBlock Text="视频时长：" Style="{StaticResource BaseFilterTextBlock}"/>
+                                            <TextBlock Text="{x:Static lang:Resources.VedioDuration}" Style="{StaticResource BaseFilterTextBlock}"/>
                                             <ItemsControl ItemsSource="{Binding Runtime}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
@@ -1781,7 +1772,7 @@
 
 
                                         <WrapPanel >
-                                            <TextBlock Text="文件大小：" Style="{StaticResource BaseFilterTextBlock}" ToolTip="（GB）"/>
+                                            <TextBlock Text="{x:Static lang:Resources.FileSize}" Style="{StaticResource BaseFilterTextBlock}" ToolTip="（GB）"/>
                                             <ItemsControl ItemsSource="{Binding FileSize}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
@@ -1804,7 +1795,7 @@
 
 
                                         <WrapPanel >
-                                            <TextBlock Text="影片评分：" Style="{StaticResource BaseFilterTextBlock}" ToolTip="（0-100）"/>
+                                            <TextBlock Text="{x:Static lang:Resources.MovieRating}" Style="{StaticResource BaseFilterTextBlock}" ToolTip="（0-100）"/>
                                             <ItemsControl ItemsSource="{Binding Rating}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
@@ -1828,8 +1819,8 @@
 
 
                                         <WrapPanel >
-                                            <TextBlock Text="影片类别：" Style="{StaticResource BaseFilterTextBlock}"/>
-                                            <TextBlock Cursor="Hand" PreviewMouseLeftButtonUp="Genre_PreviewMouseLeftButtonUp" Text="显示全部" Style="{StaticResource BaseFilterTextBlock}" TextDecorations="UnderLine" Foreground="BlueViolet"/>
+                                            <TextBlock Text="{x:Static lang:Resources.MovieGenre}" Style="{StaticResource BaseFilterTextBlock}"/>
+                                            <TextBlock Cursor="Hand" PreviewMouseLeftButtonUp="Genre_PreviewMouseLeftButtonUp" Text="{x:Static lang:Resources.ShowAll}" Style="{StaticResource BaseFilterTextBlock}" TextDecorations="UnderLine" Foreground="BlueViolet"/>
                                             <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
                                                 <ItemsControl x:Name="GenreItemsControl"  ItemsSource="{Binding Genre}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                                                     <ItemsControl.ItemsPanel>
@@ -1854,8 +1845,8 @@
 
 
                                         <WrapPanel >
-                                            <TextBlock Text="出演人员：" Style="{StaticResource BaseFilterTextBlock}"/>
-                                            <TextBlock Text="显示全部" Cursor="Hand"  PreviewMouseLeftButtonUp="Actor_PreviewMouseLeftButtonUp"  Style="{StaticResource BaseFilterTextBlock}" TextDecorations="UnderLine" Foreground="BlueViolet"/>
+                                            <TextBlock Text="{x:Static lang:Resources.MovieActors}" Style="{StaticResource BaseFilterTextBlock}"/>
+                                            <TextBlock Text="{x:Static lang:Resources.ShowAll}" Cursor="Hand"  PreviewMouseLeftButtonUp="Actor_PreviewMouseLeftButtonUp"  Style="{StaticResource BaseFilterTextBlock}" TextDecorations="UnderLine" Foreground="BlueViolet"/>
                                             <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
 
                                                 <ItemsControl x:Name="ActorFilterItemsControl"  ItemsSource="{Binding Actor}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
@@ -1881,7 +1872,7 @@
 
 
                                         <WrapPanel >
-                                            <TextBlock Text="影片标签：" Style="{StaticResource BaseFilterTextBlock}"/>
+                                            <TextBlock Text="{x:Static lang:Resources.MovieLabels}" Style="{StaticResource BaseFilterTextBlock}"/>
                                             <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
                                                 <ItemsControl  x:Name="LabelFilterItemsControl"  ItemsSource="{Binding Label}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                                                     <ItemsControl.ItemsPanel>
@@ -1909,8 +1900,8 @@
                                 </Grid>
 
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                    <Button Style="{StaticResource ButtonStyleFill}" Content="应用" HorizontalAlignment="Left" Width="100" Height="25" Click="Button_Click_5"/>
-                                    <Button Style="{StaticResource ButtonStyleFill}" Content="清除" HorizontalAlignment="Left" Width="100" Height="25" Click="Button_Click_6"/>
+                                    <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Apply}" HorizontalAlignment="Left" Width="100" Height="25" Click="Button_Click_5"/>
+                                    <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Clear}" HorizontalAlignment="Left" Width="100" Height="25" Click="Button_Click_6"/>
                                 </StackPanel>
 
 
@@ -1974,48 +1965,48 @@
                                         <StackPanel>
                                             <TextBox Text="{Binding Actress.id}" Style="{StaticResource InfoTextBox}" Visibility="Collapsed"  />
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="生日："  Style="{StaticResource ActorInfoTextBlock}" />
+                                                <TextBlock Text="{x:Static lang:Resources.Actress_Birthday}"  Style="{StaticResource ActorInfoTextBlock}" />
                                                 <TextBox Text="{Binding Actress.birthday,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}" PreviewKeyUp="SaveActress"  ToolTip="格式为【0000-00-00】，回车后保存" />
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="年龄："  Style="{StaticResource ActorInfoTextBlock}"  />
+                                                <TextBlock Text="{x:Static lang:Resources.Actress_Age}"  Style="{StaticResource ActorInfoTextBlock}"  />
                                                 <TextBox Text="{Binding Actress.age,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"  PreviewKeyUp="SaveActress"  ToolTip="整数，回车后保存" />
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="出生地："  Style="{StaticResource ActorInfoTextBlock}"  />
+                                                <TextBlock Text="{x:Static lang:Resources.Actress_Birthplace}"  Style="{StaticResource ActorInfoTextBlock}"  />
                                                 <TextBox Text="{Binding Actress.birthplace,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"  PreviewKeyUp="SaveActress"  ToolTip="少于 50  字符，回车后保存"  />
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="身高："  Style="{StaticResource ActorInfoTextBlock}"   />
+                                                <TextBlock Text="{x:Static lang:Resources.Actress_Height}"  Style="{StaticResource ActorInfoTextBlock}"   />
                                                 <TextBox Text="{Binding Actress.height,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"  PreviewKeyUp="SaveActress"  ToolTip="整数，回车后保存"   />
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="罩杯："  Style="{StaticResource ActorInfoTextBlock}"    />
+                                                <TextBlock Text="{x:Static lang:Resources.Actress_Cup}"  Style="{StaticResource ActorInfoTextBlock}"    />
                                                 <TextBox Text="{Binding Actress.cup,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"  PreviewKeyUp="SaveActress"  ToolTip="A-Z，回车后保存"  />
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="胸围："  Style="{StaticResource ActorInfoTextBlock}"  />
+                                                <TextBlock Text="{x:Static lang:Resources.Actress_Chest}"  Style="{StaticResource ActorInfoTextBlock}"  />
                                                 <TextBox Text="{Binding Actress.chest,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"  PreviewKeyUp="SaveActress" ToolTip="整数，回车后保存"   />
                                             </StackPanel>
 
 
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="腰围："  Style="{StaticResource ActorInfoTextBlock}" />
+                                                <TextBlock Text="{x:Static lang:Resources.Actress_Waist}"  Style="{StaticResource ActorInfoTextBlock}" />
                                                 <TextBox Text="{Binding Actress.waist,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"  PreviewKeyUp="SaveActress"  ToolTip="整数，回车后保存"   />
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="臀围："  Style="{StaticResource ActorInfoTextBlock}"   />
+                                                <TextBlock Text="{x:Static lang:Resources.Actress_Hipline}"  Style="{StaticResource ActorInfoTextBlock}"   />
                                                 <TextBox Text="{Binding Actress.hipline,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"  PreviewKeyUp="SaveActress" ToolTip="整数，回车后保存"  />
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="爱好："  Style="{StaticResource ActorInfoTextBlock}"   />
+                                                <TextBlock Text="{x:Static lang:Resources.Actress_Hobby}"  Style="{StaticResource ActorInfoTextBlock}"   />
                                                 <TextBox Text="{Binding Actress.hobby,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"  PreviewKeyUp="SaveActress"  ToolTip="文本，回车后保存"  />
                                             </StackPanel>
 

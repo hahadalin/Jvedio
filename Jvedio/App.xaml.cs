@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using Jvedio;
 
 namespace Jvedio
 {
@@ -40,8 +41,30 @@ namespace Jvedio
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             //非UI线程未捕获异常处理事件
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-
+            SetLanguageDictionary();
             base.OnStartup(e);
+        }
+
+        private void SetLanguageDictionary()
+        {
+            //设置语言
+            string language=Jvedio.Properties.Settings.Default.Language;
+            switch (language)
+            {
+                case "日本語":
+                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("ja-JP");
+                    break;
+                case "中文":
+                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("zh-CN");
+                    break;
+                case "English":
+                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                    break;
+                default:
+                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                    break;
+            }
+
         }
 
 

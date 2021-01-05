@@ -134,9 +134,9 @@ namespace Jvedio.ViewModel
         }
 
 
-        private Language _Language = (Language)Enum.Parse(typeof(Language), Properties.Settings.Default.Language, true);
+        private MyLanguage _Language = (MyLanguage)Enum.Parse(typeof(MyLanguage), Properties.Settings.Default.Language, true);
 
-        public Language Language
+        public MyLanguage Language
         {
             get { return _Language; }
             set

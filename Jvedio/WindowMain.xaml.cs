@@ -1328,7 +1328,7 @@ namespace Jvedio
             AllSearchBorder.BorderBrush = new SolidColorBrush(color1);
             ColorAnimation colorAnimation = new ColorAnimation(color1, color2, new Duration(TimeSpan.FromMilliseconds(200)));
             AllSearchBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
-            if (AllSearchTextBox.Text == "搜索识别码、演员、名称")
+            if (AllSearchTextBox.Text == Jvedio.Language.Resources.SearchHint)
             {
                 AllSearchTextBox.Text = "";
             }
@@ -1350,7 +1350,7 @@ namespace Jvedio
             AllSearchBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
             if (AllSearchTextBox.Text == "")
             {
-                AllSearchTextBox.Text = "搜索识别码、演员、名称";
+                AllSearchTextBox.Text = Jvedio.Language.Resources.SearchHint;
             }
             //Task.Run(() => {
             //    Task.Delay(200).Wait();
@@ -1370,7 +1370,7 @@ namespace Jvedio
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (AllSearchTextBox.Text == "" || AllSearchTextBox.Text== "搜索识别码、演员、名称")
+            if (AllSearchTextBox.Text == "" || AllSearchTextBox.Text== Jvedio.Language.Resources.SearchHint)
             {
                 if(ClearImage!=null) ClearImage.Visibility = Visibility.Hidden;
                 return;
@@ -1513,14 +1513,14 @@ namespace Jvedio
             Button button = sender as Button;
             string name = button.Content.ToString();
 
-            if (name == "隐藏")
+            if (name == Jvedio.Language.Resources.Hide)
             {
-                button.Content = "显示";
+                button.Content = Jvedio.Language.Resources.Show;
                 ListScrollViewer.Visibility = Visibility.Collapsed;
             }
             else
             {
-                button.Content = "隐藏";
+                button.Content = Jvedio.Language.Resources.Hide;
                 ListScrollViewer.Visibility = Visibility.Visible;
             }
 
@@ -2025,8 +2025,11 @@ namespace Jvedio
         public void SaveAllSearchType(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
-            Properties.Settings.Default.AllSearchType = radioButton.Content.ToString();
+            radioButton.IsChecked = true;
+            Properties.Settings.Default.AllSearchType = radioButton.Content.ToString().ToMySearchType();
             vieModel?.GetSearchCandidate(AllSearchTextBox.Text);
+
+            
         }
 
 
@@ -6271,15 +6274,13 @@ namespace Jvedio
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value == null)
-                return false;
-
-            return (((MySearchType)value).ToString() == parameter.ToString());
+            if (value == null) return false;
+            return Enum.Parse(typeof(MySearchType), value.ToString().ToMySearchType()).ToString() == parameter.ToString();
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return (bool)value ? Enum.Parse(typeof(MySearchType), parameter.ToString(), true) : null;
+            return (bool)value ? Enum.Parse(typeof(MySearchType), parameter.ToString().ToMySearchType(), true) : null;
         }
     }
 

@@ -146,7 +146,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        private MySearchType _SearchType = (MySearchType)Enum.Parse(typeof(MySearchType), Properties.Settings.Default.SearchType, true);
+        private MySearchType _SearchType = (MySearchType)Enum.Parse(typeof(MySearchType), Properties.Settings.Default.SearchType.ToMySearchType(), true);
 
         public MySearchType SearchType
         {
@@ -159,7 +159,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        private MySearchType _AllSearchType = (MySearchType)Enum.Parse(typeof(MySearchType), Properties.Settings.Default.AllSearchType, true);
+        private MySearchType _AllSearchType = (MySearchType)Enum.Parse(typeof(MySearchType), Properties.Settings.Default.AllSearchType.ToMySearchType(), true);
 
         public MySearchType AllSearchType
         {
