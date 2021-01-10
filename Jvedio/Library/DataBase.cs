@@ -650,7 +650,6 @@ namespace Jvedio
                     }
                     catch(Exception e)
                     {
-                        Console.WriteLine(e.Message);
                         actress.like = 0;
                     }
                     return actress;

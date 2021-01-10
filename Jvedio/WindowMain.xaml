@@ -1644,7 +1644,7 @@
                                         <Image Source="Resources/Picture/随机.png" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
 
-                                    <Button Click="Button_Click_2" Content="测试" Visibility="Collapsed"/>
+                                    <Button Click="Button_Click_2" Content="测试" Visibility="Visible"/>
 
                                 </StackPanel>
 

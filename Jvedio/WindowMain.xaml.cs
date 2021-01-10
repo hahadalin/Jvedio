@@ -5074,14 +5074,11 @@ namespace Jvedio
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            using (StreamReader sr = new StreamReader(@"D:\Pycharm_Project\fc2_crawler\html\1560667.html"))
-            {
-                string html = sr.ReadToEnd();
-                FC2Parse fC2Parse = new FC2Parse("1560667", html);
-                Dictionary<string, string> result = fC2Parse.Parse();
-            }
-            
-            
+            if (!(Jvedio.GetWindow.Get("LoadActorMovies") is LoadActorMovies loadActorMovies))
+                loadActorMovies = new LoadActorMovies();
+            loadActorMovies.Show();
+
+
         }
 
 
@@ -6117,7 +6114,6 @@ namespace Jvedio
 
         private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            return;
             if (!(Jvedio.GetWindow.Get("LoadActorMovies") is LoadActorMovies loadActorMovies))
                 loadActorMovies = new LoadActorMovies();
             loadActorMovies.Show();

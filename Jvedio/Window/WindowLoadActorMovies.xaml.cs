@@ -103,9 +103,34 @@ namespace Jvedio
                 }
             }
 
-            string acotr = ActorTextBlock.Text.Replace("演员：", "");
-            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(acotr)) return;
+            string actor = ActorTextBlock.Text.Replace("当前演员 ", "");
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(actor)) return;
             //检索影片
+            string id = "";
+
+            using(MySqlite mySqlite=new MySqlite("BusActress"))
+            {
+                id = mySqlite.SelectByField("id", "censored", actor, "name");
+            }
+
+            if (string.IsNullOrEmpty(id))
+            {
+
+            }
+            else
+            {
+                //访问网址
+                if (!url.EndsWith("/")) url += "/";
+                url += $"star/{id}";
+
+                (string html,int sc)= await Net.Http(url);
+
+                System.Console.WriteLine(html);
+
+
+
+
+            }
 
 
 
