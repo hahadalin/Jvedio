@@ -8,7 +8,7 @@
 
 
 
-<h3 align="center">本地视频与图片的管理</h3>
+<h3 align="center">本地视频管理</h3>
 
 
 

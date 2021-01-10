@@ -8,7 +8,7 @@
 
 
 
-<h3 align="center">ローカルビデオと画像の管理</h3>
+<h3 align="center">ローカルビデオ管理</h3>
 
 
 
