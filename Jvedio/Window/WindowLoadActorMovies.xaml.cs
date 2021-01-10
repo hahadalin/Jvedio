@@ -123,9 +123,9 @@ namespace Jvedio
                 if (!url.EndsWith("/")) url += "/";
                 url += $"star/{id}";
 
-                (string html,int sc)= await Net.Http(url);
+                //(string html,int sc)= await Net.Http(url);
 
-                System.Console.WriteLine(html);
+                //System.Console.WriteLine(html);
 
 
 
