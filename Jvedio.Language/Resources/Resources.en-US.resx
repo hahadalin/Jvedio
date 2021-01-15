@@ -285,4 +285,157 @@
   <data name="Thumbnail" xml:space="preserve">
     <value>Thumbnail</value>
   </data>
+  <data name="SyncInfo" xml:space="preserve">
+    <value>Sync Info</value>
+  </data>
+  <data name="StopSync" xml:space="preserve">
+    <value>Stop Sync</value>
+  </data>
+  <data name="ImageType" xml:space="preserve">
+    <value>ImageType</value>
+  </data>
+  <data name="Sorting" xml:space="preserve">
+    <value>Sorting</value>
+  </data>
+  <data name="MultiSelect" xml:space="preserve">
+    <value>MultiSelect</value>
+  </data>
+  <data name="About_Outline" xml:space="preserve">
+    <value>Local Video Management</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="About_Content" xml:space="preserve">
+    <value>Jvedio is a local video management software, which supports scanning local videos and importing software, establishing video library, extracting unique video identification code, automatically classifying videos, adding labels to manage videos, using artificial intelligence to identify actors, supporting translation information, and capturing video pictures based on FFmpeg. It is a smooth and beautiful application software on Window desktop</value>
+  </data>
+  <data name="OfficialWebsite" xml:space="preserve">
+    <value>Official Website</value>
+  </data>
+  <data name="Thanks_Content1" xml:space="preserve">
+    <value>Thank you so much for your sponsorship and support!</value>
+  </data>
+  <data name="Thanks_Content2" xml:space="preserve">
+    <value>Wish Jvedio better and better development!</value>
+  </data>
+  <data name="Menu_SyncInfo" xml:space="preserve">
+    <value>Sync Info(S)</value>
+  </data>
+  <data name="Menu_SyncExtra" xml:space="preserve">
+    <value>Sync Extra</value>
+  </data>
+  <data name="Menu_CustomUrl" xml:space="preserve">
+    <value>Custom Url</value>
+  </data>
+  <data name="Menu_EnforceSync" xml:space="preserve">
+    <value>Enforce Sync</value>
+  </data>
+  <data name="Menu_EditInfo" xml:space="preserve">
+    <value>Edit Info(E)</value>
+  </data>
+  <data name="Menu_Advance" xml:space="preserve">
+    <value>Advance</value>
+  </data>
+  <data name="Menu_AddToList" xml:space="preserve">
+    <value>Add to MyList</value>
+  </data>
+  <data name="Menu_RemoveFromList" xml:space="preserve">
+    <value>Remove from MyList</value>
+  </data>
+  <data name="Menu_LabelManagement" xml:space="preserve">
+    <value>Label Management</value>
+  </data>
+  <data name="Menu_OpenWebSite" xml:space="preserve">
+    <value>Open the Website (W)</value>
+  </data>
+  <data name="Menu_CopyFile" xml:space="preserve">
+    <value>Copy Files (C)</value>
+  </data>
+  <data name="Menu_ClearInfo" xml:space="preserve">
+    <value>Clear Info</value>
+  </data>
+  <data name="Menu_DeleteInfo" xml:space="preserve">
+    <value>Delete Info(D)</value>
+  </data>
+  <data name="Menu_DeleteFile" xml:space="preserve">
+    <value>Delete File(T)</value>
+  </data>
+  <data name="ToolTip_ClearInfo" xml:space="preserve">
+    <value>Clear the synchronized message</value>
+  </data>
+  <data name="ToolTip_DeleteInfo" xml:space="preserve">
+    <value>Delete information (do not delete files)</value>
+  </data>
+  <data name="ToolTip_DeleteFile" xml:space="preserve">
+    <value>Delete files to the Recycle Bin</value>
+  </data>
+  <data name="Menu_Translate" xml:space="preserve">
+    <value>Translate</value>
+  </data>
+  <data name="Menu_GenerateThumbnail" xml:space="preserve">
+    <value>Generate Thumbnail</value>
+  </data>
+  <data name="Menu_GenerateActressImage" xml:space="preserve">
+    <value>Generate Actress Image</value>
+  </data>
+  <data name="Menu_GenerateScreenShot" xml:space="preserve">
+    <value>enerate ScreenShot</value>
+  </data>
+  <data name="Menu_GenerateGif" xml:space="preserve">
+    <value>Generate Gif</value>
+  </data>
+  <data name="Menu_RenameFile" xml:space="preserve">
+    <value>Rename File</value>
+  </data>
+  <data name="Menu_RemoveZero" xml:space="preserve">
+    <value>Remove first 00 from 00000</value>
+  </data>
+  <data name="Menu_LabelManage1" xml:space="preserve">
+    <value>Add an existing label</value>
+  </data>
+  <data name="Menu_LabelManage2" xml:space="preserve">
+    <value>Single movie modification label</value>
+  </data>
+  <data name="Menu_LabelManage3" xml:space="preserve">
+    <value>Add tags to multiple movies</value>
+  </data>
+  <data name="Menu_LabelManage4" xml:space="preserve">
+    <value>Multi - movie delete tag</value>
+  </data>
+  <data name="Menu_LabelManage5" xml:space="preserve">
+    <value>Multi - movie empty tag</value>
+  </data>
+  <data name="ScreenShot" xml:space="preserve">
+    <value>ScreenShot</value>
+  </data>
+  <data name="Movie" xml:space="preserve">
+    <value>FilePath</value>
+  </data>
+  <data name="ActressImage" xml:space="preserve">
+    <value>Actor Image</value>
+  </data>
+  <data name="ToolTip_RandomShow" xml:space="preserve">
+    <value>Random Show</value>
+  </data>
+  <data name="ToolTip_Filter" xml:space="preserve">
+    <value>Portfolio Selection</value>
+  </data>
+  <data name="InputTitle1" xml:space="preserve">
+    <value>Please enter the tags to be added, each tag is separated by a space</value>
+  </data>
+  <data name="InputTitle2" xml:space="preserve">
+    <value>Please enter the URL of the video to be synchronized</value>
+  </data>
+  <data name="InputTitle3" xml:space="preserve">
+    <value>Please enter the modified name</value>
+  </data>
+  <data name="InputTitle4" xml:space="preserve">
+    <value>Please enter the list you want to add</value>
+  </data>
+  <data name="InputTitle5" xml:space="preserve">
+    <value>Please enter the ID to be added</value>
+  </data>
+  <data name="InputTitle6" xml:space="preserve">
+    <value>Please enter the tags to be deleted, separated by spaces</value>
+  </data>
 </root>

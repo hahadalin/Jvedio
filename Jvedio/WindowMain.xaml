@@ -1261,7 +1261,7 @@
                                                 <MenuItem  Header="{x:Static lang:Resources.Picture}" Click="OpenImageSavePath"   />
                                                 <MenuItem  Header="{x:Static lang:Resources.SoftWare}" Click="OpenApplicationPath"  />
                                             </MenuItem>
-                                            <MenuItem  Header="{x:Static lang:Resources.Upgrade}" PreviewMouseLeftButtonUp="ShowUpdate"   />
+                                            <MenuItem Visibility="Collapsed"  Header="{x:Static lang:Resources.Upgrade}" PreviewMouseLeftButtonUp="ShowUpdate"   />
                                             <MenuItem Visibility="Collapsed"  Header="赞助"   Click="OpenThanks"  />
                                         </ContextMenu>
                                     </Border.ContextMenu>
@@ -1550,7 +1550,7 @@
                                         <Popup VerticalOffset="5" HorizontalOffset="-15" x:Name="SearchOptionPopup" Placement="Bottom" PopupAnimation="Fade"  PlacementTarget="{Binding ElementName=SearchOptionGrid}" AllowsTransparency="True" StaysOpen="False" IsOpen="False">
                                             <Border Background="{DynamicResource BackgroundMenu}" CornerRadius="5">
                                                 <StackPanel Margin="5">
-                                                    <RadioButton Click="SaveAllSearchType"  Content="{x:Static lang:Resources.ID}" Style="{StaticResource RadioButtonStyle}"  GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                    <RadioButton Click="SaveAllSearchType" IsChecked="True"  Content="{x:Static lang:Resources.ID}" Style="{StaticResource RadioButtonStyle}"  GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                     <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Title}" Style="{StaticResource RadioButtonStyle}" GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                     <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Actor}" Style="{StaticResource RadioButtonStyle}" GroupName="RB3" Template="{DynamicResource RadioButtonControlTemplate1}"/>
 
@@ -1616,33 +1616,30 @@
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
                                     <Button Content="{x:Static lang:Resources.FastImport}" Style="{StaticResource ButtonStyleFill}" Height="30" Width="80" Click="Button_Click_7"/>
-                                    <Border Cursor="Hand" x:Name="ImageSortBorder" Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="图片类型"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowImagePopup">
+                                    <Border Cursor="Hand" x:Name="ImageSortBorder" Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.ImageType}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowImagePopup">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=image,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
-                                    <Border Cursor="Hand"   x:Name="SortBorder"  Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="排序"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowSortPopup">
+                                    <Border Cursor="Hand"   x:Name="SortBorder"  Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.Sorting}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowSortPopup">
                                         <Image x:Name="SortImage"  Source="/Resources/Picture/sort_down.png" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
-                                    <Border  Cursor="Hand"   x:Name="DownloadBorder"   Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="同步信息"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowDownloadPopup">
+                                    <Border  Cursor="Hand"   x:Name="DownloadBorder"   Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.SyncInfo}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowDownloadPopup">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=download,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
-                                    <Border Cursor="Hand"  Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="多选模式"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                    <Border Cursor="Hand"  Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.MultiSelect}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
 
                                         <ToggleButton  IsChecked="{Binding EditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Background="Transparent" BorderThickness="0" Click="CheckMode_Click"  Style="{DynamicResource ToggleButtonStyle1}">
                                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=selectmode,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" RenderTransformOrigin="0.5,0.65" />
                                         </ToggleButton>
                                     </Border>
 
-                                    <Border  Cursor="Hand"      Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}"   Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="RandomDisplay"  ToolTip="随机展示">
+                                    <Border  Cursor="Hand"      Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}"   Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="RandomDisplay"  ToolTip="{x:Static lang:Resources.ToolTip_RandomShow}">
                                         <Image Source="Resources/Picture/随机.png" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
 
-                                    <Border Visibility="Visible"  Cursor="Hand"      Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}"   Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowFilterGrid"  ToolTip="组合筛选">
+                                    <Border Visibility="Visible"  Cursor="Hand"      Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}"   Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowFilterGrid"  ToolTip="{x:Static lang:Resources.ToolTip_Filter}">
                                         <Image Source="Resources/Picture/筛选.png" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
 
-                                    <Border Visibility="Collapsed"  Cursor="Hand"      Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}"   Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="Border_MouseLeftButtonUp_1"  ToolTip="随机展示">
-                                        <Image Source="Resources/Picture/随机.png" Height="20" Width="20"   Visibility="Visible" />
-                                    </Border>
 
                                     <Button Click="Button_Click_2" Content="测试" Visibility="Visible"/>
 
@@ -1691,8 +1688,8 @@
                                             <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
                                         </Border.Effect>
                                         <StackPanel  Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Width="100" Height="auto" Margin="5" >
-                                            <Button  Style="{StaticResource SetButton}" Content="同步信息" Click="Button_StartDownload" />
-                                            <Button  Style="{StaticResource SetButton}"  Content="停止同步"  Click="Button_StopDownload"    />
+                                            <Button  Style="{StaticResource SetButton}" Content="{x:Static lang:Resources.SyncInfo}" Click="Button_StartDownload" />
+                                            <Button  Style="{StaticResource SetButton}"  Content="{x:Static lang:Resources.StopSync}"  Click="Button_StopDownload"    />
                                         </StackPanel>
                                     </Border>
                                 </Popup>
@@ -2069,46 +2066,46 @@
                                                                 <StackPanel Style="{StaticResource ViewStackPanel}" Margin="5"   ContextMenuOpening="ContextMenu_ContextMenuOpening"  >
                                                                     <StackPanel.ContextMenu >
                                                                         <ContextMenu  PreviewKeyUp="ContextMenu_PreviewKeyUp">
-                                                                            <MenuItem Header="立即同步(S)" Click="DownLoadSelectMovie"   ></MenuItem>
-                                                                            <MenuItem Header="高级同步" Visibility="Visible"  >
-                                                                                <MenuItem Header="指定网址" Click="DownLoadWithUrl"   ></MenuItem>
-                                                                                <MenuItem Header="强制同步" Click="ForceToDownLoad"   ></MenuItem>
+                                                                            <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoadSelectMovie"   ></MenuItem>
+                                                                            <MenuItem Header="{x:Static lang:Resources.Menu_SyncExtra}" Visibility="Visible"  >
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_CustomUrl}" Click="DownLoadWithUrl"   ></MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_EnforceSync}" Click="ForceToDownLoad"   ></MenuItem>
                                                                             </MenuItem>
-                                                                            <MenuItem Header="修改信息(E)" Click="EditInfo"  />
-                                                                            <MenuItem Header="扩展功能"   >
-                                                                                <MenuItem ToolTip="使用翻译API翻译标题和摘要"  Header="翻译影片" Click="TranslateMovie"  />
-                                                                                <MenuItem Header="生成缩略图" Click="GenerateSmallImage" />
-                                                                                <MenuItem Header="生成演员头像" Click="GenerateActor" />
-                                                                                <MenuItem Header="生成截图" Click="GetScreenShot" />
-                                                                                <MenuItem Header="生成 Gif" Click="GetGif" />
-                                                                                <MenuItem Header="重命名影片" Click="RenameFile" />
-                                                                                <MenuItem ToolTip="去除识别码中 5 位数字的前2个0" Header="去除识别码中多余的 0" Click="ReMoveZero" />
+                                                                            <MenuItem Header="{x:Static lang:Resources.Menu_EditInfo}" Click="EditInfo"  />
+                                                                            <MenuItem Header="{x:Static lang:Resources.Menu_Advance}"   >
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_Translate}" Click="TranslateMovie"  />
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_GenerateThumbnail}" Click="GenerateSmallImage" />
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_GenerateActressImage}" Click="GenerateActor" />
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" Click="GetScreenShot" />
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_GenerateGif}" Click="GetGif" />
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_RenameFile}" Click="RenameFile" />
+                                                                                <MenuItem  Header="{x:Static lang:Resources.Menu_RemoveZero}" Click="ReMoveZero" />
                                                                             </MenuItem>
 
-                                                                            <MenuItem Header="加入清单"   Name="ListMenuItem"   />
-                                                                            <MenuItem Visibility="Collapsed" Header="移出清单" Click="RemoveFromList"      />
+                                                                            <MenuItem Header="{x:Static lang:Resources.Menu_AddToList}"   Name="ListMenuItem"   />
+                                                                            <MenuItem Visibility="Collapsed" Header="{x:Static lang:Resources.Menu_RemoveFromList}" Click="RemoveFromList"      />
 
-                                                                            <MenuItem Header="标签管理"   Click="ShowLabelEditGrid" >
-                                                                                <MenuItem Header="添加已有的标签" Click="MenuItem_Click_1"  ></MenuItem>
-                                                                                <MenuItem Header="单影片修改标签" Click="DelSingleLabel"  ></MenuItem>
-                                                                                <MenuItem  Header="多影片添加标签" Click="AddLabel"  ></MenuItem>
-                                                                                <MenuItem Header="多影片删除标签" Click="DelLabel"  ></MenuItem>
-                                                                                <MenuItem   Header="多影片清空标签" Click="ClearLabel"   ></MenuItem>
+                                                                            <MenuItem Header="{x:Static lang:Resources.Menu_LabelManagement}"   Click="ShowLabelEditGrid" >
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}" Click="MenuItem_Click_1"  ></MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage2}" Click="DelSingleLabel"  ></MenuItem>
+                                                                                <MenuItem  Header="{x:Static lang:Resources.Menu_LabelManage3}" Click="AddLabel"  ></MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage4}" Click="DelLabel"  ></MenuItem>
+                                                                                <MenuItem   Header="{x:Static lang:Resources.Menu_LabelManage5}" Click="ClearLabel"   ></MenuItem>
                                                                             </MenuItem>
-                                                                            <MenuItem Header="打开位置"   >
-                                                                                <MenuItem Header="影片" Click="OpenFilePath"   ></MenuItem>
-                                                                                <MenuItem Header="海报图" Click="OpenImagePath"  ></MenuItem>
-                                                                                <MenuItem Header="缩略图" Click="OpenImagePath"   ></MenuItem>
+                                                                            <MenuItem Header="{x:Static lang:Resources.OpenPath}"   >
+                                                                                <MenuItem Header="{x:Static lang:Resources.OpenPath}" Click="OpenFilePath"   ></MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.Poster}" Click="OpenImagePath"  ></MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.Thumbnail}" Click="OpenImagePath"   ></MenuItem>
                                                                                 <MenuItem Header="Gif" Click="OpenImagePath"   ></MenuItem>
-                                                                                <MenuItem Header="预览图" Click="OpenImagePath"   ></MenuItem>
-                                                                                <MenuItem Header="影片截图" Click="OpenImagePath"   ></MenuItem>
-                                                                                <MenuItem Header="头像" Click="OpenImagePath"   ></MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.Preview}" Click="OpenImagePath"   ></MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.ScreenShot}" Click="OpenImagePath"   ></MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.ActressImage}" Click="OpenImagePath"   ></MenuItem>
                                                                             </MenuItem>
-                                                                            <MenuItem Header="打开网址(W)" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
-                                                                            <MenuItem Header="复制文件(C)" Click="CopyFile" />
-                                                                            <MenuItem ToolTip="从当前数据库中删除该影片" Header="清空信息"  Click="DeleteInfo"   />
-                                                                            <MenuItem ToolTip="从当前数据库中删除该影片" Header="删除信息(D)"  Click="DeleteID"   />
-                                                                            <MenuItem ToolTip="删除文件到回收站" Header="删除文件(T)" Click="DeleteFile" Icon="pack://application:,,,/Resources/menuitem/clear.png" />
+                                                                            <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
+                                                                            <MenuItem Header="{x:Static lang:Resources.Menu_CopyFile}" Click="CopyFile" />
+                                                                            <MenuItem ToolTip="{x:Static lang:Resources.ToolTip_ClearInfo}" Header="{x:Static lang:Resources.Menu_ClearInfo}"  Click="DeleteInfo"   />
+                                                                            <MenuItem ToolTip="{x:Static lang:Resources.ToolTip_DeleteInfo}" Header="{x:Static lang:Resources.Menu_DeleteInfo}"  Click="DeleteID"   />
+                                                                            <MenuItem ToolTip="{x:Static lang:Resources.ToolTip_DeleteFile}" Header="{x:Static lang:Resources.Menu_DeleteFile}" Click="DeleteFile" Icon="pack://application:,,,/Resources/menuitem/clear.png" />
 
 
 
@@ -2728,7 +2725,7 @@
                         </StackPanel>
 
 
-                        <TextBlock x:Name="ThankTextBlock" FontSize="17" FontWeight="Bold"  Text="鸣谢" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10 30"/>
+                        <TextBlock x:Name="ThankTextBlock" FontSize="17" FontWeight="Bold"  Text="{x:Static lang:Resources.Thanks}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10 30"/>
 
 
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
@@ -2742,8 +2739,8 @@
                             <TextBlock TextAlignment="Left"   Text="赞助支持：小猪培根 等人" Style="{StaticResource BaseTextBlock}"></TextBlock>
                             <TextBlock Visibility="Hidden" FontSize="16"    TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="2 10"><Hyperlink NavigateUri="https://docs.qq.com/sheet/DRnpwemNjdEFlQ2xa?tab=BB08J2" Click="OpenUrl" ><Run Text="查看完整名单"/></Hyperlink></TextBlock>
 
-                            <TextBlock   Text="感谢 众多网友对 Jvedio 的赞助与支持！" Style="{StaticResource BaseTextBlock}"></TextBlock>
-                            <TextBlock     Text="预祝 Jvedio 发展越来越好！" Style="{StaticResource BaseTextBlock}"></TextBlock>
+                            <TextBlock   Text="{x:Static lang:Resources.Thanks_Content1}" Style="{StaticResource BaseTextBlock}"></TextBlock>
+                            <TextBlock     Text="{x:Static lang:Resources.Thanks_Content2}" Style="{StaticResource BaseTextBlock}"></TextBlock>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
@@ -2783,12 +2780,12 @@
                             <Image Margin="0 10 0 10" HorizontalAlignment="Center" Height="40"  VerticalAlignment="Center"  Source="Resources/Picture/Title.png"/>
                         </StackPanel>
 
-                        <TextBlock  FontSize="20"  Text="本地视频与图片的管理" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10"/>
+                        <TextBlock  FontSize="20"  Text="{x:Static lang:Resources.About_Outline}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10"/>
 
-                        <TextBox IsReadOnly="True" Background="Transparent" BorderThickness="0"  FontSize="15"  TextWrapping="Wrap" TextAlignment="Left"  Text="        Jvedio 是本地视频管理软件，支持扫描本地视频并导入软件，建立视频库， 提取出视频的 唯一识别码，自动分类视频， 添加标签管理视频，使用人工智能识别演员，支持翻译信息， 基于 FFmpeg 截取视频图片，Window 桌面端流畅美观的应用软件"  Foreground="{DynamicResource ForegroundSearch}" Margin="40 10"/>
+                        <TextBox IsReadOnly="True" Background="Transparent" BorderThickness="0"  FontSize="15"  TextWrapping="Wrap" TextAlignment="Left"  Text="{x:Static lang:Resources.About_Content}"  Foreground="{DynamicResource ForegroundSearch}" Margin="40 10"/>
 
 
-                        <TextBlock x:Name="VersionTextBlock" FontSize="20"  Text="版本：" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10"/>
+                        <TextBlock x:Name="VersionTextBlock" FontSize="20"  Text="{x:Static lang:Resources.Version}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10"/>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
@@ -2800,7 +2797,7 @@
 
                             <StackPanel Orientation="Horizontal" Margin="20 0">
                                 <Image Source="Resources/Jvedio.ico" Width="25" />
-                                <TextBlock FontSize="20"    TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="2 10"><Hyperlink NavigateUri="https://hitchao.github.io/JvedioWebPage/" Click="OpenUrl" ><Run Text="官方网址"/></Hyperlink></TextBlock>
+                                <TextBlock FontSize="20"    TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="2 10"><Hyperlink NavigateUri="https://hitchao.github.io/JvedioWebPage/" Click="OpenUrl" ><Run Text="{x:Static lang:Resources.OfficialWebsite}"/></Hyperlink></TextBlock>
                             </StackPanel>
 
                         </StackPanel>

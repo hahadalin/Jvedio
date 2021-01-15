@@ -285,4 +285,157 @@
   <data name="Preview" xml:space="preserve">
     <value>预览图</value>
   </data>
+  <data name="SyncInfo" xml:space="preserve">
+    <value>同步信息</value>
+  </data>
+  <data name="StopSync" xml:space="preserve">
+    <value>停止同步</value>
+  </data>
+  <data name="ImageType" xml:space="preserve">
+    <value>图片类型</value>
+  </data>
+  <data name="Sorting" xml:space="preserve">
+    <value>排序</value>
+  </data>
+  <data name="MultiSelect" xml:space="preserve">
+    <value>多选模式</value>
+  </data>
+  <data name="About_Outline" xml:space="preserve">
+    <value>本地视频的管理</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="About_Content" xml:space="preserve">
+    <value>        Jvedio 是本地视频管理软件，支持扫描本地视频并导入软件，建立视频库， 提取出视频的 唯一识别码，自动分类视频， 添加标签管理视频，使用人工智能识别演员，支持翻译信息， 基于 FFmpeg 截取视频图片，Window 桌面端流畅美观的应用软件</value>
+  </data>
+  <data name="OfficialWebsite" xml:space="preserve">
+    <value>官方网址</value>
+  </data>
+  <data name="Thanks_Content1" xml:space="preserve">
+    <value>感谢 众多网友对 Jvedio 的赞助与支持！</value>
+  </data>
+  <data name="Thanks_Content2" xml:space="preserve">
+    <value>预祝 Jvedio 发展越来越好！</value>
+  </data>
+  <data name="Menu_SyncInfo" xml:space="preserve">
+    <value>立即同步(S)</value>
+  </data>
+  <data name="Menu_SyncExtra" xml:space="preserve">
+    <value>高级同步</value>
+  </data>
+  <data name="Menu_CustomUrl" xml:space="preserve">
+    <value>指定网址</value>
+  </data>
+  <data name="Menu_EnforceSync" xml:space="preserve">
+    <value>强制同步</value>
+  </data>
+  <data name="Menu_EditInfo" xml:space="preserve">
+    <value>修改信息(E)</value>
+  </data>
+  <data name="Menu_Advance" xml:space="preserve">
+    <value>扩展功能</value>
+  </data>
+  <data name="Menu_AddToList" xml:space="preserve">
+    <value>加入清单</value>
+  </data>
+  <data name="Menu_RemoveFromList" xml:space="preserve">
+    <value>移出清单</value>
+  </data>
+  <data name="Menu_LabelManagement" xml:space="preserve">
+    <value>标签管理</value>
+  </data>
+  <data name="Menu_OpenWebSite" xml:space="preserve">
+    <value>打开网址(W)</value>
+  </data>
+  <data name="Menu_CopyFile" xml:space="preserve">
+    <value>复制文件(C)</value>
+  </data>
+  <data name="Menu_ClearInfo" xml:space="preserve">
+    <value>清空信息</value>
+  </data>
+  <data name="Menu_DeleteInfo" xml:space="preserve">
+    <value>删除信息(D)</value>
+  </data>
+  <data name="Menu_DeleteFile" xml:space="preserve">
+    <value>删除文件(T)</value>
+  </data>
+  <data name="ToolTip_ClearInfo" xml:space="preserve">
+    <value>清空同步的信息</value>
+  </data>
+  <data name="ToolTip_DeleteInfo" xml:space="preserve">
+    <value>删除信息（不删除文件）</value>
+  </data>
+  <data name="ToolTip_DeleteFile" xml:space="preserve">
+    <value>删除文件到回收站</value>
+  </data>
+  <data name="Menu_Translate" xml:space="preserve">
+    <value>翻译标题和摘要</value>
+  </data>
+  <data name="Menu_GenerateThumbnail" xml:space="preserve">
+    <value>生成缩略图</value>
+  </data>
+  <data name="Menu_GenerateActressImage" xml:space="preserve">
+    <value>生成演员头像</value>
+  </data>
+  <data name="Menu_GenerateScreenShot" xml:space="preserve">
+    <value>生成截图</value>
+  </data>
+  <data name="Menu_GenerateGif" xml:space="preserve">
+    <value>生成 Gif</value>
+  </data>
+  <data name="Menu_RenameFile" xml:space="preserve">
+    <value>重命名影片</value>
+  </data>
+  <data name="Menu_RemoveZero" xml:space="preserve">
+    <value>去 5 位数字的前2个0</value>
+  </data>
+  <data name="Menu_LabelManage1" xml:space="preserve">
+    <value>添加已有的标签</value>
+  </data>
+  <data name="Menu_LabelManage2" xml:space="preserve">
+    <value>单影片修改标签</value>
+  </data>
+  <data name="Menu_LabelManage3" xml:space="preserve">
+    <value>多影片添加标签</value>
+  </data>
+  <data name="Menu_LabelManage4" xml:space="preserve">
+    <value>多影片删除标签</value>
+  </data>
+  <data name="Menu_LabelManage5" xml:space="preserve">
+    <value>多影片清空标签</value>
+  </data>
+  <data name="Movie" xml:space="preserve">
+    <value>影片</value>
+  </data>
+  <data name="ScreenShot" xml:space="preserve">
+    <value>影片截图</value>
+  </data>
+  <data name="ActressImage" xml:space="preserve">
+    <value>头像</value>
+  </data>
+  <data name="ToolTip_RandomShow" xml:space="preserve">
+    <value>随机展示</value>
+  </data>
+  <data name="ToolTip_Filter" xml:space="preserve">
+    <value>组合筛选</value>
+  </data>
+  <data name="InputTitle1" xml:space="preserve">
+    <value>请输入需添加的标签，每个标签空格隔开</value>
+  </data>
+  <data name="InputTitle2" xml:space="preserve">
+    <value>请输入需要同步的影片网址</value>
+  </data>
+  <data name="InputTitle3" xml:space="preserve">
+    <value>请输入修改的名称</value>
+  </data>
+  <data name="InputTitle4" xml:space="preserve">
+    <value>请输入你要添加的清单</value>
+  </data>
+  <data name="InputTitle5" xml:space="preserve">
+    <value>请输入需添加的识别码</value>
+  </data>
+  <data name="InputTitle6" xml:space="preserve">
+    <value>请输入需删除的标签，每个标签空格隔开</value>
+  </data>
 </root>

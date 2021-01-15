@@ -1258,7 +1258,7 @@ namespace Jvedio
         private void ShowAbout(object sender, RoutedEventArgs e)
         {
             AboutGrid.Visibility = Visibility.Visible;
-            VersionTextBlock.Text = $"版本：{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
+            VersionTextBlock.Text = Jvedio.Language.Resources.Version +  $" : {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
         }
 
         private void ShowThanks(object sender, RoutedEventArgs e)
@@ -2262,7 +2262,7 @@ namespace Jvedio
 
 
                     });
-                    if (failpath != "" && vieModel.SelectedMovie.Count==1)
+                    if (!string.IsNullOrEmpty(failpath) && vieModel.SelectedMovie.Count==1)
                         HandyControl.Controls.Growl.Info($"成功打开{vieModel.SelectedMovie.Count - num}个，失败{num}个，因为不存在{filepath}", "Main");
                     else
                         HandyControl.Controls.Growl.Info($"成功打开{vieModel.SelectedMovie.Count - num}个，失败{num}个，因为不存在", "Main");
@@ -3279,7 +3279,7 @@ namespace Jvedio
                 if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedMovie.Add(CurrentMovie);
 
                 //string TotalLabel = GetFormatGenreString(vieModel.SelectedMovie,"label");
-                var di = new DialogInput(this, "请输入需删除的标签，每个标签空格隔开", "");
+                var di = new DialogInput(this,Jvedio.Language.Resources.InputTitle6, "");
                 di.ShowDialog();
                 if (di.DialogResult == true & di.Text != "")
                 {
@@ -3319,7 +3319,7 @@ namespace Jvedio
                 var TB = sp.Children.OfType<TextBox>().First();
                 Movie CurrentMovie = GetMovieFromVieModel(TB.Text);
                 if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedMovie.Add(CurrentMovie);
-                var di = new DialogInput(this, "请输入需添加的标签，每个标签空格隔开", "");
+                var di = new DialogInput(this, Jvedio.Language.Resources.InputTitle1, "");
                 di.ShowDialog();
                 if (di.DialogResult == true & di.Text != "")
                 {
@@ -4632,36 +4632,36 @@ namespace Jvedio
             ContextMenu contextMenu = sender as ContextMenu;
             if (e.Key == Key.D)
             {
-                MenuItem menuItem = GetMenuItem(contextMenu, "删除信息(D)");
+                MenuItem menuItem = GetMenuItem(contextMenu, Jvedio.Language.Resources.Menu_DeleteInfo);
                 if (menuItem != null) DeleteID(menuItem, new RoutedEventArgs());
             }
             else if (e.Key == Key.T)
             {
-                MenuItem menuItem = GetMenuItem(contextMenu, "删除文件(T)");
+                MenuItem menuItem = GetMenuItem(contextMenu, Jvedio.Language.Resources.Menu_DeleteFile);
                 if (menuItem != null) DeleteFile(menuItem, new RoutedEventArgs());
 
             }
             else if (e.Key == Key.S)
             {
-                MenuItem menuItem = GetMenuItem(contextMenu, "立即同步(S)");
+                MenuItem menuItem = GetMenuItem(contextMenu, Jvedio.Language.Resources.Menu_SyncInfo);
                 if (menuItem != null) DownLoadSelectMovie(menuItem, new RoutedEventArgs());
 
             }
             else if (e.Key == Key.E)
             {
-                MenuItem menuItem = GetMenuItem(contextMenu, "修改信息(E)");
+                MenuItem menuItem = GetMenuItem(contextMenu, Jvedio.Language.Resources.Menu_EditInfo);
                 if (menuItem != null) EditInfo(menuItem, new RoutedEventArgs());
 
             }
             else if (e.Key == Key.W)
             {
-                MenuItem menuItem = GetMenuItem(contextMenu, "打开网址(W)");
+                MenuItem menuItem = GetMenuItem(contextMenu, Jvedio.Language.Resources.Menu_OpenWebSite);
                 if (menuItem != null) OpenWeb(menuItem, new RoutedEventArgs());
 
             }
             else if (e.Key == Key.C)
             {
-                MenuItem menuItem = GetMenuItem(contextMenu, "复制文件(C)");
+                MenuItem menuItem = GetMenuItem(contextMenu, Jvedio.Language.Resources.Menu_CopyFile);
                 if (menuItem != null) CopyFile(menuItem, new RoutedEventArgs());
 
             }
@@ -4703,12 +4703,6 @@ namespace Jvedio
             cmdGrid.Visibility = Visibility.Collapsed;
         }
 
-        private void Border_MouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
-        {
-            var s1 = Jav321IDDict;
-
-
-        }
 
         private void AllSearchTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -4978,7 +4972,7 @@ namespace Jvedio
         {
             List<string> newLabel = new List<string>();
 
-            var di = new DialogInput(this, "请输入需添加的标签，每个标签空格隔开", "");
+            var di = new DialogInput(this, Jvedio.Language.Resources.InputTitle1, "");
             di.ShowDialog();
             if (di.DialogResult == true & di.Text != "")
             {
@@ -5156,7 +5150,7 @@ namespace Jvedio
             var TB = sp.Children.OfType<TextBox>().First();
             string id = TB.Text;
 
-            DialogInput dialogInput = new DialogInput(this, "请输入需要同步的影片网址");
+            DialogInput dialogInput = new DialogInput(this,Jvedio.Language.Resources.InputTitle2);
             if (dialogInput.ShowDialog() == true)
             {
                 string url = dialogInput.Text;
@@ -5641,7 +5635,7 @@ namespace Jvedio
             string oldName = radioButton.Content.ToString();
 
 
-            var r = new DialogInput(this, "请输入修改的名称", oldName);
+            var r = new DialogInput(this, Jvedio.Language.Resources.InputTitle3, oldName);
             if (r.ShowDialog() == true)
             {
                 string text = r.Text;
@@ -5718,7 +5712,7 @@ namespace Jvedio
 
         private void AddListItem(object sender, MouseButtonEventArgs e)
         {
-            var r = new DialogInput(this, "请输入你要添加的清单");
+            var r = new DialogInput(this, Jvedio.Language.Resources.InputTitle4);
             if (r.ShowDialog() == true)
             {
                 string text = r.Text;
@@ -5979,7 +5973,7 @@ namespace Jvedio
 
         private void Button_Click_7(object sender, RoutedEventArgs e)
         {
-            var di = new DialogInput(this, "请输入需添加的识别码", "");
+            var di = new DialogInput(this,Jvedio.Language.Resources.InputTitle5, "");
             di.ShowDialog();
             if (di.DialogResult == true & di.Text != "")
             {

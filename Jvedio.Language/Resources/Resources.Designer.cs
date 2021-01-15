@@ -70,6 +70,24 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似         Jvedio 是本地视频管理软件，支持扫描本地视频并导入软件，建立视频库， 提取出视频的 唯一识别码，自动分类视频， 添加标签管理视频，使用人工智能识别演员，支持翻译信息， 基于 FFmpeg 截取视频图片，Window 桌面端流畅美观的应用软件 的本地化字符串。
+        /// </summary>
+        public static string About_Content {
+            get {
+                return ResourceManager.GetString("About_Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 本地视频的管理 的本地化字符串。
+        /// </summary>
+        public static string About_Outline {
+            get {
+                return ResourceManager.GetString("About_Outline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 演员 的本地化字符串。
         /// </summary>
         public static string Actor {
@@ -156,6 +174,15 @@ namespace Jvedio.Language {
         public static string Actress_Waist {
             get {
                 return ResourceManager.GetString("Actress_Waist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 头像 的本地化字符串。
+        /// </summary>
+        public static string ActressImage {
+            get {
+                return ResourceManager.GetString("ActressImage", resourceCulture);
             }
         }
         
@@ -268,11 +295,317 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 图片类型 的本地化字符串。
+        /// </summary>
+        public static string ImageType {
+            get {
+                return ResourceManager.GetString("ImageType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请输入需添加的标签，每个标签空格隔开 的本地化字符串。
+        /// </summary>
+        public static string InputTitle1 {
+            get {
+                return ResourceManager.GetString("InputTitle1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请输入需要同步的影片网址 的本地化字符串。
+        /// </summary>
+        public static string InputTitle2 {
+            get {
+                return ResourceManager.GetString("InputTitle2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请输入修改的名称 的本地化字符串。
+        /// </summary>
+        public static string InputTitle3 {
+            get {
+                return ResourceManager.GetString("InputTitle3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请输入你要添加的清单 的本地化字符串。
+        /// </summary>
+        public static string InputTitle4 {
+            get {
+                return ResourceManager.GetString("InputTitle4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请输入需添加的识别码 的本地化字符串。
+        /// </summary>
+        public static string InputTitle5 {
+            get {
+                return ResourceManager.GetString("InputTitle5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请输入需删除的标签，每个标签空格隔开 的本地化字符串。
+        /// </summary>
+        public static string InputTitle6 {
+            get {
+                return ResourceManager.GetString("InputTitle6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 日志 的本地化字符串。
         /// </summary>
         public static string Log {
             get {
                 return ResourceManager.GetString("Log", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 加入清单 的本地化字符串。
+        /// </summary>
+        public static string Menu_AddToList {
+            get {
+                return ResourceManager.GetString("Menu_AddToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 扩展功能 的本地化字符串。
+        /// </summary>
+        public static string Menu_Advance {
+            get {
+                return ResourceManager.GetString("Menu_Advance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 清空信息 的本地化字符串。
+        /// </summary>
+        public static string Menu_ClearInfo {
+            get {
+                return ResourceManager.GetString("Menu_ClearInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 复制文件(C) 的本地化字符串。
+        /// </summary>
+        public static string Menu_CopyFile {
+            get {
+                return ResourceManager.GetString("Menu_CopyFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 指定网址 的本地化字符串。
+        /// </summary>
+        public static string Menu_CustomUrl {
+            get {
+                return ResourceManager.GetString("Menu_CustomUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除文件(T) 的本地化字符串。
+        /// </summary>
+        public static string Menu_DeleteFile {
+            get {
+                return ResourceManager.GetString("Menu_DeleteFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除信息(D) 的本地化字符串。
+        /// </summary>
+        public static string Menu_DeleteInfo {
+            get {
+                return ResourceManager.GetString("Menu_DeleteInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 修改信息(E) 的本地化字符串。
+        /// </summary>
+        public static string Menu_EditInfo {
+            get {
+                return ResourceManager.GetString("Menu_EditInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 强制同步 的本地化字符串。
+        /// </summary>
+        public static string Menu_EnforceSync {
+            get {
+                return ResourceManager.GetString("Menu_EnforceSync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 生成演员头像 的本地化字符串。
+        /// </summary>
+        public static string Menu_GenerateActressImage {
+            get {
+                return ResourceManager.GetString("Menu_GenerateActressImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 生成 Gif 的本地化字符串。
+        /// </summary>
+        public static string Menu_GenerateGif {
+            get {
+                return ResourceManager.GetString("Menu_GenerateGif", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 生成截图 的本地化字符串。
+        /// </summary>
+        public static string Menu_GenerateScreenShot {
+            get {
+                return ResourceManager.GetString("Menu_GenerateScreenShot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 生成缩略图 的本地化字符串。
+        /// </summary>
+        public static string Menu_GenerateThumbnail {
+            get {
+                return ResourceManager.GetString("Menu_GenerateThumbnail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 添加已有的标签 的本地化字符串。
+        /// </summary>
+        public static string Menu_LabelManage1 {
+            get {
+                return ResourceManager.GetString("Menu_LabelManage1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 单影片修改标签 的本地化字符串。
+        /// </summary>
+        public static string Menu_LabelManage2 {
+            get {
+                return ResourceManager.GetString("Menu_LabelManage2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 多影片添加标签 的本地化字符串。
+        /// </summary>
+        public static string Menu_LabelManage3 {
+            get {
+                return ResourceManager.GetString("Menu_LabelManage3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 多影片删除标签 的本地化字符串。
+        /// </summary>
+        public static string Menu_LabelManage4 {
+            get {
+                return ResourceManager.GetString("Menu_LabelManage4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 多影片清空标签 的本地化字符串。
+        /// </summary>
+        public static string Menu_LabelManage5 {
+            get {
+                return ResourceManager.GetString("Menu_LabelManage5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 标签管理 的本地化字符串。
+        /// </summary>
+        public static string Menu_LabelManagement {
+            get {
+                return ResourceManager.GetString("Menu_LabelManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开网址(W) 的本地化字符串。
+        /// </summary>
+        public static string Menu_OpenWebSite {
+            get {
+                return ResourceManager.GetString("Menu_OpenWebSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 移出清单 的本地化字符串。
+        /// </summary>
+        public static string Menu_RemoveFromList {
+            get {
+                return ResourceManager.GetString("Menu_RemoveFromList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 去 5 位数字的前2个0 的本地化字符串。
+        /// </summary>
+        public static string Menu_RemoveZero {
+            get {
+                return ResourceManager.GetString("Menu_RemoveZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 重命名影片 的本地化字符串。
+        /// </summary>
+        public static string Menu_RenameFile {
+            get {
+                return ResourceManager.GetString("Menu_RenameFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 高级同步 的本地化字符串。
+        /// </summary>
+        public static string Menu_SyncExtra {
+            get {
+                return ResourceManager.GetString("Menu_SyncExtra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 立即同步(S) 的本地化字符串。
+        /// </summary>
+        public static string Menu_SyncInfo {
+            get {
+                return ResourceManager.GetString("Menu_SyncInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 翻译标题和摘要 的本地化字符串。
+        /// </summary>
+        public static string Menu_Translate {
+            get {
+                return ResourceManager.GetString("Menu_Translate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 影片 的本地化字符串。
+        /// </summary>
+        public static string Movie {
+            get {
+                return ResourceManager.GetString("Movie", resourceCulture);
             }
         }
         
@@ -322,11 +655,29 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 多选模式 的本地化字符串。
+        /// </summary>
+        public static string MultiSelect {
+            get {
+                return ResourceManager.GetString("MultiSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 我的清单 的本地化字符串。
         /// </summary>
         public static string MyList {
             get {
                 return ResourceManager.GetString("MyList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 官方网址 的本地化字符串。
+        /// </summary>
+        public static string OfficialWebsite {
+            get {
+                return ResourceManager.GetString("OfficialWebsite", resourceCulture);
             }
         }
         
@@ -403,6 +754,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 影片截图 的本地化字符串。
+        /// </summary>
+        public static string ScreenShot {
+            get {
+                return ResourceManager.GetString("ScreenShot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 再检索 的本地化字符串。
         /// </summary>
         public static string SearchCurrent {
@@ -457,11 +817,56 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 排序 的本地化字符串。
+        /// </summary>
+        public static string Sorting {
+            get {
+                return ResourceManager.GetString("Sorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 停止同步 的本地化字符串。
+        /// </summary>
+        public static string StopSync {
+            get {
+                return ResourceManager.GetString("StopSync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 同步信息 的本地化字符串。
+        /// </summary>
+        public static string SyncInfo {
+            get {
+                return ResourceManager.GetString("SyncInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 鸣谢 的本地化字符串。
         /// </summary>
         public static string Thanks {
             get {
                 return ResourceManager.GetString("Thanks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 感谢 众多网友对 Jvedio 的赞助与支持！ 的本地化字符串。
+        /// </summary>
+        public static string Thanks_Content1 {
+            get {
+                return ResourceManager.GetString("Thanks_Content1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 预祝 Jvedio 发展越来越好！ 的本地化字符串。
+        /// </summary>
+        public static string Thanks_Content2 {
+            get {
+                return ResourceManager.GetString("Thanks_Content2", resourceCulture);
             }
         }
         
@@ -493,6 +898,51 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 清空同步的信息 的本地化字符串。
+        /// </summary>
+        public static string ToolTip_ClearInfo {
+            get {
+                return ResourceManager.GetString("ToolTip_ClearInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除文件到回收站 的本地化字符串。
+        /// </summary>
+        public static string ToolTip_DeleteFile {
+            get {
+                return ResourceManager.GetString("ToolTip_DeleteFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除信息（不删除文件） 的本地化字符串。
+        /// </summary>
+        public static string ToolTip_DeleteInfo {
+            get {
+                return ResourceManager.GetString("ToolTip_DeleteInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 组合筛选 的本地化字符串。
+        /// </summary>
+        public static string ToolTip_Filter {
+            get {
+                return ResourceManager.GetString("ToolTip_Filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 随机展示 的本地化字符串。
+        /// </summary>
+        public static string ToolTip_RandomShow {
+            get {
+                return ResourceManager.GetString("ToolTip_RandomShow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 升级 的本地化字符串。
         /// </summary>
         public static string Upgrade {
@@ -516,6 +966,15 @@ namespace Jvedio.Language {
         public static string VedioType {
             get {
                 return ResourceManager.GetString("VedioType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 版本 的本地化字符串。
+        /// </summary>
+        public static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
         

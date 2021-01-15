@@ -285,4 +285,157 @@
   <data name="Thumbnail" xml:space="preserve">
     <value>サムネイル</value>
   </data>
+  <data name="SyncInfo" xml:space="preserve">
+    <value>同期メッセージ</value>
+  </data>
+  <data name="StopSync" xml:space="preserve">
+    <value>同期を止める</value>
+  </data>
+  <data name="Sorting" xml:space="preserve">
+    <value>序列</value>
+  </data>
+  <data name="ImageType" xml:space="preserve">
+    <value>ピクチャータイプ</value>
+  </data>
+  <data name="MultiSelect" xml:space="preserve">
+    <value>複数選択モード</value>
+  </data>
+  <data name="About_Outline" xml:space="preserve">
+    <value>ローカル動画の管理</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>バージョン</value>
+  </data>
+  <data name="About_Content" xml:space="preserve">
+    <value>jvedioはネイティブビデオ管理ソフトウェアで、ネイティブビデオをスキャンしてソフトウェアをインポートすることをサポートし、ビデオライブラリを作成し、ビデオの一意の識別子を抽出し、ビデオを自動的に分類し、タグを追加してビデオを管理し、aiを使って俳優を識別し、翻訳情報をサポートし、ffmpegに基づいて映像を切り取る、windowデスクトップのなめらかで美しいアプリケーションです</value>
+  </data>
+  <data name="OfficialWebsite" xml:space="preserve">
+    <value>公式ウェブサイト</value>
+  </data>
+  <data name="Thanks_Content1" xml:space="preserve">
+    <value>多くのネットユーザーのjvedioへの賛助と支持に感謝します!</value>
+  </data>
+  <data name="Thanks_Content2" xml:space="preserve">
+    <value>jvedioの発展をお祈りします。</value>
+  </data>
+  <data name="Menu_SyncInfo" xml:space="preserve">
+    <value>同期メッセージ(S)</value>
+  </data>
+  <data name="Menu_SyncExtra" xml:space="preserve">
+    <value>高度な同期</value>
+  </data>
+  <data name="Menu_CustomUrl" xml:space="preserve">
+    <value>アドレスを指定する</value>
+  </data>
+  <data name="Menu_EnforceSync" xml:space="preserve">
+    <value>強制同期</value>
+  </data>
+  <data name="Menu_EditInfo" xml:space="preserve">
+    <value>メッセージを修正する(e)</value>
+  </data>
+  <data name="Menu_Advance" xml:space="preserve">
+    <value>機能を拡張する</value>
+  </data>
+  <data name="Menu_AddToList" xml:space="preserve">
+    <value>リストに入れる</value>
+  </data>
+  <data name="Menu_RemoveFromList" xml:space="preserve">
+    <value>リストを出す</value>
+  </data>
+  <data name="Menu_LabelManagement" xml:space="preserve">
+    <value>タグ管理</value>
+  </data>
+  <data name="Menu_OpenWebSite" xml:space="preserve">
+    <value>urlを開く(w)</value>
+  </data>
+  <data name="Menu_CopyFile" xml:space="preserve">
+    <value>ファイルをコピーする(C)</value>
+  </data>
+  <data name="Menu_ClearInfo" xml:space="preserve">
+    <value>メッセージを空にする</value>
+  </data>
+  <data name="Menu_DeleteInfo" xml:space="preserve">
+    <value>メッセージを削除する(D)</value>
+  </data>
+  <data name="Menu_DeleteFile" xml:space="preserve">
+    <value>ファイルを削除する(T)</value>
+  </data>
+  <data name="ToolTip_ClearInfo" xml:space="preserve">
+    <value>同期した情報を空にします</value>
+  </data>
+  <data name="ToolTip_DeleteInfo" xml:space="preserve">
+    <value>メッセージを削除する(ファイルを削除しない)</value>
+  </data>
+  <data name="ToolTip_DeleteFile" xml:space="preserve">
+    <value>ファイルをごみ箱に削除します</value>
+  </data>
+  <data name="Menu_Translate" xml:space="preserve">
+    <value>タイトルと要約を翻訳します</value>
+  </data>
+  <data name="Menu_GenerateThumbnail" xml:space="preserve">
+    <value>サムネイルを生成する</value>
+  </data>
+  <data name="Menu_GenerateActressImage" xml:space="preserve">
+    <value>アクターアイコンを生成する</value>
+  </data>
+  <data name="Menu_GenerateScreenShot" xml:space="preserve">
+    <value>スクリーンショットを作成する</value>
+  </data>
+  <data name="Menu_GenerateGif" xml:space="preserve">
+    <value>gifを作る</value>
+  </data>
+  <data name="Menu_RenameFile" xml:space="preserve">
+    <value>改題映画</value>
+  </data>
+  <data name="Menu_RemoveZero" xml:space="preserve">
+    <value>5桁の数字の最初の2つの0に行く</value>
+  </data>
+  <data name="Menu_LabelManage5" xml:space="preserve">
+    <value>マルチムービーのラベルを空にします</value>
+  </data>
+  <data name="Menu_LabelManage1" xml:space="preserve">
+    <value>既存のラベルを追加します</value>
+  </data>
+  <data name="Menu_LabelManage2" xml:space="preserve">
+    <value>シングルムービー修正レーベル</value>
+  </data>
+  <data name="Menu_LabelManage3" xml:space="preserve">
+    <value>複数の映画にラベルを付けます</value>
+  </data>
+  <data name="Menu_LabelManage4" xml:space="preserve">
+    <value>[マルチムービーの削除]タブ</value>
+  </data>
+  <data name="ScreenShot" xml:space="preserve">
+    <value>スクリーンショット</value>
+  </data>
+  <data name="Movie" xml:space="preserve">
+    <value>映画</value>
+  </data>
+  <data name="ActressImage" xml:space="preserve">
+    <value>俳優の顔</value>
+  </data>
+  <data name="ToolTip_RandomShow" xml:space="preserve">
+    <value>ランダムに示す</value>
+  </data>
+  <data name="ToolTip_Filter" xml:space="preserve">
+    <value>組み合わせ選別</value>
+  </data>
+  <data name="InputTitle1" xml:space="preserve">
+    <value>追加するタグを入力してください。各タグはスペースで区切られます</value>
+  </data>
+  <data name="InputTitle2" xml:space="preserve">
+    <value>同期する動画のURLを入力してください</value>
+  </data>
+  <data name="InputTitle3" xml:space="preserve">
+    <value>変更した名前を入力してください</value>
+  </data>
+  <data name="InputTitle4" xml:space="preserve">
+    <value>追加したいリストを入力してください</value>
+  </data>
+  <data name="InputTitle5" xml:space="preserve">
+    <value>追加するIDを入力してください</value>
+  </data>
+  <data name="InputTitle6" xml:space="preserve">
+    <value>削除するタグをスペースで区切って入力してください</value>
+  </data>
 </root>
