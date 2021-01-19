@@ -2495,6 +2495,11 @@ namespace Jvedio
             this.Cursor = Cursors.Arrow;
         }
 
+        private void ScreenShot(object sender,MouseButtonEventArgs e)
+        {
+            new HandyControl.Controls.Screenshot().Start();
+        }
+
 
         private bool IsToScrollToEnd = false;
         public async void GetScreenShot(object sender, RoutedEventArgs e)

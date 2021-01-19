@@ -539,6 +539,51 @@
         </ItemsPanelTemplate>
 
 
+
+        <Style x:Key="RadioThemeColor" TargetType="RadioButton">
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="Background" Value="#e892ca"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Grid Background="{TemplateBinding Background}" Width="25" Height="25" Margin="{TemplateBinding Margin}">
+                            <Border x:Name="_borderOver" Background="Transparent" BorderBrush="{DynamicResource BackgroundSearch}" BorderThickness="1" Margin="0">
+
+                            </Border>
+                            <Border x:Name="_borderChecked" Visibility="Collapsed" Background="{DynamicResource BackgroundSide}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="15" Height="15">
+                                <Path Data="M0,5 5,10 13,1" Margin="2 2 0 0" Stroke="{DynamicResource ForegroundSearch}" StrokeThickness="1"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasContent" Value="True">
+                                <Setter Property="FocusVisualStyle">
+                                    <Setter.Value>
+                                        <Style>
+                                            <Setter Property="Control.Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Setter.Value>
+                                </Setter>
+
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" TargetName="_borderOver" Value="{DynamicResource BackgroundMenu}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Visibility" TargetName="_borderChecked" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
     </local:Jvedio_BaseWindow.Resources>
 
     <Grid  Background="Transparent"   >
@@ -577,7 +622,7 @@
 
 
 
-                    <StackPanel Margin="20 5" x:Name="BasicPanel" Background="Transparent" Visibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto">
+                    <StackPanel Margin="20 5" x:Name="BasicPanel" Background="Transparent" Visibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto">
                         <WrapPanel Orientation="Vertical" Margin="5">
 
 
@@ -604,12 +649,15 @@
                             <RadioButton  GroupName="LangRadioButton"  Click="SetLanguage"   IsChecked="{Binding Language, ConverterParameter=日本語, Converter={StaticResource LanguageTypeEnumConverter}, Mode=TwoWay}"  Content="日本語"  Style="{StaticResource FlatRadioButton}"/>
                         </StackPanel>
 
-                        <WrapPanel Orientation="Horizontal"  Margin="20 5">
+                        <WrapPanel x:Name="SkinWrapPanel" Orientation="Horizontal"  Margin="20 5">
                             <Label  Style="{StaticResource InfoLabel}"  Content="{x:Static lang:Resources.Skin}"/>
+                            <RadioButton   GroupName="SkinRadioButton"  Click="SetSkin"   Content="黑色" Background="#393D40"  Style="{StaticResource RadioThemeColor}"  />
+                            <RadioButton  GroupName="SkinRadioButton"  Click="SetSkin"   Content="白色" Background="#FFFFFF"  Style="{StaticResource RadioThemeColor}"  />
+                            <RadioButton   GroupName="SkinRadioButton"  Click="SetSkin"  Content="蓝色" Background="#87CEFF"  Style="{StaticResource RadioThemeColor}"  />
 
-                            <RadioButton GroupName="SkinRadioButton" Click="SetSkin" IsChecked="{Binding Themes, ConverterParameter=黑色, Converter={StaticResource SkinTypeEnumConverter}, Mode=TwoWay}" Content="黑色" Style="{StaticResource FlatRadioButton}"/>
+                            <!--<RadioButton GroupName="SkinRadioButton" Click="SetSkin" IsChecked="{Binding Themes, ConverterParameter=黑色, Converter={StaticResource SkinTypeEnumConverter}, Mode=TwoWay}" Content="黑色" Style="{StaticResource FlatRadioButton}"/>
                             <RadioButton GroupName="SkinRadioButton"  Click="SetSkin" IsChecked="{Binding Themes, ConverterParameter=白色, Converter={StaticResource SkinTypeEnumConverter}, Mode=TwoWay}"  Content="白色"  Style="{StaticResource FlatRadioButton}"/>
-                            <RadioButton GroupName="SkinRadioButton"   Click="SetSkin" IsChecked="{Binding Themes, ConverterParameter=蓝色, Converter={StaticResource SkinTypeEnumConverter}, Mode=TwoWay}"  Content="蓝色"  Style="{StaticResource FlatRadioButton}"/>
+                            <RadioButton GroupName="SkinRadioButton"   Click="SetSkin" IsChecked="{Binding Themes, ConverterParameter=蓝色, Converter={StaticResource SkinTypeEnumConverter}, Mode=TwoWay}"  Content="蓝色"  Style="{StaticResource FlatRadioButton}"/>-->
 
                         </WrapPanel>
 
@@ -638,7 +686,7 @@
                                         <DataTrigger Binding="{Binding ElementName=AdvanceCheckBox,Path=IsChecked}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
-                                        
+
                                     </Style.Triggers>
                                 </Style>
                             </StackPanel.Style>
@@ -647,37 +695,37 @@
 
 
                             <StackPanel Orientation="Horizontal" Margin="10 10">
-                                
-                            <Slider x:Name="RecentDaysSlider" Value="{Binding RecentDays, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="1" Maximum="10" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=RecentDaysSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                                <TextBlock Text="{x:Static lang:Resources.ShowRecentCreate}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                        </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="10 10">
-                                
-                            <Slider x:Name="RecentWatchSlider" Value="{Binding RecentWatchDays, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="1" Maximum="10" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=RecentWatchSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                                <Slider x:Name="RecentDaysSlider" Value="{Binding RecentDays, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="1" Maximum="10" Width="100" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=RecentDaysSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{x:Static lang:Resources.ShowRecentCreate}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="10 10">
+
+                                <Slider x:Name="RecentWatchSlider" Value="{Binding RecentWatchDays, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="1" Maximum="10" Width="100" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=RecentWatchSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                                 <TextBlock Text="{x:Static lang:Resources.ShowRecentPlay}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                             </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="10 10">
-                                
-                            <Slider x:Name="SearchCandidateSlider" Value="{Binding SearchCandidateMaxCount, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="3" Maximum="15" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=SearchCandidateSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Margin="10 10">
+
+                                <Slider x:Name="SearchCandidateSlider" Value="{Binding SearchCandidateMaxCount, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="3" Maximum="15" Width="100" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=SearchCandidateSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                                 <TextBlock Text="{x:Static lang:Resources.SearchCandidateNumber}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                             </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="10 10">
-                                
-                            <Slider x:Name="FilePathNumSlider" Value="{Binding FilePathClassificationMaxCount, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="3" Maximum="20" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=FilePathNumSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Margin="10 10">
+
+                                <Slider x:Name="FilePathNumSlider" Value="{Binding FilePathClassificationMaxCount, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="3" Maximum="20" Width="100" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=FilePathNumSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                                 <TextBlock Text="{x:Static lang:Resources.DirClassificationNumber}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                             </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="10 10">
-                              
-                            <Slider x:Name="FilePathDepthSlider" Value="{Binding FilePathClassificationMaxDepth, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="1" Maximum="10" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=FilePathDepthSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Margin="10 10">
+
+                                <Slider x:Name="FilePathDepthSlider" Value="{Binding FilePathClassificationMaxDepth, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="1" Maximum="10" Width="100" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=FilePathDepthSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                                 <TextBlock Text="{x:Static lang:Resources.DirClassificationDepth}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                             </StackPanel>
 
@@ -761,15 +809,15 @@
                             <TextBlock Style="{StaticResource TextBlockTitle}" Text="{x:Static lang:Resources.UrlList}" HorizontalAlignment="Left"/>
 
                             <Button Content="{x:Static lang:Resources.Add}" Style="{DynamicResource ButtonStyleFill}" Width="100" Height="25" Click="Button_Click_4" />
-                            </StackPanel>
+                        </StackPanel>
                         <TextBlock TextAlignment="Left" Style="{StaticResource TextBlockTitle}" Text="{x:Static lang:Resources.Attention_UrlTest}" HorizontalAlignment="Left" TextWrapping="Wrap" />
 
 
 
                         <DataGrid Visibility="Visible" Background="{DynamicResource BackgroundSide}" MinHeight="200" ScrollViewer.HorizontalScrollBarVisibility="Disabled"   PreviewMouseLeftButtonDown="Previe_Mouse_LBtnDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"   DataContextChanged="ServersDataGrid_DataContextChanged" Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
-                            
-                            
-                            
+
+
+
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="{x:Static lang:Resources.Enable}" Width="auto" MinWidth="40">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -790,7 +838,7 @@
                                                     <Style TargetType="fa:ImageAwesome">
                                                         <Style.Triggers>
                                                             <DataTrigger  Binding="{Binding Available}" Value="0">
-                                                                
+
                                                             </DataTrigger>
                                                             <DataTrigger  Binding="{Binding Available}" Value="-1">
                                                                 <Setter Property="Icon" Value="TimesCircle"/>
@@ -798,12 +846,12 @@
                                                                 <Setter Property="Spin" Value="False"/>
                                                             </DataTrigger>
                                                             <DataTrigger  Binding="{Binding Available}" Value="1">
-                                                                    <Setter Property="Icon" Value="CheckCircle"/>
+                                                                <Setter Property="Icon" Value="CheckCircle"/>
                                                                 <Setter Property="Foreground" Value="#20B759"/>
                                                                 <Setter Property="Spin" Value="False"/>
                                                             </DataTrigger>
                                                             <DataTrigger  Binding="{Binding Available}" Value="2">
-                                                                        <Setter Property="Icon" Value="Refresh"/>
+                                                                <Setter Property="Icon" Value="Refresh"/>
                                                                 <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
                                                                 <Setter Property="Spin" Value="True"/>
                                                             </DataTrigger>
@@ -864,47 +912,47 @@
                                         <DataTrigger Binding="{Binding ElementName=TimeOutAdvanceCheckBox,Path=IsChecked}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
-                                        
+
                                     </Style.Triggers>
                                 </Style>
                             </StackPanel.Style>
-                            
-                            
- 
 
 
-                        <StackPanel Orientation="Horizontal" Margin="10 10">
-                            
-                            <Slider x:Name="HttpTimeoutSlider" Value="{Binding Timeout_forcestop, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="40" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=HttpTimeoutSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+
+
+
+                            <StackPanel Orientation="Horizontal" Margin="10 10">
+
+                                <Slider x:Name="HttpTimeoutSlider" Value="{Binding Timeout_forcestop, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="40" Width="100" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=HttpTimeoutSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                                 <TextBlock Text="{x:Static lang:Resources.TimeOut_CloseConnection}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                             </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="10">
-                            
-                            <Slider x:Name="RequestTimeoutSlider" Value="{Binding Timeout_http, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="40" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=RequestTimeoutSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Margin="10">
+
+                                <Slider x:Name="RequestTimeoutSlider" Value="{Binding Timeout_http, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="40" Width="100" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=RequestTimeoutSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                                 <TextBlock Text="{x:Static lang:Resources.TimeOut_HTTP}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                             </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="10">
-                           
-                            <Slider x:Name="TcpTimeoutSlider" Value="{Binding Timeout_tcp, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="40" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=TcpTimeoutSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Margin="10">
+
+                                <Slider x:Name="TcpTimeoutSlider" Value="{Binding Timeout_tcp, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="2" Maximum="40" Width="100" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=TcpTimeoutSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                                 <TextBlock Text="{x:Static lang:Resources.TimeOut_TCP}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                             </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="10">
-                            
-                            <Slider x:Name="DownloadTimeoutSlider" Value="{Binding Timeout_download, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="5" Maximum="40" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=DownloadTimeoutSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Margin="10">
+
+                                <Slider x:Name="DownloadTimeoutSlider" Value="{Binding Timeout_download, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="5" Maximum="40" Width="100" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=DownloadTimeoutSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                                 <TextBlock Text="{x:Static lang:Resources.TimeOut_DownloadImage}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                             </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="10">
-                            
-                            <Slider x:Name="StreamTimeoutSlider" Value="{Binding Timeout_stream, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="3" Maximum="40" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=StreamTimeoutSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Margin="10">
+
+                                <Slider x:Name="StreamTimeoutSlider" Value="{Binding Timeout_stream, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="3" Maximum="40" Width="100" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value, ElementName=StreamTimeoutSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                                 <TextBlock Text="{x:Static lang:Resources.TimeOut_ReadWrite}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                             </StackPanel>
 
@@ -1082,13 +1130,13 @@
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="20 5">
-                            
+
                             <Slider x:Name="ScreenShotIgnoreSlider1" Value="{Binding ScreenShotIgnoreStart, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="0" Maximum="10" SmallChange="1" LargeChange="2" TickFrequency="1" Width="200" VerticalAlignment="Center"/>
                             <TextBlock   Width="30"    Style="{StaticResource BaseTextBlock}"   Text="{Binding  ElementName=ScreenShotIgnoreSlider1, Mode=OneWay,Path=Value}"  />
                             <TextBlock  Text ="{x:Static lang:Resources.SkipBegin}" Style="{StaticResource BaseTextBlock}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="20 5">
-                            
+
                             <Slider x:Name="ScreenShotIgnoreSlider2" Value="{Binding ScreenShotIgnoreEnd, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="0" Maximum="10" SmallChange="1" LargeChange="2" TickFrequency="1" Width="200" VerticalAlignment="Center"/>
                             <TextBlock  Width="30"     Style="{StaticResource BaseTextBlock}"   Text="{Binding ElementName=ScreenShotIgnoreSlider2, Mode=OneWay,Path=Value}"  />
                             <TextBlock  Text ="{x:Static lang:Resources.SkipEnd}" Style="{StaticResource BaseTextBlock}" />
@@ -1402,7 +1450,7 @@
 
                     </StackPanel>
 
-                    <StackPanel x:Name="RenamePanel" Orientation="Vertical" Background="Transparent" Visibility="Visible"  >
+                    <StackPanel x:Name="RenamePanel" Orientation="Vertical" Background="Transparent" Visibility="Hidden"  >
                         <WrapPanel x:Name="CheckedBoxWrapPanel" Orientation="Horizontal">
                             <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Content="{x:Static lang:Resources.ID}" Width="100" Height="30"  Margin="5"  Click="AddToRename" />
                             <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Title}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
@@ -1418,14 +1466,14 @@
                             <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Actor}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
                             <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Studio}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
                             <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Rating}" Width="100" Height="30" Margin="5"     Click="AddToRename"/>
-                            
+
                         </WrapPanel>
 
                         <CheckBox IsChecked="{Binding Path=DelRenameTitleSpace,Mode=TwoWay,Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.DeleteSpace}" Margin="10 5"/>
                         <CheckBox IsChecked="{Binding Path=AddLabelTagWhenRename,Mode=TwoWay,Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.AutoAddStamp}" Margin="10 5"/>
 
                         <!--{'\\','#','%', '&', '*', '|', ':', '"', ' <', '>', '?', '/','.' }-->
-                            <StackPanel Orientation="Horizontal" Margin="10 5">
+                        <StackPanel Orientation="Horizontal" Margin="10 5">
                             <TextBlock Text="{x:Static lang:Resources.OuterSplitChar}" Style="{StaticResource BaseTextBlock}"/>
                             <ComboBox x:Name="OutComboBox" Width="100" SelectionChanged="OutComboBox_SelectionChanged" Margin="10 0" >
                                 <ComboBoxItem Content="_"/>

@@ -5,6 +5,7 @@
               xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Jvedio"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
              xmlns:Jc="clr-namespace:Jvedio.Controls"
              
@@ -33,7 +34,7 @@
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"  >
-                        <fa:ImageAwesome x:Name="WaitingImageAwesome"  VerticalAlignment="Center"  Margin="5 0"  Height="20" Icon="Refresh" Spin="True" Foreground="{DynamicResource ForegroundSearch}"/>
+                        <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}"/>
                         <TextBox Background="Transparent" Margin="20 5" BorderThickness="0" MaxHeight="300" Grid.Row="0"  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Wait}" />
 
                     </StackPanel >

@@ -1261,7 +1261,9 @@
                                                 <MenuItem  Header="{x:Static lang:Resources.Picture}" Click="OpenImageSavePath"   />
                                                 <MenuItem  Header="{x:Static lang:Resources.SoftWare}" Click="OpenApplicationPath"  />
                                             </MenuItem>
+                                            <MenuItem  Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="ScreenShot"   />
                                             <MenuItem Visibility="Collapsed"  Header="{x:Static lang:Resources.Upgrade}" PreviewMouseLeftButtonUp="ShowUpdate"   />
+                                            
                                             <MenuItem Visibility="Collapsed"  Header="赞助"   Click="OpenThanks"  />
                                         </ContextMenu>
                                     </Border.ContextMenu>
@@ -2308,7 +2310,9 @@
 
 
                                 <!--页码-->
-                                <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="0,0,30,0" VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
+
+                                
+                                <StackPanel Visibility="Visible" Grid.Column="2" Orientation="Horizontal" Margin="0,0,30,0" VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
 
                                     <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousPage"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="上一页"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />

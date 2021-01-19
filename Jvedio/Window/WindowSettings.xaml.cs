@@ -754,6 +754,17 @@ namespace Jvedio
                 }
             }
 
+            //设置皮肤选中
+            var rbs = SkinWrapPanel.Children.OfType<RadioButton>().ToList();
+            foreach (RadioButton item in rbs)
+            {
+                if (item.Content.ToString() == Properties.Settings.Default.Themes)
+                {
+                    item.IsChecked = true;
+                    return;
+                }
+            }
+
 
         }
 
