@@ -1641,7 +1641,7 @@
                                     </Border>
 
 
-                                    <Button Click="Button_Click_2" Content="测试" Visibility="Visible"/>
+                                    <Button Visibility="Collapsed" Click="Button_Click_2" Content="测试" />
 
                                 </StackPanel>
 
@@ -2019,21 +2019,21 @@
                                     <ScrollViewer IsDeferredScrollingEnabled="False"  FocusVisualStyle="{x:Null}"  CanContentScroll="True"  x:Name="ScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
                                         <ScrollViewer.ContextMenu>
                                             <ContextMenu>
-                                                <MenuItem Header="刷新" Click="RefreshCurrentPage" />
-                                                <MenuItem Header="选择/取消所有" Click="SelectAll" />
-                                                <MenuItem Header="仅显示可播放" IsCheckable="True"  IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding ResetCommand}" />
-                                                <MenuItem Header="仅显示分段视频" IsCheckable="True"  IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding ResetCommand}" />
-                                                <MenuItem Header="标签戳显示模式" Visibility="Collapsed">
+                                                <MenuItem Header="{x:Static lang:Resources.Refresh}" Click="RefreshCurrentPage" />
+                                                <MenuItem Header="{x:Static lang:Resources.SelectAll}" Click="SelectAll" />
+                                                <MenuItem Header="{x:Static lang:Resources.ShowExists}" IsCheckable="True"  IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding ResetCommand}" />
+                                                <MenuItem Header="{x:Static lang:Resources.ShowSubSection}" IsCheckable="True"  IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding ResetCommand}" />
+                                                <MenuItem Header="{x:Static lang:Resources.ShowStamp}" Visibility="Collapsed">
                                                     <MenuItem  Command="{Binding ResetCommand}"    IsCheckable="True"  IsChecked="{Binding ShowHDV, Mode=TwoWay}" Header="高清"    />
                                                     <MenuItem  Command="{Binding ResetCommand}"    IsCheckable="True"    IsChecked="{Binding ShowCHS, Mode=TwoWay}"   Header="中文" />
                                                     <MenuItem   Command="{Binding ResetCommand}"    IsCheckable="True"   IsChecked="{Binding ShowFlowOut, Mode=TwoWay}"   Header="流出" />
                                                 </MenuItem>
-                                                <MenuItem Header="图片显示模式" >
+                                                <MenuItem Header="{x:Static lang:Resources.ShowImageType}" >
                                                     <MenuItem  Click="SaveShowViewMode" IsCheckable="True"  IsChecked="{Binding Path=ShowViewMode, ConverterParameter=默认, Converter={StaticResource ViewTypeEnumConverter}, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Header="默认"    />
                                                     <MenuItem  Click="SaveShowViewMode" IsCheckable="True"    IsChecked="{Binding Path=ShowViewMode, ConverterParameter=有图, Converter={StaticResource ViewTypeEnumConverter}, Mode=TwoWay,Source={x:Static p:Settings.Default}}"   Header="有图" />
                                                     <MenuItem  Click="SaveShowViewMode"  IsCheckable="True"   IsChecked="{Binding Path=ShowViewMode, ConverterParameter=无图, Converter={StaticResource ViewTypeEnumConverter}, Mode=TwoWay,Source={x:Static p:Settings.Default}}"   Header="无图" />
                                                 </MenuItem>
-                                                <MenuItem Header="滚动到最后" Click="ScrollToEnd" />
+                                                <MenuItem Header="{x:Static lang:Resources.ScrollToEnd}" Click="ScrollToEnd" />
                                             </ContextMenu>
                                         </ScrollViewer.ContextMenu>
 
@@ -2390,12 +2390,15 @@
                                 </Border>
 
                                 <StackPanel x:Name="ActorToolsStackPanel"  Orientation="Horizontal"  Visibility="Visible" >
-                                    <CheckBox Click="ActorCheckBox_Click" Foreground="{DynamicResource ForegroundGlobal}"  IsChecked="{Binding ActorEditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Height="30" Content="{x:Static lang:Resources.MultiSelect}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5 0" HorizontalAlignment="Left" />
-
                                     <Grid x:Name="DownloadActorGrid"    Width="auto" HorizontalAlignment="Left"  MouseLeftButtonUp="ShowDownloadActorMenu" Cursor="Hand" Height="30" Margin="5 0">
                                         <Border CornerRadius="5" Background="{DynamicResource BackgroundTab}"  />
                                         <Image Source="Resources/Picture/download.png" Height="24" HorizontalAlignment="Left" Margin="3 0"></Image>
                                     </Grid>
+                                    
+                                    
+                                    <CheckBox Click="ActorCheckBox_Click" Foreground="{DynamicResource ForegroundGlobal}"  IsChecked="{Binding ActorEditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Height="30" Content="{x:Static lang:Resources.MultiSelect}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5 0" HorizontalAlignment="Left" />
+
+                                   
 
 
                                     <CheckBox x:Name="LoveActressCheckBox"  Content="{x:Static lang:Resources.ShowFavoriteActor}" IsChecked="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>

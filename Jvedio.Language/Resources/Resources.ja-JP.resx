@@ -630,4 +630,25 @@
   <data name="ShowFavoriteActor" xml:space="preserve">
     <value>お気に入りの俳優を表示する</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>すべて選択/選択解除</value>
+  </data>
+  <data name="ShowExists" xml:space="preserve">
+    <value>再生可能のみを表示</value>
+  </data>
+  <data name="ShowSubSection" xml:space="preserve">
+    <value>セグメント化されたビデオのみを表示</value>
+  </data>
+  <data name="ShowStamp" xml:space="preserve">
+    <value>ラベルスタンプ表示モード</value>
+  </data>
+  <data name="ShowImageType" xml:space="preserve">
+    <value>画像表示モード</value>
+  </data>
+  <data name="ScrollToEnd" xml:space="preserve">
+    <value>最後までスクロールします</value>
+  </data>
 </root>

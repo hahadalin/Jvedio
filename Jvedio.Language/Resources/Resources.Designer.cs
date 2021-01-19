@@ -1177,6 +1177,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 刷新 的本地化字符串。
+        /// </summary>
+        public static string Refresh {
+            get {
+                return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 发行年份 的本地化字符串。
         /// </summary>
         public static string ReleaseYear {
@@ -1204,6 +1213,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 滚动到最后 的本地化字符串。
+        /// </summary>
+        public static string ScrollToEnd {
+            get {
+                return ResourceManager.GetString("ScrollToEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 再检索 的本地化字符串。
         /// </summary>
         public static string SearchCurrent {
@@ -1218,6 +1236,15 @@ namespace Jvedio.Language {
         public static string SearchHint {
             get {
                 return ResourceManager.GetString("SearchHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 选择/取消所有 的本地化字符串。
+        /// </summary>
+        public static string SelectAll {
+            get {
+                return ResourceManager.GetString("SelectAll", resourceCulture);
             }
         }
         
@@ -1267,11 +1294,47 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 仅显示可播放 的本地化字符串。
+        /// </summary>
+        public static string ShowExists {
+            get {
+                return ResourceManager.GetString("ShowExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 显示收藏的演员 的本地化字符串。
         /// </summary>
         public static string ShowFavoriteActor {
             get {
                 return ResourceManager.GetString("ShowFavoriteActor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 图片显示模式 的本地化字符串。
+        /// </summary>
+        public static string ShowImageType {
+            get {
+                return ResourceManager.GetString("ShowImageType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 标签戳显示模式 的本地化字符串。
+        /// </summary>
+        public static string ShowStamp {
+            get {
+                return ResourceManager.GetString("ShowStamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 仅显示分段视频 的本地化字符串。
+        /// </summary>
+        public static string ShowSubSection {
+            get {
+                return ResourceManager.GetString("ShowSubSection", resourceCulture);
             }
         }
         
