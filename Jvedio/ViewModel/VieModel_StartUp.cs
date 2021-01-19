@@ -39,8 +39,14 @@ namespace Jvedio.ViewModel
             DataBases = new ObservableCollection<string>();
             try
             {
-                var fiels = Directory.GetFiles("DataBase", "*.sqlite", SearchOption.TopDirectoryOnly).ToList();
-                fiels.ForEach(arg => DataBases.Add(arg.Split('\\').Last().Split('.').First().ToLower()));
+                var files = Directory.GetFiles("DataBase", "*.sqlite", SearchOption.TopDirectoryOnly).ToList();
+
+                foreach (var item in files)
+                {
+                    string name = Path.GetFileNameWithoutExtension(item);
+                    if (!string.IsNullOrEmpty(name))
+                        DataBases.Add(name);
+                }
             }
             catch { }
             
@@ -48,7 +54,7 @@ namespace Jvedio.ViewModel
 
 
             if (!DataBases.Contains("info")) DataBases.Add("info");
-            if (!DataBases.Contains("新建视频库")) DataBases.Add("新建视频库");
+            if (!DataBases.Contains(Jvedio.Language.Resources.NewLibrary)) DataBases.Add(Jvedio.Language.Resources.NewLibrary);
 
 
         }

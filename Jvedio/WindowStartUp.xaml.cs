@@ -57,12 +57,12 @@ namespace Jvedio
             string name = TextBox.Text.ToLower();
             if (name == "info")
                 Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + "info.sqlite";
-            else if (name == "新建视频库")
+            else if (name == Jvedio.Language.Resources.NewLibrary)
             {
                 //重命名
                 TextBox.IsEnabled = true;
                 TextBox.IsReadOnly = false;
-                TextBox.Text = "我的视频";
+                TextBox.Text =Jvedio.Language.Resources.MyLibrary;
                 TextBox.Focus();
                 TextBox.SelectAll();
                 TextBox.Cursor = Cursors.IBeam;
@@ -83,7 +83,7 @@ namespace Jvedio
                 {
                     try
                     {
-                        this.Dispatcher.BeginInvoke(new Action(() => { statusText.Text = $"扫描指定文件夹"; }), System.Windows.Threading.DispatcherPriority.Render);
+                        this.Dispatcher.BeginInvoke(new Action(() => { statusText.Text = Jvedio.Language.Resources.Status_ScanDir; }), System.Windows.Threading.DispatcherPriority.Render);
                         List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First()), ct);
                         Scan.InsertWithNfo(filepaths, ct);
 
@@ -100,7 +100,7 @@ namespace Jvedio
 
             //启动主窗口
             Main main = new Main();
-            statusText.Text = "初始化影片……";
+            statusText.Text = Jvedio.Language.Resources.Status_InitMovie;
             try
             {
                 main.InitMovie();
@@ -151,7 +151,7 @@ namespace Jvedio
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
-            statusText.Text = "更新配置文件……";
+            statusText.Text = Jvedio.Language.Resources.Status_UpdateConfig;
             try
             {
                 if (Properties.Settings.Default.UpgradeRequired)
@@ -166,7 +166,7 @@ namespace Jvedio
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
-            statusText.Text = "修复设置错误……";
+            statusText.Text = Jvedio.Language.Resources.Status_RepairConfig;
             try
             {
                 CheckFile(); //判断文件是否存在
@@ -180,7 +180,7 @@ namespace Jvedio
             if (!Directory.Exists(Properties.Settings.Default.BasePicPath)) Properties.Settings.Default.BasePicPath = AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
 
 
-            statusText.Text = "创建文件夹……";
+            statusText.Text = Jvedio.Language.Resources.Status_CreateDir;
             try
             {
                 if (!Directory.Exists("log")) { Directory.CreateDirectory("log"); }//创建 Log文件夹
@@ -194,17 +194,16 @@ namespace Jvedio
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
-            statusText.Text = "初始化数据库……";
+            statusText.Text = Jvedio.Language.Resources.Status_InitDatabase;
             try
             {
                 InitDataBase();//初始化数据库
                 //InitJav321IDConverter();
                 //初始化参数
-                statusText.Text = "初始化识别码参数……";
+                statusText.Text = Jvedio.Language.Resources.Status_InitID;
                 Identify.InitFanhaoList();
-                statusText.Text = "初始化扫描参数……";
+                statusText.Text = Jvedio.Language.Resources.Status_InitScan;
                 Scan.InitSearchPattern();
-                statusText.Text = "初始化变量……";
                 InitVariable();
             }
             catch (Exception ex)
@@ -212,7 +211,6 @@ namespace Jvedio
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
-            statusText.Text = "修改配置到 XML……";
             try
             {
                 SaveScanPathToXml();
@@ -226,9 +224,9 @@ namespace Jvedio
             }
             try
             {
-                statusText.Text = "清除超于10天的最近观看……";
+                statusText.Text = Jvedio.Language.Resources.Status_ClearRecentWatch;
                 ClearDateBefore(DateTime.Now.AddDays(-10));
-                statusText.Text = "清除超于10天的日志文件……";
+                statusText.Text = Jvedio.Language.Resources.Status_ClearLog;
                 ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log");
                 ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\NetWork");
                 ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\scanlog");
@@ -239,13 +237,13 @@ namespace Jvedio
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
-            statusText.Text = "网络配置初始化……";
+            statusText.Text = Jvedio.Language.Resources.Status_InitNet;
             try
             {
 
 
                 Net.Init();
-                statusText.Text = "创建图片文件夹……";
+                statusText.Text = Jvedio.Language.Resources.Status_CreateDir;
                 if (!Directory.Exists(BasePicPath + "ScreenShot\\")) { Directory.CreateDirectory(BasePicPath + "ScreenShot\\"); }
                 if (!Directory.Exists(BasePicPath + "SmallPic\\")) { Directory.CreateDirectory(BasePicPath + "SmallPic\\"); }
                 if (!Directory.Exists(BasePicPath + "BigPic\\")) { Directory.CreateDirectory(BasePicPath + "BigPic\\"); }
@@ -274,7 +272,7 @@ namespace Jvedio
 
                 //启动主窗口
                 Main main = new Main();
-                statusText.Text = "初始化影片……";
+                statusText.Text = Jvedio.Language.Resources.Status_InitMovie;
                 try
                 {
                     main.InitMovie();
@@ -303,7 +301,7 @@ namespace Jvedio
 
                 await Task.Run(() =>
                 {
-                    this.Dispatcher.BeginInvoke(new Action(() => { statusText.Text = $"扫描指定文件夹"; }), System.Windows.Threading.DispatcherPriority.Render);
+                    this.Dispatcher.BeginInvoke(new Action(() => { statusText.Text = Jvedio.Language.Resources.Status_ScanDir; }), System.Windows.Threading.DispatcherPriority.Render);
                     List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First()), ct);
                     Scan.InsertWithNfo(filepaths, ct);
                 }, cts.Token);
@@ -332,13 +330,13 @@ namespace Jvedio
         {
             if (!File.Exists(@"x64\SQLite.Interop.dll") || !File.Exists(@"x86\SQLite.Interop.dll"))
             {
-                MessageBox.Show("缺失 SQLite.Interop.dll", "Jvedio");
+                MessageBox.Show($"{Jvedio.Language.Resources.Missing} SQLite.Interop.dll", "Jvedio");
                 this.Close();
             }
 
             if (!File.Exists("BusActress.sqlite"))
             {
-                MessageBox.Show("缺失 BusActress.sqlite", "Jvedio");
+                MessageBox.Show($"{Jvedio.Language.Resources.Missing} BusActress.sqlite", "Jvedio");
                 this.Close();
             }
         }
@@ -461,9 +459,9 @@ namespace Jvedio
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            OpenFileDialog1.Title = "选择数据库";
+            OpenFileDialog1.Title = Jvedio.Language.Resources.ChooseDataBase;
             OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            OpenFileDialog1.Filter = "Sqlite 文件|*.sqlite";
+            OpenFileDialog1.Filter = $"Sqlite {Jvedio.Language.Resources.File}|*.sqlite";
             OpenFileDialog1.Multiselect = true;
             OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -473,7 +471,7 @@ namespace Jvedio
                 foreach (var item in names)
                 {
                     string name = item.Split('\\').Last().Split('.').First().ToLower();
-                    if (name == "info" || name == "新建视频库") return;
+                    if (name == "info" || name == Jvedio.Language.Resources.NewLibrary) return;
 
                     if (!DataBase.IsProPerSqlite(item)) continue;
 
@@ -481,7 +479,7 @@ namespace Jvedio
 
                     if (File.Exists($"DataBase\\{name}.sqlite"))
                     {
-                        if (new Msgbox(this, $"已存在 {name}，是否覆盖？").ShowDialog() == true)
+                        if (new Msgbox(this, $"{Jvedio.Language.Resources.Message_AlreadyExist} {name} {Jvedio.Language.Resources.IsToOverWrite} ？").ShowDialog() == true)
                         {
                             File.Copy(item, $"DataBase\\{name}.sqlite", true);
 
@@ -525,10 +523,10 @@ namespace Jvedio
             TextBox TextBox = stackPanel.Children[1] as TextBox;
             name = TextBox.Text.ToLower();
 
-            if (name == "info" || name == "新建视频库") return;
+            if (name == "info" || name == Jvedio.Language.Resources.NewLibrary) return;
 
 
-            if (new Msgbox(this, $"是否确认删除{name}?").ShowDialog() == true)
+            if (new Msgbox(this, $"{Jvedio.Language.Resources.IsToDelete} {name}?").ShowDialog() == true)
             {
                 string dirpath = DateTime.Now.ToString("yyyyMMddHHss");
                 Directory.CreateDirectory($"BackUp\\{dirpath}");
@@ -600,18 +598,18 @@ namespace Jvedio
                     db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
                     db.CreateTable(DataBase.SQLITETABLE_JAVDB);
 
-                    if (vieModel_StartUp.DataBases.Contains("新建视频库")) vieModel_StartUp.DataBases.Remove("新建视频库");
+                    if (vieModel_StartUp.DataBases.Contains(Jvedio.Language.Resources.NewLibrary)) vieModel_StartUp.DataBases.Remove( Jvedio.Language.Resources.NewLibrary);
 
                     textBox.IsEnabled = false;
                     textBox.IsReadOnly = true;
                     textBox.Cursor = Cursors.Hand;
 
                     vieModel_StartUp.DataBases.Add(name);
-                    vieModel_StartUp.DataBases.Add("新建视频库");
+                    vieModel_StartUp.DataBases.Add( Jvedio.Language.Resources.NewLibrary);
                 }
                 else
                 {
-                    textBox.Text = "新建视频库";
+                    textBox.Text =  Jvedio.Language.Resources.NewLibrary;
                 }
             }
 

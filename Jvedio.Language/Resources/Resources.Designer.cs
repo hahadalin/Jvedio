@@ -232,6 +232,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 选择视频库 的本地化字符串。
+        /// </summary>
+        public static string ChooseDataBase {
+            get {
+                return ResourceManager.GetString("ChooseDataBase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 清除 的本地化字符串。
         /// </summary>
         public static string Clear {
@@ -277,6 +286,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 文件 的本地化字符串。
+        /// </summary>
+        public static string File {
+            get {
+                return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 文件大小 的本地化字符串。
         /// </summary>
         public static string FileSize {
@@ -318,6 +336,15 @@ namespace Jvedio.Language {
         public static string ImageType {
             get {
                 return ResourceManager.GetString("ImageType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 导入 的本地化字符串。
+        /// </summary>
+        public static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
             }
         }
         
@@ -372,6 +399,33 @@ namespace Jvedio.Language {
         public static string InputTitle6 {
             get {
                 return ResourceManager.GetString("InputTitle6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 是否删除 的本地化字符串。
+        /// </summary>
+        public static string IsToDelete {
+            get {
+                return ResourceManager.GetString("IsToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 是否覆盖 的本地化字符串。
+        /// </summary>
+        public static string IsToOverWrite {
+            get {
+                return ResourceManager.GetString("IsToOverWrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 加载中 的本地化字符串。
+        /// </summary>
+        public static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
             }
         }
         
@@ -889,6 +943,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 缺失 的本地化字符串。
+        /// </summary>
+        public static string Missing {
+            get {
+                return ResourceManager.GetString("Missing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 影片 的本地化字符串。
         /// </summary>
         public static string Movie {
@@ -952,11 +1015,29 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 我的视频 的本地化字符串。
+        /// </summary>
+        public static string MyLibrary {
+            get {
+                return ResourceManager.GetString("MyLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 我的清单 的本地化字符串。
         /// </summary>
         public static string MyList {
             get {
                 return ResourceManager.GetString("MyList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 新建视频库 的本地化字符串。
+        /// </summary>
+        public static string NewLibrary {
+            get {
+                return ResourceManager.GetString("NewLibrary", resourceCulture);
             }
         }
         
@@ -1119,6 +1200,105 @@ namespace Jvedio.Language {
         public static string Sorting {
             get {
                 return ResourceManager.GetString("Sorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 清除超于10天的日志文件…… 的本地化字符串。
+        /// </summary>
+        public static string Status_ClearLog {
+            get {
+                return ResourceManager.GetString("Status_ClearLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 清除超于10天的最近观看…… 的本地化字符串。
+        /// </summary>
+        public static string Status_ClearRecentWatch {
+            get {
+                return ResourceManager.GetString("Status_ClearRecentWatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 创建文件夹…… 的本地化字符串。
+        /// </summary>
+        public static string Status_CreateDir {
+            get {
+                return ResourceManager.GetString("Status_CreateDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 初始化数据库…… 的本地化字符串。
+        /// </summary>
+        public static string Status_InitDatabase {
+            get {
+                return ResourceManager.GetString("Status_InitDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 初始化识别码参数…… 的本地化字符串。
+        /// </summary>
+        public static string Status_InitID {
+            get {
+                return ResourceManager.GetString("Status_InitID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 初始化影片…… 的本地化字符串。
+        /// </summary>
+        public static string Status_InitMovie {
+            get {
+                return ResourceManager.GetString("Status_InitMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 网络配置初始化…… 的本地化字符串。
+        /// </summary>
+        public static string Status_InitNet {
+            get {
+                return ResourceManager.GetString("Status_InitNet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 初始化扫描参数…… 的本地化字符串。
+        /// </summary>
+        public static string Status_InitScan {
+            get {
+                return ResourceManager.GetString("Status_InitScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 修复设置错误…… 的本地化字符串。
+        /// </summary>
+        public static string Status_RepairConfig {
+            get {
+                return ResourceManager.GetString("Status_RepairConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 扫描指定文件夹 的本地化字符串。
+        /// </summary>
+        public static string Status_ScanDir {
+            get {
+                return ResourceManager.GetString("Status_ScanDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 更新配置文件…… 的本地化字符串。
+        /// </summary>
+        public static string Status_UpdateConfig {
+            get {
+                return ResourceManager.GetString("Status_UpdateConfig", resourceCulture);
             }
         }
         

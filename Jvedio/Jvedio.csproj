@@ -267,7 +267,7 @@
     <Compile Include="Window\PopupWindow.xaml.cs">
       <DependentUpon>PopupWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Window\Msgbox.xaml.cs">
+    <Compile Include="Controls\Msgbox.xaml.cs">
       <DependentUpon>Msgbox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Library\GlobalVariable.cs" />
@@ -400,7 +400,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Window\Msgbox.xaml">
+    <Page Include="Controls\Msgbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Jvedio"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         mc:Ignorable="d"
         Title="DialogInput" 
         WindowStyle="None"
@@ -62,24 +63,33 @@
 
     </Window.Resources>
     <Grid KeyUp="Grid_KeyUp">
-        <Border CornerRadius="0" Background="Black" Opacity="0.5" Margin="5"/>
-        <Grid Width="500" Height="auto"  >
-            <Border x:Name="border"  CornerRadius="10" Background="{DynamicResource BackgroundMain}" Margin="5" Height="{Binding ElementName=TextBlock, Path=ActualHeight,TargetNullValue=200,Converter={StaticResource HeightConverter},Mode=OneWay}" >
+        <Border CornerRadius="0" Background="Black" Opacity="0.5" />
+        <Grid Width="auto" Height="auto" VerticalAlignment="Center"  HorizontalAlignment="Center" >
+
+            <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
+                <Border.Effect>
+                    <BlurEffect Radius="4" KernelType="Box"  RenderingBias="Quality"/>
+                </Border.Effect>
+            </Border>
+
+            <Border x:Name="border"  CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5" Height="{Binding ElementName=TextBlock, Path=ActualHeight,TargetNullValue=200,Converter={StaticResource HeightConverter},Mode=OneWay}" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                        <TextBox MaxHeight="300" Grid.Row="0"  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource ViewTextBox}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Text="123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123" >
-                    </TextBox>
+                    <TextBox MaxHeight="300" Grid.Row="0" Margin="20 0"  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource ViewTextBox}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Text="123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123" />
 
 
 
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"  >
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"   >
                         <fa:ImageAwesome Visibility="Collapsed" x:Name="WaitingImageAwesome"  VerticalAlignment="Center"  Margin="5 0"  Height="20" Icon="Refresh" Spin="True" Foreground="{DynamicResource ForegroundSearch}"/>
 
-                        <Button  x:Name="CancelButton" Margin="5 0"  Style="{StaticResource ButtonStyleFill}" FontSize="20" Background="Red"    Content="取 消" Width="80" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
-                        <Button x:Name="YesButton"  Margin="5 0"  Style="{StaticResource ButtonStyleFill}" FontSize="20"   Content="确 定" Width="80" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>
+                        <!--<Button  x:Name="CancelButton" Margin="5 0"  Style="{StaticResource ButtonTrigger_No}" FontSize="20" Background="Red"    Content="{x:Static lang:Resources.Cancel}" Width="80" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
+                        <Button x:Name="YesButton"  Margin="5 0"  Style="{StaticResource ButtonTrigger_Yes}" FontSize="20"   Content="{x:Static lang:Resources.Confirm}" Width="80" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>-->
+
+                        <Button  x:Name="CancelButton"  Padding="5" Style="{StaticResource ButtonTrigger_No}" FontSize="20" Margin="10"  Background="Transparent"  BorderThickness="0" Content="{x:Static lang:Resources.Cancel}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
+                        <Button  x:Name="YesButton"   Padding="5"  Style="{StaticResource ButtonTrigger_Yes}" FontSize="20" Margin="10"  Background="Transparent"  BorderThickness="0" Content="{x:Static lang:Resources.Confirm}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>
 
 
                     </StackPanel>
