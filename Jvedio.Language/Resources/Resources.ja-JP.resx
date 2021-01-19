@@ -651,4 +651,7 @@
   <data name="ScrollToEnd" xml:space="preserve">
     <value>最後までスクロールします</value>
   </data>
+  <data name="Basic" xml:space="preserve">
+    <value>基本</value>
+  </data>
 </root>

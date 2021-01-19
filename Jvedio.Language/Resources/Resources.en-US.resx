@@ -651,4 +651,7 @@
   <data name="ScrollToEnd" xml:space="preserve">
     <value>ScrollToEnd</value>
   </data>
+  <data name="Basic" xml:space="preserve">
+    <value>Basic</value>
+  </data>
 </root>

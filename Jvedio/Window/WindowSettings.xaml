@@ -8,6 +8,7 @@
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         x:Class="Jvedio.Settings"
         mc:Ignorable="d"
         Title="设置" 
@@ -558,7 +559,7 @@
 
 
             <StackPanel Grid.Column="0"  Height="auto" Width="200" VerticalAlignment="Stretch"  Background="{DynamicResource BackgroundSide}"   x:Name="RadioButtonStackPanel" >
-                <RadioButton IsChecked="True" Click="LabelMouseUp" Content="基本"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 20 5 0"/>
+                <RadioButton IsChecked="True" Click="LabelMouseUp" Content="{x:Static lang:Resources.Basic}"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 20 5 0"/>
                 <RadioButton Click="LabelMouseUp" Content="扫描"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
                 <RadioButton Click="LabelMouseUp" Content="同步信息"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
                 <RadioButton Click="LabelMouseUp" Content="显示"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>

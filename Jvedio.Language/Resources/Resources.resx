@@ -651,4 +651,7 @@
   <data name="ScrollToEnd" xml:space="preserve">
     <value>滚动到最后</value>
   </data>
+  <data name="Basic" xml:space="preserve">
+    <value>基本</value>
+  </data>
 </root>

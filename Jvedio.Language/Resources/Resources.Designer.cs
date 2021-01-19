@@ -223,6 +223,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 基本 的本地化字符串。
+        /// </summary>
+        public static string Basic {
+            get {
+                return ResourceManager.GetString("Basic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 批处理 的本地化字符串。
         /// </summary>
         public static string BatchProcessing {
