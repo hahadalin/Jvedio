@@ -531,4 +531,13 @@
   <data name="Message_AlreadyExist" xml:space="preserve">
     <value>已存在</value>
   </data>
+  <data name="Wait" xml:space="preserve">
+    <value>请稍等……</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
 </root>

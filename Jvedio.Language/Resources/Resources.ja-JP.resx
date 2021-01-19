@@ -531,4 +531,13 @@
   <data name="Message_AlreadyExist" xml:space="preserve">
     <value>存在した</value>
   </data>
+  <data name="Wait" xml:space="preserve">
+    <value>お待ちください……</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>確認</value>
+  </data>
 </root>

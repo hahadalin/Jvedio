@@ -531,4 +531,13 @@
   <data name="Message_AlreadyExist" xml:space="preserve">
     <value>Existed</value>
   </data>
+  <data name="Wait" xml:space="preserve">
+    <value>Please wait……</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
 </root>

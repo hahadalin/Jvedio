@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Jvedio"
+         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         mc:Ignorable="d"
         Title="DialogInput" Height="500" Width="500"
         WindowStyle="None"
@@ -69,8 +70,8 @@
                     <TextBox Height="auto" Grid.Row="1" PreviewKeyUp="ContentTextBox_PreviewKeyUp" x:Name="ContentTextBox" FontSize="25" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" Background="{DynamicResource BackgroundTitle}" BorderThickness="0" Text="内容" Margin="20 0 10 0"   ></TextBox>
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                        <Button Padding="5" Style="{StaticResource ButtonTrigger}" FontSize="20" Margin="10 0"  Background="Transparent"  BorderThickness="0" Content="取 消"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
-                        <Button  Padding="5"  Style="{StaticResource ButtonTrigger}" FontSize="20" Margin="10 0"  Background="Transparent"  BorderThickness="0" Content="确 定"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>
+                        <Button Padding="5" Style="{StaticResource ButtonTrigger}" FontSize="20" Margin="10 0"  Background="Transparent"  BorderThickness="0" Content="{x:Static lang:Resources.Cancel}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
+                        <Button  Padding="5"  Style="{StaticResource ButtonTrigger}" FontSize="20" Margin="10 0"  Background="Transparent"  BorderThickness="0" Content="{x:Static lang:Resources.Confirm}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>
 
                     </StackPanel>
 

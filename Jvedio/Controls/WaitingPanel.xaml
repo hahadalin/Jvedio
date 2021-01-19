@@ -5,7 +5,7 @@
               xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Jvedio"
-             
+             xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
              xmlns:Jc="clr-namespace:Jvedio.Controls"
              
              mc:Ignorable="d" 
@@ -34,10 +34,10 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"  >
                         <fa:ImageAwesome x:Name="WaitingImageAwesome"  VerticalAlignment="Center"  Margin="5 0"  Height="20" Icon="Refresh" Spin="True" Foreground="{DynamicResource ForegroundSearch}"/>
-                        <TextBox Background="Transparent" Margin="20 5" BorderThickness="0" MaxHeight="300" Grid.Row="0"  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="请稍等……" />
+                        <TextBox Background="Transparent" Margin="20 5" BorderThickness="0" MaxHeight="300" Grid.Row="0"  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Wait}" />
 
                     </StackPanel >
-                    <Button  Visibility="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=ShowCancelButton}" Cursor="Hand" Grid.Row="1"  x:Name="CancelButton" Margin="10 20"  Style="{StaticResource ButtonStyleFill}" FontSize="18" Background="Red"    Content="取消" Width="120" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="onButtonClick" />
+                    <Button  Visibility="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=ShowCancelButton}" Cursor="Hand" Grid.Row="1"  x:Name="CancelButton" Margin="10 20"  Style="{StaticResource ButtonStyleFill}" FontSize="18" Background="Red"    Content="{x:Static lang:Resources.Cancel}" Width="120" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="onButtonClick" />
 
 
                 </Grid>
