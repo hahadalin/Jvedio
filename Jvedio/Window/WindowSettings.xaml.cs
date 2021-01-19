@@ -775,12 +775,12 @@ namespace Jvedio
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://www.kancloud.cn/hitchao/jvedio/1921335");
+            Process.Start("https://github.com/hitchao/Jvedio/wiki/HowToSetYoudaoTranslation");
         }
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://www.kancloud.cn/hitchao/jvedio/1921336");
+            Process.Start("https://github.com/hitchao/Jvedio/wiki/HowToSetBaiduAI");
         }
 
         private void PathListBox_DragOver(object sender, DragEventArgs e)
@@ -842,8 +842,8 @@ namespace Jvedio
             vieModel_Settings.Servers.Add(new Server()
             {
                 IsEnable = true,
-                Url = "请输入网址",
-                Cookie = "无",
+                Url = "https://",
+                Cookie =Jvedio.Language.Resources.Nothing,
                 Available = 0,
                 ServerTitle = "",
                 LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")

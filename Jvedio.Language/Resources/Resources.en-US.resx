@@ -654,4 +654,226 @@
   <data name="Basic" xml:space="preserve">
     <value>Basic</value>
   </data>
+  <data name="Scan" xml:space="preserve">
+    <value>Scan</value>
+  </data>
+  <data name="Translate" xml:space="preserve">
+    <value>Translation</value>
+  </data>
+  <data name="VedioProcessing" xml:space="preserve">
+    <value>Video Processing</value>
+  </data>
+  <data name="CustomAppearance" xml:space="preserve">
+    <value>Custom Appearance</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="AI" xml:space="preserve">
+    <value>Artificial Intelligence</value>
+  </data>
+  <data name="CloseToBar" xml:space="preserve">
+    <value>Minimize after closing</value>
+  </data>
+  <data name="RandomWhenStartUp" xml:space="preserve">
+    <value>Random display after launch</value>
+  </data>
+  <data name="NotShowLibrary" xml:space="preserve">
+    <value>Don't show library selection when opening</value>
+  </data>
+  <data name="AutoDelete" xml:space="preserve">
+    <value>Automatically delete non-existent videos</value>
+  </data>
+  <data name="DeleteFileWhenDeleteInfo" xml:space="preserve">
+    <value>Delete file and delete movie information</value>
+  </data>
+  <data name="ScanWhenRefresh" xml:space="preserve">
+    <value>Scan movies when the main interface refreshes</value>
+  </data>
+  <data name="BossKey" xml:space="preserve">
+    <value>Boss key</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Skin" xml:space="preserve">
+    <value>Skin</value>
+  </data>
+  <data name="ImageSavePath" xml:space="preserve">
+    <value>Picture save path</value>
+  </data>
+  <data name="ChooseDir" xml:space="preserve">
+    <value>Select folder</value>
+  </data>
+  <data name="Choose" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ShowOtherOptions" xml:space="preserve">
+    <value>---Show other options---</value>
+  </data>
+  <data name="ShowRecentCreate" xml:space="preserve">
+    <value>Show the number of days recently created (day)</value>
+  </data>
+  <data name="ShowRecentPlay" xml:space="preserve">
+    <value>Show the number of days played recently (day)</value>
+  </data>
+  <data name="SearchCandidateNumber" xml:space="preserve">
+    <value>Number of search candidates</value>
+  </data>
+  <data name="DirClassificationNumber" xml:space="preserve">
+    <value>Sort by number of folders</value>
+  </data>
+  <data name="DirClassificationDepth" xml:space="preserve">
+    <value>Maximum depth of directories in the category of folders</value>
+  </data>
+  <data name="SetPlayer" xml:space="preserve">
+    <value>Specify the player</value>
+  </data>
+  <data name="SubsectionSpiltChar" xml:space="preserve">
+    <value>Segmented video separator</value>
+  </data>
+  <data name="ScanDirWhenStartUp" xml:space="preserve">
+    <value>Scan the following directories at startup</value>
+  </data>
+  <data name="ImportNFOWhenScan" xml:space="preserve">
+    <value>Import the scanned NFO file at the same time (overwrite the existing information)</value>
+  </data>
+  <data name="UrlList" xml:space="preserve">
+    <value>Url List</value>
+  </data>
+  <data name="Attention_UrlTest" xml:space="preserve">
+    <value>Note: The newly added URL can only be saved after passing the test, and the server name can be modified only if the server name is not empty [Enable]</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="UrlName" xml:space="preserve">
+    <value>Server Name</value>
+  </data>
+  <data name="LatestUpdateDate" xml:space="preserve">
+    <value>Last update time</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="SaveToNFO" xml:space="preserve">
+    <value>Save information to NFO</value>
+  </data>
+  <data name="ToolTip_SameAsVedio" xml:space="preserve">
+    <value>If it is not filled, it will be the same directory</value>
+  </data>
+  <data name="TimeOut_CloseConnection" xml:space="preserve">
+    <value>Forcibly close the connection</value>
+  </data>
+  <data name="TimeOut_HTTP" xml:space="preserve">
+    <value>HTTP timeout</value>
+  </data>
+  <data name="TimeOut_TCP" xml:space="preserve">
+    <value>TCP timeout</value>
+  </data>
+  <data name="TimeOut_DownloadImage" xml:space="preserve">
+    <value>Image download timed out</value>
+  </data>
+  <data name="TimeOut_ReadWrite" xml:space="preserve">
+    <value>Stream read timeout</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="Nothing" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="ImageStretch" xml:space="preserve">
+    <value>Picture auto zoom</value>
+  </data>
+  <data name="StatusBar" xml:space="preserve">
+    <value>Status Bar</value>
+  </data>
+  <data name="ShowFIlename" xml:space="preserve">
+    <value>Display the file name when the title is empty</value>
+  </data>
+  <data name="ShowTranslation" xml:space="preserve">
+    <value>Title shows translation result</value>
+  </data>
+  <data name="ShowTranslate2" xml:space="preserve">
+    <value>Summary shows translation results</value>
+  </data>
+  <data name="DetailViewAll" xml:space="preserve">
+    <value>Browse all movies in the database left and right in the details window</value>
+  </data>
+  <data name="FormEffect" xml:space="preserve">
+    <value>Window effect</value>
+  </data>
+  <data name="FadeInOut" xml:space="preserve">
+    <value>Form fades in and out</value>
+  </data>
+  <data name="Opacity" xml:space="preserve">
+    <value>Opacity</value>
+  </data>
+  <data name="FunctionBar" xml:space="preserve">
+    <value>Function bar</value>
+  </data>
+  <data name="Youdao" xml:space="preserve">
+    <value>Youdao Translation</value>
+  </data>
+  <data name="BaiduFaceRecognition" xml:space="preserve">
+    <value>Baidu face recognition</value>
+  </data>
+  <data name="ScreenShotToPreviewDir" xml:space="preserve">
+    <value>Screenshot to preview image directory</value>
+  </data>
+  <data name="FFmpegPath" xml:space="preserve">
+    <value>FFmpeg.exe path</value>
+  </data>
+  <data name="ChooseFFmpeg" xml:space="preserve">
+    <value>Select the FFmpeg.exe file</value>
+  </data>
+  <data name="ScreenShotNumber" xml:space="preserve">
+    <value>Total number of pictures captured</value>
+  </data>
+  <data name="SkipBegin" xml:space="preserve">
+    <value>Skip the beginning (minutes)</value>
+  </data>
+  <data name="SkipEnd" xml:space="preserve">
+    <value>Skip the end (minutes)</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Stamp" xml:space="preserve">
+    <value>Stamp</value>
+  </data>
+  <data name="BackgroundImage" xml:space="preserve">
+    <value>Background Image</value>
+  </data>
+  <data name="DeleteSpace" xml:space="preserve">
+    <value>Remove spaces</value>
+  </data>
+  <data name="AutoAddStamp" xml:space="preserve">
+    <value>Automatically add Translated stamp</value>
+  </data>
+  <data name="OuterSplitChar" xml:space="preserve">
+    <value>Information external separator</value>
+  </data>
+  <data name="InnerSplitChar" xml:space="preserve">
+    <value>Information internal separator</value>
+  </data>
+  <data name="RenameRule" xml:space="preserve">
+    <value>Rename rules</value>
+  </data>
+  <data name="RenamePreview" xml:space="preserve">
+    <value>Rename preview</value>
+  </data>
+  <data name="Attention_Rename" xml:space="preserve">
+    <value>Note: If you add content to the naming rule, if the corresponding field is empty when naming, the new content will not be deleted automatically, such as: {id}_({title}), if {title} is empty, then The brackets on both sides will not be deleted automatically</value>
+  </data>
 </root>

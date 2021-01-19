@@ -654,4 +654,226 @@
   <data name="Basic" xml:space="preserve">
     <value>基本</value>
   </data>
+  <data name="Scan" xml:space="preserve">
+    <value>走査</value>
+  </data>
+  <data name="Translate" xml:space="preserve">
+    <value>翻訳</value>
+  </data>
+  <data name="VedioProcessing" xml:space="preserve">
+    <value>ビデオ処理</value>
+  </data>
+  <data name="CustomAppearance" xml:space="preserve">
+    <value>カスタム外観</value>
+  </data>
+  <data name="AI" xml:space="preserve">
+    <value>人工知能</value>
+  </data>
+  <data name="CloseToBar" xml:space="preserve">
+    <value>閉じた後に最小化する</value>
+  </data>
+  <data name="RandomWhenStartUp" xml:space="preserve">
+    <value>発売後のランダム表示</value>
+  </data>
+  <data name="NotShowLibrary" xml:space="preserve">
+    <value>開くときにライブラリの選択を表示しない</value>
+  </data>
+  <data name="AutoDelete" xml:space="preserve">
+    <value>存在しない動画を自動的に削除する</value>
+  </data>
+  <data name="DeleteFileWhenDeleteInfo" xml:space="preserve">
+    <value>ファイルの削除と映画情報の削除</value>
+  </data>
+  <data name="ScanWhenRefresh" xml:space="preserve">
+    <value>メインインターフェイスが更新されたら映画をスキャンする</value>
+  </data>
+  <data name="BossKey" xml:space="preserve">
+    <value>ボスキー</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Skin" xml:space="preserve">
+    <value>肌</value>
+  </data>
+  <data name="ImageSavePath" xml:space="preserve">
+    <value>画像保存パス</value>
+  </data>
+  <data name="ChooseDir" xml:space="preserve">
+    <value>フォルダーを選択</value>
+  </data>
+  <data name="Choose" xml:space="preserve">
+    <value>選択する</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>保存する</value>
+  </data>
+  <data name="ShowOtherOptions" xml:space="preserve">
+    <value>---他のオプションを表示---</value>
+  </data>
+  <data name="ShowRecentCreate" xml:space="preserve">
+    <value>最近作成された日数を表示する（日）</value>
+  </data>
+  <data name="ShowRecentPlay" xml:space="preserve">
+    <value>最近プレイした日数を表示する（日）</value>
+  </data>
+  <data name="SearchCandidateNumber" xml:space="preserve">
+    <value>検索候補の数</value>
+  </data>
+  <data name="DirClassificationNumber" xml:space="preserve">
+    <value>フォルダの数で並べ替え</value>
+  </data>
+  <data name="DirClassificationDepth" xml:space="preserve">
+    <value>フォルダ分類におけるディレクトリの最大深度（床）</value>
+  </data>
+  <data name="SetPlayer" xml:space="preserve">
+    <value>プレーヤーを指定します</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>リセット</value>
+  </data>
+  <data name="SubsectionSpiltChar" xml:space="preserve">
+    <value>セグメント化されたビデオセパレータ</value>
+  </data>
+  <data name="ScanDirWhenStartUp" xml:space="preserve">
+    <value>起動時に次のディレクトリをスキャンします</value>
+  </data>
+  <data name="ImportNFOWhenScan" xml:space="preserve">
+    <value>スキャンしたNFOファイルを同時にインポートします（既存の情報を上書きします）</value>
+  </data>
+  <data name="UrlList" xml:space="preserve">
+    <value>サーバーソース</value>
+  </data>
+  <data name="Attention_UrlTest" xml:space="preserve">
+    <value>注：新しく追加されたURLは、テストに合格した場合にのみ保存でき、サーバー名は、サーバー名が空でない場合にのみ変更できます</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>有効にする</value>
+  </data>
+  <data name="Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>状態</value>
+  </data>
+  <data name="UrlName" xml:space="preserve">
+    <value>サーバーの名前</value>
+  </data>
+  <data name="LatestUpdateDate" xml:space="preserve">
+    <value>最終更新時刻</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>オプション</value>
+  </data>
+  <data name="SaveToNFO" xml:space="preserve">
+    <value>NFOに情報を保存する</value>
+  </data>
+  <data name="ToolTip_SameAsVedio" xml:space="preserve">
+    <value>埋められていない場合は、同じディレクトリになります</value>
+  </data>
+  <data name="TimeOut_CloseConnection" xml:space="preserve">
+    <value>接続を強制的に閉じます</value>
+  </data>
+  <data name="TimeOut_HTTP" xml:space="preserve">
+    <value>HTTPタイムアウト</value>
+  </data>
+  <data name="TimeOut_TCP" xml:space="preserve">
+    <value>TCPタイムアウト</value>
+  </data>
+  <data name="TimeOut_DownloadImage" xml:space="preserve">
+    <value>画像のダウンロードがタイムアウトしました</value>
+  </data>
+  <data name="TimeOut_ReadWrite" xml:space="preserve">
+    <value>ストリーム読み取りタイムアウト</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>テスト</value>
+  </data>
+  <data name="Nothing" xml:space="preserve">
+    <value>番号</value>
+  </data>
+  <data name="ImageStretch" xml:space="preserve">
+    <value>画像の自動ズーム</value>
+  </data>
+  <data name="StatusBar" xml:space="preserve">
+    <value>ステータスバー</value>
+  </data>
+  <data name="ShowFIlename" xml:space="preserve">
+    <value>タイトルが空のときにファイル名を表示する</value>
+  </data>
+  <data name="ShowTranslation" xml:space="preserve">
+    <value>タイトルは翻訳結果を示しています</value>
+  </data>
+  <data name="ShowTranslate2" xml:space="preserve">
+    <value>概要は翻訳結果を示しています</value>
+  </data>
+  <data name="DetailViewAll" xml:space="preserve">
+    <value>詳細ウィンドウでデータベース内のすべての映画を左右に閲覧する</value>
+  </data>
+  <data name="FormEffect" xml:space="preserve">
+    <value>ウィンドウ効果</value>
+  </data>
+  <data name="FadeInOut" xml:space="preserve">
+    <value>フォームがフェードインおよびフェードアウトします</value>
+  </data>
+  <data name="Opacity" xml:space="preserve">
+    <value>透明性</value>
+  </data>
+  <data name="FunctionBar" xml:space="preserve">
+    <value>ファンクションバー</value>
+  </data>
+  <data name="Youdao" xml:space="preserve">
+    <value>Youdao翻訳</value>
+  </data>
+  <data name="BaiduFaceRecognition" xml:space="preserve">
+    <value>Baiduの顔認識</value>
+  </data>
+  <data name="ScreenShotToPreviewDir" xml:space="preserve">
+    <value>画像ディレクトリをプレビューするためのスクリーンショット</value>
+  </data>
+  <data name="FFmpegPath" xml:space="preserve">
+    <value>FFmpeg.exeパス</value>
+  </data>
+  <data name="ChooseFFmpeg" xml:space="preserve">
+    <value>FFmpeg.exeファイルを選択します</value>
+  </data>
+  <data name="ScreenShotNumber" xml:space="preserve">
+    <value>キャプチャされた写真の総数</value>
+  </data>
+  <data name="SkipBegin" xml:space="preserve">
+    <value>最初をスキップ（分）</value>
+  </data>
+  <data name="SkipEnd" xml:space="preserve">
+    <value>終わりをスキップ（分）</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>日付</value>
+  </data>
+  <data name="Stamp" xml:space="preserve">
+    <value>ラベルスタンプ</value>
+  </data>
+  <data name="BackgroundImage" xml:space="preserve">
+    <value>背景画像</value>
+  </data>
+  <data name="DeleteSpace" xml:space="preserve">
+    <value>スペースを削除する</value>
+  </data>
+  <data name="AutoAddStamp" xml:space="preserve">
+    <value>日本のラベルスタンプを自動的に追加</value>
+  </data>
+  <data name="OuterSplitChar" xml:space="preserve">
+    <value>情報外部セパレータ</value>
+  </data>
+  <data name="InnerSplitChar" xml:space="preserve">
+    <value>情報内部セパレータ</value>
+  </data>
+  <data name="RenameRule" xml:space="preserve">
+    <value>ルールの名前を変更する</value>
+  </data>
+  <data name="RenamePreview" xml:space="preserve">
+    <value>プレビューの名前を変更</value>
+  </data>
+  <data name="Attention_Rename" xml:space="preserve">
+    <value>注：名前付けルールにコンテンツを追加する場合、名前を付けるときに対応するフィールドが空の場合、新しいコンテンツは自動的に削除されません。たとえば、{id} _（{title}）、{title}が空の場合、 両側のブラケットは自動的に削除されません</value>
+  </data>
 </root>

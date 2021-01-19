@@ -15,7 +15,6 @@ namespace Jvedio
     public static class Scan
     {
         public static double MinFileSize = Properties.Settings.Default.ScanMinFileSize * 1024 * 1024;
-
         public static List<string> SearchPattern = new List<string>();
 
 
@@ -23,7 +22,7 @@ namespace Jvedio
         {
             //视频后缀来自 Everything (位置：搜索-管理筛选器-视频-编辑)
 
-            MinFileSize = 0;
+            //MinFileSize = 0;
              SearchPattern = new List<string>();
             string ScanVetioType = Resource_String.ScanVetioType;
             foreach (var item in ScanVetioType.Split(','))

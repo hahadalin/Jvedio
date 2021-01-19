@@ -654,4 +654,226 @@
   <data name="Basic" xml:space="preserve">
     <value>基本</value>
   </data>
+  <data name="Scan" xml:space="preserve">
+    <value>扫描</value>
+  </data>
+  <data name="Translate" xml:space="preserve">
+    <value>翻译</value>
+  </data>
+  <data name="AI" xml:space="preserve">
+    <value>人工智能</value>
+  </data>
+  <data name="VedioProcessing" xml:space="preserve">
+    <value>视频处理</value>
+  </data>
+  <data name="CustomAppearance" xml:space="preserve">
+    <value>自定外观</value>
+  </data>
+  <data name="CloseToBar" xml:space="preserve">
+    <value>关闭后最小化</value>
+  </data>
+  <data name="RandomWhenStartUp" xml:space="preserve">
+    <value>启动后随机展示</value>
+  </data>
+  <data name="NotShowLibrary" xml:space="preserve">
+    <value>开启时不显示库选择</value>
+  </data>
+  <data name="AutoDelete" xml:space="preserve">
+    <value>自动删除不存在的影片</value>
+  </data>
+  <data name="DeleteFileWhenDeleteInfo" xml:space="preserve">
+    <value>删除文件同时删除影片信息</value>
+  </data>
+  <data name="ScanWhenRefresh" xml:space="preserve">
+    <value>主界面刷新时同时扫描影片</value>
+  </data>
+  <data name="BossKey" xml:space="preserve">
+    <value>老板键</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Skin" xml:space="preserve">
+    <value>皮肤</value>
+  </data>
+  <data name="ImageSavePath" xml:space="preserve">
+    <value>图片保存路径</value>
+  </data>
+  <data name="ChooseDir" xml:space="preserve">
+    <value>选择文件夹</value>
+  </data>
+  <data name="Choose" xml:space="preserve">
+    <value>选择</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="ShowOtherOptions" xml:space="preserve">
+    <value>---显示其他选项---</value>
+  </data>
+  <data name="ShowRecentCreate" xml:space="preserve">
+    <value>显示最近创建的天数（天）</value>
+  </data>
+  <data name="ShowRecentPlay" xml:space="preserve">
+    <value>显示最近播放的天数（天）</value>
+  </data>
+  <data name="SearchCandidateNumber" xml:space="preserve">
+    <value>搜索候选词数目（个）</value>
+  </data>
+  <data name="DirClassificationNumber" xml:space="preserve">
+    <value>按文件夹分类中显示的数目（个）</value>
+  </data>
+  <data name="DirClassificationDepth" xml:space="preserve">
+    <value>按文件夹分类中目录最大深度（层）</value>
+  </data>
+  <data name="SetPlayer" xml:space="preserve">
+    <value>指定播放器</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>恢复默认</value>
+  </data>
+  <data name="SubsectionSpiltChar" xml:space="preserve">
+    <value>分段视频分隔符</value>
+  </data>
+  <data name="ScanDirWhenStartUp" xml:space="preserve">
+    <value>启动时扫描以下目录</value>
+  </data>
+  <data name="ImportNFOWhenScan" xml:space="preserve">
+    <value>同时导入扫描出的NFO文件（覆盖已存在的信息）</value>
+  </data>
+  <data name="UrlList" xml:space="preserve">
+    <value>服务器源</value>
+  </data>
+  <data name="Attention_UrlTest" xml:space="preserve">
+    <value>注：新添加的网址测试通过才能保存，服务器名称不为空才能修改【启用】</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="Url" xml:space="preserve">
+    <value>服务器地址</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="UrlName" xml:space="preserve">
+    <value>服务器名称</value>
+  </data>
+  <data name="LatestUpdateDate" xml:space="preserve">
+    <value>上一次更新时间</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>选项</value>
+  </data>
+  <data name="SaveToNFO" xml:space="preserve">
+    <value>保存信息到NFO</value>
+  </data>
+  <data name="ToolTip_SameAsVedio" xml:space="preserve">
+    <value>不填则与视频同目录</value>
+  </data>
+  <data name="TimeOut_CloseConnection" xml:space="preserve">
+    <value>强制关闭连接</value>
+  </data>
+  <data name="TimeOut_HTTP" xml:space="preserve">
+    <value>HTTP 超时</value>
+  </data>
+  <data name="TimeOut_TCP" xml:space="preserve">
+    <value>TCP 超时</value>
+  </data>
+  <data name="TimeOut_DownloadImage" xml:space="preserve">
+    <value>图片下载超时</value>
+  </data>
+  <data name="TimeOut_ReadWrite" xml:space="preserve">
+    <value>流读取超时</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>测试</value>
+  </data>
+  <data name="Nothing" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="ImageStretch" xml:space="preserve">
+    <value>图片自动缩放</value>
+  </data>
+  <data name="StatusBar" xml:space="preserve">
+    <value>状态栏</value>
+  </data>
+  <data name="ShowFIlename" xml:space="preserve">
+    <value>标题为空时显示文件名</value>
+  </data>
+  <data name="ShowTranslation" xml:space="preserve">
+    <value>标题显示翻译结果</value>
+  </data>
+  <data name="ShowTranslate2" xml:space="preserve">
+    <value>摘要显示翻译结果</value>
+  </data>
+  <data name="DetailViewAll" xml:space="preserve">
+    <value>详情窗口左右浏览数据库所有影片</value>
+  </data>
+  <data name="FormEffect" xml:space="preserve">
+    <value>窗体效果</value>
+  </data>
+  <data name="FadeInOut" xml:space="preserve">
+    <value>窗体淡入淡出</value>
+  </data>
+  <data name="Opacity" xml:space="preserve">
+    <value>透明度</value>
+  </data>
+  <data name="FunctionBar" xml:space="preserve">
+    <value>功能栏</value>
+  </data>
+  <data name="Youdao" xml:space="preserve">
+    <value>有道翻译</value>
+  </data>
+  <data name="BaiduFaceRecognition" xml:space="preserve">
+    <value>百度人脸识别</value>
+  </data>
+  <data name="ScreenShotToPreviewDir" xml:space="preserve">
+    <value>截图到预览图目录</value>
+  </data>
+  <data name="FFmpegPath" xml:space="preserve">
+    <value>FFmpeg.exe 路径</value>
+  </data>
+  <data name="ChooseFFmpeg" xml:space="preserve">
+    <value>选择 FFmpeg.exe 文件</value>
+  </data>
+  <data name="ScreenShotNumber" xml:space="preserve">
+    <value>截取的图片总数</value>
+  </data>
+  <data name="SkipBegin" xml:space="preserve">
+    <value>跳过开头（分钟）</value>
+  </data>
+  <data name="SkipEnd" xml:space="preserve">
+    <value>跳过结尾（分钟）</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>日期</value>
+  </data>
+  <data name="Stamp" xml:space="preserve">
+    <value>标签戳</value>
+  </data>
+  <data name="BackgroundImage" xml:space="preserve">
+    <value>背景图</value>
+  </data>
+  <data name="DeleteSpace" xml:space="preserve">
+    <value>删除空格</value>
+  </data>
+  <data name="AutoAddStamp" xml:space="preserve">
+    <value>自动添加中字标签戳</value>
+  </data>
+  <data name="OuterSplitChar" xml:space="preserve">
+    <value>信息外部分隔符</value>
+  </data>
+  <data name="InnerSplitChar" xml:space="preserve">
+    <value>信息内部分隔符</value>
+  </data>
+  <data name="RenameRule" xml:space="preserve">
+    <value>重命名规则</value>
+  </data>
+  <data name="RenamePreview" xml:space="preserve">
+    <value>改名预览</value>
+  </data>
+  <data name="Attention_Rename" xml:space="preserve">
+    <value>注：如果在命名规则里添加内容，则命名的时候若对应字段为空，则新增的内容不会自动删除，如：{id}_（{title}），若 {title} 为空，则两边的括号不会自动删除</value>
+  </data>
 </root>
