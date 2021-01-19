@@ -876,4 +876,79 @@
   <data name="Attention_Rename" xml:space="preserve">
     <value>Note: If you add content to the naming rule, if the corresponding field is empty when naming, the new content will not be deleted automatically, such as: {id}_({title}), if {title} is empty, then The brackets on both sides will not be deleted automatically</value>
   </data>
+  <data name="TranslatedTitle" xml:space="preserve">
+    <value>Translated Title</value>
+  </data>
+  <data name="ReleaseDate" xml:space="preserve">
+    <value>Released Date</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="Director" xml:space="preserve">
+    <value>Director</value>
+  </data>
+  <data name="Genre" xml:space="preserve">
+    <value>Genre</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>Label</value>
+  </data>
+  <data name="Studio" xml:space="preserve">
+    <value>Studio</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="SampleMovie_Title" xml:space="preserve">
+    <value>IronMan1</value>
+  </data>
+  <data name="SampleMovie_TranslatedTitle" xml:space="preserve">
+    <value>IronMan1</value>
+  </data>
+  <data name="SampleMovie_Director" xml:space="preserve">
+    <value>乔恩·费儒</value>
+  </data>
+  <data name="SampleMovie_Genre" xml:space="preserve">
+    <value>动作 冒险 科幻</value>
+  </data>
+  <data name="SampleMovie_Tag" xml:space="preserve">
+    <value>color</value>
+  </data>
+  <data name="SampleMovie_Actor" xml:space="preserve">
+    <value>Robert Downey Jr./Gwyneth Paltrow/Terrence Howard/Jeff Bridges</value>
+  </data>
+  <data name="SampleMovie_Studio" xml:space="preserve">
+    <value>Marvel Studios</value>
+  </data>
+  <data name="SampleMovie_Label" xml:space="preserve">
+    <value>Label 1</value>
+  </data>
+  <data name="SampleMovie_Country" xml:space="preserve">
+    <value>United States</value>
+  </data>
+  <data name="Message_IsToReset" xml:space="preserve">
+    <value>Is to reset ?</value>
+  </data>
+  <data name="Message_CanNotBeNull" xml:space="preserve">
+    <value>Folder path cannot be empty</value>
+  </data>
+  <data name="Hint" xml:space="preserve">
+    <value>Prompt</value>
+  </data>
+  <data name="Message_TestError" xml:space="preserve">
+    <value>The test fails: 1. If the cookie is invalid, please copy the cookie again or 2. Retest or 3. Set the network timeout</value>
+  </data>
+  <data name="Message_NeedCookies" xml:space="preserve">
+    <value>The URL needs to be filled with Cookie!, and test once after filling in!</value>
+  </data>
+  <data name="BossKeyError" xml:space="preserve">
+    <value>Hotkey conflict!</value>
+  </data>
 </root>

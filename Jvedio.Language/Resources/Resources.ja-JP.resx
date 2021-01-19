@@ -604,7 +604,7 @@
     <value>スキャンパラメータを初期化します……</value>
   </data>
   <data name="Status_RepairConfig" xml:space="preserve">
-    <value>設定エラーを修正.……</value>
+    <value>設定エラーを修正……</value>
   </data>
   <data name="Status_UpdateConfig" xml:space="preserve">
     <value>構成ファイルを更新します……</value>
@@ -875,5 +875,80 @@
   </data>
   <data name="Attention_Rename" xml:space="preserve">
     <value>注：名前付けルールにコンテンツを追加する場合、名前を付けるときに対応するフィールドが空の場合、新しいコンテンツは自動的に削除されません。たとえば、{id} _（{title}）、{title}が空の場合、 両側のブラケットは自動的に削除されません</value>
+  </data>
+  <data name="TranslatedTitle" xml:space="preserve">
+    <value>翻訳名</value>
+  </data>
+  <data name="ReleaseDate" xml:space="preserve">
+    <value>発行日</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>期間</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>国</value>
+  </data>
+  <data name="Director" xml:space="preserve">
+    <value>ディレクター</value>
+  </data>
+  <data name="Genre" xml:space="preserve">
+    <value>カテゴリー</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>ラベル</value>
+  </data>
+  <data name="Studio" xml:space="preserve">
+    <value>出版社</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>スコア</value>
+  </data>
+  <data name="SampleMovie_Title" xml:space="preserve">
+    <value>IronMan1</value>
+  </data>
+  <data name="SampleMovie_TranslatedTitle" xml:space="preserve">
+    <value>アイアンマン1</value>
+  </data>
+  <data name="SampleMovie_Director" xml:space="preserve">
+    <value>ジョン・フェイル</value>
+  </data>
+  <data name="SampleMovie_Genre" xml:space="preserve">
+    <value>アクションアドベンチャーサイエンスフィクション</value>
+  </data>
+  <data name="SampleMovie_Tag" xml:space="preserve">
+    <value>色</value>
+  </data>
+  <data name="SampleMovie_Actor" xml:space="preserve">
+    <value>ロバートダウニージュニア/グウィネスパルトロウ/テレンスハワード/ジェフブリッジ</value>
+  </data>
+  <data name="SampleMovie_Studio" xml:space="preserve">
+    <value>マーベルスタジオ</value>
+  </data>
+  <data name="SampleMovie_Label" xml:space="preserve">
+    <value>ラベル1</value>
+  </data>
+  <data name="SampleMovie_Country" xml:space="preserve">
+    <value>United States</value>
+  </data>
+  <data name="Message_IsToReset" xml:space="preserve">
+    <value>すべての設定を復元することを確認しますか？</value>
+  </data>
+  <data name="Message_CanNotBeNull" xml:space="preserve">
+    <value>フォルダパスを空にすることはできません</value>
+  </data>
+  <data name="Hint" xml:space="preserve">
+    <value>促す</value>
+  </data>
+  <data name="Message_TestError" xml:space="preserve">
+    <value>テストは失敗します：1。Cookieが無効な場合は、Cookieを再度コピーしてください。2。再テストまたは3.ネットワークタイムアウトを設定します</value>
+  </data>
+  <data name="Message_NeedCookies" xml:space="preserve">
+    <value>URLにはCookie！を入力する必要があり、入力後に1回テストします</value>
+  </data>
+  <data name="BossKeyError" xml:space="preserve">
+    <value>ホットキーの競合！</value>
   </data>
 </root>

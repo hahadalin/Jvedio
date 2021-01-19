@@ -33,26 +33,23 @@ namespace Jvedio
     /// </summary>
     public partial class Settings : Jvedio_BaseWindow
     {
-        //public Point WindowPoint = new Point(100, 100);
-        //public Size WindowSize = new Size(1200, 700);
-        //public int WinState = 0;\
 
         public DetailMovie SampleMovie = new DetailMovie() {
             id = "AAA-001",
-            title = "钢铁侠1",
+            title = Jvedio.Language.Resources.SampleMovie_Title,
             vediotype = 1,
             releasedate ="2020-01-01",
-            director = "乔恩·费儒",
-            genre = "动作 冒险 科幻",
-            tag = "彩色",
-            actor = "小罗伯特·唐尼/格温妮斯·帕特洛/泰伦斯·霍华德/杰夫·布里吉斯",
-            studio = "漫威电影工作室",
+            director = Jvedio.Language.Resources.SampleMovie_Director,
+            genre = Jvedio.Language.Resources.SampleMovie_Genre,
+            tag = Jvedio.Language.Resources.SampleMovie_Tag,
+            actor = Jvedio.Language.Resources.SampleMovie_Actor,
+            studio = Jvedio.Language.Resources.SampleMovie_Studio,
             rating = 9.0f,
-            chinesetitle = "钢铁侠1",
-            label ="标签1",
+            chinesetitle = Jvedio.Language.Resources.SampleMovie_TranslatedTitle,
+            label = Jvedio.Language.Resources.SampleMovie_Label,
             year = 2020,
             runtime =126,
-            country ="美国"
+            country = Jvedio.Language.Resources.SampleMovie_Country
         };
         public VieModel_Settings vieModel_Settings;
         public Settings()
@@ -243,7 +240,7 @@ namespace Jvedio
         public void AddPath(object sender, MouseButtonEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderBrowserDialog.Description = "选择文件夹";
+            folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
             folderBrowserDialog.ShowNewFolderButton = true;
 
 
@@ -270,7 +267,7 @@ namespace Jvedio
             imageAwesome.Icon = FontAwesomeIcon.Refresh;
             imageAwesome.Spin = true;
             imageAwesome.Foreground = (SolidColorBrush)Application.Current.Resources["ForegroundSearch"];
-            if (checkBox.Content.ToString() == "百度人脸识别")
+            if (checkBox.Content.ToString() == Jvedio.Language.Resources.BaiduFaceRecognition)
             {
                 
                 string base64 = Resource_String.BaseImage64;
@@ -319,7 +316,7 @@ namespace Jvedio
             if (checkBox.Content.ToString() == "百度翻译")
             {
                 
-            }else if (checkBox.Content.ToString() == "有道翻译")
+            }else if (checkBox.Content.ToString() == Jvedio.Language.Resources.Youdao)
             {
                 string result = await Translate.Youdao("のマ○コに");
                 if (result != "")
@@ -378,7 +375,7 @@ namespace Jvedio
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            if(new Msgbox(this, "确认还原所有设置？").ShowDialog() == true)
+            if(new Msgbox(this, Jvedio.Language.Resources.Message_IsToReset).ShowDialog() == true)
             {
                 //保存网址
                 List<string> urlList = new List<string>();
@@ -418,8 +415,6 @@ namespace Jvedio
                 Properties.Settings.Default.EnableDMM = enableList[6];
                 Properties.Settings.Default.FirstRun = false;
                Properties.Settings.Default.Save();
-
-                HandyControl.Controls.Growl.Success("已恢复默认设置", "SettingsGrowl");
             }
 
     }
@@ -562,9 +557,9 @@ namespace Jvedio
         private void SetVediaPlaterPath(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            OpenFileDialog1.Title = "选择播放器所在路径";
+            OpenFileDialog1.Title = Jvedio.Language.Resources.Choose;
             OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            OpenFileDialog1.Filter = "可执行文件|*.exe";
+            OpenFileDialog1.Filter = "exe|*.exe";
             OpenFileDialog1.FilterIndex = 1;
             OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -579,14 +574,14 @@ namespace Jvedio
         private void SetBasePicPath(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.Description = "请选择保存图片的路径";
+            dialog.Description = Jvedio.Language.Resources.ChooseDir;
             if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Pic\\")) dialog.SelectedPath = AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
             dialog.ShowNewFolderButton = true;
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 if (string.IsNullOrEmpty(dialog.SelectedPath))
                 {
-                    System.Windows.MessageBox.Show(this, "文件夹路径不能为空", "提示");
+                    System.Windows.MessageBox.Show(this, Jvedio.Language.Resources.Message_CanNotBeNull, Jvedio.Language.Resources.Hint);
                     return;
                 }
                 else
@@ -611,13 +606,13 @@ namespace Jvedio
             GlobalVariable.InitVariable();
             Scan.InitSearchPattern();
             Net.Init();
-            HandyControl.Controls.Growl.Success("保存成功", "SettingsGrowl");
+            HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "SettingsGrowl");
         }
 
         private void SetFFMPEGPath(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            OpenFileDialog1.Title = "选择 ffmpeg.exe 所在路径";
+            OpenFileDialog1.Title = Jvedio.Language.Resources.ChooseFFmpeg;
             OpenFileDialog1.FileName = "ffmpeg.exe";
             OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
             OpenFileDialog1.Filter = "ffmpeg.exe|*.exe";
@@ -810,13 +805,13 @@ namespace Jvedio
         {
             //选择NFO存放位置
             System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.Description = "请选择保存 NFO 的路径";
+            dialog.Description = Jvedio.Language.Resources.ChooseDir;
             dialog.ShowNewFolderButton = true;
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 if (string.IsNullOrEmpty(dialog.SelectedPath))
                 {
-                    System.Windows.MessageBox.Show(this, "文件夹路径不能为空", "提示");
+                    System.Windows.MessageBox.Show(this, Jvedio.Language.Resources.Message_CanNotBeNull, Jvedio.Language.Resources.Hint);
                     return;
                 }
                 else
@@ -971,7 +966,7 @@ namespace Jvedio
             (bool result,string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.ServerTitle);
             if(!result && title.IndexOf("JavDB") >= 0)
             {
-                HandyControl.Controls.Growl.Error("测试不通过：1.若 Cookie 失效了请重新复制Cookie 或 2.重新测试 或 3. 设置网络超时", "SettingsGrowl");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, "SettingsGrowl");
                 return;
             }
             if (result && title!="")
@@ -1035,9 +1030,9 @@ namespace Jvedio
             else if (server.ServerTitle == "JavDB")
             {
                 //是否包含 cookie
-                if(server.Cookie=="无" || server.Cookie == "")
+                if(server.Cookie==Jvedio.Language.Resources.Nothing || server.Cookie == "")
                 {
-                    new Msgbox(this, "该网址需要填入 Cookie !，填入后在测试一次！").ShowDialog();
+                    new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
                 }
                 else
                 {
@@ -1057,9 +1052,9 @@ namespace Jvedio
             else if (server.ServerTitle == "FANZA")
             {
                 //是否包含 cookie
-                if (server.Cookie == "无" || server.Cookie == "")
+                if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
                 {
-                    new Msgbox(this, "FANZA 需要填入 Cookie !，填入后在测试一次！").ShowDialog();
+                    new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
                 }
                 else
                 {
@@ -1216,7 +1211,7 @@ namespace Jvedio
             {
                 UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消之前的热键
                 bool success = RegisterHotKey(_windowHandle, HOTKEY_ID, modifier, vk);
-                if (!success) { MessageBox.Show("热键冲突！", "热键冲突");
+                if (!success) { MessageBox.Show(Jvedio.Language.Resources.BossKeyError, Jvedio.Language.Resources.Hint);
                     Properties.Settings.Default.HotKey_Enable = false;
                 }
             }
@@ -1230,7 +1225,7 @@ namespace Jvedio
 
         private void ReplaceWithValue(string property)
         {
-            string inSplit = InComboBox.Text.Replace("无", "");
+            string inSplit = InComboBox.Text.Replace(Jvedio.Language.Resources.Nothing, "");
             PropertyInfo[] PropertyList = SampleMovie.GetType().GetProperties();
             foreach (PropertyInfo item in PropertyList)
             {
@@ -1270,7 +1265,7 @@ namespace Jvedio
             bool ischecked= (bool)toggleButton.IsChecked;
             string formatstring ="{" + text.ToSqlField() + "}";
 
-            string split = OutComboBox.Text.Replace("无", "");
+            string split = OutComboBox.Text.Replace(Jvedio.Language.Resources.Nothing, "");
 
 
             if (ischecked)
@@ -1350,7 +1345,7 @@ namespace Jvedio
         private void SetBackgroundImage(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            OpenFileDialog1.Title = "选择图片";
+            OpenFileDialog1.Title = Jvedio.Language.Resources.Choose;
             OpenFileDialog1.FileName = "background.jpg";
             OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
             OpenFileDialog1.Filter = "jpg|*.jpg";

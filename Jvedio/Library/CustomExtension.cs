@@ -154,49 +154,64 @@ namespace Jvedio
 
         public static string ToSqlField(this string content)
         {
-            switch (content)
+            if (content == Jvedio.Language.Resources.ID)
             {
-                case "识别码":
-                    return "id";
-
-                case "名称":
-                    return "title";
-
-                case "中文名称":
-                    return "chinesetitle";
-
-                case "视频类型":
-                    return "vediotype";
-
-                case "发行日期":
-                    return "releasedate";
-
-                case "年份":
-                    return "year";
-
-                case "时长":
-                    return "runtime";
-
-                case "国家":
-                    return "country";
-
-                case "导演":
-                    return "director";
-
-                case "类别":
-                    return "genre";
-
-                case "标签":
-                    return "label";
-                case "演员":
-                    return "actor";
-                case "发行商":
-                    return "studio";
-                case "评分":
-                    return "rating";
-
-                default:
-                    return "";
+                return "id";
+            }else if (content == Jvedio.Language.Resources.Title)
+            {
+                return "title";
+            }
+            else if (content == Jvedio.Language.Resources.TranslatedTitle)
+            {
+                return "chinesetitle";
+            }
+            else if (content == Jvedio.Language.Resources.VedioType)
+            {
+                return "vediotype";
+            }
+            else if (content == Jvedio.Language.Resources.ReleaseDate)
+            {
+                return "releasedate";
+            }
+            else if (content == Jvedio.Language.Resources.Year)
+            {
+                return "year";
+            }
+            else if (content == Jvedio.Language.Resources.Duration)
+            {
+                return "runtime";
+            }
+            else if (content == Jvedio.Language.Resources.Country)
+            {
+                return "country";
+            }
+            else if (content == Jvedio.Language.Resources.Director)
+            {
+                return "director";
+            }
+            else if (content == Jvedio.Language.Resources.Genre)
+            {
+                return "genre";
+            }
+            else if (content == Jvedio.Language.Resources.Label)
+            {
+                return "label";
+            }
+            else if (content == Jvedio.Language.Resources.Actor)
+            {
+                return "actor";
+            }
+            else if (content == Jvedio.Language.Resources.Studio)
+            {
+                return "studio";
+            }
+            else if (content == Jvedio.Language.Resources.Rating)
+            {
+                return "rating";
+            }
+            else
+            {
+                return "";
             }
 
         }

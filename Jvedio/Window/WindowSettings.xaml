@@ -1404,20 +1404,20 @@
 
                     <StackPanel x:Name="RenamePanel" Orientation="Vertical" Background="Transparent" Visibility="Visible"  >
                         <WrapPanel x:Name="CheckedBoxWrapPanel" Orientation="Horizontal">
-                            <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Content="识别码" Width="100" Height="30"  Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="名称" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="中文名称" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="视频类型" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="发行日期" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="年份" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="时长" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="国家" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="导演" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="类别" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="标签" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="演员" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="发行商" Width="100" Height="30" Margin="5"  Click="AddToRename" />
-                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="评分" Width="100" Height="30" Margin="5"     Click="AddToRename"/>
+                            <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Content="{x:Static lang:Resources.ID}" Width="100" Height="30"  Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Title}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.TranslatedTitle}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.VedioType}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.ReleaseDate}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Year}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Duration}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Country}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Director}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Genre}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Label}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Actor}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Studio}" Width="100" Height="30" Margin="5"  Click="AddToRename" />
+                            <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Rating}" Width="100" Height="30" Margin="5"     Click="AddToRename"/>
                             
                         </WrapPanel>
 
