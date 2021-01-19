@@ -438,4 +438,97 @@
   <data name="InputTitle6" xml:space="preserve">
     <value>请输入需删除的标签，每个标签空格隔开</value>
   </data>
+  <data name="Message_StopAndTry" xml:space="preserve">
+    <value>停止当前下载后再试</value>
+  </data>
+  <data name="Message_ScanNum" xml:space="preserve">
+    <value>扫描并导入视频个数为</value>
+  </data>
+  <data name="Message_ViewLog" xml:space="preserve">
+    <value>详细请看日志文件</value>
+  </data>
+  <data name="Message_WatchFail" xml:space="preserve">
+    <value>监听不成功</value>
+  </data>
+  <data name="Message_OpenFail" xml:space="preserve">
+    <value>无法打开</value>
+  </data>
+  <data name="Message_SetYoudao" xml:space="preserve">
+    <value>请设置【有道翻译】并测试</value>
+  </data>
+  <data name="Message_SuccessNum" xml:space="preserve">
+    <value>成功个数</value>
+  </data>
+  <data name="Message_SkipNum" xml:space="preserve">
+    <value>跳过个数</value>
+  </data>
+  <data name="Message_FailNum" xml:space="preserve">
+    <value>失败个数</value>
+  </data>
+  <data name="Message_SetBaiduAI" xml:space="preserve">
+    <value>请设置【百度 AI】并测试</value>
+  </data>
+  <data name="Message_PosterMustExist" xml:space="preserve">
+    <value>海报图必须存在！</value>
+  </data>
+  <data name="Message_SetFFmpeg" xml:space="preserve">
+    <value>请设置 ffmpeg.exe 的路径</value>
+  </data>
+  <data name="Message_SetRenameRule" xml:space="preserve">
+    <value>请在设置中配置【重命名】规则</value>
+  </data>
+  <data name="Message_Success" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="Message_Fail" xml:space="preserve">
+    <value>失败</value>
+  </data>
+  <data name="Message_FileNotExist" xml:space="preserve">
+    <value>文件不存在</value>
+  </data>
+  <data name="Message_Copied" xml:space="preserve">
+    <value>已复制</value>
+  </data>
+  <data name="Message_DeleteToRecycleBin" xml:space="preserve">
+    <value>已删除视频到回收站</value>
+  </data>
+  <data name="Message_NotEdit" xml:space="preserve">
+    <value>编辑模式不可批量修改信息</value>
+  </data>
+  <data name="Message_WaitForDownload" xml:space="preserve">
+    <value>请等待同步完成</value>
+  </data>
+  <data name="Message_UrlNotSet" xml:space="preserve">
+    <value>同步信息的服务器源未设置</value>
+  </data>
+  <data name="Message_SetUrl" xml:space="preserve">
+    <value>请在设置【同步信息】中添加服务器源并启用</value>
+  </data>
+  <data name="Message_Stop" xml:space="preserve">
+    <value>已停止</value>
+  </data>
+  <data name="Message_OnlySupportJPG" xml:space="preserve">
+    <value>仅支持 JPG 格式</value>
+  </data>
+  <data name="Message_NotOpenOrNotEnable" xml:space="preserve">
+    <value>未开启或未设置</value>
+  </data>
+  <data name="Message_WrongUrl" xml:space="preserve">
+    <value>网址有误</value>
+  </data>
+  <data name="Message_NotRecognize" xml:space="preserve">
+    <value>识别失败</value>
+  </data>
+  <data name="NotSupport" xml:space="preserve">
+    <value>暂不支持</value>
+  </data>
+  <data name="Message_BeginParse" xml:space="preserve">
+    <value>开始解析</value>
+  </data>
+  <data name="Message_BeginDownloadImage" xml:space="preserve">
+    <value>解析成功！开始同步图片</value>
+  </data>
+  <data name="Message_AlreadyExist" xml:space="preserve">
+    <value>已存在</value>
+  </data>
 </root>

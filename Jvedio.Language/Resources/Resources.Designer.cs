@@ -601,6 +601,276 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 已存在 的本地化字符串。
+        /// </summary>
+        public static string Message_AlreadyExist {
+            get {
+                return ResourceManager.GetString("Message_AlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 解析成功 开始同步图片 的本地化字符串。
+        /// </summary>
+        public static string Message_BeginDownloadImage {
+            get {
+                return ResourceManager.GetString("Message_BeginDownloadImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 开始解析 的本地化字符串。
+        /// </summary>
+        public static string Message_BeginParse {
+            get {
+                return ResourceManager.GetString("Message_BeginParse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 已复制 的本地化字符串。
+        /// </summary>
+        public static string Message_Copied {
+            get {
+                return ResourceManager.GetString("Message_Copied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 已删除视频到回收站 的本地化字符串。
+        /// </summary>
+        public static string Message_DeleteToRecycleBin {
+            get {
+                return ResourceManager.GetString("Message_DeleteToRecycleBin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 失败 的本地化字符串。
+        /// </summary>
+        public static string Message_Fail {
+            get {
+                return ResourceManager.GetString("Message_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 失败个数 的本地化字符串。
+        /// </summary>
+        public static string Message_FailNum {
+            get {
+                return ResourceManager.GetString("Message_FailNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 文件不存在 的本地化字符串。
+        /// </summary>
+        public static string Message_FileNotExist {
+            get {
+                return ResourceManager.GetString("Message_FileNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 编辑模式不可批量修改信息 的本地化字符串。
+        /// </summary>
+        public static string Message_NotEdit {
+            get {
+                return ResourceManager.GetString("Message_NotEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未开启或未设置 的本地化字符串。
+        /// </summary>
+        public static string Message_NotOpenOrNotEnable {
+            get {
+                return ResourceManager.GetString("Message_NotOpenOrNotEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 识别失败 的本地化字符串。
+        /// </summary>
+        public static string Message_NotRecognize {
+            get {
+                return ResourceManager.GetString("Message_NotRecognize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 仅支持 JPG 格式 的本地化字符串。
+        /// </summary>
+        public static string Message_OnlySupportJPG {
+            get {
+                return ResourceManager.GetString("Message_OnlySupportJPG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 无法打开 的本地化字符串。
+        /// </summary>
+        public static string Message_OpenFail {
+            get {
+                return ResourceManager.GetString("Message_OpenFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 海报图必须存在！ 的本地化字符串。
+        /// </summary>
+        public static string Message_PosterMustExist {
+            get {
+                return ResourceManager.GetString("Message_PosterMustExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 扫描并导入视频个数为 的本地化字符串。
+        /// </summary>
+        public static string Message_ScanNum {
+            get {
+                return ResourceManager.GetString("Message_ScanNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请设置【百度 AI】并测试 的本地化字符串。
+        /// </summary>
+        public static string Message_SetBaiduAI {
+            get {
+                return ResourceManager.GetString("Message_SetBaiduAI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请设置 ffmpeg.exe 的路径 的本地化字符串。
+        /// </summary>
+        public static string Message_SetFFmpeg {
+            get {
+                return ResourceManager.GetString("Message_SetFFmpeg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请在设置中配置【重命名】规则 的本地化字符串。
+        /// </summary>
+        public static string Message_SetRenameRule {
+            get {
+                return ResourceManager.GetString("Message_SetRenameRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请在设置【同步信息】中添加服务器源并启用 的本地化字符串。
+        /// </summary>
+        public static string Message_SetUrl {
+            get {
+                return ResourceManager.GetString("Message_SetUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请设置【有道翻译】并测试 的本地化字符串。
+        /// </summary>
+        public static string Message_SetYoudao {
+            get {
+                return ResourceManager.GetString("Message_SetYoudao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 跳过个数 的本地化字符串。
+        /// </summary>
+        public static string Message_SkipNum {
+            get {
+                return ResourceManager.GetString("Message_SkipNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 已停止 的本地化字符串。
+        /// </summary>
+        public static string Message_Stop {
+            get {
+                return ResourceManager.GetString("Message_Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 停止当前下载后再试 的本地化字符串。
+        /// </summary>
+        public static string Message_StopAndTry {
+            get {
+                return ResourceManager.GetString("Message_StopAndTry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 成功 的本地化字符串。
+        /// </summary>
+        public static string Message_Success {
+            get {
+                return ResourceManager.GetString("Message_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 成功个数 的本地化字符串。
+        /// </summary>
+        public static string Message_SuccessNum {
+            get {
+                return ResourceManager.GetString("Message_SuccessNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 同步信息的服务器源未设置 的本地化字符串。
+        /// </summary>
+        public static string Message_UrlNotSet {
+            get {
+                return ResourceManager.GetString("Message_UrlNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 详细请看日志文件 的本地化字符串。
+        /// </summary>
+        public static string Message_ViewLog {
+            get {
+                return ResourceManager.GetString("Message_ViewLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请等待同步完成 的本地化字符串。
+        /// </summary>
+        public static string Message_WaitForDownload {
+            get {
+                return ResourceManager.GetString("Message_WaitForDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 监听不成功 的本地化字符串。
+        /// </summary>
+        public static string Message_WatchFail {
+            get {
+                return ResourceManager.GetString("Message_WatchFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 网址有误 的本地化字符串。
+        /// </summary>
+        public static string Message_WrongUrl {
+            get {
+                return ResourceManager.GetString("Message_WrongUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 影片 的本地化字符串。
         /// </summary>
         public static string Movie {
@@ -669,6 +939,15 @@ namespace Jvedio.Language {
         public static string MyList {
             get {
                 return ResourceManager.GetString("MyList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 暂不支持 的本地化字符串。
+        /// </summary>
+        public static string NotSupport {
+            get {
+                return ResourceManager.GetString("NotSupport", resourceCulture);
             }
         }
         

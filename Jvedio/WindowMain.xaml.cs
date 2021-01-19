@@ -598,7 +598,7 @@ namespace Jvedio
         {
             if (DownLoader?.State == DownLoadState.DownLoading)
             {
-                HandyControl.Controls.Growl.Info("停止当前下载后再试", "Main");
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_StopAndTry, "Main");
                 return;
             }
 
@@ -655,7 +655,7 @@ namespace Jvedio
                 this.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     //vieModel.Reset();
-                    if (num > 0) HandyControl.Controls.Growl.Info($"扫描并导入 {num} 个视频，详细请看日志文件", "Main");
+                    if (num > 0) HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_ScanNum} {num} --- {Jvedio.Language.Resources.Message_ViewLog}", "Main");
                 }), System.Windows.Threading.DispatcherPriority.Render);
 
 
@@ -837,7 +837,7 @@ namespace Jvedio
             }
 
             if (failwatcherMessage != "")
-                HandyControl.Controls.Growl.Info($"监听{failwatcherMessage}不成功", "Main");
+                HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_WatchFail} {failwatcherMessage}", "Main");
         }
 
         public async void CheckUrl()
@@ -2200,8 +2200,7 @@ namespace Jvedio
             }
             else
             {
-                Console.WriteLine("无法打开");
-                HandyControl.Controls.Growl.Error("无法打开 " + filepath, "Main");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_OpenFail + filepath, "Main");
             }
 
         }
@@ -2262,10 +2261,10 @@ namespace Jvedio
 
 
                     });
-                    if (!string.IsNullOrEmpty(failpath) && vieModel.SelectedMovie.Count==1)
-                        HandyControl.Controls.Growl.Info($"成功打开{vieModel.SelectedMovie.Count - num}个，失败{num}个，因为不存在{filepath}", "Main");
-                    else
-                        HandyControl.Controls.Growl.Info($"成功打开{vieModel.SelectedMovie.Count - num}个，失败{num}个，因为不存在", "Main");
+                    //if (!string.IsNullOrEmpty(failpath) && vieModel.SelectedMovie.Count==1)
+                    //    HandyControl.Controls.Growl.Info($"成功打开{vieModel.SelectedMovie.Count - num}个，失败{num}个，因为不存在{filepath}", "Main");
+                    //else
+                    //    HandyControl.Controls.Growl.Info($"成功打开{vieModel.SelectedMovie.Count - num}个，失败{num}个，因为不存在", "Main");
                 }
 
             }
@@ -2300,8 +2299,8 @@ namespace Jvedio
                             num++;
                         }
                     });
-                    if (failpath != "")
-                        HandyControl.Controls.Growl.Info($"成功打开{vieModel.SelectedMovie.Count - num}个，失败{num}个，因为文件夹不存在 ：\n{failpath}", "Main");
+                    //if (failpath != "")
+                    //    HandyControl.Controls.Growl.Info($"成功打开{vieModel.SelectedMovie.Count - num}个，失败{num}个，因为文件夹不存在 ：\n{failpath}", "Main");
 
                 }
 
@@ -2313,7 +2312,9 @@ namespace Jvedio
 
         public async void TranslateMovie(object sender, RoutedEventArgs e)
         {
-            if (!Properties.Settings.Default.Enable_TL_BAIDU & !Properties.Settings.Default.Enable_TL_YOUDAO) { HandyControl.Controls.Growl.Info("请设置【有道翻译】并测试", "Main"); return; }
+            if (!Properties.Settings.Default.Enable_TL_BAIDU & !Properties.Settings.Default.Enable_TL_YOUDAO) { 
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_SetYoudao, "Main"); 
+                return; }
 
 
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
@@ -2380,9 +2381,9 @@ namespace Jvedio
 
                 }
                 dataBase.CloseDB();
-
-                HandyControl.Controls.Growl.Info($"成功：{successNum}个，失败：{failNum}个，跳过：{translatedNum}个", "Main");
-
+                HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.Message_SuccessNum} {successNum}", "Main");
+                HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.Message_FailNum} {failNum}", "Main");
+                HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_SkipNum} {translatedNum}", "Main");
             }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
         }
@@ -2397,7 +2398,7 @@ namespace Jvedio
 
         public async void GenerateActor(object sender, RoutedEventArgs e)
         {
-            if (!Properties.Settings.Default.Enable_BaiduAI) { HandyControl.Controls.Growl.Info("请设置【百度 AI】并测试", "Main"); return; }
+            if (!Properties.Settings.Default.Enable_BaiduAI) { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_SetBaiduAI, "Main"); return; }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             MenuItem _mnu = sender as MenuItem;
             StackPanel sp = null;
@@ -2409,7 +2410,7 @@ namespace Jvedio
                 if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedMovie.Add(CurrentMovie);
 
 
-                if (vieModel.SelectedMovie.Count > 3 && new Msgbox(this, $"预计用时 {(float)vieModel.SelectedMovie.Count / 2} s，是否继续？").ShowDialog() == false) return;
+                //if (vieModel.SelectedMovie.Count > 3 && new Msgbox(this, $"预计用时 {(float)vieModel.SelectedMovie.Count / 2} s，是否继续？").ShowDialog() == false) return;
 
                 this.Cursor = Cursors.Wait;
                 int successNum = 0;
@@ -2444,10 +2445,10 @@ namespace Jvedio
                     }
                     else
                     {
-                        HandyControl.Controls.Growl.Error($"海报图必须存在才能切割！", "Main");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_PosterMustExist, "Main");
                     }
                 }
-                HandyControl.Controls.Growl.Info($"成功切割 {successNum} / {vieModel.SelectedMovie.Count} 个头像", "Main");
+                HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_SuccessNum} {successNum} / {vieModel.SelectedMovie.Count}", "Main");
                 //更新到窗口中
                 foreach(Movie movie1 in vieModel.SelectedMovie)
                 {
@@ -2468,17 +2469,11 @@ namespace Jvedio
 
         public void GetGif(object sender, RoutedEventArgs e)
         {
-
-            HandyControl.Controls.Growl.Warning("暂时取消 Gif，等待后续更新", "Main");
             return;
-
-            if (Properties.Settings.Default.EditMode)
-            {
-                HandyControl.Controls.Growl.Warning("暂不支持批量！", "Main");
-                return;
+            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { 
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_SetFFmpeg, "Main"); 
+                return; 
             }
-
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { HandyControl.Controls.Growl.Info("请设置 ffmpeg.exe 的路径 ", "Main"); return; }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             MenuItem mnu = ((MenuItem)(sender)).Parent as MenuItem;
             StackPanel sp = null;
@@ -2493,7 +2488,7 @@ namespace Jvedio
                 this.Cursor = Cursors.Wait;
                 foreach (Movie movie in vieModel.SelectedMovie)
                 {
-                    if (!File.Exists(movie.filepath)) { HandyControl.Controls.Growl.Warning("视频不存在", "Main"); continue; }
+                    if (!File.Exists(movie.filepath)) { HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_FileNotExist, "Main"); continue; }
                     bool result = false;
                     try { GenerateGif(movie); } catch (Exception ex) { Logger.LogF(ex); }
 
@@ -2510,7 +2505,11 @@ namespace Jvedio
         public async void GetScreenShot(object sender, RoutedEventArgs e)
         {
 
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { HandyControl.Controls.Growl.Info("请设置 ffmpeg.exe 的路径 ", "Main"); return; }
+            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path))
+            {
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_SetFFmpeg, "Main");
+                return;
+            }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             MenuItem mnu = ((MenuItem)(sender)).Parent as MenuItem;
             StackPanel sp = null;
@@ -2527,7 +2526,7 @@ namespace Jvedio
                 cmdGrid.Visibility = Visibility.Visible;
                 foreach (Movie movie in vieModel.SelectedMovie)
                 {
-                    if (!File.Exists(movie.filepath)) { HandyControl.Controls.Growl.Error("视频不存在", "Main"); continue; }
+                    if (!File.Exists(movie.filepath)) { HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_FileNotExist, "Main"); continue; }
                     bool success = false;
                     string message = "";
                     ScreenShot screenShot = new ScreenShot();
@@ -2545,7 +2544,7 @@ namespace Jvedio
                     if (success) successNum++;
                     else this.Dispatcher.Invoke((Action)delegate { cmdTextBox.AppendText($"截图失败，原因：{message}"); });
                 }
-                HandyControl.Controls.Growl.Info($"成功截图 {successNum} / {vieModel.SelectedMovie.Count} 个影片", "Main");
+                HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_SuccessNum} {successNum} / {vieModel.SelectedMovie.Count}", "Main");
             }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             this.Cursor = Cursors.Arrow;
@@ -2605,7 +2604,7 @@ namespace Jvedio
                 }
                 catch (ArgumentNullException ex) { }
 
-                HandyControl.Controls.Growl.Info("成功生成 Gif", "Main");
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
 
             });
         }
@@ -2615,7 +2614,11 @@ namespace Jvedio
 
         public void GenerateGif(Movie movie)
         {
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) return;
+            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path))
+            {
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_SetFFmpeg, "Main");
+                return;
+            }
 
 
             string GifSavePath = BasePicPath + "Gif\\";
@@ -2635,7 +2638,7 @@ namespace Jvedio
 
         public async void GenerateSmallImage(object sender, RoutedEventArgs e)
         {
-            if (!Properties.Settings.Default.Enable_BaiduAI) { HandyControl.Controls.Growl.Info("请设置【百度 AI】并测试", "Main"); return; }
+            if (!Properties.Settings.Default.Enable_BaiduAI) { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_SetBaiduAI, "Main"); return; }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             MenuItem _mnu = sender as MenuItem;
             MenuItem mnu = _mnu.Parent as MenuItem;
@@ -2647,7 +2650,7 @@ namespace Jvedio
                 Movie CurrentMovie = GetMovieFromVieModel(TB.Text);
                 if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedMovie.Add(CurrentMovie);
 
-                if (vieModel.SelectedMovie.Count > 3 && new Msgbox(this, $"预计用时 {(float)vieModel.SelectedMovie.Count / 2} s，是否继续？").ShowDialog() == false) return;
+                //if (vieModel.SelectedMovie.Count > 3 && new Msgbox(this, $"预计用时 {(float)vieModel.SelectedMovie.Count / 2} s，是否继续？").ShowDialog() == false) return;
                 int successNum = 0;
                 this.Cursor = Cursors.Wait;
                 foreach (Movie movie in vieModel.SelectedMovie)
@@ -2686,13 +2689,11 @@ namespace Jvedio
                     }
                     else
                     {
-                        HandyControl.Controls.Growl.Error($"海报图必须存在才能切割！", "Main");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_PosterMustExist, "Main");
                     }
 
                 }
-                HandyControl.Controls.Growl.Info($"成功切割 {successNum} / {vieModel.SelectedMovie.Count} 个缩略图", "Main");
-
-
+                HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_SuccessNum} {successNum} / {vieModel.SelectedMovie.Count}", "Main");
             }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             this.Cursor = Cursors.Arrow;
@@ -2703,7 +2704,7 @@ namespace Jvedio
         {
             if (Properties.Settings.Default.RenameFormat.IndexOf("{") < 0)
             {
-                HandyControl.Controls.Growl.Error("请在设置中配置【重命名】规则", "Main");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_SetRenameRule, "Main");
                 return;
             }
 
@@ -2754,7 +2755,7 @@ namespace Jvedio
                             catch (ArgumentNullException) { }
                             DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
                             DataBase.UpdateMovieByID(movie.id, "subsection", movie.subsection, "string");//保存
-                            if (vieModel.SelectedMovie.Count == 1) HandyControl.Controls.Growl.Success("重命名成功！", "Main");
+                            if (vieModel.SelectedMovie.Count == 1) HandyControl.Controls.Growl.Success( Jvedio.Language.Resources.Message_Success , "Main");
                         }
                         else
                         {
@@ -2773,11 +2774,12 @@ namespace Jvedio
                                 }
                                 catch (ArgumentNullException) { }
                                 DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
-                                if (vieModel.SelectedMovie.Count == 1) HandyControl.Controls.Growl.Success("重命名成功！", "Main");
+                                if (vieModel.SelectedMovie.Count == 1) HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "Main");
                             }
                             else
                             {
-                                HandyControl.Controls.Growl.Error("重命名失败！存在同名文件", "Main");
+                                //存在同名文件
+                                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_Fail, "Main");
                             }
 
                         }
@@ -2789,11 +2791,12 @@ namespace Jvedio
                         //    continue;
                         //}
                     }
-                    HandyControl.Controls.Growl.Info($"已重命名 {num}/{vieModel.SelectedMovie.Count} 个文件", "Main");
+                    HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_SuccessNum} {num}/{vieModel.SelectedMovie.Count} ", "Main");
                 }
                 else
                 {
-                    HandyControl.Controls.Growl.Info($"文件不存在！无法重命名！ ", "Main");
+                    //文件不存在！无法重命名！
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_FileNotExist, "Main");
                 }
 
 
@@ -2848,7 +2851,7 @@ namespace Jvedio
                     }
                 }
 
-                HandyControl.Controls.Growl.Info($"成功修改 {successnum}/{vieModel.SelectedMovie.Count}个", "Main");
+                HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_SuccessNum} {successnum}/{vieModel.SelectedMovie.Count}", "Main");
 
 
 
@@ -2918,13 +2921,13 @@ namespace Jvedio
                     try
                     {
                         Clipboard.SetFileDropList(paths);
-                        HandyControl.Controls.Growl.Info($"已复制 {num}/{vieModel.SelectedMovie.Count} 个文件", "Main");
+                        HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_Copied} {num}/{vieModel.SelectedMovie.Count}", "Main");
                     }
                     catch (Exception ex) { Console.WriteLine(ex.Message); }
                 }
                 else
                 {
-                    HandyControl.Controls.Growl.Info($"文件不存在！无法复制！ ", "Main");
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_FileNotExist, "Main");
                 }
 
 
@@ -2987,7 +2990,7 @@ namespace Jvedio
 
                 });
 
-                HandyControl.Controls.Growl.Info($"已删除 {num}/{vieModel.SelectedMovie.Count}个视频到回收站", "Main");
+                HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_DeleteToRecycleBin} {num}/{vieModel.SelectedMovie.Count}", "Main");
 
                 if (num > 0 && Properties.Settings.Default.DelInfoAfterDelFile)
                 {
@@ -3031,8 +3034,8 @@ namespace Jvedio
 
         public void EditInfo(object sender, RoutedEventArgs e)
         {
-            if (Properties.Settings.Default.EditMode) { HandyControl.Controls.Growl.Info("编辑模式不可批量修改信息！", "Main"); return; }
-            if (DownLoader?.State == DownLoadState.DownLoading) { HandyControl.Controls.Growl.Warning("请等待下载完成！", "Main"); return; }
+            if (Properties.Settings.Default.EditMode) { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_NotEdit, "Main"); return; }
+            if (DownLoader?.State == DownLoadState.DownLoading) { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_WaitForDownload, "Main"); return; }
             MenuItem mnu = sender as MenuItem;
             StackPanel sp = null;
             if (mnu != null)
@@ -3048,7 +3051,7 @@ namespace Jvedio
 
         public async void DeleteID(object sender, RoutedEventArgs e)
         {
-            if (DownLoader?.State == DownLoadState.DownLoading) { HandyControl.Controls.Growl.Warning("请等待下载完成！", "Main"); return; }
+            if (DownLoader?.State == DownLoadState.DownLoading) { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_WaitForDownload, "Main"); return; }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             MenuItem mnu = sender as MenuItem;
             StackPanel sp = null;
@@ -3087,7 +3090,7 @@ namespace Jvedio
                         }
                     }
 
-                    HandyControl.Controls.Growl.Info($"已从数据库删除 {vieModel.SelectedMovie.Count}个视频 ", "Main");
+                    HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Menu_DeleteInfo} {vieModel.SelectedMovie.Count} ", "Main");
                     //修复数字显示
                     vieModel.CurrentCount -= vieModel.SelectedMovie.Count;
                     vieModel.TotalCount -= vieModel.SelectedMovie.Count;
@@ -3104,7 +3107,7 @@ namespace Jvedio
 
         public async void DeleteInfo(object sender, RoutedEventArgs e)
         {
-            if (DownLoader?.State == DownLoadState.DownLoading) { HandyControl.Controls.Growl.Warning("请等待下载完成！", "Main"); return; }
+            if (DownLoader?.State == DownLoadState.DownLoading) { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_WaitForDownload, "Main"); return; }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             MenuItem mnu = sender as MenuItem;
             StackPanel sp = null;
@@ -3227,7 +3230,7 @@ namespace Jvedio
                     }
 
                 }
-                HandyControl.Controls.Growl.Info($"成功清空标签", "Main");
+                HandyControl.Controls.Growl.Info( Jvedio.Language.Resources.Message_Success, "Main");
 
                 vieModel.GetLabelList();
 
@@ -3243,7 +3246,7 @@ namespace Jvedio
         {
             if (Properties.Settings.Default.EditMode)
             {
-                HandyControl.Controls.Growl.Info("不支持批量", "Main");
+                //HandyControl.Controls.Growl.Info("不支持批量", "Main");
                 return;
             }
             MenuItem _mnu = sender as MenuItem;
@@ -3298,7 +3301,7 @@ namespace Jvedio
                         }
 
                     }
-                    HandyControl.Controls.Growl.Info($"成功删除标签{di.Text}", "Main");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
                     vieModel.GetLabelList();
                 }
 
@@ -3341,7 +3344,7 @@ namespace Jvedio
                         }
 
                     }
-                    HandyControl.Controls.Growl.Info($"成功增加标签{di.Text}", "Main");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
 
                     vieModel.GetLabelList();
 
@@ -3439,7 +3442,7 @@ namespace Jvedio
                         }
                         else
                         {
-                            HandyControl.Controls.Growl.Error("同步信息的服务器源未设置！", "Main");
+                            HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_UrlNotSet, "Main");
                         }
 
                     }
@@ -3455,11 +3458,11 @@ namespace Jvedio
         {
             if (DownLoader?.State == DownLoadState.DownLoading)
             {
-                HandyControl.Controls.Growl.Info("已有任务在下载！", "Main");
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_WaitForDownload, "Main");
             }
             else if (!Net.IsServersProper())
             {
-                HandyControl.Controls.Growl.Error("请在设置【同步信息】中添加服务器源并启用！", "Main");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_SetUrl, "Main");
             }
             else
             {
@@ -3491,11 +3494,11 @@ namespace Jvedio
         {
             if (DownLoader?.State == DownLoadState.DownLoading)
             {
-                HandyControl.Controls.Growl.Info("已有任务在下载！", "Main");
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_WaitForDownload, "Main");
             }
             else if (!Net.IsServersProper())
             {
-                HandyControl.Controls.Growl.Error("请在设置【同步信息】中添加服务器源并启用！", "Main");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_SetUrl, "Main");
             }
             else
             {
@@ -3695,7 +3698,7 @@ namespace Jvedio
 
         public void StopDownLoad()
         {
-            if (DownLoader != null && DownLoader.State == DownLoadState.DownLoading) HandyControl.Controls.Growl.Warning("已停止同步信息！", "Main");
+            if (DownLoader != null && DownLoader.State == DownLoadState.DownLoading) HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_Stop, "Main");
             DownLoader?.CancelDownload();
             downLoadActress?.CancelDownload();
             this.Dispatcher.BeginInvoke((Action)delegate { ProgressBar.Visibility = Visibility.Hidden;  });
@@ -3855,14 +3858,14 @@ namespace Jvedio
         {
             DownloadActorPopup.IsOpen = false;
             downLoadActress?.CancelDownload();
-            HandyControl.Controls.Growl.Info("已停止所有任务", "Main");
+            HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Stop, "Main");
         }
 
         public void DownLoadSelectedActor(object sender, RoutedEventArgs e)
         {
             if (downLoadActress?.State == DownLoadState.DownLoading)
             {
-                HandyControl.Controls.Growl.Info("已有任务在下载！", "Main"); return;
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_WaitForDownload, "Main"); return;
             }
 
             if (!Properties.Settings.Default.ActorEditMode) SelectedActress.Clear();
@@ -3970,12 +3973,12 @@ namespace Jvedio
             DownloadActorPopup.IsOpen = false;
             if(!EnableUrl.Bus || !RootUrl.Bus.IsProperUrl())
             {
-                HandyControl.Controls.Growl.Info("BUS 为开启或未设置！", "Main");
+                HandyControl.Controls.Growl.Info($"BUS {Jvedio.Language.Resources.Message_NotOpenOrNotEnable}", "Main");
                 return;
             }
 
             if (DownLoader?.State == DownLoadState.DownLoading)
-                HandyControl.Controls.Growl.Info("已有任务在下载！", "Main");
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_WaitForDownload, "Main");
             else
                 StartDownLoadActor(vieModel.CurrentActorList.ToList());
 
@@ -4072,13 +4075,13 @@ namespace Jvedio
 
             if (!Net.IsServersProper())
             {
-                HandyControl.Controls.Growl.Error("请在设置【同步信息】中添加服务器源并启用！", "Main");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_SetUrl, "Main");
 
             }
             else
             {
                 if (DownLoader?.State == DownLoadState.DownLoading)
-                    HandyControl.Controls.Growl.Info("已有任务在下载！", "Main");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_WaitForDownload, "Main");
                 else
                     StartDownload(vieModel.CurrentMovieList.ToList());
             }
@@ -4888,7 +4891,7 @@ namespace Jvedio
 
             if (originLabels.Count <= 0)
             {
-                HandyControl.Controls.Growl.Warning("请选择标签！", "Main");
+                //HandyControl.Controls.Growl.Warning("请选择标签！", "Main");
                 return;
             }
 
@@ -4900,7 +4903,7 @@ namespace Jvedio
                 movie.label = string.Join(" ", labels);
                 DataBase.UpdateMovieByID(movie.id, "label", movie.label, "String");
             }
-            HandyControl.Controls.Growl.Info($"成功添加标签！", "Main");
+            HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
             LabelGrid.Visibility = Visibility.Hidden;
 
@@ -4929,7 +4932,7 @@ namespace Jvedio
 
             if (originLabels.Count <= 0)
             {
-                HandyControl.Controls.Growl.Warning("请选择标签！", "Main");
+                //HandyControl.Controls.Growl.Warning("请选择标签！", "Main");
                 return;
             }
 
@@ -4950,7 +4953,7 @@ namespace Jvedio
 
             if (vieModel.CurrentMovieList.Count == 0)
             {
-                HandyControl.Controls.Growl.Info($"成功删除标签！", "Main");
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
                 LabelDelGrid.Visibility = Visibility.Hidden;
                 vieModel.GetLabelList();
             }
@@ -5018,7 +5021,7 @@ namespace Jvedio
 
             if (originLabels.Count <= 0)
             {
-                HandyControl.Controls.Growl.Warning("请选择标签！", "Main");
+                //HandyControl.Controls.Growl.Warning("请选择标签！", "Main");
                 return;
             }
 
@@ -5039,7 +5042,7 @@ namespace Jvedio
 
             if (vieModel.CurrentMovieList.Count == 0)
             {
-                HandyControl.Controls.Growl.Info($"成功删除标签！", "Main");
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
                 LabelDelGrid.Visibility = Visibility.Hidden;
                 vieModel.GetLabelList();
             }
@@ -5109,35 +5112,7 @@ namespace Jvedio
 
         }
 
-        private void PreviousCommand(object sender, MouseButtonEventArgs e)
-        {
-            if (vieModel.SqlCommands.Count > 0 && vieModel.SqlIndex >= 1)
-            {
-                vieModel.SqlIndex -= 1;
-                vieModel.SwitchSqlCommand();
-            }
-            else
-            {
-                HandyControl.Controls.Growl.Clear();
-                HandyControl.Controls.Growl.Info("已是最前！", "Main");
-            }
-        }
 
-        private void NextCommand(object sender, MouseButtonEventArgs e)
-        {
-
-
-            if (vieModel.SqlCommands.Count > 0 && vieModel.SqlIndex < vieModel.SqlCommands.Count - 1)
-            {
-                vieModel.SqlIndex += 1;
-                vieModel.SwitchSqlCommand();
-            }
-            else
-            {
-                HandyControl.Controls.Growl.Clear();
-                HandyControl.Controls.Growl.Info("已是最后！", "Main");
-            }
-        }
 
         private async void DownLoadWithUrl(object sender, RoutedEventArgs e)
         {
@@ -5156,7 +5131,7 @@ namespace Jvedio
                 string url = dialogInput.Text;
                 if (!url.StartsWith("http"))
                 {
-                    HandyControl.Controls.Growl.Error("网址有误！", "Main");
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_WrongUrl, "Main");
                 }
                 else
                 {
@@ -5165,21 +5140,21 @@ namespace Jvedio
                     WebSite webSite = await Net.CheckUrlType(url.Split(':')[0] + "://" + host);
                     if (webSite == WebSite.None)
                     {
-                        HandyControl.Controls.Growl.Error("识别失败", "Main");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_NotRecognize, "Main");
                     }
                     else
                     {
                         if (webSite == WebSite.DMM || webSite == WebSite.Jav321)
                         {
-                            HandyControl.Controls.Growl.Info("暂不支持解析", "Main");
+                            HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.NotSupport, "Main");
                         }
                         else
                         {
-                            HandyControl.Controls.Growl.Info($"识别为{webSite}，开始解析", "Main");
+                            HandyControl.Controls.Growl.Info($"{webSite} {Jvedio.Language.Resources.Message_BeginParse}", "Main");
                             bool result = await Net.ParseSpecifiedInfo(webSite, id, url);
                             if (result)
                             {
-                                HandyControl.Controls.Growl.Success("解析成功！开始同步图片！", "Main");
+                                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_BeginDownloadImage, "Main");
                                 //更新到主界面
                                 RefreshMovieByID(id);
 
@@ -5211,7 +5186,7 @@ namespace Jvedio
                             }
                             else
                             {
-                                HandyControl.Controls.Growl.Error("解析失败", "Main");
+                                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_Fail, "Main");
                             }
                         }
                     }
@@ -5258,7 +5233,7 @@ namespace Jvedio
                 }
                 else
                 {
-                    HandyControl.Controls.Growl.Info("仅支持 jpg", "DetailsGrowl");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_OnlySupportJPG, "DetailsGrowl");
                 }
             }
         }
@@ -5327,7 +5302,7 @@ namespace Jvedio
                 }
                 else
                 {
-                    HandyControl.Controls.Growl.Info("仅支持 jpg", "DetailsGrowl");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_OnlySupportJPG, "DetailsGrowl");
                 }
             }
         }
@@ -5643,7 +5618,7 @@ namespace Jvedio
                 {
                     if (vieModel.MyList.Where(arg => arg.Name == text).Count() > 0)
                     {
-                        HandyControl.Controls.Growl.Error("已存在该项！");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_AlreadyExist);
                         return;
                     }
                     //重命名
@@ -5678,7 +5653,7 @@ namespace Jvedio
             }
             catch
             {
-                HandyControl.Controls.Growl.Error("不支持的名字");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotSupport);
                 return false;
             }
             finally
@@ -5720,7 +5695,7 @@ namespace Jvedio
                 {
                     if (vieModel.MyList.Where(arg=>arg.Name==text).Count()>0)
                     {
-                        HandyControl.Controls.Growl.Error("已存在该项！");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_AlreadyExist);
                         return;
                     }
                     if ( AddToMyList(text)) vieModel.MyList.Add(new MyListItem(text,0));
@@ -5744,7 +5719,7 @@ namespace Jvedio
                 if (!dB.IsTableExist(name)) dB.CreateTable(name);
             }catch
             {
-                HandyControl.Controls.Growl.Error("不支持的名字");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotSupport);
                 return false;
             }
             finally
@@ -5981,7 +5956,7 @@ namespace Jvedio
                 Movie movie = DataBase.SelectMovieByID(id);
                 if (movie != null)
                 {
-                    HandyControl.Controls.Growl.Info("已存在该影片！", "Main");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_AlreadyExist, "Main");
                 }
                 else
                 {
@@ -5993,7 +5968,7 @@ namespace Jvedio
                     DataBase.InsertScanMovie(movie1);
                     vieModel.MovieList.Insert(0, movie1);
                     vieModel.CurrentMovieList.Insert(0, movie1);
-                    HandyControl.Controls.Growl.Info("成功导入！", "Main");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
                 }
             }
         }
@@ -6070,7 +6045,7 @@ namespace Jvedio
                             }
                         }
 
-                        HandyControl.Controls.Growl.Info($"已从清单【{table}】移除 {vieModel.SelectedMovie.Count}个视频 ", "Main");
+                        HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
                         //修复数字显示
                         vieModel.CurrentCount -= vieModel.SelectedMovie.Count;
                         vieModel.TotalCount -= vieModel.SelectedMovie.Count;

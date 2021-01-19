@@ -438,4 +438,97 @@
   <data name="InputTitle6" xml:space="preserve">
     <value>削除するタグをスペースで区切って入力してください</value>
   </data>
+  <data name="Message_StopAndTry" xml:space="preserve">
+    <value>現在のダウンロードを停止してからお試しください</value>
+  </data>
+  <data name="Message_ScanNum" xml:space="preserve">
+    <value>ビデオの枚数をスキャンしてインポートします</value>
+  </data>
+  <data name="Message_ViewLog" xml:space="preserve">
+    <value>詳しくはログファイルをご覧ください</value>
+  </data>
+  <data name="Message_WatchFail" xml:space="preserve">
+    <value>傍受が成功しない</value>
+  </data>
+  <data name="Message_OpenFail" xml:space="preserve">
+    <value>開けない</value>
+  </data>
+  <data name="Message_SetYoudao" xml:space="preserve">
+    <value>[YoudaoTranslation]を設定してテストしてください</value>
+  </data>
+  <data name="Message_SetBaiduAI" xml:space="preserve">
+    <value>[バイドゥAI]を設定してテストしてください</value>
+  </data>
+  <data name="Message_FailNum" xml:space="preserve">
+    <value>失敗の数</value>
+  </data>
+  <data name="Message_SkipNum" xml:space="preserve">
+    <value>スキップ数</value>
+  </data>
+  <data name="Message_SuccessNum" xml:space="preserve">
+    <value>成功数</value>
+  </data>
+  <data name="Message_PosterMustExist" xml:space="preserve">
+    <value>ポスター画像が存在する必要があります！</value>
+  </data>
+  <data name="Message_SetFFmpeg" xml:space="preserve">
+    <value>ffmpeg.exeのパスを設定してください</value>
+  </data>
+  <data name="Message_SetRenameRule" xml:space="preserve">
+    <value>設定で[名前変更]ルールを設定してください</value>
+  </data>
+  <data name="Message_Success" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="Message_Fail" xml:space="preserve">
+    <value>失敗</value>
+  </data>
+  <data name="Message_FileNotExist" xml:space="preserve">
+    <value>ファイルが存在しません</value>
+  </data>
+  <data name="Message_Copied" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="Message_DeleteToRecycleBin" xml:space="preserve">
+    <value>ビデオを削除してゴミ箱に移動</value>
+  </data>
+  <data name="Message_NotEdit" xml:space="preserve">
+    <value>編集モードでは、情報をバッチで変更することはできません</value>
+  </data>
+  <data name="Message_WaitForDownload" xml:space="preserve">
+    <value>ダウンロードが完了するまでお待ちください</value>
+  </data>
+  <data name="Message_UrlNotSet" xml:space="preserve">
+    <value>情報を同期するためのサーバーソースが設定されていません</value>
+  </data>
+  <data name="Message_SetUrl" xml:space="preserve">
+    <value>サーバーソースを追加し、設定[同期情報]で有効にしてください</value>
+  </data>
+  <data name="Message_Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="Message_OnlySupportJPG" xml:space="preserve">
+    <value>JPG形式のみをサポート</value>
+  </data>
+  <data name="Message_NotOpenOrNotEnable" xml:space="preserve">
+    <value>オンになっていない、または設定されていない</value>
+  </data>
+  <data name="Message_WrongUrl" xml:space="preserve">
+    <value>間違ったURL</value>
+  </data>
+  <data name="Message_NotRecognize" xml:space="preserve">
+    <value>認識の失敗</value>
+  </data>
+  <data name="NotSupport" xml:space="preserve">
+    <value>現在サポートされていません</value>
+  </data>
+  <data name="Message_BeginParse" xml:space="preserve">
+    <value>解析を開始します</value>
+  </data>
+  <data name="Message_BeginDownloadImage" xml:space="preserve">
+    <value>正常に解析され、画像の同期が開始されました</value>
+  </data>
+  <data name="Message_AlreadyExist" xml:space="preserve">
+    <value>存在した</value>
+  </data>
 </root>
