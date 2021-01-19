@@ -316,7 +316,7 @@
     <value>多くのネットユーザーのjvedioへの賛助と支持に感謝します!</value>
   </data>
   <data name="Thanks_Content2" xml:space="preserve">
-    <value>jvedioの発展をお祈りします。</value>
+    <value>jvedioの発展をお祈りします</value>
   </data>
   <data name="Menu_SyncInfo" xml:space="preserve">
     <value>同期メッセージ(S)</value>
@@ -569,5 +569,47 @@
   </data>
   <data name="IsToOverWrite" xml:space="preserve">
     <value>カバーするかどうか</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>名前を変更</value>
+  </data>
+  <data name="SetDefaultToOpen" xml:space="preserve">
+    <value>デフォルトとして設定</value>
+  </data>
+  <data name="SetPassword" xml:space="preserve">
+    <value>パスワードを設定してください</value>
+  </data>
+  <data name="Status_ClearLog" xml:space="preserve">
+    <value>10日以上経過したログファイルをクリアする……</value>
+  </data>
+  <data name="Status_ClearRecentWatch" xml:space="preserve">
+    <value>最近の視聴を10日以上クリアする……</value>
+  </data>
+  <data name="Status_CreateDir" xml:space="preserve">
+    <value>フォルダーを作る……</value>
+  </data>
+  <data name="Status_InitDatabase" xml:space="preserve">
+    <value>データベースを初期化します……</value>
+  </data>
+  <data name="Status_InitID" xml:space="preserve">
+    <value>識別コードパラメータを初期化します……</value>
+  </data>
+  <data name="Status_InitMovie" xml:space="preserve">
+    <value>映画を初期化する……</value>
+  </data>
+  <data name="Status_InitNet" xml:space="preserve">
+    <value>ネットワーク構成の初期化……</value>
+  </data>
+  <data name="Status_InitScan" xml:space="preserve">
+    <value>スキャンパラメータを初期化します……</value>
+  </data>
+  <data name="Status_RepairConfig" xml:space="preserve">
+    <value>設定エラーを修正.……</value>
+  </data>
+  <data name="Status_UpdateConfig" xml:space="preserve">
+    <value>構成ファイルを更新します……</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>削除</value>
   </data>
 </root>

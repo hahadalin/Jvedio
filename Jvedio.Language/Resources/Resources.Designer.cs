@@ -259,6 +259,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 删除 的本地化字符串。
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 快速添加+ 的本地化字符串。
         /// </summary>
         public static string FastImport {
@@ -1132,6 +1141,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 重命名 的本地化字符串。
+        /// </summary>
+        public static string Rename {
+            get {
+                return ResourceManager.GetString("Rename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 影片截图 的本地化字符串。
         /// </summary>
         public static string ScreenShot {
@@ -1155,6 +1173,24 @@ namespace Jvedio.Language {
         public static string SearchHint {
             get {
                 return ResourceManager.GetString("SearchHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设为默认打开 的本地化字符串。
+        /// </summary>
+        public static string SetDefaultToOpen {
+            get {
+                return ResourceManager.GetString("SetDefaultToOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置密码 的本地化字符串。
+        /// </summary>
+        public static string SetPassword {
+            get {
+                return ResourceManager.GetString("SetPassword", resourceCulture);
             }
         }
         

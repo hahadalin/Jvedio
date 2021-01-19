@@ -1,6 +1,7 @@
 ﻿using Jvedio.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -54,8 +55,8 @@ namespace Jvedio
             StackPanel stackPanel = sender as StackPanel;
             TextBox TextBox = stackPanel.Children[1] as TextBox;
 
-            string name = TextBox.Text.ToLower();
-            if (name == "info")
+            string name = TextBox.Text;
+            if (name.ToLower() == "info")
                 Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + "info.sqlite";
             else if (name == Jvedio.Language.Resources.NewLibrary)
             {
@@ -84,7 +85,7 @@ namespace Jvedio
                     try
                     {
                         this.Dispatcher.BeginInvoke(new Action(() => { statusText.Text = Jvedio.Language.Resources.Status_ScanDir; }), System.Windows.Threading.DispatcherPriority.Render);
-                        List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First()), ct);
+                        List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath)), ct);
                         Scan.InsertWithNfo(filepaths, ct);
 
                     }
@@ -470,8 +471,8 @@ namespace Jvedio
 
                 foreach (var item in names)
                 {
-                    string name = item.Split('\\').Last().Split('.').First().ToLower();
-                    if (name == "info" || name == Jvedio.Language.Resources.NewLibrary) return;
+                    string name = Path.GetFileNameWithoutExtension(item);
+                    if (name.ToLower() == "info" || name == Jvedio.Language.Resources.NewLibrary) return;
 
                     if (!DataBase.IsProPerSqlite(item)) continue;
 
@@ -521,9 +522,9 @@ namespace Jvedio
             StackPanel sp = border.Parent as StackPanel;
             StackPanel stackPanel = sp.Children.OfType<StackPanel>().First();
             TextBox TextBox = stackPanel.Children[1] as TextBox;
-            name = TextBox.Text.ToLower();
+            name = TextBox.Text;
 
-            if (name == "info" || name == Jvedio.Language.Resources.NewLibrary) return;
+            if (name.ToLower() == "info" || name == Jvedio.Language.Resources.NewLibrary) return;
 
 
             if (new Msgbox(this, $"{Jvedio.Language.Resources.IsToDelete} {name}?").ShowDialog() == true)
@@ -557,9 +558,9 @@ namespace Jvedio
             StackPanel sp = border.Parent as StackPanel;
             StackPanel stackPanel = sp.Children.OfType<StackPanel>().First();
             TextBox TextBox = stackPanel.Children[1] as TextBox;
-            name = TextBox.Text.ToLower();
+            name = TextBox.Text;
 
-            if (name == "info") return;
+            if (name.ToLower() == "info") return;
 
             //重命名
             OptionPopup.IsOpen = false;
@@ -575,7 +576,9 @@ namespace Jvedio
         private void Rename(TextBox textBox)
         {
             Console.WriteLine("Rename");
-            string name = textBox.Text.ToLower();
+            string name = textBox.Text;
+
+            //不修改
             if (name == beforeRename)
             {
 
@@ -587,9 +590,10 @@ namespace Jvedio
             }
 
 
+            //新建一个数据库
             if (beforeRename == "")
             {
-                if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrEmpty(name) && !vieModel_StartUp.DataBases.Contains(name) && name.IndexOfAny(Path.GetInvalidFileNameChars()) == -1)
+                if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrEmpty(name) && !IsItemInList(name, vieModel_StartUp.DataBases) && name.IndexOfAny(Path.GetInvalidFileNameChars()) == -1)
                 {
                     //新建
                     MySqlite db = new MySqlite("DataBase\\" + name);
@@ -605,18 +609,17 @@ namespace Jvedio
                     textBox.Cursor = Cursors.Hand;
 
                     vieModel_StartUp.DataBases.Add(name);
-                    vieModel_StartUp.DataBases.Add( Jvedio.Language.Resources.NewLibrary);
+                    vieModel_StartUp.DataBases.Add(Jvedio.Language.Resources.NewLibrary);
                 }
                 else
                 {
                     textBox.Text =  Jvedio.Language.Resources.NewLibrary;
                 }
             }
-
             else
             {
                 //重命名
-                if (vieModel_StartUp.DataBases.Contains(name))
+                if (IsItemInList(name, vieModel_StartUp.DataBases))
                 {
                     textBox.Text = beforeRename; //重复的
                 }
@@ -652,6 +655,15 @@ namespace Jvedio
 
         }
 
+        private bool IsItemInList(string str, ObservableCollection<string> list)
+        {
+            foreach (var item in list)
+            {
+                if (item.ToLower() == str.ToLower()) return true;
+            }
+            return false;
+        }
+
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("TextBox_LostFocus");
@@ -680,7 +692,7 @@ namespace Jvedio
             StackPanel sp = border.Parent as StackPanel;
             StackPanel stackPanel = sp.Children.OfType<StackPanel>().First();
             TextBox TextBox = stackPanel.Children[1] as TextBox;
-            string name = TextBox.Text.ToLower();
+            string name = TextBox.Text;
             Properties.Settings.Default.OpenDataBaseDefault = true;
             Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"\\DataBase\\{name}.sqlite";
             OptionPopup.IsOpen = false;

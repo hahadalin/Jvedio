@@ -570,4 +570,46 @@
   <data name="IsToOverWrite" xml:space="preserve">
     <value>Is to overwrite</value>
   </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="SetDefaultToOpen" xml:space="preserve">
+    <value>Set as default</value>
+  </data>
+  <data name="SetPassword" xml:space="preserve">
+    <value>Set password</value>
+  </data>
+  <data name="Status_ClearLog" xml:space="preserve">
+    <value>Clear log files older than 10 days...</value>
+  </data>
+  <data name="Status_ClearRecentWatch" xml:space="preserve">
+    <value>Clear more than 10 days of recent viewing...</value>
+  </data>
+  <data name="Status_CreateDir" xml:space="preserve">
+    <value>Create folder...</value>
+  </data>
+  <data name="Status_InitDatabase" xml:space="preserve">
+    <value>Initialize the database...</value>
+  </data>
+  <data name="Status_InitID" xml:space="preserve">
+    <value>Initialize identification code parameters...</value>
+  </data>
+  <data name="Status_InitMovie" xml:space="preserve">
+    <value>Initialize the movie...</value>
+  </data>
+  <data name="Status_InitNet" xml:space="preserve">
+    <value>Network configuration initialization...</value>
+  </data>
+  <data name="Status_InitScan" xml:space="preserve">
+    <value>Initialize scan parameters...</value>
+  </data>
+  <data name="Status_RepairConfig" xml:space="preserve">
+    <value>Fix setting error...</value>
+  </data>
+  <data name="Status_UpdateConfig" xml:space="preserve">
+    <value>Update configuration file...</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
 </root>
