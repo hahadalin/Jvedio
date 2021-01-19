@@ -187,6 +187,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 新增 的本地化字符串。
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 所有视频 的本地化字符串。
         /// </summary>
         public static string AllVideo {
@@ -264,6 +273,15 @@ namespace Jvedio.Language {
         public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 修改 的本地化字符串。
+        /// </summary>
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
             }
         }
         
@@ -412,6 +430,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 是否清空视频的下载信息 的本地化字符串。
+        /// </summary>
+        public static string IsToClearInfo {
+            get {
+                return ResourceManager.GetString("IsToClearInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 是否删除 的本地化字符串。
         /// </summary>
         public static string IsToDelete {
@@ -426,6 +453,24 @@ namespace Jvedio.Language {
         public static string IsToOverWrite {
             get {
                 return ResourceManager.GetString("IsToOverWrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 确认移除 的本地化字符串。
+        /// </summary>
+        public static string IsToRemove {
+            get {
+                return ResourceManager.GetString("IsToRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 是否关闭程序开始更新 的本地化字符串。
+        /// </summary>
+        public static string IsToUpdate {
+            get {
+                return ResourceManager.GetString("IsToUpdate", resourceCulture);
             }
         }
         
@@ -1218,6 +1263,15 @@ namespace Jvedio.Language {
         public static string ShowAll {
             get {
                 return ResourceManager.GetString("ShowAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 显示收藏的演员 的本地化字符串。
+        /// </summary>
+        public static string ShowFavoriteActor {
+            get {
+                return ResourceManager.GetString("ShowFavoriteActor", resourceCulture);
             }
         }
         

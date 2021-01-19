@@ -612,4 +612,22 @@
   <data name="SetDefaultToOpen" xml:space="preserve">
     <value>设为默认打开</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>修改</value>
+  </data>
+  <data name="IsToRemove" xml:space="preserve">
+    <value>确认移除</value>
+  </data>
+  <data name="IsToClearInfo" xml:space="preserve">
+    <value>是否清空视频的下载信息</value>
+  </data>
+  <data name="IsToUpdate" xml:space="preserve">
+    <value>是否关闭程序开始更新</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>新增</value>
+  </data>
+  <data name="ShowFavoriteActor" xml:space="preserve">
+    <value>显示收藏的演员</value>
+  </data>
 </root>

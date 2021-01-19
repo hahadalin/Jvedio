@@ -612,4 +612,22 @@
   <data name="Delete" xml:space="preserve">
     <value>削除</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>変更する</value>
+  </data>
+  <data name="IsToRemove" xml:space="preserve">
+    <value>削除を確認する</value>
+  </data>
+  <data name="IsToClearInfo" xml:space="preserve">
+    <value>ビデオのダウンロード情報をクリアするかどうか</value>
+  </data>
+  <data name="IsToUpdate" xml:space="preserve">
+    <value>プログラムを閉じて更新を開始するかどうか</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="ShowFavoriteActor" xml:space="preserve">
+    <value>お気に入りの俳優を表示する</value>
+  </data>
 </root>

@@ -441,13 +441,13 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="TypeName1" Type="System.String" Scope="User">
-      <Value Profile="(Default)">类型1</Value>
+      <Value Profile="(Default)">UnCencored</Value>
     </Setting>
     <Setting Name="TypeName2" Type="System.String" Scope="User">
-      <Value Profile="(Default)">类型2</Value>
+      <Value Profile="(Default)">Cencored</Value>
     </Setting>
     <Setting Name="TypeName3" Type="System.String" Scope="User">
-      <Value Profile="(Default)">类型3</Value>
+      <Value Profile="(Default)">Europe</Value>
     </Setting>
     <Setting Name="RecentDays" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>

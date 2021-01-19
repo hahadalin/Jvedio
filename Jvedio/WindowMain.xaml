@@ -1394,7 +1394,7 @@
                                                     </ContextMenu>
                                                 </RadioButton.ContextMenu>
                                                 <RadioButton.Content>
-                                                    <TextBox x:Name="TypeNameTextBox1" PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="类型1"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
+                                                    <TextBox x:Name="TypeNameTextBox1" PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="UnCensored"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
                                                 </RadioButton.Content>
                                             </RadioButton>
                                             <TextBlock Text="{Binding VedioTypeACount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
@@ -1405,11 +1405,11 @@
                                             <RadioButton  x:Name="TypeRB2"   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding CensoredCommand}"  Click="ShowMovieGrid" >
                                                 <RadioButton.ContextMenu>
                                                     <ContextMenu>
-                                                        <MenuItem Header="重命名" Click="RenameType" />
+                                                        <MenuItem Header="{x:Static lang:Resources.Rename}" Click="RenameType" />
                                                     </ContextMenu>
                                                 </RadioButton.ContextMenu>
                                                 <RadioButton.Content>
-                                                    <TextBox  x:Name="TypeNameTextBox2"  PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="类型2"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
+                                                    <TextBox  x:Name="TypeNameTextBox2"  PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="Censored"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
                                                 </RadioButton.Content>
                                             </RadioButton>
                                             <TextBlock Text="{Binding VedioTypeBCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
@@ -1420,11 +1420,11 @@
                                             <RadioButton  x:Name="TypeRB3"   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding EuropeCommand}"  Click="ShowMovieGrid" >
                                                 <RadioButton.ContextMenu>
                                                     <ContextMenu>
-                                                        <MenuItem Header="重命名" Click="RenameType" />
+                                                        <MenuItem Header="{x:Static lang:Resources.Rename}" Click="RenameType" />
                                                     </ContextMenu>
                                                 </RadioButton.ContextMenu>
                                                 <RadioButton.Content>
-                                                    <TextBox  x:Name="TypeNameTextBox3"  PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="类型3"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
+                                                    <TextBox  x:Name="TypeNameTextBox3"  PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="Europe"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
                                                 </RadioButton.Content>
                                             </RadioButton>
                                             <TextBlock Text="{Binding VedioTypeCCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
@@ -1470,8 +1470,8 @@
                                                     <RadioButton x:Name="CreateRB" Padding="20 0"    Style="{StaticResource SideRadioButtonStyle}"  Content="{Binding Name}"  Click="ShowSameList"  >
                                                         <RadioButton.ContextMenu>
                                                             <ContextMenu>
-                                                                <MenuItem Header="修改" Click="EditListItem"/>
-                                                                <MenuItem Header="删除"  Click="RemoveListItem"/>
+                                                                <MenuItem Header="{x:Static lang:Resources.Rename}" Click="EditListItem"/>
+                                                                    <MenuItem Header="{x:Static lang:Resources.Delete}"  Click="RemoveListItem"/>
                                                             </ContextMenu>
                                                         </RadioButton.ContextMenu>
                                                     </RadioButton>
@@ -2390,15 +2390,15 @@
                                 </Border>
 
                                 <StackPanel x:Name="ActorToolsStackPanel"  Orientation="Horizontal"  Visibility="Visible" >
-                                    <CheckBox Click="ActorCheckBox_Click" Foreground="{DynamicResource ForegroundGlobal}"  IsChecked="{Binding ActorEditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Height="30" Content="多选模式"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5 0" HorizontalAlignment="Left" />
+                                    <CheckBox Click="ActorCheckBox_Click" Foreground="{DynamicResource ForegroundGlobal}"  IsChecked="{Binding ActorEditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Height="30" Content="{x:Static lang:Resources.MultiSelect}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5 0" HorizontalAlignment="Left" />
 
-                                    <Grid x:Name="DownloadActorGrid" ToolTip="仅支持 Bus 演员信息与头像"   Width="auto" HorizontalAlignment="Left"  MouseLeftButtonUp="ShowDownloadActorMenu" Cursor="Hand" Height="30" Margin="5 0">
+                                    <Grid x:Name="DownloadActorGrid"    Width="auto" HorizontalAlignment="Left"  MouseLeftButtonUp="ShowDownloadActorMenu" Cursor="Hand" Height="30" Margin="5 0">
                                         <Border CornerRadius="5" Background="{DynamicResource BackgroundTab}"  />
                                         <Image Source="Resources/Picture/download.png" Height="24" HorizontalAlignment="Left" Margin="3 0"></Image>
                                     </Grid>
 
 
-                                    <CheckBox x:Name="LoveActressCheckBox"  Content="显示收藏的演员" IsChecked="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                    <CheckBox x:Name="LoveActressCheckBox"  Content="{x:Static lang:Resources.ShowFavoriteActor}" IsChecked="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
 
                                 </StackPanel>
 
@@ -2408,8 +2408,8 @@
                                             <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
                                         </Border.Effect>
                                         <StackPanel  Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Width="100" Height="auto" Margin="5" >
-                                            <Button  Style="{StaticResource SetButton}" Content="同步信息" Click="StartDownLoadActress" />
-                                            <Button  Style="{StaticResource SetButton}"  Content="停止同步"  Click="StopDownLoadActress"    />
+                                            <Button  Style="{StaticResource SetButton}" Content="{x:Static lang:Resources.SyncInfo}" Click="StartDownLoadActress" />
+                                            <Button  Style="{StaticResource SetButton}"  Content="{x:Static lang:Resources.StopSync}"  Click="StopDownLoadActress"    />
                                         </StackPanel>
                                     </Border>
                                 </Popup>
@@ -2983,9 +2983,9 @@
                         </ItemsControl>
 
                         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-                            <Button  Style="{StaticResource ButtonStyleFill}" Content="新增" Width="100" Height="25" Click="AddSingleLabel"/>
-                            <Button  Style="{StaticResource ButtonStyleFill}" Content="清空" Width="100" Height="25" Click="ClearSingleLabel"/>
-                            <Button  Style="{StaticResource ButtonStyleFill}" Content="删除" Width="100" Height="25" Click="DeleteSingleLabel"/>
+                            <Button  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Add}" Width="100" Height="25" Click="AddSingleLabel"/>
+                            <Button  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Clear}" Width="100" Height="25" Click="ClearSingleLabel"/>
+                            <Button  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Delete}" Width="100" Height="25" Click="DeleteSingleLabel"/>
                         </StackPanel>
 
 

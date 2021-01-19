@@ -148,16 +148,16 @@
     <value>VedioType</value>
   </data>
   <data name="WithActress" xml:space="preserve">
-    <value>WithActress</value>
+    <value>Actress</value>
   </data>
   <data name="WithGenre" xml:space="preserve">
-    <value>WithGenre</value>
+    <value>Genre</value>
   </data>
   <data name="WithLabel" xml:space="preserve">
-    <value>WithLabel</value>
+    <value>Label</value>
   </data>
   <data name="WithPath" xml:space="preserve">
-    <value>WithPath</value>
+    <value>Path</value>
   </data>
   <data name="Actress_Age" xml:space="preserve">
     <value>Age</value>
@@ -611,5 +611,23 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="IsToRemove" xml:space="preserve">
+    <value>Is to remove</value>
+  </data>
+  <data name="IsToClearInfo" xml:space="preserve">
+    <value>Is to clear the download information of the video</value>
+  </data>
+  <data name="IsToUpdate" xml:space="preserve">
+    <value>Whether to close the program and start the update</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ShowFavoriteActor" xml:space="preserve">
+    <value>Show favorite actors</value>
   </data>
 </root>

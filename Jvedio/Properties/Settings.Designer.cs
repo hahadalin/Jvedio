@@ -1777,7 +1777,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("类型1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("UnCencored")]
         public string TypeName1 {
             get {
                 return ((string)(this["TypeName1"]));
@@ -1789,7 +1789,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("类型2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Cencored")]
         public string TypeName2 {
             get {
                 return ((string)(this["TypeName2"]));
@@ -1801,7 +1801,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("类型3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Europe")]
         public string TypeName3 {
             get {
                 return ((string)(this["TypeName3"]));

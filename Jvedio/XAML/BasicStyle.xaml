@@ -76,7 +76,7 @@
                                 <Setter Property="Background" Value="{DynamicResource BackgroundSearch}"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver"  Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource BackgroundMenu}"/>
+                                        <Setter Property="Background" Value="#66cc00"/>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
