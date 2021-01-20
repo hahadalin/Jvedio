@@ -1131,4 +1131,37 @@
   <data name="FileExtension" xml:space="preserve">
     <value>文件后缀</value>
   </data>
+  <data name="EnterLabel" xml:space="preserve">
+    <value>请输入标签</value>
+  </data>
+  <data name="CannotOpen" xml:space="preserve">
+    <value>无法打开</value>
+  </data>
+  <data name="HasCopy" xml:space="preserve">
+    <value>已复制</value>
+  </data>
+  <data name="IsToDeleteAllSubSection" xml:space="preserve">
+    <value>是否确认删除所有的分段视频到回收站？</value>
+  </data>
+  <data name="TranslateFail" xml:space="preserve">
+    <value>翻译失败</value>
+  </data>
+  <data name="TranslateSuccess" xml:space="preserve">
+    <value>翻译成功</value>
+  </data>
+  <data name="MovieHasNoActor" xml:space="preserve">
+    <value>该影片无演员</value>
+  </data>
+  <data name="DownloadSPicFailFor" xml:space="preserve">
+    <value>下载缩略图失败，原因：</value>
+  </data>
+  <data name="DownloadBPicFailFor" xml:space="preserve">
+    <value>下载海报图失败，原因：</value>
+  </data>
+  <data name="DownloadEPicFailFor" xml:space="preserve">
+    <value>下载海报图失败：</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>原因</value>
+  </data>
 </root>

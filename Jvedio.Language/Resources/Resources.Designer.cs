@@ -403,6 +403,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 无法打开 的本地化字符串。
+        /// </summary>
+        public static string CannotOpen {
+            get {
+                return ResourceManager.GetString("CannotOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 声道数 的本地化字符串。
         /// </summary>
         public static string Channel {
@@ -601,6 +610,33 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 下载海报图失败，原因： 的本地化字符串。
+        /// </summary>
+        public static string DownloadBPicFailFor {
+            get {
+                return ResourceManager.GetString("DownloadBPicFailFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 下载海报图失败： 的本地化字符串。
+        /// </summary>
+        public static string DownloadEPicFailFor {
+            get {
+                return ResourceManager.GetString("DownloadEPicFailFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 下载缩略图失败，原因： 的本地化字符串。
+        /// </summary>
+        public static string DownloadSPicFailFor {
+            get {
+                return ResourceManager.GetString("DownloadSPicFailFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 或拖入文件至此 的本地化字符串。
         /// </summary>
         public static string DragFileIn {
@@ -642,6 +678,15 @@ namespace Jvedio.Language {
         public static string Enable {
             get {
                 return ResourceManager.GetString("Enable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请输入标签 的本地化字符串。
+        /// </summary>
+        public static string EnterLabel {
+            get {
+                return ResourceManager.GetString("EnterLabel", resourceCulture);
             }
         }
         
@@ -804,6 +849,15 @@ namespace Jvedio.Language {
         public static string Genre {
             get {
                 return ResourceManager.GetString("Genre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 已复制 的本地化字符串。
+        /// </summary>
+        public static string HasCopy {
+            get {
+                return ResourceManager.GetString("HasCopy", resourceCulture);
             }
         }
         
@@ -1029,6 +1083,15 @@ namespace Jvedio.Language {
         public static string IsToDelete {
             get {
                 return ResourceManager.GetString("IsToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 是否确认删除所有的分段视频到回收站？ 的本地化字符串。
+        /// </summary>
+        public static string IsToDeleteAllSubSection {
+            get {
+                return ResourceManager.GetString("IsToDeleteAllSubSection", resourceCulture);
             }
         }
         
@@ -1726,6 +1789,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 该影片无演员 的本地化字符串。
+        /// </summary>
+        public static string MovieHasNoActor {
+            get {
+                return ResourceManager.GetString("MovieHasNoActor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 影片信息 的本地化字符串。
         /// </summary>
         public static string MovieInfo {
@@ -2028,6 +2100,15 @@ namespace Jvedio.Language {
         public static string Rating {
             get {
                 return ResourceManager.GetString("Rating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 原因 的本地化字符串。
+        /// </summary>
+        public static string Reason {
+            get {
+                return ResourceManager.GetString("Reason", resourceCulture);
             }
         }
         
@@ -2919,6 +3000,24 @@ namespace Jvedio.Language {
         public static string TranslatedTitle {
             get {
                 return ResourceManager.GetString("TranslatedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 翻译失败 的本地化字符串。
+        /// </summary>
+        public static string TranslateFail {
+            get {
+                return ResourceManager.GetString("TranslateFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 翻译成功 的本地化字符串。
+        /// </summary>
+        public static string TranslateSuccess {
+            get {
+                return ResourceManager.GetString("TranslateSuccess", resourceCulture);
             }
         }
         

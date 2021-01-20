@@ -1131,4 +1131,37 @@
   <data name="FileExtension" xml:space="preserve">
     <value>File Extension</value>
   </data>
+  <data name="EnterLabel" xml:space="preserve">
+    <value>Please enter a label</value>
+  </data>
+  <data name="CannotOpen" xml:space="preserve">
+    <value>Can't open</value>
+  </data>
+  <data name="HasCopy" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+  <data name="IsToDeleteAllSubSection" xml:space="preserve">
+    <value>Are you sure to delete all segmented videos to the recycle bin?</value>
+  </data>
+  <data name="TranslateFail" xml:space="preserve">
+    <value>Translation failed</value>
+  </data>
+  <data name="TranslateSuccess" xml:space="preserve">
+    <value>Successfully translated</value>
+  </data>
+  <data name="MovieHasNoActor" xml:space="preserve">
+    <value>No actors in this film</value>
+  </data>
+  <data name="DownloadSPicFailFor" xml:space="preserve">
+    <value>Failed to download thumbnail, reason:</value>
+  </data>
+  <data name="DownloadBPicFailFor" xml:space="preserve">
+    <value>Failed to download poster image, reason:</value>
+  </data>
+  <data name="DownloadEPicFailFor" xml:space="preserve">
+    <value>Failed to download poster image:</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>the reason</value>
+  </data>
 </root>

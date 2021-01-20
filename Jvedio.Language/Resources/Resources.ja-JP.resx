@@ -1131,4 +1131,37 @@
   <data name="FileExtension" xml:space="preserve">
     <value>ファイル拡張子</value>
   </data>
+  <data name="EnterLabel" xml:space="preserve">
+    <value>ラベルを入力してください</value>
+  </data>
+  <data name="CannotOpen" xml:space="preserve">
+    <value>開けない</value>
+  </data>
+  <data name="HasCopy" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="IsToDeleteAllSubSection" xml:space="preserve">
+    <value>セグメント化されたすべてのビデオをリサイクルビンに削除してもよろしいですか？</value>
+  </data>
+  <data name="TranslateFail" xml:space="preserve">
+    <value>翻訳に失敗しました</value>
+  </data>
+  <data name="TranslateSuccess" xml:space="preserve">
+    <value>正常に翻訳されました</value>
+  </data>
+  <data name="MovieHasNoActor" xml:space="preserve">
+    <value>この映画には俳優はいません</value>
+  </data>
+  <data name="DownloadSPicFailFor" xml:space="preserve">
+    <value>サムネイルのダウンロードに失敗しました。理由：</value>
+  </data>
+  <data name="DownloadBPicFailFor" xml:space="preserve">
+    <value>ポスター画像のダウンロードに失敗しました。理由：</value>
+  </data>
+  <data name="DownloadEPicFailFor" xml:space="preserve">
+    <value>ポスター画像のダウンロードに失敗しました：</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>理由</value>
+  </data>
 </root>
