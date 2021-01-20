@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Jvedio"
+        xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
@@ -11,7 +12,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
-        Title="影视库管理"       
+        Title="{x:Static lang:Resources.MovieManagement}"       
         MinHeight="500"
         MinWidth="800"           
         Background="{DynamicResource BackgroundMain}"
@@ -58,62 +59,14 @@
 
         <JvedioControls:WaitingPanel Visibility="Collapsed" ShowCancelButton="Visible" x:Name="WaitingPanel"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel" ></JvedioControls:WaitingPanel>
 
+        <!--消息提示框-->
+        <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="20">
+            <StackPanel hc:Growl.Token="DBManageGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
+        </ScrollViewer>
 
-
-
-        <Grid>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-
-
-
-
-
-            <Grid Grid.Column="0"  x:Name="Side_Grid"   HorizontalAlignment="Stretch" Height="auto" VerticalAlignment="Stretch" >
-
-                <Border Background="{DynamicResource BackgroundSide}" x:Name="SideBorder" CornerRadius="0" BorderBrush="{DynamicResource BorderBursh}" BorderThickness="0" >
-                </Border>
-
-                <StackPanel Panel.ZIndex="3" Height="auto" VerticalAlignment="Top" Margin="0,10,0,0">
-                    <Image HorizontalAlignment="Center" Height="40" VerticalAlignment="Center" Width="40" Source="pack://application:,,,/Resources/Picture/Jvedio.png"/>
-                    <Image  ToolTip="Jvedio" Margin="0 10 0 10" HorizontalAlignment="Center" Height="20"  VerticalAlignment="Center"  Source="pack://application:,,,/Resources/Picture/Title.png"/>
-
-                </StackPanel>
-                <StackPanel Height="auto"  Margin="2,100,2,0" VerticalAlignment="Stretch"  >
-                    <Grid>
-                        <Image  Source="/Resources/Picture/manage.png" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="25 0"    />
-                        <RadioButton GroupName="SideRadioButton" x:Name="ManageRadioButton"  IsChecked="True" Style="{StaticResource RadioButtonStyleSide}"  Command="{Binding ListDatabaseCommand}" Content="管理"  />
-                    </Grid>
-
-                    <Grid>
-                        <Image  Source="/Resources/Picture/statistic.png" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="25 0"    />
-                        <RadioButton  IsChecked="False" GroupName="SideRadioButton" x:Name="StatisticRadioButton" Style="{StaticResource RadioButtonStyleSide}" Command="{Binding StatisticCommand}" Content="统计"  />
-                    </Grid>
-
-                </StackPanel>
-
-
-            </Grid>
-
-            <Grid Grid.Column="1">
-                <!--消息提示框-->
-                <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="20">
-                    <StackPanel hc:Growl.Token="DBManageGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
-                </ScrollViewer>
-
-
-                <Grid x:Name="ManageGrid" Visibility="{Binding ElementName=ManageRadioButton,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
-                    <!--<Grid x:Name="ManageGrid" Visibility="Hidden">-->
-
-                        <Grid.RenderTransform>
-                        <TranslateTransform  />
-                    </Grid.RenderTransform>
-
-
+        <TabControl SelectedIndex="0" Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl" Grid.Row="0" Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
+            <TabItem FontSize="15"  Background="Transparent" Header="{x:Static lang:Resources.MovieManagement}">
+                <Grid  >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition x:Name="SecondRow"  Height="200"/>
@@ -121,14 +74,14 @@
 
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Vertical" Grid.Column="0" >
 
-                            <Button Style="{StaticResource ButtonStyleFill}" Content="新建" HorizontalAlignment="Center" Width="150" Height="40" Margin="10" Click="Button_Click"/>
-                            <Button Style="{StaticResource ButtonStyleFill}" Content="导入" HorizontalAlignment="Center" Width="150" Height="40" Margin="10" Click="Button_Click_1"/>
+                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.NewLibrary}" HorizontalAlignment="Center" MinWidth="120" Width="auto" Height="40" Margin="10" Click="Button_Click"/>
+                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Import}" HorizontalAlignment="Center" MinWidth="120" Width="auto" Height="40" Margin="10" Click="Button_Click_1"/>
 
 
                         </StackPanel>
@@ -202,7 +155,7 @@
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Vertical" Grid.Column="0" Background="{DynamicResource BackgroundSide}" Margin="5">
@@ -213,9 +166,9 @@
 
                             <WrapPanel x:Name="CheckBoxWrapPanel"  Orientation="Horizontal" Margin="15 0">
 
-                                <CheckBox  Content="重置信息数据库" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
-                                <CheckBox  Content="删除不存在影片" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
-                                <CheckBox  Content="删除不位于【启动时扫描】目录中的影片" Height="30" Width="auto"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
+                                <CheckBox  Content="{x:Static lang:Resources.ResetDataBase}" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
+                                <CheckBox  Content="{x:Static lang:Resources.DeleteMovieNotExist}" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
+                                <CheckBox  Content="{x:Static lang:Resources.DeleteMovieNotInScan}" Height="30" Width="auto"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
                             </WrapPanel>
 
 
@@ -224,7 +177,7 @@
 
 
                         <StackPanel Orientation="Vertical" Grid.Column="1"  Margin="5">
-                            <Button Style="{StaticResource ButtonStyleFill}" Content="执行" HorizontalAlignment="Center" Width="80" Height="30" Click="Button_Click_2"/>
+                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Center" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_2"/>
                         </StackPanel>
 
 
@@ -236,12 +189,12 @@
 
 
                 </Grid>
+            </TabItem>
 
+            <TabItem  Background="Transparent" Header="{x:Static lang:Resources.Statistic}" FontSize="15">
+                <Grid x:Name="StatisticGrid" Visibility="Visible">
 
-                <Grid x:Name="StatisticGrid" Visibility="{Binding ElementName=StatisticRadioButton,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
-                    <!--<Grid x:Name="StatisticGrid" Visibility="Visible">-->
-
-                        <Grid.RowDefinitions >
+                    <Grid.RowDefinitions >
                         <RowDefinition Height="200"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
@@ -250,7 +203,7 @@
 
                         <Border Background="{DynamicResource BackgroundSide}" Margin="20" CornerRadius="5">
                             <StackPanel Orientation="Vertical">
-                                <TextBlock  Text="所有" Style="{StaticResource BaseTextBlock}"/>
+                                <TextBlock  Text="{x:Static lang:Resources.AllVideo}" Style="{StaticResource BaseTextBlock}"/>
                                 <TextBlock   Text="{Binding AllCount}"  Style="{StaticResource BaseTextBlock}"/>
                                 <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="40" Height="80" Margin="0 5" Value="100"   />
                             </StackPanel>
@@ -335,7 +288,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Border CornerRadius="5" Background="{DynamicResource BackgroundTitle}" Width="60" HorizontalAlignment="Left" Margin="10 5" >
-                                    <TextBlock Text="识别码" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                                    <TextBlock Text="{x:Static lang:Resources.ID}" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
                                 </Border>
 
                                 <lvc:CartesianChart  Series="{Binding Path=SeriesCollection}" LegendLocation="None" Margin="5" Grid.Row="1" DisableAnimations="True" AnimationsSpeed="0:0:0.1"  PreviewMouseWheel="CartesianChart_PreviewMouseWheel" >
@@ -360,7 +313,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Border CornerRadius="5" Background="{DynamicResource BackgroundTitle}" Width="60" HorizontalAlignment="Left" Margin="10 5" >
-                                    <TextBlock Text="类别" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                                    <TextBlock Text="{x:Static lang:Resources.Genre}" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
                                 </Border>
                                 <lvc:CartesianChart Series="{Binding Path=GenreSeriesCollection}" LegendLocation="None" Margin="5" Grid.Row="1" DisableAnimations="True" AnimationsSpeed="0:0:0.1"  PreviewMouseWheel="CartesianChart_PreviewMouseWheel1" >
                                     <lvc:CartesianChart.AxisX >
@@ -384,7 +337,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Border CornerRadius="5" Background="{DynamicResource BackgroundTitle}" Width="60" HorizontalAlignment="Left" Margin="10 5" >
-                                    <TextBlock Text="系列" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                                    <TextBlock Text="{x:Static lang:Resources.Tag}" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
                                 </Border>
                                 <lvc:CartesianChart Series="{Binding Path=TagSeriesCollection}" LegendLocation="None" Margin="5" Grid.Row="1" DisableAnimations="True" AnimationsSpeed="0:0:0.1"  PreviewMouseWheel="CartesianChart_PreviewMouseWheel2" >
                                     <lvc:CartesianChart.AxisX >
@@ -407,7 +360,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Border CornerRadius="5" Background="{DynamicResource BackgroundTitle}" Width="60" HorizontalAlignment="Left" Margin="10 5" >
-                                    <TextBlock Text="演员" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                                    <TextBlock Text="{x:Static lang:Resources.Actor}" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
                                 </Border>
                                 <lvc:CartesianChart Series="{Binding Path=ActorSeriesCollection}" LegendLocation="None" Margin="5" Grid.Row="1" DisableAnimations="True" AnimationsSpeed="0:0:0.1"  PreviewMouseWheel="CartesianChart_PreviewMouseWheel3" >
                                     <lvc:CartesianChart.AxisX >
@@ -440,9 +393,19 @@
 
 
                 </Grid>
+            </TabItem>
+            
+        </TabControl>
 
 
-            </Grid>
+
+            <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
 
         </Grid>
 

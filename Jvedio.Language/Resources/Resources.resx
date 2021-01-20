@@ -1164,4 +1164,19 @@
   <data name="Reason" xml:space="preserve">
     <value>原因</value>
   </data>
+  <data name="Management" xml:space="preserve">
+    <value>管理</value>
+  </data>
+  <data name="Statistic" xml:space="preserve">
+    <value>统计</value>
+  </data>
+  <data name="ResetDataBase" xml:space="preserve">
+    <value>重置信息数据库</value>
+  </data>
+  <data name="DeleteMovieNotExist" xml:space="preserve">
+    <value>删除不存在影片</value>
+  </data>
+  <data name="DeleteMovieNotInScan" xml:space="preserve">
+    <value>删除不位于【启动时扫描】目录中的影片</value>
+  </data>
 </root>

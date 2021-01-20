@@ -20,7 +20,7 @@
                 <ResourceDictionary Source="XAML/ContextMenuStyle.xaml"/>
                 <ResourceDictionary Source="XAML/RadioButtonStyle.xaml"/>
                 <ResourceDictionary Source="XAML/RadioButtonFlatStyle.xaml"/>
-
+                <ResourceDictionary Source="XAML/TabControlStyle.xaml"/>
                 <ResourceDictionary Source="XAML/ListBoxStyle.xaml"/>
                 <ResourceDictionary Source="XAML/ProgressBarStyle.xaml"/>
                 <ResourceDictionary Source="XAML/ScrollViewStyle.xaml"/>

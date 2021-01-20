@@ -556,6 +556,24 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 删除不存在影片 的本地化字符串。
+        /// </summary>
+        public static string DeleteMovieNotExist {
+            get {
+                return ResourceManager.GetString("DeleteMovieNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除不位于【启动时扫描】目录中的影片 的本地化字符串。
+        /// </summary>
+        public static string DeleteMovieNotInScan {
+            get {
+                return ResourceManager.GetString("DeleteMovieNotInScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 删除空格 的本地化字符串。
         /// </summary>
         public static string DeleteSpace {
@@ -1164,6 +1182,15 @@ namespace Jvedio.Language {
         public static string Log {
             get {
                 return ResourceManager.GetString("Log", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 管理 的本地化字符串。
+        /// </summary>
+        public static string Management {
+            get {
+                return ResourceManager.GetString("Management", resourceCulture);
             }
         }
         
@@ -2185,6 +2212,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 重置信息数据库 的本地化字符串。
+        /// </summary>
+        public static string ResetDataBase {
+            get {
+                return ResourceManager.GetString("ResetDataBase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 分辨率 的本地化字符串。
         /// </summary>
         public static string Resolution {
@@ -2631,6 +2667,15 @@ namespace Jvedio.Language {
         public static string Stamp {
             get {
                 return ResourceManager.GetString("Stamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 统计 的本地化字符串。
+        /// </summary>
+        public static string Statistic {
+            get {
+                return ResourceManager.GetString("Statistic", resourceCulture);
             }
         }
         

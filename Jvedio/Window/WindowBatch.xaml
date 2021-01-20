@@ -553,6 +553,13 @@
         </ScrollViewer>
 
 
+        <!--<TabControl Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl"  Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
+            <TabItem Header="批量同步">
+                
+            </TabItem>
+        </TabControl>-->
+
+
 
         <Grid Margin="0 0 0 50" Background="{DynamicResource BackgroundMain}"   Height="auto">
             <Grid.ColumnDefinitions>
