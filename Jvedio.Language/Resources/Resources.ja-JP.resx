@@ -951,4 +951,58 @@
   <data name="BossKeyError" xml:space="preserve">
     <value>ホットキーの競合！</value>
   </data>
+  <data name="VedioScan" xml:space="preserve">
+    <value>ビデオスキャン</value>
+  </data>
+  <data name="ImportAccess" xml:space="preserve">
+    <value>Access データのインポート</value>
+  </data>
+  <data name="ImportNFO" xml:space="preserve">
+    <value>メタデータNFOインポート</value>
+  </data>
+  <data name="EuropeScan" xml:space="preserve">
+    <value>ヨーロッパとアメリカのフィルムスキャン</value>
+  </data>
+  <data name="UNCScan" xml:space="preserve">
+    <value>ネットワークディスクスキャン</value>
+  </data>
+  <data name="ScanAllFile" xml:space="preserve">
+    <value>フルスキャン（すべてのエンジン速度スキャン）</value>
+  </data>
+  <data name="ViewLog" xml:space="preserve">
+    <value>レポートを見る</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>やめる</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>実施した</value>
+  </data>
+  <data name="DragFileIn" xml:space="preserve">
+    <value>または、ファイルをここにドラッグアンドドロップします</value>
+  </data>
+  <data name="ScanFolder" xml:space="preserve">
+    <value>スキャンフォルダ</value>
+  </data>
+  <data name="ImportSingleNFO" xml:space="preserve">
+    <value>単一のNFOをインポートする</value>
+  </data>
+  <data name="CopyNFOImage" xml:space="preserve">
+    <value>ビデオの同じファイルの下にあるポスターとファンアートをJvedioの画像ディレクトリにコピーします</value>
+  </data>
+  <data name="Attention_EuropeScan" xml:space="preserve">
+    <value>注：ファイル名にはBrazzersExxtra.20.07.22の形式が含まれている必要があり、ダウンロード情報はバスサイトのみをサポートします</value>
+  </data>
+  <data name="DragFolderIn" xml:space="preserve">
+    <value>または、ここのフォルダにドラッグします</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>選択する</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>従来型</value>
+  </data>
+  <data name="Europe" xml:space="preserve">
+    <value>ヨーロッパとアメリカ</value>
+  </data>
 </root>

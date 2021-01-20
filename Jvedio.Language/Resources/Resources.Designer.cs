@@ -223,6 +223,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 注：文件名必须包含形如 BrazzersExxtra.20.07.22，下载信息仅支持 Bus 站点 的本地化字符串。
+        /// </summary>
+        public static string Attention_EuropeScan {
+            get {
+                return ResourceManager.GetString("Attention_EuropeScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 注：如果在命名规则里添加内容，则命名的时候若对应字段为空，则新增的内容不会自动删除，如：{id}_（{title}），若 {title} 为空，则两边的括号不会自动删除 的本地化字符串。
         /// </summary>
         public static string Attention_Rename {
@@ -304,6 +313,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 开始扫描 的本地化字符串。
+        /// </summary>
+        public static string BeginScan {
+            get {
+                return ResourceManager.GetString("BeginScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 老板键 的本地化字符串。
         /// </summary>
         public static string BossKey {
@@ -367,6 +385,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 选择文件 的本地化字符串。
+        /// </summary>
+        public static string ChooseFile {
+            get {
+                return ResourceManager.GetString("ChooseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 清除 的本地化字符串。
         /// </summary>
         public static string Clear {
@@ -390,6 +417,15 @@ namespace Jvedio.Language {
         public static string Confirm {
             get {
                 return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 复制视频同文件下的 poster 与 fanart 到 Jvedio 的图片目录 的本地化字符串。
+        /// </summary>
+        public static string CopyNFOImage {
+            get {
+                return ResourceManager.GetString("CopyNFOImage", resourceCulture);
             }
         }
         
@@ -484,6 +520,24 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 或拖入文件至此 的本地化字符串。
+        /// </summary>
+        public static string DragFileIn {
+            get {
+                return ResourceManager.GetString("DragFileIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 或拖入文件夹至此 的本地化字符串。
+        /// </summary>
+        public static string DragFolderIn {
+            get {
+                return ResourceManager.GetString("DragFolderIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 时长 的本地化字符串。
         /// </summary>
         public static string Duration {
@@ -507,6 +561,24 @@ namespace Jvedio.Language {
         public static string Enable {
             get {
                 return ResourceManager.GetString("Enable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 欧美 的本地化字符串。
+        /// </summary>
+        public static string Europe {
+            get {
+                return ResourceManager.GetString("Europe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 欧美影片扫描 的本地化字符串。
+        /// </summary>
+        public static string EuropeScan {
+            get {
+                return ResourceManager.GetString("EuropeScan", resourceCulture);
             }
         }
         
@@ -673,11 +745,47 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 Access 数据导入 的本地化字符串。
+        /// </summary>
+        public static string ImportAccess {
+            get {
+                return ResourceManager.GetString("ImportAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 元数据 NFO 导入 的本地化字符串。
+        /// </summary>
+        public static string ImportNFO {
+            get {
+                return ResourceManager.GetString("ImportNFO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 同时导入扫描出的NFO文件（覆盖已存在的信息） 的本地化字符串。
         /// </summary>
         public static string ImportNFOWhenScan {
             get {
                 return ResourceManager.GetString("ImportNFOWhenScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 导入个数 的本地化字符串。
+        /// </summary>
+        public static string ImportNumber {
+            get {
+                return ResourceManager.GetString("ImportNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 导入单个NFO 的本地化字符串。
+        /// </summary>
+        public static string ImportSingleNFO {
+            get {
+                return ResourceManager.GetString("ImportSingleNFO", resourceCulture);
             }
         }
         
@@ -741,6 +849,15 @@ namespace Jvedio.Language {
         public static string InputTitle6 {
             get {
                 return ResourceManager.GetString("InputTitle6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 权限不够 的本地化字符串。
+        /// </summary>
+        public static string InsufficientPermissions {
+            get {
+                return ResourceManager.GetString("InsufficientPermissions", resourceCulture);
             }
         }
         
@@ -1096,6 +1213,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 取消当前下载任务 的本地化字符串。
+        /// </summary>
+        public static string Message_CancelCurrentTask {
+            get {
+                return ResourceManager.GetString("Message_CancelCurrentTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 文件夹路径不能为空 的本地化字符串。
         /// </summary>
         public static string Message_CanNotBeNull {
@@ -1209,6 +1335,15 @@ namespace Jvedio.Language {
         public static string Message_OpenFail {
             get {
                 return ResourceManager.GetString("Message_OpenFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 路径冲突 的本地化字符串。
+        /// </summary>
+        public static string Message_PathConflict {
+            get {
+                return ResourceManager.GetString("Message_PathConflict", resourceCulture);
             }
         }
         
@@ -1474,6 +1609,33 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 无报告 的本地化字符串。
+        /// </summary>
+        public static string NoLog {
+            get {
+                return ResourceManager.GetString("NoLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 常规 的本地化字符串。
+        /// </summary>
+        public static string Normal {
+            get {
+                return ResourceManager.GetString("Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 不存在 的本地化字符串。
+        /// </summary>
+        public static string NotExists {
+            get {
+                return ResourceManager.GetString("NotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 无 的本地化字符串。
         /// </summary>
         public static string Nothing {
@@ -1497,6 +1659,15 @@ namespace Jvedio.Language {
         public static string NotSupport {
             get {
                 return ResourceManager.GetString("NotSupport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 数目 的本地化字符串。
+        /// </summary>
+        public static string Number {
+            get {
+                return ResourceManager.GetString("Number", resourceCulture);
             }
         }
         
@@ -1533,6 +1704,15 @@ namespace Jvedio.Language {
         public static string Options {
             get {
                 return ResourceManager.GetString("Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 其他任务正在进行 的本地化字符串。
+        /// </summary>
+        public static string OtherTaskIsRunning {
+            get {
+                return ResourceManager.GetString("OtherTaskIsRunning", resourceCulture);
             }
         }
         
@@ -1681,6 +1861,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 执行 的本地化字符串。
+        /// </summary>
+        public static string Run {
+            get {
+                return ResourceManager.GetString("Run", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 小罗伯特·唐尼/格温妮斯·帕特洛/泰伦斯·霍华德/杰夫·布里吉斯 的本地化字符串。
         /// </summary>
         public static string SampleMovie_Actor {
@@ -1789,11 +1978,29 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 全盘扫描（Everything引擎极速扫描） 的本地化字符串。
+        /// </summary>
+        public static string ScanAllFile {
+            get {
+                return ResourceManager.GetString("ScanAllFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 启动时扫描以下目录 的本地化字符串。
         /// </summary>
         public static string ScanDirWhenStartUp {
             get {
                 return ResourceManager.GetString("ScanDirWhenStartUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 扫描文件夹 的本地化字符串。
+        /// </summary>
+        public static string ScanFolder {
+            get {
+                return ResourceManager.GetString("ScanFolder", resourceCulture);
             }
         }
         
@@ -2203,6 +2410,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 停止 的本地化字符串。
+        /// </summary>
+        public static string Stop {
+            get {
+                return ResourceManager.GetString("Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 停止同步 的本地化字符串。
         /// </summary>
         public static string StopSync {
@@ -2419,6 +2635,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 网络磁盘扫描 的本地化字符串。
+        /// </summary>
+        public static string UNCScan {
+            get {
+                return ResourceManager.GetString("UNCScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 升级 的本地化字符串。
         /// </summary>
         public static string Upgrade {
@@ -2473,6 +2698,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 视频扫描 的本地化字符串。
+        /// </summary>
+        public static string VedioScan {
+            get {
+                return ResourceManager.GetString("VedioScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 视频类型 的本地化字符串。
         /// </summary>
         public static string VedioType {
@@ -2487,6 +2721,15 @@ namespace Jvedio.Language {
         public static string Version {
             get {
                 return ResourceManager.GetString("Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 查看报告 的本地化字符串。
+        /// </summary>
+        public static string ViewLog {
+            get {
+                return ResourceManager.GetString("ViewLog", resourceCulture);
             }
         }
         

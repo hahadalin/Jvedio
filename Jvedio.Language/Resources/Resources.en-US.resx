@@ -703,7 +703,7 @@
     <value>Picture save path</value>
   </data>
   <data name="ChooseDir" xml:space="preserve">
-    <value>Select folder</value>
+    <value>Select Folder</value>
   </data>
   <data name="Choose" xml:space="preserve">
     <value>Select</value>
@@ -950,5 +950,74 @@
   </data>
   <data name="BossKeyError" xml:space="preserve">
     <value>Hotkey conflict!</value>
+  </data>
+  <data name="VedioScan" xml:space="preserve">
+    <value>Video scan</value>
+  </data>
+  <data name="ImportAccess" xml:space="preserve">
+    <value>Access data import</value>
+  </data>
+  <data name="ImportNFO" xml:space="preserve">
+    <value>Metadata NFO import</value>
+  </data>
+  <data name="EuropeScan" xml:space="preserve">
+    <value>European and American film scanning</value>
+  </data>
+  <data name="UNCScan" xml:space="preserve">
+    <value>UNC Scan</value>
+  </data>
+  <data name="ScanAllFile" xml:space="preserve">
+    <value>Full scan (Everything engine)</value>
+  </data>
+  <data name="ViewLog" xml:space="preserve">
+    <value>View Log</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Run</value>
+  </data>
+  <data name="DragFileIn" xml:space="preserve">
+    <value>Or drag and drop the file here</value>
+  </data>
+  <data name="ScanFolder" xml:space="preserve">
+    <value>Scan folder</value>
+  </data>
+  <data name="ImportSingleNFO" xml:space="preserve">
+    <value>Import a single NFO</value>
+  </data>
+  <data name="CopyNFOImage" xml:space="preserve">
+    <value>Copy poster and fanart under the same file of the video to the picture directory of Jvedio</value>
+  </data>
+  <data name="Attention_EuropeScan" xml:space="preserve">
+    <value>Note: The file name must contain the form BrazzersExxtra.20.07.22, and the download information only supports the Bus site</value>
+  </data>
+  <data name="DragFolderIn" xml:space="preserve">
+    <value>Or drag into the folder here</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Select File</value>
+  </data>
+  <data name="Europe" xml:space="preserve">
+    <value>Europe</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="ImportNumber" xml:space="preserve">
+    <value>Import Number</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="InsufficientPermissions" xml:space="preserve">
+    <value>Insufficient Permissions</value>
+  </data>
+  <data name="NotExists" xml:space="preserve">
+    <value>Not Exists</value>
+  </data>
+  <data name="NoLog" xml:space="preserve">
+    <value>No Log</value>
   </data>
 </root>

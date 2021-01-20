@@ -714,9 +714,6 @@
     <Resource Include="Resources\Picture\screenshot.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Picture\admin.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Skin\white\detaildownload.png" />
   </ItemGroup>
   <ItemGroup>

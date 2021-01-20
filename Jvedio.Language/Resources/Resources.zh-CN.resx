@@ -951,4 +951,85 @@
   <data name="BossKeyError" xml:space="preserve">
     <value>热键冲突！</value>
   </data>
+  <data name="VedioScan" xml:space="preserve">
+    <value>视频扫描</value>
+  </data>
+  <data name="ImportAccess" xml:space="preserve">
+    <value>Access 数据导入</value>
+  </data>
+  <data name="ImportNFO" xml:space="preserve">
+    <value>元数据 NFO 导入</value>
+  </data>
+  <data name="EuropeScan" xml:space="preserve">
+    <value>欧美影片扫描</value>
+  </data>
+  <data name="UNCScan" xml:space="preserve">
+    <value>网络磁盘扫描</value>
+  </data>
+  <data name="ScanAllFile" xml:space="preserve">
+    <value>全盘扫描（Everything引擎极速扫描）</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>执行</value>
+  </data>
+  <data name="DragFileIn" xml:space="preserve">
+    <value>或拖入文件至此</value>
+  </data>
+  <data name="ScanFolder" xml:space="preserve">
+    <value>扫描文件夹</value>
+  </data>
+  <data name="ViewLog" xml:space="preserve">
+    <value>查看报告</value>
+  </data>
+  <data name="ImportSingleNFO" xml:space="preserve">
+    <value>导入单个NFO</value>
+  </data>
+  <data name="CopyNFOImage" xml:space="preserve">
+    <value>复制视频同文件下的 poster 与 fanart 到 Jvedio 的图片目录</value>
+  </data>
+  <data name="Attention_EuropeScan" xml:space="preserve">
+    <value>注：文件名必须包含形如 BrazzersExxtra.20.07.22，下载信息仅支持 Bus 站点</value>
+  </data>
+  <data name="DragFolderIn" xml:space="preserve">
+    <value>或拖入文件夹至此</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>选择文件</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>常规</value>
+  </data>
+  <data name="Europe" xml:space="preserve">
+    <value>欧美</value>
+  </data>
+  <data name="Message_CancelCurrentTask" xml:space="preserve">
+    <value>取消当前下载任务</value>
+  </data>
+  <data name="Message_PathConflict" xml:space="preserve">
+    <value>路径冲突</value>
+  </data>
+  <data name="ImportNumber" xml:space="preserve">
+    <value>导入个数</value>
+  </data>
+  <data name="BeginScan" xml:space="preserve">
+    <value>开始扫描</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>数目</value>
+  </data>
+  <data name="InsufficientPermissions" xml:space="preserve">
+    <value>权限不够</value>
+  </data>
+  <data name="NotExists" xml:space="preserve">
+    <value>不存在</value>
+  </data>
+  <data name="NoLog" xml:space="preserve">
+    <value>无报告</value>
+  </data>
+  <data name="OtherTaskIsRunning" xml:space="preserve">
+    <value>其他任务正在进行</value>
+  </data>
 </root>
