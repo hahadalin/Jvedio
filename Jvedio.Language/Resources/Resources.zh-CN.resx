@@ -613,7 +613,7 @@
     <value>设为默认打开</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>修改</value>
+    <value>编辑</value>
   </data>
   <data name="IsToRemove" xml:space="preserve">
     <value>确认移除</value>
@@ -1073,5 +1073,62 @@
   </data>
   <data name="Message_EditUpdateSuccess" xml:space="preserve">
     <value>路径、视频类型、文件大小、创建时间、导入时间成功更新！</value>
+  </data>
+  <data name="MovieInfo" xml:space="preserve">
+    <value>影片信息</value>
+  </data>
+  <data name="VedioInfo" xml:space="preserve">
+    <value>视频信息</value>
+  </data>
+  <data name="HD" xml:space="preserve">
+    <value>高清</value>
+  </data>
+  <data name="Translated" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="FlowOut" xml:space="preserve">
+    <value>流出</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>上一个</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>下一个</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>视频格式</value>
+  </data>
+  <data name="FrameRate" xml:space="preserve">
+    <value>帧率</value>
+  </data>
+  <data name="BitRate" xml:space="preserve">
+    <value>总码率</value>
+  </data>
+  <data name="Resolution" xml:space="preserve">
+    <value>分辨率</value>
+  </data>
+  <data name="DisplayAspectRatio" xml:space="preserve">
+    <value>宽高比</value>
+  </data>
+  <data name="BitDepth" xml:space="preserve">
+    <value>位深度</value>
+  </data>
+  <data name="FrameCount" xml:space="preserve">
+    <value>总帧数</value>
+  </data>
+  <data name="AudioFormat" xml:space="preserve">
+    <value>音频格式</value>
+  </data>
+  <data name="AudioBitRate" xml:space="preserve">
+    <value>音频码率</value>
+  </data>
+  <data name="AudioSamplingRate" xml:space="preserve">
+    <value>采样率</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>声道数</value>
+  </data>
+  <data name="FileExtension" xml:space="preserve">
+    <value>文件后缀</value>
   </data>
 </root>

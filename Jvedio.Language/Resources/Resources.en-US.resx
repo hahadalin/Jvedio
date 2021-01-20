@@ -1074,4 +1074,61 @@
   <data name="Message_EditUpdateSuccess" xml:space="preserve">
     <value>The path, video type, file size, creation time, and import time are successfully updated!</value>
   </data>
+  <data name="Translated" xml:space="preserve">
+    <value>Translated</value>
+  </data>
+  <data name="FlowOut" xml:space="preserve">
+    <value>FlowOut</value>
+  </data>
+  <data name="MovieInfo" xml:space="preserve">
+    <value>Movie information</value>
+  </data>
+  <data name="VedioInfo" xml:space="preserve">
+    <value>Video information</value>
+  </data>
+  <data name="HD" xml:space="preserve">
+    <value>HD</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>Video format</value>
+  </data>
+  <data name="FrameRate" xml:space="preserve">
+    <value>FrameRate</value>
+  </data>
+  <data name="BitRate" xml:space="preserve">
+    <value>BitRate</value>
+  </data>
+  <data name="Resolution" xml:space="preserve">
+    <value>Resolution</value>
+  </data>
+  <data name="DisplayAspectRatio" xml:space="preserve">
+    <value>DisplayAspectRatio</value>
+  </data>
+  <data name="BitDepth" xml:space="preserve">
+    <value>BitDepth</value>
+  </data>
+  <data name="FrameCount" xml:space="preserve">
+    <value>FrameCount</value>
+  </data>
+  <data name="AudioFormat" xml:space="preserve">
+    <value>AudioFormat</value>
+  </data>
+  <data name="AudioBitRate" xml:space="preserve">
+    <value>AudioBitRate</value>
+  </data>
+  <data name="AudioSamplingRate" xml:space="preserve">
+    <value>AudioSamplingRate</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="FileExtension" xml:space="preserve">
+    <value>File Extension</value>
+  </data>
 </root>

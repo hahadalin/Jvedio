@@ -259,6 +259,33 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 音频码率 的本地化字符串。
+        /// </summary>
+        public static string AudioBitRate {
+            get {
+                return ResourceManager.GetString("AudioBitRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 音频格式 的本地化字符串。
+        /// </summary>
+        public static string AudioFormat {
+            get {
+                return ResourceManager.GetString("AudioFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 采样率 的本地化字符串。
+        /// </summary>
+        public static string AudioSamplingRate {
+            get {
+                return ResourceManager.GetString("AudioSamplingRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 自动添加中字标签戳 的本地化字符串。
         /// </summary>
         public static string AutoAddStamp {
@@ -331,6 +358,24 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 位深度 的本地化字符串。
+        /// </summary>
+        public static string BitDepth {
+            get {
+                return ResourceManager.GetString("BitDepth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 总码率 的本地化字符串。
+        /// </summary>
+        public static string BitRate {
+            get {
+                return ResourceManager.GetString("BitRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 老板键 的本地化字符串。
         /// </summary>
         public static string BossKey {
@@ -354,6 +399,15 @@ namespace Jvedio.Language {
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 声道数 的本地化字符串。
+        /// </summary>
+        public static string Channel {
+            get {
+                return ResourceManager.GetString("Channel", resourceCulture);
             }
         }
         
@@ -538,6 +592,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 宽高比 的本地化字符串。
+        /// </summary>
+        public static string DisplayAspectRatio {
+            get {
+                return ResourceManager.GetString("DisplayAspectRatio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 或拖入文件至此 的本地化字符串。
         /// </summary>
         public static string DragFileIn {
@@ -565,7 +628,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 修改 的本地化字符串。
+        ///   查找类似 编辑 的本地化字符串。
         /// </summary>
         public static string Edit {
             get {
@@ -655,6 +718,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 文件后缀 的本地化字符串。
+        /// </summary>
+        public static string FileExtension {
+            get {
+                return ResourceManager.GetString("FileExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 文件位置 的本地化字符串。
         /// </summary>
         public static string FilePath {
@@ -673,11 +745,47 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 流出 的本地化字符串。
+        /// </summary>
+        public static string FlowOut {
+            get {
+                return ResourceManager.GetString("FlowOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 视频格式 的本地化字符串。
+        /// </summary>
+        public static string Format {
+            get {
+                return ResourceManager.GetString("Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 窗体效果 的本地化字符串。
         /// </summary>
         public static string FormEffect {
             get {
                 return ResourceManager.GetString("FormEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 总帧数 的本地化字符串。
+        /// </summary>
+        public static string FrameCount {
+            get {
+                return ResourceManager.GetString("FrameCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 帧率 的本地化字符串。
+        /// </summary>
+        public static string FrameRate {
+            get {
+                return ResourceManager.GetString("FrameRate", resourceCulture);
             }
         }
         
@@ -696,6 +804,15 @@ namespace Jvedio.Language {
         public static string Genre {
             get {
                 return ResourceManager.GetString("Genre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 高清 的本地化字符串。
+        /// </summary>
+        public static string HD {
+            get {
+                return ResourceManager.GetString("HD", resourceCulture);
             }
         }
         
@@ -1609,6 +1726,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 影片信息 的本地化字符串。
+        /// </summary>
+        public static string MovieInfo {
+            get {
+                return ResourceManager.GetString("MovieInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 影片标签 的本地化字符串。
         /// </summary>
         public static string MovieLabels {
@@ -1668,6 +1794,15 @@ namespace Jvedio.Language {
         public static string NewLibrary {
             get {
                 return ResourceManager.GetString("NewLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 下一个 的本地化字符串。
+        /// </summary>
+        public static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
             }
         }
         
@@ -1861,6 +1996,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 上一个 的本地化字符串。
+        /// </summary>
+        public static string Previous {
+            get {
+                return ResourceManager.GetString("Previous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 重命名 的本地化字符串。
         /// </summary>
         public static string Raname {
@@ -1956,6 +2100,15 @@ namespace Jvedio.Language {
         public static string RenameRule {
             get {
                 return ResourceManager.GetString("RenameRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 分辨率 的本地化字符串。
+        /// </summary>
+        public static string Resolution {
+            get {
+                return ResourceManager.GetString("Resolution", resourceCulture);
             }
         }
         
@@ -2752,6 +2905,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 中文 的本地化字符串。
+        /// </summary>
+        public static string Translated {
+            get {
+                return ResourceManager.GetString("Translated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 中文名称 的本地化字符串。
         /// </summary>
         public static string TranslatedTitle {
@@ -2811,6 +2973,15 @@ namespace Jvedio.Language {
         public static string VedioDuration {
             get {
                 return ResourceManager.GetString("VedioDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 视频信息 的本地化字符串。
+        /// </summary>
+        public static string VedioInfo {
+            get {
+                return ResourceManager.GetString("VedioInfo", resourceCulture);
             }
         }
         

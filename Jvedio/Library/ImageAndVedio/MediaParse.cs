@@ -168,7 +168,7 @@ namespace Jvedio
                 {
                     Format = format,
                     BitRate = vBitRate,
-                    Duration = duration.Replace("h", "小时").Replace("mn", "分钟").Replace("ms", "毫秒").Replace("s", "秒"),
+                    Duration = duration,
                     FileSize = fileSize,
                     Width = width,
                     Height = height,

@@ -1074,4 +1074,61 @@
   <data name="Message_EditUpdateSuccess" xml:space="preserve">
     <value>パス、ビデオタイプ、ファイルサイズ、作成時間、およびインポート時間が正常に更新されました</value>
   </data>
+  <data name="MovieInfo" xml:space="preserve">
+    <value>映画情報</value>
+  </data>
+  <data name="VedioInfo" xml:space="preserve">
+    <value>ビデオ情報</value>
+  </data>
+  <data name="HD" xml:space="preserve">
+    <value>HD</value>
+  </data>
+  <data name="Translated" xml:space="preserve">
+    <value>日本人</value>
+  </data>
+  <data name="FlowOut" xml:space="preserve">
+    <value>流出</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>前</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>次</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>ビデオフォーマット</value>
+  </data>
+  <data name="FrameRate" xml:space="preserve">
+    <value>フレームレート</value>
+  </data>
+  <data name="BitRate" xml:space="preserve">
+    <value>合計ビットレート</value>
+  </data>
+  <data name="Resolution" xml:space="preserve">
+    <value>解決</value>
+  </data>
+  <data name="DisplayAspectRatio" xml:space="preserve">
+    <value>アスペクト比</value>
+  </data>
+  <data name="BitDepth" xml:space="preserve">
+    <value>ビット深度</value>
+  </data>
+  <data name="FrameCount" xml:space="preserve">
+    <value>フレームの総数</value>
+  </data>
+  <data name="AudioFormat" xml:space="preserve">
+    <value>オーディオフォーマット</value>
+  </data>
+  <data name="AudioBitRate" xml:space="preserve">
+    <value>オーディオビットレート</value>
+  </data>
+  <data name="AudioSamplingRate" xml:space="preserve">
+    <value>サンプリングレート</value>
+  </data>
+  <data name="Channel" xml:space="preserve">
+    <value>チャネル数</value>
+  </data>
+  <data name="FileExtension" xml:space="preserve">
+    <value>ファイル拡張子</value>
+  </data>
 </root>
