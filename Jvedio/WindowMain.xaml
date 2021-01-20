@@ -46,7 +46,6 @@
         <local:BoolToImageStretchConverter x:Key="BoolToImageStretchConverter" />
         <local:VedioTypeEnumConverter x:Key="VedioTypeEnumConverter" />
         <local:BitToGBConverter x:Key="BitToGBConverter" />
-        <local:IntToVedioTypeConverter x:Key="IntToVedioTypeConverter" />
         <local:WidthToMarginConverter x:Key="WidthToMarginConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <local:MovieStampTypeToStringConverter x:Key="MovieStampTypeToStringConverter" />
@@ -1623,7 +1622,7 @@
                                     </Border>
 
 
-                                    <Button Visibility="Collapsed" Click="Button_Click_2" Content="测试" />
+                                    <Button Visibility="Visible" Click="Button_Click_2" Content="测试" />
 
                                 </StackPanel>
 

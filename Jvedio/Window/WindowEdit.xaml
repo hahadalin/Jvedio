@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:Jvedio"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:p="clr-namespace:Jvedio.Properties"
+        xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         mc:Ignorable="d"
-        Title="修改" 
+        Title="{x:Static lang:Resources.Edit}" 
         WindowStartupLocation="CenterScreen"
         MinHeight="450"
         MinWidth="800"
-                         
-        ContentRendered="Window_ContentRendered"
-        
+        Height="450"
+        Width="800"
         >
 
     <Window.Resources>
@@ -72,6 +72,24 @@
 
         </Style>
 
+        <Style x:Key="BaseHCTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBaseBaseStyle}">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="auto"/>
+            <Setter Property="FontFamily" Value="Times New Romans"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5 0"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource ForegroundSearch}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
 
 
         <Style x:Key="BaseTextBox" TargetType="TextBox">
@@ -116,101 +134,67 @@
             <StackPanel hc:Growl.GrowlParent="True" hc:Growl.Token="EditGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
 
-        <Border Background="#F3F3F3"  BorderBrush="Gray" BorderThickness="2"></Border>
 
-        <Grid Margin="0 0 0 50" Background="{DynamicResource BackgroundMain}"   Height="auto">
+        <Grid  Background="{DynamicResource BackgroundMain}"   >
 
+            <Grid.RowDefinitions >
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
-
-            <Border Margin="20,60,0,30" Height="auto" Width="200" HorizontalAlignment="Left" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="2" Background="{DynamicResource BackgroundSide}"  CornerRadius="10">
-                <Border.Effect>
-                    <DropShadowEffect Color="Gray"/>
-                </Border.Effect>
-            </Border>
-
-
-
-            <Grid  Height="40" Width="200"  Margin="20 10 10 0"  HorizontalAlignment="Left" VerticalAlignment="Top" >
-                <Border Style="{StaticResource SearchTextGrid}" x:Name="SearchBorder"  CornerRadius="20"  Background="{DynamicResource BackgroundSearch}" BorderThickness="2" ></Border>
-                <Canvas Height="25" Width="25"    HorizontalAlignment="Left" Margin="10 0 0 0" MouseDown="SearchContent">
-                    <Ellipse Style="{StaticResource Ellipse}" Width="16" Height="16"  Canvas.Left="3" Canvas.Top="3" />
-                    <Ellipse Style="{StaticResource Ellipse}" Width="10" Height="10" Fill="{DynamicResource BackgroundSearch}" Canvas.Left="6" Canvas.Top="6" />
-                    <Line Style="{StaticResource Line}" X1="16" Y1="16" X2="22" Y2="22" StrokeThickness="2.5"  ></Line>
-                </Canvas>
-
-                <TextBox ToolTip="搜索当前番号" KeyDown="SearchTextBox_KeyDown" Style="{StaticResource SearchTextBox}" Text="Search"  GotFocus="SearchTextBox_GotFocus" LostFocus="SearchTextBox_LostFocus" CaretBrush="{DynamicResource ForegroundSearch}" x:Name="SearchTextBox"   FontSize="16"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="40 0 40 0" Background="Transparent" BorderThickness="0"  />
-                <Canvas Height="25" Width="25"   HorizontalAlignment="Right" Margin="0 0 10 0" MouseDown="ClearSearctTextBox">
-                    <Line Style="{StaticResource Line}" X1="5" Y1="5" X2="20" Y2="20" StrokeThickness="2.5"  ></Line>
-                    <Line x:Name="DelCanvas" Style="{StaticResource Line}" X1="20" Y1="5" X2="5" Y2="20" StrokeThickness="2.5" ></Line>
-                </Canvas>
-            </Grid>
-
-
-
-            <Grid Margin="25,70,0,40" Height="auto" Width="190" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="Transparent">
-
-                <ListBox ItemsSource="{Binding MovieIDList}" SelectionChanged="IdListBox_SelectionChanged"   ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="IdListBox" BorderThickness="0" Background="Transparent" Height="auto" Margin="5"   Width="auto"   HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-
-                    <ListBox.ItemTemplate >
-                        <DataTemplate >
-                            <TextBlock Text="{Binding}" Height="20" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" ></TextBlock>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
-
-
-
-
-
-            <Grid Margin="250,20,20,20" Height="auto" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                <Border BorderBrush="Black" BorderThickness="2" Background="{DynamicResource BackgroundSide}" CornerRadius="10"></Border>
-                <ScrollViewer Margin="0,20,20,20"  >
+            <Grid Grid.Row="0" Margin="10" Height="auto" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                <Border  BorderThickness="0" Background="{DynamicResource BackgroundSide}" CornerRadius="5"></Border>
+                <ScrollViewer   >
                     <StackPanel   HorizontalAlignment="Stretch" Width="auto" Margin="5 20 5 20" VerticalAlignment="Stretch" Height="auto">
+                        <DockPanel >
+                            <Label  Content="{x:Static lang:Resources.ID}"  Style="{StaticResource BaseLabel2}"/>
+                            <hc:TextBox x:Name="idTextBox"    Text="{Binding DetailMovie.id,Mode=OneWay}"  ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}" />
+                        </DockPanel>
                         <Grid Style="{StaticResource InfoGrid}">
-                        <Label  Content="识别码"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox x:Name="idTextBox"  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.id,Mode=OneWay}" Style="{StaticResource BaseTextBox}"/>
-                    </Grid>
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="视频类型"  Style="{StaticResource BaseLabel2}"/>
-                            <StackPanel Orientation="Horizontal" Margin="120 0">
-                                <RadioButton  FontSize="15" Foreground="{DynamicResource ForegroundSearch}" IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=0,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}" Content="未识别" Style="{StaticResource FlatRadioButton}"/>
+                            <Label  Content="{x:Static lang:Resources.VedioType}"  Style="{StaticResource BaseLabel2}"/>
+                            <StackPanel Orientation="Horizontal" Margin="110 0">
+                                <RadioButton  FontSize="15" Foreground="{DynamicResource ForegroundSearch}" IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=0,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}" Content="{x:Static lang:Resources.NotRecognize}" Style="{StaticResource FlatRadioButton}"/>
                                 <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"  IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=1,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="{Binding TypeName1,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
                                 <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"   IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=2,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="{Binding TypeName2,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
                                 <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"    IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=3,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="{Binding TypeName3,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
                             </StackPanel>
                         </Grid>
                         <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="喜爱程度"  Style="{StaticResource BaseLabel2}"/>
-                            <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="130 5" Cursor="Hand">
+                            <Label  Content="{x:Static lang:Resources.Favorites}"  Style="{StaticResource BaseLabel2}"/>
+                            <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="110 5" Cursor="Hand">
                                 <hc:Rate AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   DefaultValue="0"/>
                             </StackPanel>
-
-
                         </Grid>
 
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="演员"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.actor}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
-                        
-                        
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="类别"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox   GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.genre}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
+                        <DockPanel >
+                            <Label  Content="{x:Static lang:Resources.Actor}"  Style="{StaticResource BaseLabel2}"/>
+                            <hc:TextBox    Text="{Binding DetailMovie.actor}"  ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                        </DockPanel>
 
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="标签"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.label}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
 
-                        <Grid Style="{StaticResource InfoGrid}" >
-                            <Label  Content="文件位置"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.filepath}" Style="{StaticResource BaseTextBox}" Margin="120 2 180 2"/>
-                            <Button Margin="100 0" HorizontalAlignment="Right" Width="70" Height="20" Content="选择视频" Click="ChoseMovie" Style="{StaticResource ButtonStyleFill}" />
+                        <DockPanel >
+                            <Label  Content="{x:Static lang:Resources.Genre}"  Style="{StaticResource BaseLabel2}"/>
+                            <hc:TextBox     Text="{Binding DetailMovie.genre}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                        </DockPanel>
 
-                            <Border AllowDrop="True" x:Name="ChoseMovieBorder" DragOver="ChoseMovieBorder_DragOver" Drop="ChoseMovieBorder_Drop"   BorderThickness="2"  Margin="5" Width="90" HorizontalAlignment="Right">
+                        <DockPanel >
+                            <Label  Content="{x:Static lang:Resources.Label}"  Style="{StaticResource BaseLabel2}"/>
+                            <hc:TextBox    Text="{Binding DetailMovie.label}"  ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}" />
+                        </DockPanel>
+
+                        <Grid Style="{StaticResource InfoGrid}" Height="auto" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0"  Content="{x:Static lang:Resources.FilePath}"  Style="{StaticResource BaseLabel2}"/>
+                            <hc:TextBox  Grid.Column="1"     Text="{Binding DetailMovie.filepath}"  Style="{StaticResource BaseHCTextBox}" />
+                            <Button Grid.Column="2"  HorizontalAlignment="Right" Width="auto" Height="auto" Content="{x:Static lang:Resources.ChooseFile}" Click="ChoseMovie" Style="{StaticResource ButtonStyleFill}" />
+
+                            <Border Grid.Column="3" AllowDrop="True" x:Name="ChoseMovieBorder" DragOver="ChoseMovieBorder_DragOver" Drop="ChoseMovieBorder_Drop" Margin="5 0"   BorderThickness="2" CornerRadius="5"  Width="auto" HorizontalAlignment="Right">
                                 <Border.BorderBrush>
                                     <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
                                         <DrawingBrush.Drawing>
@@ -227,20 +211,20 @@
                                         </DrawingBrush.Drawing>
                                     </DrawingBrush>
                                 </Border.BorderBrush>
-                                <TextBlock Text="拖入文件至此" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                <TextBlock Margin="5" Text="{x:Static lang:Resources.DragFileIn}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundGlobal}"/>
 
                             </Border>
                         </Grid>
 
 
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="文件大小"  Style="{StaticResource BaseLabel2}"/>
+                        <DockPanel >
+                            <Label  Content="{x:Static lang:Resources.FileSize}"  Style="{StaticResource BaseLabel2}"/>
 
-                            <TextBox IsReadOnly="True" GotFocus="TextBox_GotFocus" Text="{Binding DetailMovie.filesize,Converter={StaticResource BitToGBConverter},Mode=OneWay}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
+                            <hc:TextBox IsReadOnly="True"  Text="{Binding DetailMovie.filesize,Converter={StaticResource BitToGBConverter},Mode=OneWay}"     Style="{StaticResource BaseHCTextBox}"/>
+                        </DockPanel>
 
 
-                        <CheckBox IsChecked="{Binding EditWindow_ShowMore,Mode=TwoWay,Source={x:Static p:Settings.Default}}" ToolTip="显示详情信息" x:Name="ExtraInfoCheckBox"  Content="详情信息 -------------------------------------"  HorizontalAlignment="Left" Margin="25 5"/>
+                        <CheckBox IsChecked="{Binding EditWindow_ShowMore,Mode=TwoWay,Source={x:Static p:Settings.Default}}"  x:Name="ExtraInfoCheckBox"  Content="{x:Static lang:Resources.ShowOtherOptions}"  HorizontalAlignment="Left" Margin="25 5"/>
 
                         <StackPanel x:Name="ExtraInfoStackPanel" Orientation="Vertical" >
                             <StackPanel.Style>
@@ -256,79 +240,81 @@
                                 </Style>
                             </StackPanel.Style>
 
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="系列"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox   GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.tag}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
+                            <DockPanel >
+                                <Label  Content="{x:Static lang:Resources.Tag}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox     Text="{Binding DetailMovie.tag}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
 
 
-                    <Grid Style="{StaticResource InfoGrid}" >
-                        <Label  Content="导入时间"  Style="{StaticResource BaseLabel2}"/>
-                                <TextBox IsReadOnly="True"   GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.otherinfo}" Style="{StaticResource BaseTextBox}"/>
-                    </Grid>
-                    <Grid Style="{StaticResource InfoGrid}" >
-                        <Label  Content="创建时间"  Style="{StaticResource BaseLabel2}"/>
-                                <TextBox IsReadOnly="True"   GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.scandate}" Style="{StaticResource BaseTextBox}"/>
-                    </Grid>
-                            <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="标题"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.title}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
-                        <Grid Panel.ZIndex="5" Style="{StaticResource InfoGrid}">
-                            <Label  Content="发行日期"  Style="{StaticResource BaseLabel2}"   />
-                            <TextBox  x:Name="ReleaseDateTextBox" Text="{Binding DetailMovie.releasedate}" Style="{StaticResource BaseTextBox}" IsReadOnly="False" PreviewMouseLeftButtonUp="SetDateTime"/>
-                            <Popup  VerticalOffset="5" HorizontalOffset="5" x:Name="CalenderPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=ReleaseDateTextBox}" PopupAnimation="Fade"   AllowsTransparency="True" StaysOpen="False" IsOpen="False">
-                                <Calendar x:Name="Calendar" SelectedDatesChanged="Calendar_SelectedDatesChanged" IsTodayHighlighted="False"  />
-                            </Popup>
-                        </Grid>
-                    <Grid Style="{StaticResource InfoGrid}">
-                        <Label  Content="评分"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.rating}" Style="{StaticResource BaseTextBox}"/>
-                    </Grid>
-
-                       
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  GotFocus="TextBox_GotFocus"   Content="长度"  Style="{StaticResource BaseLabel2}"/>
-                        <TextBox Text="{Binding DetailMovie.runtime}" Style="{StaticResource BaseTextBox}"/>
-                    </Grid>
+                            <DockPanel >
+                                <Label  Content="{x:Static lang:Resources.ImportDate}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox IsReadOnly="True"     Text="{Binding DetailMovie.otherinfo}"     Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
+                            <DockPanel  >
+                                <Label  Content="{x:Static lang:Resources.CreatedDate}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox IsReadOnly="True"     Text="{Binding DetailMovie.scandate}"    Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
+                            <DockPanel >
+                                <Label  Content="{x:Static lang:Resources.Title}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox    Text="{Binding DetailMovie.title}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
+                            <DockPanel Panel.ZIndex="5" >
+                                <Label  Content="{x:Static lang:Resources.ReleaseDate}"  Style="{StaticResource BaseLabel2}"   />
+                                <hc:DatePicker x:Name="DatePicker" SelectedDateChanged="DatePicker_SelectedDateChanged"  BorderThickness="1" BorderBrush="{DynamicResource BackgroundMenu}" Background="Transparent" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" Text="{Binding DetailMovie.releasedate}"  Width="200" HorizontalAlignment="Left"> </hc:DatePicker>
+                                
+                                <!--<hc:TextBox  x:Name="ReleaseDateTextBox" Text="{Binding DetailMovie.releasedate}"    ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}" PreviewMouseLeftButtonUp="SetDateTime"/>
+                                <Popup  VerticalOffset="5" HorizontalOffset="5" x:Name="CalenderPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=ReleaseDateTextBox}" PopupAnimation="Fade"   AllowsTransparency="True" StaysOpen="False" IsOpen="False">
+                                    <Calendar x:Name="Calendar" SelectedDatesChanged="Calendar_SelectedDatesChanged" IsTodayHighlighted="False"  />
+                                </Popup>-->
+                            </DockPanel>
+                            <DockPanel >
+                                <Label  Content="{x:Static lang:Resources.Rating}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox    Text="{Binding DetailMovie.rating}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
 
 
-                        <Grid Style="{StaticResource InfoGrid}" >
-                            <Label  Content="分段视频"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.subsection}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
+                            <DockPanel >
+                                <Label     Content="{x:Static lang:Resources.Duration}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox Text="{Binding DetailMovie.runtime}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
 
 
-
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="导演"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.director}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
-
-                        
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="发行商"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.studio}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
-
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="中文标题"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.chinesetitle}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
+                            <DockPanel   >
+                                <Label  Content="{x:Static lang:Resources.SubsectionVedio}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox    Text="{Binding DetailMovie.subsection}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
 
 
 
+                            <DockPanel  >
+                                <Label  Content="{x:Static lang:Resources.Director}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox    Text="{Binding DetailMovie.director}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
 
 
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="摘要"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.plot}" Style="{StaticResource BaseTextBox}" ToolTip="显示影片的内容"/>
-                        </Grid>
+                            <DockPanel  >
+                                <Label  Content="{x:Static lang:Resources.Studio}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox    Text="{Binding DetailMovie.studio}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
 
-                        <Grid Style="{StaticResource InfoGrid}">
-                            <Label  Content="国家"  Style="{StaticResource BaseLabel2}"/>
-                            <TextBox  GotFocus="TextBox_GotFocus"  Text="{Binding DetailMovie.country}" Style="{StaticResource BaseTextBox}"/>
-                        </Grid>
+                            <DockPanel  >
+                                <Label  Content="{x:Static lang:Resources.TranslatedTitle}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox    Text="{Binding DetailMovie.chinesetitle}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
+
+
+
+
+
+                            <DockPanel  >
+                                <Label  Content="{x:Static lang:Resources.Plot}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox    Text="{Binding DetailMovie.plot}"  ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
+
+                            <DockPanel  >
+                                <Label  Content="{x:Static lang:Resources.Country}"  Style="{StaticResource BaseLabel2}"/>
+                                <hc:TextBox    Text="{Binding DetailMovie.country}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
+                            </DockPanel>
 
                         </StackPanel>
 
@@ -340,13 +326,14 @@
 
 
 
-
+            <Button MinWidth="80" Grid.Row="1"  Content="{x:Static lang:Resources.Save}" Height="auto" Margin="10 10 10 20"  VerticalAlignment="Bottom" Width="auto"  Style="{StaticResource ButtonStyleFill}"  Click="Button_Click"></Button>
 
 
         </Grid>
-        <Grid Background="{DynamicResource BackgroundTitle}"  Height="50" VerticalAlignment="Bottom">
-            <Button  Content="保存修改" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}"  Click="Button_Click"></Button>
-        </Grid>
+
+
+
+
 
     </Grid>
 </local:Jvedio_BaseWindow>

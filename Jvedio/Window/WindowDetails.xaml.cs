@@ -607,39 +607,8 @@ namespace Jvedio
         public void EditInfo(object sender, RoutedEventArgs e)
         {
 
-            string table = vieModel.GetCurrentListFromMain();
-
             if (WindowEdit != null)  WindowEdit.Close(); 
-            string id = vieModel.DetailMovie.id;
-
-            if (string.IsNullOrEmpty(table))
-            {
-                WindowEdit = new WindowEdit(id);
-            }
-            else
-            {
-                WindowEdit = new WindowEdit(id, table);
-            }
-            
-
-
-            WindowEdit.Loaded +=
-                delegate (object _sender, RoutedEventArgs args)
-                {
-                    if (WindowEdit.IdListBox.Items.Count > 0)
-                    {
-                        for (int i = 0; i <= WindowEdit.IdListBox.Items.Count - 1; i++)
-                        {
-                            string movieid = WindowEdit.IdListBox.Items[i].ToString();
-                            if (movieid.ToLower() == id.ToLower())
-                            {
-                                WindowEdit.IdListBox.SelectedItem = WindowEdit.IdListBox.Items[i];
-                                WindowEdit.IdListBox.ScrollIntoView(WindowEdit.IdListBox.Items[i]);
-                                break;
-                            }
-                        }
-                    }
-                };
+            WindowEdit = new WindowEdit(vieModel.DetailMovie.id);
             WindowEdit.Show();
         }
 
@@ -1448,7 +1417,7 @@ namespace Jvedio
                 PlayVedio(sender, new MouseEventArgs(InputManager.Current.PrimaryMouseDevice, 0));
             else if (e.Key == Key.E)
                 EditInfo(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if (e.Key == Key.D && string.IsNullOrEmpty( vieModel.GetCurrentListFromMain()))
+            else if (e.Key == Key.D )
                 DownLoad(sender, new RoutedEventArgs());
 
         }
@@ -1990,12 +1959,11 @@ namespace Jvedio
 
         private void BigImage_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            string table = vieModel.GetCurrentListFromMain();
             Image image = (Image)sender;
             ContextMenu contextMenu = image.ContextMenu;
 
-            if (!string.IsNullOrEmpty(table))
-            {
+            //if (!string.IsNullOrEmpty(table))
+            //{
                 foreach (MenuItem item in contextMenu.Items)
                 {
                     string header = item.Header.ToString();
@@ -2004,14 +1972,14 @@ namespace Jvedio
                     else
                         item.Visibility = Visibility.Visible;
                 }
-            }
-            else
-            {
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                        item.Visibility = Visibility.Visible;
-                }
-            }
+            //}
+            //else
+            //{
+            //    foreach (MenuItem item in contextMenu.Items)
+            //    {
+            //            item.Visibility = Visibility.Visible;
+            //    }
+            //}
 
 
             if (contextMenu.Visibility != Visibility.Visible) return;
@@ -2026,7 +1994,6 @@ namespace Jvedio
                         {
                             MenuItem menuItem1 = new MenuItem();
                             menuItem1.Header = item.Name;
-                            //menuItem1.Name = item.Name;
                             menuItem1.Click += MyListItemClick;
                             menuItem.Items.Add(menuItem1);
                         }

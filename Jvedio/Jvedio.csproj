@@ -285,12 +285,6 @@
     <Compile Include="Window\WindowEdit.xaml.cs">
       <DependentUpon>WindowEdit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Window\WindowImageViewer.xaml.cs">
-      <DependentUpon>WindowImageViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Window\WindowSearch.xaml.cs">
-      <DependentUpon>WindowSearch.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Window\WindowBatch.xaml.cs">
       <DependentUpon>WindowBatch.xaml</DependentUpon>
     </Compile>
@@ -313,10 +307,6 @@
       <DependentUpon>Window_DBManagement.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\WaitingPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Window\WindowSearch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -409,10 +399,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window\WindowEdit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Window\WindowImageViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

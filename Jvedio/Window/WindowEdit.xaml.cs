@@ -22,7 +22,7 @@ namespace Jvedio
 
         private string ID ;
 
-
+        
         public WindowEdit(string id="")
         {
             InitializeComponent();
@@ -34,23 +34,17 @@ namespace Jvedio
             else
                 vieModel.Query(ID);
             this.DataContext = vieModel;
-        }
 
-        public WindowEdit(string id ,string tablename)
-        {
-            InitializeComponent();
-            ID = id;
-            vieModel = new VieModel_Edit();
-            vieModel.Query(ID, tablename);
-            this.DataContext = vieModel;
+            this.Height = SystemParameters.PrimaryScreenHeight * 0.6;
+            this.Width = SystemParameters.PrimaryScreenHeight * 0.6 * 800 / 450;
         }
 
         public void ChoseMovie(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            OpenFileDialog1.Title = "选择一个视频";
+            OpenFileDialog1.Title = Jvedio.Language.Resources.ChooseFile;
             OpenFileDialog1.FileName = "";
-            OpenFileDialog1.Filter = "常见视频文件(*.avi, *.mp4, *.mkv, *.mpg, *.rmvb)| *.avi; *.mp4; *.mkv; *.mpg; *.rmvb|其它视频文件((*.rm, *.mov, *.mpeg, *.flv, *.wmv, *.m4v)| *.rm; *.mov; *.mpeg; *.flv; *.wmv; *.m4v|所有文件 (*.*)|*.*";
+            OpenFileDialog1.Filter =$"{Jvedio.Language.Resources.NormalVedio}(*.avi, *.mp4, *.mkv, *.mpg, *.rmvb)| *.avi; *.mp4; *.mkv; *.mpg; *.rmvb|{Jvedio.Language.Resources.OtherVedio}((*.rm, *.mov, *.mpeg, *.flv, *.wmv, *.m4v)| *.rm; *.mov; *.mpeg; *.flv; *.wmv; *.m4v|{Jvedio.Language.Resources.AllFile} (*.*)|*.*";
             OpenFileDialog1.FilterIndex = 1;
             OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -62,63 +56,10 @@ namespace Jvedio
         }
 
 
-        private void SearchTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                TextBox tb = sender as TextBox;
-
-                string result = Identify.SearchSimilarityAnalysis(tb.Text, vieModel.MovieIDList.ToList()); //相似度分析
 
 
-                if (result != "")
-                {
-                    for (int i = 0; i <= IdListBox.Items.Count - 1; i++)
-                    {
-                        if (IdListBox.Items[i].ToString().ToUpper() == result.ToUpper())
-                        {
-                            IdListBox.SelectedItem = IdListBox.Items[i];
-                            IdListBox.ScrollIntoView(IdListBox.Items[i]);
-                            break;
-                        }
-                    }
-                }
-
-            }
-        }
-
-        private void SearchTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (SearchTextBox.Text == "") { SearchTextBox.Text = "Search"; }
-        }
-
-        private void SearchTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (SearchTextBox.Text == "Search") { SearchTextBox.Text = ""; }
-        }
-
-        private void ClearSearctTextBox(object sender, MouseButtonEventArgs e)
-        {
-            SearchTextBox.Text = "";
-            SearchTextBox.Focus();
-        }
-
-        public void SearchContent(object sender, MouseButtonEventArgs e)
-        {
-            //vieModel.Search = SearchTextBox.Text;
-        }
-
-        private void IdListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string table = ((Main)Jvedio.GetWindow.Get("Main")).GetCurrentList();
-            string movieid = IdListBox.SelectedItem.ToString();
-            if (string.IsNullOrEmpty(table))
-                vieModel.Query(movieid);
-            else
-                vieModel.Query(movieid,table);
 
 
-        }
 
         private void UpdateDetail()
         {
@@ -191,8 +132,8 @@ namespace Jvedio
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (vieModel.DetailMovie.id == "") { new Msgbox(this, "识别码为空！").ShowDialog(); return; }
-            if (vieModel.DetailMovie.vediotype <= 0) { new Msgbox(this, "请选择视频类型！").ShowDialog(); return; }
+            if (vieModel.DetailMovie.id == "") { new Msgbox(this, Jvedio.Language.Resources.NullID).ShowDialog(); return; }
+            if (vieModel.DetailMovie.vediotype <= 0) { new Msgbox(this, Jvedio.Language.Resources.Message_ChooseVedioType).ShowDialog(); return; }
 
             string oldID = vieModel.DetailMovie.id;
             string newID = idTextBox.Text;
@@ -201,11 +142,11 @@ namespace Jvedio
             {
                 UpdateMain(oldID,newID);//更新主窗口
                 UpdateDetail();//更新详情窗口
-                HandyControl.Controls.Growl.Success("保存成功", "EditGrowl");
+                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "EditGrowl");
             }
             else
             {
-                HandyControl.Controls.Growl.Error("保存失败，已存在该识别码", "EditGrowl");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_SaveFailForExistID, "EditGrowl");
             }
 
         }
@@ -224,56 +165,18 @@ namespace Jvedio
             e.Handled = true;
         }
 
-        private void SetDateTime(object sender, MouseButtonEventArgs e)
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            CalenderPopup.IsOpen = true;
-
             DateTime date = DateTime.Now; ;
-            bool success = DateTime.TryParse(vieModel.DetailMovie.releasedate, out date);
-            if (success) Calendar.SelectedDate = date;
-        }
-
-        private void Calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
-            this.vieModel.DetailMovie.releasedate = Calendar.SelectedDate?.ToString("yyyy-MM-dd ");
-            ReleaseDateTextBox.Text= Calendar.SelectedDate?.ToString("yyyy-MM-dd ");
-        }
-
-
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            ClearPopupFocus();
-        }
-
-
-
-        /// <summary>
-        /// 傻逼 Popup ，就是他么的没法获得焦点，cntmd
-        /// </summary>
-
-        public void ClearPopupFocus()
-        {
-            CalenderPopup.IsOpen = false;
-        }
-
-
-
-        private void Window_ContentRendered(object sender, EventArgs e)
-        {
-            if (IdListBox.Items.Count > 0)
+            bool success = DateTime.TryParse(DatePicker.SelectedDate?.ToString("yyyy-MM-dd "), out date);
+            if (success)
             {
-                for (int i = 0; i < IdListBox.Items.Count; i++)
-                {
-                    string movieid = IdListBox.Items[i].ToString();
-                    if (movieid.ToLower() == ID.ToLower())
-                    {
-                       IdListBox.SelectedItem = IdListBox.Items[i];
-                        IdListBox.ScrollIntoView(IdListBox.Items[i]);
-                        break;
-                    }
-                }
+                this.vieModel.DetailMovie.releasedate = date.ToString("yyyy-MM-dd ");
             }
+
         }
+
+
 
         private void ChoseMovieBorder_DragOver(object sender, DragEventArgs e)
         {
@@ -329,12 +232,17 @@ namespace Jvedio
                     vieModel.Query(vieModel.id);
                 else
                     vieModel.Query(vieModel.id, table);
-                HandyControl.Controls.Growl.Success("路径、视频类型、文件大小、创建时间、导入时间成功更新！", "EditGrowl");
+                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_EditUpdateSuccess, "EditGrowl");
             }
             else
             {
                 vieModel.Refresh(filepath);
             }
+        }
+
+        private void Jvedio_BaseWindow_ContentRendered(object sender, EventArgs e)
+        {
+
         }
     }
 
@@ -360,27 +268,5 @@ namespace Jvedio
         }
     }
 
-    public class IntToVedioTypeConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null) return "未识别";
-
-            if (value.ToString() == "1")
-                return Properties.Settings.Default.TypeName1;
-            else if (value.ToString() == "2")
-                return Properties.Settings.Default.TypeName2;
-            else if (value.ToString() == "3")
-                return Properties.Settings.Default.TypeName3;
-            else 
-                return "未识别";
-
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
 
 }

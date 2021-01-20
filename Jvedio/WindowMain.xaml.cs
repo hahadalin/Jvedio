@@ -67,7 +67,6 @@ namespace Jvedio
 
         public Settings WindowSet = null;
         public VieModel_Main vieModel;
-        public WindowSearch windowSearch = null;
 
         private HwndSource _hwndSource;
 
@@ -4362,9 +4361,6 @@ namespace Jvedio
             if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.F)
             {
                 //高级检索
-                if (windowSearch != null) { windowSearch.Close(); }
-                windowSearch = new WindowSearch();
-                windowSearch.Show();
             }
             else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Right)
             {
@@ -5047,9 +5043,8 @@ namespace Jvedio
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            if (!(Jvedio.GetWindow.Get("LoadActorMovies") is LoadActorMovies loadActorMovies))
-                loadActorMovies = new LoadActorMovies();
-            loadActorMovies.Show();
+            WindowEdit windowEdit = new WindowEdit();
+            windowEdit.Show();
 
 
         }

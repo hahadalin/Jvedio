@@ -1032,4 +1032,46 @@
   <data name="OtherTaskIsRunning" xml:space="preserve">
     <value>其他任务正在进行</value>
   </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>文件位置</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>系列</value>
+  </data>
+  <data name="Plot" xml:space="preserve">
+    <value>摘要</value>
+  </data>
+  <data name="SubsectionVedio" xml:space="preserve">
+    <value>分段视频</value>
+  </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>创建时间</value>
+  </data>
+  <data name="ImportDate" xml:space="preserve">
+    <value>导入时间</value>
+  </data>
+  <data name="NotRecognize" xml:space="preserve">
+    <value>未识别</value>
+  </data>
+  <data name="NormalVedio" xml:space="preserve">
+    <value>常见视频文件</value>
+  </data>
+  <data name="OtherVedio" xml:space="preserve">
+    <value>其它视频文件</value>
+  </data>
+  <data name="AllFile" xml:space="preserve">
+    <value>所有文件</value>
+  </data>
+  <data name="NullID" xml:space="preserve">
+    <value>识别码为空</value>
+  </data>
+  <data name="Message_ChooseVedioType" xml:space="preserve">
+    <value>请选择视频类型</value>
+  </data>
+  <data name="Message_SaveFailForExistID" xml:space="preserve">
+    <value>保存失败，已存在该识别码</value>
+  </data>
+  <data name="Message_EditUpdateSuccess" xml:space="preserve">
+    <value>路径、视频类型、文件大小、创建时间、导入时间成功更新！</value>
+  </data>
 </root>

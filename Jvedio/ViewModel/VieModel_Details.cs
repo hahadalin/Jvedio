@@ -122,20 +122,8 @@ namespace Jvedio.ViewModel
 
         public void SaveLove()
         {
-            string table = GetCurrentListFromMain();
-            if (!string.IsNullOrEmpty(table))
-            {
-                using(MySqlite mySqlite=new MySqlite("mylist"))
-                {
-                    mySqlite.ExecuteSql($"update {table} set favorites={ DetailMovie.favorites} where id='{DetailMovie.id}'");
-                }
-            }
-            else
-            {
+
                 DataBase.UpdateMovieByID(DetailMovie.id, "favorites", DetailMovie.favorites, "string");
-            }
-
-
         }
 
         public void SaveLabel()
@@ -148,27 +136,12 @@ namespace Jvedio.ViewModel
         }
 
 
-        public string GetCurrentListFromMain()
-        {
-            Main main = Jvedio.GetWindow.Get("Main") as Main;
-            return main.GetCurrentList();
-        }
 
 
         public void Query(string movieid)
         {
             DetailMovie detailMovie = null;
-            string table = GetCurrentListFromMain();
-            if (!string.IsNullOrEmpty(table))
-            {
-                //清单
-                using (MySqlite mySqlite = new MySqlite("mylist.sqlite"))
-                {
-                    detailMovie = mySqlite.SelectDetailMovieBySql($"select * from {table} where id='{movieid}'");
-                }
-            }
-            else
-            {
+
                 detailMovie = DataBase.SelectDetailMovieById(movieid);
                 //访问次数+1
                 if (detailMovie != null)
@@ -176,13 +149,7 @@ namespace Jvedio.ViewModel
                     detailMovie.visits += 1;
                     DataBase.UpdateMovieByID(movieid, "visits", detailMovie.visits);
                 }
-            }
-
-
-
-
-
-
+            
             //释放图片内存
             if (DetailMovie != null)
             {

@@ -1006,7 +1006,7 @@
     <value>Normal</value>
   </data>
   <data name="ImportNumber" xml:space="preserve">
-    <value>Import Number</value>
+    <value>Number of imports</value>
   </data>
   <data name="Number" xml:space="preserve">
     <value>Number</value>
@@ -1019,5 +1019,59 @@
   </data>
   <data name="NoLog" xml:space="preserve">
     <value>No Log</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>FilePath</value>
+  </data>
+  <data name="Message_CancelCurrentTask" xml:space="preserve">
+    <value>Cancel the current download task</value>
+  </data>
+  <data name="Message_PathConflict" xml:space="preserve">
+    <value>Path conflict</value>
+  </data>
+  <data name="BeginScan" xml:space="preserve">
+    <value>Start scanning</value>
+  </data>
+  <data name="OtherTaskIsRunning" xml:space="preserve">
+    <value>Other tasks are in progress</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Series</value>
+  </data>
+  <data name="Plot" xml:space="preserve">
+    <value>Plot</value>
+  </data>
+  <data name="SubsectionVedio" xml:space="preserve">
+    <value>Segmented video</value>
+  </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Creation time</value>
+  </data>
+  <data name="ImportDate" xml:space="preserve">
+    <value>Import time</value>
+  </data>
+  <data name="NotRecognize" xml:space="preserve">
+    <value>Unrecognized</value>
+  </data>
+  <data name="NormalVedio" xml:space="preserve">
+    <value>Common video files</value>
+  </data>
+  <data name="OtherVedio" xml:space="preserve">
+    <value>Other video files</value>
+  </data>
+  <data name="AllFile" xml:space="preserve">
+    <value>All files</value>
+  </data>
+  <data name="NullID" xml:space="preserve">
+    <value>ID is empty</value>
+  </data>
+  <data name="Message_ChooseVedioType" xml:space="preserve">
+    <value>Please select video type</value>
+  </data>
+  <data name="Message_SaveFailForExistID" xml:space="preserve">
+    <value>Save failed, the ID already exists</value>
+  </data>
+  <data name="Message_EditUpdateSuccess" xml:space="preserve">
+    <value>The path, video type, file size, creation time, and import time are successfully updated!</value>
   </data>
 </root>
