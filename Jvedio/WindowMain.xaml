@@ -1103,11 +1103,6 @@
                     </StackPanel>
 
                     <StackPanel Panel.ZIndex="5" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Border Visibility="Collapsed" ToolTip="皮肤"  x:Name="SkinBorder"   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowSkinPopup">
-                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=skin,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
-                        </Border>
-
-
 
                         <Border Visibility="Collapsed"  ToolTip="全屏"   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="FullScreen" >
                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=fullscreen,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
@@ -1122,21 +1117,6 @@
                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Border>
                     </StackPanel>
-
-
-
-                    <Popup VerticalOffset="10" HorizontalOffset="-40" x:Name="SkinPopup" Placement="Bottom" PopupAnimation="Fade"  PlacementTarget="{Binding ElementName=SkinBorder}" AllowsTransparency="True" StaysOpen="False" IsOpen="False">
-                        <Border Background="{DynamicResource BackgroundMenu}"  Margin="2" >
-                            <Border.Effect>
-                                <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
-                            </Border.Effect>
-                            <StackPanel   Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Margin="5" Width="100">
-                                <Button  Style="{StaticResource SetButton}" Content="黑色" Click="SetSkinProperty" />
-                                <Button  Style="{StaticResource SetButton}"  Content="白色"  Click="SetSkinProperty"   />
-                                <Button  Style="{StaticResource SetButton}"  Content="蓝色" Click="SetSkinProperty"  />
-                            </StackPanel>
-                        </Border>
-                    </Popup>
                 </Grid>
             </Border>
 
@@ -2700,7 +2680,7 @@
                     </Grid>
 
                     <!--进度条-->
-                    <ProgressBar Grid.Column="1"  ValueChanged="ProgressBar_ValueChanged" Grid.Row="1" DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged" x:Name="ProgressBar" Visibility="Visible" Foreground="LightGreen"   Height="5" Margin="20 0 20 2"   VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
+                    <ProgressBar  Style="{StaticResource ProgressBarSuccess}" Grid.Column="1"  ValueChanged="ProgressBar_ValueChanged" Grid.Row="1" DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged" x:Name="ProgressBar" Visibility="Visible"  Value="50"   Height="5" Margin="20 0 20 2"   VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
 
 
                 </Grid>

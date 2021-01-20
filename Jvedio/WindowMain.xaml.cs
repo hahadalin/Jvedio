@@ -4142,13 +4142,6 @@ namespace Jvedio
 
         }
 
-        public void ShowSkinPopup(object sender, MouseButtonEventArgs e)
-        {
-            if (SkinPopup.IsOpen)
-                SkinPopup.IsOpen = false;
-            else
-                SkinPopup.IsOpen = true;
-        }
 
         private void ClearRecentWatched(object sender, RoutedEventArgs e)
         {

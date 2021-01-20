@@ -39,30 +39,7 @@ namespace Jvedio
             cts.Token.Register(() => { HandyControl.Controls.Growl.Info("取消当前下载任务！", "ToolsGrowl"); });
             ct = cts.Token;
             Running = false;
-
-
-            var Grids = MainGrid.Children.OfType<Grid>().ToList();
-            foreach (var item in Grids) item.Visibility = Visibility.Hidden;
-            Grids[Properties.Settings.Default.ToolsIndex].Visibility = Visibility.Visible;
-
-            var RadioButtons = RadioButtonStackPanel.Children.OfType<RadioButton>().ToList();
-            RadioButtons[Properties.Settings.Default.ToolsIndex].IsChecked = true;
-
-        }
-
-        public void ShowGrid(object sender, RoutedEventArgs e)
-        {
-
-            RadioButton radioButton = (RadioButton)sender;
-            StackPanel SP = radioButton.Parent as StackPanel;
-            var radioButtons = SP.Children.OfType<RadioButton>().ToList();
-            var Grids = MainGrid.Children.OfType<Grid>().ToList();
-            foreach (var item in Grids) item.Visibility = Visibility.Hidden;
-            Grids[radioButtons.IndexOf(radioButton)].Visibility = Visibility.Visible;
-
-            Properties.Settings.Default.ToolsIndex = radioButtons.IndexOf(radioButton);
-            Properties.Settings.Default.Save();
-
+            TabControl.SelectedIndex = Properties.Settings.Default.ToolsIndex;
         }
 
         public void ShowAccessPath(object sender, RoutedEventArgs e)
@@ -256,9 +233,7 @@ namespace Jvedio
             cts.Token.Register(() => { HandyControl.Controls.Growl.Info("取消当前下载任务！", "ToolsGrowl"); });
             ct = cts.Token;
 
-            var grids = MainGrid.Children.OfType<Grid>().ToList();
-            int index = 0;
-            for (int i = 0; i < grids.Count; i++) { if (grids[i].Visibility == Visibility.Visible) { index = i; break; } }
+            int index = TabControl.SelectedIndex;
             Running = true;
             switch (index)
             {
@@ -460,7 +435,7 @@ namespace Jvedio
                         LoadingStackPanel.Visibility = Visibility.Hidden;
                         if (!cts.IsCancellationRequested)
                         {
-                            HandyControl.Controls.Growl.Info($"扫描出 {totalnum} 个，导入 {insertnum} 个");
+                            HandyControl.Controls.Growl.Info($"扫描出 {totalnum} 个，导入 {insertnum} 个", "ToolsGrowl");
                         }
                     }
                     finally
@@ -491,7 +466,7 @@ namespace Jvedio
                         catch { CanScan = false; }
                     });
 
-                    if (!CanScan) { LoadingStackPanel.Visibility = Visibility.Hidden; HandyControl.Controls.Growl.Error($"权限不够！"); break; }
+                    if (!CanScan) { LoadingStackPanel.Visibility = Visibility.Hidden; HandyControl.Controls.Growl.Error($"权限不够！", "ToolsGrowl"); break; }
 
 
                     bool IsEurope = !(bool)ScanTypeRadioButton.IsChecked;
@@ -510,7 +485,7 @@ namespace Jvedio
                         });
 
                         LoadingStackPanel.Visibility = Visibility.Hidden;
-                        if (!cts.IsCancellationRequested) { HandyControl.Controls.Growl.Info($"扫描出 {totalnum} 个，导入 {insertnum} 个"); }
+                        if (!cts.IsCancellationRequested) { HandyControl.Controls.Growl.Info($"扫描出 {totalnum} 个，导入 {insertnum} 个", "ToolsGrowl"); }
                     }
                     finally
                     {
@@ -560,39 +535,36 @@ namespace Jvedio
         {
             try
             {
-
-                var grids = MainGrid.Children.OfType<Grid>().ToList();
-                int index = 0;
-                for (int i = 0; i < grids.Count; i++) { if (grids[i].Visibility == Visibility.Visible) { index = i; break; } }
+                int index = TabControl.SelectedIndex;
                 string filepath = "";
                 switch (index)
                 {
                     case 0:
                         filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在");
+                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在", "ToolsGrowl");
                         break;
 
                     case 1:
                         filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\DataBase\\{DateTime.Now.ToString("yyyy -MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在");
+                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在", "ToolsGrowl");
                         break;
                     case 2:
                         filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在");
+                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在", "ToolsGrowl");
                         break;
 
                     case 3:
                         filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在");
+                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在", "ToolsGrowl");
                         break;
 
                     case 4:
-                        HandyControl.Controls.Growl.Info("无报告");
+                        HandyControl.Controls.Growl.Info("无报告", "ToolsGrowl");
                         break;
 
                     case 5:
                         filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在");
+                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error("不存在", "ToolsGrowl");
                         break;
 
                     default:
@@ -685,8 +657,8 @@ namespace Jvedio
 
         private void DownloadMany(object sender, RoutedEventArgs e)
         {
-            if (Running) { HandyControl.Controls.Growl.Warning("其他任务正在进行！"); return; }
-            if (IsDownLoading()) { HandyControl.Controls.Growl.Warning("请等待下载结束！"); return; }
+            if (Running) { HandyControl.Controls.Growl.Warning("其他任务正在进行！", "ToolsGrowl"); return; }
+            if (IsDownLoading()) { HandyControl.Controls.Growl.Warning("请等待下载结束！", "ToolsGrowl"); return; }
 
 
 
@@ -709,7 +681,7 @@ namespace Jvedio
            if(!cts.IsCancellationRequested) cts.Cancel();
             LoadingStackPanel.Visibility = Visibility.Hidden;
 
-            HandyControl.Controls.Growl.Info("已取消！");
+            HandyControl.Controls.Growl.Info("已取消！", "ToolsGrowl");
             Running = false;
         }
 
@@ -858,6 +830,12 @@ namespace Jvedio
                     break;
                 }
             }
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Properties.Settings.Default.ToolsIndex = TabControl.SelectedIndex;
+            Properties.Settings.Default.Save();
         }
     }
 

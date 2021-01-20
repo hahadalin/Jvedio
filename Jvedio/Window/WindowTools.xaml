@@ -80,7 +80,132 @@
 
 
         </Style>
-      
+        <Style x:Key="TabControlStyle1" TargetType="{x:Type TabControl}">
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type TabItem}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                        <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Padding" Value="10,6"/>
+                        <Setter Property="MinHeight" Value="30"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type TabItem}">
+                                    <hc:SimplePanel x:Name="templateRoot" SnapsToDevicePixels="True">
+                                        <Border x:Name="mainBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="{TemplateBinding Background}" Margin="0"/>
+                                        <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" TextElement.Foreground="{DynamicResource ForegroundGlobal}" Focusable="False" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                    </hc:SimplePanel>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="False">
+                                            <Setter Property="BorderThickness" TargetName="mainBorder" Value="0"/>
+                                        </Trigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                                <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}" Value="Top"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Panel.ZIndex" Value="1"/>
+                                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{DynamicResource PrimaryBrush}"/>
+                                            <Setter Property="BorderThickness" TargetName="mainBorder" Value="0,0,0,3"/>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                                <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}" Value="Left"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Panel.ZIndex" Value="1"/>
+                                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{DynamicResource ForegroundGlobal}"/>
+                                            <Setter Property="BorderThickness" TargetName="mainBorder" Value="0,0,3,0"/>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                                <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}" Value="Bottom"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Panel.ZIndex" Value="1"/>
+                                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{DynamicResource PrimaryBrush}"/>
+                                            <Setter Property="BorderThickness" TargetName="mainBorder" Value="0,3,0,0"/>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
+                                                <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}" Value="Right"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Panel.ZIndex" Value="1"/>
+                                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{DynamicResource PrimaryBrush}"/>
+                                            <Setter Property="BorderThickness" TargetName="mainBorder" Value="3,0,0,0"/>
+                                        </MultiDataTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid x:Name="templateRoot" Background="{TemplateBinding Background}" ClipToBounds="True" SnapsToDevicePixels="True" KeyboardNavigation.TabNavigation="Local">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition x:Name="ColumnDefinition0"/>
+                                    <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                                    <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TabPanel x:Name="headerPanel" Background="Transparent" Grid.Column="0" IsItemsHost="True" Margin="0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
+                                <Border x:Name="contentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,2,0,0" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" HorizontalAlignment="Stretch" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local" VerticalAlignment="Stretch">
+                                    <ContentPresenter x:Name="PART_SelectedContentHost" ContentTemplate="{TemplateBinding SelectedContentTemplate}" Content="{TemplateBinding SelectedContent}" ContentStringFormat="{TemplateBinding SelectedContentStringFormat}" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="TabStripPlacement" Value="Bottom">
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
+                                <Setter Property="Grid.Row" TargetName="headerPanel" Value="1"/>
+                                <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                                <Setter Property="BorderThickness" TargetName="contentPanel" Value="0,0,0,1"/>
+                            </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Left">
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
+                                <Setter Property="Grid.Column" TargetName="headerPanel" Value="0"/>
+                                <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="contentPanel" Value="1"/>
+                                <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                                <Setter Property="BorderThickness" TargetName="contentPanel" Value="1,0,0,0"/>
+                            </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Right">
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
+                                <Setter Property="Grid.Column" TargetName="headerPanel" Value="1"/>
+                                <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="contentPanel" Value="0"/>
+                                <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                                <Setter Property="BorderThickness" TargetName="contentPanel" Value="0,0,1,0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
 
     </Window.Resources>
 
@@ -91,334 +216,289 @@
             <StackPanel hc:Growl.Token="ToolsGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
 
+        <Grid>
 
-        <DockPanel>
-
-            <Grid Background="Transparent"  >
-                <DockPanel >
-                    <StackPanel x:Name="RadioButtonStackPanel"  Orientation="Vertical"  Background="{DynamicResource BackgroundSide}">
-                        <RadioButton Click="ShowGrid"  Style="{StaticResource RadioButtonStyleSide}" Content="视频扫描" Margin="5 5 5 0"/>
-                        <RadioButton Click="ShowGrid"  Style="{StaticResource RadioButtonStyleSide}" Content="Access数据导入" Margin="5 5 5 0"/>
-                        <RadioButton Click="ShowGrid"  Style="{StaticResource RadioButtonStyleSide}" Content="元数据（NFO）导入" Margin="5 5 10 0"/>
-                        <RadioButton Click="ShowGrid"  Style="{StaticResource RadioButtonStyleSide}" Content="欧美影片扫描" Margin="5 5 5 0"/>
-                        <RadioButton Visibility="Collapsed" Click="ShowGrid"  Style="{StaticResource RadioButtonStyleSide}" Content="数据库管理" Margin="5 5 5 0"/>
-                        <RadioButton Click="ShowGrid"  Style="{StaticResource RadioButtonStyleSide}" Content="网络磁盘扫描" Margin="5 5 5 0"/>
-                        <Button Click="InsertOneMovie"   Style="{StaticResource ButtonStyleFill}" Content="导入单个视频" Margin="5" HorizontalAlignment="Center" Width="100" Height="30"/>
-                        <Button Visibility="Collapsed" Style="{StaticResource ButtonStyleFill}" Content="批量下载" Margin="5"  HorizontalAlignment="Center" Width="100" Height="30"/>
-                    </StackPanel>
-                    <Grid>
-
-
-                        <Grid AllowDrop="True" Background="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0 0 0 40"     x:Name="MainGrid">
-
-                            <!--基本扫描-->
-                            <Grid Visibility="Hidden">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="视频扫描（拖入或选择文件夹）" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
-                                    <StackPanel Orientation="Vertical"  Margin="40 0">
-                                        <ListBox AllowDrop="True" DragOver="PathListBox_DragOver" Drop="PathListBox_Drop"  ItemsSource="{Binding ScanPath}" x:Name="PathListBox"  Height="200" Background="Transparent" >
-                                            <ListBox.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <WrapPanel Orientation="Vertical"/>
-                                                </ItemsPanelTemplate>
-                                            </ListBox.ItemsPanel>
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Image Source="pack://application:,,,/Resources/Picture/folder.png" Width="20"/>
-                                                        <TextBlock Text="{Binding}" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" />
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-
-                                        <StackPanel Orientation="Horizontal" Margin="0 10"  >
-
-                                            <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="AddPath">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
-                                            </Border>
-                                            <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="DelPath">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                            </Border>
-                                            <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearPath">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                            </Border>
-
-                                        </StackPanel>
-
-                                        <StackPanel Orientation="Horizontal">
-                                            <CheckBox x:Name="ScanAll" Content="全盘扫描（Everything引擎极速扫描）"/>
-                                            <Image Source="pack://application:,,,/Resources/Picture/admin.png" Height="20"/>
-                                        </StackPanel>
-                                    </StackPanel>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
 
 
-                                </StackPanel>
-                            </Grid>
+            <TabControl BorderBrush="{DynamicResource BackgroundSearch}" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" Grid.Row="0" Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource TabControlStyle1}"  >
+                <TabItem Background="Transparent" Header="视频扫描" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+                    <Grid Background="Transparent">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="视频扫描（拖入或选择文件夹）" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
+                            <StackPanel Orientation="Vertical"  Margin="40 0">
+                                <ListBox AllowDrop="True" DragOver="PathListBox_DragOver" Drop="PathListBox_Drop"  ItemsSource="{Binding ScanPath}" x:Name="PathListBox"  Height="200" Background="Transparent" >
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Vertical"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="pack://application:,,,/Resources/Picture/folder.png" Width="20"/>
+                                                <TextBlock Text="{Binding}" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
 
-                            <!--Access-->
-                            <Grid Visibility="Hidden">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="Access数据导入" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
-                                    <Grid  VerticalAlignment="Top" >
-                                      
-                                        <TextBox  x:Name="AccessPathTextBox"  Text="" Margin="20 5 130 5"  Width="auto" HorizontalAlignment="Stretch" BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="5"/>
-                                        <Border AllowDrop="True" DragOver="AccessPathTextBox_DragOver" Drop="AccessPathTextBox_Drop" BorderThickness="2"  Margin="5" Width="100" HorizontalAlignment="Right">
-                                            <Border.BorderBrush>
-                                                <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
-                                                    <DrawingBrush.Drawing>
-                                                        <DrawingGroup>
-                                                            <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
-                                                                <GeometryDrawing.Geometry>
-                                                                    <GeometryGroup>
-                                                                        <RectangleGeometry Rect="0,0,50,50" />
-                                                                        <RectangleGeometry Rect="50,50,50,50" />
-                                                                    </GeometryGroup>
-                                                                </GeometryDrawing.Geometry>
-                                                            </GeometryDrawing>
-                                                        </DrawingGroup>
-                                                    </DrawingBrush.Drawing>
-                                                </DrawingBrush>
-                                            </Border.BorderBrush>
+                                <StackPanel Orientation="Horizontal" Margin="0 10"  >
 
-                                            <TextBlock Text="拖入文件至此" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                        </Border>
-
-
-                                    </Grid>
-                                    <Button HorizontalAlignment="Left"  Content="选择文件" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="20 5" Click="ShowAccessPath"></Button>
+                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="AddPath">
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                                    </Border>
+                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="DelPath">
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                    </Border>
+                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearPath">
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                    </Border>
 
                                 </StackPanel>
 
-
-
-                            </Grid>
-
-
-                            <!--NFO-->
-
-                            <Grid Visibility="Visible">
-                                <StackPanel>
-
-
-                                    <TextBlock Text="NFO数据导入" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
-                                    <CheckBox  x:Name="NFOCopyPicture" Content="复制并覆盖图片" Margin="40 0"></CheckBox>
-                                    <RadioButton Style="{StaticResource RadioButtonStyle}" IsChecked="True" VerticalContentAlignment="Center"  x:Name="NfoRB1" GroupName="NfoRadioButton" Content="扫描文件夹" FontSize="20" Foreground="{DynamicResource ForegroundGlobal}" Margin="40 5"/>
-                                    <StackPanel Style="{StaticResource NFOSPShow1}"     Orientation="Horizontal" Margin="10 0" Visibility="Collapsed">
-                                        <Button Margin="30 0"  Content="添加" Height="30" Width="60"  Style="{StaticResource ButtonStyleFill}" Click="AddSingleNFOPath"></Button>
-                                        <TextBox Height="30" x:Name="NFODirPathTextBox"  Text="" Margin="10 5"  Width="400" VerticalAlignment="Center" TextAlignment="Left"/>
-                                    </StackPanel>
-                                    <StackPanel   Style="{StaticResource NFOSPShow1}"   Orientation="Vertical"  Margin="40 5">
-
-                                        <ListBox AllowDrop="True" DragOver="NFOPathListBox_DragOver" Drop="NFOPathListBox_Drop"  ItemsSource="{Binding NFOScanPath}" x:Name="NFOPathListBox"  Height="150" Background="Transparent" >
-                                            <ListBox.ItemsPanel >
-                                                <ItemsPanelTemplate>
-                                                    <WrapPanel Orientation="Vertical" />
-                                                </ItemsPanelTemplate>
-                                            </ListBox.ItemsPanel>
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Image Source="pack://application:,,,/Resources/Picture/folder.png" Width="20"/>
-                                                        <TextBlock Text="{Binding}" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" />
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-
-                                        <StackPanel Orientation="Horizontal" Margin="0 10" >
-
-                                            <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="AddNFOPath">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
-                                            </Border>
-                                            <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="DelNFOPath">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                            </Border>
-                                            <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearNFOPath">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                            </Border>
-
-                                        </StackPanel>
-
-                                    </StackPanel>
-                                    <RadioButton  Style="{StaticResource RadioButtonStyle}"   VerticalContentAlignment="Center"   x:Name="NfoRB2"  GroupName="NfoRadioButton" Content="导入单个文件" FontSize="20" Foreground="{DynamicResource ForegroundGlobal}" Margin="40 5"/>
-                                    <Grid   Style="{StaticResource NFOSPShow2}"   Margin="40 0">
-
-                                       
-                                        <TextBox HorizontalAlignment="Stretch" Height="30" x:Name="NFOPathTextBox"  Text="" Margin="10 5 120 5"  Width="auto" VerticalAlignment="Center" TextAlignment="Left" BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="5"/>
-                                        <Border x:Name="SingleNFOBorder" AllowDrop="True" DragOver="SingleNFOBorder_DragOver" Drop="SingleNFOBorder_Drop" BorderThickness="2"  Margin="5" Width="100" HorizontalAlignment="Right">
-                                            <Border.BorderBrush>
-                                                <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
-                                                    <DrawingBrush.Drawing>
-                                                        <DrawingGroup>
-                                                            <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
-                                                                <GeometryDrawing.Geometry>
-                                                                    <GeometryGroup>
-                                                                        <RectangleGeometry Rect="0,0,50,50" />
-                                                                        <RectangleGeometry Rect="50,50,50,50" />
-                                                                    </GeometryGroup>
-                                                                </GeometryDrawing.Geometry>
-                                                            </GeometryDrawing>
-                                                        </DrawingGroup>
-                                                    </DrawingBrush.Drawing>
-                                                </DrawingBrush>
-                                            </Border.BorderBrush>
-
-                                            <TextBlock Text="拖入文件至此" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                        </Border>
-                                    </Grid>
-
-                                    <Button HorizontalAlignment="Left" Margin="50 5"  Content="选择文件" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}" Click="ShowNFOPath"></Button>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox x:Name="ScanAll" Content="全盘扫描（Everything引擎极速扫描）"/>
+                                    <Image Source="pack://application:,,,/Resources/Picture/admin.png" Height="20"/>
                                 </StackPanel>
-                            </Grid>
-
-
-                            <!--欧美影片扫描-->
-                            <Grid Visibility="Hidden">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="欧美扫描" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
-                                    <StackPanel Orientation="Vertical"  Margin="40 0">
-                                        <ListBox AllowDrop="True" DragOver="EuropePathListBox_DragOver" Drop="EuropePathListBox_Drop"  ItemsSource="{Binding ScanEuPath}" x:Name="EuropePathListBox"  Height="200" Background="Transparent" >
-                                            <ListBox.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <WrapPanel Orientation="Vertical"/>
-                                                </ItemsPanelTemplate>
-                                            </ListBox.ItemsPanel>
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Image Source="pack://application:,,,/Resources/Picture/folder.png" Width="20"/>
-                                                        <TextBlock Text="{Binding}" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" />
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-
-                                        <StackPanel Orientation="Horizontal" Margin="0 10" >
-
-                                            <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="AddEuPath">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                            </Border>
-                                            <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="DelEuPath">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                            </Border>
-                                            <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearEuPath">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
-                                            </Border>
-
-
-                                        </StackPanel>
-
-
-
-                                    </StackPanel>
-                                    <TextBlock Text="注：文件名必须包含形如 BrazzersExxtra.20.07.22" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20 5"/>
-                                    <TextBlock Text="下载信息仅支持 Bus 站点" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20 5"/>
-
-
-                                </StackPanel>
-                            </Grid>
-
-
-
-                            <!--数据库管理-->
-                            <Grid Visibility="Hidden">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="数据库管理" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
-                                    <StackPanel x:Name="CheckBoxStackPanel" Orientation="Vertical"  Margin="40 0">
-                                        <CheckBox  Content="重置信息数据库" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
-                                        <CheckBox  Content="删除不存在影片" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
-                                        <CheckBox  Content="Vaccum" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
-                                    </StackPanel>
-
-
-
-                                </StackPanel>
-
-                            </Grid>
-
-
-                            <!--网络磁盘扫描-->
-                            <Grid Visibility="Hidden">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="网络地址：" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
-
-                                    <Grid>
-                                        <TextBox x:Name="UNCPathTextBox"   Text="" Margin="50 0 150 0" FontSize="25" BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="5" ToolTip="\\用户名\\文件夹" />
-                                        <Border x:Name="UNCPathBorder" AllowDrop="True" Drop="UNCPathBorder_Drop" DragOver="UNCPathBorder_DragOver"  BorderThickness="2"  Margin="5" Width="100" HorizontalAlignment="Right">
-                                            <Border.BorderBrush>
-                                                <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
-                                                    <DrawingBrush.Drawing>
-                                                        <DrawingGroup>
-                                                            <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
-                                                                <GeometryDrawing.Geometry>
-                                                                    <GeometryGroup>
-                                                                        <RectangleGeometry Rect="0,0,50,50" />
-                                                                        <RectangleGeometry Rect="50,50,50,50" />
-                                                                    </GeometryGroup>
-                                                                </GeometryDrawing.Geometry>
-                                                            </GeometryDrawing>
-                                                        </DrawingGroup>
-                                                    </DrawingBrush.Drawing>
-                                                </DrawingBrush>
-                                            </Border.BorderBrush>
-                                            <TextBlock Text="拖入文件夹至此" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundGlobal}"/>
-
-                                        </Border>
-                                    </Grid>
-
-
-
-
-                                        <StackPanel Orientation="Horizontal" Margin="40 0">
-                                        <TextBlock Text="视频类型：" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
-
-                                        <RadioButton x:Name="ScanTypeRadioButton" GroupName="ScanTypeGroup"  FontSize="15" IsChecked="True" Foreground="{DynamicResource ForegroundSearch}" Content="常规" Style="{StaticResource FlatRadioButton}"/>
-                                        <RadioButton FontSize="15" GroupName="ScanTypeGroup"   Foreground="{DynamicResource ForegroundSearch}"   Content="欧美"  Style="{StaticResource FlatRadioButton}"/>
-                                    </StackPanel>
-
-                                </StackPanel>
-                            </Grid>
-
-
-
-                        </Grid>
-
-
-
-                        <Grid  VerticalAlignment="Bottom" >
-
-                            <TextBlock x:Name="StatusTextBlock" Visibility="Hidden" Text="扫描中……" Style="{StaticResource TextBlockStyle}" HorizontalAlignment="Stretch" Margin="120 0 280 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"/>
-                            <StackPanel Visibility="Hidden" x:Name="LoadingStackPanel"  Margin="240 10" Orientation="Horizontal" HorizontalAlignment="Right" Height="20">
-                                <StackPanel.Triggers>
-                                    <EventTrigger RoutedEvent="Rectangle.Loaded">
-                                        <BeginStoryboard>
-                                            <Storyboard Name="waitingAnimation" RepeatBehavior="Forever">
-                                                <DoubleAnimation Storyboard.TargetName="Dot1" BeginTime="0:0:0.1" Storyboard.TargetProperty="Opacity" From=".1" To="1" AutoReverse="True" Duration="0:0:0.4"/>
-                                                <DoubleAnimation Storyboard.TargetName="Dot2" BeginTime="0:0:0.2" Storyboard.TargetProperty="Opacity" From=".1" To="1" AutoReverse="True" Duration="0:0:0.4"/>
-                                                <DoubleAnimation Storyboard.TargetName="Dot3" BeginTime="0:0:0.3" Storyboard.TargetProperty="Opacity" From=".1" To="1" AutoReverse="True" Duration="0:0:0.4"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </StackPanel.Triggers>
-                                <Ellipse Name="Dot1" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8"/>
-                                <Ellipse Name="Dot2" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8" Margin="2,0,0,0"/>
-                                <Ellipse Name="Dot3" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8" Margin="2,0,0,0"/>
                             </StackPanel>
-                            <Button  Content="执行" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="5" Click="StartRun"></Button>
-                            <Button  Content="停止" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="120 5" Click="CancelRun"></Button>
-                            <Button   Content="查看报告" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="5" Click="ShowRunInfo" HorizontalAlignment="Left"></Button>
-                        </Grid>
+
+
+
+                        </StackPanel>
                     </Grid>
-                </DockPanel>
+                </TabItem>
+                <TabItem  Background="Transparent"  Header="Access数据导入" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+                    <Grid Background="Transparent">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Access数据导入" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
+                            <Grid  VerticalAlignment="Top" >
+
+                                <TextBox  x:Name="AccessPathTextBox"  Text="" Margin="20 5 130 5"  Width="auto" HorizontalAlignment="Stretch" BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="5"/>
+                                <Border AllowDrop="True" DragOver="AccessPathTextBox_DragOver" Drop="AccessPathTextBox_Drop" BorderThickness="2"  Margin="5" Width="100" HorizontalAlignment="Right">
+                                    <Border.BorderBrush>
+                                        <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <GeometryGroup>
+                                                                <RectangleGeometry Rect="0,0,50,50" />
+                                                                <RectangleGeometry Rect="50,50,50,50" />
+                                                            </GeometryGroup>
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Border.BorderBrush>
+
+                                    <TextBlock Text="拖入文件至此" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                </Border>
 
 
+                            </Grid>
+                            <Button HorizontalAlignment="Left"  Content="选择文件" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="20 5" Click="ShowAccessPath"></Button>
+
+                        </StackPanel>
+
+                    </Grid>
+                </TabItem>
+                <TabItem  Background="Transparent"  Header="元数据（NFO）导入" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+                    <Grid Background="Transparent">
+                        <StackPanel>
+
+
+                            <TextBlock Text="NFO数据导入" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
+                            <CheckBox  x:Name="NFOCopyPicture" Content="复制并覆盖图片" Margin="40 0"></CheckBox>
+                            <RadioButton Style="{StaticResource RadioButtonStyle}" IsChecked="True" VerticalContentAlignment="Center"  x:Name="NfoRB1" GroupName="NfoRadioButton" Content="扫描文件夹" FontSize="20" Foreground="{DynamicResource ForegroundGlobal}" Margin="40 5"/>
+                            <StackPanel Style="{StaticResource NFOSPShow1}"     Orientation="Horizontal" Margin="10 0" Visibility="Collapsed">
+                                <Button Margin="30 0"  Content="添加" Height="30" Width="60"  Style="{StaticResource ButtonStyleFill}" Click="AddSingleNFOPath"></Button>
+                                <TextBox Height="30" x:Name="NFODirPathTextBox"  Text="" Margin="10 5"  Width="400" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </StackPanel>
+                            <StackPanel   Style="{StaticResource NFOSPShow1}"   Orientation="Vertical"  Margin="40 5">
+
+                                <ListBox AllowDrop="True" DragOver="NFOPathListBox_DragOver" Drop="NFOPathListBox_Drop"  ItemsSource="{Binding NFOScanPath}" x:Name="NFOPathListBox"  Height="150" Background="Transparent" >
+                                    <ListBox.ItemsPanel >
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Vertical" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="pack://application:,,,/Resources/Picture/folder.png" Width="20"/>
+                                                <TextBlock Text="{Binding}" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 10" >
+
+                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="AddNFOPath">
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                                    </Border>
+                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="DelNFOPath">
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                    </Border>
+                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearNFOPath">
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                    </Border>
+
+                                </StackPanel>
+
+                            </StackPanel>
+                            <RadioButton  Style="{StaticResource RadioButtonStyle}"   VerticalContentAlignment="Center"   x:Name="NfoRB2"  GroupName="NfoRadioButton" Content="导入单个文件" FontSize="20" Foreground="{DynamicResource ForegroundGlobal}" Margin="40 5"/>
+                            <Grid   Style="{StaticResource NFOSPShow2}"   Margin="40 0">
+
+
+                                <TextBox HorizontalAlignment="Stretch" Height="30" x:Name="NFOPathTextBox"  Text="" Margin="10 5 120 5"  Width="auto" VerticalAlignment="Center" TextAlignment="Left" BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="5"/>
+                                <Border x:Name="SingleNFOBorder" AllowDrop="True" DragOver="SingleNFOBorder_DragOver" Drop="SingleNFOBorder_Drop" BorderThickness="2"  Margin="5" Width="100" HorizontalAlignment="Right">
+                                    <Border.BorderBrush>
+                                        <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <GeometryGroup>
+                                                                <RectangleGeometry Rect="0,0,50,50" />
+                                                                <RectangleGeometry Rect="50,50,50,50" />
+                                                            </GeometryGroup>
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Border.BorderBrush>
+
+                                    <TextBlock Text="拖入文件至此" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                </Border>
+                            </Grid>
+
+                            <Button HorizontalAlignment="Left" Margin="50 5"  Content="选择文件" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}" Click="ShowNFOPath"></Button>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem  Background="Transparent"  Header="欧美影片扫描" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+                    <Grid Background="Transparent">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="欧美扫描" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
+                            <StackPanel Orientation="Vertical"  Margin="40 0">
+                                <ListBox AllowDrop="True" DragOver="EuropePathListBox_DragOver" Drop="EuropePathListBox_Drop"  ItemsSource="{Binding ScanEuPath}" x:Name="EuropePathListBox"  Height="200" Background="Transparent" >
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Vertical"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="pack://application:,,,/Resources/Picture/folder.png" Width="20"/>
+                                                <TextBlock Text="{Binding}" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 10" >
+
+                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="AddEuPath">
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                    </Border>
+                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource ToolsBorderStyle}" MouseLeftButtonUp="DelEuPath">
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                    </Border>
+                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearEuPath">
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                                    </Border>
+
+
+                                </StackPanel>
+
+
+
+                            </StackPanel>
+                            <TextBlock Text="注：文件名必须包含形如 BrazzersExxtra.20.07.22" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20 5"/>
+                            <TextBlock Text="下载信息仅支持 Bus 站点" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20 5"/>
+
+
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem  Background="Transparent"  Header="网络磁盘扫描" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
+                    <Grid Background="Transparent">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="网络地址：" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
+
+                            <Grid>
+                                <TextBox x:Name="UNCPathTextBox"   Text="" Margin="50 0 150 0" FontSize="25" BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="5" ToolTip="\\用户名\\文件夹" />
+                                <Border x:Name="UNCPathBorder" AllowDrop="True" Drop="UNCPathBorder_Drop" DragOver="UNCPathBorder_DragOver"  BorderThickness="2"  Margin="5" Width="100" HorizontalAlignment="Right">
+                                    <Border.BorderBrush>
+                                        <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <GeometryGroup>
+                                                                <RectangleGeometry Rect="0,0,50,50" />
+                                                                <RectangleGeometry Rect="50,50,50,50" />
+                                                            </GeometryGroup>
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Border.BorderBrush>
+                                    <TextBlock Text="拖入文件夹至此" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundGlobal}"/>
+
+                                </Border>
+                            </Grid>
+
+
+
+
+                            <StackPanel Orientation="Horizontal" Margin="40 0">
+                                <TextBlock Text="视频类型：" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20"/>
+
+                                <RadioButton x:Name="ScanTypeRadioButton" GroupName="ScanTypeGroup"  FontSize="15" IsChecked="True" Foreground="{DynamicResource ForegroundSearch}" Content="常规" Style="{StaticResource FlatRadioButton}"/>
+                                <RadioButton FontSize="15" GroupName="ScanTypeGroup"   Foreground="{DynamicResource ForegroundSearch}"   Content="欧美"  Style="{StaticResource FlatRadioButton}"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+
+            <Grid  Grid.Row="1" >
+
+                <TextBlock x:Name="StatusTextBlock" Visibility="Hidden" Text="扫描中……" Style="{StaticResource TextBlockStyle}" HorizontalAlignment="Stretch" Margin="120 0 280 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"/>
+                <StackPanel Visibility="Hidden" x:Name="LoadingStackPanel"  Margin="240 10" Orientation="Horizontal" HorizontalAlignment="Right" Height="20">
+                    <StackPanel.Triggers>
+                        <EventTrigger RoutedEvent="Rectangle.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard Name="waitingAnimation" RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="Dot1" BeginTime="0:0:0.1" Storyboard.TargetProperty="Opacity" From=".1" To="1" AutoReverse="True" Duration="0:0:0.4"/>
+                                    <DoubleAnimation Storyboard.TargetName="Dot2" BeginTime="0:0:0.2" Storyboard.TargetProperty="Opacity" From=".1" To="1" AutoReverse="True" Duration="0:0:0.4"/>
+                                    <DoubleAnimation Storyboard.TargetName="Dot3" BeginTime="0:0:0.3" Storyboard.TargetProperty="Opacity" From=".1" To="1" AutoReverse="True" Duration="0:0:0.4"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </StackPanel.Triggers>
+                    <Ellipse Name="Dot1" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8"/>
+                    <Ellipse Name="Dot2" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8" Margin="2,0,0,0"/>
+                    <Ellipse Name="Dot3" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8" Margin="2,0,0,0"/>
+                </StackPanel>
+                <Button  Content="执行" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="5" Click="StartRun"></Button>
+                <Button  Content="停止" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="120 5" Click="CancelRun"></Button>
+                <Button   Content="查看报告" Height="30" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="5" Click="ShowRunInfo" HorizontalAlignment="Left"></Button>
             </Grid>
-
-        </DockPanel>
-
-
+        </Grid>
 
     </Grid>
 </local:Jvedio_BaseWindow>

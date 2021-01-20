@@ -69,6 +69,6 @@
         </Setter>
     </Style>
 
-    <Style TargetType="ProgressBar" BasedOn="{StaticResource ProgressBarStyle1}"/>
+    <!--<Style TargetType="ProgressBar" BasedOn="{StaticResource ProgressBarStyle1}"/>-->
 
 </ResourceDictionary>
