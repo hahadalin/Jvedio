@@ -116,5 +116,26 @@
 
     </Style>
 
+    <Style x:Key="MultiLineTextBox" TargetType="TextBox" >
+        <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ForegroundGlobal}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource ForegroundSearch}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Top"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="AcceptsReturn" Value="True"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource ForegroundSearch}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+   
 
 </ResourceDictionary>

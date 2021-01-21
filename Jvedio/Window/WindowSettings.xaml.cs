@@ -656,13 +656,6 @@ namespace Jvedio
             HandyControl.Controls.Growl.Success(hint, "SettingsGrowl");
         }
 
-        private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if(SubsectionMenu.Visibility == Visibility.Hidden)
-                SubsectionMenu.Visibility = Visibility.Visible;
-            else
-                SubsectionMenu.Visibility = Visibility.Hidden;
-        }
 
         private void Border_MouseLeftButtonUp1(object sender, MouseButtonEventArgs e)
         {

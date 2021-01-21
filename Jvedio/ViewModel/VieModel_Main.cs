@@ -47,6 +47,24 @@ namespace Jvedio.ViewModel
         public FixedList<List<string>> Record = new FixedList<List<string>>(10);//固定长度
         public int RecordIndex= 0;
 
+        #region "RelayCommand"
+        public RelayCommand ResetCommand { get; set; }
+        public RelayCommand GenreCommand { get; set; }
+        public RelayCommand ActorCommand { get; set; }
+        public RelayCommand LabelCommand { get; set; }
+
+        public RelayCommand FavoritesCommand { get; set; }
+        public RelayCommand RecentCommand { get; set; }
+
+        public RelayCommand<bool> RecentWatchCommand { get; set; }
+        public RelayCommand<VedioType> CensoredCommand { get; set; }
+        public RelayCommand<VedioType> UncensoredCommand { get; set; }
+        public RelayCommand<VedioType> EuropeCommand { get; set; }
+
+        public RelayCommand AddNewMovie { get; set; }
+        #endregion
+
+
         public VieModel_Main()
         {
             ResetCommand = new RelayCommand(Reset);
@@ -61,6 +79,9 @@ namespace Jvedio.ViewModel
             UncensoredCommand = new RelayCommand<VedioType>(t => GetMoviebyVedioType(VedioType.步兵));
             CensoredCommand = new RelayCommand<VedioType>(t => GetMoviebyVedioType(VedioType.骑兵));
             EuropeCommand = new RelayCommand<VedioType>(t => GetMoviebyVedioType(VedioType.欧美));
+
+
+            AddNewMovie = new RelayCommand(AddSingleMovie);
 
 
 
@@ -84,20 +105,7 @@ namespace Jvedio.ViewModel
 
 
 
-        #region "RelayCommand"
-        public RelayCommand ResetCommand { get; set; }
-        public RelayCommand GenreCommand { get; set; }
-        public RelayCommand ActorCommand { get; set; }
-        public RelayCommand LabelCommand { get; set; }
 
-        public RelayCommand FavoritesCommand { get; set; }
-        public RelayCommand RecentCommand { get; set; }
-
-        public RelayCommand<bool> RecentWatchCommand { get; set; }
-        public RelayCommand<VedioType> CensoredCommand { get; set; }
-        public RelayCommand<VedioType> UncensoredCommand { get; set; }
-        public RelayCommand<VedioType> EuropeCommand { get; set; }
-        #endregion
 
 
         #region "enum"
@@ -965,10 +973,19 @@ namespace Jvedio.ViewModel
 
 
 
+
+
         private void SearchTimer_Tick(object sender, EventArgs e)
         {
             if (!IsSearching) BeginSearch();
             SearchTimer.Stop();
+        }
+
+
+        private void AddSingleMovie()
+        {
+            Main main = (Main)Jvedio.GetWindow.Get("Main");
+            main.AddMovieGrid.Visibility = Visibility.Visible;
         }
 
         public void GetSearchCandidate(string Search)

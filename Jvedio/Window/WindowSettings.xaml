@@ -146,42 +146,6 @@
         </Style>
 
 
-        <Style x:Key="ViewImage" TargetType="{x:Type Image}">
-            <Style.Triggers>
-
-                <DataTrigger  Binding="{Binding ShowImageMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Value="海报图">
-                    <Setter Property="Width" Value="280" />
-                    <Setter Property="Source" Value="{Binding bigimage}" />
-                </DataTrigger>
-
-                <DataTrigger  Binding="{Binding ShowImageMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Value="缩略图">
-                    <Setter Property="Height" Value="180" />
-                    <Setter Property="Source" Value="{Binding smallimage}" />
-                </DataTrigger>
-
-
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Value="海报图"/>
-                        <Condition Binding="{Binding bigimage}" Value="{x:Null}"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Width" Value="280" />
-                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_B.png" />
-                </MultiDataTrigger>
-
-
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Value="缩略图"/>
-                        <Condition Binding="{Binding smallimage}" Value="{x:Null}"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Height" Value="180" />
-                    <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_S.png" />
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
-
-
         <Style x:Key="TextBlockTitle" TargetType="{x:Type TextBlock}">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="Width" Value="auto" />
@@ -622,7 +586,7 @@
 
 
 
-                    <StackPanel Margin="20 5" x:Name="BasicPanel" Background="Transparent" Visibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto">
+                    <StackPanel Margin="20 5" x:Name="BasicPanel" Background="Transparent" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto">
                         <WrapPanel Orientation="Vertical" Margin="5">
 
 
@@ -1166,88 +1130,10 @@
 
                     </StackPanel>
 
-                    <StackPanel x:Name="CustomPanel" Background="Transparent" Visibility="Collapsed" VerticalAlignment="Stretch" Height="auto" Margin="20 5">
+                    <StackPanel x:Name="CustomPanel" Background="Transparent" Visibility="Visible" VerticalAlignment="Stretch" Height="auto" Margin="20 5">
 
 
 
-                        <Border HorizontalAlignment="Center"  CornerRadius="3"  Style="{StaticResource ViewBorder}" Visibility="Collapsed" >
-                            <Border.Margin>
-                                <MultiBinding Converter="{StaticResource MultiIntToMarginConverter}">
-                                    <Binding Path="MovieStyle_OutMargin_UD" Mode="OneWay" Source="{x:Static p:Settings.Default}"/>
-                                    <Binding Path="MovieStyle_OutMargin_LR" Mode="OneWay" Source="{x:Static p:Settings.Default}"/>
-                                </MultiBinding>
-                            </Border.Margin>
-
-
-                            <StackPanel Style="{StaticResource ViewStackPanel}"  Background="{x:Null}">
-                                <StackPanel.Margin>
-                                    <MultiBinding Converter="{StaticResource MultiIntToMarginConverter}">
-                                        <Binding Path="MovieStyle_InMargin_UD" Mode="OneWay" Source="{x:Static p:Settings.Default}"/>
-                                        <Binding Path="MovieStyle_InMargin_LR" Mode="OneWay" Source="{x:Static p:Settings.Default}"/>
-                                    </MultiBinding>
-                                </StackPanel.Margin>
-                                <Grid  >
-                                    <!--常规显示图片-->
-                                    <Image x:Name="ViewImage"   Style="{StaticResource ViewImage}"   HorizontalAlignment="Center"  VerticalAlignment="Center" />
-
-
-
-                                    <Grid  Panel.ZIndex="3" Visibility="Visible"  >
-                                        <Image MouseLeftButtonUp="Image_MouseLeftButtonUp" Cursor="Hand" Panel.ZIndex="3" Height="24"  Source="pack://application:,,,/Resources/Picture/subsection1.png" HorizontalAlignment="Right"  VerticalAlignment="Bottom"  Margin="5"  />
-
-
-                                        <Canvas Panel.ZIndex="3"    x:Name="SubsectionMenu" Visibility="Visible"  >
-                                            <Rectangle  Opacity="0.86" Width="100" Height="150" Fill="{DynamicResource BackgroundMenu}"  StrokeThickness="0" RadiusX="5" RadiusY="5" Canvas.Left="20" Canvas.Top="20"/>
-
-                                            <StackPanel Orientation="Vertical" Canvas.Left="20" Canvas.Top="20">
-                                                <TextBlock Text="分段视频" Style="{StaticResource BaseTextBlock}" Foreground="{DynamicResource ForegroundSearch}"/>
-                                                <StackPanel>
-                                                    <StackPanel Width="100">
-                                                        <Button Content="1"  Height="25"  />
-                                                        <TextBlock Text="{Binding ''}" Visibility="Collapsed"   />
-                                                    </StackPanel>
-                                                    <StackPanel Width="100">
-                                                        <Button Content="2"  Height="25"  />
-                                                        <TextBlock Text="{Binding ''}" Visibility="Collapsed"   />
-                                                    </StackPanel>
-                                                    <StackPanel Width="100">
-                                                        <Button Content="3"  Height="25"  />
-                                                        <TextBlock Text="{Binding ''}" Visibility="Collapsed"   />
-                                                    </StackPanel>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </Canvas>
-
-                                    </Grid>
-
-
-
-                                    <!--播放按钮-->
-
-                                    <Canvas Margin="10 0 10 0" Opacity="0.5"  Visibility="Visible" Style="{StaticResource PlayButton}"   Cursor="Hand" Width="40" Height="40"  VerticalAlignment="Center" HorizontalAlignment="Center"  >
-                                        <Ellipse Fill="#DD744C"  Width="40" Height="40" Canvas.Left="3" Canvas.Top="3"  />
-                                        <Polygon Points="15,38 35,25 15,10" Stroke="{DynamicResource BackgroundMenu}" Fill="#F6F7F7"  Cursor="Hand" />
-                                    </Canvas>
-                                </Grid>
-
-                                <TextBox TextDecorations="{Binding Font_Title_UnderLine, Converter={StaticResource BoolToUnderLineConverter}, Source={x:Static p:Settings.Default}}" FontStyle="{Binding Font_Title_Italic, Converter={StaticResource BoolToFontItalicConverter}, Source={x:Static p:Settings.Default}}"  FontWeight="{Binding Font_Title_Bold, Converter={StaticResource BoolToFontBoldConverter}, Source={x:Static p:Settings.Default}}" FontSize="{Binding Font_Title_Size, Mode=OneWay, Source={x:Static p:Settings.Default}}" FontFamily="{Binding Font_Title_Family, Mode=OneWay, Source={x:Static p:Settings.Default}}"      Foreground="{DynamicResource ForegroundGlobal}"  Text="《钢铁侠》（Iron Man）是由美国漫威电影工作室出品的一部科幻冒险电影" Style="{StaticResource InfoTextBox}" Visibility="{Binding DisplayTitle, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}"/>
-                                <TextBox  TextDecorations="{Binding Font_ID_UnderLine, Converter={StaticResource BoolToUnderLineConverter}, Source={x:Static p:Settings.Default}}" FontStyle="{Binding Font_ID_Italic, Converter={StaticResource BoolToFontItalicConverter}, Source={x:Static p:Settings.Default}}"  FontWeight="{Binding Font_ID_Bold, Converter={StaticResource BoolToFontBoldConverter}, Source={x:Static p:Settings.Default}}" FontSize="{Binding Font_ID_Size, Mode=OneWay, Source={x:Static p:Settings.Default}}" FontFamily="{Binding Font_ID_Family, Mode=OneWay, Source={x:Static p:Settings.Default}}"         Text="IronMan-001"    Foreground="{DynamicResource ForegroundGlobal}" Style="{StaticResource InfoTextBox}"  Visibility="{Binding DisplayID, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}"/>
-                                <TextBox  TextDecorations="{Binding Font_Date_UnderLine, Converter={StaticResource BoolToUnderLineConverter}, Source={x:Static p:Settings.Default}}" FontStyle="{Binding Font_Date_Italic, Converter={StaticResource BoolToFontItalicConverter}, Source={x:Static p:Settings.Default}}"  FontWeight="{Binding Font_Date_Bold, Converter={StaticResource BoolToFontBoldConverter}, Source={x:Static p:Settings.Default}}" FontSize="{Binding Font_Date_Size, Mode=OneWay, Source={x:Static p:Settings.Default}}" FontFamily="{Binding Font_Date_Family, Mode=OneWay, Source={x:Static p:Settings.Default}}"          Text="1900-01-01"   Foreground="{DynamicResource ForegroundGlobal}"  Style="{StaticResource InfoTextBox}"  Visibility="{Binding DisplayDate, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}"/>
-
-
-                                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Visibility="{Binding DisplayStamp, Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}" >
-                                    <Border CornerRadius="4" Background="#7192B0" Margin="5 0"  >
-                                        <Label Content="高清" Foreground="{DynamicResource ForegroundSearch}"/>
-                                    </Border>
-                                    <Border CornerRadius="4" Background="#F2C17B" Margin="5 0">
-                                        <Label Content="中文" Foreground="{DynamicResource ForegroundSearch}" />
-                                    </Border>
-                                    <Border CornerRadius="4" Background="#89C989" Margin="5 0">
-                                        <Label Content="流出" Foreground="{DynamicResource ForegroundSearch}" />
-                                    </Border>
-                                </WrapPanel>
-                            </StackPanel>
-                        </Border>
 
                         <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10">
                             <WrapPanel Orientation="Horizontal" Margin="5 5">

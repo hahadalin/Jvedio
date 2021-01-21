@@ -55,7 +55,7 @@
         </Style>
 
     </Window.Resources>
-    <Grid>
+    <Grid Background="{DynamicResource BackgroundMain}">
 
         <JvedioControls:WaitingPanel Visibility="Collapsed" ShowCancelButton="Visible" x:Name="WaitingPanel"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel" ></JvedioControls:WaitingPanel>
 
@@ -89,7 +89,7 @@
 
 
 
-                        <ScrollViewer Grid.Column="1"   Margin="5 5 5 5"    Panel.ZIndex="4" Background="Transparent"   x:Name="scrollViewer"     >
+                        <ScrollViewer  Grid.Column="1"   Margin="5 5 5 5"    Panel.ZIndex="4" Background="Transparent"   x:Name="scrollViewer"     >
                             <ItemsControl   ItemsSource="{Binding DataBases}"  >
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -150,15 +150,15 @@
 
                     </Grid>
 
-                    <Grid Grid.Row="1" Background="{DynamicResource BackgroundTitle}" >
+                    <Grid Grid.Row="1" Background="{DynamicResource BackgroundSide}" >
 
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
 
-                        <StackPanel Orientation="Vertical" Grid.Column="0" Background="{DynamicResource BackgroundSide}" Margin="5">
+                        <StackPanel Orientation="Vertical" Grid.Row="0"  Margin="5">
                             <Border x:Name="NameBorder" Margin="10 5" Width="auto" Height="auto" Background="{DynamicResource BackgroundMain}" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="5" >
                                 <TextBlock Margin="5"  Text="{Binding CurrentDataBase, StringFormat='数据库：\{0}'}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" />
                             </Border>
@@ -175,10 +175,8 @@
                         </StackPanel>
 
 
+                        <Button Grid.Row="1" Margin="10" Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_2"/>
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1"  Margin="5">
-                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Center" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_2"/>
-                        </StackPanel>
 
 
 
@@ -195,76 +193,47 @@
                 <Grid x:Name="StatisticGrid" Visibility="Visible">
 
                     <Grid.RowDefinitions >
-                        <RowDefinition Height="200"/>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" DockPanel.Dock="Top">
 
-                        <Border Background="{DynamicResource BackgroundSide}" Margin="20" CornerRadius="5">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock  Text="{x:Static lang:Resources.AllVideo}" Style="{StaticResource BaseTextBlock}"/>
-                                <TextBlock   Text="{Binding AllCount}"  Style="{StaticResource BaseTextBlock}"/>
-                                <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="40" Height="80" Margin="0 5" Value="100"   />
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Visibility="Visible" Margin="5 10" >
+                        <TextBlock Text="{x:Static lang:Resources.ChooseDataBase}" Style="{StaticResource BaseTextBlock}"/>
+                        <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="DatabaseComboBox_SelectionChanged"  x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" DockPanel.Dock="Top">
+
+                        <Border Background="{DynamicResource BackgroundSide}" Margin="10" CornerRadius="5">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock  Text="{x:Static lang:Resources.AllVideo}" Style="{StaticResource BaseTextBlock}" Margin="10 5"/>
+                                    <TextBlock   Text="{Binding AllCount}"  Style="{StaticResource BaseTextBlock}"/>
+                                    <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="25" Height="60" Margin="0 5 0 20" Value="100"    />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding TypeName2,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding CensoredCount}"  Style="{StaticResource BaseTextBlock}"/>
+                                    <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="25" Height="60" Margin="0 5 0 20" Value="{Binding CensoredCountPercent}"   />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding TypeName1,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding UncensoredCount}"  Style="{StaticResource BaseTextBlock}"/>
+                                    <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="25" Height="60" Margin="0 5 0 20" Value="{Binding UncensoredCountPercent}"   />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding TypeName3,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding EuropeCount}"  Style="{StaticResource BaseTextBlock}"/>
+                                    <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="25" Height="60" Margin="0 5 0 20" Value="{Binding EuropeCountPercent}"   />
+                                </StackPanel>
+
                             </StackPanel>
+
                         </Border>
-
-                        <Border Background="{DynamicResource BackgroundSide}" Margin="20" CornerRadius="5">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding TypeName2,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}"/>
-                                <TextBlock Text="{Binding CensoredCount}"  Style="{StaticResource BaseTextBlock}"/>
-                                <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="40" Height="80" Margin="0 5" Value="{Binding CensoredCountPercent}"   />
-                            </StackPanel>
-                        </Border>
-
-                        <Border Background="{DynamicResource BackgroundSide}" Margin="20" CornerRadius="5">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding TypeName1,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}"/>
-                                <TextBlock Text="{Binding UncensoredCount}"  Style="{StaticResource BaseTextBlock}"/>
-                                <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="40" Height="80" Margin="0 5" Value="{Binding UncensoredCountPercent}"   />
-                            </StackPanel>
-                        </Border>
-
-                        <Border Background="{DynamicResource BackgroundSide}" Margin="20" CornerRadius="5">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding TypeName3,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}"/>
-                                <TextBlock Text="{Binding EuropeCount}"  Style="{StaticResource BaseTextBlock}"/>
-                                <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="40" Height="80" Margin="0 5" Value="{Binding EuropeCountPercent}"   />
-                            </StackPanel>
-                        </Border>
-
-                        <lvc:PieChart LegendLocation="Right" DataClick="Chart_OnDataClick" Hoverable="False" DataTooltip="{x:Null}" Width="200" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 10">
-                            <lvc:PieChart.Series>
-                                <!--DataLabels属性是显示模块标签的、PointLabel是占比-->
-                                <lvc:PieSeries Title="{Binding TypeName2,Source={x:Static p:Settings.Default}}" Values="{Binding Path=ChartValuesCensoredCount,trace:PresentationTraceSources.TraceLevel=Low}"   DataLabels="True" LabelPoint="{Binding PointLabel}"/>
-                                <lvc:PieSeries  Title="{Binding TypeName1,Source={x:Static p:Settings.Default}}"   Values="{Binding Path=ChartValuesUnCensoredCount}"  DataLabels="True" LabelPoint="{Binding PointLabel}"/>
-                                <lvc:PieSeries  Title="{Binding TypeName3,Source={x:Static p:Settings.Default}}"   Values="{Binding Path=ChartValuesEuropeCount}" DataLabels="True" LabelPoint="{Binding PointLabel}"/>
-                            </lvc:PieChart.Series>
-                        </lvc:PieChart>
-
-
-
-
-
-
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left" Visibility="Visible" Margin="5 0" >
-                        <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="DatabaseComboBox_SelectionChanged"  x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" >
 
-                        </ComboBox>
-
-
-
-
-                        <RadioButton Visibility="Collapsed" GroupName="PageRadioButton"  IsChecked="True" Content="1" Style="{StaticResource FlatRadioButton}"/>
-                        <RadioButton  Visibility="Collapsed" GroupName="PageRadioButton" Content="2"  Style="{StaticResource FlatRadioButton}"/>
-                        <RadioButton  Visibility="Collapsed" GroupName="PageRadioButton"   Content="3"  Style="{StaticResource FlatRadioButton}"/>
-
-
-
-
-                    </StackPanel>
 
 
 

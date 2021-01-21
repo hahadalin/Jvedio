@@ -6114,6 +6114,33 @@ namespace Jvedio
             vieModel.Actress = actress;
 
         }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            string text = AddMovieTextBox.Text;
+            if (!string.IsNullOrEmpty(text))
+            {
+                string id = text;
+                Movie movie = DataBase.SelectMovieByID(id);
+                if (movie != null)
+                {
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_AlreadyExist, "Main");
+                }
+                else
+                {
+                    Movie movie1 = new Movie()
+                    {
+                        id = id,
+                        vediotype = 1,
+                        otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    };
+                    DataBase.InsertScanMovie(movie1);
+                    vieModel. MovieList.Insert(0, movie1);
+                    vieModel.CurrentMovieList.Insert(0, movie1);
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
+                }
+            }
+        }
     }
 
 
@@ -6255,7 +6282,7 @@ namespace Jvedio
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value == null) return
+            if (value == null || double.Parse(value.ToString())<=0) return
                     150;
             else
                 return double.Parse(value.ToString()) - 40;
