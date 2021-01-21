@@ -1954,7 +1954,7 @@ namespace Jvedio.ViewModel
             foreach (Movie movie in MovieList)
             {
                 string path = GetPathByDepth(movie.filepath, Properties.Settings.Default.FilePathClassificationMaxDepth);
-                if (!FilePathClassification.Contains(path)) FilePathClassification.Add(path);
+                if (!string.IsNullOrEmpty(path) && !FilePathClassification.Contains(path)) FilePathClassification.Add(path);
                 if (FilePathClassification.Count > Properties.Settings.Default.FilePathClassificationMaxCount) break;
             }
         }
