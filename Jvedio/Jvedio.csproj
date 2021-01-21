@@ -236,6 +236,10 @@
     <Compile Include="Library\ImageAndVedio\MediaInfo.cs" />
     <Compile Include="Library\ImageAndVedio\ImageProcess.cs" />
     <Compile Include="Library\FileProcess\XML.cs" />
+    <Compile Include="Dialog\BaseDialog.cs" />
+    <Compile Include="Dialog\Dialog_NewMovie.xaml.cs">
+      <DependentUpon>Dialog_NewMovie.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Window\Jvedio_BaseWindow.cs" />
     <Compile Include="Library\Net\MultiDownLoader.cs" />
     <Compile Include="Library\Net\Translate.cs" />
@@ -306,6 +310,14 @@
     <Page Include="Controls\WaitingPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialog\BaseDialogStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialog\Dialog_NewMovie.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Window\WindowBatch.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -751,6 +763,7 @@
       <Name>Jvedio.Language</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

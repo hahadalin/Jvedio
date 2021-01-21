@@ -503,7 +503,8 @@ namespace Jvedio
                     otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     scandate= createDate 
             };
-                DataBase.InsertScanMovie(movie); 
+                
+                 DataBase.InsertScanMovie(movie); 
                 totalinsertnum += 1;
             }
 

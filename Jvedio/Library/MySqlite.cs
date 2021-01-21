@@ -265,7 +265,7 @@ namespace Jvedio
         {
             string sqltext = "INSERT INTO movie(id , filesize ,filepath  , vediotype  ,scandate,subsection,otherinfo) values(@id , @filesize ,@filepath  , @vediotype  ,@scandate,@subsection,@otherinfo) ON CONFLICT(id) DO UPDATE SET filesize=@filesize,filepath=@filepath,scandate=@scandate,otherinfo=@otherinfo,vediotype=@vediotype,subsection=@subsection";
             cmd.CommandText = sqltext;
-            cmd.Parameters.Add("id", DbType.String).Value = movie.id.ToUpper();
+            cmd.Parameters.Add("id", DbType.String).Value = movie.vediotype==3? movie.id:movie.id.ToUpper();
             cmd.Parameters.Add("filesize", DbType.Double).Value = movie.filesize;
             cmd.Parameters.Add("filepath", DbType.String).Value = movie.filepath;
             cmd.Parameters.Add("vediotype", DbType.Int16).Value = movie.vediotype;

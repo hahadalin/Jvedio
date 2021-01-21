@@ -984,8 +984,58 @@ namespace Jvedio.ViewModel
 
         private void AddSingleMovie()
         {
-            Main main = (Main)Jvedio.GetWindow.Get("Main");
-            main.AddMovieGrid.Visibility = Visibility.Visible;
+            Dialog_NewMovie dialog_NewMovie = new Dialog_NewMovie((Main)Jvedio.GetWindow.Get("Main"));
+            var b= (bool)dialog_NewMovie.ShowDialog();
+            NewMovieDialogResult result=dialog_NewMovie.Result;
+
+            if (b && !string.IsNullOrEmpty(result.Text))
+            {
+                List<string> IDList = GetIDListFromString(result.Text,result.VedioType);
+                foreach (var item in IDList)
+                {
+                    InsertID(item,result.VedioType);
+                }
+            }
+
+
+        }
+
+        private void InsertID(string id,VedioType vedioType)
+        {
+            Movie movie = DataBase.SelectMovieByID(id);
+            if (movie != null)
+            {
+                HandyControl.Controls.Growl.Info($"{id} {Jvedio.Language.Resources.Message_AlreadyExist}", "Main");
+            }
+            else
+            {
+                Movie movie1 = new Movie()
+                {
+                    id = id,
+                    vediotype = (int)vedioType,
+                    otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                };
+                DataBase.InsertScanMovie(movie1);
+                MovieList.Insert(0, movie1);
+                CurrentMovieList.Insert(0, movie1);
+            }
+        }
+
+
+        public List<string> GetIDListFromString(string str,VedioType vedioType)
+        {
+            List<string> result = new List<string>();
+            foreach (var item in str.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.None))
+            {
+                string id = "";
+                if (vedioType == VedioType.欧美)
+                    id=item.Replace(" ","");
+                else
+                    id = item.ToUpper().Replace(" ", "");
+
+                if (!string.IsNullOrEmpty(id) && !result.Contains(id)) result.Add(id);
+            }
+            return result;
         }
 
         public void GetSearchCandidate(string Search)

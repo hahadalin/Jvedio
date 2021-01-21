@@ -1022,7 +1022,7 @@
     <Grid x:Name="MainGrid"  AllowDrop="True" Margin="10"   >
         <Border  x:Name="MainBorder"   Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="5"  >
             <Border.Effect>
-                <DropShadowEffect BlurRadius="5" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
+                <DropShadowEffect BlurRadius="5" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
             </Border.Effect>
 
         </Border>
@@ -2861,41 +2861,6 @@
 
                 </Grid>
 
-
-
-                <!--添加番号-->
-
-                <Grid x:Name="AddMovieGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300" Width="500" Visibility="Visible" >
-                    <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
-                        </Border.Effect>
-                    </Border>
-
-                    <Border Height="30" Width="30" HorizontalAlignment="Right"  VerticalAlignment="Top" PreviewMouseLeftButtonUp="HideGrid"   CornerRadius="3" Style="{StaticResource CloseBorderStyle}" >
-                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                    </Border>
-
-                    <TextBlock Text="{x:Static lang:Resources.Add}" Style="{StaticResource BaseTextBlock}" Margin="20" Height="auto" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-
-                    <Grid  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20 50 20 5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBox x:Name="AddMovieTextBox" Style="{StaticResource MultiLineTextBox}" Text="123" Margin="10" />
-
-                        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-                            <Button  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Confirm}" Click="Button_Click_3"  />
-                            <Button  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Cancel}"  Click="Button_Click_1"/>
-                        </StackPanel>
-
-
-                    </Grid>
-
-
-                </Grid>
 
 
                 <!--标签-->

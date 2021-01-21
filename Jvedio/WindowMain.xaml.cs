@@ -5043,8 +5043,8 @@ namespace Jvedio
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            WindowEdit windowEdit = new WindowEdit();
-            windowEdit.Show();
+            Dialog_NewMovie dialog_NewMovie = new Dialog_NewMovie(this,500,300);
+            dialog_NewMovie.ShowDialog();
 
 
         }
@@ -5920,33 +5920,6 @@ namespace Jvedio
             }
         }
 
-        private void Button_Click_7(object sender, RoutedEventArgs e)
-        {
-            var di = new DialogInput(this, Jvedio.Language.Resources.InputTitle5, "");
-            di.ShowDialog();
-            if (di.DialogResult == true & di.Text != "")
-            {
-                string id = di.Text;
-                Movie movie = DataBase.SelectMovieByID(id);
-                if (movie != null)
-                {
-                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_AlreadyExist, "Main");
-                }
-                else
-                {
-                    Movie movie1 = new Movie()
-                    {
-                        id = id,
-                        vediotype = 1,
-                        otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                    };
-                    DataBase.InsertScanMovie(movie1);
-                    vieModel.MovieList.Insert(0, movie1);
-                    vieModel.CurrentMovieList.Insert(0, movie1);
-                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
-                }
-            }
-        }
 
 
         public string GetCurrentList()
@@ -6113,33 +6086,6 @@ namespace Jvedio
 
             vieModel.Actress = actress;
 
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            string text = AddMovieTextBox.Text;
-            if (!string.IsNullOrEmpty(text))
-            {
-                string id = text;
-                Movie movie = DataBase.SelectMovieByID(id);
-                if (movie != null)
-                {
-                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_AlreadyExist, "Main");
-                }
-                else
-                {
-                    Movie movie1 = new Movie()
-                    {
-                        id = id,
-                        vediotype = 1,
-                        otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-                    };
-                    DataBase.InsertScanMovie(movie1);
-                    vieModel. MovieList.Insert(0, movie1);
-                    vieModel.CurrentMovieList.Insert(0, movie1);
-                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
-                }
-            }
         }
     }
 

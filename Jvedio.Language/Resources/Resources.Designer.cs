@@ -2032,6 +2032,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 或者 的本地化字符串。
+        /// </summary>
+        public static string Or {
+            get {
+                return ResourceManager.GetString("Or", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 其他任务正在进行 的本地化字符串。
         /// </summary>
         public static string OtherTaskIsRunning {

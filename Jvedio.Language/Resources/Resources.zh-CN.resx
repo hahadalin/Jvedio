@@ -1179,4 +1179,7 @@
   <data name="DeleteMovieNotInScan" xml:space="preserve">
     <value>删除不位于【启动时扫描】目录中的影片</value>
   </data>
+  <data name="Or" xml:space="preserve">
+    <value>或者</value>
+  </data>
 </root>
