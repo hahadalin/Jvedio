@@ -74,7 +74,7 @@ namespace Jvedio
             IsFlashing = false;
             ControlTemplate baseDialogControlTemplate = (ControlTemplate)App.Current.Resources["BaseDialogControlTemplate"];
             Border border = (Border)baseDialogControlTemplate.FindName("MainBorder", this);
-            DropShadowEffect dropShadowEffect = new DropShadowEffect() { Color = Colors.SkyBlue, BlurRadius = 5, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
+            DropShadowEffect dropShadowEffect = new DropShadowEffect() { Color = Colors.SkyBlue, BlurRadius = 20, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
             border.Effect = dropShadowEffect;
             base.OnActivated(e);
         }
@@ -89,8 +89,8 @@ namespace Jvedio
             //边缘闪动
             ControlTemplate baseDialogControlTemplate = (ControlTemplate)App.Current.Resources["BaseDialogControlTemplate"];
             Border border = (Border)baseDialogControlTemplate.FindName("MainBorder", this);
-            DropShadowEffect dropShadowEffect1 = new DropShadowEffect() {Color=Colors.Red,BlurRadius=5,Direction=-90,RenderingBias=RenderingBias.Quality,ShadowDepth=0 };
-            DropShadowEffect dropShadowEffect2 = new DropShadowEffect() { Color = Colors.SkyBlue, BlurRadius = 5, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
+            DropShadowEffect dropShadowEffect1 = new DropShadowEffect() {Color=Colors.Red,BlurRadius= 20, Direction=-90,RenderingBias=RenderingBias.Quality,ShadowDepth=0 };
+            DropShadowEffect dropShadowEffect2 = new DropShadowEffect() { Color = Colors.SkyBlue, BlurRadius = 20, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
 
 
             for (int i = 0; i <3; i++)

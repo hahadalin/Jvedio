@@ -14,7 +14,7 @@
         <Grid x:Name="MainGrid"  Margin="10" >
             <Border x:Name="MainBorder" CornerRadius="5" Margin="5"  Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Width="Auto" Height="Auto"  >
                 <Border.Effect>
-                    <DropShadowEffect BlurRadius="5" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
+                    <DropShadowEffect BlurRadius="20" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
                 </Border.Effect>
             </Border>
             <Grid x:Name="ContentGrid"   Margin="5">

@@ -1022,7 +1022,7 @@
     <Grid x:Name="MainGrid"  AllowDrop="True" Margin="10"   >
         <Border  x:Name="MainBorder"   Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="5"  >
             <Border.Effect>
-                <DropShadowEffect BlurRadius="5" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                <DropShadowEffect BlurRadius="20" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
             </Border.Effect>
 
         </Border>
@@ -1573,15 +1573,7 @@
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
-                                    <hc:SplitButton VerticalAlignment="Center" Style="{StaticResource SplitButtonPrimary}" Margin="0" Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch">
-                                        <hc:SplitButton.DropDownContent>
-                                            <StackPanel>
-                                                <MenuItem Header="123" Command="{Binding SelectCmd}" CommandParameter="Command1"/>
-                                                <MenuItem Header="456" Command="{Binding SelectCmd}" CommandParameter="Command2"/>
-                                                <MenuItem Header="789" Command="{Binding SelectCmd}" CommandParameter="Command3"/>
-                                            </StackPanel>
-                                        </hc:SplitButton.DropDownContent>
-                                    </hc:SplitButton>
+                                    <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}" Margin="0" Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch"/>
                                     <Border Cursor="Hand" x:Name="ImageSortBorder" Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.ImageType}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowImagePopup">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=image,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
