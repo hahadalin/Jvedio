@@ -1182,4 +1182,10 @@
   <data name="Or" xml:space="preserve">
     <value>或者</value>
   </data>
+  <data name="SmallToBig" xml:space="preserve">
+    <value>从小到大</value>
+  </data>
+  <data name="BigToSmall" xml:space="preserve">
+    <value>从大到小</value>
+  </data>
 </root>

@@ -635,7 +635,7 @@ namespace Jvedio
             RefreshScanCT = RefreshScanCTS.Token;
             await Task.Run(() =>
             {
-                List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First()), RefreshScanCT);
+                List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(System.IO.Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath)), RefreshScanCT);
                 double num = Scan.InsertWithNfo(filepaths, RefreshScanCT);
                 vieModel.IsScanning = false;
 
@@ -4197,7 +4197,7 @@ namespace Jvedio
             //设置当前数据库
             for (int i = 0; i < vieModel.DataBases.Count; i++)
             {
-                if (vieModel.DataBases[i].ToLower() == Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower())
+                if (vieModel.DataBases[i].ToLower() == System.IO.Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
                 {
                     DatabaseComboBox.SelectedIndex = i;
                     break;
@@ -4430,7 +4430,7 @@ namespace Jvedio
         {
             if (e.AddedItems.Count == 0) return;
             string name = e.AddedItems[0].ToString().ToLower();
-            if (name != Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower())
+            if (name != System.IO.Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
             {
                 if (name == "info")
                     Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"{name}.sqlite";

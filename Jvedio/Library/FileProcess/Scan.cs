@@ -552,13 +552,13 @@ namespace Jvedio
 
 
             //从 主数据库中 复制信息
-            if (Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower() != "info")
+            if (Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower() != "info")
             {
                 try
                 {
                     //待修复 的 bug
                     string src= AppDomain.CurrentDomain.BaseDirectory + "info.sqlite";
-                    string dst = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower()}.sqlite"; ;
+                    string dst = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower()}.sqlite"; ;
                     DataBase. CopyDatabaseInfo(src,dst);
                 }
                 catch { }

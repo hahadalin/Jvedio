@@ -358,6 +358,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 从大到小 的本地化字符串。
+        /// </summary>
+        public static string BigToSmall {
+            get {
+                return ResourceManager.GetString("BigToSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 位深度 的本地化字符串。
         /// </summary>
         public static string BitDepth {
@@ -2649,6 +2658,15 @@ namespace Jvedio.Language {
         public static string SkipEnd {
             get {
                 return ResourceManager.GetString("SkipEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 从小到大 的本地化字符串。
+        /// </summary>
+        public static string SmallToBig {
+            get {
+                return ResourceManager.GetString("SmallToBig", resourceCulture);
             }
         }
         

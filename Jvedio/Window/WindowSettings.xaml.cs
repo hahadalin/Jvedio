@@ -714,7 +714,7 @@ namespace Jvedio
             //设置当前数据库
             for (int i = 0; i < vieModel_Settings.DataBases.Count; i++)
             {
-                if (vieModel_Settings.DataBases[i].ToLower() == Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower())
+                if (vieModel_Settings.DataBases[i].ToLower() == Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
                 {
                     DatabaseComboBox.SelectedIndex = i;
                     break;

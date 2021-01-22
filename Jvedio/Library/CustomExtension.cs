@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jvedio.Plot.Bar;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -83,6 +84,23 @@ namespace Jvedio
             return result;
 
 
+        }
+
+
+        public static List<BarData> ToBarDatas(this Dictionary<string, double> dicSort)
+        {
+            List<BarData> result = new List<BarData>();
+            foreach (var item in dicSort)
+            {
+                result.Add(new BarData()
+                {
+                    Value = item.Value,
+                    ActualValue = item.Value,
+                    Key = item.Key
+                });
+            }
+
+            return result;
         }
 
 

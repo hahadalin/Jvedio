@@ -964,7 +964,7 @@ namespace Jvedio.ViewModel
             try
             {
                 var fiels = Directory.GetFiles("DataBase", "*.sqlite", SearchOption.TopDirectoryOnly).ToList();
-                fiels.ForEach(arg => DataBases.Add(arg.Split('\\').Last().Split('.').First().ToLower()));
+                fiels.ForEach(arg => DataBases.Add(Path.GetFileNameWithoutExtension(arg).ToLower()));
             }
             catch { }
 

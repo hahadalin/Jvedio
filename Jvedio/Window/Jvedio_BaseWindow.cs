@@ -164,56 +164,13 @@ namespace Jvedio
 
 
         /// <summary>
-        /// 保存窗口状态
-        /// </summary>
-        private void SaveWindow()
-        {
-            if (this.WindowState != WindowState.Minimized)
-            {
-                if (this.WindowState == WindowState.Normal) WinState =JvedioWindowState.Normal;
-                else if (this.WindowState == WindowState.Maximized) WinState = JvedioWindowState.FullScreen;
-
-                if (this.Width == SystemParameters.WorkArea.Width & this.Height == SystemParameters.WorkArea.Height) WinState = JvedioWindowState.Maximized;
-
-                WindowConfig cj = new WindowConfig(this.GetType().Name);
-                cj.Save(new WindowProperty() { Location=new Point(this.Left,this.Top),Size=new Size(this.Width,this.Height),WinState=WinState});
-            }
-        }
-
-        /// <summary>
         /// 调整窗体状态
         /// </summary>
         private void AdjustWindow()
         {
-            //读取窗体设置
-            WindowConfig cj = new WindowConfig(this.GetType().Name);
-            WindowProperty windowProperty = cj.Read();
-            Rect rect = new Rect() { Location = windowProperty.Location, Size = windowProperty.Size };
-            WinState = windowProperty.WinState;
-            //读到属性值
-            if (WinState == JvedioWindowState.FullScreen)
-            {
-                this.WindowState = WindowState.Maximized;
-            }
-            else if (WinState == JvedioWindowState.None)
-            {
-                WinState = 0;
-                this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            }
-            else
-            {
-                this.Left = rect.X >= 0 ? rect.X : 0;
-                this.Top = rect.Y >= 0 ? rect.Y : 0;
-                this.Height = rect.Height > 100 ? rect.Height : 100;
-                this.Width = rect.Width > 100 ? rect.Width : 100;
-                if (this.Width == SystemParameters.WorkArea.Width | this.Height == SystemParameters.WorkArea.Height) { WinState = JvedioWindowState.Maximized; }
-            }
-
-
             this.Width = SystemParameters.WorkArea.Width * 0.6;
             this.Height = SystemParameters.WorkArea.Height * 0.6;
-            
-
+            this.WindowState = WindowState.Normal;
             HideMargin();
         }
 
@@ -250,9 +207,6 @@ namespace Jvedio
                 }
             };
 
-            this.Closing += delegate {
-                SaveWindow();
-            };
 
             this.SizeChanged += onSizeChanged;
 

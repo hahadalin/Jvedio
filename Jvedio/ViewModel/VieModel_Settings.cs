@@ -19,7 +19,7 @@ namespace Jvedio.ViewModel
 
         public VieModel_Settings()
         {
-            DataBase = Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First();
+            DataBase = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
             DataBases = ((Main)App.Current.Windows[0]).vieModel.DataBases;
 
 

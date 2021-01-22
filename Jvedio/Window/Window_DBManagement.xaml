@@ -11,6 +11,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+        xmlns:plot="clr-namespace:Jvedio.Plot.Bar"
         mc:Ignorable="d"
         Title="{x:Static lang:Resources.MovieManagement}"       
         MinHeight="500"
@@ -189,7 +190,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem  Background="Transparent" Header="{x:Static lang:Resources.Statistic}" FontSize="15">
+            <TabItem   Background="Transparent" Header="{x:Static lang:Resources.Statistic}" FontSize="15">
                 <Grid x:Name="StatisticGrid" Visibility="Visible">
 
                     <Grid.RowDefinitions >
@@ -203,14 +204,14 @@
                         <TextBlock Text="{x:Static lang:Resources.ChooseDataBase}" Style="{StaticResource BaseTextBlock}"/>
                         <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="DatabaseComboBox_SelectionChanged"  x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
                     </StackPanel>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" DockPanel.Dock="Top">
+                    <StackPanel Visibility="Collapsed" Grid.Row="1" Orientation="Horizontal" DockPanel.Dock="Top">
 
                         <Border Background="{DynamicResource BackgroundSide}" Margin="10" CornerRadius="5">
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock  Text="{x:Static lang:Resources.AllVideo}" Style="{StaticResource BaseTextBlock}" Margin="10 5"/>
                                     <TextBlock   Text="{Binding AllCount}"  Style="{StaticResource BaseTextBlock}"/>
-                                    <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="25" Height="60" Margin="0 5 0 20" Value="100"    />
+                                    <ProgressBar   Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="25" Height="60" Margin="0 5 0 20" Value="100"    />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="{Binding TypeName2,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}" Margin="10 5"/>
@@ -250,108 +251,11 @@
                             <RowDefinition Height="500*"/>
                         </Grid.RowDefinitions>
 
-                        <Border Background="{DynamicResource BackgroundSide}" Margin="5" CornerRadius="5" Grid.Column="0" Grid.Row="0">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Border CornerRadius="5" Background="{DynamicResource BackgroundTitle}" Width="60" HorizontalAlignment="Left" Margin="10 5" >
-                                    <TextBlock Text="{x:Static lang:Resources.ID}" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
-                                </Border>
 
-                                <lvc:CartesianChart  Series="{Binding Path=SeriesCollection}" LegendLocation="None" Margin="5" Grid.Row="1" DisableAnimations="True" AnimationsSpeed="0:0:0.1"  PreviewMouseWheel="CartesianChart_PreviewMouseWheel" >
-                                    <lvc:CartesianChart.AxisX >
-                                        <lvc:Axis Title="" Labels="{Binding Path=Labels}" MaxValue="{Binding Path=Statictistic_ID_Number,Mode=OneWay, Source={x:Static p:Settings.Default}}"    >
-                                            <lvc:Axis.Separator >
-                                                <lvc:Separator Step="2"/>
-                                            </lvc:Axis.Separator>
-                                        </lvc:Axis>
-                                    </lvc:CartesianChart.AxisX>
-                                    <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis Title="" LabelFormatter="{Binding Path=Formatter}"></lvc:Axis>
-                                    </lvc:CartesianChart.AxisY>
-                                </lvc:CartesianChart>
-                            </Grid>
-                        </Border>
-
-                        <Border Background="{DynamicResource BackgroundSide}" Margin="5" CornerRadius="5" Grid.Column="1" Grid.Row="0">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Border CornerRadius="5" Background="{DynamicResource BackgroundTitle}" Width="60" HorizontalAlignment="Left" Margin="10 5" >
-                                    <TextBlock Text="{x:Static lang:Resources.Genre}" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
-                                </Border>
-                                <lvc:CartesianChart Series="{Binding Path=GenreSeriesCollection}" LegendLocation="None" Margin="5" Grid.Row="1" DisableAnimations="True" AnimationsSpeed="0:0:0.1"  PreviewMouseWheel="CartesianChart_PreviewMouseWheel1" >
-                                    <lvc:CartesianChart.AxisX >
-                                        <lvc:Axis Title="" Labels="{Binding Path=GenreLabels}" MaxValue="{Binding Path=Statictistic_Genre_Number,Mode=OneWay, Source={x:Static p:Settings.Default}}"    >
-                                            <lvc:Axis.Separator >
-                                                <lvc:Separator Step="2"/>
-                                            </lvc:Axis.Separator>
-                                        </lvc:Axis>
-                                    </lvc:CartesianChart.AxisX>
-                                    <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis Title="" LabelFormatter="{Binding Path=Formatter}"></lvc:Axis>
-                                    </lvc:CartesianChart.AxisY>
-                                </lvc:CartesianChart>
-                            </Grid>
-                        </Border>
-
-                        <Border Background="{DynamicResource BackgroundSide}" Margin="5" CornerRadius="5" Grid.Column="0" Grid.Row="1">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Border CornerRadius="5" Background="{DynamicResource BackgroundTitle}" Width="60" HorizontalAlignment="Left" Margin="10 5" >
-                                    <TextBlock Text="{x:Static lang:Resources.Tag}" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
-                                </Border>
-                                <lvc:CartesianChart Series="{Binding Path=TagSeriesCollection}" LegendLocation="None" Margin="5" Grid.Row="1" DisableAnimations="True" AnimationsSpeed="0:0:0.1"  PreviewMouseWheel="CartesianChart_PreviewMouseWheel2" >
-                                    <lvc:CartesianChart.AxisX >
-                                        <lvc:Axis Title="" Labels="{Binding Path=TagLabels}" MaxValue="{Binding Path=Statictistic_Tag_Number,Mode=OneWay, Source={x:Static p:Settings.Default}}"    >
-                                            <lvc:Axis.Separator >
-                                                <lvc:Separator Step="2"/>
-                                            </lvc:Axis.Separator>
-                                        </lvc:Axis>
-                                    </lvc:CartesianChart.AxisX>
-                                    <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis Title="" LabelFormatter="{Binding Path=Formatter}"></lvc:Axis>
-                                    </lvc:CartesianChart.AxisY>
-                                </lvc:CartesianChart>
-                            </Grid>
-                        </Border>
-                        <Border Background="{DynamicResource BackgroundSide}" Margin="5" CornerRadius="5" Grid.Column="1" Grid.Row="1">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Border CornerRadius="5" Background="{DynamicResource BackgroundTitle}" Width="60" HorizontalAlignment="Left" Margin="10 5" >
-                                    <TextBlock Text="{x:Static lang:Resources.Actor}" Foreground="{DynamicResource ForegroundSearch}" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
-                                </Border>
-                                <lvc:CartesianChart Series="{Binding Path=ActorSeriesCollection}" LegendLocation="None" Margin="5" Grid.Row="1" DisableAnimations="True" AnimationsSpeed="0:0:0.1"  PreviewMouseWheel="CartesianChart_PreviewMouseWheel3" >
-                                    <lvc:CartesianChart.AxisX >
-                                        <lvc:Axis Title="" Labels="{Binding Path=ActorLabels}" MaxValue="{Binding Path=Statictistic_Actor_Number,Mode=OneWay, Source={x:Static p:Settings.Default}}"    >
-                                            <lvc:Axis.Separator >
-                                                <lvc:Separator Step="2"/>
-                                            </lvc:Axis.Separator>
-                                        </lvc:Axis>
-                                    </lvc:CartesianChart.AxisX>
-                                    <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis Title="" LabelFormatter="{Binding Path=Formatter}"></lvc:Axis>
-                                    </lvc:CartesianChart.AxisY>
-                                </lvc:CartesianChart>
-                            </Grid>
-                        </Border>
-
-
-
-
-
-
-
+                        <plot:BarView x:Name="IDBarView" Grid.Row="0" Grid.Column="0"/>
+                        <plot:BarView Grid.Row="0" Grid.Column="1"/>
+                        <plot:BarView Grid.Row="1" Grid.Column="0"/>
+                        <plot:BarView Grid.Row="1" Grid.Column="1"/>
 
                     </Grid>
 

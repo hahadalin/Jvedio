@@ -5,13 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-
 using System.Collections.ObjectModel;
-using System.Windows.Media.Imaging;
 using System.IO;
-using static Jvedio.GlobalVariable;
-using LiveCharts;
-using LiveCharts.Wpf;
+using Jvedio.Plot.Bar;
 
 namespace Jvedio.ViewModel
 {
@@ -64,7 +60,7 @@ namespace Jvedio.ViewModel
         public  void Statistic()
         {
             Movies = new List<Movie>();
-            string name = Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower();
+            string name = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower();
             if (name != "info") name = "DataBase\\" + name;
             MySqlite db = new MySqlite(name);
             Movies =  db.SelectMoviesBySql("SELECT * FROM movie");
@@ -78,22 +74,9 @@ namespace Jvedio.ViewModel
             CensoredCountPercent = (int)(100 * CensoredCount / (AllCount == 0 ? 1 : AllCount));
             UncensoredCountPercent = (int)(100 * UncensoredCount / (AllCount == 0 ? 1 : AllCount));
             EuropeCountPercent = (int)(100 * EuropeCount / (AllCount == 0 ? 1 : AllCount));
-
-
-            ChartValuesCensoredCount = new ChartValues<double>() { CensoredCount };
-            ChartValuesUnCensoredCount = new ChartValues<double>() { UncensoredCount };
-            ChartValuesEuropeCount = new ChartValues<double>() { EuropeCount };
-            PointLabel = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
-
-            //按识别码显示
-            LoadID();
-            LoadGenre();
-            LoadTag();
-            LoadActor();
-            Formatter = value => value.ToString("N");
         }
 
-        private void LoadActor()
+        public List<BarData> LoadActor()
         {
             Dictionary<string, double> dic = new Dictionary<string, double>();
             Movies.ForEach(arg =>
@@ -112,22 +95,10 @@ namespace Jvedio.ViewModel
             });
 
             var dicSort = dic.OrderByDescending(arg => arg.Value).ToDictionary(x => x.Key, y => y.Value);
-            ActorLabels = dicSort.Keys.ToArray();
-            ChartValues<double> cv = new ChartValues<double>();
-            dicSort.Values.ToList().ForEach(arg => cv.Add(arg));
-
-
-            ActorSeriesCollection = new SeriesCollection
-            {
-                new ColumnSeries
-                {
-                    Title="数目",
-                    Values = cv
-                }
-            };
+            return dicSort.ToBarDatas();
         }
 
-        private void LoadTag()
+        public List<BarData> LoadTag()
         {
             Dictionary<string, double> dic = new Dictionary<string, double>();
             Movies.ForEach(arg =>
@@ -145,23 +116,10 @@ namespace Jvedio.ViewModel
             });
 
             var dicSort = dic.OrderByDescending(arg => arg.Value).ToDictionary(x => x.Key, y => y.Value);
-            TagLabels = dicSort.Keys.ToArray();
-
-            ChartValues<double> cv = new ChartValues<double>();
-            dicSort.Values.ToList().ForEach(arg => cv.Add(arg));
-
-
-            TagSeriesCollection = new SeriesCollection
-            {
-                new ColumnSeries
-                {
-                    Title="数目",
-                    Values = cv
-                }
-            };
+            return dicSort.ToBarDatas();
         }
 
-        private void LoadGenre()
+        public List<BarData> LoadGenre()
         {
             Dictionary<string, double> dic = new Dictionary<string, double>();
             Movies.ForEach(arg =>
@@ -179,23 +137,11 @@ namespace Jvedio.ViewModel
             });
 
             var dicSort = dic.OrderByDescending(arg => arg.Value).ToDictionary(x => x.Key, y => y.Value);
-            GenreLabels = dicSort.Keys.ToArray();
+            return dicSort.ToBarDatas();
 
-            ChartValues<double> cv = new ChartValues<double>();
-            dicSort.Values.ToList().ForEach(arg => cv.Add(arg));
-
-
-            GenreSeriesCollection = new SeriesCollection
-            {
-                new ColumnSeries
-                {
-                    Title="数目",
-                    Values = cv
-                }
-            };
         }
 
-        private void LoadID()
+        public List<BarData> LoadID()
         {
             Dictionary<string, double> dic = new Dictionary<string, double>();
             Movies.ForEach(arg =>
@@ -212,32 +158,11 @@ namespace Jvedio.ViewModel
             });
 
             var dicSort = dic.OrderByDescending(arg => arg.Value).ToDictionary(x => x.Key, y => y.Value);
-            Labels = dicSort.Keys.ToArray();
-            ChartValues<double> cv = new ChartValues<double>();
-            dicSort.Values.ToList().ForEach(arg => cv.Add(arg));
-            SeriesCollection = new SeriesCollection
-            {
-                new ColumnSeries
-                {
-                    Title="数目",
-                    Values = cv
-                }
-            };
+            return dicSort.ToBarDatas();
         }
 
 
 
-
-        private SeriesCollection _ActorSeriesCollection;
-        public SeriesCollection ActorSeriesCollection
-        {
-            get { return _ActorSeriesCollection; }
-            set
-            {
-                _ActorSeriesCollection = value;
-                RaisePropertyChanged();
-            }
-        }
 
 
 
@@ -259,19 +184,6 @@ namespace Jvedio.ViewModel
 
 
 
-        private SeriesCollection _TagSeriesCollection;
-        public SeriesCollection TagSeriesCollection
-        {
-            get { return _TagSeriesCollection; }
-            set
-            {
-                _TagSeriesCollection = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-
         private string[] _TagLabels;
 
         public string[] TagLabels
@@ -286,19 +198,6 @@ namespace Jvedio.ViewModel
         }
 
 
-        private SeriesCollection _GenreSeriesCollection;
-        public SeriesCollection GenreSeriesCollection
-        {
-            get { return _GenreSeriesCollection; }
-            set
-            {
-                _GenreSeriesCollection = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-
         private string[] _GenreLabels;
 
         public string[] GenreLabels
@@ -308,18 +207,6 @@ namespace Jvedio.ViewModel
             set
             {
                 _GenreLabels = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        private SeriesCollection _SeriesCollection;
-        public SeriesCollection SeriesCollection
-        {
-            get { return _SeriesCollection; }
-            set
-            {
-                _SeriesCollection = value;
                 RaisePropertyChanged();
             }
         }
@@ -339,63 +226,8 @@ namespace Jvedio.ViewModel
             }
         }
 
-        public Func<double, string> Formatter { get; set; }
 
 
-
-
-
-        private ChartValues<double> _ChartValuesCensoredCount;
-
-        public ChartValues<double> ChartValuesCensoredCount
-        {
-            get { return _ChartValuesCensoredCount; }
-            set
-            {
-                _ChartValuesCensoredCount = value;
-                RaisePropertyChanged();
-            }
-        }
-        private ChartValues<double> _ChartValuesUnCensoredCount;
-
-
-        public ChartValues<double> ChartValuesUnCensoredCount
-        {
-            get { return _ChartValuesUnCensoredCount; }
-            set
-            {
-                _ChartValuesUnCensoredCount = value;
-                RaisePropertyChanged();
-            }
-        }
-        private ChartValues<double> _ChartValuesEuropeCount { get; set; }
-
-
-        public ChartValues<double> ChartValuesEuropeCount
-        {
-            get { return _ChartValuesEuropeCount; }
-            set
-            {
-                _ChartValuesEuropeCount = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-
-        private Func<ChartPoint, string> _PointLabel;
-
-        public Func<ChartPoint, string> PointLabel
-        {
-            get { return _PointLabel; }
-            set
-            {
-                _PointLabel = value;
-                RaisePropertyChanged();
-            }
-
-
-        }
 
 
         private double _CensoredCountPercent;

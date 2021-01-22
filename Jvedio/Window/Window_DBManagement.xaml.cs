@@ -1,4 +1,5 @@
-﻿using Jvedio.ViewModel;
+﻿using Jvedio.Plot.Bar;
+using Jvedio.ViewModel;
 using LiveCharts;
 using LiveCharts.Wpf;
 using System;
@@ -35,10 +36,14 @@ namespace Jvedio
 
             vieModel_DBManagement = new VieModel_DBManagement();
             vieModel_DBManagement.ListDatabase();
+            vieModel_DBManagement.Statistic();
             this.DataContext = vieModel_DBManagement;
+            vieModel_DBManagement.CurrentDataBase = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
 
-            vieModel_DBManagement.CurrentDataBase = Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First();
 
+            //显示数据
+            IDBarView.Datas = vieModel_DBManagement.LoadID();
+            IDBarView.Title = Jvedio.Language.Resources.ID;
 
         }
 
@@ -65,7 +70,7 @@ namespace Jvedio
             if (main.vieModel.DataBases.Count > 1)
             {
                 main.DatabaseComboBox.Visibility = Visibility.Visible;
-                main.DatabaseComboBox.SelectedItem = Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First();
+                main.DatabaseComboBox.SelectedItem = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
 
 
             }
@@ -275,7 +280,7 @@ namespace Jvedio
 
                 foreach (var item in names)
                 {
-                    string name = item.Split('\\').Last().Split('.').First().ToLower();
+                    string name = Path.GetFileNameWithoutExtension(item).ToLower();
                     if (name == "info") continue;
 
                     if (!DataBase.IsProPerSqlite(item)) continue;
@@ -312,7 +317,7 @@ namespace Jvedio
             //设置当前数据库
             for (int i = 0; i < vieModel_DBManagement.DataBases.Count; i++)
             {
-                if (vieModel_DBManagement.DataBases[i].ToLower() == Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower())
+                if (vieModel_DBManagement.DataBases[i].ToLower() == Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
                 {
                     DatabaseComboBox.SelectedIndex = i;
                     break;
@@ -326,7 +331,7 @@ namespace Jvedio
         private void DatabaseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0) return;
-            if (e.AddedItems[0].ToString().ToLower() != Properties.Settings.Default.DataBasePath.Split('\\').Last().Split('.').First().ToLower())
+            if (e.AddedItems[0].ToString().ToLower() != Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
             {
                 if (e.AddedItems[0].ToString() == "info")
                     Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"{e.AddedItems[0].ToString()}.sqlite";
@@ -464,6 +469,7 @@ namespace Jvedio
             cts.Cancel();
             WaitingPanel.Visibility = Visibility.Hidden;
         }
+
     }
 
 }

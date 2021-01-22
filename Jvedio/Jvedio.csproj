@@ -240,6 +240,10 @@
     <Compile Include="Dialog\Dialog_NewMovie.xaml.cs">
       <DependentUpon>Dialog_NewMovie.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Plot\Bar\BarView.xaml.cs">
+      <DependentUpon>BarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Plot\Bar\BarViewModel.cs" />
     <Compile Include="Window\Jvedio_BaseWindow.cs" />
     <Compile Include="Library\Net\MultiDownLoader.cs" />
     <Compile Include="Library\Net\Translate.cs" />
@@ -318,6 +322,10 @@
     <Page Include="Dialog\Dialog_NewMovie.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Plot\Bar\BarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window\WindowBatch.xaml">
       <Generator>MSBuild:Compile</Generator>
