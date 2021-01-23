@@ -45,7 +45,7 @@ namespace Jvedio.Plot.Bar
             this.Loaded += Load;
             ApplyButton.Click += Apply;
             SortButton.Click += Sort;
-            RefreshButton.Click += Refresh;
+            ResetButton.Click += Reset;
         }
 
 
@@ -69,6 +69,18 @@ namespace Jvedio.Plot.Bar
             ItemsControl2.ItemsSource = model.CurrentDatas;
         }
 
+        public void Refresh()
+        {
+            App.Current.Dispatcher.Invoke((Action)delegate { 
+                model = new BarViewModel(Title, ScrollViewer.ActualHeight, ScrollViewer.ActualWidth);
+                if (this.Datas != null) model.Init(this.Datas);
+                this.DataContext = model;
+                ItemsControl1.Background = DefaultBackground;
+                ItemsControl1.ItemsSource = model.CurrentDatas;
+                ItemsControl2.ItemsSource = model.CurrentDatas;
+            });
+        }
+
 
         private void AdjustBarWidth(object sender, MouseWheelEventArgs e)
         {
@@ -89,7 +101,7 @@ namespace Jvedio.Plot.Bar
             ItemsControl2.ItemsSource = model.CurrentDatas;
         }
 
-        private void Refresh(object sender, RoutedEventArgs e)
+        private void Reset(object sender, RoutedEventArgs e)
         {
             model = new BarViewModel(Title,ScrollViewer.ActualHeight, ScrollViewer.ActualWidth, model.Descending);
             model.Init(Datas,model.Current);

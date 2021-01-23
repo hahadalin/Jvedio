@@ -21,7 +21,7 @@
             </Border>
 
             <Border  CornerRadius="10"    >
-                <ScrollViewer Margin="20 0 20 20"   x:Name="ScrollViewer"  VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer Margin="20 0 20 0"   x:Name="ScrollViewer"  VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
 
                     <Grid   >
 
@@ -154,29 +154,29 @@
                 </ScrollViewer>
             </Border>
             <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Panel.ZIndex="10" >
-                <Border   Opacity="0.7" Width="100" Height="100"   CornerRadius="5"  Background="Black" >
+                <Border   Opacity="0.7" Width="auto" Height="auto"   CornerRadius="5"  Background="Black" >
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="10" Color="Gray" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                     </Border.Effect>
                 </Border>
 
-                <StackPanel Orientation="Vertical" Margin="20" >
+                <StackPanel Orientation="Vertical" Margin="10" >
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <Border Width="10" Height="10"  Background="#0594B2"/>
                         <TextBlock Text="{Binding Title}" Foreground="White" Margin="10 0"/>
                     </StackPanel>
-                    <TextBlock Text="{Binding Current,StringFormat='当前：{0} '}" Foreground="White" Margin="10 5"/>
-                    <TextBlock Text="{Binding Total,StringFormat='总数：{0} '}" Foreground="White" Margin="10 5"/>
+                    <TextBlock Text="{Binding Current,StringFormat='Current：{0} '}" Foreground="White" Margin="10 5"/>
+                    <TextBlock Text="{Binding Total,StringFormat='Total：{0} '}" Foreground="White" Margin="10 5"/>
 
                 </StackPanel>
             </Grid>
             <StackPanel x:Name="ToolStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20 0 0 5">
-                <Button x:Name="RefreshButton" Content="{x:Static lang:Resources.Refresh}" Margin="10"/>
-                <Button x:Name="SortButton"  Content="{x:Static lang:Resources.SmallToBig}" Margin="10" />
-                <Slider x:Name="Slider" VerticalAlignment="Center" VerticalContentAlignment="Center" IsSnapToTickEnabled="True" TickFrequency="1"  Width="300" Height="auto" Maximum="100" Minimum="1" Value="{Binding Current,Mode=OneWay}" />
+                <Button Opacity="0.7" x:Name="ResetButton" Content="{x:Static lang:Resources.Restore}" Margin="10"/>
+                <Button Opacity="0.7" x:Name="SortButton"  Content="{x:Static lang:Resources.SmallToBig}" Margin="10" />
+                <Slider x:Name="Slider" VerticalAlignment="Center" VerticalContentAlignment="Center" IsSnapToTickEnabled="True" TickFrequency="1"  Width="150" Height="auto" Maximum="100" Minimum="1" Value="{Binding Current,Mode=OneWay}" />
 
                 <TextBlock Margin="5 0" Text="{Binding ElementName=Slider,Path=Value,StringFormat=\{0\}}"  VerticalAlignment="Center"/>
-                <Button x:Name="ApplyButton"  Content="{x:Static lang:Resources.Apply}" Margin="10" />
+                <Button Opacity="0.7" x:Name="ApplyButton"  Content="{x:Static lang:Resources.Apply}" Margin="10" />
 
             </StackPanel>
 

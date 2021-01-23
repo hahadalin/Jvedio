@@ -36,16 +36,21 @@ namespace Jvedio
 
             vieModel_DBManagement = new VieModel_DBManagement();
             vieModel_DBManagement.ListDatabase();
-            vieModel_DBManagement.Statistic();
+
             this.DataContext = vieModel_DBManagement;
             vieModel_DBManagement.CurrentDataBase = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
 
-
-            //显示数据
-            IDBarView.Datas = vieModel_DBManagement.LoadID();
-            IDBarView.Title = Jvedio.Language.Resources.ID;
-
+            this.SizedChangedCompleted += OnSizedChangedCompleted;
         }
+
+
+        private void OnSizedChangedCompleted(object o, EventArgs e)
+        {
+            ShowStatistic();
+        }
+
+
+
 
         public void LoadDataBase(object sender, MouseButtonEventArgs e)
         {
@@ -338,7 +343,7 @@ namespace Jvedio
                 else
                     Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{e.AddedItems[0].ToString()}.sqlite";
                 //切换数据库
-                vieModel_DBManagement.Statistic();
+                ShowStatistic();
             }
         }
 
@@ -470,6 +475,36 @@ namespace Jvedio
             WaitingPanel.Visibility = Visibility.Hidden;
         }
 
+        private  void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ShowStatistic();
+        }
+
+
+        private async void ShowStatistic()
+        {
+            if (TabControl.SelectedIndex == 1)
+            {
+                await Task.Run(() => {
+                    vieModel_DBManagement.Statistic();
+                    IDBarView.Datas = vieModel_DBManagement.LoadID();
+                    IDBarView.Title = Jvedio.Language.Resources.ID;
+                    IDBarView.Refresh();
+                    Task.Delay(300).Wait();
+                    ActorBarView.Datas = vieModel_DBManagement.LoadActor();
+                    ActorBarView.Title = Jvedio.Language.Resources.Actor;
+                    ActorBarView.Refresh();
+                    Task.Delay(300).Wait();
+                    GenreBarView.Datas = vieModel_DBManagement.LoadGenre();
+                    GenreBarView.Title = Jvedio.Language.Resources.Genre;
+                    GenreBarView.Refresh();
+                    Task.Delay(300).Wait();
+                    TagBarView.Datas = vieModel_DBManagement.LoadTag();
+                    TagBarView.Title = Jvedio.Language.Resources.Tag;
+                    TagBarView.Refresh();
+                });
+            }
+        }
     }
 
 }

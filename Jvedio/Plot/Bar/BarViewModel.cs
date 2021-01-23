@@ -129,8 +129,8 @@ namespace Jvedio.Plot.Bar
             Current = Math.Min(current, Datas.Count);
             int idx = 0;
             if (!Descending) idx = (int)Current - 1;
-
-
+            CurrentDatas = new ObservableCollection<BarData>();
+            if (Datas.Count == 0) return;
             Datas[idx] = new BarData()
             {
                 BarWidth = BarWidth,
@@ -150,7 +150,7 @@ namespace Jvedio.Plot.Bar
                 };
             }
 
-            CurrentDatas = new ObservableCollection<BarData>();
+            
             for (int i = 0; i < Current; i++)
             {
                 CurrentDatas.Add(Datas[i]);

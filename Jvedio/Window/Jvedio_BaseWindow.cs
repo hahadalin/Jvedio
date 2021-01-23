@@ -22,7 +22,7 @@ namespace Jvedio
         public Point WindowPoint = new Point(100, 100);
         public Size WindowSize = new Size(800, 500);
         public JvedioWindowState WinState = JvedioWindowState.Normal;
-
+        public event EventHandler SizedChangedCompleted;
         private HwndSource _hwndSource;
 
         public Jvedio_BaseWindow()
@@ -157,6 +157,7 @@ namespace Jvedio
         private void ResizeWindow(ResizeDirection direction)
         {
             SendMessage(_hwndSource.Handle, 0x112, (IntPtr)(61440 + direction), IntPtr.Zero);
+            SizedChangedCompleted?.Invoke(this, new EventArgs());
         }
 
         #endregion
@@ -352,6 +353,9 @@ namespace Jvedio
                 this.Height = WindowSize.Height;
             }
             HideMargin();
+
+            SizedChangedCompleted?.Invoke(this, new EventArgs());
+
         }
 
         private void MoveWindow(object sender, MouseEventArgs e)
