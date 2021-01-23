@@ -1589,7 +1589,7 @@
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
-                                    <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}" Margin="0" Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch"/>
+                                    <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}" Margin="0" Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch" />
                                     <Border Cursor="Hand" x:Name="ImageSortBorder" Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.ImageType}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowImagePopup">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=image,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
@@ -1615,7 +1615,7 @@
                                     </Border>
 
 
-                                    <Button Visibility="Visible" Click="Button_Click_2" Content="测试" />
+                                    <Button Visibility="Collapsed" Click="Button_Click_2" Content="测试" />
 
                                 </StackPanel>
 

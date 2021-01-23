@@ -51,6 +51,11 @@ namespace Jvedio
             windowTools.TabControl.SelectedIndex = 0;
             this.Close();
         }
+
+        private void BaseDialog_ContentRendered(object sender, EventArgs e)
+        {
+            AddMovieTextBox.Focus();
+        }
     }
 
 

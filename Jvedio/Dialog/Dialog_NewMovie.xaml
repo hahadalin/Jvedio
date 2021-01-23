@@ -16,6 +16,7 @@
         MinHeight="200"
         MinWidth="400"
         WindowStartupLocation="CenterScreen"
+    ContentRendered="BaseDialog_ContentRendered"
     
         >
 
@@ -39,7 +40,7 @@
 
 
             <WrapPanel Grid.Row="1">
-                <Label Background="Transparent"  Content="{x:Static lang:Resources.VedioType}"  Style="{StaticResource LabelPrimary}" Margin="20 10" />
+                <Label Background="Transparent"  Content="{x:Static lang:Resources.VedioType}"  Foreground="{DynamicResource ForegroundSearch}"  Style="{StaticResource LabelPrimary}" Margin="20 10" />
                 <StackPanel x:Name="RadioButtonStackPanel"  Orientation="Horizontal" >
                     <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}" IsChecked="True"    Content="{Binding TypeName1,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
                     <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"     Content="{Binding TypeName2,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
