@@ -34,11 +34,12 @@ namespace Jvedio
     public partial class Settings : Jvedio_BaseWindow
     {
 
-        public DetailMovie SampleMovie = new DetailMovie() {
+        public DetailMovie SampleMovie = new DetailMovie()
+        {
             id = "AAA-001",
             title = Jvedio.Language.Resources.SampleMovie_Title,
             vediotype = 1,
-            releasedate ="2020-01-01",
+            releasedate = "2020-01-01",
             director = Jvedio.Language.Resources.SampleMovie_Director,
             genre = Jvedio.Language.Resources.SampleMovie_Genre,
             tag = Jvedio.Language.Resources.SampleMovie_Tag,
@@ -48,7 +49,7 @@ namespace Jvedio
             chinesetitle = Jvedio.Language.Resources.SampleMovie_TranslatedTitle,
             label = Jvedio.Language.Resources.SampleMovie_Label,
             year = 2020,
-            runtime =126,
+            runtime = 126,
             country = Jvedio.Language.Resources.SampleMovie_Country
         };
         public VieModel_Settings vieModel_Settings;
@@ -77,7 +78,7 @@ namespace Jvedio
             }
 
             bool IsMatch = false;
-            foreach(var item  in ComboBox_Ttile.Items)
+            foreach (var item in ComboBox_Ttile.Items)
             {
                 if (Properties.Settings.Default.Font_Title_Family == item.ToString())
                 {
@@ -89,15 +90,14 @@ namespace Jvedio
 
             if (!IsMatch) ComboBox_Ttile.SelectedIndex = 0;
 
-            var childsps = MainGrid.Children.OfType<StackPanel>().ToList();
-            foreach (var item in childsps) item.Visibility = Visibility.Hidden;
-            childsps[Properties.Settings.Default.SettingsIndex].Visibility = Visibility.Visible;
 
-            var RadioButtons = RadioButtonStackPanel.Children.OfType<RadioButton>().ToList();
-            RadioButtons[Properties.Settings.Default.SettingsIndex].IsChecked = true;
+            ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
 
-             ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
-
+            //绑定事件
+            foreach (var item in CheckedBoxWrapPanel.Children.OfType<ToggleButton>().ToList())
+            {
+                item.Click += AddToRename;
+            }
 
         }
 
@@ -210,7 +210,7 @@ namespace Jvedio
                     }
                     VK = (uint)KeyInterop.VirtualKeyFromKey(_key);
 
-                    
+
                     UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消之前的热键
                     bool success = RegisterHotKey(_windowHandle, HOTKEY_ID, fsModifiers, VK);
                     if (!success) { MessageBox.Show("热键冲突！", "热键冲突"); }
@@ -223,7 +223,7 @@ namespace Jvedio
                         Properties.Settings.Default.Save();
                         HandyControl.Controls.Growl.Success("设置热键成功", "SettingsGrowl");
                     }
-                    
+
                 }
 
 
@@ -262,14 +262,14 @@ namespace Jvedio
         {
             Button button = sender as Button;
             StackPanel stackPanel = button.Parent as StackPanel;
-            CheckBox checkBox  = stackPanel.Children.OfType<CheckBox>().First();
+            CheckBox checkBox = stackPanel.Children.OfType<CheckBox>().First();
             ImageAwesome imageAwesome = stackPanel.Children.OfType<ImageAwesome>().First();
             imageAwesome.Icon = FontAwesomeIcon.Refresh;
             imageAwesome.Spin = true;
             imageAwesome.Foreground = (SolidColorBrush)Application.Current.Resources["ForegroundSearch"];
             if (checkBox.Content.ToString() == Jvedio.Language.Resources.BaiduFaceRecognition)
             {
-                
+
                 string base64 = Resource_String.BaseImage64;
                 System.Drawing.Bitmap bitmap = ImageProcess.Base64ToBitmap(base64);
                 Dictionary<string, string> result;
@@ -290,9 +290,10 @@ namespace Jvedio
             }
         }
 
-        public static  Task<(Dictionary<string, string>,Int32Rect)> TestBaiduAI(System.Drawing.Bitmap bitmap)
+        public static Task<(Dictionary<string, string>, Int32Rect)> TestBaiduAI(System.Drawing.Bitmap bitmap)
         {
-            return Task.Run(() => {
+            return Task.Run(() =>
+            {
                 string token = AccessToken.getAccessToken();
                 string FaceJson = FaceDetect.faceDetect(token, bitmap);
                 Dictionary<string, string> result;
@@ -307,16 +308,17 @@ namespace Jvedio
         {
             Button button = sender as Button;
             StackPanel stackPanel = button.Parent as StackPanel;
-            CheckBox  checkBox = stackPanel.Children.OfType<CheckBox>().First();
-            ImageAwesome  imageAwesome = stackPanel.Children.OfType<ImageAwesome>().First();
+            CheckBox checkBox = stackPanel.Children.OfType<CheckBox>().First();
+            ImageAwesome imageAwesome = stackPanel.Children.OfType<ImageAwesome>().First();
             imageAwesome.Icon = FontAwesomeIcon.Refresh;
             imageAwesome.Spin = true;
             imageAwesome.Foreground = (SolidColorBrush)Application.Current.Resources["ForegroundSearch"];
 
             if (checkBox.Content.ToString() == "百度翻译")
             {
-                
-            }else if (checkBox.Content.ToString() == Jvedio.Language.Resources.Youdao)
+
+            }
+            else if (checkBox.Content.ToString() == Jvedio.Language.Resources.Youdao)
             {
                 string result = await Translate.Youdao("のマ○コに");
                 if (result != "")
@@ -347,7 +349,7 @@ namespace Jvedio
             }
             if (vieModel_Settings.ScanPath != null)
                 SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath.ToList());
-            
+
         }
 
         public void ClearPath(object sender, MouseButtonEventArgs e)
@@ -361,21 +363,9 @@ namespace Jvedio
 
 
 
-        public void LabelMouseUp(object sender, RoutedEventArgs e)
-        {
-            RadioButton radioButton = (RadioButton)sender;
-            StackPanel SP = radioButton.Parent as StackPanel;
-            var radioButtons = SP.Children.OfType<RadioButton>().ToList();
-            var childsps = MainGrid.Children.OfType<StackPanel>().ToList();
-            foreach(var item in childsps) item.Visibility = Visibility.Hidden;
-            childsps[radioButtons.IndexOf(radioButton)].Visibility = Visibility.Visible;
-            Properties.Settings.Default.SettingsIndex = radioButtons.IndexOf(radioButton);
-            Properties.Settings.Default.Save();
-        }
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            if(new Msgbox(this, Jvedio.Language.Resources.Message_IsToReset).ShowDialog() == true)
+            if (new Msgbox(this, Jvedio.Language.Resources.Message_IsToReset).ShowDialog() == true)
             {
                 //保存网址
                 List<string> urlList = new List<string>();
@@ -414,10 +404,10 @@ namespace Jvedio
                 Properties.Settings.Default.Enable321 = enableList[5];
                 Properties.Settings.Default.EnableDMM = enableList[6];
                 Properties.Settings.Default.FirstRun = false;
-               Properties.Settings.Default.Save();
+                Properties.Settings.Default.Save();
             }
 
-    }
+        }
 
         private void DisplayNumberTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -427,7 +417,7 @@ namespace Jvedio
             if (success)
             {
                 num = int.Parse(textBox.Text);
-                if (num > 0 & num <=500)
+                if (num > 0 & num <= 500)
                 {
                     Properties.Settings.Default.DisplayNumber = num;
                     Properties.Settings.Default.Save();
@@ -441,16 +431,16 @@ namespace Jvedio
             TextBox textBox = sender as TextBox;
             int num = 0;
             bool success = int.TryParse(textBox.Text, out num);
-            if (success ) 
+            if (success)
             {
                 num = int.Parse(textBox.Text);
-                if (num > 0 & num <=30)
+                if (num > 0 & num <= 30)
                 {
                     Properties.Settings.Default.FlowNum = num;
                     Properties.Settings.Default.Save();
                 }
             }
-               
+
         }
 
         private void ActorTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -567,7 +557,7 @@ namespace Jvedio
                 string exePath = OpenFileDialog1.FileName;
                 if (File.Exists(exePath))
                     Properties.Settings.Default.VedioPlayerPath = exePath;
-                       
+
             }
         }
 
@@ -586,10 +576,10 @@ namespace Jvedio
                 }
                 else
                 {
-                    string path= dialog.SelectedPath; 
+                    string path = dialog.SelectedPath;
                     if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
                     Properties.Settings.Default.BasePicPath = path;
-                    
+
                 }
             }
         }
@@ -623,7 +613,7 @@ namespace Jvedio
                 string exePath = OpenFileDialog1.FileName;
                 if (File.Exists(exePath))
                 {
-                    if(new FileInfo(exePath).Name.ToLower()== "ffmpeg.exe")
+                    if (new FileInfo(exePath).Name.ToLower() == "ffmpeg.exe")
                         Properties.Settings.Default.FFMPEG_Path = exePath;
                 }
             }
@@ -639,17 +629,18 @@ namespace Jvedio
             main?.ActorSetSelected();
         }
 
-        
 
-     private void SetLanguage(object sender, RoutedEventArgs e)
+
+        private void SetLanguage(object sender, RoutedEventArgs e)
         {
+            //https://blog.csdn.net/fenglailea/article/details/45888799
             Properties.Settings.Default.Language = (sender as RadioButton).Content.ToString();
             Properties.Settings.Default.Save();
             string language = Properties.Settings.Default.Language;
             string hint = "";
             if (language == "English")
                 hint = "Take effect after restart";
-            else if(language=="日本語")
+            else if (language == "日本語")
                 hint = "再起動後に有効になります";
             else
                 hint = "重启后生效";
@@ -661,7 +652,7 @@ namespace Jvedio
         {
             System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
             colorDialog.Color = System.Drawing.ColorTranslator.FromHtml(Properties.Settings.Default.Selected_BorderBrush);
-            if(colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 Properties.Settings.Default.Selected_BorderBrush = System.Drawing.ColorTranslator.ToHtml(colorDialog.Color);
                 Properties.Settings.Default.Save();
@@ -684,7 +675,7 @@ namespace Jvedio
 
         private void ComboBox_Ttile_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
             if (e.RemovedItems.Count > 0)
             {
                 if (ComboBox_Ttile.Text != "")
@@ -758,6 +749,8 @@ namespace Jvedio
                 }
             }
 
+            TabControl.SelectedIndex = Properties.Settings.Default.SettingsIndex;
+
 
         }
 
@@ -765,7 +758,7 @@ namespace Jvedio
         {
             foreach (ToggleButton item in CheckedBoxWrapPanel.Children.OfType<ToggleButton>().ToList())
             {
-                if(Properties.Settings.Default.RenameFormat.IndexOf(   item.Content.ToString().ToSqlField()) >= 0)
+                if (Properties.Settings.Default.RenameFormat.IndexOf(item.Content.ToString().ToSqlField()) >= 0)
                 {
                     item.IsChecked = true;
                 }
@@ -842,7 +835,7 @@ namespace Jvedio
             {
                 IsEnable = true,
                 Url = "https://",
-                Cookie =Jvedio.Language.Resources.Nothing,
+                Cookie = Jvedio.Language.Resources.Nothing,
                 Available = 0,
                 ServerTitle = "",
                 LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
@@ -856,7 +849,7 @@ namespace Jvedio
         }
 
 
-        private int  ServersDataGrid_RowIndex=0;
+        private int ServersDataGrid_RowIndex = 0;
         private void test_Click(object sender, RoutedEventArgs e)
         {
             FocusTextBox.Focus();
@@ -866,7 +859,7 @@ namespace Jvedio
             int rowIndex = ServersDataGrid_RowIndex;
             Server server = vieModel_Settings.Servers[rowIndex];
             CheckBox cb = GetVisualChild<CheckBox>(GetCell(rowIndex, 0));
-            CheckUrl( server,cb);
+            CheckUrl(server, cb);
 
         }
 
@@ -877,7 +870,7 @@ namespace Jvedio
             Server server = vieModel_Settings.Servers[ServersDataGrid_RowIndex];
 
             //保存到文件
-            if (server.ServerTitle == "JavBus" | server.Url.ToLower()==Properties.Settings.Default.Bus.ToLower())
+            if (server.ServerTitle == "JavBus" | server.Url.ToLower() == Properties.Settings.Default.Bus.ToLower())
             {
                 Properties.Settings.Default.Bus = "";
                 DeleteServerInfoFromConfig(WebSite.Bus);
@@ -887,20 +880,20 @@ namespace Jvedio
                 Properties.Settings.Default.BusEurope = "";
                 DeleteServerInfoFromConfig(WebSite.BusEu);
             }
-                
+
             else if (server.ServerTitle == "JavDB" | server.Url.ToLower() == Properties.Settings.Default.DB.ToLower())
             {
                 Properties.Settings.Default.DB = "";
                 Properties.Settings.Default.DBCookie = "";
                 DeleteServerInfoFromConfig(WebSite.DB);
             }
-                
+
             else if (server.ServerTitle == "JavLibrary" | server.Url.ToLower() == Properties.Settings.Default.Library.ToLower())
             {
                 Properties.Settings.Default.Library = "";
                 DeleteServerInfoFromConfig(WebSite.Library);
             }
-               
+
             else if (server.ServerTitle == "FANZA" | server.Url.ToLower() == Properties.Settings.Default.DMM.ToLower())
             {
                 Properties.Settings.Default.DMM = "";
@@ -961,23 +954,23 @@ namespace Jvedio
             server.LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             server.Available = 2;
             ServersDataGrid.Items.Refresh();
-            if (server.Url.IndexOf("http") < 0) server.Url = "https://" + server.Url; 
+            if (server.Url.IndexOf("http") < 0) server.Url = "https://" + server.Url;
             if (!server.Url.EndsWith("/")) server.Url = server.Url + "/";
 
             bool enablecookie = false;
-            if(server.ServerTitle=="FANZA" || server.ServerTitle == "JavDB")  enablecookie = true; 
+            if (server.ServerTitle == "FANZA" || server.ServerTitle == "JavDB") enablecookie = true;
 
-            (bool result,string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.ServerTitle);
-            if(!result && title.IndexOf("JavDB") >= 0)
+            (bool result, string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.ServerTitle);
+            if (!result && title.IndexOf("JavDB") >= 0)
             {
                 HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, "SettingsGrowl");
                 return;
             }
-            if (result && title!="")
+            if (result && title != "")
             {
                 server.Available = 1;
 
-                if(title.IndexOf("JavBus")>=0 && title.IndexOf("歐美") < 0)
+                if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") < 0)
                 {
                     server.ServerTitle = "JavBus";
                 }
@@ -1012,13 +1005,14 @@ namespace Jvedio
 
 
             }
-            else {
+            else
+            {
                 server.Available = -1;
             }
             ServersDataGrid.Items.Refresh();
 
             //保存，重复的会覆盖
-            if (server.ServerTitle== "JavBus")
+            if (server.ServerTitle == "JavBus")
             {
                 Properties.Settings.Default.Bus = server.Url;
                 Properties.Settings.Default.EnableBus = (bool)checkBox.IsChecked;
@@ -1034,7 +1028,7 @@ namespace Jvedio
             else if (server.ServerTitle == "JavDB")
             {
                 //是否包含 cookie
-                if(server.Cookie==Jvedio.Language.Resources.Nothing || server.Cookie == "")
+                if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
                 {
                     new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
                 }
@@ -1045,7 +1039,7 @@ namespace Jvedio
                     Properties.Settings.Default.DBCookie = server.Cookie;
                     SaveServersInfoToConfig(WebSite.DB, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
                 }
-                
+
             }
             else if (server.ServerTitle == "JavLibrary")
             {
@@ -1080,11 +1074,11 @@ namespace Jvedio
                 Properties.Settings.Default.Enable321 = (bool)checkBox.IsChecked;
                 SaveServersInfoToConfig(WebSite.Jav321, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
             }
-                Properties.Settings.Default.Save();
+            Properties.Settings.Default.Save();
 
         }
 
-        
+
 
 
         public static T GetVisualChild<T>(Visual parent) where T : Visual
@@ -1188,7 +1182,7 @@ namespace Jvedio
 
             if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JavBus")
                 Properties.Settings.Default.EnableBus = enable;
-            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JavBus Europe") 
+            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JavBus Europe")
                 Properties.Settings.Default.EnableBusEu = enable;
             else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JavDB")
                 Properties.Settings.Default.EnableDB = enable;
@@ -1211,11 +1205,13 @@ namespace Jvedio
             uint modifier = Properties.Settings.Default.HotKey_Modifiers;
             uint vk = Properties.Settings.Default.HotKey_VK;
 
-            if ( modifier != 0 && vk != 0)
+            if (modifier != 0 && vk != 0)
             {
                 UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消之前的热键
                 bool success = RegisterHotKey(_windowHandle, HOTKEY_ID, modifier, vk);
-                if (!success) { MessageBox.Show(Jvedio.Language.Resources.BossKeyError, Jvedio.Language.Resources.Hint);
+                if (!success)
+                {
+                    MessageBox.Show(Jvedio.Language.Resources.BossKeyError, Jvedio.Language.Resources.Hint);
                     Properties.Settings.Default.HotKey_Enable = false;
                 }
             }
@@ -1250,12 +1246,12 @@ namespace Jvedio
                             int.TryParse(value, out v);
                             if (v == 1)
                                 value = Properties.Settings.Default.TypeName1;
-                            else if(v==2)
+                            else if (v == 2)
                                 value = Properties.Settings.Default.TypeName2;
                             else if (v == 3)
                                 value = Properties.Settings.Default.TypeName3;
                         }
-                        vieModel_Settings.ViewRenameFormat = vieModel_Settings.ViewRenameFormat.Replace("{"+property+"}", value);
+                        vieModel_Settings.ViewRenameFormat = vieModel_Settings.ViewRenameFormat.Replace("{" + property + "}", value);
                     }
                     break;
                 }
@@ -1266,8 +1262,8 @@ namespace Jvedio
         {
             ToggleButton toggleButton = sender as ToggleButton;
             string text = toggleButton.Content.ToString();
-            bool ischecked= (bool)toggleButton.IsChecked;
-            string formatstring ="{" + text.ToSqlField() + "}";
+            bool ischecked = (bool)toggleButton.IsChecked;
+            string formatstring = "{" + text.ToSqlField() + "}";
 
             string split = OutComboBox.Text.Replace(Jvedio.Language.Resources.Nothing, "");
 
@@ -1276,7 +1272,7 @@ namespace Jvedio
             {
                 if (string.IsNullOrEmpty(Properties.Settings.Default.RenameFormat))
                 {
-                    Properties.Settings.Default.RenameFormat +=   formatstring;
+                    Properties.Settings.Default.RenameFormat += formatstring;
                 }
                 else
                 {
@@ -1288,7 +1284,7 @@ namespace Jvedio
                 int idx = Properties.Settings.Default.RenameFormat.IndexOf(formatstring);
                 if (idx == 0)
                 {
-                    Properties.Settings.Default.RenameFormat = Properties.Settings.Default.RenameFormat.Replace( formatstring, "");
+                    Properties.Settings.Default.RenameFormat = Properties.Settings.Default.RenameFormat.Replace(formatstring, "");
                 }
                 else
                 {
@@ -1301,7 +1297,7 @@ namespace Jvedio
         {
             int idx = Properties.Settings.Default.RenameFormat.IndexOf(formatstring);
             if (idx > 0)
-               return Properties.Settings.Default.RenameFormat[idx - 1];
+                return Properties.Settings.Default.RenameFormat[idx - 1];
             else
                 return '\0';
 
@@ -1310,7 +1306,7 @@ namespace Jvedio
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (vieModel_Settings == null) return;
-            TextBox textBox =(TextBox) sender;
+            TextBox textBox = (TextBox)sender;
             string txt = textBox.Text;
             ShowViewRename(txt);
         }
@@ -1343,7 +1339,7 @@ namespace Jvedio
         private void InComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0) return;
-            Properties.Settings.Default.InSplit= ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
+            Properties.Settings.Default.InSplit = ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
         }
 
         private void SetBackgroundImage(object sender, RoutedEventArgs e)
@@ -1369,6 +1365,12 @@ namespace Jvedio
                 }
             }
         }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Properties.Settings.Default.SettingsIndex = TabControl.SelectedIndex;
+            Properties.Settings.Default.Save();
+        }
     }
 
 
@@ -1377,7 +1379,7 @@ namespace Jvedio
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value ==null || parameter == null)  return false;
+            if (value == null || parameter == null) return false;
 
 
             if (value.ToString() == parameter.ToString())
@@ -1447,7 +1449,7 @@ namespace Jvedio
                 typename = "所有";
             string vediotype = values[1].ToString();
 
-            if (typename == vediotype) 
+            if (typename == vediotype)
                 return true;
             else
                 return false;
@@ -1498,7 +1500,7 @@ namespace Jvedio
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
 
-            if (value == null )
+            if (value == null)
             {
                 if (parameter.ToString() == "BorderBrush")
                     return Brushes.Gold;
@@ -1508,7 +1510,7 @@ namespace Jvedio
 
             if (parameter.ToString() == "BorderBrush")
                 return Brushes.Gold;
-            else 
+            else
                 return Brushes.LightGreen;
         }
 
@@ -1539,7 +1541,7 @@ namespace Jvedio
                 return 0;
 
             int i = -1;
-            foreach(FontFamily item in Fonts.SystemFontFamilies)
+            foreach (FontFamily item in Fonts.SystemFontFamilies)
             {
                 i++;
                 if (item.ToString() == value.ToString()) return i;
@@ -1602,9 +1604,9 @@ namespace Jvedio
 
     }
 
-    
 
-                    public class BoolToFontItalicConverter : IValueConverter
+
+    public class BoolToFontItalicConverter : IValueConverter
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

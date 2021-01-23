@@ -25,6 +25,7 @@
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
         <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Margin" Value="10 5"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
