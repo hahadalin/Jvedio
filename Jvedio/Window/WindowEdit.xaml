@@ -113,8 +113,8 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Width" Value="100"/>
-            <Setter Property="Height" Value="30"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="Height" Value="auto"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="2"/>
@@ -150,21 +150,21 @@
                             <Label  Content="{x:Static lang:Resources.ID}"  Style="{StaticResource BaseLabel2}"/>
                             <hc:TextBox x:Name="idTextBox"    Text="{Binding DetailMovie.id,Mode=OneWay}"  ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}" />
                         </DockPanel>
-                        <Grid Style="{StaticResource InfoGrid}">
+                        <StackPanel  Orientation="Horizontal">
                             <Label  Content="{x:Static lang:Resources.VedioType}"  Style="{StaticResource BaseLabel2}"/>
-                            <StackPanel Orientation="Horizontal" Margin="110 0">
+                            <StackPanel Orientation="Horizontal" >
                                 <RadioButton  FontSize="15" Foreground="{DynamicResource ForegroundSearch}" IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=0,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}" Content="{x:Static lang:Resources.NotRecognize}" Style="{StaticResource FlatRadioButton}"/>
                                 <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"  IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=1,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="{Binding TypeName1,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
                                 <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"   IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=2,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="{Binding TypeName2,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
                                 <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"    IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=3,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="{Binding TypeName3,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
                             </StackPanel>
-                        </Grid>
-                        <Grid Style="{StaticResource InfoGrid}">
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
                             <Label  Content="{x:Static lang:Resources.Favorites}"  Style="{StaticResource BaseLabel2}"/>
-                            <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="110 5" Cursor="Hand">
+                            <StackPanel  Cursor="Hand" VerticalAlignment="Center">
                                 <hc:Rate AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   DefaultValue="0"/>
                             </StackPanel>
-                        </Grid>
+                        </StackPanel>
 
                         <DockPanel >
                             <Label  Content="{x:Static lang:Resources.Actor}"  Style="{StaticResource BaseLabel2}"/>
@@ -326,7 +326,7 @@
 
 
 
-            <Button MinWidth="80" Grid.Row="1"  Content="{x:Static lang:Resources.Save}" Height="auto" Margin="10 10 10 20"  VerticalAlignment="Bottom" Width="auto"  Style="{StaticResource ButtonStyleFill}"  Click="Button_Click"></Button>
+            <Button MinWidth="80" Grid.Row="1"  Content="{x:Static lang:Resources.Save}" Height="auto" Margin="10 10 10 20"  VerticalAlignment="Bottom" Width="auto"  Style="{StaticResource ButtonStyleFill}"  Click="Button_Click"/>
 
 
         </Grid>

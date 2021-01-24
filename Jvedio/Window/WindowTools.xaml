@@ -258,7 +258,7 @@
 
 
                                             <hc:TextBox CaretBrush="{DynamicResource ForegroundSearch}" Grid.Column="0" ShowClearButton="True"  Padding="10" x:Name="NFOPathTextBox"  Text="" Margin="20 20 0 20"    TextAlignment="Left" Foreground="{DynamicResource ForegroundSearch}" BorderThickness="0" Background="{DynamicResource BackgroundSide}" />
-                                            <Button Grid.Column="1" HorizontalAlignment="Left" Margin="20"  Content="{x:Static lang:Resources.ChooseFile}" Height="auto" Width="100"  Style="{StaticResource ButtonStyleFill}" Click="ShowNFOPath"></Button>
+                                            <Button Grid.Column="1" HorizontalAlignment="Left" Margin="20"  Content="{x:Static lang:Resources.ChooseFile}" Height="auto" Width="100"  Style="{StaticResource ButtonStyleFill}" Click="ShowNFOPath"/>
 
 
                                         </Grid>
@@ -357,7 +357,7 @@
 
                                 <hc:TextBox CaretBrush="{DynamicResource ForegroundSearch}"  Grid.Column="0"  x:Name="UNCPathTextBox" ShowClearButton="True"   Text="" Margin="20 20 0 20"  BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="10" ToolTip="\\用户名\\文件夹" />
 
-                                <Button  Grid.Column="1"  Content="{x:Static lang:Resources.ChooseDir}"  Width="auto"  Style="{StaticResource ButtonStyleFill}" Margin="20" Click="ShowUNCPath"></Button>
+                                <Button  Grid.Column="1"  Content="{x:Static lang:Resources.ChooseDir}"  Width="auto"  Style="{StaticResource ButtonStyleFill}" Margin="20" Click="ShowUNCPath"/>
 
 
                             </Grid>
@@ -424,9 +424,9 @@
                     <Ellipse Name="Dot2" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8" Margin="2,0,0,0"/>
                     <Ellipse Name="Dot3" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8" Margin="2,0,0,0"/>
                 </StackPanel>
-                <Button  Content="{x:Static lang:Resources.Run}" Height="40" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="5" Click="StartRun"></Button>
-                <Button  Content="{x:Static lang:Resources.Stop}" Height="40" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="120 5" Click="CancelRun"></Button>
-                <Button   Content="{x:Static lang:Resources.ViewLog}" Height="40" Width="100"  Style="{StaticResource ButtonStyleFill}" Margin="5" Click="ShowRunInfo" HorizontalAlignment="Left"></Button>
+                <Button  Content="{x:Static lang:Resources.Run}"   Style="{StaticResource ButtonStyleFill}" Margin="5" Click="StartRun"/>
+                <Button  Content="{x:Static lang:Resources.Stop}"   Style="{StaticResource ButtonStyleFill}" Margin="120 5" Click="CancelRun"/>
+                <Button   Content="{x:Static lang:Resources.ViewLog}"  Style="{StaticResource ButtonStyleFill}" Margin="5" Click="ShowRunInfo" HorizontalAlignment="Left"/>
             </Grid>
         </Grid>
 

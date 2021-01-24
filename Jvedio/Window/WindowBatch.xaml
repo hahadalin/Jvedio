@@ -12,6 +12,8 @@
         mc:Ignorable="d"
         Title="批量处理" 
         MinHeight="500" MinWidth="800"
+    Height="500"
+    Width="800"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
@@ -541,6 +543,11 @@
 
     <Grid  Background="Transparent"   >
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
         <JvedioControls:WaitingPanel Visibility="Collapsed"  ShowCancelButton="Collapsed" x:Name="WaitingPanel"  Panel.ZIndex="5" ></JvedioControls:WaitingPanel>
 
         
@@ -561,7 +568,7 @@
 
 
 
-        <Grid Margin="0 0 0 50" Background="{DynamicResource BackgroundMain}"   Height="auto">
+        <Grid Grid.Row="0" Background="{DynamicResource BackgroundMain}"   >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
@@ -787,11 +794,11 @@
 
 
         </Grid>
-        <StackPanel FlowDirection="RightToLeft" Orientation="Horizontal" HorizontalAlignment="Stretch" Background="{DynamicResource BackgroundTitle}"  Height="50" VerticalAlignment="Bottom">
+        <StackPanel Grid.Row="1" FlowDirection="RightToLeft" Orientation="Horizontal" HorizontalAlignment="Stretch" Background="{DynamicResource BackgroundTitle}"  Height="auto" VerticalAlignment="Bottom">
 
-            <Button Content="开始" Style="{StaticResource ButtonStyleFill}"  Background="#22D7BB" VerticalAlignment="Center" HorizontalAlignment="Right" Width="100" Height="25" Click="StartTask" />
-            <Button x:Name="PauseButton" IsEnabled="False" Content="暂停" Style="{StaticResource ButtonStyleFill}" VerticalAlignment="Center" HorizontalAlignment="Right" Width="100" Height="25" Click="Button_Click_1" />
-            <Button Content="取消" Style="{StaticResource ButtonStyleFill}" Background="OrangeRed" VerticalAlignment="Center" HorizontalAlignment="Right" Width="100" Height="25" Click="Button_Click_2" />
+            <Button Content="开始" Style="{StaticResource ButtonStyleFill}"  Background="#22D7BB" VerticalAlignment="Center" HorizontalAlignment="Right"  Click="StartTask" />
+            <Button x:Name="PauseButton" IsEnabled="False" Content="暂停" Style="{StaticResource ButtonStyleFill}" VerticalAlignment="Center" HorizontalAlignment="Right"  Click="Button_Click_1" />
+            <Button Content="取消" Style="{StaticResource ButtonStyleFill}" Background="OrangeRed" VerticalAlignment="Center" HorizontalAlignment="Right"  Click="Button_Click_2" />
         </StackPanel>
 
     </Grid>
