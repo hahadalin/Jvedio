@@ -525,8 +525,8 @@
         <Style x:Key="ViewStackPanel" TargetType="{x:Type StackPanel}">
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
-
         </Style>
+        
         <Style x:Key="ViewImage" TargetType="{x:Type Image}">
             <Setter Property="Margin" Value="0 5"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -2040,8 +2040,11 @@
                                                     </DataTemplate.Triggers>
 
                                                     <WrapPanel  x:Name="MovieWrapPanel"  >
-                                                        <Grid>
+                                                        <Grid Margin="5">
                                                             <Border MinWidth="200" x:Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"  MouseEnter="BorderMouseEnter" MouseLeave="BorderMouseLeave"  >
+                                                                <Border.Effect>
+                                                                    <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                                                </Border.Effect>
                                                                 <StackPanel Style="{StaticResource ViewStackPanel}" Margin="5"   ContextMenuOpening="ContextMenu_ContextMenuOpening"  >
                                                                     <StackPanel.ContextMenu >
                                                                         <ContextMenu  PreviewKeyUp="ContextMenu_PreviewKeyUp">
