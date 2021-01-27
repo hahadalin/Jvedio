@@ -30,6 +30,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
+using System.Windows.Media.Effects;
+
 namespace Jvedio
 {
     /// <summary>
@@ -1628,15 +1630,20 @@ namespace Jvedio
                 WrapPanel wrapPanel = FindElementByName<WrapPanel>(c, "ActorWrapPanel");
                 if (wrapPanel != null)
                 {
-                    Border border = wrapPanel.Children[0] as Border;
+                    Grid grid = wrapPanel.Children[0] as Grid;
+                    Border border = grid.Children[0] as Border;
                     if (c.ContentTemplate.FindName("ActorNameTextBox", c) is TextBox textBox)
                     {
-                        border.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
+                        DropShadowEffect dropShadowEffect = new DropShadowEffect() { Color = Colors.SkyBlue, BlurRadius = 10, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
+                        border.Effect = dropShadowEffect;
+                        //border.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
                         foreach (Actress actress in SelectedActress)
                         {
                             if (actress.name == textBox.Text.Split('(')[0])
                             {
-                                border.Background = Brushes.LightGreen; break;
+                                //border.Background = Brushes.LightGreen; break;
+                                dropShadowEffect = new DropShadowEffect() { Color = Colors.OrangeRed, BlurRadius = 10, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
+                                border.Effect = dropShadowEffect;
                             }
                         }
                     }

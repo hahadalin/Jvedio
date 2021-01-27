@@ -678,7 +678,7 @@
                                     <Grid >
                                         <Image ContextMenuOpening="BigImage_ContextMenuOpening" Margin="0" HorizontalAlignment="Center"    x:Name="BigImage"  Style="{StaticResource BigImage}" MouseMove="MoveWindow" AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"    >
                                             <Image.ContextMenu>
-                                                <ContextMenu  PreviewKeyUp="ContextMenu_PreviewKeyUp">
+                                                <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp">
                                                     <MenuItem Header="立即同步(S)" Click="DownLoad"/>
                                                     <MenuItem Header="扩展功能"   >
                                                         <MenuItem Header="翻译影片" Click="TranslateMovie"  />

@@ -526,7 +526,7 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
         </Style>
-        
+
         <Style x:Key="ViewImage" TargetType="{x:Type Image}">
             <Setter Property="Margin" Value="0 5"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -708,7 +708,7 @@
             <Setter Property="Height" Value="auto" />
             <Setter Property="Background" Value="{DynamicResource BackgroundSide}" />
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
 
@@ -1197,7 +1197,7 @@
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=menu,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" Margin="4,4,3.2,0" VerticalAlignment="Center"   />
 
                                     <Border.ContextMenu >
-                                        <ContextMenu  StaysOpen="False"  x:Name="SettingsContextMenu"  HorizontalOffset="-30" Placement="Bottom"  Margin="2" >
+                                        <ContextMenu Opacity="0.8"  StaysOpen="False"  x:Name="SettingsContextMenu"  HorizontalOffset="-30" Placement="Bottom"  Margin="2" >
                                             <ContextMenu.Effect>
                                                 <DropShadowEffect BlurRadius="10" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
                                             </ContextMenu.Effect>
@@ -1220,7 +1220,7 @@
                                             </MenuItem>
                                             <MenuItem  Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="ScreenShot"   />
                                             <MenuItem Visibility="Collapsed"  Header="{x:Static lang:Resources.Upgrade}" PreviewMouseLeftButtonUp="ShowUpdate"   />
-                                            
+
                                             <MenuItem Visibility="Collapsed"  Header="赞助"   Click="OpenThanks"  />
                                         </ContextMenu>
                                     </Border.ContextMenu>
@@ -1431,14 +1431,14 @@
                                             <DataTemplate>
                                                 <StackPanel  x:Name="ListStackPanel"  >
                                                     <Grid >
-                                                    <RadioButton x:Name="CreateRB" Padding="20 0"    Style="{StaticResource SideRadioButtonStyle}"  Content="{Binding Name}"  Click="ShowSameList"  >
-                                                        <RadioButton.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem Header="{x:Static lang:Resources.Rename}" Click="EditListItem"/>
+                                                        <RadioButton x:Name="CreateRB" Padding="20 0"    Style="{StaticResource SideRadioButtonStyle}"  Content="{Binding Name}"  Click="ShowSameList"  >
+                                                            <RadioButton.ContextMenu>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="{x:Static lang:Resources.Rename}" Click="EditListItem"/>
                                                                     <MenuItem Header="{x:Static lang:Resources.Delete}"  Click="RemoveListItem"/>
-                                                            </ContextMenu>
-                                                        </RadioButton.ContextMenu>
-                                                    </RadioButton>
+                                                                </ContextMenu>
+                                                            </RadioButton.ContextMenu>
+                                                        </RadioButton>
                                                         <TextBlock Text="{Binding Number}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                                     </Grid>
 
@@ -1493,13 +1493,13 @@
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
                                     </Border>
                                 </StackPanel>
-                                
-                                
-                                
-                                
-                                
-                                
-                                
+
+
+
+
+
+
+
                                 <!--搜索-->
                                 <Grid  HorizontalAlignment="Left" x:Name="AllSearchGrid"   Height="40"  Width="300" Margin="10 5"   >
                                     <Border x:Name="AllSearchBorder"    Style="{StaticResource SearchTextGrid}"   CornerRadius="2"  Background="Transparent" BorderBrush="{DynamicResource BackgroundSide}" BorderThickness="2" />
@@ -1903,7 +1903,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            
+
 
                             <!--演员-->
                             <Grid Grid.Column="0" Visibility="Collapsed" x:Name="ActorInfoGrid"  HorizontalAlignment="Right" Width="auto" Height="auto" VerticalAlignment="Stretch" Margin="10">
@@ -1934,7 +1934,7 @@
                                             </Border>
                                             <hc:Rate ToolTip="双击取消" Visibility="Visible" AllowClear="True" Margin="10 0" Value="{Binding Actress.like,Mode=TwoWay}" Count="1" VerticalAlignment="Center" Background="{DynamicResource BackgroundSide}" Foreground="#FF7B3B" ValueChanged="Rate_ValueChanged_1"   />
 
-                                         
+
 
                                         </StackPanel>
 
@@ -2046,10 +2046,10 @@
                                                                     <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                 </Border.Effect>
                                                                 <StackPanel Style="{StaticResource ViewStackPanel}" Margin="5"   ContextMenuOpening="ContextMenu_ContextMenuOpening"  >
-                                                                    <StackPanel.ContextMenu >
-                                                                        <ContextMenu  PreviewKeyUp="ContextMenu_PreviewKeyUp">
+                                                                    <StackPanel.ContextMenu  >
+                                                                        <ContextMenu Opacity="0.9"  PreviewKeyUp="ContextMenu_PreviewKeyUp">
                                                                             <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoadSelectMovie"   ></MenuItem>
-                                                                            <MenuItem Header="{x:Static lang:Resources.Menu_SyncExtra}" Visibility="Visible"  >
+                                                                            <MenuItem  Header="{x:Static lang:Resources.Menu_SyncExtra}" Visibility="Visible"  >
                                                                                 <MenuItem Header="{x:Static lang:Resources.Menu_CustomUrl}" Click="DownLoadWithUrl"   ></MenuItem>
                                                                                 <MenuItem Header="{x:Static lang:Resources.Menu_EnforceSync}" Click="ForceToDownLoad"   ></MenuItem>
                                                                             </MenuItem>
@@ -2294,7 +2294,7 @@
 
                                 <!--页码-->
 
-                                
+
                                 <StackPanel Visibility="Visible" Grid.Column="2" Orientation="Horizontal" Margin="0,0,30,0" VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
 
                                     <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousPage"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="上一页"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
@@ -2323,7 +2323,7 @@
 
                             </Grid>
 
-                           </Grid>
+                        </Grid>
 
 
                     </Grid>
@@ -2381,11 +2381,11 @@
                                         <Border CornerRadius="5" Background="{DynamicResource BackgroundTab}"  />
                                         <Image Source="Resources/Picture/download.png" Height="24" HorizontalAlignment="Left" Margin="3 0"></Image>
                                     </Grid>
-                                    
-                                    
+
+
                                     <CheckBox Click="ActorCheckBox_Click" Foreground="{DynamicResource ForegroundGlobal}"  IsChecked="{Binding ActorEditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Height="30" Content="{x:Static lang:Resources.MultiSelect}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5 0" HorizontalAlignment="Left" />
 
-                                   
+
 
 
                                     <CheckBox x:Name="LoveActressCheckBox"  Content="{x:Static lang:Resources.ShowFavoriteActor}" IsChecked="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
@@ -2596,33 +2596,37 @@
                                             </DataTemplate.Triggers>
 
                                             <WrapPanel x:Name="ActorWrapPanel">
-                                                <Border  Style="{StaticResource ActorBorder}" MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave" CornerRadius="5">
-
-                                                    <StackPanel Orientation="Vertical">
-                                                        <Image x:Name="ActorImage"  Height="100" Width="100" Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver" AllowDrop="True" Drop="ActorImage_Drop"  />
-                                                        <TextBox x:Name="ActorNameTextBox" TextAlignment="Center" Margin="10 5" Foreground="{DynamicResource ForegroundGlobal}" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
-                                                            <TextBox.Text>
-                                                                <MultiBinding StringFormat="{}{0}({1})">
-                                                                    <Binding Path="name" />
-                                                                    <Binding Path="num" />
-                                                                    <!--<Binding trace:PresentationTraceSources.TraceLevel="High"></Binding>-->
-                                                                </MultiBinding>
-                                                            </TextBox.Text>
-                                                        </TextBox>
-                                                        <TextBlock Text="{Binding id}" Visibility="Collapsed"/>
-                                                        <StackPanel.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem Header="同步信息" Icon="pack://application:,,,/Resources/menuitem/download.png" Click="DownLoadSelectedActor" />
-                                                                <MenuItem Header="添加收藏" Icon="pack://application:,,,/Resources/menuitem/like.png" Click="LikeSelectedActor" />
-
-
-
-                                                            </ContextMenu>
-                                                        </StackPanel.ContextMenu>
-                                                    </StackPanel>
+                                                <Grid Margin="5">
+                                                    <Border  Style="{StaticResource ActorBorder}" MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave" CornerRadius="5">
+                                                        <Border.Effect>
+                                                            <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                                        </Border.Effect>
+                                                        <StackPanel Orientation="Vertical">
+                                                            <Image x:Name="ActorImage"  Height="100" Width="100" Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver" AllowDrop="True" Drop="ActorImage_Drop"  />
+                                                            <TextBox x:Name="ActorNameTextBox" TextAlignment="Center" Margin="10 5" Foreground="{DynamicResource ForegroundGlobal}" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
+                                                                <TextBox.Text>
+                                                                    <MultiBinding StringFormat="{}{0}({1})">
+                                                                        <Binding Path="name" />
+                                                                        <Binding Path="num" />
+                                                                        <!--<Binding trace:PresentationTraceSources.TraceLevel="High"></Binding>-->
+                                                                    </MultiBinding>
+                                                                </TextBox.Text>
+                                                            </TextBox>
+                                                            <TextBlock Text="{Binding id}" Visibility="Collapsed"/>
+                                                            <StackPanel.ContextMenu>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="同步信息" Icon="pack://application:,,,/Resources/menuitem/download.png" Click="DownLoadSelectedActor" />
+                                                                    <MenuItem Header="添加收藏" Icon="pack://application:,,,/Resources/menuitem/like.png" Click="LikeSelectedActor" />
 
 
-                                                </Border>
+
+                                                                </ContextMenu>
+                                                            </StackPanel.ContextMenu>
+                                                        </StackPanel>
+
+
+                                                    </Border>
+                                                </Grid>
                                             </WrapPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -2753,7 +2757,7 @@
                 <!--关于-->
 
 
-                
+
 
                 <Grid x:Name="AboutGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="500" Visibility="Hidden" >
                     <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >
