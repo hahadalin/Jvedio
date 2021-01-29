@@ -699,7 +699,7 @@
 
                                                     <MenuItem Header="{x:Static lang:Resources.Menu_AddToList}"   Name="ListMenuItem"   />
 
-                                                    <MenuItem Header="{x:Static lang:Resources.Menu_LabelManagement}"   Click="AddNewLabel" />
+                                                    <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}"   Click="AddNewLabel" />
 
                                                     <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
                                                     <MenuItem Header="{x:Static lang:Resources.Menu_CopyFile}" Click="CopyFile" />

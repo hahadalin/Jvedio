@@ -533,6 +533,8 @@
                         <StackPanel Orientation="Horizontal">
                             <CheckBox IsChecked="{Binding Enable_TL_YOUDAO, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="20 10" Content="{x:Static lang:Resources.Youdao}" />
                             <Button Click="TestTranslate"  Content="{x:Static lang:Resources.Test}"  Style="{StaticResource ButtonStyleFill}"  />
+                            
+                            <!--TODO WIN7-->
                             <fa:ImageAwesome    Height="20"  Foreground="{DynamicResource ForegroundSearch}" Margin="5 0"    />
                             <Button Style="{StaticResource ButtonPrimary}" Content=" ？" Width="auto" HorizontalAlignment="Left"  Cursor="Hand"  Click="Button_Click_2"/>
                         </StackPanel>

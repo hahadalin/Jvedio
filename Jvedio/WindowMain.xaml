@@ -1799,7 +1799,7 @@
                                                                                 <MenuItem   Header="{x:Static lang:Resources.Menu_LabelManage5}" Click="ClearLabel"   ></MenuItem>
                                                                             </MenuItem>
                                                                             <MenuItem Header="{x:Static lang:Resources.OpenPath}"   >
-                                                                                <MenuItem Header="{x:Static lang:Resources.OpenPath}" Click="OpenFilePath"   ></MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.Movie}" Click="OpenFilePath"   ></MenuItem>
                                                                                 <MenuItem Header="{x:Static lang:Resources.Poster}" Click="OpenImagePath"  ></MenuItem>
                                                                                 <MenuItem Header="{x:Static lang:Resources.Thumbnail}" Click="OpenImagePath"   ></MenuItem>
                                                                                 <MenuItem Header="Gif" Click="OpenImagePath"   ></MenuItem>
