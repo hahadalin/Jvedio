@@ -89,9 +89,6 @@ namespace Jvedio.ViewModel
             SearchTimer.Tick += new EventHandler(SearchTimer_Tick);
 
 
-            VedioType vedioType = VedioType.所有;
-            bool result = Enum.TryParse<VedioType>(Properties.Settings.Default.VedioType, out vedioType);
-            VedioType = vedioType;
 
 
             //获得所有数据库
@@ -109,8 +106,7 @@ namespace Jvedio.ViewModel
 
 
         #region "enum"
-        private VedioType vedioType;
-
+        private VedioType vedioType =  Properties.Settings.Default.VedioType.Length == 1? (VedioType) int.Parse(Properties.Settings.Default.VedioType):0; 
         public VedioType VedioType
         {
             get { return vedioType; }
@@ -118,15 +114,12 @@ namespace Jvedio.ViewModel
             {
                 vedioType = value;
                 RaisePropertyChanged();
-                //if (ClickGridType == 0) GetGenreList();
-                //else if (ClickGridType == 1) GetActorList();
-                //else GetLabelList();
             }
         }
 
 
 
-        private MyImageType _ShowImageMode=0;
+        private MyImageType _ShowImageMode= Properties.Settings.Default.ShowImageMode.Length == 1 ? (MyImageType)int.Parse(Properties.Settings.Default.ShowImageMode) : 0;
 
         public MyImageType ShowImageMode
         {
@@ -141,7 +134,7 @@ namespace Jvedio.ViewModel
 
 
 
-        private ViewType _ShowViewMode = (ViewType)Enum.Parse(typeof(ViewType), Properties.Settings.Default.ShowViewMode, true);
+        private ViewType _ShowViewMode = Properties.Settings.Default.ShowViewMode.Length == 1 ? (ViewType)int.Parse(Properties.Settings.Default.ShowViewMode) : 0;
 
         public ViewType ShowViewMode
         {
@@ -154,7 +147,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        private MySearchType _SearchType = (MySearchType)Enum.Parse(typeof(MySearchType), Properties.Settings.Default.SearchType.ToMySearchType(), true);
+        private MySearchType _SearchType = Properties.Settings.Default.SearchType.Length == 1 ? (MySearchType)int.Parse(Properties.Settings.Default.SearchType) : 0;
 
         public MySearchType SearchType
         {
@@ -167,7 +160,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        private MySearchType _AllSearchType = (MySearchType)Enum.Parse(typeof(MySearchType), Properties.Settings.Default.AllSearchType.ToMySearchType(), true);
+        private MySearchType _AllSearchType = Properties.Settings.Default.AllSearchType.Length == 1 ? (MySearchType)int.Parse(Properties.Settings.Default.AllSearchType) : 0;
 
         public MySearchType AllSearchType
         {
@@ -1269,9 +1262,9 @@ namespace Jvedio.ViewModel
                         for (int i = 0; i < Movies.Count; i++)
                         {
                             //添加标签戳
-                            if (Identify.IsHDV(Movies[i].filepath) || Movies[i].genre?.IndexOf("高清") >= 0 || Movies[i].tag?.IndexOf("高清") >= 0 || Movies[i].label?.IndexOf("高清") >= 0) Movies[i].tagstamps += "高清";
-                            if (Identify.IsCHS(Movies[i].filepath) || Movies[i].genre?.IndexOf("中文") >= 0 || Movies[i].tag?.IndexOf("中文") >= 0 || Movies[i].label?.IndexOf("中文") >= 0) Movies[i].tagstamps += "中文";
-                            if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOf("流出") >= 0 || Movies[i].tag?.IndexOf("流出") >= 0 || Movies[i].label?.IndexOf("流出") >= 0) Movies[i].tagstamps += "流出";
+                            if (Identify.IsHDV(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_HD) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.HD;
+                            if (Identify.IsCHS(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_Translated) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_Translated) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_Translated) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.Translated;
+                            if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.FlowOut;
                         }
 
 

@@ -1203,4 +1203,7 @@
   <data name="SuccessScreenShotTo" xml:space="preserve">
     <value>成功截图到</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>所有</value>
+  </data>
 </root>

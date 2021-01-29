@@ -298,17 +298,17 @@ namespace Jvedio
         {
             //添加标签戳
             if (movie == null) return;
-            if (Identify.IsHDV(movie.filepath) || movie.genre?.IndexOf("高清") >= 0 || movie.tag?.IndexOf("高清") >= 0 || movie.label?.IndexOf("高清") >= 0) movie.tagstamps += "高清";
-            if (Identify.IsCHS(movie.filepath) || movie.genre?.IndexOf("中文") >= 0 || movie.tag?.IndexOf("中文") >= 0 || movie.label?.IndexOf("中文") >= 0) movie.tagstamps += "中文";
-            if (Identify.IsFlowOut(movie.filepath) || movie.genre?.IndexOf("流出") >= 0 || movie.tag?.IndexOf("流出") >= 0 || movie.label?.IndexOf("流出") >= 0) movie.tagstamps += "流出";
+            if (Identify.IsHDV(movie.filepath) || movie.genre?.IndexOfAnyString(TagStrings_HD) >= 0 || movie.tag?.IndexOfAnyString(TagStrings_HD) >= 0 || movie.label?.IndexOfAnyString(TagStrings_HD) >= 0) movie.tagstamps +=Jvedio.Language.Resources.HD;
+            if (Identify.IsCHS(movie.filepath) || movie.genre?.IndexOfAnyString(TagStrings_Translated) >= 0 || movie.tag?.IndexOfAnyString(TagStrings_Translated) >= 0 || movie.label?.IndexOfAnyString(TagStrings_Translated) >= 0) movie.tagstamps += Jvedio.Language.Resources.Translated;
+            if (Identify.IsFlowOut(movie.filepath) || movie.genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || movie.tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || movie.label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) movie.tagstamps += Jvedio.Language.Resources.FlowOut;
         }
 
         public static void addTag(ref DetailMovie movie)
         {
             //添加标签戳
-            if (Identify.IsHDV(movie.filepath) || movie.genre?.IndexOf("高清") >= 0 || movie.tag?.IndexOf("高清") >= 0 || movie.label?.IndexOf("高清") >= 0) movie.tagstamps += "高清";
-            if (Identify.IsCHS(movie.filepath) || movie.genre?.IndexOf("中文") >= 0 || movie.tag?.IndexOf("中文") >= 0 || movie.label?.IndexOf("中文") >= 0) movie.tagstamps += "中文";
-            if (Identify.IsFlowOut(movie.filepath) || movie.genre?.IndexOf("流出") >= 0 || movie.tag?.IndexOf("流出") >= 0 || movie.label?.IndexOf("流出") >= 0) movie.tagstamps += "流出";
+            if (Identify.IsHDV(movie.filepath) || movie.genre?.IndexOfAnyString(TagStrings_HD) >= 0 || movie.tag?.IndexOfAnyString(TagStrings_HD) >= 0 || movie.label?.IndexOfAnyString(TagStrings_HD) >= 0) movie.tagstamps += Jvedio.Language.Resources.HD;
+            if (Identify.IsCHS(movie.filepath) || movie.genre?.IndexOfAnyString(TagStrings_Translated) >= 0 || movie.tag?.IndexOfAnyString(TagStrings_Translated) >= 0 || movie.label?.IndexOfAnyString(TagStrings_Translated) >= 0) movie.tagstamps += Jvedio.Language.Resources.Translated;
+            if (Identify.IsFlowOut(movie.filepath) || movie.genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || movie.tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || movie.label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) movie.tagstamps += Jvedio.Language.Resources.FlowOut;
         }
 
 

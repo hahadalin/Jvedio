@@ -55,7 +55,6 @@
         <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <local:ImageTypeEnumConverter x:Key="ImageTypeEnumConverter" />
         <local:ViewTypeEnumConverter x:Key="ViewTypeEnumConverter" />
-        <local:SearchTypeEnumConverter x:Key="SearchTypeEnumConverter" />
         <local:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
 
         <!--高清、中字、流出-->
@@ -2199,10 +2198,9 @@
                                                                         </Grid.ColumnDefinitions>
                                                                         <TextBox   HorizontalContentAlignment="Left" TextAlignment="Left"  Visibility="{Binding Path=DisplayID,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}" Width="auto" HorizontalAlignment="Left" Grid.Column="0" FontSize="18" FontFamily="Times New Roman"      Text="{Binding id}"    Foreground="{DynamicResource ForegroundSearch}"  Style="{StaticResource InfoTextBox}"  />
                                                                         <StackPanel    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Right" Margin="0 0 10 0" >
-                                                                            <Label Margin="2 0"  BorderThickness="0" Visibility="{Binding tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=高清,Mode=OneWay}" Background="#9A58B7" Content="高清" Foreground="{DynamicResource ForegroundSearch}"/>
-                                                                            <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=中文,Mode=OneWay}"  Background="YellowGreen"   Content="中文" Foreground="{DynamicResource ForegroundSearch}" />
-                                                                            <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=流出,Mode=OneWay}" Background="#00B0F0" Content="流出" Foreground="{DynamicResource ForegroundSearch}" />
-
+                                                                            <Label Margin="2 0"  BorderThickness="0" Visibility="{Binding tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=0,Mode=OneWay}" Background="#9A58B7" Content="{x:Static lang:Resources.HD}" Foreground="{DynamicResource ForegroundSearch}"/>
+                                                                            <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=1,Mode=OneWay}"  Background="YellowGreen"   Content="{x:Static lang:Resources.Translated}" Foreground="{DynamicResource ForegroundSearch}" />
+                                                                            <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=2,Mode=OneWay}" Background="#00B0F0" Content="{x:Static lang:Resources.FlowOut}" Foreground="{DynamicResource ForegroundSearch}" />
                                                                         </StackPanel>
                                                                     </Grid>
 
@@ -2340,39 +2338,11 @@
 
 
 
-                                    <StackPanel Orientation="Horizontal">
-                                        <RadioButton GroupName="VedioTypeRadioButton" Click="SetTypeValue"  Content="所有" Style="{StaticResource FlatRadioButton}">
-                                            <RadioButton.IsChecked>
-                                                <MultiBinding Mode="OneWay" Converter="{StaticResource VedioTypeEnumConverter}">
-                                                    <Binding Path="Null" Source="{x:Null}"/>
-                                                    <Binding Path="Null" Source="{x:Null}"/>
-                                                </MultiBinding>
-                                            </RadioButton.IsChecked>
-                                        </RadioButton>
-                                        <RadioButton GroupName="VedioTypeRadioButton" Click="SetTypeValue"  Content="{Binding TypeName1,Source={x:Static p:Settings.Default}}" Style="{StaticResource FlatRadioButton}">
-                                            <RadioButton.IsChecked>
-                                                <MultiBinding Mode="OneWay" Converter="{StaticResource VedioTypeEnumConverter}">
-                                                    <Binding Path="TypeName1" Source="{x:Static p:Settings.Default}"/>
-                                                    <Binding Path="VedioType" Source="{x:Static p:Settings.Default}"/>
-                                                </MultiBinding>
-                                            </RadioButton.IsChecked>
-                                        </RadioButton>
-                                        <RadioButton GroupName="VedioTypeRadioButton"  Click="SetTypeValue"   Content="{Binding TypeName2,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}">
-                                            <RadioButton.IsChecked>
-                                                <MultiBinding Mode="OneWay"  Converter="{StaticResource VedioTypeEnumConverter}">
-                                                    <Binding Path="TypeName2" Source="{x:Static p:Settings.Default}"/>
-                                                    <Binding Path="VedioType" Source="{x:Static p:Settings.Default}"/>
-                                                </MultiBinding>
-                                            </RadioButton.IsChecked>
-                                        </RadioButton>
-                                        <RadioButton GroupName="VedioTypeRadioButton"   Click="SetTypeValue"   Content="{Binding TypeName3,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}">
-                                            <RadioButton.IsChecked>
-                                                <MultiBinding Mode="OneWay"  Converter="{StaticResource VedioTypeEnumConverter}">
-                                                    <Binding Path="TypeName3" Source="{x:Static p:Settings.Default}"/>
-                                                    <Binding Path="VedioType" Source="{x:Static p:Settings.Default}"/>
-                                                </MultiBinding>
-                                            </RadioButton.IsChecked>
-                                        </RadioButton>
+                                    <StackPanel x:Name="VedioTypeStackPanel" Orientation="Horizontal">
+                                        <RadioButton GroupName="VedioTypeRadioButton"   Content="{x:Static lang:Resources.All}" Style="{StaticResource FlatRadioButton}"/>
+                                        <RadioButton GroupName="VedioTypeRadioButton"   Content="{Binding TypeName1,Source={x:Static p:Settings.Default}}" Style="{StaticResource FlatRadioButton}"/>
+                                        <RadioButton GroupName="VedioTypeRadioButton"     Content="{Binding TypeName2,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
+                                        <RadioButton GroupName="VedioTypeRadioButton"      Content="{Binding TypeName3,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
                                     </StackPanel>
                                 </Border>
 

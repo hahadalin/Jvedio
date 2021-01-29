@@ -780,17 +780,17 @@ namespace Jvedio
         private void ShowTagStamps()
         {
             var labels = TagStampsStackPanel.Children.OfType<Label>().ToList();
-            if (vieModel.DetailMovie.tagstamps.IndexOf("高清") >= 0)
+            if (vieModel.DetailMovie.tagstamps.IndexOfAnyString(TagStrings_HD) >= 0)
                 labels[0].Visibility = Visibility.Visible;
             else
                 labels[0].Visibility = Visibility.Collapsed;
 
-            if (vieModel.DetailMovie.tagstamps.IndexOf("中文") >= 0)
+            if (vieModel.DetailMovie.tagstamps.IndexOfAnyString(TagStrings_Translated) >= 0)
                 labels[1].Visibility = Visibility.Visible;
             else
                 labels[1].Visibility = Visibility.Collapsed;
 
-            if (vieModel.DetailMovie.tagstamps.IndexOf("流出") >= 0)
+            if (vieModel.DetailMovie.tagstamps.IndexOfAnyString(TagStrings_FlowOut) >= 0)
                 labels[2].Visibility = Visibility.Visible;
             else
                 labels[2].Visibility = Visibility.Collapsed;

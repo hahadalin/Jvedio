@@ -22,6 +22,28 @@ namespace Jvedio
     public static class CustomExtension
     {
 
+        public static int IndexOfAnyString(this string str, string[] parameter)
+        {
+            foreach (var item in parameter)
+            {
+                int idx = str.IndexOf(item,StringComparison.CurrentCultureIgnoreCase);
+                if (idx >= 0) return idx;
+            }
+            return -1;
+        }
+
+
+        public static string ToTagString(this string str)
+        {
+            if (str.Length != 1) return "";
+            if (str == "0" ) return  Jvedio.Language.Resources.HD ;
+            if (str == "1" ) return Jvedio.Language.Resources.Translated;
+            if (str == "2"  ) return Jvedio.Language.Resources.FlowOut;
+            return str;
+        }
+
+
+
         public static string ToMySearchType(this string str)
         {
             if(str=="ID" || str == "身元") return "识别码";

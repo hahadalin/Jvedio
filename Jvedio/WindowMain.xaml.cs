@@ -131,6 +131,16 @@ namespace Jvedio
                 item.Click += SaveShowImageMode;
             }
 
+            //设置视频格式
+            var rbs2 = VedioTypeStackPanel.Children.OfType<RadioButton>().ToList();
+            foreach (RadioButton item in rbs2)
+            {
+                item.Click += SetTypeValue;
+            }
+
+
+
+
             #region "改变窗体大小"
             //https://www.cnblogs.com/yang-fei/p/4737308.html
 
@@ -1895,20 +1905,24 @@ namespace Jvedio
         }
 
 
-        //TODO
+        /// <summary>
+        /// 演员里的视频类型分类
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void SetTypeValue(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
             if ((bool)radioButton.IsChecked)
             {
                 if (radioButton.Content.ToString() == Properties.Settings.Default.TypeName1)
-                    Properties.Settings.Default.VedioType = "步兵";
+                    Properties.Settings.Default.VedioType = "1";
                 else if (radioButton.Content.ToString() == Properties.Settings.Default.TypeName2)
-                    Properties.Settings.Default.VedioType = "骑兵";
+                    Properties.Settings.Default.VedioType = "2";
                 else if (radioButton.Content.ToString() == Properties.Settings.Default.TypeName3)
-                    Properties.Settings.Default.VedioType = "欧美";
+                    Properties.Settings.Default.VedioType = "3";
                 else
-                    Properties.Settings.Default.VedioType = "所有";
+                    Properties.Settings.Default.VedioType = "0";
                 Properties.Settings.Default.Save();
             }
 
@@ -1926,10 +1940,6 @@ namespace Jvedio
             {
                 vieModel.GetLabelList();
             }
-
-
-
-
         }
 
 
@@ -4216,7 +4226,10 @@ namespace Jvedio
             int.TryParse(Properties.Settings.Default.ShowImageMode, out int idx2);
             rbs[idx2].IsChecked = true;
 
-
+            //设置视频类型
+            var rbs2 = VedioTypeStackPanel.Children.OfType<RadioButton>().ToList();
+            int.TryParse(Properties.Settings.Default.VedioType, out int idx3);
+            rbs2[idx3].IsChecked = true;
 
 
 
@@ -4250,8 +4263,6 @@ namespace Jvedio
         }
 
 
-
-        //TODO
         public void SetSkin()
         {
             if (Properties.Settings.Default.Themes == "黑色")
@@ -6158,23 +6169,8 @@ namespace Jvedio
 
     }
 
-    public class SearchTypeEnumConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null) return false;
-            return Enum.Parse(typeof(MySearchType), value.ToString().ToMySearchType()).ToString() == parameter.ToString();
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return (bool)value ? Enum.Parse(typeof(MySearchType), parameter.ToString().ToMySearchType(), true) : null;
-        }
-    }
 
 
-    //TODO
-    public enum MySearchType { 识别码, 名称, 演员 }
 
 
 
@@ -6219,8 +6215,6 @@ namespace Jvedio
         }
     }
 
-
-    //TODO
     public class StringToUriStringConverterMain : IValueConverter
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -6241,8 +6235,6 @@ namespace Jvedio
         }
     }
 
-
-    //TODO
     public class StringToUriStringConverterOther : IValueConverter
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -6474,7 +6466,9 @@ namespace Jvedio
         {
             if (value == null || parameter == null) return Visibility.Collapsed;
 
-            if (value.ToString().IndexOf(parameter.ToString()) >= 0)
+            Console.WriteLine(value.ToString());
+
+            if (value.ToString().IndexOf(parameter.ToString().ToTagString()) >= 0)
                 return Visibility.Visible;
             else
                 return Visibility.Collapsed;

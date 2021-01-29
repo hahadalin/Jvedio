@@ -58,6 +58,10 @@ namespace Jvedio
         public static Dictionary<int, char[]> actorSplitDict = new Dictionary<int, char[]>();
 
 
+        public static string[] TagStrings_HD = new string[] {"hd","高清" };
+        public static string[] TagStrings_Translated = new string[] { "中文", "日本語", "Translated","English" };
+        public static string[] TagStrings_FlowOut = new string[] { "流出", "FlowOut" };
+
         //最近播放
         public static Dictionary<DateTime, List<string>> RecentWatched =new Dictionary<DateTime, List<string>>();
 
@@ -214,6 +218,8 @@ namespace Jvedio
 
         #region "enum"
         public enum ViewType { 默认, 有图, 无图 }
+        //TODO
+        public enum MySearchType { 识别码, 名称, 演员 }
         public enum MyImageType { 缩略图, 海报图, 预览图, 动态图, 列表模式 }
         public enum MovieStampType { 无, 高清中字, 无码流出 }
 
