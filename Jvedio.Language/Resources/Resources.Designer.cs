@@ -1978,6 +1978,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 无权限监听 的本地化字符串。
+        /// </summary>
+        public static string NoPermissionToListen {
+            get {
+                return ResourceManager.GetString("NoPermissionToListen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 常规 的本地化字符串。
         /// </summary>
         public static string Normal {
@@ -2217,6 +2226,15 @@ namespace Jvedio.Language {
         public static string Reason {
             get {
                 return ResourceManager.GetString("Reason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 重启后生效 的本地化字符串。
+        /// </summary>
+        public static string RebootToTakeEffect {
+            get {
+                return ResourceManager.GetString("RebootToTakeEffect", resourceCulture);
             }
         }
         

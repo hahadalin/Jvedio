@@ -1218,4 +1218,10 @@
   <data name="DownloadMessageFailFor" xml:space="preserve">
     <value>信息下载失败，原因：</value>
   </data>
+  <data name="RebootToTakeEffect" xml:space="preserve">
+    <value>重启后生效</value>
+  </data>
+  <data name="NoPermissionToListen" xml:space="preserve">
+    <value>无权限监听</value>
+  </data>
 </root>

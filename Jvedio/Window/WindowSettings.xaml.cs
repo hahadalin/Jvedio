@@ -509,7 +509,7 @@ namespace Jvedio
                 if (!TestListen())
                     checkBox.IsChecked = false;
                 else
-                    HandyControl.Controls.Growl.Info("重启后生效！", "SettingsGrowl");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.RebootToTakeEffect, "SettingsGrowl");
             }
         }
 
@@ -537,7 +537,7 @@ namespace Jvedio
                 }
                 catch
                 {
-                    HandyControl.Controls.Growl.Error($"无权限监听{drives[i]}", "SettingsGrowl");
+                    HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NoPermissionToListen} {drives[i]}", "SettingsGrowl");
                     return false;
                 }
             }
@@ -863,6 +863,7 @@ namespace Jvedio
 
         }
 
+        //TODO
         private void delete_Click(object sender, RoutedEventArgs e)
         {
             FocusTextBox.Focus();
@@ -947,7 +948,7 @@ namespace Jvedio
             ServersDataGrid_RowIndex = dgr.GetIndex();
         }
 
-
+        //TODO
         private async void CheckUrl(Server server, CheckBox checkBox)
         {
             ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
@@ -1175,6 +1176,7 @@ namespace Jvedio
 
         }
 
+        //TODO
         private void CheckBox_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             bool enable = !(bool)((CheckBox)sender).IsChecked;
