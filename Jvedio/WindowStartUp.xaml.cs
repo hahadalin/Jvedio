@@ -61,7 +61,6 @@ namespace Jvedio
             else if (name == Jvedio.Language.Resources.NewLibrary)
             {
                 //重命名
-                TextBox.IsEnabled = true;
                 TextBox.IsReadOnly = false;
                 TextBox.Text =Jvedio.Language.Resources.MyLibrary;
                 TextBox.Focus();
@@ -564,7 +563,6 @@ namespace Jvedio
 
             //重命名
             OptionPopup.IsOpen = false;
-            TextBox.IsEnabled = true;
             TextBox.IsReadOnly = false;
             TextBox.Focus();
             TextBox.SelectAll();
@@ -581,8 +579,6 @@ namespace Jvedio
             //不修改
             if (name == beforeRename)
             {
-
-                textBox.IsEnabled = false;
                 textBox.IsReadOnly = true;
                 textBox.Cursor = Cursors.Hand;
                 beforeRename = "";
@@ -603,8 +599,6 @@ namespace Jvedio
                     db.CreateTable(DataBase.SQLITETABLE_JAVDB);
 
                     if (vieModel_StartUp.DataBases.Contains(Jvedio.Language.Resources.NewLibrary)) vieModel_StartUp.DataBases.Remove( Jvedio.Language.Resources.NewLibrary);
-
-                    textBox.IsEnabled = false;
                     textBox.IsReadOnly = true;
                     textBox.Cursor = Cursors.Hand;
 
@@ -648,10 +642,9 @@ namespace Jvedio
                 }
                 beforeRename = "";
             }
-
-            textBox.IsEnabled = false;
             textBox.IsReadOnly = true;
             textBox.Cursor = Cursors.Hand;
+            textBox.TextAlignment = TextAlignment.Left;
 
         }
 
@@ -666,7 +659,6 @@ namespace Jvedio
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("TextBox_LostFocus");
             TextBox textBox = sender as TextBox;
             Rename(textBox);
         }
@@ -680,7 +672,6 @@ namespace Jvedio
             }
             else if (e.Key == Key.Escape)
             {
-                textBox.IsEnabled = false;
                 textBox.IsReadOnly = true;
                 textBox.Cursor = Cursors.Hand;
             }
