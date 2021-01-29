@@ -28,7 +28,7 @@
         <Style x:Key="OptionBorderStyle" TargetType="Border">
             <Setter Property="Visibility" Value="Visible"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=Children[1].Children[1].Text,RelativeSource={RelativeSource AncestorType={x:Type StackPanel},Mode=FindAncestor}}" Value="{x:Static lang:Resources.NewLibrary}">
+                <DataTrigger Binding="{Binding Path=Children[0].Children[1].Text,RelativeSource={RelativeSource AncestorType={x:Type Grid},Mode=FindAncestor}}" Value="{x:Static lang:Resources.NewLibrary}">
                     <Setter Property="Visibility" Value="Hidden"/>
                 </DataTrigger>
             </Style.Triggers>
@@ -133,7 +133,7 @@
     <Grid Margin="10">
         <Border  x:Name="MainBorder"   Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="5"  >
             <Border.Effect>
-                <DropShadowEffect BlurRadius="5" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
+                <DropShadowEffect BlurRadius="20" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
             </Border.Effect>
         </Border>
         <Grid Margin="5">
@@ -209,15 +209,21 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border Width="200" Panel.ZIndex="5"  Margin="5" CornerRadius="5" Style="{StaticResource DBBorder}" Cursor="Arrow" >
-                                            <StackPanel Orientation="Vertical"  Margin="5">
-                                                <Border Style="{StaticResource OptionBorderStyle}" Background="{DynamicResource BackgroundSide}"  Height="20"  Width="auto" Margin="4 0" HorizontalAlignment="Right" Cursor="Hand" MouseLeftButtonUp="Image_MouseLeftButtonUp">
-                                                    <Image Source="pack://application:,,,/Resources/Image/StartUp/选项.png" Width="15" Margin="2"  />
-                                                </Border>
-                                                <StackPanel  Orientation="Horizontal" Margin="5 2 20 2" PreviewMouseLeftButtonUp="LoadDataBase" Cursor="Hand">
+                                            <Grid Margin="5 10">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0"  Orientation="Horizontal" Margin="5 5" PreviewMouseLeftButtonUp="LoadDataBase" Cursor="Hand">
                                                     <Image Style="{StaticResource ImageStyle}" Margin="10 2"  />
                                                     <TextBox Cursor="Hand" TextAlignment="Left" Width="180" Height="auto"  KeyUp="TextBox_KeyUp" LostFocus="TextBox_LostFocus"  IsReadOnly="True" Text="{Binding .,Mode=TwoWay}" Margin="5" Grid.Row="1" Style="{StaticResource BaseTextBox}" VerticalAlignment="Center" FontSize="20" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
                                                 </StackPanel>
-                                            </StackPanel>
+                                                <Border  Grid.Column="1"  Style="{StaticResource OptionBorderStyle}" Background="{DynamicResource BackgroundSide}"  Height="20"  Width="auto" Margin="4 0"  VerticalAlignment="Top" Cursor="Hand" MouseLeftButtonUp="Image_MouseLeftButtonUp">
+                                                    <Image Source="pack://application:,,,/Resources/Image/StartUp/选项.png" Width="15" Margin="2"  />
+                                                </Border>
+
+                                            </Grid>
+
                                         </Border>
 
                                     </DataTemplate>
