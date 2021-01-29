@@ -673,6 +673,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 信息下载失败，原因： 的本地化字符串。
+        /// </summary>
+        public static string DownloadMessageFailFor {
+            get {
+                return ResourceManager.GetString("DownloadMessageFailFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 下载缩略图失败，原因： 的本地化字符串。
         /// </summary>
         public static string DownloadSPicFailFor {

@@ -2180,7 +2180,7 @@ if (contextMenu.Visibility != Visibility.Visible) return;
             {
                 bool success; string resultMessage;
                 (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet((Movie)DetailMovie); });
-                if (!success) MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id} 信息下载失败，原因：{resultMessage.ToStatusMessage()}"));
+                if (!success) MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id}  {Jvedio.Language.Resources.DownloadMessageFailFor} {resultMessage.ToStatusMessage()}"));
 
             }
             DetailMovie dm = new DetailMovie();

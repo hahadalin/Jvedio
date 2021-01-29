@@ -1215,4 +1215,7 @@
   <data name="SuccessDelete" xml:space="preserve">
     <value>成功删除</value>
   </data>
+  <data name="DownloadMessageFailFor" xml:space="preserve">
+    <value>信息下载失败，原因：</value>
+  </data>
 </root>
