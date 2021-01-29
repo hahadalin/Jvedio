@@ -11,14 +11,14 @@
                 <Trigger.EnterActions>
                     <BeginStoryboard >
                         <Storyboard FillBehavior="HoldEnd" >
-                            <ColorAnimation Duration="0:0:0.5"  Storyboard.TargetProperty="Background.Color" To="Gray" />
+                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Gray" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>
                 <Trigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard >
-                            <ColorAnimation Duration="0:0:0.15"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
+                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.ExitActions>
@@ -33,14 +33,14 @@
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard FillBehavior="HoldEnd">
-                            <ColorAnimation Duration="0:0:0.3"  Storyboard.TargetProperty="Background.Color" To="Red" />
+                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Red" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>
                 <Trigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard >
-                            <ColorAnimation Duration="0:0:0.15"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
+                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.ExitActions>

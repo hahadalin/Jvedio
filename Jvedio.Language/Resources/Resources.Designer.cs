@@ -835,6 +835,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 文件夹存在交集或文件夹已在当前集合中 的本地化字符串。
+        /// </summary>
+        public static string FilePathIntersection {
+            get {
+                return ResourceManager.GetString("FilePathIntersection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 文件大小 的本地化字符串。
         /// </summary>
         public static string FileSize {

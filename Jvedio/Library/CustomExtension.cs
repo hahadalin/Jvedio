@@ -22,6 +22,17 @@ namespace Jvedio
     public static class CustomExtension
     {
 
+
+        public static bool IsIntersectWith(this ObservableCollection<string> collections, string str)
+        {
+            foreach (var item in collections)
+            {
+                if (item.IndexOf(str) >= 0 || str.IndexOf(item) >= 0) return true;
+            }
+
+            return false;
+        }
+
         public static int IndexOfAnyString(this string str, string[] parameter)
         {
             foreach (var item in parameter)

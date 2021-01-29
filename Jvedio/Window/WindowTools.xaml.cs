@@ -818,7 +818,8 @@ namespace Jvedio
             }
         }
 
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void Jvedio_BaseWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Properties.Settings.Default.ToolsIndex = TabControl.SelectedIndex;
             Properties.Settings.Default.Save();

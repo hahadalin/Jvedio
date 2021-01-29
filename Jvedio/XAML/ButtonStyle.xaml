@@ -3,16 +3,17 @@
 >
 
     <Style x:Key="ButtonStyleFill" TargetType="{x:Type Button}">
-        <Setter Property="Margin" Value="10 5"/>
+        <Setter Property="Margin" Value="5"/>
         <Setter Property="MinWidth" Value="80"/>
         <Setter Property="Width" Value="auto"/>
         <Setter Property="Height" Value="auto"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Padding="10"  Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="5">
-                        <TextBlock Foreground="White" Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border   Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="5">
+                        <TextBlock Margin="10 5" Foreground="White" Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

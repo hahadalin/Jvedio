@@ -64,31 +64,31 @@ namespace Jvedio
 
 
             //绑定中文字体
-            foreach (FontFamily _f in Fonts.SystemFontFamilies)
-            {
-                LanguageSpecificStringDictionary _font = _f.FamilyNames;
-                if (_font.ContainsKey(System.Windows.Markup.XmlLanguage.GetLanguage("zh-cn")))
-                {
-                    string _fontName = null;
-                    if (_font.TryGetValue(System.Windows.Markup.XmlLanguage.GetLanguage("zh-cn"), out _fontName))
-                    {
-                        ComboBox_Ttile.Items.Add(_fontName);
-                    }
-                }
-            }
+            //foreach (FontFamily _f in Fonts.SystemFontFamilies)
+            //{
+            //    LanguageSpecificStringDictionary _font = _f.FamilyNames;
+            //    if (_font.ContainsKey(System.Windows.Markup.XmlLanguage.GetLanguage("zh-cn")))
+            //    {
+            //        string _fontName = null;
+            //        if (_font.TryGetValue(System.Windows.Markup.XmlLanguage.GetLanguage("zh-cn"), out _fontName))
+            //        {
+            //            ComboBox_Ttile.Items.Add(_fontName);
+            //        }
+            //    }
+            //}
 
-            bool IsMatch = false;
-            foreach (var item in ComboBox_Ttile.Items)
-            {
-                if (Properties.Settings.Default.Font_Title_Family == item.ToString())
-                {
-                    ComboBox_Ttile.SelectedItem = item;
-                    IsMatch = true;
-                    break;
-                }
-            }
+            //bool IsMatch = false;
+            //foreach (var item in ComboBox_Ttile.Items)
+            //{
+            //    if (Properties.Settings.Default.Font_Title_Family == item.ToString())
+            //    {
+            //        ComboBox_Ttile.SelectedItem = item;
+            //        IsMatch = true;
+            //        break;
+            //    }
+            //}
 
-            if (!IsMatch) ComboBox_Ttile.SelectedIndex = 0;
+            //if (!IsMatch) ComboBox_Ttile.SelectedIndex = 0;
 
 
             ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
@@ -98,6 +98,7 @@ namespace Jvedio
             {
                 item.Click += AddToRename;
             }
+            TabControl.SelectedIndex = Properties.Settings.Default.SettingsIndex;
 
         }
 
@@ -247,9 +248,18 @@ namespace Jvedio
             if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
             {
                 if (vieModel_Settings.ScanPath == null) { vieModel_Settings.ScanPath = new ObservableCollection<string>(); }
-                if (!vieModel_Settings.ScanPath.Contains(folderBrowserDialog.SelectedPath)) { vieModel_Settings.ScanPath.Add(folderBrowserDialog.SelectedPath); }
-                //保存
-                FileProcess.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath?.ToList());
+                if (!vieModel_Settings.ScanPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel_Settings.ScanPath.IsIntersectWith(folderBrowserDialog.SelectedPath))
+                {
+                    vieModel_Settings.ScanPath.Add(folderBrowserDialog.SelectedPath);
+                    //保存
+                    FileProcess.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath?.ToList());
+                }
+                else
+                {
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "SettingsGrowl");
+                }
+
+
             }
 
 
@@ -673,22 +683,6 @@ namespace Jvedio
 
         }
 
-        private void ComboBox_Ttile_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-            if (e.RemovedItems.Count > 0)
-            {
-                if (ComboBox_Ttile.Text != "")
-                {
-                    Properties.Settings.Default.Font_Title_Family = (sender as ComboBox).SelectedItem.ToString();
-                    Properties.Settings.Default.Save();
-                }
-            }
-
-
-
-        }
-
         private void DatabaseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0) return;
@@ -700,7 +694,7 @@ namespace Jvedio
 
         }
 
-        private void Jvedio_BaseWindow_ContentRendered(object sender, EventArgs e)
+        private void Window_ContentRendered(object sender, EventArgs e)
         {
             //设置当前数据库
             for (int i = 0; i < vieModel_Settings.DataBases.Count; i++)
@@ -749,9 +743,6 @@ namespace Jvedio
                 }
             }
 
-            TabControl.SelectedIndex = Properties.Settings.Default.SettingsIndex;
-
-
         }
 
         private void SetCheckedBoxChecked()
@@ -789,7 +780,14 @@ namespace Jvedio
             {
                 if (!IsFile(item))
                 {
-                    if (!vieModel_Settings.ScanPath.Contains(item)) { vieModel_Settings.ScanPath.Add(item); }
+                    if (!vieModel_Settings.ScanPath.Contains(item) && !vieModel_Settings.ScanPath.IsIntersectWith(item)) 
+                    { 
+                        vieModel_Settings.ScanPath.Add(item);
+                    }
+                    else
+                    {
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "SettingsGrowl");
+                    }
                 }
 
             }
@@ -1368,7 +1366,7 @@ namespace Jvedio
             }
         }
 
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             Properties.Settings.Default.SettingsIndex = TabControl.SelectedIndex;
             Properties.Settings.Default.Save();

@@ -53,5 +53,46 @@
     </Style>
 
 
+    <Style x:Key="ColorRadioButton" TargetType="RadioButton">
+        <Setter Property="Margin" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid Width="50" Height="30" Margin="{TemplateBinding Margin}">
+                        <Border   x:Name="_borderOver"  Background="{TemplateBinding Background}"  CornerRadius="5" BorderBrush="{DynamicResource BackgroundSearch}" BorderThickness="2" Margin="0">
+
+                        </Border>
+                        <Border x:Name="_borderChecked" Margin="0 0 3 3" Visibility="Collapsed" CornerRadius="3" Background="{DynamicResource BackgroundSide}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="20" Height="20">
+                            <Path Data="M0,5 5,10 13,1" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="{DynamicResource ForegroundSearch}" StrokeThickness="1"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasContent" Value="True">
+                            <Setter Property="FocusVisualStyle">
+                                <Setter.Value>
+                                    <Style>
+                                        <Setter Property="Control.Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Setter.Value>
+                            </Setter>
+
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" TargetName="_borderOver" Value="{DynamicResource ForegroundSearch}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Visibility" TargetName="_borderChecked" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

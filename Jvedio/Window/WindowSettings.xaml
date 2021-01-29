@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:Jvedio"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:p="clr-namespace:Jvedio.Properties"
-        xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         x:Class="Jvedio.Settings"
@@ -17,28 +16,20 @@
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         AllowDrop="True"
-    
-        ContentRendered="Jvedio_BaseWindow_ContentRendered"
+        ContentRendered="Window_ContentRendered"
+        Closing="Window_Closing"
     
     
         >
 
     <local:Jvedio_BaseWindow.Resources>
 
-
-
-
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
         <local:SkinTypeEnumConverter x:Key="SkinTypeEnumConverter"/>
         <local:LanguageTypeEnumConverter x:Key="LanguageTypeEnumConverter"/>
-
         <local:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
-
-
         <local:StringToCheckedConverter x:Key="StringToCheckedConverter"/>
-
-
         <local:ColorToBrushConverter x:Key="ColorToBrushConverter" />
         <local:FontFamilyToSelectedIndexConverter x:Key="FontFamilyToSelectedIndexConverter" />
         <local:BoolToFontBoldConverter x:Key="BoolToFontBoldConverter" />
@@ -49,39 +40,14 @@
 
 
 
-        <Style x:Key="SettingsBorderStyle" TargetType="{x:Type Border}">
+        <Style x:Key="InfoTextBox" TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="Transparent"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
-                </Trigger>
-            </Style.Triggers>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center"/>
         </Style>
 
-
-        <Style x:Key="PlayButton" TargetType="{x:Type Canvas}">
-
-            <Setter Property="Visibility" Value="Hidden"/>
-
-
-            <Style.Triggers>
-
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding EditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Value="False"/>
-                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Grid}, Mode=FindAncestor}}" Value="True"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Visibility" Value="Visible"/>
-                </MultiDataTrigger>
-
-                <DataTrigger Binding="{Binding EditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Value="True">
-                    <Setter Property="Visibility" Value="Hidden"/>
-                </DataTrigger>
-                <!--<DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Grid}, Mode=FindAncestor}}" Value="False">
-                    <Setter Property="Visibility" Value="Hidden"/>
-                </DataTrigger>-->
-            </Style.Triggers>
-        </Style>
 
         <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
             <Setter Property="TextWrapping" Value="Wrap"/>
@@ -91,59 +57,6 @@
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Margin" Value="0,5,0,5"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-        </Style>
-
-        <Style x:Key="InfoTextBox" TargetType="{x:Type TextBox}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-
-            <Setter Property="Margin">
-                <Setter.Value>
-                    <MultiBinding Converter="{StaticResource MultiIntToMarginConverter}">
-                        <Binding Path="MovieStyle_WordMargin_UD" Mode="OneWay" Source="{x:Static p:Settings.Default}"/>
-                        <Binding Path="MovieStyle_WordMargin_LR" Mode="OneWay" Source="{x:Static p:Settings.Default}"/>
-                    </MultiBinding>
-                </Setter.Value>
-            </Setter>
-
-
-            <Style.Triggers>
-                <DataTrigger  Binding="{Binding ShowImageMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Value="海报图">
-                    <Setter Property="Width" Value="280" />
-                </DataTrigger>
-
-                <DataTrigger  Binding="{Binding ShowImageMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Value="缩略图">
-                    <Setter Property="Width" Value="180" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="ViewBorder" TargetType="{x:Type Border}">
-            <Setter Property="Width" Value="auto"/>
-            <Setter Property="Height" Value="auto"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
-
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsChecked, ElementName=IsMovieChecked}" Value="true">
-                    <Setter Property="Background" Value="{DynamicResource Selected_Background}"/>
-                    <Setter Property="BorderBrush" Value="{DynamicResource Selected_BorderBrush}"/>
-                </DataTrigger>
-            </Style.Triggers>
-
-
-        </Style>
-
-
-        <Style x:Key="ViewStackPanel" TargetType="{x:Type StackPanel}">
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Width" Value="auto"/>
-            <Setter Property="Height" Value="auto"/>
         </Style>
 
 
@@ -158,23 +71,6 @@
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="Margin" Value="20 5"/>
-        </Style>
-
-
-
-        <Style x:Key="BaseLabel" TargetType="{x:Type Label}">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Margin" Value="2 0 2 0"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
 
         <Style x:Key="InfoLabel" TargetType="{x:Type Label}">
@@ -198,359 +94,17 @@
             <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Width" Value="auto"/>
+            <Setter Property="Height" Value="auto"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="MinWidth" Value="400"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="5 0"/>
+            <Setter Property="Padding" Value="5"/>
             <Setter Property="Margin" Value="5 0"/>
             <Setter Property="CaretBrush" Value="{DynamicResource ForegroundSearch}"/>
         </Style>
 
 
-        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="BorderBrush" Value="#FF00C3BA"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0.8" CornerRadius="3">
-                            <Border.Effect>
-                                <DropShadowEffect Color="#FF72FFE5" ShadowDepth="0"/>
-                            </Border.Effect>
-                            <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#FF00C3BA" />
 
-
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FF00C3BA" />
-                    <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-
-
-        <!--DataGridStyle-->
-        <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="#FF688CAF"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
-            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
-            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
-            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGrid}">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-                            <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false" Style="{DynamicResource ScrollViewerStyle}">
-                                <ScrollViewer.Template>
-                                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <!--<Button Command="{x:Static DataGrid.SelectAllCommand}" Focusable="false" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>-->
-                                            <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                            <ScrollContentPresenter   x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" Grid.ColumnSpan="2" Grid.Row="1"/>
-                                            <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="2" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Grid.Row="1" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}"/>
-                                            <Grid Grid.Column="1" Grid.Row="2">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-                                                <ScrollBar x:Name="PART_HorizontalScrollBar" Grid.Column="1" Maximum="{TemplateBinding ScrollableWidth}" Orientation="Horizontal" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}"/>
-                                            </Grid>
-                                        </Grid>
-                                    </ControlTemplate>
-                                </ScrollViewer.Template>
-                                <ItemsPresenter  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            </ScrollViewer>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsGrouping" Value="true"/>
-                        <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <!--分隔符-->
-        <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
-            <Setter Property="Width" Value="8"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Cursor" Value="SizeWE"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border Background="Transparent" Padding="{TemplateBinding Padding}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="DataGridColumnHeaderStyle1" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
-                        <Grid>
-                            <Themes:DataGridHeaderBorder CornerRadius="5 5 0 0" Height="30" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{DynamicResource BackgroundSide}" IsClickable="{TemplateBinding CanUserSort}" IsPressed="{TemplateBinding IsPressed}" IsHovered="{TemplateBinding IsMouseOver}" Padding="{TemplateBinding Padding}" SortDirection="{TemplateBinding SortDirection}" SeparatorBrush="{TemplateBinding SeparatorBrush}" SeparatorVisibility="{TemplateBinding SeparatorVisibility}">
-                                <ContentPresenter HorizontalAlignment="Center" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
-                            </Themes:DataGridHeaderBorder>
-                            <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}"/>
-                            <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="DataGridCellStyle1" TargetType="{x:Type DataGridCell}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate    TargetType="{x:Type DataGridCell}">
-                        <Border   VerticalAlignment="Center" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="{DynamicResource BackgroundTitle}" SnapsToDevicePixels="True">
-                            <ContentPresenter HorizontalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                </Trigger>
-                <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static DataGrid.FocusBorderBrushKey}}"/>
-                </Trigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsSelected" Value="true"/>
-                        <Condition Property="Selector.IsSelectionActive" Value="false"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
-                </MultiTrigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <BooleanToVisibilityConverter x:Key="bool2VisibilityConverter"/>
-        <Style x:Key="RowHeaderGripperStyle" TargetType="{x:Type Thumb}">
-            <Setter Property="Height" Value="8"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Cursor" Value="SizeNS"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="DataGridRowHeaderStyle1" TargetType="{x:Type DataGridRowHeader}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridRowHeader}">
-                        <Grid Visibility="Visible">
-                            <Themes:DataGridHeaderBorder BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" IsPressed="{TemplateBinding IsPressed}" IsHovered="{TemplateBinding IsMouseOver}" IsSelected="{TemplateBinding IsRowSelected}" Orientation="Horizontal" Padding="{TemplateBinding Padding}" SeparatorBrush="{TemplateBinding SeparatorBrush}" SeparatorVisibility="{TemplateBinding SeparatorVisibility}">
-                                <StackPanel Orientation="Horizontal">
-                                    <ContentPresenter RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
-                                    <Control SnapsToDevicePixels="false" Template="{Binding ValidationErrorTemplate, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Visibility="{Binding (Validation.HasError), Converter={StaticResource bool2VisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"/>
-                                </StackPanel>
-                            </Themes:DataGridHeaderBorder>
-                            <Thumb x:Name="PART_TopHeaderGripper" Style="{StaticResource RowHeaderGripperStyle}" VerticalAlignment="Top"/>
-                            <Thumb x:Name="PART_BottomHeaderGripper" Style="{StaticResource RowHeaderGripperStyle}" VerticalAlignment="Bottom"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="DataGridRowStyle1" TargetType="{x:Type DataGridRow}">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
-            <Setter Property="SnapsToDevicePixels" Value="true"/>
-            <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
-            <Setter Property="ValidationErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <TextBlock  Foreground="Red" Margin="2,0,0,0" Text="!" VerticalAlignment="Center"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridRow}">
-                        <Border     x:Name="DGR_Border" BorderBrush="Transparent" BorderThickness="0" Background="{DynamicResource BackgroundTitle}" SnapsToDevicePixels="True">
-                            <SelectiveScrollingGrid>
-                                <SelectiveScrollingGrid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </SelectiveScrollingGrid.ColumnDefinitions>
-                                <SelectiveScrollingGrid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </SelectiveScrollingGrid.RowDefinitions>
-                                <DataGridCellsPresenter Grid.Column="1" ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                <DataGridDetailsPresenter Grid.Column="1" Grid.Row="1" SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, Converter={x:Static DataGrid.RowDetailsScrollingConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Visibility="{TemplateBinding DetailsVisibility}"/>
-                                <DataGridRowHeader Grid.RowSpan="2" SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Row}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                            </SelectiveScrollingGrid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsNewItem" Value="True">
-                    <Setter Property="Margin" Value="{Binding NewItemMargin, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="DataGridColumnHeaderStyle2" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
-                        <Grid>
-                            <Themes:DataGridHeaderBorder BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" IsClickable="{TemplateBinding CanUserSort}" IsPressed="{TemplateBinding IsPressed}" IsHovered="{TemplateBinding IsMouseOver}" Padding="{TemplateBinding Padding}" SortDirection="{TemplateBinding SortDirection}" SeparatorBrush="{TemplateBinding SeparatorBrush}" SeparatorVisibility="{TemplateBinding SeparatorVisibility}">
-                                <ContentPresenter  HorizontalAlignment="Center" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
-                            </Themes:DataGridHeaderBorder>
-                            <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}"/>
-                            <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="DataGridStyle2" TargetType="{x:Type DataGrid}">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="#FF688CAF"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
-            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
-            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
-            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGrid}">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-                            <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
-                                <ScrollViewer.Template>
-                                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <Button Command="{x:Static DataGrid.SelectAllCommand}" Focusable="false" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                            <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                            <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" Grid.ColumnSpan="2" Grid.Row="1"/>
-                                            <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="2" Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Grid.Row="1" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}"/>
-                                            <Grid Grid.Column="1" Grid.Row="2">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-                                                <ScrollBar  x:Name="PART_HorizontalScrollBar" Grid.Column="1" Maximum="{TemplateBinding ScrollableWidth}" Orientation="Horizontal" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}"/>
-                                            </Grid>
-                                        </Grid>
-                                    </ControlTemplate>
-                                </ScrollViewer.Template>
-                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            </ScrollViewer>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsGrouping" Value="true"/>
-                        <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
-        <ItemsPanelTemplate  x:Key="ItemsPanelTemplate1">
-            <DataGridRowsPresenter x:Name="PART_RowsPresenter" IsItemsHost="True"/>
-        </ItemsPanelTemplate>
-
-
-
-        <Style x:Key="RadioThemeColor" TargetType="RadioButton">
-            <Setter Property="Margin" Value="1"/>
-            <Setter Property="Background" Value="#e892ca"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RadioButton">
-                        <Grid Background="{TemplateBinding Background}" Width="25" Height="25" Margin="{TemplateBinding Margin}">
-                            <Border x:Name="_borderOver" Background="Transparent" BorderBrush="{DynamicResource BackgroundSearch}" BorderThickness="1" Margin="0">
-
-                            </Border>
-                            <Border x:Name="_borderChecked" Visibility="Collapsed" Background="{DynamicResource BackgroundSide}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="15" Height="15">
-                                <Path Data="M0,5 5,10 13,1" Margin="2 2 0 0" Stroke="{DynamicResource ForegroundSearch}" StrokeThickness="1"/>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="HasContent" Value="True">
-                                <Setter Property="FocusVisualStyle">
-                                    <Setter.Value>
-                                        <Style>
-                                            <Setter Property="Control.Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate>
-                                                        <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </Setter.Value>
-                                </Setter>
-
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" TargetName="_borderOver" Value="{DynamicResource BackgroundMenu}"/>
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="Visibility" TargetName="_borderChecked" Value="Visible"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
 
     </local:Jvedio_BaseWindow.Resources>
@@ -564,33 +118,29 @@
         </Grid.RowDefinitions>
 
         <!--消息提示框-->
-        <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="10 120 30 80">
+        <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="10 0 30 20">
             <StackPanel hc:Growl.GrowlParent="True" hc:Growl.Token="SettingsGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
 
         <TextBox Visibility="Visible" x:Name="FocusTextBox" Width="5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-20 0"/>
 
 
-        <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl"  Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
+        <TabControl  Grid.Row="0" Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl"  Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
             <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.Basic}" >
                 <StackPanel    >
                     <WrapPanel Orientation="Vertical" Margin="5">
-
-
                         <CheckBox IsChecked="{Binding CloseToTaskBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.CloseToBar}" />
-                        <CheckBox IsChecked="{Binding RandomDisplay, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.RandomWhenStartUp}"  VerticalContentAlignment="Center"/>
-                        <CheckBox IsChecked="{Binding OpenDataBaseDefault, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.NotShowLibrary}"  VerticalContentAlignment="Center"/>
-                        <CheckBox IsChecked="{Binding AutoDeleteNotExistMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.AutoDelete}"  VerticalContentAlignment="Center"/>
-                        <CheckBox IsChecked="{Binding DelInfoAfterDelFile, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.DeleteFileWhenDeleteInfo}"  VerticalContentAlignment="Center"/>
-                        <CheckBox IsChecked="{Binding ScanWhenRefresh, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.ScanWhenRefresh}"  VerticalContentAlignment="Center"/>
-
+                        <CheckBox IsChecked="{Binding RandomDisplay, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.RandomWhenStartUp}"  />
+                        <CheckBox IsChecked="{Binding OpenDataBaseDefault, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.NotShowLibrary}"  />
+                        <CheckBox IsChecked="{Binding AutoDeleteNotExistMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.AutoDelete}"  />
+                        <CheckBox IsChecked="{Binding DelInfoAfterDelFile, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.DeleteFileWhenDeleteInfo}"  />
+                        <CheckBox IsChecked="{Binding ScanWhenRefresh, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.ScanWhenRefresh}"  />
                     </WrapPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="5 0" Height="auto">
-                        <CheckBox Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked" IsChecked="{Binding HotKey_Enable, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.BossKey}" Width="100" VerticalContentAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Margin="5 0" >
+                        <CheckBox Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked" IsChecked="{Binding HotKey_Enable, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.BossKey}"  VerticalContentAlignment="Center"/>
                         <hc:TextBox x:Name="hotkeyTextBox" Text="{Binding HotKey_String,Mode=OneWay,Source={x:Static p:Settings.Default}}" IsReadOnly="True" PreviewKeyUp="hotkeyTextBox_PreviewKeyUp" PreviewKeyDown="hotkeyTextBox_PreviewKeyDown" Style="{StaticResource BaseHcTextBox}"  />
-                        <Button Style="{StaticResource ButtonStyleFill}" Click="ApplyHotKey" Content="{x:Static lang:Resources.Apply}"  Width="auto" Height="auto" />
-
+                        <Button Style="{StaticResource ButtonStyleFill}" Click="ApplyHotKey" Content="{x:Static lang:Resources.Apply}"   />
                     </StackPanel>
 
                     <StackPanel  Margin="20 5"  Orientation="Horizontal" >
@@ -602,15 +152,15 @@
 
                     <WrapPanel x:Name="SkinWrapPanel" Orientation="Horizontal"  Margin="20 5">
                         <Label  Style="{StaticResource InfoLabel}"  Content="{x:Static lang:Resources.Skin}"/>
-                        <RadioButton   GroupName="SkinRadioButton"  Click="SetSkin"   Content="黑色" Background="#393D40"  Style="{StaticResource RadioThemeColor}"  />
-                        <RadioButton  GroupName="SkinRadioButton"  Click="SetSkin"   Content="白色" Background="#FFFFFF"  Style="{StaticResource RadioThemeColor}"  />
-                            <RadioButton   GroupName="SkinRadioButton"  Click="SetSkin"  Content="蓝色" Background="#87CEFF"  Style="{StaticResource RadioThemeColor}"  />
-                        </WrapPanel>
+                        <RadioButton   GroupName="SkinRadioButton"  Click="SetSkin"   Content="黑色" Background="Black"  Style="{StaticResource ColorRadioButton}"  />
+                        <RadioButton  GroupName="SkinRadioButton"  Click="SetSkin"   Content="白色" Background="White"  Style="{StaticResource ColorRadioButton}"  />
+                        <RadioButton   GroupName="SkinRadioButton"  Click="SetSkin"  Content="蓝色" Background="#87CEFF"  Style="{StaticResource ColorRadioButton}"  />
+                    </WrapPanel>
 
                     <StackPanel Orientation="Horizontal"  Margin="20 5">
                         <Label Style="{StaticResource InfoLabel}"  Content="{x:Static lang:Resources.ImageSavePath}"/>
                         <hc:TextBox  ShowClearButton="True"   Style="{StaticResource BaseHcTextBox}"  Text="{Binding BasePicPath, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   />
-                        <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.ChooseDir}"  Click="SetBasePicPath" Margin="5 2" HorizontalAlignment="Right"/>
+                        <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.ChooseDir}"  Click="SetBasePicPath"  HorizontalAlignment="Right"/>
                     </StackPanel>
 
 
@@ -624,7 +174,6 @@
                     <CheckBox IsChecked="False" Content="{x:Static lang:Resources.ShowOtherOptions}" HorizontalAlignment="Left" Margin="20 5" x:Name="AdvanceCheckBox"/>
 
                     <StackPanel Orientation="Vertical">
-
                         <StackPanel.Style>
                             <Style TargetType="StackPanel">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -632,13 +181,9 @@
                                     <DataTrigger Binding="{Binding ElementName=AdvanceCheckBox,Path=IsChecked}" Value="True">
                                         <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
-
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Style>
-
-
-
 
                         <StackPanel Orientation="Horizontal" Margin="10 10">
 
@@ -710,8 +255,8 @@
                         </StackPanel>
 
 
-                        <StackPanel Orientation="Vertical" >
-                            <ListBox AllowDrop="True"  Drop="PathListBox_Drop"  DragOver="PathListBox_DragOver" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding ScanPath}" x:Name="PathListBox" Margin="5 5" Width="auto" Height="150"    >
+                        <StackPanel Orientation="Vertical" Margin="20 0" >
+                            <ListBox AllowDrop="True"  Drop="PathListBox_Drop"  DragOver="PathListBox_DragOver" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding ScanPath}" x:Name="PathListBox"  Height="200"     >
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Vertical"/>
@@ -727,11 +272,11 @@
                                 </ListBox.ItemTemplate>
                             </ListBox>
 
-                            <StackPanel Orientation="Horizontal" Margin="30 5 20 5" VerticalAlignment="Top">
-                                <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource SettingsBorderStyle}" MouseLeftButtonUp="AddPath">
+                            <StackPanel Orientation="Horizontal" Margin="0 10" HorizontalAlignment="Left">
+                                <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="AddPath">
                                     <Image Source="{Binding Themes, ConverterParameter=openfolder, Converter={StaticResource StringToUriStringConverterOther}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                 </Border>
-                                <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource SettingsBorderStyle}" MouseLeftButtonUp="DelPath">
+                                <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="DelPath">
                                     <Image Source="{Binding Themes, ConverterParameter=min, Converter={StaticResource StringToUriStringConverterOther}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                 </Border>
                                 <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearPath">
@@ -753,19 +298,15 @@
             <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.SyncInfo}" >
                 <StackPanel >
 
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" Text="{x:Static lang:Resources.UrlList}" />
-
-                        <Button Content="{x:Static lang:Resources.Add}" Style="{DynamicResource ButtonStyleFill}"  Click="Button_Click_4" />
+                    <StackPanel Orientation="Horizontal" Margin="20 5">
+                        <Button HorizontalAlignment="Left"  Content="{x:Static lang:Resources.Add}" Style="{DynamicResource ButtonStyleFill}"  Click="Button_Click_4" />
+                        <TextBlock TextAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" Text="{x:Static lang:Resources.Attention_UrlTest}" HorizontalAlignment="Left" TextWrapping="Wrap" />
                     </StackPanel>
-                    <TextBlock TextAlignment="Left" Style="{StaticResource TextBlockTitle}" Text="{x:Static lang:Resources.Attention_UrlTest}" HorizontalAlignment="Left" TextWrapping="Wrap" />
-
+                   
+                    
 
 
                     <DataGrid Visibility="Visible" Background="{DynamicResource BackgroundSide}" MinHeight="200" ScrollViewer.HorizontalScrollBarVisibility="Disabled"   PreviewMouseLeftButtonDown="Previe_Mouse_LBtnDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"   DataContextChanged="ServersDataGrid_DataContextChanged" Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
-
-
-
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Enable}" Width="auto" MinWidth="40">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -849,7 +390,7 @@
                     </WrapPanel>
 
 
-                        <CheckBox x:Name="TimeOutAdvanceCheckBox" HorizontalAlignment="Left" Content="{x:Static lang:Resources.ShowOtherOptions}" IsChecked="False" Margin="30 5"/>
+                    <CheckBox x:Name="TimeOutAdvanceCheckBox" HorizontalAlignment="Left" Content="{x:Static lang:Resources.ShowOtherOptions}" IsChecked="False" Margin="30 5"/>
 
                     <StackPanel Orientation="Vertical">
 
@@ -915,7 +456,7 @@
             <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.Show}" >
                 <StackPanel >
 
-                    <StackPanel Orientation="Vertical"   HorizontalAlignment="Left">
+                    <StackPanel Orientation="Vertical"   HorizontalAlignment="Left" Margin="5">
                         <CheckBox IsChecked="{Binding MainImageAutoMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.ImageStretch}"  />
                         <CheckBox IsChecked="{Binding DisplayStatusBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.StatusBar}"  />
                         <CheckBox IsChecked="{Binding DisplayFunBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.FunctionBar}"  />
@@ -950,9 +491,9 @@
 
                     </WrapPanel>
 
-                    <TextBlock Text="{x:Static lang:Resources.FormEffect}" Style="{StaticResource TextBlockTitle}" Margin="0 10" HorizontalAlignment="Left"/>
-                    <CheckBox HorizontalAlignment="Left" IsChecked="{Binding EnableWindowFade, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="10 5" Content="{x:Static lang:Resources.FadeInOut}" />
-                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <TextBlock Text="{x:Static lang:Resources.FormEffect}" Style="{StaticResource TextBlockTitle}" Margin="10" HorizontalAlignment="Left"/>
+                    <CheckBox HorizontalAlignment="Left" IsChecked="{Binding EnableWindowFade, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="15 5" Content="{x:Static lang:Resources.FadeInOut}" />
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 5">
                         <Label Content="{x:Static lang:Resources.Opacity}" Style="{StaticResource InfoLabel}"    />
                         <Slider x:Name="OpacitySlider" IsSnapToTickEnabled="True" Width="200" VerticalAlignment="Center" Margin="5 0" Value="{Binding Opacity_Main, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="1" Minimum="0.5" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" Cursor="Hand" TickPlacement="None"  />
                         <Label Content="{Binding Value, ElementName=OpacitySlider}" Style="{StaticResource InfoLabel}"  />
@@ -1011,7 +552,7 @@
                     <StackPanel Orientation="Vertical" IsEnabled="False" Visibility="Collapsed" >
                         <StackPanel Orientation="Horizontal">
                             <CheckBox IsChecked="{Binding Enable_TL_BAIDU, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="20 10" Content="百度翻译" />
-                            <Button Click="TestTranslate"  Width="80" Content="测试"  Style="{StaticResource ButtonStyle}"  />
+                            <Button Click="TestTranslate"   Content="{x:Static lang:Resources.Test}"  Style="{StaticResource ButtonStyleFill}"  />
                             <Image Margin="20 5" Width="32" Height="32" />
                         </StackPanel>
 
@@ -1033,7 +574,7 @@
                     <StackPanel  Orientation="Horizontal" IsEnabled="False" Visibility="Collapsed" >
                         <CheckBox IsChecked="{Binding Enable321, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="20 10" Content="语音播放" />
                         <hc:TextBox IsEnabled="False" Style="{StaticResource BaseHcTextBox}"   Text="Default"  />
-                        <Button     Width="80" Content="测试"  Style="{StaticResource ButtonStyle}"/>
+                        <Button    Content="{x:Static lang:Resources.Test}"  Style="{StaticResource ButtonStyleFill}"/>
                         <Image Margin="20 5" Width="32" Height="32"  />
                     </StackPanel>
                 </StackPanel>
@@ -1068,12 +609,12 @@
 
             <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.VedioProcessing}" >
                 <StackPanel  >
-                    <CheckBox Margin="20 5" IsChecked="{Binding ScreenShotToExtraPicPath, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.ScreenShotToPreviewDir}"  VerticalContentAlignment="Center"/>
+                    <CheckBox Margin="20 5" HorizontalAlignment="Left" IsChecked="{Binding ScreenShotToExtraPicPath, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.ScreenShotToPreviewDir}"  VerticalContentAlignment="Center"/>
 
                     <StackPanel Orientation="Horizontal" Margin="20 5">
                         <TextBlock Text="{x:Static lang:Resources.FFmpegPath}" Style="{StaticResource BaseTextBlock}"   />
                         <hc:TextBox    Style="{StaticResource BaseHcTextBox}"  Text="{Binding FFMPEG_Path, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  />
-                        <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.ChooseFFmpeg}"  Click="SetFFMPEGPath" Margin="5"/>
+                        <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.ChooseFFmpeg}"  Click="SetFFMPEGPath" />
 
                     </StackPanel>
 
@@ -1124,19 +665,14 @@
 
             <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.CustomAppearance}" >
                 <StackPanel>
+                    <WrapPanel Orientation="Horizontal" Margin="20 5"  HorizontalAlignment="Left">
+                        <CheckBox IsChecked="{Binding DisplayID, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.ID}" />
+                        <CheckBox IsChecked="{Binding DisplayTitle, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.Title}" />
+                        <CheckBox IsChecked="{Binding DisplayDate, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.Date}" />
+                        <CheckBox IsChecked="{Binding DisplayStamp, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.Stamp}" />
+                        <CheckBox IsChecked="{Binding DisplayFavorites, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.Favorites}"  />
+                    </WrapPanel>
 
-
-
-
-                    <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10">
-                        <WrapPanel Orientation="Horizontal" Margin="5 5">
-                            <CheckBox IsChecked="{Binding DisplayID, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="10 5 10 5" Content="{x:Static lang:Resources.ID}"  VerticalContentAlignment="Center"/>
-                            <CheckBox IsChecked="{Binding DisplayTitle, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="10 5 10 5" Content="{x:Static lang:Resources.Title}"  VerticalContentAlignment="Center"/>
-                            <CheckBox IsChecked="{Binding DisplayDate, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="10 5 10 5" Content="{x:Static lang:Resources.Date}"  VerticalContentAlignment="Center"/>
-                            <CheckBox IsChecked="{Binding DisplayStamp, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="10 5 10 5" Content="{x:Static lang:Resources.Stamp}"  VerticalContentAlignment="Center"/>
-                            <CheckBox IsChecked="{Binding DisplayFavorites, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Margin="10 5 10 5" Content="{x:Static lang:Resources.Favorites}"  VerticalContentAlignment="Center"/>
-                        </WrapPanel>
-                    </Border>
 
 
 
@@ -1145,188 +681,6 @@
                         <hc:TextBox   Style="{StaticResource BaseHcTextBox}"  Text="{Binding BackgroundImage, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  />
                         <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Choose}" Click="SetBackgroundImage"/>
                     </StackPanel>
-
-
-                    <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10" Visibility="Collapsed">
-                        <Grid >
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                                <TextBlock Text="图片大小" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
-                                <Label Content="缩略图" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" HorizontalAlignment="Left" />
-                                <WrapPanel Orientation="Horizontal" Margin="25 0">
-                                    <Label Content="高度" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" HorizontalAlignment="Left" />
-                                    <Slider  x:Name="Slider10"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding SmallImage_Height, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="500" Minimum="100" SmallChange="5" LargeChange="20" TickFrequency="5" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider10}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                    <Label Content="宽度" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" HorizontalAlignment="Left" />
-                                    <Slider  x:Name="Slider11"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding SmallImage_Width, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="500" Minimum="100" SmallChange="5" LargeChange="20" TickFrequency="5" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider11}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                </WrapPanel>
-
-                                <Label Content="海报图" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" HorizontalAlignment="Left" />
-                                <WrapPanel Orientation="Horizontal" Margin="25 0">
-
-                                    <Label Content="高度" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" HorizontalAlignment="Left" />
-                                    <Slider  x:Name="Slider12"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding BigImage_Height, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="500" Minimum="100" SmallChange="5" LargeChange="20" TickFrequency="5" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider12}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                    <Label Content="宽度" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" HorizontalAlignment="Left" />
-                                    <Slider  x:Name="Slider13"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding BigImage_Width, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="500" Minimum="100" SmallChange="5" LargeChange="20" TickFrequency="5" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider13}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                </WrapPanel>
-                                <Label Content="预览图" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" HorizontalAlignment="Left" />
-                                <WrapPanel Orientation="Horizontal" Margin="25 0">
-
-                                    <Label Content="高度" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" HorizontalAlignment="Left" />
-                                    <Slider  x:Name="Slider14"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding ExtraImage_Height, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="500" Minimum="100" SmallChange="5" LargeChange="20" TickFrequency="5" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider14}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                    <Label Content="宽度" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" HorizontalAlignment="Left" />
-                                    <Slider  x:Name="Slider15"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding ExtraImage_Width, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="500" Minimum="100" SmallChange="5" LargeChange="20" TickFrequency="5" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider15}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                </WrapPanel>
-                            </StackPanel>
-
-
-
-                        </Grid>
-                    </Border>
-
-
-                    <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10" Visibility="Collapsed">
-                        <StackPanel Orientation="Vertical">
-                            <WrapPanel Orientation="Horizontal">
-                                <TextBlock Text="名称" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
-                                <CheckBox Content="斜体" Margin="10 0" IsChecked="{Binding Font_Title_Italic, Mode=TwoWay, Source={x:Static p:Settings.Default}}"/>
-                                <CheckBox Content="加粗"  Margin="10 0"  IsChecked="{Binding Font_Title_Bold, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                                <CheckBox Content="下划线"  Margin="10 0"  IsChecked="{Binding Font_Title_UnderLine, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                            </WrapPanel>
-
-                            <WrapPanel Orientation="Horizontal">
-                                <Label Content="字体" Style="{StaticResource InfoLabel}" Margin="50 5 10 5" FontSize="18" Height="auto" />
-                                <ComboBox x:Name="ComboBox_Ttile" Height="30" Text="{Binding Font_Title_Family, Converter={StaticResource FontFamilyConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}"    Width="200" HorizontalAlignment="Left"  SelectionChanged="ComboBox_Ttile_SelectionChanged"  />
-
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="大小" Style="{StaticResource InfoLabel}" Margin="50 5 10 5" FontSize="18" Height="auto" />
-                                    <Slider  x:Name="Slider7"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding Font_Title_Size, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="25" Minimum="5" SmallChange="1" LargeChange="2" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider7}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                </StackPanel>
-                            </WrapPanel>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10"  Visibility="Collapsed">
-                        <StackPanel Orientation="Vertical">
-                            <WrapPanel Orientation="Horizontal">
-                                <TextBlock Text="识别码" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
-                                <CheckBox Content="斜体" Margin="10 0" IsChecked="{Binding Font_ID_Italic, Mode=TwoWay, Source={x:Static p:Settings.Default}}"/>
-                                <CheckBox Content="加粗"  Margin="10 0"  IsChecked="{Binding Font_ID_Bold, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                                <CheckBox Content="下划线"  Margin="10 0"  IsChecked="{Binding Font_ID_UnderLine, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                            </WrapPanel>
-
-                            <WrapPanel Orientation="Horizontal">
-                                <Label Content="字体" Style="{StaticResource InfoLabel}" Margin="50 5 10 5" FontSize="18" Height="auto" />
-                                <ComboBox Height="30"   SelectedIndex="{Binding Font_ID_Family, Converter={StaticResource FontFamilyToSelectedIndexConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}"    Width="200" HorizontalAlignment="Stretch" >
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock FontFamily="{Binding ''}" Text="{Binding Source}" FontSize="15"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="大小" Style="{StaticResource InfoLabel}" Margin="50 5 10 5" FontSize="18" Height="auto" />
-                                    <Slider  x:Name="Slider8"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding Font_ID_Size, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="25" Minimum="5" SmallChange="1" LargeChange="2" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider8}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                </StackPanel>
-                            </WrapPanel>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10"  Visibility="Collapsed">
-                        <StackPanel Orientation="Vertical">
-                            <WrapPanel Orientation="Horizontal">
-                                <TextBlock Text="日期" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
-                                <CheckBox Content="斜体" Margin="10 0" IsChecked="{Binding Font_Date_Italic, Mode=TwoWay, Source={x:Static p:Settings.Default}}"/>
-                                <CheckBox Content="加粗"  Margin="10 0"  IsChecked="{Binding Font_Date_Bold, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                                <CheckBox Content="下划线"  Margin="10 0"  IsChecked="{Binding Font_Date_UnderLine, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                            </WrapPanel>
-
-                            <WrapPanel Orientation="Horizontal">
-                                <Label Content="字体" Style="{StaticResource InfoLabel}" Margin="50 5 10 5" FontSize="18" Height="auto" />
-                                <ComboBox Height="30"  SelectedIndex="{Binding Font_Date_Family, Converter={StaticResource FontFamilyToSelectedIndexConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}"    Width="200" HorizontalAlignment="Stretch" >
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock FontFamily="{Binding ''}" Text="{Binding Source}" FontSize="15"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-
-
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="大小" Style="{StaticResource InfoLabel}" Margin="50 5 10 5" FontSize="18" Height="auto" />
-                                    <Slider  x:Name="Slider9"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding Font_Date_Size, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="25" Minimum="5" SmallChange="1" LargeChange="2" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider9}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                </StackPanel>
-                            </WrapPanel>
-                        </StackPanel>
-                    </Border>
-
-
-
-
-                    <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10"  Visibility="Collapsed">
-                        <Grid >
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                                <TextBlock Text="外部间隔" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
-                                <WrapPanel Orientation="Horizontal">
-                                    <Label Content="上下" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" />
-                                    <Slider  x:Name="Slider1"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding MovieStyle_OutMargin_UD, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="10" Minimum="0" SmallChange="1" LargeChange="2" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider1}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                    <Label Content="左右" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" />
-                                    <Slider  x:Name="Slider2"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding MovieStyle_OutMargin_LR, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="10" Minimum="0" SmallChange="1" LargeChange="2" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider2}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                </WrapPanel>
-                                <TextBlock Text="内部间隔" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
-                                <WrapPanel Orientation="Horizontal">
-                                    <Label Content="上下" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" />
-                                    <Slider  x:Name="Slider3"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding MovieStyle_InMargin_UD, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="20" Minimum="0" SmallChange="1" LargeChange="2" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider3}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                    <Label Content="左右" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" />
-                                    <Slider  x:Name="Slider4"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding MovieStyle_InMargin_LR, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="20" Minimum="0" SmallChange="1" LargeChange="2" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider4}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                </WrapPanel>
-                                <TextBlock Text="文字间隔" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
-                                <WrapPanel Orientation="Horizontal">
-                                    <Label Content="上下" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" />
-                                    <Slider  x:Name="Slider5"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding MovieStyle_WordMargin_UD, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="10" Minimum="0" SmallChange="1" LargeChange="2" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider5}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                    <Label Content="左右" Style="{StaticResource InfoLabel}" Margin="20 5 10 5" FontSize="18" Height="auto" />
-                                    <Slider  x:Name="Slider6"    IsSnapToTickEnabled="True" Width="100" VerticalAlignment="Center" Margin="20 5" Value="{Binding MovieStyle_WordMargin_LR, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="20" Minimum="0" SmallChange="1" LargeChange="2" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
-                                    <Label Content="{Binding Value, ElementName=Slider6}" Style="{StaticResource InfoLabel}" Height="auto" />
-                                </WrapPanel>
-                            </StackPanel>
-
-
-
-                        </Grid>
-                    </Border>
-
-
-
-                    <Border Margin="20 5" Background="{DynamicResource BackgroundMain}" CornerRadius="10"  Visibility="Collapsed">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="选中框" Style="{StaticResource TextBlockTitle}" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
-                                <CheckBox x:Name="IsMovieChecked" IsChecked="False" Content="选中" Margin="10 5"/>
-                            </StackPanel>
-                            <WrapPanel Orientation="Horizontal">
-                                <Label Content="边框颜色" Style="{StaticResource InfoLabel}" Margin="50 5 10 5" FontSize="18" Height="auto" />
-
-                                <Border Background="{DynamicResource Selected_BorderBrush}" Height="25" Width="25" CornerRadius="5" Cursor="Hand" MouseLeftButtonUp="Border_MouseLeftButtonUp1" />
-                                <Label Content="选中颜色" Style="{StaticResource InfoLabel}" Margin="50 5 10 5" FontSize="18" Height="auto" />
-
-                                <Border Background="{DynamicResource Selected_Background}" Height="25" Width="25" CornerRadius="5"  Cursor="Hand" MouseLeftButtonUp="Border_MouseLeftButtonUp2" />
-                            </WrapPanel>
-                        </StackPanel>
-                    </Border>
-
                 </StackPanel>
 
             </TabItem>
@@ -1335,9 +689,9 @@
                     <WrapPanel x:Name="CheckedBoxWrapPanel" Orientation="Horizontal">
                         <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Content="{x:Static lang:Resources.ID}" Width="100"  Padding="5" Margin="5"   />
                         <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Title}" Width="100" Padding="5" Margin="5"  />
-                        
+
                         <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.VedioType}" Width="100" Padding="5" Margin="5"   />
-                       
+
                         <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Year}" Width="100" Padding="5" Margin="5"   />
                         <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Duration}" Width="100" Padding="5" Margin="5"   />
                         <ToggleButton Style="{StaticResource ToggleButtonStyle1}" Content="{x:Static lang:Resources.Country}" Width="100" Padding="5" Margin="5"  />
@@ -1412,8 +766,10 @@
                         <Label  Grid.Column="0"  MinWidth="100"  Content="{x:Static lang:Resources.RenamePreview}" Style="{StaticResource LabelPrimary}"/>
                         <TextBlock TextWrapping="Wrap" Text="{Binding ViewRenameFormat}"  TextAlignment="Left"  Grid.Column="1"  Width="auto" HorizontalAlignment="Stretch"  Margin="5 0"  Style="{StaticResource BaseTextBlock}" FontSize="18"  Padding="10 5"/>
                     </Grid>
-                    <TextBox  TextWrapping="Wrap"  HorizontalAlignment="Left" Margin="10 5" Width="auto"   Grid.Column="0" Text="{x:Static lang:Resources.Attention_Rename}" Style="{StaticResource InfoTextBox}" Padding="10 5" CaretBrush="{DynamicResource ForegroundSearch}"  Foreground="{DynamicResource ForegroundSearch}" TextAlignment="Left"  FontSize="18" />
-
+                 
+                    <Border Margin="10 5" Style="{StaticResource BorderTipInfo}" Background="{DynamicResource BackgroundMenu}">
+                        <TextBlock Text="{x:Static lang:Resources.Attention_Rename}" TextWrapping="Wrap" Foreground="{DynamicResource ForegroundGlobal}"/>
+                    </Border>
 
                 </StackPanel>
             </TabItem>

@@ -16,6 +16,8 @@
         MinHeight="450"
         MinWidth="800"
         WindowStartupLocation="CenterScreen"
+    Closing="Jvedio_BaseWindow_Closing"
+    
     
         >
 
@@ -104,7 +106,7 @@
 
 
 
-            <TabControl Margin="5" BorderBrush="{DynamicResource BackgroundSearch}" SelectionChanged="TabControl_SelectionChanged" x:Name="TabControl" Grid.Row="0" Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
+            <TabControl Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl" Grid.Row="0" Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
                 <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.VedioScan}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
                     <Grid Background="Transparent">
                         <StackPanel Orientation="Vertical">
