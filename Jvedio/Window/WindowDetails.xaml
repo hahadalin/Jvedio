@@ -679,33 +679,33 @@
                                         <Image ContextMenuOpening="BigImage_ContextMenuOpening" Margin="0" HorizontalAlignment="Center"    x:Name="BigImage"  Style="{StaticResource BigImage}" MouseMove="MoveWindow" AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"    >
                                             <Image.ContextMenu>
                                                 <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp">
-                                                    <MenuItem Header="立即同步(S)" Click="DownLoad"/>
-                                                    <MenuItem Header="扩展功能"   >
-                                                        <MenuItem Header="翻译影片" Click="TranslateMovie"  />
-                                                        <MenuItem Header="生成缩略图" Click="GenerateSmallImage" />
-                                                        <MenuItem Header="生成演员头像" Click="GenerateActor" />
-                                                        <MenuItem Header="生成截图" Click="GetScreenShot" />
-                                                        <!--<MenuItem Header="生成 Gif" Click="GetGif" />-->
+                                                    <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoad"/>
+                                                    <MenuItem Header="{x:Static lang:Resources.Menu_Advance}"   >
+                                                        <MenuItem Header="{x:Static lang:Resources.Menu_Translate}" Click="TranslateMovie"  />
+                                                        <MenuItem Header="{x:Static lang:Resources.Menu_GenerateThumbnail}" Click="GenerateSmallImage" />
+                                                        <MenuItem Header="{x:Static lang:Resources.Menu_GenerateActressImage}" Click="GenerateActor" />
+                                                        <MenuItem Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" Click="GetScreenShot" />
+                                                        <MenuItem Visibility="Collapsed" Header="{x:Static lang:Resources.Menu_GenerateGif}" />
                                                     </MenuItem>
-                                                    <MenuItem Header="打开位置"   >
-                                                        <MenuItem Header="影片" Click="OpenFilePath"   ></MenuItem>
-                                                        <MenuItem Header="海报图" Click="OpenImagePath"  ></MenuItem>
-                                                        <MenuItem Header="缩略图" Click="OpenImagePath"   ></MenuItem>
+                                                    <MenuItem Header="{x:Static lang:Resources.OpenPath}"   >
+                                                        <MenuItem Header="{x:Static lang:Resources.Movie}" Click="OpenFilePath"   ></MenuItem>
+                                                        <MenuItem Header="{x:Static lang:Resources.Poster}" Click="OpenImagePath"  ></MenuItem>
+                                                        <MenuItem Header="{x:Static lang:Resources.Thumbnail}" Click="OpenImagePath"   ></MenuItem>
                                                         <MenuItem Header="Gif" Click="OpenImagePath"   ></MenuItem>
-                                                        <MenuItem Header="预览图" Click="OpenImagePath"   ></MenuItem>
-                                                        <MenuItem Header="影片截图" Click="OpenImagePath"   ></MenuItem>
-                                                        <MenuItem Header="头像" Click="OpenImagePath"   ></MenuItem>
+                                                        <MenuItem Header="{x:Static lang:Resources.Preview}" Click="OpenImagePath"   ></MenuItem>
+                                                        <MenuItem Header="{x:Static lang:Resources.ScreenShot}" Click="OpenImagePath"   ></MenuItem>
+                                                        <MenuItem Header="{x:Static lang:Resources.Actor}" Click="OpenImagePath"   ></MenuItem>
                                                     </MenuItem>
 
-                                                    <MenuItem Header="加入清单"   Name="ListMenuItem"   />
+                                                    <MenuItem Header="{x:Static lang:Resources.Menu_AddToList}"   Name="ListMenuItem"   />
 
-                                                    <MenuItem Header="添加到标签"   Click="AddNewLabel" />
+                                                    <MenuItem Header="{x:Static lang:Resources.Menu_LabelManagement}"   Click="AddNewLabel" />
 
-                                                    <MenuItem Header="打开网址(W)" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
-                                                    <MenuItem Header="复制文件(C)" Click="CopyFile" />
-                                                    <MenuItem Header="清空信息"  Click="DeleteInfo"   />
-                                                    <MenuItem Header="删除影片(D)"  Click="DeleteID"   />
-                                                    <MenuItem Header="删除文件(T)" Click="DeleteFile" Icon="pack://application:,,,/Resources/menuitem/clear.png" />
+                                                    <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
+                                                    <MenuItem Header="{x:Static lang:Resources.Menu_CopyFile}" Click="CopyFile" />
+                                                    <MenuItem Header="{x:Static lang:Resources.Menu_ClearInfo}"  Click="DeleteInfo"   />
+                                                    <MenuItem Header="{x:Static lang:Resources.Menu_DeleteInfo}"  Click="DeleteID"   />
+                                                    <MenuItem Header="{x:Static lang:Resources.Menu_DeleteFile}" Click="DeleteFile" Icon="pack://application:,,,/Resources/menuitem/clear.png" />
 
                                                 </ContextMenu>
                                             </Image.ContextMenu>

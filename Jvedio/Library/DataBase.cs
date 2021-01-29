@@ -241,9 +241,11 @@ namespace Jvedio
             Enum.TryParse(Properties.Settings.Default.ShowViewMode, out ShowViewMode);
 
             MyImageType ShowImageMode = MyImageType.缩略图;
-            Enum.TryParse(Properties.Settings.Default.ShowImageMode, out ShowImageMode);
 
-
+            if (Properties.Settings.Default.ShowImageMode.Length == 1)
+            {
+                ShowImageMode = (MyImageType)(int.Parse(Properties.Settings.Default.ShowImageMode));
+            }
 
             if (ShowViewMode == ViewType.有图)
             {

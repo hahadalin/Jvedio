@@ -529,6 +529,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 当前版本 的本地化字符串。
+        /// </summary>
+        public static string CurrentVersion {
+            get {
+                return ResourceManager.GetString("CurrentVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 自定外观 的本地化字符串。
         /// </summary>
         public static string CustomAppearance {
@@ -1173,6 +1182,24 @@ namespace Jvedio.Language {
         public static string LatestUpdateDate {
             get {
                 return ResourceManager.GetString("LatestUpdateDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 最新版本 的本地化字符串。
+        /// </summary>
+        public static string LatestVersion {
+            get {
+                return ResourceManager.GetString("LatestVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 列表 的本地化字符串。
+        /// </summary>
+        public static string ListView {
+            get {
+                return ResourceManager.GetString("ListView", resourceCulture);
             }
         }
         
@@ -2869,6 +2896,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 成功截图到 的本地化字符串。
+        /// </summary>
+        public static string SuccessScreenShotTo {
+            get {
+                return ResourceManager.GetString("SuccessScreenShotTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 同步信息 的本地化字符串。
         /// </summary>
         public static string SyncInfo {
@@ -3198,6 +3234,15 @@ namespace Jvedio.Language {
         public static string ViewLog {
             get {
                 return ResourceManager.GetString("ViewLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 访问次数 的本地化字符串。
+        /// </summary>
+        public static string ViewNumber {
+            get {
+                return ResourceManager.GetString("ViewNumber", resourceCulture);
             }
         }
         

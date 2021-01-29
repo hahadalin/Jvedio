@@ -117,6 +117,20 @@ namespace Jvedio
             Properties.Settings.Default.Selected_BorderBrush = "#FF8000";
             //Properties.Settings.Default.DisplayNumber = 5;
 
+            //设置排序类型
+            var radioButtons = SortStackPanel.Children.OfType<RadioButton>().ToList();
+            foreach (RadioButton item in radioButtons)
+            {
+                item.Click += SetSortValue;
+            }
+
+            //设置图片显示模式
+            var rbs = ImageTypeStackPanel.Children.OfType<RadioButton>().ToList();
+            foreach (RadioButton item in rbs)
+            {
+                item.Click += SaveShowImageMode;
+            }
+
             #region "改变窗体大小"
             //https://www.cnblogs.com/yang-fei/p/4737308.html
 
@@ -500,8 +514,8 @@ namespace Jvedio
                             sw.WriteLine(updateContent);
                         }
 
-                        LocalVersionTextBlock.Text = $"当前版本：{local}";
-                        RemoteVersionTextBlock.Text = $"最新版本：{remote}";
+                        LocalVersionTextBlock.Text = $"{Jvedio.Language.Resources.CurrentVersion}：{local}";
+                        RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
                         UpdateContentTextBox.Text = updateContent;
 
                         if (local.CompareTo(remote) < 0) UpdateGrid.Visibility = Visibility.Visible;
@@ -726,7 +740,7 @@ namespace Jvedio
         {
             Movie movie = DataBase.SelectMovieByID(ID);
             addTag(ref movie);
-            if (Properties.Settings.Default.ShowImageMode == "预览图")
+            if (Properties.Settings.Default.ShowImageMode == "2")
             {
 
             }
@@ -977,7 +991,7 @@ namespace Jvedio
             SideGridColumn.Width = new GridLength(Properties.Settings.Default.SideGridWidth);
             if (Properties.Settings.Default.SideGridWidth < 200) ShowSideGrid.Visibility = Visibility.Visible;
 
-            if (Properties.Settings.Default.ShowImageMode == "列表模式")
+            if (Properties.Settings.Default.ShowImageMode == "4")
             {
                 MovieMainGrid.Visibility = Visibility.Hidden;
                 //DetailGrid.Visibility = Visibility.Visible;
@@ -1798,28 +1812,6 @@ namespace Jvedio
 
 
 
-                ////判断是否按下 ctrl + shif
-                //if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.LeftShift))
-                //{
-                //    //找到距离最近的那个项
-                //    (Movie currentMovie, int idx) = GetCurrentMovie(id);
-                //    if (currentMovie != null && idx > 0)
-                //    {
-                //        //从后往前
-                //        for (int i = idx - 1; i >= 0; i--)
-                //        {
-                //            if (add)
-                //            {
-                //                //如果是增加模式，
-
-                //            }
-                //        }
-                //    }
-                //}
-
-
-
-
                 SetSelected();
             }
             else
@@ -1903,6 +1895,7 @@ namespace Jvedio
         }
 
 
+        //TODO
         public void SetTypeValue(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
@@ -2010,25 +2003,23 @@ namespace Jvedio
 
         public void SetSortValue(object sender, RoutedEventArgs e)
         {
+            RadioButton radioButton = sender as RadioButton;
+            var rbs = SortStackPanel.Children.OfType<RadioButton>().ToList();
+            int sortindex = rbs.IndexOf(radioButton);
+            Sort sorttype = (Sort)sortindex;
 
-            RadioButton rb = sender as RadioButton;
-            vieModel.SortType = rb.Content.ToString();
-            if (rb.Content.ToString() == vieModel.SortType)
-                Properties.Settings.Default.SortDescending = !Properties.Settings.Default.SortDescending;
+            if (sorttype == vieModel.SortType) Properties.Settings.Default.SortDescending = !Properties.Settings.Default.SortDescending;
 
             vieModel.SortDescending = Properties.Settings.Default.SortDescending;
-            Properties.Settings.Default.SortType = rb.Content.ToString();
+            Properties.Settings.Default.SortType =((int)sorttype).ToString();
             Properties.Settings.Default.Save();
-            vieModel.SortType = Properties.Settings.Default.SortType;
+            vieModel.SortType = sorttype;
             vieModel.Sort();
             if (vieModel.SortDescending)
                 SortImage.Source = new BitmapImage(new Uri("/Resources/Picture/sort_down.png", UriKind.Relative));
             else
                 SortImage.Source = new BitmapImage(new Uri("/Resources/Picture/sort_up.png", UriKind.Relative));
-
             vieModel.FlipOver();
-
-
         }
 
         public void SaveAllSearchType(object sender, RoutedEventArgs e)
@@ -2054,11 +2045,15 @@ namespace Jvedio
         public void SaveShowImageMode(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
-            string mode = radioButton.Content.ToString();
-            Properties.Settings.Default.ShowImageMode = mode;
+            var rbs =ImageTypeStackPanel.Children.OfType<RadioButton>().ToList();
+            int sortindex = rbs.IndexOf(radioButton);
+            MyImageType imageType = (MyImageType)sortindex;
+
+
+            Properties.Settings.Default.ShowImageMode = sortindex.ToString();
             Properties.Settings.Default.Save();
 
-            if (mode == "列表模式")
+            if (sortindex ==4)
             {
                 MovieMainGrid.Visibility = Visibility.Hidden;
                 //DetailGrid.Visibility = Visibility.Visible;
@@ -2072,18 +2067,12 @@ namespace Jvedio
                 vieModel.FlipOver();
             }
 
-            if (mode == "缩略图")
+            if (sortindex == 0)
                 Properties.Settings.Default.GlobalImageWidth = Properties.Settings.Default.SmallImage_Width;
-            else if (mode == "海报图")
+            else if (sortindex == 1)
                 Properties.Settings.Default.GlobalImageWidth = Properties.Settings.Default.BigImage_Width;
-            else if (mode == "预览图")
+            else if (sortindex == 2)
                 Properties.Settings.Default.GlobalImageWidth = Properties.Settings.Default.ExtraImage_Width;
-
-
-
-
-
-
         }
 
 
@@ -2541,14 +2530,13 @@ namespace Jvedio
                         App.Current.Dispatcher.Invoke((Action)delegate
                         {
                             Console.WriteLine(((ScreenShotEventArgs)ev).FFmpegCommand);
-                            cmdTextBox.AppendText($"成功截图到 {((ScreenShotEventArgs)ev).FilePath}\n");
-
+                            cmdTextBox.AppendText($"{Jvedio.Language.Resources.SuccessScreenShotTo} ： {((ScreenShotEventArgs)ev).FilePath}\n");
                             cmdTextBox.ScrollToEnd();
                         });
                     };
                     (success, message) = await screenShot.AsyncScreenShot(movie);
                     if (success) successNum++;
-                    else this.Dispatcher.Invoke((Action)delegate { cmdTextBox.AppendText($"截图失败，原因：{message}"); });
+                    else this.Dispatcher.Invoke((Action)delegate { cmdTextBox.AppendText($"{Jvedio.Language.Resources.Message_Fail}，{Jvedio.Language.Resources.Reason}：{message}"); });
                 }
                 HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_SuccessNum} {successNum} / {vieModel.SelectedMovie.Count}", "Main");
             }
@@ -3105,7 +3093,7 @@ namespace Jvedio
         }
 
 
-        public async void DeleteInfo(object sender, RoutedEventArgs e)
+        public  void DeleteInfo(object sender, RoutedEventArgs e)
         {
             if (DownLoader?.State == DownLoadState.DownLoading) { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_WaitForDownload, "Main"); return; }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
@@ -4122,7 +4110,7 @@ namespace Jvedio
                     IsToUpdate = true;
                     Application.Current.Shutdown();//直接关闭
                 }
-                catch { MessageBox.Show("找不到 JvedioUpdate.exe"); }
+                catch { MessageBox.Show($"{Jvedio.Language.Resources.CannotOpen} JvedioUpdate.exe"); }
 
             }
         }
@@ -4218,15 +4206,20 @@ namespace Jvedio
             vieModel.AddToRecentWatch("");
             vieModel.GetFilterInfo();
 
+            //设置排序类型
             var radioButtons = SortStackPanel.Children.OfType<RadioButton>().ToList();
-            for (int i = 0; i < radioButtons.Count; i++)
-            {
-                if (radioButtons[i].Content.ToString() == Properties.Settings.Default.SortType)
-                {
-                    radioButtons[i].IsChecked = true;
-                    break;
-                }
-            }
+            int.TryParse(Properties.Settings.Default.SortType, out int idx);
+            radioButtons[idx].IsChecked = true;
+
+            //设置图片类型
+            var rbs = ImageTypeStackPanel.Children.OfType<RadioButton>().ToList();
+            int.TryParse(Properties.Settings.Default.ShowImageMode, out int idx2);
+            rbs[idx2].IsChecked = true;
+
+
+
+
+
             if (vieModel.SortDescending)
                 SortImage.Source = new BitmapImage(new Uri("/Resources/Picture/sort_down.png", UriKind.Relative));
             else
@@ -4258,6 +4251,7 @@ namespace Jvedio
 
 
 
+        //TODO
         public void SetSkin()
         {
             if (Properties.Settings.Default.Themes == "黑色")
@@ -4723,18 +4717,18 @@ namespace Jvedio
 
         private void ImageSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (Properties.Settings.Default.ShowImageMode == "缩略图")
+            if (Properties.Settings.Default.ShowImageMode == "0")
             {
                 Properties.Settings.Default.SmallImage_Width = Properties.Settings.Default.GlobalImageWidth;
                 Properties.Settings.Default.SmallImage_Height = (int)((double)Properties.Settings.Default.SmallImage_Width * (200 / 147));
 
             }
-            else if (Properties.Settings.Default.ShowImageMode == "海报图")
+            else if (Properties.Settings.Default.ShowImageMode == "1")
             {
                 Properties.Settings.Default.BigImage_Width = Properties.Settings.Default.GlobalImageWidth;
                 Properties.Settings.Default.BigImage_Height = (int)(Properties.Settings.Default.GlobalImageWidth * 540f / 800f);
             }
-            else if (Properties.Settings.Default.ShowImageMode == "预览图")
+            else if (Properties.Settings.Default.ShowImageMode == "2")
             {
                 Properties.Settings.Default.ExtraImage_Width = Properties.Settings.Default.GlobalImageWidth;
                 Properties.Settings.Default.ExtraImage_Height = (int)(Properties.Settings.Default.GlobalImageWidth * 540f / 800f);
@@ -5749,7 +5743,7 @@ namespace Jvedio
             {
                 foreach (MenuItem item in contextMenu.Items)
                 {
-                    if (item.Header.ToString() != "移出清单")
+                    if (item.Header.ToString() != Jvedio.Language.Resources.Menu_RemoveFromList)
                     {
                         item.Visibility = Visibility.Collapsed;
                     }
@@ -5763,7 +5757,7 @@ namespace Jvedio
             {
                 foreach (MenuItem item in contextMenu.Items)
                 {
-                    if (item.Header.ToString() == "移出清单")
+                    if (item.Header.ToString() == Jvedio.Language.Resources.Menu_RemoveFromList)
                     {
                         item.Visibility = Visibility.Collapsed;
                     }
@@ -5825,31 +5819,6 @@ namespace Jvedio
                     InitList();
                 }
             }
-
-
-
-
-
-
-
-            //MenuItem menuItem = sender as MenuItem;
-            //string table = menuItem.Header.ToString();
-            //MenuItem mnu = menuItem.Parent as MenuItem;
-            //StackPanel sp = null;
-            //if (mnu != null)
-            //{
-            //    sp = ((ContextMenu)mnu.Parent).PlacementTarget as StackPanel;
-            //    if (sp != null)
-            //    {
-            //        var TB = sp.Children.OfType<TextBox>().First();
-            //        string id = TB.Text;
-            //        Movie movie = DataBase.SelectMovieByID(id);
-            //        MySqlite dB = new MySqlite("mylist");
-            //        dB.InsertFullMovie(movie, table);
-            //        dB.CloseDB();
-            //        InitList();
-            //    }
-            //}
         }
 
         private void Rate_ValueChanged_1(object sender, HandyControl.Data.FunctionEventArgs<double> e)
@@ -6203,6 +6172,8 @@ namespace Jvedio
         }
     }
 
+
+    //TODO
     public enum MySearchType { 识别码, 名称, 演员 }
 
 
@@ -6249,6 +6220,7 @@ namespace Jvedio
     }
 
 
+    //TODO
     public class StringToUriStringConverterMain : IValueConverter
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -6270,6 +6242,7 @@ namespace Jvedio
     }
 
 
+    //TODO
     public class StringToUriStringConverterOther : IValueConverter
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -6296,7 +6269,6 @@ namespace Jvedio
         {
             if (value == null)
                 return false;
-
             return (((MyImageType)value).ToString() == parameter.ToString());
         }
 
@@ -6313,7 +6285,7 @@ namespace Jvedio
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value.ToString() == "预览图")
+            if (value.ToString() == "2")
                 return Visibility.Visible;
             else
                 return Visibility.Collapsed;
@@ -6328,6 +6300,8 @@ namespace Jvedio
 
 
 
+
+    //TODO
     public class MovieStampTypeToStringConverter : IValueConverter
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)

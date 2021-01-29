@@ -126,7 +126,7 @@ namespace Jvedio.ViewModel
 
 
 
-        private MyImageType _ShowImageMode = (MyImageType)Enum.Parse(typeof(MyImageType), Properties.Settings.Default.ShowImageMode, true);
+        private MyImageType _ShowImageMode=0;
 
         public MyImageType ShowImageMode
         {
@@ -462,8 +462,8 @@ namespace Jvedio.ViewModel
 
 
 
-        private string _SortType = Properties.Settings.Default.SortType;
-        public string SortType
+        private Sort _SortType = 0;
+        public Sort SortType
         {
             get { return _SortType; }
             set
@@ -1132,7 +1132,7 @@ namespace Jvedio.ViewModel
                 App.Current.Dispatcher.Invoke((Action)delegate
                 {
                     Main main = App.Current.Windows[0] as Main;
-                    if (Properties.Settings.Default.ShowImageMode == "预览图") main.ImageSlideTimer.Start();//0.5s后开始展示预览图
+                    if (Properties.Settings.Default.ShowImageMode == "2") main.ImageSlideTimer.Start();//0.5s后开始展示预览图
                     IsFlipOvering = false;
                     if (main != null)
                     {
@@ -1143,20 +1143,6 @@ namespace Jvedio.ViewModel
                     
                 });
 
-
-
-                //CurrentMovieList.AddRange(Movies);
-                //CurrentCount = CurrentMovieList.Count;
-                //App.Current.Dispatcher.Invoke((Action)delegate
-                //{
-                //    CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
-                //    Main main = App.Current.Windows[0] as Main;
-                //    if (Properties.Settings.Default.ShowImageMode == "预览图") main.ImageSlideTimer.Start();//0.5s后开始展示预览图
-                //    IsFlipOvering = false;
-                //    main.AsyncLoadImage(); //异步加载图片
-                //    main.IsFlowing = false;
-                //    main.SetSelected();
-                //});
             }
         }
 
@@ -1249,7 +1235,7 @@ namespace Jvedio.ViewModel
         public bool FlipOver()
         {
             GetLabelList();
-            if (Properties.Settings.Default.ShowImageMode == "列表模式")
+            if (Properties.Settings.Default.ShowImageMode == "4")
             {
                 ShowDetailsData();
             }
@@ -1304,7 +1290,7 @@ namespace Jvedio.ViewModel
                         App.Current.Dispatcher.Invoke((Action)delegate
                         {
                             Main main = App.Current.Windows[0] as Main;
-                            if (Properties.Settings.Default.ShowImageMode == "预览图") main.ImageSlideTimer.Start();//0.5s后开始展示预览图
+                            if (Properties.Settings.Default.ShowImageMode == "2") main.ImageSlideTimer.Start();//0.5s后开始展示预览图
                             IsFlipOvering = false;
                             if (main != null)
                             {
@@ -1645,40 +1631,40 @@ namespace Jvedio.ViewModel
             {
                 List<Movie> sortMovieList = new List<Movie>();
                 bool SortDescending = Properties.Settings.Default.SortDescending;
-
-                switch (Properties.Settings.Default.SortType)
+                int.TryParse(Properties.Settings.Default.SortType, out int sortindex);
+                switch (sortindex)
                 {
-                    case "识别码":
+                    case 0:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.id).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.id).ToList(); }
                         break;
-                    case "文件大小":
+                    case 1:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.filesize).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.filesize).ToList(); }
                         break;
-                    case "创建时间":
+                    case 2:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.scandate).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.scandate).ToList(); }
                         break;
-                    case "导入时间":
+                    case 3:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.otherinfo).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.otherinfo).ToList(); }
                         break;
-                    case "喜爱程度":
+                    case 4:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.favorites).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.favorites).ToList(); }
                         break;
-                    case "名称":
+                    case 5:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.title).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.title).ToList(); }
                         break;
-                    case "访问次数":
+                    case 6:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.visits).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.visits).ToList(); }
                         break;
-                    case "发行日期":
+                    case 7:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.releasedate).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.releasedate).ToList(); }
                         break;
-                    case "评分":
+                    case 8:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.rating).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.rating).ToList(); }
                         break;
-                    case "时长":
+                    case 9:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.runtime).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.runtime).ToList(); }
                         break;
-                    case "演员":
+                    case 10:
                         if (SortDescending) { sortMovieList = MovieList.OrderByDescending(o => o.actor.Split(new char[] { ' ', '/' })[0]).ToList(); } else { sortMovieList = MovieList.OrderBy(o => o.actor.Split(new char[] { ' ', '/' })[0]).ToList(); }
                         break;
                     default:
@@ -1687,9 +1673,8 @@ namespace Jvedio.ViewModel
                 }
                 MovieList = new List<Movie>();
                 sortMovieList.ForEach(arg => { MovieList.Add(arg); });
-                //Statistic();
-                //FlipOver();
             }
+            
         }
 
 

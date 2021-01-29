@@ -537,7 +537,7 @@
                 <!--有图-->
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="缩略图"/>
+                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="0"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Source" Value="{Binding smallimage}" />
                     <Setter Property="Width" Value="{Binding SmallImage_Width,Source={x:Static p:Settings.Default}}"/>
@@ -548,7 +548,7 @@
 
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="海报图"/>
+                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="1"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Source" Value="{Binding bigimage}" />
                     <Setter Property="Width" Value="{Binding BigImage_Width,Source={x:Static p:Settings.Default}}"/>
@@ -558,7 +558,7 @@
 
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="缩略图"/>
+                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="0"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Source" Value="{Binding smallimage}" />
                     <Setter Property="Width" Value="{Binding SmallImage_Width,Source={x:Static p:Settings.Default}}"/>
@@ -568,7 +568,7 @@
 
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="海报图"/>
+                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="1"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Source" Value="{Binding bigimage}" />
                     <Setter Property="Width" Value="{Binding BigImage_Width,Source={x:Static p:Settings.Default}}"/>
@@ -582,7 +582,7 @@
 
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="海报图"/>
+                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="1"/>
                         <Condition Binding="{Binding bigimage}" Value="{x:Null}"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Source" Value="Resources/Picture/NoPrinting_B.png" />
@@ -592,7 +592,7 @@
 
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="动态图"/>
+                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="3"/>
                         <Condition Binding="{Binding gif}" Value="{x:Null}"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Source" Value="Resources/Picture/NoPrinting_B.png" />
@@ -604,7 +604,7 @@
 
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="缩略图"/>
+                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="0"/>
                         <Condition Binding="{Binding smallimage}" Value="{x:Null}"/>
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Source" Value="Resources/Picture/NoPrinting_S.png" />
@@ -1625,12 +1625,12 @@
                                                 <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                             </Border.Effect>
                                         </Border>
-                                        <StackPanel   Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Margin="5" Width="100">
-                                            <RadioButton Click="SaveShowImageMode" IsChecked="{Binding ShowImageMode, ConverterParameter=缩略图, Converter={StaticResource ImageTypeEnumConverter}, Mode=TwoWay}" Content="缩略图" Style="{StaticResource RadioButtonStyle}"  GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                            <RadioButton Click="SaveShowImageMode"   IsChecked="{Binding ShowImageMode, ConverterParameter=海报图, Converter={StaticResource ImageTypeEnumConverter}, Mode=TwoWay}"   Content="海报图" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                            <RadioButton Click="SaveShowImageMode"   IsChecked="{Binding ShowImageMode, ConverterParameter=预览图, Converter={StaticResource ImageTypeEnumConverter}, Mode=TwoWay}"   Content="预览图" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                            <RadioButton Visibility="Collapsed" Click="SaveShowImageMode"   IsChecked="{Binding ShowImageMode, ConverterParameter=动态图, Converter={StaticResource ImageTypeEnumConverter}, Mode=TwoWay}"   Content="动态图" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                            <RadioButton  Visibility="Collapsed"  Click="SaveShowImageMode"   IsChecked="{Binding ShowImageMode, ConverterParameter=列表模式, Converter={StaticResource ImageTypeEnumConverter}, Mode=TwoWay}"   Content="列表模式" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                        <StackPanel x:Name="ImageTypeStackPanel"   Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Margin="10 5" Width="auto">
+                                            <RadioButton  Content="{x:Static lang:Resources.Thumbnail}" Style="{StaticResource RadioButtonStyle}"  GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                            <RadioButton      Content="{x:Static lang:Resources.Poster}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                            <RadioButton     Content="{x:Static lang:Resources.Preview}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                            <RadioButton Visibility="Collapsed"      Content="Gif" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                            <RadioButton  Visibility="Collapsed"        Content="{x:Static lang:Resources.ListView}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                         </StackPanel>
                                     </Grid>
                                 </Popup>
@@ -1643,17 +1643,17 @@
                                             </Border.Effect>
                                         </Border>
                                         <StackPanel x:Name="SortStackPanel"   Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Margin="5" Width="auto">
-                                            <RadioButton Margin="5 5 10 5" Click="SetSortValue" Content="识别码"  Style="{StaticResource RadioButtonStyle}" HorizontalContentAlignment="Center"  GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                            <RadioButton  Margin="5 0 10 5" Click="SetSortValue" Style="{StaticResource RadioButtonStyle}"  Content="文件大小" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                            <RadioButton  Margin="5 0 10 5"  Click="SetSortValue"  Style="{StaticResource RadioButtonStyle}" Content="创建时间" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                            <RadioButton  Margin="5 0 10 5"  Click="SetSortValue"  Style="{StaticResource RadioButtonStyle}" Content="导入时间" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                            <RadioButton  Margin="5 0 10 5"  Click="SetSortValue" Style="{StaticResource RadioButtonStyle}"  Content="喜爱程度" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                            <RadioButton  Margin="5 0 10 5"  Click="SetSortValue" Style="{StaticResource RadioButtonStyle}"  Content="名称" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                            <RadioButton  Margin="5 0 10 5"  Click="SetSortValue" Style="{StaticResource RadioButtonStyle}"  Content="访问次数" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                            <RadioButton  Margin="5 0 10 5"  Click="SetSortValue" Style="{StaticResource RadioButtonStyle}"  Content="发行日期" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                            <RadioButton  Margin="5 0 10 5"  Click="SetSortValue" Style="{StaticResource RadioButtonStyle}"  Content="评分" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                            <RadioButton  Margin="5 0 10 5"  Click="SetSortValue" Style="{StaticResource RadioButtonStyle}"  Content="时长" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                            <RadioButton  Margin="5 0 10 5"  Click="SetSortValue" Style="{StaticResource RadioButtonStyle}"  Content="演员" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton Margin="5 5 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.ID}" HorizontalContentAlignment="Center"  GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton  Margin="5 0 10 5"  Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.FileSize}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton  Margin="5 0 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.CreatedDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton  Margin="5 0 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.ImportDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Favorites}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Title}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.ViewNumber}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.ReleaseDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Rating}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Duration}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                            <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Actor}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
                                         </StackPanel>
                                     </Grid>
                                 </Popup>

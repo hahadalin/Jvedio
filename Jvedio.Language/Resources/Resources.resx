@@ -1188,4 +1188,19 @@
   <data name="BigToSmall" xml:space="preserve">
     <value>从大到小</value>
   </data>
+  <data name="ViewNumber" xml:space="preserve">
+    <value>访问次数</value>
+  </data>
+  <data name="ListView" xml:space="preserve">
+    <value>列表</value>
+  </data>
+  <data name="CurrentVersion" xml:space="preserve">
+    <value>当前版本</value>
+  </data>
+  <data name="LatestVersion" xml:space="preserve">
+    <value>最新版本</value>
+  </data>
+  <data name="SuccessScreenShotTo" xml:space="preserve">
+    <value>成功截图到</value>
+  </data>
 </root>
