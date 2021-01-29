@@ -48,7 +48,6 @@
         <local:BitToGBConverter x:Key="BitToGBConverter" />
         <local:WidthToMarginConverter x:Key="WidthToMarginConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <local:MovieStampTypeToStringConverter x:Key="MovieStampTypeToStringConverter" />
         <local:StringToUriStringConverterMain x:Key="StringToUriStringConverterMain" />
         <local:MovieStampTypeToVisibilityConverter x:Key="MovieStampTypeToVisibilityConverter" />
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />

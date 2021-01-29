@@ -1168,6 +1168,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 正在被使用 的本地化字符串。
+        /// </summary>
+        public static string IsUsing {
+            get {
+                return ResourceManager.GetString("IsUsing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 标签 的本地化字符串。
         /// </summary>
         public static string Label {
@@ -2122,6 +2131,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 请输入 的本地化字符串。
+        /// </summary>
+        public static string PleaseEnter {
+            get {
+                return ResourceManager.GetString("PleaseEnter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 摘要 的本地化字符串。
         /// </summary>
         public static string Plot {
@@ -2901,6 +2919,15 @@ namespace Jvedio.Language {
         public static string SubsectionVedio {
             get {
                 return ResourceManager.GetString("SubsectionVedio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 成功删除 的本地化字符串。
+        /// </summary>
+        public static string SuccessDelete {
+            get {
+                return ResourceManager.GetString("SuccessDelete", resourceCulture);
             }
         }
         

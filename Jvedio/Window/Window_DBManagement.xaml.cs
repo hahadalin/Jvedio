@@ -142,7 +142,7 @@ namespace Jvedio
             if (name == "info") return;
 
 
-            if (new Msgbox(this, $"是否确认删除{name}?").ShowDialog() == true)
+            if (new Msgbox(this, $"{Jvedio.Language.Resources.IsToDelete} {name}?").ShowDialog() == true)
             {
                 string dirpath = DateTime.Now.ToString("yyyyMMddHHss");
                 Directory.CreateDirectory($"BackUp\\{dirpath}");
@@ -161,7 +161,7 @@ namespace Jvedio
                     }
                     catch
                     {
-                        new Msgbox(this, $"数据库【{name}】正在被使用，请切换后重试！").ShowDialog();
+                        new Msgbox(this, $"【{name}】{Jvedio.Language.Resources.IsUsing}").ShowDialog();
                     }
 
 
@@ -239,7 +239,7 @@ namespace Jvedio
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DialogInput dialogInput = new DialogInput(this, "输入数据库名称");
+            DialogInput dialogInput = new DialogInput(this, Jvedio.Language.Resources.PleaseEnter);
             if (dialogInput.ShowDialog() == true)
             {
                 string name = dialogInput.Text.ToLower();
@@ -247,7 +247,7 @@ namespace Jvedio
 
                 if (vieModel_DBManagement.DataBases.Contains(name))
                 {
-                    new Msgbox(this, "已存在").ShowDialog();
+                    new Msgbox(this, Jvedio.Language.Resources.Message_AlreadyExist).ShowDialog();
                     return;
                 }
 
@@ -274,9 +274,9 @@ namespace Jvedio
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            OpenFileDialog1.Title = "选择数据库";
+            OpenFileDialog1.Title = Jvedio.Language.Resources.ChooseDataBase;
             OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            OpenFileDialog1.Filter = "Sqlite 文件|*.sqlite";
+            OpenFileDialog1.Filter = $"Sqlite { Jvedio.Language.Resources.File}|*.sqlite";
             OpenFileDialog1.Multiselect = true;
             OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -292,7 +292,7 @@ namespace Jvedio
 
                     if (File.Exists($"DataBase\\{name}.sqlite"))
                     {
-                        if (new Msgbox(this, $"已存在 {name}，是否覆盖？").ShowDialog() == true)
+                        if (new Msgbox(this, $"{ Jvedio.Language.Resources.Message_AlreadyExist} {name}，{ Jvedio.Language.Resources.IsToOverWrite}").ShowDialog() == true)
                         {
                             File.Copy(item, $"DataBase\\{name}.sqlite", true);
 
@@ -352,7 +352,7 @@ namespace Jvedio
 
 
             cts = new CancellationTokenSource();
-            cts.Token.Register(() => { HandyControl.Controls.Growl.Info("取消当前任务！", "DBManageGrowl"); });
+            cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Cancel, "DBManageGrowl"); });
             ct = cts.Token;
 
             //数据库管理
@@ -372,7 +372,7 @@ namespace Jvedio
                 //重置信息
                 db.DeleteTable("movie");
                 db.CreateTable(DataBase.SQLITETABLE_MOVIE);
-                HandyControl.Controls.Growl.Success("成功重置信息", "DBManageGrowl");
+                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "DBManageGrowl");
             }
 
             if ((bool)cb[1].IsChecked)
@@ -405,7 +405,7 @@ namespace Jvedio
                     return true;
                 }, ct);
 
-                HandyControl.Controls.Growl.Success($"成功删除 {num} 个不存在的影片", "DBManageGrowl");
+                HandyControl.Controls.Growl.Success($"{ Jvedio.Language.Resources.SuccessDelete} {num}", "DBManageGrowl");
             }
 
             if ((bool)cb[2].IsChecked)
@@ -439,7 +439,7 @@ namespace Jvedio
                 }, ct);
 
 
-                HandyControl.Controls.Growl.Success($"成功删除 {num} 个不位于指定目录的影片", "DBManageGrowl");
+                HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.SuccessDelete} {num}", "DBManageGrowl");
             }
 
             db.Vacuum();

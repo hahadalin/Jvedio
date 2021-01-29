@@ -6293,44 +6293,6 @@ namespace Jvedio
 
 
 
-    //TODO
-    public class MovieStampTypeToStringConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null)
-            {
-                return "";
-            }
-            else
-            {
-                MovieStampType movieStampType = (MovieStampType)value;
-                if (movieStampType == MovieStampType.高清中字)
-                {
-                    return "高清中字";
-                }
-                else if (movieStampType == MovieStampType.无码流出)
-                {
-                    return "无码流出";
-                }
-                else
-                {
-                    return "无";
-
-                }
-
-
-            }
-
-
-
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
 
 
     public class MovieStampTypeToVisibilityConverter : IValueConverter

@@ -1206,4 +1206,13 @@
   <data name="All" xml:space="preserve">
     <value>所有</value>
   </data>
+  <data name="IsUsing" xml:space="preserve">
+    <value>正在被使用</value>
+  </data>
+  <data name="PleaseEnter" xml:space="preserve">
+    <value>请输入</value>
+  </data>
+  <data name="SuccessDelete" xml:space="preserve">
+    <value>成功删除</value>
+  </data>
 </root>
