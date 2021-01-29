@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -56,7 +57,7 @@ namespace Jvedio
             TextBox TextBox = stackPanel.Children[1] as TextBox;
 
             string name = TextBox.Text;
-            if (name.ToLower() == "info")
+            if (name?.ToLower() == "info")
                 Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + "info.sqlite";
             else if (name == Jvedio.Language.Resources.NewLibrary)
             {
@@ -467,37 +468,26 @@ namespace Jvedio
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string[] names = OpenFileDialog1.FileNames;
-
                 foreach (var item in names)
                 {
                     string name = Path.GetFileNameWithoutExtension(item);
-                    if (name.ToLower() == "info" || name == Jvedio.Language.Resources.NewLibrary) return;
-
+                    if (name?.ToLower() == "info" || name == Jvedio.Language.Resources.NewLibrary) continue;
                     if (!DataBase.IsProPerSqlite(item)) continue;
-
-
-
                     if (File.Exists($"DataBase\\{name}.sqlite"))
                     {
                         if (new Msgbox(this, $"{Jvedio.Language.Resources.Message_AlreadyExist} {name} {Jvedio.Language.Resources.IsToOverWrite} ？").ShowDialog() == true)
                         {
                             File.Copy(item, $"DataBase\\{name}.sqlite", true);
-
                             if (!vieModel_StartUp.DataBases.Contains(name)) vieModel_StartUp.DataBases.Add(name);
-
                         }
                     }
                     else
                     {
                         File.Copy(item, $"DataBase\\{name}.sqlite", true);
                         if (!vieModel_StartUp.DataBases.Contains(name)) vieModel_StartUp.DataBases.Add(name);
-
                     }
 
                 }
-
-
-
             }
         }
 
@@ -516,14 +506,13 @@ namespace Jvedio
 
         private void DelSqlite(object sender, RoutedEventArgs e)
         {
-            string name = "";
             Border border = optionImage.Parent as Border;
-            StackPanel sp = border.Parent as StackPanel;
-            StackPanel stackPanel = sp.Children.OfType<StackPanel>().First();
+            Grid grid = border.Parent as Grid;
+            StackPanel stackPanel = grid.Children.OfType<StackPanel>().First();
             TextBox TextBox = stackPanel.Children[1] as TextBox;
-            name = TextBox.Text;
+            string name = TextBox.Text;
 
-            if (name.ToLower() == "info" || name == Jvedio.Language.Resources.NewLibrary) return;
+            if (name?.ToLower() == "info" || name == Jvedio.Language.Resources.NewLibrary) return;
 
 
             if (new Msgbox(this, $"{Jvedio.Language.Resources.IsToDelete} {name}?").ShowDialog() == true)
@@ -536,10 +525,16 @@ namespace Jvedio
                     File.Copy($"DataBase\\{name}.sqlite", $"BackUp\\{dirpath}\\{name}.sqlite", true);
                     //删除
 
-                    File.Delete($"DataBase\\{name}.sqlite");
-
-                    vieModel_StartUp.DataBases.Remove(name);
-
+                    try
+                    {
+                        File.Delete($"DataBase\\{name}.sqlite");
+                        vieModel_StartUp.DataBases.Remove(name);
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    
                 }
 
 
@@ -551,15 +546,13 @@ namespace Jvedio
 
         private void RenameSqlite(object sender, RoutedEventArgs e)
         {
-            string name = "";
-
             Border border = optionImage.Parent as Border;
-            StackPanel sp = border.Parent as StackPanel;
-            StackPanel stackPanel = sp.Children.OfType<StackPanel>().First();
+            Grid grid = border.Parent as Grid;
+            StackPanel stackPanel = grid.Children.OfType<StackPanel>().First();
             TextBox TextBox = stackPanel.Children[1] as TextBox;
-            name = TextBox.Text;
+            string name = TextBox.Text;
 
-            if (name.ToLower() == "info") return;
+            if (name?.ToLower() == "info") return;
 
             //重命名
             OptionPopup.IsOpen = false;
@@ -573,7 +566,6 @@ namespace Jvedio
 
         private void Rename(TextBox textBox)
         {
-            Console.WriteLine("Rename");
             string name = textBox.Text;
 
             //不修改
@@ -592,11 +584,13 @@ namespace Jvedio
                 if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrEmpty(name) && !IsItemInList(name, vieModel_StartUp.DataBases) && name.IndexOfAny(Path.GetInvalidFileNameChars()) == -1)
                 {
                     //新建
+                    
                     MySqlite db = new MySqlite("DataBase\\" + name);
                     db.CreateTable(DataBase.SQLITETABLE_MOVIE);
                     db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
                     db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
                     db.CreateTable(DataBase.SQLITETABLE_JAVDB);
+                    db.CloseDB();
 
                     if (vieModel_StartUp.DataBases.Contains(Jvedio.Language.Resources.NewLibrary)) vieModel_StartUp.DataBases.Remove( Jvedio.Language.Resources.NewLibrary);
                     textBox.IsReadOnly = true;
@@ -652,7 +646,7 @@ namespace Jvedio
         {
             foreach (var item in list)
             {
-                if (item.ToLower() == str.ToLower()) return true;
+                if (item?.ToLower() == str.ToLower()) return true;
             }
             return false;
         }
@@ -677,17 +671,29 @@ namespace Jvedio
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SetAsDefault(object sender, RoutedEventArgs e)
         {
             Border border = optionImage.Parent as Border;
-            StackPanel sp = border.Parent as StackPanel;
-            StackPanel stackPanel = sp.Children.OfType<StackPanel>().First();
+            Grid grid = border.Parent as Grid;
+            StackPanel stackPanel = grid.Children.OfType<StackPanel>().First();
             TextBox TextBox = stackPanel.Children[1] as TextBox;
             string name = TextBox.Text;
             Properties.Settings.Default.OpenDataBaseDefault = true;
-            Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"\\DataBase\\{name}.sqlite";
+            Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
             OptionPopup.IsOpen = false;
             LoadDataBase(stackPanel, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
+        }
+
+        private void OpenPath(object sender, RoutedEventArgs e)
+        {
+            Border border = optionImage.Parent as Border;
+            Grid grid = border.Parent as Grid;
+            StackPanel stackPanel = grid.Children.OfType<StackPanel>().First();
+            TextBox TextBox = stackPanel.Children[1] as TextBox;
+            string name = TextBox.Text;
+            string path= AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
+            if (name.ToLower()=="info") path= AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
+            if (File.Exists(path)) { Process.Start("explorer.exe", "/select, \"" + path + "\""); }
         }
     }
 }

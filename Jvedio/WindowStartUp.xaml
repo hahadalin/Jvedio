@@ -146,7 +146,7 @@
                 <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}" Margin="0 10"/>
             </StackPanel>
 
-            <Border x:Name="SelectDbBorder" Visibility="Visible" CornerRadius="5" Background="{DynamicResource BackgroundMain}" BorderBrush="Gray" BorderThickness="0"  >
+            <Border x:Name="SelectDbBorder" Visibility="Hidden" CornerRadius="5" Background="{DynamicResource BackgroundMain}" BorderBrush="Gray" BorderThickness="0"  >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100*"/>
@@ -188,7 +188,8 @@
                                     <Button Style="{StaticResource SetButton}"    Content="{x:Static lang:Resources.Delete}" Click="DelSqlite"  />
                                     <Button  Style="{StaticResource SetButton}"   Content="{x:Static lang:Resources.Rename}"   Click="RenameSqlite"   />
                                     <Button  Style="{StaticResource SetButton}"   Content="{x:Static lang:Resources.SetPassword}"  Visibility="Collapsed"   />
-                                    <Button  Style="{StaticResource SetButton}"   Content="{x:Static lang:Resources.SetDefaultToOpen}" Click="Button_Click"  />
+                                    <Button  Style="{StaticResource SetButton}"   Content="{x:Static lang:Resources.SetDefaultToOpen}" Click="SetAsDefault" Visibility="Visible"  />
+                                    <Button  Style="{StaticResource SetButton}"   Content="{x:Static lang:Resources.OpenPath}"   Click="OpenPath"   />
                                 </StackPanel>
                             </Grid>
                         </Popup>
@@ -219,7 +220,7 @@
                                                     <TextBox Cursor="Hand" TextAlignment="Left" Width="180" Height="auto"  KeyUp="TextBox_KeyUp" LostFocus="TextBox_LostFocus"  IsReadOnly="True" Text="{Binding .,Mode=TwoWay}" Margin="5" Grid.Row="1" Style="{StaticResource BaseTextBox}" VerticalAlignment="Center" FontSize="20" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
                                                 </StackPanel>
                                                 <Border  Grid.Column="1"  Style="{StaticResource OptionBorderStyle}" Background="{DynamicResource BackgroundSide}"  Height="20"  Width="auto" Margin="4 0"  VerticalAlignment="Top" Cursor="Hand" MouseLeftButtonUp="Image_MouseLeftButtonUp">
-                                                    <Image Source="pack://application:,,,/Resources/Image/StartUp/选项.png" Width="15" Margin="2"  />
+                                                    <Image x:Name="optionImage" Source="pack://application:,,,/Resources/Image/StartUp/选项.png" Width="15" Margin="2"  />
                                                 </Border>
 
                                             </Grid>
