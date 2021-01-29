@@ -15,7 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using static Jvedio.FileProcess;
-
+using static Jvedio.GlobalMethod;
 namespace Jvedio
 {
     /// <summary>
@@ -450,7 +450,7 @@ namespace Jvedio
             await Task.Run(() => { Task.Delay(500).Wait(); });
 
             Main main = null;
-            Window window = Jvedio.GetWindow.Get("Main");
+            Window window = GetWindowByName("Main");
             if (window != null) main = (Main)window;
             main?.vieModel.Reset();
 

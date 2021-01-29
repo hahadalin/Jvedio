@@ -16,6 +16,7 @@ using System.Threading;
 using System.IO;
 using System.Windows.Threading;
 using System.Diagnostics;
+using static Jvedio.GlobalMethod;
 using static Jvedio.GlobalVariable;
 using System.Windows.Input;
 using System.Drawing;
@@ -977,7 +978,7 @@ namespace Jvedio.ViewModel
 
         private void AddSingleMovie()
         {
-            Dialog_NewMovie dialog_NewMovie = new Dialog_NewMovie((Main)Jvedio.GetWindow.Get("Main"));
+            Dialog_NewMovie dialog_NewMovie = new Dialog_NewMovie((Main)GetWindowByName("Main"));
             var b= (bool)dialog_NewMovie.ShowDialog();
             NewMovieDialogResult result=dialog_NewMovie.Result;
 

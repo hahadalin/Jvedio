@@ -28,6 +28,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static Jvedio.GlobalMethod;
 using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
 using System.Windows.Media.Effects;
@@ -1238,7 +1239,7 @@ namespace Jvedio
 
         private void OpenDataBase(object sender, RoutedEventArgs e)
         {
-            if (!(Jvedio.GetWindow.Get("Window_DBManagement") is Window_DBManagement window_DBManagement))
+            if (!(GetWindowByName("Window_DBManagement") is Window_DBManagement window_DBManagement))
                 window_DBManagement = new Window_DBManagement();
 
 
@@ -3003,9 +3004,9 @@ namespace Jvedio
                         });
 
                         //从详情窗口删除
-                        if (Jvedio.GetWindow.Get("WindowDetails") != null)
+                        if (GetWindowByName("WindowDetails") != null)
                         {
-                            WindowDetails windowDetails = Jvedio.GetWindow.Get("WindowDetails") as WindowDetails;
+                            WindowDetails windowDetails = GetWindowByName("WindowDetails") as WindowDetails;
                             foreach (var item in vieModel.SelectedMovie.ToList())
                             {
                                 if (windowDetails.vieModel.DetailMovie.id == item.id)
@@ -3075,9 +3076,9 @@ namespace Jvedio
                     });
 
                     //从详情窗口删除
-                    if (Jvedio.GetWindow.Get("WindowDetails") != null)
+                    if (GetWindowByName("WindowDetails") != null)
                     {
-                        WindowDetails windowDetails = Jvedio.GetWindow.Get("WindowDetails") as WindowDetails;
+                        WindowDetails windowDetails = GetWindowByName("WindowDetails") as WindowDetails;
                         foreach (var item in vieModel.SelectedMovie.ToList())
                         {
                             if (windowDetails.vieModel.DetailMovie.id == item.id)
@@ -5965,9 +5966,9 @@ namespace Jvedio
                         });
                     dB.Close();
                     //从详情窗口删除
-                    if (Jvedio.GetWindow.Get("WindowDetails") != null)
+                    if (GetWindowByName("WindowDetails") != null)
                     {
-                        WindowDetails windowDetails = Jvedio.GetWindow.Get("WindowDetails") as WindowDetails;
+                        WindowDetails windowDetails = GetWindowByName("WindowDetails") as WindowDetails;
                         foreach (var item in vieModel.SelectedMovie.ToList())
                         {
                             if (windowDetails.vieModel.DetailMovie.id == item.id)
@@ -6016,7 +6017,7 @@ namespace Jvedio
 
         private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (!(Jvedio.GetWindow.Get("LoadActorMovies") is LoadActorMovies loadActorMovies))
+            if (!(GetWindowByName("LoadActorMovies") is LoadActorMovies loadActorMovies))
                 loadActorMovies = new LoadActorMovies();
             loadActorMovies.Show();
         }
@@ -6078,392 +6079,6 @@ namespace Jvedio
     }
 
 
-    public class DownLoadProgress
-    {
-        public double maximum = 0;
-        public double value = 0;
-        public object lockobject;
-
-    }
-
-
-    public class BiggerWidthConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null) return 0;
-            double width = 0;
-            double.TryParse(value.ToString(), out width);
-            return width;
-
-        }
-
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return null;
-        }
-
-
-    }
-
-
-    public class BoolToVisibilityConverter : IValueConverter
-    {
-        //数字转换为选中项的地址
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if ((bool)value) return Visibility.Visible; else return Visibility.Collapsed;
-        }
-
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return null;
-        }
-
-
-    }
-
-    public class IntToCheckedConverter : IValueConverter
-    {
-        //数字转换为选中项的地址
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null | parameter == null) { return false; }
-            int intparameter = int.Parse(parameter.ToString());
-            if ((int)value == intparameter)
-                return true;
-            else
-                return false;
-        }
-
-        //选中项地址转换为数字
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null | parameter == null) return 0;
-            int intparameter = int.Parse(parameter.ToString());
-            return intparameter;
-        }
-
-
-    }
-
-
-    public class StringToCheckedConverter : IValueConverter
-    {
-        //判断是否相同
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value.ToString() == parameter.ToString()) { return true; } else { return false; }
-        }
-
-        //选中项地址转换为数字
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return parameter.ToString();
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-    public class ViewTypeEnumConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null)
-                return false;
-
-            ViewType myViewType = ViewType.默认;
-            Enum.TryParse<ViewType>(value.ToString(), out myViewType);
-
-            return myViewType.ToString() == parameter.ToString();
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return (bool)value ? Enum.Parse(typeof(ViewType), parameter.ToString(), true) : null;
-        }
-    }
-
-
-
-
-
-    public class WidthToMarginConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null || double.Parse(value.ToString())<=0) return
-                    150;
-            else
-                return double.Parse(value.ToString()) - 40;
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-    public class StringToUriStringConverterMain : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value.ToString() == "黑色")
-                return $"Resources/Skin/black/{parameter}.png";
-            else if (value.ToString() == "白色")
-                return $"Resources/Skin/white/{parameter}.png";
-            else if (value.ToString() == "蓝色")
-                return $"Resources/Skin/black/{parameter}.png";
-            else
-                return $"Resources/Skin/black/{parameter}.png";
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-    public class StringToUriStringConverterOther : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value.ToString() == "黑色")
-                return $"pack://application:,,,/Resources/Skin/black/{parameter}.png";
-            else if (value.ToString() == "白色")
-                return $"pack://application:,,,/Resources/Skin/white/{parameter}.png";
-            else if (value.ToString() == "蓝色")
-                return $"pack://application:,,,/Resources/Skin/black/{parameter}.png";
-            else
-                return $"pack://application:,,,/Resources/Skin/black/{parameter}.png";
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-    public class ImageTypeEnumConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null)
-                return false;
-            return (((MyImageType)value).ToString() == parameter.ToString());
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return (bool)value ? Enum.Parse(typeof(MyImageType), parameter.ToString(), true) : null;
-        }
-    }
-
-
-
-
-    public class StringToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value.ToString() == "2")
-                return Visibility.Visible;
-            else
-                return Visibility.Collapsed;
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-
-
-
-
-
-
-    public class MovieStampTypeToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (!Properties.Settings.Default.DisplayStamp) return Visibility.Hidden;
-
-            if (value == null)
-            {
-                return Visibility.Hidden;
-            }
-            else
-            {
-                MovieStampType movieStampType = (MovieStampType)value;
-                if (movieStampType == MovieStampType.无)
-                {
-                    return Visibility.Hidden;
-                }
-                else
-                {
-                    return Visibility.Visible;
-                }
-
-
-            }
-
-
-
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-
-    public static class GetWindow
-    {
-        public static Window Get(string name)
-        {
-            foreach (Window window in App.Current.Windows)
-            {
-                if (window.GetType().Name == name) return window;
-            }
-            return null;
-        }
-    }
-
-
-
-
-    public class CloseEventArgs : EventArgs
-    {
-        public bool IsExitApp = true;
-    }
-
-    public static class GetBounds
-    {
-        public static Rect BoundsRelativeTo(this FrameworkElement element, Visual relativeTo)
-        {
-            return element.TransformToVisual(relativeTo).TransformBounds(new Rect(element.RenderSize));
-        }
-
-        public static T GetVisualChild<T>(DependencyObject parent) where T : Visual
-        {
-            T child = default(T);
-
-            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < numVisuals; i++)
-            {
-                Visual v = (Visual)VisualTreeHelper.GetChild(parent, i);
-                child = v as T;
-                if (child == null)
-                {
-                    child = GetVisualChild<T>(v);
-                }
-                if (child != null)
-                {
-                    break;
-                }
-            }
-            return child;
-        }
-
-
-    }
-
-
-
-    public class PlusToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value.ToString() == " + ")
-                return Visibility.Collapsed;
-            else
-                return Visibility.Visible;
-
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-
-    public class LabelToListConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null) return " + ";
-            List<string> result = value.ToString().Split(' ').ToList();
-            result.Insert(0, " + ");
-            return result;
-
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null) return "";
-            List<string> vs = value as List<string>;
-            vs.Remove(" + ");
-            return string.Join(" ", vs);
-        }
-    }
-
-    public class TagStampsConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null || parameter == null) return Visibility.Collapsed;
-
-            Console.WriteLine(value.ToString());
-
-            if (value.ToString().IndexOf(parameter.ToString().ToTagString()) >= 0)
-                return Visibility.Visible;
-            else
-                return Visibility.Collapsed;
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-
-    public class FontFamilyConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-
-            if (value == null || value.ToString() == "") return "宋体";
-
-            return value.ToString();
-
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-    public class LabelMenuItem
-    {
-        public string Header { get; set; }
-    }
 
 
 }

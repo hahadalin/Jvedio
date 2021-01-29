@@ -222,7 +222,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Library\BaseClass.cs" />
+    <Compile Include="Library\Converter.cs" />
     <Compile Include="Library\FileProcess\FileProcess.cs" />
+    <Compile Include="Library\GlobalMethod.cs" />
     <Compile Include="Library\ImageAndVedio\MediaParse.cs" />
     <Compile Include="Config\RecentWatchedConfig.cs" />
     <Compile Include="Config\ServerConfig.cs" />

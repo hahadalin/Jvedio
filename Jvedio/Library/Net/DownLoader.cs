@@ -164,6 +164,15 @@ namespace Jvedio
 
     }
 
+
+    public class DownLoadProgress
+    {
+        public double maximum = 0;
+        public double value = 0;
+        public object lockobject;
+
+    }
+
     public class InfoUpdateEventArgs : EventArgs
     {
         public bool Success = false;

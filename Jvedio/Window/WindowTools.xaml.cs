@@ -14,7 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
 using static Jvedio.FileProcess;
-
+using static Jvedio.GlobalMethod;
 
 namespace Jvedio
 {
@@ -495,7 +495,7 @@ namespace Jvedio
         {
             bool result = false;
             Main main = null;
-            Window window = Jvedio.GetWindow.Get("Main");
+            Window window = GetWindowByName("Main");
             if (window != null) main = (Main)window;
 
 
@@ -654,7 +654,7 @@ namespace Jvedio
 
         private void InsertOneMovie(object sender, RoutedEventArgs e)
         {
-            Window window = Jvedio.GetWindow.Get("WindowEdit");
+            Window window = GetWindowByName("WindowEdit");
             WindowEdit windowEdit;
             if (window != null) { windowEdit = (WindowEdit)window; windowEdit.Close(); }
             windowEdit = new WindowEdit();
@@ -825,29 +825,4 @@ namespace Jvedio
         }
     }
 
-    public class IntToVisibility : IValueConverter
-    {
-        //数字转换为选中项的地址
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            int v = int.Parse(value.ToString());
-            if (v <= 0)
-            {
-                return Visibility.Visible;
-            }
-            else
-            {
-                return Visibility.Hidden;
-            }
-        }
-
-        //选中项地址转换为数字
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return null;
-        }
-
-
-    }
 }

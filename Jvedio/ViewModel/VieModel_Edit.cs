@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-
+using static Jvedio.GlobalMethod;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 using System.IO;
@@ -103,7 +103,7 @@ namespace Jvedio.ViewModel
 
         public bool SaveModel(string ID="")
         {
-            string table = ((Main)Jvedio.GetWindow.Get("Main")).GetCurrentList();
+            string table = ((Main)GetWindowByName("Main")).GetCurrentList();
 
 
             if (ID == "" && DetailMovie != null && DetailMovie.id.ToUpper() == id.ToUpper())

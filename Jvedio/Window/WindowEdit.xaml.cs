@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using static Jvedio.FileProcess;
-
+using static Jvedio.GlobalMethod;
 namespace Jvedio
 {
     /// <summary>
@@ -63,9 +63,9 @@ namespace Jvedio
 
         private void UpdateDetail()
         {
-            if (Jvedio.GetWindow.Get("WindowDetails") != null)
+            if (GetWindowByName("WindowDetails") != null)
             {
-                WindowDetails windowDetails = Jvedio.GetWindow.Get("WindowDetails") as WindowDetails;
+                WindowDetails windowDetails = GetWindowByName("WindowDetails") as WindowDetails;
                 windowDetails.vieModel.Query(vieModel.DetailMovie.id);
             }
         }
@@ -73,7 +73,7 @@ namespace Jvedio
 
         public Movie SelectMovie(string ID)
         {
-            string table = ((Main)Jvedio.GetWindow.Get("Main")).GetCurrentList();
+            string table = ((Main)GetWindowByName("Main")).GetCurrentList();
             if (string.IsNullOrEmpty(table))
             {
                 return DataBase.SelectMovieByID(ID); ;
@@ -227,7 +227,7 @@ namespace Jvedio
 
                vieModel.SaveModel();
 
-                string table = ((Main)Jvedio.GetWindow.Get("Main")).GetCurrentList();
+                string table = ((Main)GetWindowByName("Main")).GetCurrentList();
                 if (string.IsNullOrEmpty(table))
                     vieModel.Query(vieModel.id);
                 else
@@ -246,27 +246,6 @@ namespace Jvedio
         }
     }
 
-    public class BitToGBConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (value == null) return "0 GB";
-
-            //保留2位小数
-            double.TryParse(value.ToString(), out double filesize);
-
-            filesize = filesize / 1024 / 1024 / 1024;//GB
-            if (filesize >= 0.9)
-                return $"{Math.Round(filesize, 2)} GB";//GB
-            else
-                return $"{Math.Ceiling(filesize * 1024)} MB";//MB
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
+   
 
 }
