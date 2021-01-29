@@ -40,6 +40,9 @@ namespace Jvedio
             ct = cts.Token;
             Running = false;
             TabControl.SelectedIndex = Properties.Settings.Default.ToolsIndex;
+
+            StatusTextBlock.Visibility = Visibility.Hidden;
+            LoadingStackPanel.Visibility = Visibility.Hidden;
         }
 
         public void ShowAccessPath(object sender, RoutedEventArgs e)
@@ -92,19 +95,16 @@ namespace Jvedio
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
             folderBrowserDialog.ShowNewFolderButton = false;
-            //folderBrowserDialog.SelectedPath = @"D:\2020\VS Project\Jvedio\Jvedio(WPF)\Jvedio\Jvedio\bin\番号测试";
             if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
             {
-                bool PathConflict = false;
-                foreach (var item in vieModel.ScanPath)
-                {
-                    if (folderBrowserDialog.SelectedPath.IndexOf(item) >= 0 | item.IndexOf(folderBrowserDialog.SelectedPath) >= 0)
-                    {
-                        PathConflict = true;
-                        break;
+                    if (!vieModel.ScanPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.ScanPath.IsIntersectWith(folderBrowserDialog.SelectedPath)) 
+                    { 
+                        vieModel.ScanPath.Add(folderBrowserDialog.SelectedPath); 
+                    } else {
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl");
                     }
-                }
-                if (!PathConflict) { vieModel.ScanPath.Add(folderBrowserDialog.SelectedPath); } else { new Msgbox(this, Jvedio.Language.Resources.Message_PathConflict).ShowDialog(); }
+
+                
 
             }
 
@@ -138,16 +138,11 @@ namespace Jvedio
             folderBrowserDialog.ShowNewFolderButton = true;
             if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
             {
-                bool PathConflict = false;
-                foreach (var item in vieModel.ScanEuPath)
-                {
-                    if (folderBrowserDialog.SelectedPath.IndexOf(item) >= 0 | item.IndexOf(folderBrowserDialog.SelectedPath) >= 0)
-                    {
-                        PathConflict = true;
-                        break;
-                    }
+                if (!vieModel.ScanEuPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.ScanEuPath.IsIntersectWith(folderBrowserDialog.SelectedPath)) { 
+                    vieModel.ScanEuPath.Add(folderBrowserDialog.SelectedPath);
+                } else {
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl");
                 }
-                if (!PathConflict) { vieModel.ScanEuPath.Add(folderBrowserDialog.SelectedPath); } else { new Msgbox(this, Jvedio.Language.Resources.Message_PathConflict).ShowDialog(); }
 
             }
 
@@ -185,16 +180,13 @@ namespace Jvedio
             folderBrowserDialog.SelectedPath = Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "DownLoad\\NFO") ? AppDomain.CurrentDomain.BaseDirectory + "DownLoad\\NFO" : AppDomain.CurrentDomain.BaseDirectory;
             if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
             {
-                bool PathConflict = false;
-                foreach (var item in vieModel.NFOScanPath)
-                {
-                    if (folderBrowserDialog.SelectedPath.IndexOf(item) >= 0 | item.IndexOf(folderBrowserDialog.SelectedPath) >= 0)
-                    {
-                        PathConflict = true;
-                        break;
-                    }
+                if (!vieModel.NFOScanPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.NFOScanPath.IsIntersectWith(folderBrowserDialog.SelectedPath)) 
+                { 
+                    vieModel.NFOScanPath.Add(folderBrowserDialog.SelectedPath); 
+                } else 
+                { 
+                    HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl"); 
                 }
-                if (!PathConflict) { vieModel.NFOScanPath.Add(folderBrowserDialog.SelectedPath); } else { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_PathConflict, "ToolsGrowl"); }
 
             }
 
@@ -684,16 +676,14 @@ namespace Jvedio
             {
                 if (!IsFile(dragdropFile))
                 {
-                    bool PathConflict = false;
-                    foreach (var path in vieModel.ScanPath)
-                    {
-                        if (dragdropFile.IndexOf(path) >= 0 | path.IndexOf(dragdropFile) >= 0)
-                        {
-                            PathConflict = true;
-                            break;
+                        if (!vieModel.ScanPath.Contains(dragdropFile) && !vieModel.ScanPath.IsIntersectWith(dragdropFile)) 
+                        { 
+                            vieModel.ScanPath.Add(dragdropFile);
                         }
-                    }
-                    if (!PathConflict) { vieModel.ScanPath.Add(dragdropFile); }
+                        else
+                        {
+                            HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl");
+                        }
                 }
             }
         }
@@ -734,16 +724,14 @@ namespace Jvedio
             {
                 if (!IsFile(dragdropFile))
                 {
-                    bool PathConflict = false;
-                    foreach (var path in vieModel.NFOScanPath)
-                    {
-                        if (dragdropFile.IndexOf(path) >= 0 | path.IndexOf(dragdropFile) >= 0)
-                        {
-                            PathConflict = true;
-                            break;
-                        }
+                    if (!vieModel.NFOScanPath.Contains(dragdropFile) && !vieModel.NFOScanPath.IsIntersectWith(dragdropFile)) 
+                    { 
+                        vieModel.NFOScanPath.Add(dragdropFile);
                     }
-                    if (!PathConflict) { vieModel.NFOScanPath.Add(dragdropFile); }
+                    else
+                    {
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl");
+                    }
                 }
             }
         }
@@ -784,16 +772,14 @@ namespace Jvedio
             {
                 if (!IsFile(dragdropFile))
                 {
-                    bool PathConflict = false;
-                    foreach (var path in vieModel.ScanEuPath)
+                    if (!vieModel.ScanEuPath.Contains(dragdropFile) && !vieModel.ScanEuPath.IsIntersectWith(dragdropFile))
                     {
-                        if (dragdropFile.IndexOf(path) >= 0 | path.IndexOf(dragdropFile) >= 0)
-                        {
-                            PathConflict = true;
-                            break;
-                        }
+                        vieModel.ScanEuPath.Add(dragdropFile);
                     }
-                    if (!PathConflict) { vieModel.ScanEuPath.Add(dragdropFile); }
+                    else
+                    {
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl");
+                    }
                 }
             }
         }

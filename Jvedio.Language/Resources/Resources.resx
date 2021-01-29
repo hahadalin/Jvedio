@@ -1227,4 +1227,7 @@
   <data name="FilePathIntersection" xml:space="preserve">
     <value>文件夹存在交集或文件夹已在当前集合中</value>
   </data>
+  <data name="Scanning" xml:space="preserve">
+    <value>扫描中……</value>
+  </data>
 </root>

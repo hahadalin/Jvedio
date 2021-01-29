@@ -22,70 +22,35 @@
         >
 
     <Window.Resources>
-
-
-
         <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
         <local:IntToVisibility x:Key="IntToVisibility"/>
 
-        <Style x:Key="ToolsBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="Transparent"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
-                </Trigger>
-            </Style.Triggers>
+        <Style x:Key="DropBorderStyle" TargetType="Border">
+            <Setter Property="AllowDrop" Value="True"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Margin" Value="20 0"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
+                        <DrawingBrush.Drawing>
+                            <DrawingGroup>
+                                <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
+                                    <GeometryDrawing.Geometry>
+                                        <GeometryGroup>
+                                            <RectangleGeometry Rect="0,0,50,50" />
+                                            <RectangleGeometry Rect="50,50,50,50" />
+                                        </GeometryGroup>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Setter.Value>
+            </Setter>
         </Style>
-
-
-        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="20 5"/>
-        </Style>
-
-
-
-        <Style x:Key="BaseTextBox" TargetType="{x:Type TextBox}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-            <Setter Property="Height" Value="auto"/>
-            <Setter Property="TextAlignment" Value="Left"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="CaretBrush" Value="{DynamicResource ForegroundSearch}"/>
-        </Style>
-
-        <Style TargetType="TextBox" BasedOn="{StaticResource BaseTextBox}"/>
-
-        <Style x:Key="NFOSPShow1" TargetType="StackPanel">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=NfoRB1,Path=IsChecked}" Value="True">
-                    <Setter Property="Visibility" Value="Visible"></Setter>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=NfoRB1,Path=IsChecked}" Value="False">
-                    <Setter Property="Visibility" Value="Collapsed"></Setter>
-                </DataTrigger>
-
-            </Style.Triggers>
-
-
-        </Style>
-
-        <Style x:Key="NFOSPShow2" TargetType="Grid">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=NfoRB2,Path=IsChecked}" Value="True">
-                    <Setter Property="Visibility" Value="Visible"></Setter>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ElementName=NfoRB2,Path=IsChecked}" Value="False">
-                    <Setter Property="Visibility" Value="Collapsed"></Setter>
-                </DataTrigger>
-
-            </Style.Triggers>
-
-
-        </Style>
-        
 
 
     </Window.Resources>
@@ -127,7 +92,7 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
 
-                                <StackPanel Orientation="Horizontal" Margin="0 10"  >
+                                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left"  >
 
                                     <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="AddPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
@@ -170,23 +135,7 @@
                                 
                                
                             </Grid>
-                            <Border Background="{DynamicResource BackgroundMain}" AllowDrop="True" DragOver="AccessPathTextBox_DragOver" Drop="AccessPathTextBox_Drop" BorderThickness="2" CornerRadius="5"  Margin="20 0" HorizontalAlignment="Left">
-                                <Border.BorderBrush>
-                                    <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
-                                        <DrawingBrush.Drawing>
-                                            <DrawingGroup>
-                                                <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
-                                                    <GeometryDrawing.Geometry>
-                                                        <GeometryGroup>
-                                                            <RectangleGeometry Rect="0,0,50,50" />
-                                                            <RectangleGeometry Rect="50,50,50,50" />
-                                                        </GeometryGroup>
-                                                    </GeometryDrawing.Geometry>
-                                                </GeometryDrawing>
-                                            </DrawingGroup>
-                                        </DrawingBrush.Drawing>
-                                    </DrawingBrush>
-                                </Border.BorderBrush>
+                            <Border Style="{StaticResource DropBorderStyle}"   DragOver="AccessPathTextBox_DragOver" Drop="AccessPathTextBox_Drop" >
 
                                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="auto">
 
@@ -209,8 +158,8 @@
                         <StackPanel>
 
                             <TabControl x:Name="NFOTabControl" Background="Transparent"  TabStripPlacement="Left" Style="{DynamicResource BaseHcTabControlStyle}">
-                                <TabItem Background="Transparent" Header="{x:Static lang:Resources.ScanFolder}"   Height="30" VerticalAlignment="Top" MinWidth="150" Width="auto" >
-                                    <Grid MinHeight="350" Background="Transparent" >
+                                <TabItem Background="Transparent" Header="{x:Static lang:Resources.ScanFolder}"     MinWidth="150"  >
+                                    <Grid MinHeight="350"  >
                                         <StackPanel    Orientation="Vertical"  Margin="20">
 
                                             <ListBox AllowDrop="True" DragOver="NFOPathListBox_DragOver" Drop="NFOPathListBox_Drop"  ItemsSource="{Binding NFOScanPath}" x:Name="NFOPathListBox"  Height="250" Background="Transparent" >
@@ -229,7 +178,7 @@
                                                 </ListBox.ItemTemplate>
                                             </ListBox>
 
-                                            <StackPanel Orientation="Horizontal" Margin="0 10" >
+                                            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left" >
 
                                                 <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="AddNFOPath">
                                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
@@ -247,7 +196,7 @@
 
                                     </Grid>
                                 </TabItem>
-                                <TabItem      Background="Transparent" Header="{x:Static lang:Resources.ImportSingleNFO}" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top"  MinWidth="150"  Width="auto">
+                                <TabItem      Background="Transparent" Header="{x:Static lang:Resources.ImportSingleNFO}"  MinWidth="150"  >
                                     <StackPanel MinHeight="350" Background="Transparent" Orientation="Vertical">
                                         <Grid   Visibility="Visible"   >
 
@@ -265,23 +214,7 @@
 
                                         </Grid>
 
-                                        <Border Background="{DynamicResource BackgroundMain}" x:Name="SingleNFOBorder" AllowDrop="True" DragOver="SingleNFOBorder_DragOver" Drop="SingleNFOBorder_Drop" BorderThickness="2" CornerRadius="5"  Margin="20 0"  HorizontalAlignment="Left">
-                                            <Border.BorderBrush>
-                                                <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
-                                                    <DrawingBrush.Drawing>
-                                                        <DrawingGroup>
-                                                            <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
-                                                                <GeometryDrawing.Geometry>
-                                                                    <GeometryGroup>
-                                                                        <RectangleGeometry Rect="0,0,50,50" />
-                                                                        <RectangleGeometry Rect="50,50,50,50" />
-                                                                    </GeometryGroup>
-                                                                </GeometryDrawing.Geometry>
-                                                            </GeometryDrawing>
-                                                        </DrawingGroup>
-                                                    </DrawingBrush.Drawing>
-                                                </DrawingBrush>
-                                            </Border.BorderBrush>
+                                        <Border x:Name="SingleNFOBorder"  DragOver="SingleNFOBorder_DragOver" Drop="SingleNFOBorder_Drop"  Style="{StaticResource DropBorderStyle}">
 
 
                                             <StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="auto">
@@ -297,7 +230,7 @@
                                 </TabItem>
                             </TabControl>
 
-                            <CheckBox  x:Name="NFOCopyPicture" Content="{x:Static lang:Resources.CopyNFOImage}" Margin="40 0"></CheckBox>
+                            <CheckBox  x:Name="NFOCopyPicture" Content="{x:Static lang:Resources.CopyNFOImage}" Margin="40 0" HorizontalAlignment="Left"/>
 
 
                         </StackPanel>
@@ -307,7 +240,7 @@
                     <Grid Background="Transparent">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Vertical"  >
-                                <ListBox AllowDrop="True" DragOver="EuropePathListBox_DragOver" Drop="EuropePathListBox_Drop"  ItemsSource="{Binding ScanEuPath}" x:Name="EuropePathListBox"  Height="250" Margin="20" Background="Transparent" >
+                                <ListBox AllowDrop="True" DragOver="EuropePathListBox_DragOver" Drop="EuropePathListBox_Drop"  ItemsSource="{Binding ScanEuPath}" x:Name="EuropePathListBox"  Height="250" Margin="20 20 20 5" Background="Transparent" >
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Orientation="Vertical"/>
@@ -323,7 +256,7 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
 
-                                <StackPanel Orientation="Horizontal" Margin="20 0" >
+                                <StackPanel Orientation="Horizontal" Margin="25 5" HorizontalAlignment="Left" >
 
                                     <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="AddEuPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
@@ -341,7 +274,11 @@
 
 
                             </StackPanel>
-                            <TextBlock Text="{x:Static lang:Resources.Attention_EuropeScan}" TextWrapping="Wrap" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Margin="20 5"/>
+
+                            <Border Margin="20 5" Style="{StaticResource BorderTipInfo}" Background="{DynamicResource BackgroundMenu}">
+                                <TextBlock Text="{x:Static lang:Resources.Attention_EuropeScan}" TextWrapping="Wrap" Foreground="{DynamicResource ForegroundGlobal}"/>
+                            </Border>
+
 
 
                         </StackPanel>
@@ -365,23 +302,7 @@
                             </Grid>
 
 
-                            <Border x:Name="UNCPathBorder" AllowDrop="True" Drop="UNCPathBorder_Drop" DragOver="UNCPathBorder_DragOver"  BorderThickness="2"  Margin="20 0"  CornerRadius="5" HorizontalAlignment="Left">
-                                <Border.BorderBrush>
-                                    <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
-                                        <DrawingBrush.Drawing>
-                                            <DrawingGroup>
-                                                <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
-                                                    <GeometryDrawing.Geometry>
-                                                        <GeometryGroup>
-                                                            <RectangleGeometry Rect="0,0,50,50" />
-                                                            <RectangleGeometry Rect="50,50,50,50" />
-                                                        </GeometryGroup>
-                                                    </GeometryDrawing.Geometry>
-                                                </GeometryDrawing>
-                                            </DrawingGroup>
-                                        </DrawingBrush.Drawing>
-                                    </DrawingBrush>
-                                </Border.BorderBrush>
+                            <Border x:Name="UNCPathBorder"  Drop="UNCPathBorder_Drop" DragOver="UNCPathBorder_DragOver"   Style="{StaticResource DropBorderStyle}">
                                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="auto">
 
                                     <fa:ImageAwesome Icon="Folder" Foreground="{DynamicResource ForegroundSearch}" Width="20" Height="20" Margin="20 10"/>
@@ -409,26 +330,14 @@
 
             <Grid  Grid.Row="1" >
 
-                <TextBlock x:Name="StatusTextBlock" Visibility="Hidden" Text="扫描中……" Style="{StaticResource TextBlockStyle}" HorizontalAlignment="Stretch" Margin="120 0 280 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"/>
-                <StackPanel Visibility="Hidden" x:Name="LoadingStackPanel"  Margin="240 10" Orientation="Horizontal" HorizontalAlignment="Right" Height="20">
-                    <StackPanel.Triggers>
-                        <EventTrigger RoutedEvent="Rectangle.Loaded">
-                            <BeginStoryboard>
-                                <Storyboard Name="waitingAnimation" RepeatBehavior="Forever">
-                                    <DoubleAnimation Storyboard.TargetName="Dot1" BeginTime="0:0:0.1" Storyboard.TargetProperty="Opacity" From=".1" To="1" AutoReverse="True" Duration="0:0:0.4"/>
-                                    <DoubleAnimation Storyboard.TargetName="Dot2" BeginTime="0:0:0.2" Storyboard.TargetProperty="Opacity" From=".1" To="1" AutoReverse="True" Duration="0:0:0.4"/>
-                                    <DoubleAnimation Storyboard.TargetName="Dot3" BeginTime="0:0:0.3" Storyboard.TargetProperty="Opacity" From=".1" To="1" AutoReverse="True" Duration="0:0:0.4"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </StackPanel.Triggers>
-                    <Ellipse Name="Dot1" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8"/>
-                    <Ellipse Name="Dot2" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8" Margin="2,0,0,0"/>
-                    <Ellipse Name="Dot3" Fill="{DynamicResource ForegroundSearch}" Opacity=".1" Width="8" Height="8" Margin="2,0,0,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button   Content="{x:Static lang:Resources.ViewLog}"  Style="{StaticResource ButtonStyleFill}" Margin="5" Click="ShowRunInfo" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="StatusTextBlock" Foreground="{DynamicResource ForegroundSearch}" FontSize="20" VerticalAlignment="Center" Margin="20 5" Visibility="Visible" Text="{x:Static lang:Resources.Scanning}"  HorizontalAlignment="Stretch"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"/>
+                    <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}" Height="30"  x:Name="LoadingStackPanel"/>
                 </StackPanel>
-                <Button  Content="{x:Static lang:Resources.Run}"   Style="{StaticResource ButtonStyleFill}" Margin="5" Click="StartRun"/>
+                 <Button  Content="{x:Static lang:Resources.Run}"   Style="{StaticResource ButtonStyleFill}" Margin="5" Click="StartRun"/>
                 <Button  Content="{x:Static lang:Resources.Stop}"   Style="{StaticResource ButtonStyleFill}" Margin="120 5" Click="CancelRun"/>
-                <Button   Content="{x:Static lang:Resources.ViewLog}"  Style="{StaticResource ButtonStyleFill}" Margin="5" Click="ShowRunInfo" HorizontalAlignment="Left"/>
+
             </Grid>
         </Grid>
 

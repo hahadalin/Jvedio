@@ -2491,6 +2491,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 扫描中…… 的本地化字符串。
+        /// </summary>
+        public static string Scanning {
+            get {
+                return ResourceManager.GetString("Scanning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 主界面刷新时同时扫描影片 的本地化字符串。
         /// </summary>
         public static string ScanWhenRefresh {
