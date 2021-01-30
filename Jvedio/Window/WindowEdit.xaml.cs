@@ -214,11 +214,9 @@ namespace Jvedio
                 string id = Identify.GetFanhao(fileInfo.Name);
                 int vt = (int)Identify.GetVedioType(id);
                 if(vt>0)  vieModel.DetailMovie.vediotype = vt;
-                if (File.Exists(filepath)) { 
-                    
-                    vieModel.DetailMovie.filesize = fileInfo.Length;
+                if (File.Exists(filepath)) {
                     string createDate = "";
-                    try { createDate = fileInfo.CreationTime.ToString("yyyy-MM-dd HH:mm:ss"); }
+                    try { createDate = fileInfo.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss"); }
                     catch { }
                     if (createDate == "") createDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     vieModel.DetailMovie.otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");

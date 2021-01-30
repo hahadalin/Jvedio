@@ -20,57 +20,8 @@
 
         <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
         <local:IntToCheckedConverter x:Key="IntToCheckedConverter" />
-
         <local:BitToGBConverter x:Key="BitToGBConverter" />
 
-        <Style x:Key="SearchTextGrid" TargetType="Border">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}},Path=IsMouseOver}" Value="True">
-                    <Setter Property="BorderBrush" Value="{DynamicResource ForegroundSearch}"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}},Path=IsMouseOver}" Value="False">
-                    <Setter Property="Background" Value="Transparent"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-
-        <Style x:Key="Ellipse" TargetType="Ellipse">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Canvas}},Path=IsMouseOver}" Value="True">
-                    <Setter Property="Fill" Value="{DynamicResource ForegroundSearch}"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Canvas}},Path=IsMouseOver}" Value="False">
-                    <Setter Property="Fill" Value="{DynamicResource ForegroundGlobal}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="Line" TargetType="Line">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Canvas}},Path=IsMouseOver}" Value="True">
-                    <Setter Property="Stroke" Value="{DynamicResource ForegroundSearch}"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Canvas}},Path=IsMouseOver}" Value="False">
-                    <Setter Property="Stroke" Value="{DynamicResource ForegroundGlobal}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="SearchTextBox" TargetType="TextBox">
-
-            <Style.Triggers>
-                <Trigger Property="IsFocused" Value="True">
-                    <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-                    <Setter Property="FontStyle" Value="Normal"/>
-                </Trigger>
-                <Trigger Property="IsFocused" Value="False">
-                    <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
-                    <Setter Property="FontStyle" Value="Italic"/>
-                </Trigger>
-            </Style.Triggers>
-
-        </Style>
 
         <Style x:Key="BaseHCTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBaseBaseStyle}">
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -194,23 +145,7 @@
                             <hc:TextBox  Grid.Column="1"     Text="{Binding DetailMovie.filepath}"  Style="{StaticResource BaseHCTextBox}" />
                             <Button Grid.Column="2"  HorizontalAlignment="Right" Width="auto" Height="auto" Content="{x:Static lang:Resources.ChooseFile}" Click="ChoseMovie" Style="{StaticResource ButtonStyleFill}" />
 
-                            <Border Grid.Column="3" AllowDrop="True" x:Name="ChoseMovieBorder" DragOver="ChoseMovieBorder_DragOver" Drop="ChoseMovieBorder_Drop" Margin="5 0"   BorderThickness="2" CornerRadius="5"  Width="auto" HorizontalAlignment="Right">
-                                <Border.BorderBrush>
-                                    <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
-                                        <DrawingBrush.Drawing>
-                                            <DrawingGroup>
-                                                <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
-                                                    <GeometryDrawing.Geometry>
-                                                        <GeometryGroup>
-                                                            <RectangleGeometry Rect="0,0,50,50" />
-                                                            <RectangleGeometry Rect="50,50,50,50" />
-                                                        </GeometryGroup>
-                                                    </GeometryDrawing.Geometry>
-                                                </GeometryDrawing>
-                                            </DrawingGroup>
-                                        </DrawingBrush.Drawing>
-                                    </DrawingBrush>
-                                </Border.BorderBrush>
+                            <Border Grid.Column="3" x:Name="ChoseMovieBorder" DragOver="ChoseMovieBorder_DragOver" Drop="ChoseMovieBorder_Drop" Style="{StaticResource DropBorderStyle}"  >
                                 <TextBlock Margin="5" Text="{x:Static lang:Resources.DragFileIn}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundGlobal}"/>
 
                             </Border>
@@ -225,6 +160,7 @@
 
 
                         <CheckBox IsChecked="{Binding EditWindow_ShowMore,Mode=TwoWay,Source={x:Static p:Settings.Default}}"  x:Name="ExtraInfoCheckBox"  Content="{x:Static lang:Resources.ShowOtherOptions}"  HorizontalAlignment="Left" Margin="25 5"/>
+                        <!--<CheckBox IsChecked="True"  x:Name="ExtraInfoCheckBox"  Content="{x:Static lang:Resources.ShowOtherOptions}"  HorizontalAlignment="Left" Margin="25 5"/>-->
 
                         <StackPanel x:Name="ExtraInfoStackPanel" Orientation="Vertical" >
                             <StackPanel.Style>
@@ -260,12 +196,7 @@
                             </DockPanel>
                             <DockPanel Panel.ZIndex="5" >
                                 <Label  Content="{x:Static lang:Resources.ReleaseDate}"  Style="{StaticResource BaseLabel2}"   />
-                                <hc:DatePicker x:Name="DatePicker" SelectedDateChanged="DatePicker_SelectedDateChanged"  BorderThickness="1" BorderBrush="{DynamicResource BackgroundMenu}" Background="Transparent" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" Text="{Binding DetailMovie.releasedate}"  Width="200" HorizontalAlignment="Left"> </hc:DatePicker>
-                                
-                                <!--<hc:TextBox  x:Name="ReleaseDateTextBox" Text="{Binding DetailMovie.releasedate}"    ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}" PreviewMouseLeftButtonUp="SetDateTime"/>
-                                <Popup  VerticalOffset="5" HorizontalOffset="5" x:Name="CalenderPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=ReleaseDateTextBox}" PopupAnimation="Fade"   AllowsTransparency="True" StaysOpen="False" IsOpen="False">
-                                    <Calendar x:Name="Calendar" SelectedDatesChanged="Calendar_SelectedDatesChanged" IsTodayHighlighted="False"  />
-                                </Popup>-->
+                                <hc:DatePicker x:Name="DatePicker" SelectedDateChanged="DatePicker_SelectedDateChanged"  BorderThickness="1" BorderBrush="{DynamicResource BackgroundMenu}" Background="Transparent" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" Text="{Binding DetailMovie.releasedate}"  Width="200" HorizontalAlignment="Left"></hc:DatePicker>
                             </DockPanel>
                             <DockPanel >
                                 <Label  Content="{x:Static lang:Resources.Rating}"  Style="{StaticResource BaseLabel2}"/>

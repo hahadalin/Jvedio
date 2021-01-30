@@ -25,32 +25,7 @@
         <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
         <local:IntToVisibility x:Key="IntToVisibility"/>
 
-        <Style x:Key="DropBorderStyle" TargetType="Border">
-            <Setter Property="AllowDrop" Value="True"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="CornerRadius" Value="5"/>
-            <Setter Property="Margin" Value="20 0"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
-                        <DrawingBrush.Drawing>
-                            <DrawingGroup>
-                                <GeometryDrawing Brush="{DynamicResource ForegroundSearch}">
-                                    <GeometryDrawing.Geometry>
-                                        <GeometryGroup>
-                                            <RectangleGeometry Rect="0,0,50,50" />
-                                            <RectangleGeometry Rect="50,50,50,50" />
-                                        </GeometryGroup>
-                                    </GeometryDrawing.Geometry>
-                                </GeometryDrawing>
-                            </DrawingGroup>
-                        </DrawingBrush.Drawing>
-                    </DrawingBrush>
-                </Setter.Value>
-            </Setter>
-        </Style>
+
 
 
     </Window.Resources>

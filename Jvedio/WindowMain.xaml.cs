@@ -798,7 +798,7 @@ namespace Jvedio
 
                 //获取创建日期
                 string createDate = "";
-                try { createDate = fileinfo.CreationTime.ToString("yyyy-MM-dd HH:mm:ss"); }
+                try { createDate = fileinfo.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss"); }
                 catch { }
                 if (createDate == "") createDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
