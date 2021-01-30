@@ -18,7 +18,6 @@
 
     <Window.Resources>
 
-        <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
         <local:IntToCheckedConverter x:Key="IntToCheckedConverter" />
         <local:BitToGBConverter x:Key="BitToGBConverter" />
 
@@ -43,24 +42,7 @@
 
 
 
-        <Style x:Key="BaseTextBox" TargetType="TextBox">
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="FontFamily" Value="Times New Romans"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Margin" Value="120 2 2 2"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="CaretBrush" Value="{DynamicResource ForegroundSearch}"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="BaseLabel2" TargetType="Label">
+        <Style x:Key="BaseInfoLabel" TargetType="Label">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -72,16 +54,13 @@
             <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
         </Style>
 
-        <Style x:Key="InfoGrid" TargetType="Grid" >
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="Height" Value="30"/>
-        </Style>
+
 
     </Window.Resources>
     <Grid>
 
         <!--消息提示框-->
-        <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="10 120 30 80">
+        <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="10 0 30 50">
             <StackPanel hc:Growl.GrowlParent="True" hc:Growl.Token="EditGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
 
@@ -93,16 +72,16 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Margin="10" Height="auto" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <Grid Grid.Row="0" Margin="5"   >
                 <Border  BorderThickness="0" Background="{DynamicResource BackgroundSide}" CornerRadius="5"></Border>
                 <ScrollViewer   >
                     <StackPanel   HorizontalAlignment="Stretch" Width="auto" Margin="5 20 5 20" VerticalAlignment="Stretch" Height="auto">
                         <DockPanel >
-                            <Label  Content="{x:Static lang:Resources.ID}"  Style="{StaticResource BaseLabel2}"/>
+                            <Label  Content="{x:Static lang:Resources.ID}"  Style="{StaticResource BaseInfoLabel}"/>
                             <hc:TextBox x:Name="idTextBox"    Text="{Binding DetailMovie.id,Mode=OneWay}"  ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}" />
                         </DockPanel>
                         <StackPanel  Orientation="Horizontal">
-                            <Label  Content="{x:Static lang:Resources.VedioType}"  Style="{StaticResource BaseLabel2}"/>
+                            <Label  Content="{x:Static lang:Resources.VedioType}"  Style="{StaticResource BaseInfoLabel}"/>
                             <StackPanel Orientation="Horizontal" >
                                 <RadioButton  FontSize="15" Foreground="{DynamicResource ForegroundSearch}" IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=0,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}" Content="{x:Static lang:Resources.NotRecognize}" Style="{StaticResource FlatRadioButton}"/>
                                 <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"  IsChecked="{Binding Path=DetailMovie.vediotype,ConverterParameter=1,Converter={StaticResource IntToCheckedConverter},Mode=TwoWay}"  Content="{Binding TypeName1,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
@@ -111,29 +90,29 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label  Content="{x:Static lang:Resources.Favorites}"  Style="{StaticResource BaseLabel2}"/>
+                            <Label  Content="{x:Static lang:Resources.Favorites}"  Style="{StaticResource BaseInfoLabel}"/>
                             <StackPanel  Cursor="Hand" VerticalAlignment="Center">
                                 <hc:Rate AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   DefaultValue="0"/>
                             </StackPanel>
                         </StackPanel>
 
                         <DockPanel >
-                            <Label  Content="{x:Static lang:Resources.Actor}"  Style="{StaticResource BaseLabel2}"/>
+                            <Label  Content="{x:Static lang:Resources.Actor}"  Style="{StaticResource BaseInfoLabel}"/>
                             <hc:TextBox    Text="{Binding DetailMovie.actor}"  ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                         </DockPanel>
 
 
                         <DockPanel >
-                            <Label  Content="{x:Static lang:Resources.Genre}"  Style="{StaticResource BaseLabel2}"/>
+                            <Label  Content="{x:Static lang:Resources.Genre}"  Style="{StaticResource BaseInfoLabel}"/>
                             <hc:TextBox     Text="{Binding DetailMovie.genre}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                         </DockPanel>
 
                         <DockPanel >
-                            <Label  Content="{x:Static lang:Resources.Label}"  Style="{StaticResource BaseLabel2}"/>
+                            <Label  Content="{x:Static lang:Resources.Label}"  Style="{StaticResource BaseInfoLabel}"/>
                             <hc:TextBox    Text="{Binding DetailMovie.label}"  ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}" />
                         </DockPanel>
 
-                        <Grid Style="{StaticResource InfoGrid}" Height="auto" >
+                        <Grid  >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="*"/>
@@ -141,7 +120,7 @@
                                 <ColumnDefinition Width="auto"/>
 
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0"  Content="{x:Static lang:Resources.FilePath}"  Style="{StaticResource BaseLabel2}"/>
+                            <Label Grid.Column="0"  Content="{x:Static lang:Resources.FilePath}"  Style="{StaticResource BaseInfoLabel}"/>
                             <hc:TextBox  Grid.Column="1"     Text="{Binding DetailMovie.filepath}"  Style="{StaticResource BaseHCTextBox}" />
                             <Button Grid.Column="2"  HorizontalAlignment="Right" Width="auto" Height="auto" Content="{x:Static lang:Resources.ChooseFile}" Click="ChoseMovie" Style="{StaticResource ButtonStyleFill}" />
 
@@ -153,7 +132,7 @@
 
 
                         <DockPanel >
-                            <Label  Content="{x:Static lang:Resources.FileSize}"  Style="{StaticResource BaseLabel2}"/>
+                            <Label  Content="{x:Static lang:Resources.FileSize}"  Style="{StaticResource BaseInfoLabel}"/>
 
                             <hc:TextBox IsReadOnly="True"  Text="{Binding DetailMovie.filesize,Converter={StaticResource BitToGBConverter},Mode=OneWay}"     Style="{StaticResource BaseHCTextBox}"/>
                         </DockPanel>
@@ -177,59 +156,59 @@
                             </StackPanel.Style>
 
                             <DockPanel >
-                                <Label  Content="{x:Static lang:Resources.Tag}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.Tag}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox     Text="{Binding DetailMovie.tag}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
 
 
                             <DockPanel >
-                                <Label  Content="{x:Static lang:Resources.ImportDate}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.ImportDate}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox IsReadOnly="True"     Text="{Binding DetailMovie.otherinfo}"     Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
                             <DockPanel  >
-                                <Label  Content="{x:Static lang:Resources.CreatedDate}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.CreatedDate}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox IsReadOnly="True"     Text="{Binding DetailMovie.scandate}"    Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
                             <DockPanel >
-                                <Label  Content="{x:Static lang:Resources.Title}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.Title}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox    Text="{Binding DetailMovie.title}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
                             <DockPanel Panel.ZIndex="5" >
-                                <Label  Content="{x:Static lang:Resources.ReleaseDate}"  Style="{StaticResource BaseLabel2}"   />
-                                <hc:DatePicker x:Name="DatePicker" SelectedDateChanged="DatePicker_SelectedDateChanged"  BorderThickness="1" BorderBrush="{DynamicResource BackgroundMenu}" Background="Transparent" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" Text="{Binding DetailMovie.releasedate}"  Width="200" HorizontalAlignment="Left"></hc:DatePicker>
+                                <Label  Content="{x:Static lang:Resources.ReleaseDate}"  Style="{StaticResource BaseInfoLabel}"   />
+                                <hc:DatePicker x:Name="DatePicker" Margin="5" SelectedDateChanged="DatePicker_SelectedDateChanged"  BorderThickness="1" BorderBrush="{DynamicResource BackgroundMenu}" Background="Transparent" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" Text="{Binding DetailMovie.releasedate}"  MinWidth="200" HorizontalAlignment="Left"></hc:DatePicker>
                             </DockPanel>
                             <DockPanel >
-                                <Label  Content="{x:Static lang:Resources.Rating}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.Rating}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox    Text="{Binding DetailMovie.rating}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
 
 
                             <DockPanel >
-                                <Label     Content="{x:Static lang:Resources.Duration}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label     Content="{x:Static lang:Resources.Duration}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox Text="{Binding DetailMovie.runtime}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
 
 
                             <DockPanel   >
-                                <Label  Content="{x:Static lang:Resources.SubsectionVedio}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.SubsectionVedio}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox    Text="{Binding DetailMovie.subsection}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
 
 
 
                             <DockPanel  >
-                                <Label  Content="{x:Static lang:Resources.Director}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.Director}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox    Text="{Binding DetailMovie.director}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
 
 
                             <DockPanel  >
-                                <Label  Content="{x:Static lang:Resources.Studio}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.Studio}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox    Text="{Binding DetailMovie.studio}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
 
                             <DockPanel  >
-                                <Label  Content="{x:Static lang:Resources.TranslatedTitle}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.TranslatedTitle}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox    Text="{Binding DetailMovie.chinesetitle}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
 
@@ -238,12 +217,12 @@
 
 
                             <DockPanel  >
-                                <Label  Content="{x:Static lang:Resources.Plot}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.Plot}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox    Text="{Binding DetailMovie.plot}"  ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
 
                             <DockPanel  >
-                                <Label  Content="{x:Static lang:Resources.Country}"  Style="{StaticResource BaseLabel2}"/>
+                                <Label  Content="{x:Static lang:Resources.Country}"  Style="{StaticResource BaseInfoLabel}"/>
                                 <hc:TextBox    Text="{Binding DetailMovie.country}"   ShowClearButton="True"  Style="{StaticResource BaseHCTextBox}"/>
                             </DockPanel>
 
@@ -257,7 +236,7 @@
 
 
 
-            <Button MinWidth="80" Grid.Row="1"  Content="{x:Static lang:Resources.Save}" Height="auto" Margin="10 10 10 20"  VerticalAlignment="Bottom" Width="auto"  Style="{StaticResource ButtonStyleFill}"  Click="Button_Click"/>
+            <Button  Grid.Row="1"  Content="{x:Static lang:Resources.Save}"   Style="{StaticResource ButtonStyleFill}"  Click="Button_Click"/>
 
 
         </Grid>
