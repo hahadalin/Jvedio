@@ -1230,4 +1230,13 @@
   <data name="Scanning" xml:space="preserve">
     <value>扫描中……</value>
   </data>
+  <data name="DeleteImage" xml:space="preserve">
+    <value>删除图片</value>
+  </data>
+  <data name="SetAs" xml:space="preserve">
+    <value>设置为</value>
+  </data>
+  <data name="ThumbnailAndPoster" xml:space="preserve">
+    <value>缩略 + 海报</value>
+  </data>
 </root>

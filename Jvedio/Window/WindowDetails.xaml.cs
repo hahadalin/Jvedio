@@ -42,6 +42,7 @@ namespace Jvedio
         public DetailDownLoad DetailDownLoad;
         public List<string> MovieIDs = new List<string>();
         public string MovieID = "";
+        Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager taskbarInstance=null;
 
         public WindowDetails(string movieid = "")
         {
@@ -50,6 +51,8 @@ namespace Jvedio
             MovieID = movieid;
             this.Height = SystemParameters.PrimaryScreenHeight *0.8;
             this.Width = SystemParameters.PrimaryScreenHeight * 0.8 * 1230/720;
+            ProgressBar.Visibility = Visibility.Collapsed;
+            if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported ) taskbarInstance = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
         }
 
 
@@ -88,22 +91,19 @@ namespace Jvedio
 
         public void ActorMouseMove(object sender, RoutedEventArgs e)
         {
-            ActorCanvas.Visibility = Visibility.Visible;
+            ActorPopup.IsOpen = true;
+            ShowActor(sender, e);
 
-            Point MousePoistion = Mouse.GetPosition(InfoGrid);
-            Canvas.SetLeft(ActorGrid, MousePoistion.X - 40);
-            Canvas.SetTop(ActorGrid, MousePoistion.Y + 30);
         }
 
         public void ShowActor(object sender, RoutedEventArgs e)
         {
-            Border border = sender as Border;
-            StackPanel stackPanel = border.Child as StackPanel;
-            TextBlock textBlock = stackPanel.Children[0] as TextBlock;
 
-            string imagePath = BasePicPath + $"Actresses\\{textBlock.Text}.jpg";
+            Label label = sender as Label;
+            string name = label.Content.ToString();
+            string imagePath = BasePicPath + $"Actresses\\{name}.jpg";
             if (File.Exists(imagePath))
-                ActorImage.Source = GetBitmapImage(textBlock.Text, "Actresses");
+                ActorImage.Source = GetBitmapImage(name, "Actresses");
             else
                 ActorImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("/Resources/Picture/NoPrinting_A.png", UriKind.Relative));
 
@@ -111,7 +111,7 @@ namespace Jvedio
 
         public void HideActor(object sender, RoutedEventArgs e)
         {
-            ActorCanvas.Visibility = Visibility.Hidden;
+            ActorPopup.IsOpen = false;
         }
 
         public void DownLoad(object sender, RoutedEventArgs e)
@@ -478,10 +478,9 @@ namespace Jvedio
         //显示演员
         public void ShowSameActor(object sender, MouseButtonEventArgs e)
         {
-            Border border = sender as Border;
-            StackPanel sp = border.Child as StackPanel;
-            TextBlock textBlock = sp.Children.OfType<TextBlock>().First();
-            string name = textBlock.Text.Split('(')[0];
+            Label label = sender as Label;
+            string name = label.Content.ToString();
+
             if (string.IsNullOrEmpty(name)) return;
             foreach (Window window in App.Current.Windows)
             {
@@ -1436,9 +1435,9 @@ namespace Jvedio
             }
             else
             {
-
-
                 BigImage.Source = vieModel.DetailMovie.extraimagelist[idx];
+
+                //设置遮罩
                 for (int i = 0; i < imageItemsControl.Items.Count; i++)
                 {
                     ContentPresenter c = (ContentPresenter)imageItemsControl.ItemContainerGenerator.ContainerFromItem(imageItemsControl.Items[i]);
@@ -1670,22 +1669,17 @@ namespace Jvedio
         {
             Border border = sender as Border;
             border.Opacity = 0;
-
-
-
         }
 
         private void Border_MouseLeave(object sender, MouseEventArgs e)
         {
-
             Border border = sender as Border;
-
             Grid grid = border.Parent as Grid;
             TextBlock textBlock = grid.Children.OfType<TextBlock>().First();
 
             int idx = int.Parse(textBlock.Text);
             if (idx != vieModel.SelectImageIndex)
-                border.Opacity = 0.4;
+                border.Opacity = 0.5;
             else
                 border.Opacity = 0;
 
@@ -1789,23 +1783,6 @@ namespace Jvedio
 
             }
             contextMenu.IsOpen = false;
-        }
-
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            if (VedioInfoBorder == null || MovieInfoBorder == null) return;
-            RadioButton radioButton = (RadioButton)sender;
-            if ((bool)radioButton.IsChecked)
-            {
-                VedioInfoBorder.Visibility = Visibility.Collapsed;
-                MovieInfoBorder.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                VedioInfoBorder.Visibility = Visibility.Visible;
-                MovieInfoBorder.Visibility = Visibility.Collapsed;
-            }
-
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -1960,8 +1937,8 @@ namespace Jvedio
 
         private void BigImage_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            Image image = (Image)sender;
-            ContextMenu contextMenu = image.ContextMenu;
+            Grid grid = (Grid)sender;
+            ContextMenu contextMenu = grid.ContextMenu;
             string table = ((Main)GetWindowByName("Main")).GetCurrentList();
             if (!string.IsNullOrEmpty(table))
             {
@@ -2092,26 +2069,22 @@ if (contextMenu.Visibility != Visibility.Visible) return;
 
         }
 
+
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported)
+            if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported && taskbarInstance !=null)
             {
-                var taskbarInstance = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
-                taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal);
-                taskbarInstance.SetProgressValue((int)e.NewValue, 100);
-                if (e.NewValue == 100) taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress);
+                taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal,this);
+                taskbarInstance.SetProgressValue((int)e.NewValue, 100,this);
+                if (e.NewValue == 100) taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress,this);
             }
         }
 
         private void ProgressBar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (ProgressBar.Visibility == Visibility.Hidden)
+            if (ProgressBar.Visibility == Visibility.Hidden && Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported && taskbarInstance != null)
             {
-                if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported)
-                {
-                    var taskbarInstance = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
-                    taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress);
-                }
+                taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress,this);
             }
         }
 

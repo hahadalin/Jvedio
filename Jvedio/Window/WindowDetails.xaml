@@ -24,71 +24,13 @@
 
 
         <local:TagStampsConverter x:Key="TagStampsConverter"/>
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther"/>
         <local:PlotToVisibilityConverter x:Key="PlotToVisibilityConverter"/>
         <local:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-
-
-        <Style x:Key="GenBorder" TargetType="{x:Type Border}">
-            <Setter Property="Width" Value="auto" />
-            <Setter Property="Height" Value="auto" />
-            <Setter Property="Background" Value="{DynamicResource BackgroundSide}" />
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="CornerRadius" Value="5"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundTitle}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="InfoStackPanel" TargetType="{x:Type StackPanel}">
-            <Setter Property="Margin" Value="0 5"/>
-            <Setter Property="Orientation" Value="Horizontal"/>
-
-        </Style>
-
-
-        <Style x:Key="DetailToggleStyle" TargetType="{x:Type ToggleButton}">
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="Width" Value="16"/>
-            <Setter Property="Height" Value="16"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border Background="Transparent" Height="16" Padding="2" Width="16">
-                            <Grid>
-                                <Path Visibility="Collapsed" x:Name="ExpandPath" >
-                                    <Path.RenderTransform>
-                                        <RotateTransform Angle="135" CenterY="3" CenterX="3"/>
-                                    </Path.RenderTransform>
-                                </Path>
-                                <Image x:Name="ExpandImage" Source="/Resources/Skin/Black/arrow_down.png"  />
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="RenderTransform" TargetName="ExpandPath">
-                                    <Setter.Value>
-                                        <RotateTransform Angle="180" CenterY="3" CenterX="3"/>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Source" TargetName="ExpandImage" Value="/Resources/Skin/Black/arrow_up.png"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsMouseOver" Value="True"/>
-                                    <Condition Property="IsChecked" Value="True"/>
-                                </MultiTrigger.Conditions>
-                            </MultiTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <local:IntToVedioTypeConverter x:Key="IntToVedioTypeConverter" />
+        <local:SmallerValueConverter x:Key="SmallerValueConverter" />
+        
 
         <Style x:Key="ExtraPic" TargetType="Image">
             <Setter Property="Source" Value="{Binding}" />
@@ -100,10 +42,9 @@
         </Style>
 
         <Style x:Key="BigImage" TargetType="Image">
-
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="5 5 0 5"/>
+            <Setter Property="Margin" Value="10"/>
             <Setter Property="Stretch" Value="Uniform"/>
             <Setter Property="Source" Value="{Binding DetailMovie.bigimage,UpdateSourceTrigger=Explicit}" />
             <Style.Triggers>
@@ -111,12 +52,6 @@
                     <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_B.png" />
                 </DataTrigger>
             </Style.Triggers>
-        </Style>
-
-        <Style x:Key="ActorInfoImage" TargetType="{x:Type Image}">
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/NoPrinting_A.png" />
         </Style>
 
 
@@ -134,18 +69,7 @@
 
 
 
-        <Style x:Key="ViewTextBlock" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
-            <Setter Property="Margin" Value="5 0"/>
-            <Setter Property="Opacity" Value="0.8"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-
-
-        <Style x:Key="ViewTextBlock2" TargetType="TextBlock">
+        <Style x:Key="BaseTextBlock" TargetType="TextBlock">
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
@@ -153,26 +77,43 @@
             <Setter Property="Opacity" Value="0.5"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
         <Style x:Key="GenLabel" TargetType="Label">
-            <Setter Property="Padding" Value="2 0"/>
+            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}"/>
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Opacity" Value="0.8"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="Margin" Value="2 0"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Label">
+                        <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="3" Padding="4" SnapsToDevicePixels="True">
+                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
+                </Trigger>
+            </Style.Triggers>
+
+
         </Style>
 
 
 
         <Style x:Key="GenreBorder" TargetType="Border">
-
-            <Setter Property="Margin" Value="2 0"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="Margin" Value="2"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -195,308 +136,30 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
-        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
-        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
-        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
-        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
-        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="Transparent"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="Transparent"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="border" Value="Transparent"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
-                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Transparent"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
 
+        <Style x:Key="EditButton" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="TabControlStyle1" TargetType="{x:Type TabControl}">
-            <Setter Property="hc:TitleElement.BorderBrush" Value="{DynamicResource TitleBrush}"/>
-            <Setter Property="hc:TitleElement.Background" Value="{DynamicResource TitleBrush}"/>
-            <Setter Property="hc:TitleElement.Foreground" Value="{DynamicResource TextIconBrush}"/>
-            <Style.BasedOn>
-                <Style TargetType="{x:Type TabControl}">
-                    <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
-                    <Setter Property="hc:TitleElement.BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
-                    <Setter Property="hc:TitleElement.Background" Value="{DynamicResource RegionBrush}"/>
-                    <Setter Property="hc:TitleElement.Foreground" Value="{DynamicResource PrimaryBrush}"/>
-                    <Setter Property="ItemContainerStyleSelector">
-                        <Setter.Value>
-                            <hc:TabItemCapsuleStyleSelector/>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type TabControl}">
-                                <Grid x:Name="templateRoot" Background="{TemplateBinding Background}" ClipToBounds="True" SnapsToDevicePixels="True" KeyboardNavigation.TabNavigation="Local">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition x:Name="ColumnDefinition0"/>
-                                        <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
-                                        <RowDefinition x:Name="RowDefinition1" Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <UniformGrid x:Name="headerPanel" Background="Transparent" Grid.Column="0" HorizontalAlignment="Left" IsItemsHost="True" Margin="0" Grid.Row="0" Rows="1" KeyboardNavigation.TabIndex="1" VerticalAlignment="Center" Panel.ZIndex="1"/>
-                                    <Border x:Name="contentPanel" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" HorizontalAlignment="Stretch" Margin="0,6,0,0" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local" VerticalAlignment="Stretch">
-                                        <ContentPresenter x:Name="PART_SelectedContentHost" ContentTemplate="{TemplateBinding SelectedContentTemplate}" Content="{TemplateBinding SelectedContent}" ContentStringFormat="{TemplateBinding SelectedContentStringFormat}" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                    </Border>
-                                </Grid>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="TabStripPlacement" Value="Bottom">
-                                        <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                                        <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
-                                        <Setter Property="Grid.Row" TargetName="headerPanel" Value="1"/>
-                                        <Setter Property="Margin" TargetName="contentPanel" Value="0,0,0,6"/>
-                                        <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                                    </Trigger>
-                                    <Trigger Property="TabStripPlacement" Value="Left">
-                                        <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                                        <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                                        <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
-                                        <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
-                                        <Setter Property="Grid.Column" TargetName="headerPanel" Value="0"/>
-                                        <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
-                                        <Setter Property="Rows" TargetName="headerPanel" Value="0"/>
-                                        <Setter Property="Columns" TargetName="headerPanel" Value="1"/>
-                                        <Setter Property="Grid.Column" TargetName="contentPanel" Value="1"/>
-                                        <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                                        <Setter Property="Margin" TargetName="contentPanel" Value="6,0,0,0"/>
-                                    </Trigger>
-                                    <Trigger Property="TabStripPlacement" Value="Right">
-                                        <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                                        <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                                        <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
-                                        <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
-                                        <Setter Property="Grid.Column" TargetName="headerPanel" Value="1"/>
-                                        <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
-                                        <Setter Property="Rows" TargetName="headerPanel" Value="0"/>
-                                        <Setter Property="Columns" TargetName="headerPanel" Value="1"/>
-                                        <Setter Property="Grid.Column" TargetName="contentPanel" Value="0"/>
-                                        <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                                        <Setter Property="Margin" TargetName="contentPanel" Value="0,0,6,0"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Style.BasedOn>
+        
+        <!--如果 tag 为空则不显示--> 
+        <Style x:Key="InfoStackPanel" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Margin" Value="0 5 0 0"/>
+            <Style.Triggers>
+                <Trigger Property="Tag" Value="">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
-        <LinearGradientBrush x:Key="TabItem.Static.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#F0F0F0" Offset="0.0"/>
-            <GradientStop Color="#E5E5E5" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="TabItem.Static.Border" Color="#ACACAC"/>
-        <LinearGradientBrush x:Key="TabItem.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#ECF4FC" Offset="0.0"/>
-            <GradientStop Color="#DCECFC" Offset="1.0"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="#7EB4EA"/>
-        <SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F0F0F0"/>
-        <SolidColorBrush x:Key="TabItem.Disabled.Border" Color="#D9D9D9"/>
-        <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
-        <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF"/>
-        <Style x:Key="TabItemStyle1" TargetType="{x:Type TabItem}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-            <Setter Property="Background" Value="{DynamicResource BackgroundMenu}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource TabItem.Static.Border}"/>
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="6,2,6,2"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TabItem}">
-                        <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Cursor="Hand">
-                            <Border x:Name="mainBorder" CornerRadius="5"  BorderThickness="0" Background="{DynamicResource BackgroundSearch}" Margin="0">
-                                <Border x:Name="innerBorder"  CornerRadius="5"  BorderThickness="0" Background="{DynamicResource BackgroundMenu}" Margin="-1" Opacity="0"/>
-                            </Border>
-                            <ContentPresenter x:Name="contentPresenter" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Left"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Background" TargetName="mainBorder" Value="{DynamicResource BackgroundSearch}"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Background" TargetName="mainBorder" Value="{DynamicResource BackgroundSearch}"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Right"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Background" TargetName="mainBorder" Value="{DynamicResource BackgroundSearch}"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Background" TargetName="mainBorder" Value="{DynamicResource BackgroundSearch}"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Left"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Background" TargetName="mainBorder" Value="{DynamicResource BackgroundSearch}"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
-                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Border}"/>
-                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,0,1,1"/>
-                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,0,1,1"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Right"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
-                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Border}"/>
-                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="0,1,1,1"/>
-                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="0,1,1,1"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
-                                <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="{StaticResource TabItem.Disabled.Border}"/>
-                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,1,0"/>
-                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,1,0"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Left"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Panel.ZIndex" Value="1"/>
-                                <Setter Property="Margin" Value="-2,-2,0,-2"/>
-                                <Setter Property="Opacity" TargetName="innerBorder" Value="1"/>
-                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,0,1"/>
-                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,0,1"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,0,1,1"/>
-                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,0,1,1"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Panel.ZIndex" Value="1"/>
-                                <Setter Property="Margin" Value="-2,0,-2,-2"/>
-                                <Setter Property="Opacity" TargetName="innerBorder" Value="1"/>
-                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,0,1,1"/>
-                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,0,1,1"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Right"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="0,1,1,1"/>
-                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="0,1,1,1"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Right"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Panel.ZIndex" Value="1"/>
-                                <Setter Property="Margin" Value="0,-2,-2,-2"/>
-                                <Setter Property="Opacity" TargetName="innerBorder" Value="1"/>
-                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="0,1,1,1"/>
-                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="0,1,1,1"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,1,0"/>
-                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,1,0"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
-                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter Property="Panel.ZIndex" Value="1"/>
-                                <Setter Property="Margin" Value="-2,-2,-2,0"/>
-                                <Setter Property="Opacity" TargetName="innerBorder" Value="1"/>
-                                <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,1,0"/>
-                                <Setter Property="BorderThickness" TargetName="mainBorder" Value="1,1,1,0"/>
-                            </MultiDataTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
-
     </Window.Resources>
 
 
@@ -504,7 +167,7 @@
     <Grid x:Name="FatherGrid" PreviewKeyUp="Grid_PreviewKeyUp"   Focusable="True" Margin="10">
         <Border  x:Name="MainBorder" Background="{DynamicResource BackgroundMain}"    CornerRadius="5" Margin="5"  >
             <Border.Effect>
-                <DropShadowEffect BlurRadius="5" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
+                <DropShadowEffect BlurRadius="20" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
             </Border.Effect>
             <Image Grid.Row="1" x:Name="BackGroundImage"  Stretch="UniformToFill"></Image>
         </Border>
@@ -519,7 +182,7 @@
         <Border Margin="5" x:Name="BackBorder"  CornerRadius="5"  BorderBrush="LightBlue" BorderThickness="0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="auto" MinWidth="50" />
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -555,23 +218,25 @@
 
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="46"/>
+                        <RowDefinition Height="auto" MinHeight="45"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    
                     <!--标题-->
-
                     <Grid Grid.Row="0" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="auto" MinWidth="50"/>
+                            <ColumnDefinition Width="auto" MinWidth="50"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Opacity="0.8" VerticalAlignment="Center" TextAlignment="Left" MouseMove="MoveWindow" FontWeight="Bold" Grid.Column="0"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 60 0" ></TextBlock>
+                        <Grid MouseMove="MoveWindow"  Grid.Column="0" Background="{DynamicResource BackgroundMain}"/>
+                        <TextBox Grid.Column="0" Background="{DynamicResource BackgroundMain}"   Style="{StaticResource ViewTextBox}" VerticalAlignment="Center" HorizontalAlignment="Left"   TextAlignment="Left"  FontWeight="Bold"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 50 0" ></TextBox>
 
-                        <Button Opacity="0.8" VerticalAlignment="Center" Click="EditInfo" Cursor="Hand" BorderThickness="0"  Grid.Column="1" FontSize="16" Content="{x:Static lang:Resources.Edit}"  Width="auto" HorizontalAlignment="Stretch" Background="Transparent" Style="{DynamicResource ButtonStyle1}"/>
 
-                        <Border Opacity="0.8"  Grid.Column="2"  ToolTip="返回"   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="CloseWindow">
+                        <Button  Click="EditInfo"  Grid.Column="1" Content="{x:Static lang:Resources.Edit}"   Style="{StaticResource  EditButton}" />
+
+                        <Border   Grid.Column="2"    Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="CloseWindow">
                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Border>
 
@@ -584,7 +249,6 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="400"/>
-
                         </Grid.ColumnDefinitions>
 
 
@@ -597,24 +261,7 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel Margin="20" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right"    Panel.ZIndex="10"     >
-
-
-                                <!--<Image Visibility="{Binding DetailMovie.hassubsection,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}"  ToolTip="分段视频"  x:Name="SubsectionImage" Cursor="Hand"  Panel.ZIndex="3" Height="24"  PreviewMouseLeftButtonUp="ShowSubsection" HorizontalAlignment="Right" VerticalAlignment="Bottom"    >
-                                        <Image.Style>
-                                            <Style TargetType="Image">
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/subsection2.png"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsMouseOver" Value="False">
-                                                        <Setter Property="Source" Value="pack://application:,,,/Resources/Picture/subsection1.png"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Image.Style>
-                                    </Image>-->
-
-                                <Canvas  ToolTip="播放"   Width="40" Height="40" VerticalAlignment="Center"  MouseLeftButtonUp="PlayVedio">
+                                <Canvas Width="40" Height="40" VerticalAlignment="Center"  MouseLeftButtonUp="PlayVedio">
                                     <Ellipse Style="{StaticResource Ellipse}" Width="40" Height="40"  Canvas.Left="3" Canvas.Top="3" />
                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=triangle,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="28" Canvas.Left="11" Canvas.Top="38" Cursor="Hand"   >
                                         <Image.RenderTransform>
@@ -627,11 +274,13 @@
 
 
                                 <Popup  VerticalOffset="0" HorizontalOffset="0" x:Name="SubSectionPopup"  PopupAnimation="Fade" Placement="MousePoint"   AllowsTransparency="True" StaysOpen="False" IsOpen="False">
-                                    <Border Background="{DynamicResource BackgroundMenu}"   Margin="2" Height="auto" CornerRadius="3" >
-                                        <Border.Effect>
-                                            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
-                                        </Border.Effect>
-                                        <ItemsControl AlternationCount="99"   x:Name="SubsectionItemsControl"  ItemsSource="{Binding DetailMovie.subsectionlist}" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent"  >
+                                    <Grid    Margin="5"   >
+                                        <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
+                                            <Border.Effect>
+                                                <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                            </Border.Effect>
+                                        </Border>
+                                        <ItemsControl Margin="5 10 " AlternationCount="99"   x:Name="SubsectionItemsControl"  ItemsSource="{Binding DetailMovie.subsectionlist}" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent"  >
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel Orientation="Vertical" Panel.ZIndex="4"  />
@@ -642,8 +291,6 @@
                                                 <DataTemplate>
 
                                                     <StackPanel Width="auto">
-
-
                                                         <Button  HorizontalAlignment="Center" Click="OpenSubSuctionVedio" Height="20" Width="50" Content="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" >
                                                             <Button.Style>
                                                                 <Style  TargetType="Button">
@@ -654,7 +301,7 @@
                                                                     <Setter Property="BorderThickness" Value="0"/>
                                                                     <Style.Triggers>
                                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                                            <Setter Property="Background" Value="#5AC6FC"/>
+                                                                            <Setter Property="Background" Value="#467AF3"/>
                                                                         </Trigger>
                                                                     </Style.Triggers>
                                                                 </Style>
@@ -665,100 +312,84 @@
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
-                                    </Border>
-
-                                    <!--<Border Width="100" Height="100" Background="Red"/>-->
+                                    </Grid>
                                 </Popup>
 
                             </StackPanel>
 
                             <!--大图-->
-                            <Grid Grid.Row="0" PreviewMouseWheel="Grid_PreviewMouseWheel"   MouseLeftButtonDown="Grid_MouseLeftButtonDown"   >
-                                <Border   Background="{DynamicResource BackgroundSide}"  CornerRadius="10" Padding="10"   >
-                                    <Grid >
-                                        <Image ContextMenuOpening="BigImage_ContextMenuOpening" Margin="0" HorizontalAlignment="Center"    x:Name="BigImage"  Style="{StaticResource BigImage}" MouseMove="MoveWindow" AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"    >
-                                            <Image.ContextMenu>
-                                                <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp">
-                                                    <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoad"/>
-                                                    <MenuItem Header="{x:Static lang:Resources.Menu_Advance}"   >
-                                                        <MenuItem Header="{x:Static lang:Resources.Menu_Translate}" Click="TranslateMovie"  />
-                                                        <MenuItem Header="{x:Static lang:Resources.Menu_GenerateThumbnail}" Click="GenerateSmallImage" />
-                                                        <MenuItem Header="{x:Static lang:Resources.Menu_GenerateActressImage}" Click="GenerateActor" />
-                                                        <MenuItem Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" Click="GetScreenShot" />
-                                                        <MenuItem Visibility="Collapsed" Header="{x:Static lang:Resources.Menu_GenerateGif}" />
-                                                    </MenuItem>
-                                                    <MenuItem Header="{x:Static lang:Resources.OpenPath}"   >
-                                                        <MenuItem Header="{x:Static lang:Resources.Movie}" Click="OpenFilePath"   ></MenuItem>
-                                                        <MenuItem Header="{x:Static lang:Resources.Poster}" Click="OpenImagePath"  ></MenuItem>
-                                                        <MenuItem Header="{x:Static lang:Resources.Thumbnail}" Click="OpenImagePath"   ></MenuItem>
-                                                        <MenuItem Header="Gif" Click="OpenImagePath"   ></MenuItem>
-                                                        <MenuItem Header="{x:Static lang:Resources.Preview}" Click="OpenImagePath"   ></MenuItem>
-                                                        <MenuItem Header="{x:Static lang:Resources.ScreenShot}" Click="OpenImagePath"   ></MenuItem>
-                                                        <MenuItem Header="{x:Static lang:Resources.Actor}" Click="OpenImagePath"   ></MenuItem>
-                                                    </MenuItem>
+                            <Grid Background="{DynamicResource BackgroundMain}" HorizontalAlignment="Stretch"   ContextMenuOpening="BigImage_ContextMenuOpening"  Grid.Row="0" PreviewMouseWheel="Grid_PreviewMouseWheel" MouseMove="MoveWindow"   MouseLeftButtonDown="Grid_MouseLeftButtonDown"   AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"  >
+                                <Grid.ContextMenu>
+                                    <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp">
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoad"/>
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_Advance}"   >
+                                            <MenuItem Header="{x:Static lang:Resources.Menu_Translate}" Click="TranslateMovie"  />
+                                            <MenuItem Header="{x:Static lang:Resources.Menu_GenerateThumbnail}" Click="GenerateSmallImage" />
+                                            <MenuItem Header="{x:Static lang:Resources.Menu_GenerateActressImage}" Click="GenerateActor" />
+                                            <MenuItem Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" Click="GetScreenShot" />
+                                            <MenuItem Visibility="Collapsed" Header="{x:Static lang:Resources.Menu_GenerateGif}" />
+                                        </MenuItem>
+                                        <MenuItem Header="{x:Static lang:Resources.OpenPath}"   >
+                                            <MenuItem Header="{x:Static lang:Resources.Movie}" Click="OpenFilePath"   ></MenuItem>
+                                            <MenuItem Header="{x:Static lang:Resources.Poster}" Click="OpenImagePath"  ></MenuItem>
+                                            <MenuItem Header="{x:Static lang:Resources.Thumbnail}" Click="OpenImagePath"   ></MenuItem>
+                                            <MenuItem Header="Gif" Click="OpenImagePath"   ></MenuItem>
+                                            <MenuItem Header="{x:Static lang:Resources.Preview}" Click="OpenImagePath"   ></MenuItem>
+                                            <MenuItem Header="{x:Static lang:Resources.ScreenShot}" Click="OpenImagePath"   ></MenuItem>
+                                            <MenuItem Header="{x:Static lang:Resources.Actor}" Click="OpenImagePath"   ></MenuItem>
+                                        </MenuItem>
 
-                                                    <MenuItem Header="{x:Static lang:Resources.Menu_AddToList}"   Name="ListMenuItem"   />
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_AddToList}"   Name="ListMenuItem"   />
 
-                                                    <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}"   Click="AddNewLabel" />
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}"   Click="AddNewLabel" />
 
-                                                    <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
-                                                    <MenuItem Header="{x:Static lang:Resources.Menu_CopyFile}" Click="CopyFile" />
-                                                    <MenuItem Header="{x:Static lang:Resources.Menu_ClearInfo}"  Click="DeleteInfo"   />
-                                                    <MenuItem Header="{x:Static lang:Resources.Menu_DeleteInfo}"  Click="DeleteID"   />
-                                                    <MenuItem Header="{x:Static lang:Resources.Menu_DeleteFile}" Click="DeleteFile" Icon="pack://application:,,,/Resources/menuitem/clear.png" />
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_CopyFile}" Click="CopyFile" />
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_ClearInfo}"  Click="DeleteInfo"   />
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_DeleteInfo}"  Click="DeleteID"   />
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_DeleteFile}" Click="DeleteFile" Icon="pack://application:,,,/Resources/menuitem/clear.png" />
 
-                                                </ContextMenu>
-                                            </Image.ContextMenu>
-                                        </Image>
-
-                                    </Grid>
-                                </Border>
-
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+                                <Image    x:Name="BigImage"  Style="{StaticResource BigImage}"   />
                             </Grid>
 
                             <!--预览图-->
                             <Grid Grid.Row="1" x:Name="ThumbGrid"      >
-
-
-                                <ProgressBar IsVisibleChanged="ProgressBar_IsVisibleChanged"  x:Name="ProgressBar" ValueChanged="ProgressBar_ValueChanged" Visibility="Collapsed" Foreground="LightGreen"   Height="5" Margin="20 4"   VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
+                                <ProgressBar IsVisibleChanged="ProgressBar_IsVisibleChanged"  x:Name="ProgressBar" ValueChanged="ProgressBar_ValueChanged" Visibility="Visible" Style="{StaticResource ProgressBarSuccess}"   Height="10" Margin="10 -6"  Value="20"  VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
 
                                 <Border x:Name="ExtraImageBorder" Visibility="Visible" Margin="0 10 0 10" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
-                                    <ScrollViewer Margin="5 0" VerticalContentAlignment="Center"   PreviewMouseWheel="scrollViewer_PreviewMouseWheel"   x:Name="scrollViewer"      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+                                    <ScrollViewer Margin="5" VerticalContentAlignment="Center"   PreviewMouseWheel="scrollViewer_PreviewMouseWheel"   x:Name="scrollViewer"      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
                                         <ItemsControl x:Name="imageItemsControl" VerticalContentAlignment="Center"   AlternationCount="99" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
-                                                    <StackPanel    Orientation="Horizontal" >
-                                                    </StackPanel>
+                                                    <StackPanel    Orientation="Horizontal"  />
                                                 </ItemsPanelTemplate>
                                             </ItemsControl.ItemsPanel>
 
 
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-
-                                                    <StackPanel x:Name="ImageStackPanel"    Margin="5 0" VerticalAlignment="Center" >
-
-                                                        <Grid Margin="0 10"    VerticalAlignment="Center" >
-                                                            <Border Opacity="0.4" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" Cursor="Hand" Panel.ZIndex="5"  Background="Black"  MouseLeftButtonUp="ShowExtraImage">
+                                                    <StackPanel    Orientation="Horizontal" x:Name="ImageStackPanel" >
+                                                       
+                                                    <Grid Margin="10 0" >
+                                                            <Border  Opacity="0.5" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" Cursor="Hand" Panel.ZIndex="5"  Background="Black"  MouseLeftButtonUp="ShowExtraImage">
                                                                 <Border.ContextMenu>
-                                                                    <ContextMenu>
-                                                                        <MenuItem Header="打开位置" Click="OpenExtraImagePath" ></MenuItem>
-                                                                        <MenuItem Header="设置为" >
-                                                                            <MenuItem Header="缩略+海报  " Click="SetToBigAndSmallPic" ></MenuItem>
-                                                                            <MenuItem Header="缩略图"  Click="SetToSmallPic" ></MenuItem>
-                                                                            <MenuItem Header="海报图" Click="SetToBigPic" ></MenuItem>
-                                                                        </MenuItem>
-                                                                        <MenuItem Header="删除图片" Click="DeleteImage" ></MenuItem>
-                                                                    </ContextMenu>
-                                                                </Border.ContextMenu>
-                                                            </Border>
-                                                            <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16"  Height="20"  ></TextBlock>
-                                                            <Image VerticalAlignment="Center"   Height="{Binding ElementName=scrollViewer,Path=ActualHeight}" Width="auto" Style="{StaticResource ExtraPic}"  >
-
-                                                            </Image>
-                                                        </Grid>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="{x:Static lang:Resources.OpenPath}" Click="OpenExtraImagePath" ></MenuItem>
+                                                                    <MenuItem Header="{x:Static lang:Resources.SetAs}" >
+                                                                        <MenuItem Header="{x:Static lang:Resources.ThumbnailAndPoster}" Click="SetToBigAndSmallPic" ></MenuItem>
+                                                                        <MenuItem Header="{x:Static lang:Resources.Thumbnail}"  Click="SetToSmallPic" ></MenuItem>
+                                                                        <MenuItem Header="{x:Static lang:Resources.Poster}" Click="SetToBigPic" ></MenuItem>
+                                                                    </MenuItem>
+                                                                    <MenuItem Header="{x:Static lang:Resources.DeleteImage}" Click="DeleteImage" ></MenuItem>
+                                                                </ContextMenu>
+                                                            </Border.ContextMenu>
+                                                        </Border>
+                                                        <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16"  Height="20"  ></TextBlock>
+                                                        <Image VerticalAlignment="Center"   Height="{Binding ElementName=scrollViewer,Path=ActualHeight,Converter={StaticResource SmallerValueConverter},ConverterParameter=20}" Width="auto" Style="{StaticResource ExtraPic}"  />
+                                                    </Grid>
                                                     </StackPanel>
-
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -776,60 +407,56 @@
 
                             <Grid.ColumnDefinitions >
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="auto" MinWidth="50" />
                             </Grid.ColumnDefinitions>
 
-                            <Canvas x:Name="ActorCanvas"  Panel.ZIndex="5" Visibility="Hidden" >
-                                <Grid  x:Name="ActorGrid"     Width="125" Height="125">
-                                    <Border   Background="{DynamicResource BackgroundTitle}" Opacity="0.8" CornerRadius="5"></Border>
-                                    <Image  x:Name="ActorImage" Style="{StaticResource ActorInfoImage}"/>
+                            <Popup VerticalOffset="5" HorizontalOffset="-30" x:Name="ActorPopup" Placement="MousePoint" PopupAnimation="Fade"   AllowsTransparency="True" StaysOpen="True" IsOpen="False">
+                                <Grid Margin="10"   HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="10" >
+                                    <Border    Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="10"  >
+                                        <Border.Effect>
+                                            <DropShadowEffect BlurRadius="15" Direction="-90" Color="SkyBlue"  RenderingBias="Quality" ShadowDepth="0"/>
+                                        </Border.Effect>
+                                    </Border>
+                                    <Image Margin="10"  Width="125" Height="125"  x:Name="ActorImage" Source="pack://application:,,,/Resources/Picture/NoPrinting_A.png"/>
                                 </Grid>
-                            </Canvas>
+                            </Popup>
 
-                            <Border Margin="0 0 0 10" Grid.Column="0" Background="Transparent" CornerRadius="5" Opacity="0.9" >
-                                <TabControl Style="{DynamicResource TabControlStyle1}" HorizontalAlignment="Stretch" Background="Transparent"  >
-                                    <TabItem   Margin="5" Padding="5"  Header="{x:Static lang:Resources.MovieInfo}" Style="{DynamicResource TabItemStyle1}" >
-                                        <Border x:Name="MovieInfoBorder" Grid.Row="1" Visibility="Visible"  CornerRadius="5"   >
-                                            <ScrollViewer Height="auto"  Margin="20 0 0 0" HorizontalAlignment="Stretch">
-                                                <StackPanel  >
-                                                    <TextBox Margin="-1 20 0 16" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"></TextBox>
-                                                    <StackPanel x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 7 0 10" >
-                                                        <Label Margin="5 0"  BorderThickness="0" Visibility="{Binding DetailMovie.tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=0,Mode=OneWay}" Background="#9A58B7" Content="{x:Static lang:Resources.HD}" Foreground="{DynamicResource ForegroundSearch}"/>
+
+
+                            <Border Margin="0 0 0 10" Grid.Column="0" Background="Transparent" CornerRadius="5"  >
+                                <TabControl Style="{DynamicResource TapControlStyle}" HorizontalAlignment="Stretch" Background="Transparent"  >
+                                    <TabItem   Margin="5" Padding="5"  Header="{x:Static lang:Resources.MovieInfo}" Style="{DynamicResource TopTabItemStyle}" >
+                                        <StackPanel  >
+                                                    <TextBox Margin="-1 20 0 5" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"/>
+                                                    <StackPanel  x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 5 0 10" >
+                                                        <Label Margin="0 0 5 0"  BorderThickness="0" Visibility="{Binding DetailMovie.tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=0,Mode=OneWay}" Background="#9A58B7" Content="{x:Static lang:Resources.HD}" Foreground="{DynamicResource ForegroundSearch}"/>
                                                         <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=1,Mode=OneWay}"  Background="YellowGreen"   Content="{x:Static lang:Resources.Translated}" Foreground="{DynamicResource ForegroundSearch}" />
                                                         <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=2,Mode=OneWay}" Background="#00B0F0" Content="{x:Static lang:Resources.FlowOut}" Foreground="{DynamicResource ForegroundSearch}" />
-
                                                     </StackPanel>
 
                                                     <StackPanel Orientation="Horizontal" >
-                                                        <TextBlock   FontSize="14"  VerticalAlignment="Center" Style="{StaticResource ViewTextBlock}"  Foreground="{DynamicResource ForegroundSearch}" Text="{Binding DetailMovie.releasedate}" Margin="0 0 10 0"></TextBlock>
+                                                        <TextBox   FontSize="14"  VerticalAlignment="Center" Style="{StaticResource ViewTextBox}"   Text="{Binding DetailMovie.releasedate}" ></TextBox>
 
                                                         <StackPanel Orientation="Horizontal" Margin="10 0">
                                                             <Image VerticalAlignment="Center" Source="{Binding Themes, Mode=OneWay, ConverterParameter=runtime,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" />
-                                                            <TextBlock FontSize="14" VerticalAlignment="Center" Style="{StaticResource ViewTextBlock}"  Foreground="{DynamicResource ForegroundSearch}" Text="{Binding  DetailMovie.runtime , StringFormat='\{0} 分钟'}" ></TextBlock>
+                                                            <TextBox Margin="5 0" FontSize="14" VerticalAlignment="Center" Style="{StaticResource ViewTextBox}"   Text="{Binding  DetailMovie.runtime , StringFormat='\{0} min'}" ></TextBox>
                                                         </StackPanel>
 
                                                     </StackPanel>
 
-                                                    <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="0 20" Cursor="Hand">
-                                                        <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0"/>
-                                                    </StackPanel>
+                                            <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="0 20" Cursor="Hand">
+                                                <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0"/>
+                                            </StackPanel>
 
-
-
-
-
-
-
-
-                                                    <!--演员-->
-                                                    <Grid  Margin="0 0 0 5" Height="auto">
+                                            <!--演员-->
+                                                    <Grid  >
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="auto"/>
                                                             <ColumnDefinition Width="auto"/>
                                                             <ColumnDefinition Width="*"/>
                                                         </Grid.ColumnDefinitions>
-                                                        <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Actor}" Style="{StaticResource ViewTextBlock2}" />
-                                                        <TextBlock Grid.Column="1" Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Actor}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Top" Margin="0 5 0 0" />
+                                                        <TextBlock Grid.Column="1" Text="：" Style="{StaticResource BaseTextBlock}"  VerticalAlignment="Top" Margin="0 5 0 0" />
                                                         <ItemsControl  Grid.Column="2" ItemsSource="{Binding DetailMovie.actorlist}" Height="auto"  VerticalAlignment="Top"  Background="Transparent" >
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
@@ -841,132 +468,57 @@
 
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <WrapPanel>
-                                                                        <Border Margin="2 0" Padding="2 0"  Style="{StaticResource GenreBorder}" MouseUp="ShowSameActor"  MouseEnter="ShowActor" MouseLeave="HideActor" MouseMove="ActorMouseMove">
-                                                                            <StackPanel Background="Transparent"  >
-                                                                                <TextBlock Opacity="0.8" Text="{Binding name}"  FontFamily="微软雅黑" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Center" Margin="2 0"  FontSize="16"  >
-                                                                                </TextBlock>
-                                                                            </StackPanel>
-                                                                        </Border>
-                                                                    </WrapPanel>
+                                                                    <Label Style="{StaticResource GenLabel}" Content="{Binding name}" MouseUp="ShowSameActor"  MouseEnter="ShowActor" MouseLeave="HideActor" MouseMove="ActorMouseMove" ToolTip="{x:Null}"/>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
                                                     </Grid>
 
 
-                                                    <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <StackPanel.Style>
-                                                            <Style TargetType="StackPanel">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding DetailMovie.director}" Value="">
-                                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </StackPanel.Style>
-                                                        <TextBlock Text="{x:Static lang:Resources.Director}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
-                                                        <Border Style="{StaticResource GenreBorder}" >
-                                                            <Label  Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.director}" MouseLeftButtonUp="ShowSameDirector"      ></Label>
-                                                        </Border>
-
+                                                    <StackPanel   Tag="{Binding DetailMovie.director}" Style="{StaticResource InfoStackPanel}" >
+                                                        <TextBlock Text="{x:Static lang:Resources.Director}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
+                                                        <Label  Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.director}" MouseLeftButtonUp="ShowSameDirector"     />
                                                     </StackPanel>
 
 
-                                                    <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
-                                                        <StackPanel.Style>
-                                                            <Style TargetType="StackPanel">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding DetailMovie.tag}" Value="">
-                                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </StackPanel.Style>
-                                                        <TextBlock Text="{x:Static lang:Resources.Tag}"  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
-                                                        <Border Style="{StaticResource GenreBorder}">
-                                                            <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.tag}" MouseLeftButtonUp="ShowSameTag"></Label>
-                                                        </Border>
+                                                    <StackPanel   Tag="{Binding DetailMovie.tag}" Style="{StaticResource InfoStackPanel}" >
+                                                        <TextBlock Text="{x:Static lang:Resources.Tag}"  Style="{StaticResource BaseTextBlock}"></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
+                                                        <Label    Content="{Binding DetailMovie.tag}" MouseLeftButtonUp="ShowSameTag" Style="{DynamicResource GenLabel}"  />
                                                     </StackPanel>
 
-                                                    <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
-                                                        <StackPanel.Style>
-                                                            <Style TargetType="StackPanel">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding DetailMovie.tag}" Value="">
-                                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </StackPanel.Style>
-                                                        <TextBlock Text="{x:Static lang:Resources.VedioType}"  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
-                                                        <Border Style="{StaticResource GenreBorder}" Background="Transparent" Cursor="Arrow">
-                                                            <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.vediotype}" ></Label>
-                                                        </Border>
+                                                    <StackPanel   Margin="0 5 0 5"     Tag="{Binding DetailMovie.vediotype}" Style="{StaticResource InfoStackPanel}" >
+                                                        <TextBlock Text="{x:Static lang:Resources.VedioType}"  Style="{StaticResource BaseTextBlock}"></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
+                                                        <TextBox Margin="0"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.vediotype,Converter={StaticResource IntToVedioTypeConverter}}" ></TextBox>
                                                     </StackPanel>
 
-                                                    <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
-                                                        <StackPanel.Style>
-                                                            <Style TargetType="StackPanel">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding DetailMovie.rating}" Value="">
-                                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </StackPanel.Style>
-                                                        <TextBlock Text="{x:Static lang:Resources.Rating}"  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
-                                                        <TextBlock Style="{StaticResource ViewTextBlock}" Text="{Binding DetailMovie.rating}"></TextBlock>
+                                                    <StackPanel Margin="0 5 0 0"   Tag="{Binding DetailMovie.rating}" Style="{StaticResource InfoStackPanel}" >
+                                                        <TextBlock Text="{x:Static lang:Resources.Rating}"  Style="{StaticResource BaseTextBlock}"></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
+                                                        <TextBox  Margin="0"    Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.rating}"></TextBox>
                                                     </StackPanel>
 
 
 
-                                                    <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
-                                                        <StackPanel.Style>
-                                                            <Style TargetType="StackPanel">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding DetailMovie.studio}" Value="">
-                                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </StackPanel.Style>
-                                                        <TextBlock Text="{x:Static lang:Resources.Studio}"  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
-                                                        <Border Style="{StaticResource GenreBorder}">
-                                                            <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.studio}" MouseLeftButtonUp="ShowSameStudio"></Label>
-                                                        </Border>
+                                                    <StackPanel   Tag="{Binding DetailMovie.studio}" Style="{StaticResource InfoStackPanel}" >
+                                                        <TextBlock Text="{x:Static lang:Resources.Studio}"  Style="{StaticResource BaseTextBlock}"></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
+                                                        <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.studio}" MouseLeftButtonUp="ShowSameStudio"></Label>
                                                     </StackPanel>
 
 
-                                                    <StackPanel Margin="0 5" Orientation="Horizontal" Background="Transparent">
-                                                        <StackPanel.Style>
-                                                            <Style TargetType="StackPanel">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding DetailMovie.studio}" Value="">
-                                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </StackPanel.Style>
-                                                        <TextBlock Text="{x:Static lang:Resources.ReleaseDate}"  Style="{StaticResource ViewTextBlock2}"></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
-                                                        <TextBlock   Style="{StaticResource ViewTextBlock}" Text="{Binding DetailMovie.releasedate}" ></TextBlock>
-                                                    </StackPanel>
 
                                                     <!--类别-->
-                                                    <Grid  Margin="0 5" >
+                                                    <Grid   >
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="auto"/>
                                                             <ColumnDefinition Width="auto"/>
                                                             <ColumnDefinition Width="*"/>
                                                         </Grid.ColumnDefinitions>
-                                                        <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Genre}" Style="{StaticResource ViewTextBlock2}" />
-                                                        <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Genre}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Top"  Margin="0 5 0 0"  />
+                                                        <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource BaseTextBlock}"  VerticalAlignment="Top"  Margin="0 5 0 0"  />
                                                         <ItemsControl  Grid.Column="2" ItemsSource="{Binding DetailMovie.genrelist}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
@@ -977,27 +529,21 @@
 
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <Border >
-                                                                        <WrapPanel>
-                                                                            <Border Margin="2 0" Padding="2 0"   Style="{StaticResource GenreBorder}">
-                                                                                <Label Style="{StaticResource GenLabel}" Content="{Binding}"  MouseLeftButtonUp="ShowSameGenre"></Label>
-                                                                            </Border>
-                                                                        </WrapPanel>
-                                                                    </Border>
+                                                                    <Label Style="{StaticResource GenLabel}" Content="{Binding}"  MouseLeftButtonUp="ShowSameGenre" ToolTip="{x:Null}"></Label>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
                                                     </Grid>
 
                                                     <!--标签-->
-                                                    <Grid  Margin="0 5">
+                                                    <Grid  >
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="auto"/>
                                                             <ColumnDefinition Width="auto"/>
                                                             <ColumnDefinition Width="*"/>
                                                         </Grid.ColumnDefinitions>
-                                                        <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Label}" Style="{StaticResource ViewTextBlock2}" />
-                                                        <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Label}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Top" Margin="0 10 0 0" />
+                                                        <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource BaseTextBlock}"  VerticalAlignment="Top" Margin="0 10 0 0" />
                                                         <ItemsControl  Grid.Column="2" ItemsSource="{Binding DetailMovie.labellist}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
@@ -1039,45 +585,38 @@
 
 
 
-                                                        <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Plot}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource ViewTextBlock2}" />
-
-
-                                                        <TextBlock Margin="5 0" Grid.Column="2"   Style="{StaticResource ViewTextBlock2}" Text="{Binding DetailMovie.plot}"  Height="auto" TextWrapping="Wrap"  ></TextBlock>
+                                                        <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Plot}"  Style="{StaticResource BaseTextBlock}" VerticalAlignment="Top" ></TextBlock>
+                                                        <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource BaseTextBlock}"  VerticalAlignment="Top"  />
+                                                        <TextBlock Margin="5 0" Grid.Column="2"   Style="{StaticResource BaseTextBlock}" Text="{Binding DetailMovie.plot}"  Height="auto" TextWrapping="Wrap"  ></TextBlock>
                                                     </Grid>
 
                                                 </StackPanel>
-                                            </ScrollViewer>
-                                        </Border>
+
                                     </TabItem>
-                                    <TabItem  Margin="5" Padding="5"   Header="{x:Static lang:Resources.VedioInfo}" Style="{DynamicResource TabItemStyle1}" >
-
-
-                                        <Border x:Name="VedioInfoBorder"  Grid.Row="1"   >
-                                            <ScrollViewer Height="auto"  Margin="20 0 0 0" HorizontalAlignment="Stretch">
-                                                <StackPanel  >
+                                    <TabItem  Margin="5" Padding="10 5"   Header="{x:Static lang:Resources.VedioInfo}" Style="{DynamicResource TopTabItemStyle}" >
+                                        <StackPanel  >
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock Width="auto" Text="{x:Static lang:Resources.Format}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock Width="auto" Text="{x:Static lang:Resources.Format}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Format}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.Duration}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.Duration}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Duration}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.FrameRate}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.FrameRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameRate}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.BitRate}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.BitRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.BitRate}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
@@ -1086,53 +625,53 @@
 
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.Resolution}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.Resolution}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Resolution}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.DisplayAspectRatio}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.DisplayAspectRatio}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.DisplayAspectRatio}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
 
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.BitDepth}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.BitDepth}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.BitDepth}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.FrameCount}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.FrameCount}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameCount}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
                                                     <Rectangle Fill="{DynamicResource ForegroundGlobal}" Height="2" Width="auto" Margin="0 5"/>
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.AudioFormat}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.AudioFormat}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioFormat}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.AudioBitRate}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.AudioBitRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioBitRate}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.AudioSamplingRate}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.AudioSamplingRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioSamplingRate}" Margin="0"   ></TextBox>
                                                     </StackPanel>
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.Channel}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.Channel}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Channel}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
@@ -1142,33 +681,23 @@
 
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock  Text="{x:Static lang:Resources.FileExtension}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock  Text="{x:Static lang:Resources.FileExtension}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Extension}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
                                                     <StackPanel Margin="0 5" Orientation="Horizontal" >
-                                                        <TextBlock   Text="{x:Static lang:Resources.FileSize}"  Style="{StaticResource ViewTextBlock2}" ></TextBlock>
-                                                        <TextBlock  Text="：" Style="{StaticResource ViewTextBlock2}" />
+                                                        <TextBlock   Text="{x:Static lang:Resources.FileSize}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
+                                                        <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
                                                         <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FileSize}" Margin="0"   ></TextBox>
                                                     </StackPanel>
 
-                                                    <TextBlock TextWrapping="Wrap" Cursor="Hand" Foreground="SkyBlue" MouseEnter="TextBox_MouseEnter" MouseLeave="TextBox_MouseLeave" PreviewMouseLeftButtonUp="TextBox_PreviewMouseLeftButtonUp"  Style="{StaticResource  ViewTextBlock2}" Text="{Binding VedioInfo.FileName}" Margin="0"   ></TextBlock>
+                                                    <TextBlock TextWrapping="Wrap" Cursor="Hand" Foreground="SkyBlue" MouseEnter="TextBox_MouseEnter" MouseLeave="TextBox_MouseLeave" PreviewMouseLeftButtonUp="TextBox_PreviewMouseLeftButtonUp"  Style="{StaticResource  BaseTextBlock}" Text="{Binding VedioInfo.FileName}" Margin="0"   ></TextBlock>
 
                                                 </StackPanel>
-                                            </ScrollViewer>
-                                        </Border>
+
                                     </TabItem>
                                 </TabControl>
-
-
-
-                                <!--<StackPanel Grid.Row="0" Orientation="Horizontal">
-                                        <RadioButton Unchecked="RadioButton_Checked" Checked="RadioButton_Checked"   FontSize="12" Style="{StaticResource FlatRadioButton}" IsChecked="True" Content="{x:Static lang:Resources.MovieInfo}" GroupName="InfoSwitchRadioButton"/>
-                                        <RadioButton  FontSize="12"  Style="{StaticResource FlatRadioButton}" Content="{x:Static lang:Resources.VedioInfo}" GroupName="InfoSwitchRadioButton"/>
-                                </StackPanel>-->
-
-
                             </Border>
 
 
@@ -1210,7 +739,7 @@
                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
             </Border>
 
-            <TextBlock Text="{x:Static lang:Resources.Menu_LabelManage1}" Style="{StaticResource ViewTextBlock}" Margin="20" Height="auto" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            <TextBox Text="{x:Static lang:Resources.Menu_LabelManage1}" Style="{StaticResource ViewTextBox}" Margin="20" Height="auto" VerticalAlignment="Top" HorizontalAlignment="Center"/>
 
             <Grid  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20 50 20 5">
                 <Grid.RowDefinitions>

@@ -443,6 +443,51 @@ namespace Jvedio
         }
     }
 
+    public class SmallerValueConverter : IValueConverter
+    {
+        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null || parameter==null) return 0;
+            int.TryParse(value.ToString(), out int w1);
+            int.TryParse(parameter.ToString(), out int w2);
+            if (w1 - w2 < 0) return 0;
+            else return w1 - w2;
+        }
+
+        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class IntToVedioTypeConverter : IValueConverter
+    {
+        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null) return Properties.Settings.Default.TypeName1;
+
+            int.TryParse(value.ToString(), out int vt);
+            if (vt == 1)
+            {
+                return Properties.Settings.Default.TypeName1;
+            }
+            else if (vt == 2)
+            {
+                return Properties.Settings.Default.TypeName2;
+            }
+            else if (vt == 3)
+            {
+                return Properties.Settings.Default.TypeName3;
+            }
+            return Jvedio.Language.Resources.All;
+        }
+
+        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
 
 
 

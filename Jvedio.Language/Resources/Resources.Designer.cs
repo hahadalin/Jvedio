@@ -583,6 +583,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 删除图片 的本地化字符串。
+        /// </summary>
+        public static string DeleteImage {
+            get {
+                return ResourceManager.GetString("DeleteImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 删除不存在影片 的本地化字符串。
         /// </summary>
         public static string DeleteMovieNotExist {
@@ -2581,6 +2590,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 设置为 的本地化字符串。
+        /// </summary>
+        public static string SetAs {
+            get {
+                return ResourceManager.GetString("SetAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 设为默认打开 的本地化字符串。
         /// </summary>
         public static string SetDefaultToOpen {
@@ -3045,6 +3063,15 @@ namespace Jvedio.Language {
         public static string Thumbnail {
             get {
                 return ResourceManager.GetString("Thumbnail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 缩略 + 海报 的本地化字符串。
+        /// </summary>
+        public static string ThumbnailAndPoster {
+            get {
+                return ResourceManager.GetString("ThumbnailAndPoster", resourceCulture);
             }
         }
         

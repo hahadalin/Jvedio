@@ -1863,8 +1863,7 @@
                                                                                             <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                                         </Border.Effect>
                                                                                     </Border>
-                                                                                    <ItemsControl Margin="5 10
-                                                                                                  " AlternationCount="99"   x:Name="SubsectionItemsControl"  ItemsSource="{Binding subsectionlist}" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent"  >
+                                                                                    <ItemsControl Margin="5 10 " AlternationCount="99"   x:Name="SubsectionItemsControl"  ItemsSource="{Binding subsectionlist}" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent"  > 
                                                                                         <ItemsControl.ItemsPanel>
                                                                                             <ItemsPanelTemplate>
                                                                                                 <StackPanel Orientation="Vertical" Panel.ZIndex="4"  />
@@ -1887,7 +1886,7 @@
                                                                                                                 <Setter Property="BorderThickness" Value="0"/>
                                                                                                                 <Style.Triggers>
                                                                                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                                                                                        <Setter Property="Background" Value="#5AC6FC"/>
+                                                                                                                        <Setter Property="Background" Value="#467AF3"/>
                                                                                                                     </Trigger>
                                                                                                                 </Style.Triggers>
                                                                                                             </Style>
