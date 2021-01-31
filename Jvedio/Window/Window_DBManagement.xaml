@@ -6,9 +6,7 @@
         xmlns:local="clr-namespace:Jvedio"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         xmlns:p="clr-namespace:Jvedio.Properties"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
-        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         xmlns:plot="clr-namespace:Jvedio.Plot.Bar"
@@ -16,14 +14,13 @@
         Title="{x:Static lang:Resources.MovieManagement}"       
         MinHeight="500"
         MinWidth="800"           
+        Width="1000"           
         Background="{DynamicResource BackgroundMain}"
         WindowStartupLocation="CenterScreen"
         ContentRendered="Jvedio_BaseWindow_ContentRendered"        
         >
 
     <Window.Resources>
-        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-
 
         <Style x:Key="DBBorder" TargetType="{x:Type Border}">
             <Setter Property="Cursor" Value="Hand"/>
@@ -35,15 +32,6 @@
         </Style>
 
 
-
-        <Style TargetType="lvc:Separator">
-            <Setter Property="Stroke" Value="{DynamicResource ForegroundGlobal}"></Setter>
-            <Style.Triggers>
-                <Trigger Property="AxisOrientation" Value="X">
-                    <Setter Property="IsEnabled" Value="False"></Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
 
 
         <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
@@ -65,12 +53,58 @@
             <StackPanel hc:Growl.Token="DBManageGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
 
+        <!--<Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <Border  x:Name="MainBorder"   Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="5"  >
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                </Border.Effect>
+            </Border>
+            <Grid Margin="5" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+
+
+                <Image Grid.Row="0" Source="pack://application:,,,/Resources/Picture/database.png" Height="50" Margin="10"/>
+                <TextBlock Text="{Binding }" Margin="5" Grid.Row="1" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="16" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
+                <Grid  Grid.Row="2" Background="{DynamicResource BackgroundTitle}" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="333*"/>
+                        <ColumnDefinition Width="333*"/>
+                        <ColumnDefinition Width="334*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border  Grid.Column="0" Style="{StaticResource DBBorder}" MouseLeftButtonUp="LoadDataBase" ToolTip="装载" >
+                        <Image  Source="pack://application:,,,/Resources/Picture/loaddatabase.png" Height="32"/>
+                    </Border>
+                    <Border  Grid.Column="1" Style="{StaticResource DBBorder}"   MouseLeftButtonUp="EditDataBase"  ToolTip="编辑" >
+                        <Image Grid.Column="1" Source="pack://application:,,,/Resources/Picture/edit.png" Width="25"/>
+                    </Border>
+
+                    <Border Grid.Column="2"  Style="{StaticResource DBBorder}"  MouseLeftButtonUp="DelDataBase"  ToolTip="删除"  >
+                        <Image Grid.Column="2" Source="pack://application:,,,/Resources/Picture/delete.png" Width="32"/>
+                    </Border>
+
+
+
+
+
+                </Grid>
+
+            </Grid>
+        </Grid>-->
+
+
+
         <TabControl SelectionChanged="TabControl_SelectionChanged" SelectedIndex="0" Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl" Grid.Row="0" Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
             <TabItem FontSize="15"  Background="Transparent" Header="{x:Static lang:Resources.MovieManagement}">
                 <Grid  >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
-                        <RowDefinition x:Name="SecondRow"  Height="200"/>
+                        <RowDefinition   Height="auto"/>
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
@@ -81,8 +115,8 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="0" >
 
-                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.NewLibrary}" HorizontalAlignment="Center" MinWidth="120" Width="auto" Height="40" Margin="10" Click="Button_Click"/>
-                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Import}" HorizontalAlignment="Center" MinWidth="120" Width="auto" Height="40" Margin="10" Click="Button_Click_1"/>
+                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.NewLibrary}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click"/>
+                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Import}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click_1"/>
 
 
                         </StackPanel>
@@ -90,7 +124,7 @@
 
 
 
-                        <ScrollViewer  Grid.Column="1"   Margin="5 5 5 5"    Panel.ZIndex="4" Background="Transparent"   x:Name="scrollViewer"     >
+                        <ScrollViewer  Grid.Column="1"       Panel.ZIndex="4" Background="Transparent"   x:Name="scrollViewer"     >
                             <ItemsControl   ItemsSource="{Binding DataBases}"  >
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -102,47 +136,42 @@
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <WrapPanel>
-                                            <Border Height="150" Width="150" Background="{DynamicResource BackgroundSide}" Margin="10" CornerRadius="5">
-                                                <Grid >
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="400*"/>
-                                                        <RowDefinition Height="200*"/>
-                                                        <RowDefinition Height="300*"/>
-                                                    </Grid.RowDefinitions>
+                                        <Border Height="150" Width="150" Background="{DynamicResource BackgroundSide}" Margin="10" CornerRadius="5">
+                                            <Grid >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="400*"/>
+                                                    <RowDefinition Height="200*"/>
+                                                    <RowDefinition Height="300*"/>
+                                                </Grid.RowDefinitions>
 
-                                                    <Image Grid.Row="0" Source="pack://application:,,,/Resources/Picture/database.png" Height="64"/>
-                                                    <TextBlock Text="{Binding }" Margin="5" Grid.Row="1" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="16" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
-                                                    <Grid  Grid.Row="2" Background="{DynamicResource BackgroundTitle}" >
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="333*"/>
-                                                            <ColumnDefinition Width="333*"/>
-                                                            <ColumnDefinition Width="334*"/>
-                                                        </Grid.ColumnDefinitions>
+                                                <Image Grid.Row="0" Source="pack://application:,,,/Resources/Picture/database.png" Height="64"/>
+                                                <TextBlock Text="{Binding }" Margin="5" Grid.Row="1" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="16" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
+                                                <Grid  Grid.Row="2" Background="{DynamicResource BackgroundTitle}" >
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="333*"/>
+                                                        <ColumnDefinition Width="333*"/>
+                                                        <ColumnDefinition Width="334*"/>
+                                                    </Grid.ColumnDefinitions>
 
-                                                        <Border  Grid.Column="0" Style="{StaticResource DBBorder}" MouseLeftButtonUp="LoadDataBase" ToolTip="装载" >
-                                                            <Image  Source="pack://application:,,,/Resources/Picture/loaddatabase.png" Height="32"/>
-                                                        </Border>
-                                                        <Border  Grid.Column="1" Style="{StaticResource DBBorder}"   MouseLeftButtonUp="EditDataBase"  ToolTip="编辑" >
-                                                            <Image Grid.Column="1" Source="pack://application:,,,/Resources/Picture/edit.png" Width="25"/>
-                                                        </Border>
+                                                    <Border  Grid.Column="0" Style="{StaticResource DBBorder}" MouseLeftButtonUp="LoadDataBase" ToolTip="装载" >
+                                                        <Image  Source="pack://application:,,,/Resources/Picture/loaddatabase.png" Height="32"/>
+                                                    </Border>
+                                                    <Border  Grid.Column="1" Style="{StaticResource DBBorder}"   MouseLeftButtonUp="EditDataBase"  ToolTip="编辑" >
+                                                        <Image Grid.Column="1" Source="pack://application:,,,/Resources/Picture/edit.png" Width="25"/>
+                                                    </Border>
 
-                                                        <Border Grid.Column="2"  Style="{StaticResource DBBorder}"  MouseLeftButtonUp="DelDataBase"  ToolTip="删除"  >
-                                                            <Image Grid.Column="2" Source="pack://application:,,,/Resources/Picture/delete.png" Width="32"/>
-                                                        </Border>
-
+                                                    <Border Grid.Column="2"  Style="{StaticResource DBBorder}"  MouseLeftButtonUp="DelDataBase"  ToolTip="删除"  >
+                                                        <Image Grid.Column="2" Source="pack://application:,,,/Resources/Picture/delete.png" Width="32"/>
+                                                    </Border>
 
 
 
 
-                                                    </Grid>
 
                                                 </Grid>
 
-
-
-                                            </Border>
-                                        </WrapPanel>
+                                            </Grid>
+                                        </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -160,12 +189,17 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Vertical" Grid.Row="0"  Margin="5">
-                            <Border x:Name="NameBorder" Margin="10 5" Width="auto" Height="auto" Background="{DynamicResource BackgroundMain}" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="5" >
-                                <TextBlock Margin="5"  Text="{Binding CurrentDataBase, StringFormat='数据库：\{0}'}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" />
+                            <Border x:Name="NameBorder"   Background="{DynamicResource BackgroundMain}" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="5" >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{x:Static lang:Resources.DataBase}" Style="{StaticResource BaseTextBlock}" Margin="5" VerticalAlignment="Center"/>
+                                    <TextBlock Margin="5"  Text="{Binding CurrentDataBase}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" />
+                                </StackPanel>
+                                
+                               
                             </Border>
 
 
-                            <WrapPanel x:Name="CheckBoxWrapPanel"  Orientation="Horizontal" Margin="15 0">
+                            <WrapPanel x:Name="CheckBoxWrapPanel"  Orientation="Horizontal" Margin="15">
 
                                 <CheckBox  Content="{x:Static lang:Resources.ResetDataBase}" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
                                 <CheckBox  Content="{x:Static lang:Resources.DeleteMovieNotExist}" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
@@ -176,7 +210,7 @@
                         </StackPanel>
 
 
-                        <Button Grid.Row="1" Margin="10" Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_2"/>
+                        <Button Grid.Row="1"  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_2"/>
 
 
 
@@ -190,7 +224,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem   Background="Transparent" Header="{x:Static lang:Resources.Statistic}" FontSize="15">
+            <TabItem   Background="Transparent" Header="{x:Static lang:Resources.Statistic}" FontSize="15" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Grid x:Name="StatisticGrid" Visibility="Visible">
 
                     <Grid.RowDefinitions >
@@ -202,42 +236,8 @@
 
                     <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Visibility="Visible" Margin="5 10" >
                         <TextBlock Text="{x:Static lang:Resources.ChooseDataBase}" Style="{StaticResource BaseTextBlock}"/>
-                        <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="DatabaseComboBox_SelectionChanged"  x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
+                        <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="DatabaseComboBox_SelectionChanged"  x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   MinWidth="150" MaxWidth="300" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
                     </StackPanel>
-                    <StackPanel Visibility="Collapsed" Grid.Row="1" Orientation="Horizontal" DockPanel.Dock="Top">
-
-                        <Border Background="{DynamicResource BackgroundSide}" Margin="10" CornerRadius="5">
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock  Text="{x:Static lang:Resources.AllVideo}" Style="{StaticResource BaseTextBlock}" Margin="10 5"/>
-                                    <TextBlock   Text="{Binding AllCount}"  Style="{StaticResource BaseTextBlock}"/>
-                                    <ProgressBar   Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="25" Height="60" Margin="0 5 0 20" Value="100"    />
-                                </StackPanel>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{Binding TypeName2,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding CensoredCount}"  Style="{StaticResource BaseTextBlock}"/>
-                                    <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="25" Height="60" Margin="0 5 0 20" Value="{Binding CensoredCountPercent}"   />
-                                </StackPanel>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{Binding TypeName1,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding UncensoredCount}"  Style="{StaticResource BaseTextBlock}"/>
-                                    <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="25" Height="60" Margin="0 5 0 20" Value="{Binding UncensoredCountPercent}"   />
-                                </StackPanel>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{Binding TypeName3,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding EuropeCount}"  Style="{StaticResource BaseTextBlock}"/>
-                                    <ProgressBar  Orientation="Vertical" MaxHeight="100" MinHeight="0" Width="25" Height="60" Margin="0 5 0 20" Value="{Binding EuropeCountPercent}"   />
-                                </StackPanel>
-
-                            </StackPanel>
-
-                        </Border>
-                    </StackPanel>
-
-
-
-
-
 
                     <Grid Grid.Row="2">
 
@@ -267,12 +267,12 @@
 
                 </Grid>
             </TabItem>
-            
+
         </TabControl>
 
 
 
-            <Grid>
+        <Grid>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>

@@ -91,8 +91,6 @@ namespace Jvedio
             name = textBlock.Text.ToLower();
             vieModel_DBManagement.CurrentDataBase = name;
 
-
-            //ShowEditGrid();
             var brush = new SolidColorBrush(Colors.Red);
             NameBorder.Background = brush;
             Color TargColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Application.Current.Resources["BackgroundMain"].ToString())).Color;
@@ -101,32 +99,6 @@ namespace Jvedio
 
         }
 
-        public void ShowEditGrid()
-        {
-            if (SecondRow.Height == new GridLength(0))
-            {
-
-                Task.Run(() =>
-                {
-                    for (int i = 0; i <= 20; i++)
-                    {
-                        this.Dispatcher.Invoke((Action)delegate { SecondRow.Height = new GridLength(5 * i); });
-                        Task.Delay(1).Wait();
-                    }
-                });
-            }
-            else
-            {
-                Task.Run(() =>
-                {
-                    for (int i = 20; i >= 0; i--)
-                    {
-                        this.Dispatcher.Invoke((Action)delegate { SecondRow.Height = new GridLength(5 * i); });
-                        Task.Delay(1).Wait();
-                    }
-                });
-            }
-        }
 
         public void DelDataBase(object sender, MouseButtonEventArgs e)
         {

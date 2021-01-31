@@ -538,6 +538,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 当前/总数 的本地化字符串。
+        /// </summary>
+        public static string CurrentAndTotal {
+            get {
+                return ResourceManager.GetString("CurrentAndTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 当前版本 的本地化字符串。
         /// </summary>
         public static string CurrentVersion {
@@ -552,6 +561,15 @@ namespace Jvedio.Language {
         public static string CustomAppearance {
             get {
                 return ResourceManager.GetString("CustomAppearance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 数据库 的本地化字符串。
+        /// </summary>
+        public static string DataBase {
+            get {
+                return ResourceManager.GetString("DataBase", resourceCulture);
             }
         }
         

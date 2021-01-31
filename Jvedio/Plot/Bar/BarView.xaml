@@ -165,9 +165,17 @@
                         <Border Width="10" Height="10"  Background="#0594B2"/>
                         <TextBlock Text="{Binding Title}" Foreground="White" Margin="10 0"/>
                     </StackPanel>
-                    <TextBlock Text="{Binding Current,StringFormat='Current：{0} '}" Foreground="White" Margin="10 5"/>
-                    <TextBlock Text="{Binding Total,StringFormat='Total：{0} '}" Foreground="White" Margin="10 5"/>
-
+                    <StackPanel >
+                        <TextBlock Text="{x:Static lang:Resources.CurrentAndTotal}" Foreground="White" Margin="10 5"/>
+                        <TextBlock  Foreground="White" Margin="10 5">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat=" {0} / {1} ">
+                                    <Binding Path="Current" />
+                                    <Binding Path="Total" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
             <StackPanel x:Name="ToolStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20 0 0 5">

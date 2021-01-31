@@ -1239,4 +1239,10 @@
   <data name="ThumbnailAndPoster" xml:space="preserve">
     <value>缩略 + 海报</value>
   </data>
+  <data name="DataBase" xml:space="preserve">
+    <value>数据库</value>
+  </data>
+  <data name="CurrentAndTotal" xml:space="preserve">
+    <value>当前/总数</value>
+  </data>
 </root>
