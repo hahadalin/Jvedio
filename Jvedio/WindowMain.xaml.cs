@@ -2202,7 +2202,6 @@ namespace Jvedio
                 else
                 {
                     //使用默认播放器
-                    Console.WriteLine("使用默认播放器");
                     Process.Start(filepath);
                     vieModel.AddToRecentWatch(ID);
                 }
@@ -2248,6 +2247,10 @@ namespace Jvedio
                             if (Directory.Exists(filepath)) { Process.Start("explorer.exe", "\"" + filepath + "\""); }
                             else
                             {
+                                if (vieModel.SelectedMovie.Count == 1)
+                                {
+                                    HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NotExists}  {filepath}", "Main");
+                                }
                                 failpath += filepath + "\n";
                                 num++;
                             }
@@ -2257,6 +2260,10 @@ namespace Jvedio
                             if (File.Exists(filepath)) { Process.Start("explorer.exe", "/select, \"" + filepath + "\""); }
                             else
                             {
+                                if (vieModel.SelectedMovie.Count == 1)
+                                {
+                                    HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NotExists}  {filepath}", "Main");
+                                }
                                 failpath += filepath + "\n";
                                 num++;
                             }
@@ -2297,6 +2304,10 @@ namespace Jvedio
                         if (File.Exists(arg.filepath)) { Process.Start("explorer.exe", "/select, \"" + arg.filepath + "\""); }
                         else
                         {
+                            if (vieModel.SelectedMovie.Count == 1)
+                            {
+                                HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NotExists}  {arg.filepath}", "Main");
+                            }
                             failpath += arg.filepath + "\n";
                             num++;
                         }
@@ -4113,7 +4124,14 @@ namespace Jvedio
                         }
                         catch { }
                     }
-                    Process.Start(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
+                    try
+                    {
+                        Process.Start(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
+                    }catch(Exception ex)
+                    {
+                        HandyControl.Controls.Growl.Error(ex.Message, "Main");
+                    }
+
                     IsToUpdate = true;
                     Application.Current.Shutdown();//直接关闭
                 }

@@ -577,7 +577,7 @@
 
                     <StackPanel   Margin="10" HorizontalAlignment="Left">
                         <Label Content="{x:Static lang:Resources.TaskSettings}" HorizontalAlignment="Left" Style="{StaticResource LabelSuccess}"  />
-                        <CheckBox Margin="15 15 0 0"   PreviewMouseLeftButtonUp="ResetTaskWithCheckbox"    IsChecked="{Binding Info_ForceDownload,Mode=TwoWay}"  Content="{x:Static lang:Resources.ForeceToSync}"/>
+                        <CheckBox Margin="15 15 0 0"      IsChecked="{Binding Info_ForceDownload,Mode=TwoWay}"  Content="{x:Static lang:Resources.ForeceToSync}"/>
                         <WrapPanel Margin="5">
                             <CheckBox  IsChecked="{Binding DownloadSmallPic,Mode=TwoWay}"   Content="{x:Static lang:Resources.Thumbnail}"/>
                             <CheckBox  IsChecked="{Binding DownloadBigPic,Mode=TwoWay}" Content="{x:Static lang:Resources.Poster}"/>
@@ -602,11 +602,13 @@
                     <StackPanel   Margin="10" HorizontalAlignment="Left">
                         <Label Content="{x:Static lang:Resources.TaskSettings}" HorizontalAlignment="Left" Style="{StaticResource LabelSuccess}"  />
 
-                        <CheckBox Margin="15" HorizontalAlignment="Left"  PreviewMouseLeftButtonUp="ResetTaskWithCheckbox"  IsChecked="{Binding Gif_Skip}"  Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="{x:Static lang:Resources.SkipExistGif}"/>
+                        <TextBlock TextWrapping="Wrap" Cursor="Hand" MouseLeftButtonUp="TextBlock_MouseLeftButtonUp" Foreground="SkyBlue" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" Text="{x:Static lang:Resources.Settings}" Style="{StaticResource  BaseTextBlock}"  Margin="20 10 0 0" HorizontalAlignment="Left"  ></TextBlock>
+
+                        <CheckBox Margin="15" HorizontalAlignment="Left"    IsChecked="{Binding Gif_Skip,Mode=TwoWay}"  Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="{x:Static lang:Resources.SkipExistGif}"/>
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock   MinWidth="100" TextAlignment="Left"   Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="{x:Static lang:Resources.GifDuration}"/>
-                            <Slider x:Name="Gif_IntervalSlider" Value="{Binding Gif_Length}" Minimum="1" Maximum="20" Width="100" VerticalAlignment="Center"/>
+                            <Slider x:Name="Gif_IntervalSlider" Value="{Binding Gif_Length,Mode=TwoWay}" Minimum="1" Maximum="20" Width="100" VerticalAlignment="Center"/>
                             <TextBlock MinWidth="30" TextAlignment="Center" Text="{Binding Value, ElementName=Gif_IntervalSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                             <TextBlock Text="{x:Static lang:Resources.Second}" Margin="0" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -615,11 +617,11 @@
                             <TextBlock MinWidth ="100" TextAlignment="Left"   Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="{x:Static lang:Resources.Resolution}"/>
 
                             <TextBlock Margin="0 0 20 0" MinWidth="50" Text="{x:Static lang:Resources.Height}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                            <Slider x:Name="Gif_HeightSlider" Value="{Binding Gif_Height}" Minimum="30" Maximum="500" Width="100" VerticalAlignment="Center"/>
+                            <Slider x:Name="Gif_HeightSlider" Value="{Binding Gif_Height,Mode=TwoWay}" Minimum="30" Maximum="500" Width="100" VerticalAlignment="Center"/>
                             <TextBlock   Text="{Binding Value, ElementName=Gif_HeightSlider, StringFormat=\{0\} px}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
 
                             <TextBlock MinWidth="50"   Text="{x:Static lang:Resources.Width}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                            <Slider x:Name="Gif_WidthSlider" Value="{Binding Gif_Width}" Minimum="30" Maximum="500" Width="100" VerticalAlignment="Center"/>
+                            <Slider x:Name="Gif_WidthSlider" Value="{Binding Gif_Width,Mode=TwoWay}" Minimum="30" Maximum="500" Width="100" VerticalAlignment="Center"/>
                             <TextBlock  Text="{Binding Value, ElementName=Gif_WidthSlider, StringFormat=\{0\} px}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
 
                         </StackPanel>
@@ -645,7 +647,9 @@
 
                     <StackPanel   Margin="10" HorizontalAlignment="Left">
                         <Label Content="{x:Static lang:Resources.TaskSettings}" HorizontalAlignment="Left" Style="{StaticResource LabelSuccess}"  />
-                        <CheckBox Margin="15" PreviewMouseLeftButtonUp="ResetTaskWithCheckbox" IsChecked="{Binding ScreenShot_Skip}"   Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="{x:Static lang:Resources.SkipExistsScreenShot}"/>
+                        <TextBlock TextWrapping="Wrap" Cursor="Hand" MouseLeftButtonUp="TextBlock_MouseLeftButtonUp" Foreground="SkyBlue" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" Text="{x:Static lang:Resources.Settings}" Style="{StaticResource  BaseTextBlock}"  Margin="20 10 0 0" HorizontalAlignment="Left"  ></TextBlock>
+
+                        <CheckBox Margin="15"  IsChecked="{Binding ScreenShot_Skip,Mode=TwoWay}"   Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="{x:Static lang:Resources.SkipExistsScreenShot}"/>
                         <StackPanel Orientation="Horizontal">
 
                             <TextBlock MinWidth="120" TextAlignment="Left"  Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="{x:Static lang:Resources.ScreenShotNumber}"/>
@@ -658,7 +662,7 @@
 
                             <TextBlock MinWidth="120" TextAlignment="Left"  Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="{x:Static lang:Resources.ThreadNumber}"/>
 
-                            <Slider x:Name="Screen_ThreadSlider" Value="{Binding ScreenShot_Num}" Minimum="1" Maximum="10" Width="100" VerticalAlignment="Center"/>
+                            <Slider x:Name="Screen_ThreadSlider" Value="{Binding ScreenShot_Num,Mode=TwoWay}" Minimum="1" Maximum="10" Width="100" VerticalAlignment="Center"/>
                             <TextBlock Width="30" TextAlignment="Center" Text="{Binding Value, ElementName=Screen_ThreadSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
 
                         </StackPanel>

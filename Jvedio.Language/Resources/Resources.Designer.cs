@@ -2086,6 +2086,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 新文件已存在 的本地化字符串。
+        /// </summary>
+        public static string NewFileExists {
+            get {
+                return ResourceManager.GetString("NewFileExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 新建视频库 的本地化字符串。
         /// </summary>
         public static string NewLibrary {
@@ -2136,6 +2145,15 @@ namespace Jvedio.Language {
         public static string NormalVedio {
             get {
                 return ResourceManager.GetString("NormalVedio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 跳过开头或结尾超过视频总长度 的本地化字符串。
+        /// </summary>
+        public static string NoScreenShotDuration {
+            get {
+                return ResourceManager.GetString("NoScreenShotDuration", resourceCulture);
             }
         }
         
@@ -2964,6 +2982,15 @@ namespace Jvedio.Language {
         public static string Sorting {
             get {
                 return ResourceManager.GetString("Sorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 原文件 的本地化字符串。
+        /// </summary>
+        public static string SourceFile {
+            get {
+                return ResourceManager.GetString("SourceFile", resourceCulture);
             }
         }
         

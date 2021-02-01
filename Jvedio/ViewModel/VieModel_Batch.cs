@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 using System.IO;
 using static Jvedio.GlobalVariable;
+using System.Threading;
 
 namespace Jvedio.ViewModel
 {
@@ -72,7 +73,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        public bool Reset(int idx,Action<string> callback)
+        public bool Reset(int idx,Action<string> callback, CancellationTokenSource cts = null)
         {
             Movies = new ObservableCollection<string>();
             var movies = DataBase.SelectMoviesBySql("SELECT * FROM movie");
@@ -86,60 +87,69 @@ namespace Jvedio.ViewModel
                     else
                     {
                         //判断哪些需要下载
-                        movies.ForEach(arg => {
+                        foreach (var arg in movies)
+                        {
                             if (IsToDownload(arg))
                             {
+                                if (cts.IsCancellationRequested) break;
                                 Movies.Add(arg.id);
+                                TotalNum = Movies.Count;
                             }
-                        });
+                        }
                     }
                     break;
 
                 case 1:
-                    if (Gif_Skip)
+
+                    foreach (var arg in movies)
                     {
-                        //跳过已截取的
-                        movies.ForEach(arg => { 
-                            if(!File.Exists(Path.Combine(Properties.Settings.Default.BasePicPath, "Gif", arg.id +".gif")))
-                            {
-                                Movies.Add(arg.id);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        movies.ForEach(arg => { Movies.Add(arg.id); });
+                        if (Gif_Skip && File.Exists(arg.filepath) && !File.Exists(Path.Combine(Properties.Settings.Default.BasePicPath, "Gif", arg.id + ".gif")))
+                        {
+                            Movies.Add(arg.id);
+                        }
+                        else if(!Gif_Skip && File.Exists(arg.filepath))
+                        {
+                            Movies.Add(arg.id);
+                        }
+                        if (cts.IsCancellationRequested) break;
+                        TotalNum = Movies.Count;
                     }
                     break;
 
                 case 2:
-                    if (ScreenShot_Skip)
+                    foreach (var arg in movies)
                     {
-                        movies.ForEach(arg => {
-                            if (!IsScreenShotExist(Path.Combine(Properties.Settings.Default.BasePicPath, "ScreenShot", arg.id) ))
-                            {
-                                Movies.Add(arg.id);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        movies.ForEach(arg => { Movies.Add(arg.id); });
+                        if (ScreenShot_Skip && File.Exists(arg.filepath) &&  !IsScreenShotExist(Path.Combine(Properties.Settings.Default.BasePicPath, "ScreenShot", arg.id)))
+                        {
+                            Movies.Add(arg.id);
+                        }
+                        else if (!ScreenShot_Skip && File.Exists(arg.filepath)) 
+                        {
+                            Movies.Add(arg.id);
+                        }
+                        if (cts.IsCancellationRequested) break;
+                        TotalNum = Movies.Count;
                     }
                     break;
 
                 case 3:
                     //重命名
-                    movies.ForEach(arg => { 
-                        if (File.Exists(arg.filepath)) Movies.Add(arg.id);
-                    });
+                    foreach (var arg in movies)
+                    {
+                        if (File.Exists(arg.filepath))
+                        {
+                            if (cts.IsCancellationRequested) break;
+                            Movies.Add(arg.id);
+                            TotalNum = Movies.Count;
+                        }
+                    }
                     break;
                 default:
 
                     break;
             }
             callback.Invoke(Jvedio.Language.Resources.Complete);
-            TotalNum = Movies.Count;
+
             return true;
         }
 

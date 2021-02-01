@@ -94,42 +94,42 @@ namespace Jvedio
 
 
 
-        public bool ScreenShot(string id)
+        public async Task<bool> ScreenShot(string id)
         {
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) return false;
-
-            Movie movie = DataBase.SelectMovieByID(id);
-            int SemaphoreNum = vieModel.ScreenShot_Num;
-            string ScreenShotPath = "";
-            //if (Properties.Settings.Default.ScreenShotToExtraPicPath)
-            //    ScreenShotPath = BasePicPath + "ExtraPic\\" + movie.id;
-            //else
-            ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
-
-            if (!Directory.Exists(ScreenShotPath)) Directory.CreateDirectory(ScreenShotPath);
-
-
-
-            string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
-            if (cutoffArray.Length == 0) return false;
-            SemaphoreScreenShot = new Semaphore(SemaphoreNum, SemaphoreNum);
-            int total = cutoffArray.Count();
-            ScreenShotNumber = 0;
-
-
-            for (int i = 0; i < cutoffArray.Count(); i++)
+            return await Task.Run(() =>
             {
-                List<object> list = new List<object>() { cutoffArray[i], i.ToString(), movie.filepath, ScreenShotPath };
-                Thread threadObject = new Thread(BeginScreenShot);
-                threadObject.Start(list);
-            }
+                if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) return false;
 
-            //等待直到所有线程完成
-            while (ScreenShotNumber < total)
-            {
-                Task.Delay(500).Wait();
-            }
-            return true;
+                Movie movie = DataBase.SelectMovieByID(id);
+                int SemaphoreNum = vieModel.ScreenShot_Num;
+                string ScreenShotPath = "";
+                ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
+
+                if (!Directory.Exists(ScreenShotPath)) Directory.CreateDirectory(ScreenShotPath);
+
+
+
+                string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
+                if (cutoffArray.Length == 0) return false;
+                SemaphoreScreenShot = new Semaphore(SemaphoreNum, SemaphoreNum);
+                int total = cutoffArray.Count();
+                ScreenShotNumber = 0;
+
+
+                for (int i = 0; i < cutoffArray.Count(); i++)
+                {
+                    List<object> list = new List<object>() { cutoffArray[i], i.ToString(), movie.filepath, ScreenShotPath };
+                    Thread threadObject = new Thread(BeginScreenShot);
+                    threadObject.Start(list);
+                }
+
+                //等待直到所有线程完成
+                while (ScreenShotNumber < total)
+                {
+                    Task.Delay(500).Wait();
+                }
+                return true;
+            });
 
         }
 
@@ -178,39 +178,43 @@ namespace Jvedio
 
 
 
-        private bool GenGif(string id)
+        private async Task<bool> GenGif(string id)
         {
-            Movie movie = DataBase.SelectMovieByID(id);
-            string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
-            if (cutoffArray.Count() < 2) return false;
-            string cutoffTime = cutoffArray[new Random().Next(1, cutoffArray.Count() - 1)];
-            string filePath = movie.filepath;
-            string GifSavePath = BasePicPath + "Gif\\";
-            if (!Directory.Exists(GifSavePath)) Directory.CreateDirectory(GifSavePath);
-            GifSavePath += id + ".gif";
-            if (string.IsNullOrEmpty(cutoffTime)) return false;
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) return false;
+            return await Task.Run(() =>
+            {
+                Movie movie = DataBase.SelectMovieByID(id);
+                string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
+                if (cutoffArray.Count() < 2) return false;
+                string cutoffTime = cutoffArray[new Random().Next(1, cutoffArray.Count() - 1)];
+                string filePath = movie.filepath;
+                string GifSavePath = BasePicPath + "Gif\\";
+                if (!Directory.Exists(GifSavePath)) Directory.CreateDirectory(GifSavePath);
+                GifSavePath += id + ".gif";
+                if (string.IsNullOrEmpty(cutoffTime)) return false;
+                if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) return false;
 
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            p.StartInfo.FileName = "cmd.exe";
-            p.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
-            p.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
-            p.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
-            p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
-            p.StartInfo.CreateNoWindow = true;//不显示程序窗口
-            p.Start();//启动程序
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                p.StartInfo.FileName = "cmd.exe";
+                p.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
+                p.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
+                p.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
+                p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
+                p.StartInfo.CreateNoWindow = true;//不显示程序窗口
+                p.Start();//启动程序
 
-            int width = vieModel.Gif_Width;
-            int height = vieModel.Gif_Height;
+                int width = vieModel.Gif_Width;
+                int height = vieModel.Gif_Height;
 
-            string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t {vieModel.Gif_Length} -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifSavePath}\"";
-            p.StandardInput.WriteLine(str + "&exit");
-            p.StandardInput.AutoFlush = true;
-            _ = p.StandardOutput.ReadToEnd();
-            p.WaitForExit();//等待程序执行完退出进程
-            p.Close();
+                string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t {vieModel.Gif_Length} -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifSavePath}\"";
+                Console.WriteLine(str);
+                p.StandardInput.WriteLine(str + "&exit");
+                p.StandardInput.AutoFlush = true;
+                _ = p.StandardOutput.ReadToEnd();
+                p.WaitForExit();//等待程序执行完退出进程
+                p.Close();
 
-            return true;
+                return true;
+            });
         }
 
         private void SetEnable(bool enable)
@@ -309,7 +313,17 @@ namespace Jvedio
             if (result)
                 ShowStatus($"{i + 1}/{vieModel.TotalNum} => {Jvedio.Language.Resources.Message_Success}");
             else
-                ShowStatus($"{i + 1}/{vieModel.TotalNum} =>  {Jvedio.Language.Resources.Message_Success}" + message == "" ? "" : $"，{Jvedio.Language.Resources.Reason} ：" + message);
+            {
+                if (message != "")
+                {
+                    ShowStatus($"{i + 1}/{vieModel.TotalNum} =>  {Jvedio.Language.Resources.Message_Fail}  {Jvedio.Language.Resources.Reason} ：{message}");
+                }
+                else
+                {
+                    ShowStatus($"{i + 1}/{vieModel.TotalNum} => {Jvedio.Language.Resources.Message_Fail}");
+                }
+            }
+
             vieModel.CurrentNum += 1;
         }
 
@@ -331,9 +345,9 @@ namespace Jvedio
                 }
                 ct.ThrowIfCancellationRequested();
             }
-            catch(OperationCanceledException ex)
+            catch (OperationCanceledException ex)
             {
-                Console.WriteLine(  ex.Message);
+                Console.WriteLine(ex.Message);
                 ShowStatus($"------------{Jvedio.Language.Resources.Cancel}------------");
                 App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });
                 return true;
@@ -364,13 +378,15 @@ namespace Jvedio
         private async void GenerateGif()
         {
             ShowStatus($"------------{Jvedio.Language.Resources.Batch_Gif}------------");
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 for (int i = 0; i < vieModel.TotalNum; i++)
                 {
                     if (CheckPause()) break;
-                    bool result = GenGif(vieModel.Movies[i]);
-                    ShowResultMessage(result, i);
+                    bool result = await GenGif(vieModel.Movies[i]);
+                    string message = "";
+                    if (!result) message = Jvedio.Language.Resources.NoScreenShotDuration;
+                    ShowResultMessage(result, i, message);
                 }
             }, ct);
             ShowStatus($"------------{Jvedio.Language.Resources.Complete}------------");
@@ -381,13 +397,15 @@ namespace Jvedio
         private async void GenerateScreenShot()
         {
             ShowStatus($"------------{Jvedio.Language.Resources.ScreenShot}------------");
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 for (int i = 0; i < vieModel.TotalNum; i++)
                 {
                     if (CheckPause()) break;
-                    bool result = ScreenShot(vieModel.Movies[i]);
-                    ShowResultMessage(result, i);
+                    bool result = await ScreenShot(vieModel.Movies[i]);
+                    string message = "";
+                    if (!result) message = Jvedio.Language.Resources.NoScreenShotDuration;
+                    ShowResultMessage(result, i, message);
 
                 }
             }, ct);
@@ -440,24 +458,25 @@ namespace Jvedio
                 return;
             }
 
-            bool success = await ResetTask();
-            if (!success) return;
-
             cts = new CancellationTokenSource();
             cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_CancelCurrentTask, "BatchGrowl"); });
             ct = cts.Token;
 
+
             Running = true;
 
             OutputPanel.Clear();
-            PauseButton.IsEnabled = true;
+
             PauseButton.Content = Jvedio.Language.Resources.Pause;
+            vieModel.TotalNum = 0;
             vieModel.CurrentNum = 0;
             vieModel.Progress = 0;
 
-            if (vieModel.Movies != null)
+            bool success = await ResetTask(cts);
+            if (success && Running && vieModel.Movies != null && vieModel.TotalNum!=0)
             {
-
+                WaitingPanel.Visibility = Visibility.Hidden;
+                PauseButton.IsEnabled = true;
                 if (idx == 0)
                 {
                     SyncInfo();
@@ -477,6 +496,11 @@ namespace Jvedio
                     Rename();
                 }
             }
+            else
+            {
+                Running = false;
+
+            }
         }
 
 
@@ -487,19 +511,23 @@ namespace Jvedio
 
             if (!File.Exists(detailMovie.filepath)) return (false, $"{Jvedio.Language.Resources.Message_FileNotExist} {detailMovie.filepath}");
             DetailMovie movie = DataBase.SelectDetailMovieById(id);
-            //try
-            //{
             string[] newPath = movie.ToFileName();
             if (movie.hassubsection)
             {
                 for (int i = 0; i < newPath.Length; i++)
                 {
-                    if (File.Exists(newPath[i])) return (false, $"新文件已存在：{newPath[i]}，原文件为：{detailMovie.filepath}");
+                    if (File.Exists(newPath[i])) return (false, $"{Jvedio.Language.Resources.NewFileExists}：{newPath[i]}，{Jvedio.Language.Resources.SourceFile}：{detailMovie.filepath}");
                 }
 
                 for (int i = 0; i < newPath.Length; i++)
                 {
-                    File.Move(movie.subsectionlist[i], newPath[i]);
+                    try
+                    {
+                        File.Move(movie.subsectionlist[i], newPath[i]);
+                    }catch(Exception ex) {
+                        Logger.LogF(ex);
+                        continue; 
+                    }                    
                 }
                 movie.filepath = newPath[0];
                 movie.subsection = string.Join(";", newPath);
@@ -509,17 +537,12 @@ namespace Jvedio
             }
             else
             {
-                if (File.Exists(newPath[0])) return (false, $"新文件已存在：{newPath[0]}，原文件为：{detailMovie.filepath}");
+                if (File.Exists(newPath[0])) return (false, $"{Jvedio.Language.Resources.NewFileExists}：{newPath[0]}，{Jvedio.Language.Resources.NewFileExists}：{detailMovie.filepath}");
                 File.Move(movie.filepath, newPath[0]);
                 movie.filepath = newPath[0];
                 DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
             }
             return (true, "");
-            //}
-            //catch (Exception ex)
-            //{
-            //    return (false, ex.Message);
-            //}
         }
 
 
@@ -558,6 +581,7 @@ namespace Jvedio
                 catch { }
                 PauseButton.IsEnabled = false;
                 WaitingPanel.Visibility = Visibility.Hidden;
+                Running = false;
             }
         }
 
@@ -568,13 +592,8 @@ namespace Jvedio
             Properties.Settings.Default.Save();
         }
 
-        private async Task<bool> ResetTask()
+        private async Task<bool> ResetTask(CancellationTokenSource cts=null)
         {
-            if (Running)
-            {
-                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.OtherTaskIsRunning, "BatchGrowl");
-                return false;
-            }
             int idx = TabControl.SelectedIndex;
             WaitingPanel.Visibility = Visibility.Visible;
             return await Task.Run(() =>
@@ -582,7 +601,7 @@ namespace Jvedio
                 return vieModel.Reset(idx, (message) =>
                 {
                     Dispatcher.BeginInvoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });
-                });
+                },cts);
             });
         }
 
@@ -593,19 +612,13 @@ namespace Jvedio
         }
 
 
-        private async void Jvedio_BaseWindow_ContentRendered(object sender, EventArgs e)
+        private  void Jvedio_BaseWindow_ContentRendered(object sender, EventArgs e)
         {
 
             vieModel = new VieModel_Batch();
             this.DataContext = vieModel;
-            await ResetTask();
-            //WaitingPanel.Visibility = Visibility.Visible;
         }
 
-        private async void ResetTaskWithCheckbox(object sender, MouseButtonEventArgs e)
-        {
-            await ResetTask();
-        }
 
 
         private void TextBlock_MouseEnter(object sender, MouseEventArgs e)
@@ -626,7 +639,20 @@ namespace Jvedio
             if (settings == null) settings = new Settings();
             settings.Show();
             settings.Activate();
-            settings.TabControl.SelectedIndex = settings.TabControl.Items.Count - 1;
+
+            if (TabControl.SelectedIndex == 1)
+            {
+                settings.TabControl.SelectedIndex = 7;
+            }
+            else if (TabControl.SelectedIndex == 2)
+            {
+                settings.TabControl.SelectedIndex = 7;
+            }
+            else if (TabControl.SelectedIndex == 3)
+            {
+                settings.TabControl.SelectedIndex = 9;
+            }
+
         }
     }
 

@@ -1305,4 +1305,13 @@
   <data name="Download" xml:space="preserve">
     <value>下载</value>
   </data>
+  <data name="NoScreenShotDuration" xml:space="preserve">
+    <value>跳过开头或结尾超过视频总长度</value>
+  </data>
+  <data name="NewFileExists" xml:space="preserve">
+    <value>新文件已存在</value>
+  </data>
+  <data name="SourceFile" xml:space="preserve">
+    <value>原文件</value>
+  </data>
 </root>
