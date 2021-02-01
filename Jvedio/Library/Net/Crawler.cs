@@ -77,7 +77,7 @@ namespace Jvedio
             if (StatusCode == 200 & Content != "") { SaveInfo(GetInfo()); return true; }
             else
             {
-                resultMessage = $"地址：{Url}，错误原因：{StatusCode.ToString().ToStatusMessage()}";
+                resultMessage = $"{Jvedio.Language.Resources.Url}：{Url}，{Jvedio.Language.Resources.Reason}：{StatusCode.ToString().ToStatusMessage()}";
                 Logger.LogN(resultMessage);
                 callback?.Invoke(StatusCode);
                 return false;
@@ -137,20 +137,20 @@ namespace Jvedio
             }
             else if (Content.IndexOf("非常抱歉，此商品未在您的居住国家公开")> 0 || Content.IndexOf("お探しの商品が見つかりません") > 0)
             {
-                resultMessage = $"地址：{Url}，错误原因：该商品未在您的居住国家公开，请设置相应代理";
+                resultMessage = $"{Jvedio.Language.Resources.Url}：{Url}，{Jvedio.Language.Resources.Reason}：{"403".ToStatusMessage()}";
                 Logger.LogN(resultMessage);
                 callback?.Invoke(403);
                 return false;
             }else if (Content.IndexOf("非常抱歉，找不到您要的商品")>0)
             {
-                resultMessage = $"地址：{Url}，错误原因：该商品未在您的居住国家公开，请设置相应代理";
+                resultMessage = $"{Jvedio.Language.Resources.Url}：{Url}，{Jvedio.Language.Resources.Reason}：{"403".ToStatusMessage()}";
                 Logger.LogN(resultMessage);
                 callback?.Invoke(404);
                 return false;
             }
             else
             {
-                resultMessage = $"地址：{Url}，错误原因：获取网页源码失败";
+                resultMessage = $"{Jvedio.Language.Resources.Url}：{Url}，{Jvedio.Language.Resources.Reason}：{Jvedio.Language.Resources.GetSourceCodeFail}";
                 Logger.LogN(resultMessage);
                 callback?.Invoke(StatusCode);
                 return false;
@@ -163,11 +163,11 @@ namespace Jvedio
             Dictionary<string, string> Info = new FC2Parse(ID, Content).Parse();
             if (Info.Count <= 0)
             {
-                Logger.LogN($"地址：{Url}，失败原因：信息解析失败");
+                Logger.LogN($"{Jvedio.Language.Resources.Url}：{Url}");
             }
             else if (Content.IndexOf("非常抱歉，此商品未在您的居住国家公开")>0)
             {
-                Logger.LogN($"非常抱歉，此商品未在您的居住国家公开");
+                Logger.LogN("403".ToStatusMessage());
             }
             else
             {
@@ -255,7 +255,7 @@ namespace Jvedio
         protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new JavDBParse(ID, Content, MovieCode).Parse();
-            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
+            if (Info.Count <= 0) { Console.WriteLine($"{Jvedio.Language.Resources.Url}：{Url}"); resultMessage = $"{Jvedio.Language.Resources.Url}：{Url}，{Jvedio.Language.Resources.Reason}：{Jvedio.Language.Resources.ParseFail}！"; Logger.LogN(resultMessage); }
             else
             {
                 Info.Add("id", ID);
@@ -358,7 +358,7 @@ namespace Jvedio
         protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new LibraryParse(ID, Content).Parse();
-            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
+            if (Info.Count <= 0) { Console.WriteLine($"{Jvedio.Language.Resources.Url}：{Url}"); resultMessage = $"{Jvedio.Language.Resources.Url}：{Url}，{Jvedio.Language.Resources.Reason}：{Jvedio.Language.Resources.ParseFail}！"; Logger.LogN(resultMessage); }
             else
             {
                 Info.Add("id", ID);
@@ -470,7 +470,7 @@ namespace Jvedio
             Dictionary<string, string> Info = new Dictionary<string, string>();
             return Info;
             Info = new LibraryParse(ID, Content).Parse();
-            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
+            if (Info.Count <= 0) { Console.WriteLine($"{Jvedio.Language.Resources.Url}：{Url}"); resultMessage = $"{Jvedio.Language.Resources.Url}：{Url}，{Jvedio.Language.Resources.Reason}：{Jvedio.Language.Resources.ParseFail}！"; Logger.LogN(resultMessage); }
             else
             {
                 Info.Add("id", ID);
@@ -520,7 +520,7 @@ namespace Jvedio
         protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new Jav321Parse(ID, Content).Parse();
-            if (Info.Count <= 0) { Console.WriteLine($"解析失败：{Url}"); resultMessage = $"地址：{Url}，失败原因：无法解析！"; Logger.LogN(resultMessage); }
+            if (Info.Count <= 0) { Console.WriteLine($"{Jvedio.Language.Resources.Url}：{Url}"); resultMessage = $"{Jvedio.Language.Resources.Url}：{Url}，{Jvedio.Language.Resources.Reason}：{Jvedio.Language.Resources.ParseFail}！"; Logger.LogN(resultMessage); }
             else
             {
                 Info.Add("sourceurl", Url);

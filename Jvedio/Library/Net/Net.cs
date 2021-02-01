@@ -90,7 +90,7 @@ namespace Jvedio
                             if (Mode == HttpMode.RedirectGet) Request.AllowAutoRedirect = false;
                             Request.Referer = Url;
                             Request.UserAgent = UserAgent;
-                            Request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+                            Request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");//限定为中文，解析的时候就是中文
                             Request.ReadWriteTimeout = READWRITETIMEOUT;
                             if (Proxy != null) Request.Proxy = Proxy;
                             Response = (HttpWebResponse)Request.GetResponse();
@@ -114,7 +114,7 @@ namespace Jvedio
                         }
                         catch (WebException e)
                         {
-                            Logger.LogN($"地址：{Url}，失败原因：{e.Message}");
+                            Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{e.Message}");
                             if (e.Status == WebExceptionStatus.Timeout)
                                 num += 1;
                             else
@@ -122,7 +122,7 @@ namespace Jvedio
                         }
                         catch (Exception e)
                         {
-                            Logger.LogN($"地址：{Url}，失败原因：{e.Message}");
+                            Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{e.Message}");
                             num = 2;
                         }
                         finally
@@ -134,7 +134,7 @@ namespace Jvedio
                     }).TimeoutAfter(TimeSpan.FromSeconds(HTTPTIMEOUT));
 
                 }
-                catch (TimeoutException ex) { Logger.LogN($"地址：{Url}，失败原因：{ex.Message}"); num = 2; }
+                catch (TimeoutException ex) { Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{ex.Message}"); num = 2; }
             }
 
             return (HtmlText, StatusCode);
@@ -288,7 +288,7 @@ namespace Jvedio
             {
                 Console.WriteLine(e.StackTrace);
                 Console.WriteLine(e.Message);
-                Logger.LogN($"地址：{aDomain}，失败原因：{e.Message}");
+                Logger.LogN($" {Jvedio.Language.Resources.Url}：{aDomain}， {Jvedio.Language.Resources.Reason}：{e.Message}");
             }
             return false;
         }
@@ -346,7 +346,7 @@ namespace Jvedio
                 {
                     HttpWebResponse res = (HttpWebResponse)e.Response;
                     if(res!=null) statuscode = (int)res.StatusCode;
-                    Logger.LogN($"地址：{Url}，失败原因：{e.Message}");
+                    Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{e.Message}");
                     if (e.Status == WebExceptionStatus.Timeout) { num += 1; } else { num = 2; }
                 }
                 catch (Exception e)
@@ -384,7 +384,7 @@ namespace Jvedio
 
 
             if (ImageBytes == null) {
-                Logger.LogN($"图片下载失败：{Url}");
+                Logger.LogN($" {Jvedio.Language.Resources.DownLoadImageFail}：{Url}");
                 callback?.Invoke(statuscode);
                 result = false; 
             }
@@ -411,7 +411,7 @@ namespace Jvedio
                 Actress actress = busParse.ParseActress();
                 if (actress ==null && string.IsNullOrEmpty(actress.birthday)  && actress.age == 0 && string.IsNullOrEmpty(actress.birthplace))
                 { 
-                    ResultMessage = $"该网址无演员信息：{Url}";
+                    ResultMessage = $"{Jvedio.Language.Resources.NoActorInfo}：{Url}";
                     callback.Invoke(ResultMessage);
                     Logger.LogN($"URL={Url},Message-{ResultMessage}"); 
                 }
@@ -428,8 +428,8 @@ namespace Jvedio
                 }
             }
             else { 
-                Console.WriteLine($"无法访问 404：{Url}"); 
-                ResultMessage = "Bus 无法访问";
+                Console.WriteLine($"{"404".ToStatusMessage()}：{Url}"); 
+                ResultMessage = "Bus" + "404".ToStatusMessage();
                 callback.Invoke(ResultMessage);
                 Logger.LogN($"URL={Url},Message-{ResultMessage}"); }
             return result;
@@ -549,12 +549,12 @@ namespace Jvedio
         public static async Task<(bool, string)> DownLoadFromNet(Movie movie,bool forceToDownload=false)
         {
             bool success = false;
-            string message = "网址未配置";
+            string message = Jvedio.Language.Resources.UrlNotSet;
             Movie newMovie;
             if (movie.vediotype == (int)VedioType.欧美)
             {
                 if (RootUrl.BusEu.IsProperUrl() && EnableUrl.BusEu) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl((statuscode)=> { message = statuscode.ToString(); } );
-                else if (RootUrl.BusEu.IsProperUrl() && !EnableUrl.BusEu) message = "未开启欧美网址";
+                else if (RootUrl.BusEu.IsProperUrl() && !EnableUrl.BusEu) message = Jvedio.Language.Resources.UrlEuropeNotset;
             }
             else
             {
@@ -562,7 +562,7 @@ namespace Jvedio
                 {
                     //优先从 db 下载
                     if (RootUrl.DB.IsProperUrl() && EnableUrl.DB) {  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
-                    else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB) message = "未开启 DB 网址";
+                    else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB) message = Jvedio.Language.Resources.UrlDBNotset;
 
                     //db 未下载成功则去 fc2官网
                     newMovie = DataBase.SelectMovieByID(movie.id);

@@ -47,7 +47,7 @@ namespace Jvedio
             if (nfopaths.Count > 0 && Properties.Settings.Default.ScanNfo)
             {
                 Logger.LogScanInfo(Environment.NewLine + "-----【" + DateTime.Now.ToString() + "】-----");
-                Logger.LogScanInfo(Environment.NewLine + $"扫描出NFO => {nfopaths.Count}  个 \n");
+                Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.ScanNFO} => {nfopaths.Count}  个 \n");
 
                 double total = 0;
                 //导入 nfo 文件
@@ -60,15 +60,15 @@ namespace Jvedio
                         {
                             DataBase.InsertFullMovie(movie);
                             total += 1;
-                            Logger.LogScanInfo($"\n成功导入数据库 => {item}  ");
+                            Logger.LogScanInfo($"\n{Jvedio.Language.Resources.SuccessImportToDataBase} => {item}  ");
                         }
 
                     }
                 });
 
                 
-                Logger.LogScanInfo(Environment.NewLine + $"总计导入{total}个 nfo 文件" + Environment.NewLine );
-                messageCallBack?.Invoke($"总计导入{total}个 nfo 文件");
+                Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.ImportNFONumber}： {total}" + Environment.NewLine );
+                messageCallBack?.Invoke($"{Jvedio.Language.Resources.ImportNFONumber}： {total}");
 
                 
 
@@ -79,7 +79,7 @@ namespace Jvedio
             if (vediopaths.Count > 0)
             {
                 double _num = Scan.DistinctMovieAndInsert(vediopaths, ct, IsEurope);
-                messageCallBack?.Invoke($"总计导入{_num}个视频，详情请看日志");
+                messageCallBack?.Invoke($"{Jvedio.Language.Resources.ImportVideioNumber}：{_num}，详情请看日志");
                 return _num;
             }
             return 0;
@@ -355,7 +355,7 @@ namespace Jvedio
         public static double DistinctMovieAndInsert(List<string> MoviePaths , CancellationToken ct, bool IsEurope = false)
         {
             Logger.LogScanInfo(Environment.NewLine +  "-----【" + DateTime.Now.ToString() + "】-----");
-            Logger.LogScanInfo(Environment.NewLine +  $"扫描出视频 => {MoviePaths.Count}  个 \n");
+            Logger.LogScanInfo(Environment.NewLine +  $"{Jvedio.Language.Resources.ScanVideo} => {MoviePaths.Count} \n");
 
 
             //检查未识别出番号的视频
@@ -385,7 +385,7 @@ namespace Jvedio
                     }
                 }
             }
-            Logger.LogScanInfo($"\n【未识别出的视频：{unidentifynum}个】\n" + c1);
+            Logger.LogScanInfo($"\n【{Jvedio.Language.Resources.NotRecognizeNumber} ：{unidentifynum}】\n" + c1);
 
             //检查 重复|分段 视频
             Dictionary<string, List<string>> repeatlist = new Dictionary<string, List<string>>();
@@ -421,12 +421,12 @@ namespace Jvedio
                         if(filepathlist.Count< kvp.Value.Count)
                         {
                             //其中几个不是分段视频
-                            c2 += $"   识别码为：{kvp.Key}" + Environment.NewLine;
+                            c2 += $"   {Jvedio.Language.Resources.ID} ：{kvp.Key}" + Environment.NewLine;
                             removelist.AddRange(notsubsection);
-                            c2 += $"      导入了 {filepathlist.Count} 个分段视频：{string.Join(";",filepathlist)}" + Environment.NewLine;
+                            c2 += $"      {Jvedio.Language.Resources.ImportSubSection}： {filepathlist.Count} ，：{string.Join(";",filepathlist)}" + Environment.NewLine;
                             notsubsection.ForEach(arg =>
                             {
-                                c2 += $"      未导入：{arg}" + Environment.NewLine;
+                                c2 += $"      {Jvedio.Language.Resources.NotImport} ：{arg}" + Environment.NewLine;
                             });
                         }
 
@@ -434,13 +434,13 @@ namespace Jvedio
                     }
                     else
                     {
-                        c2 += $"   识别码为：{kvp.Key}" + Environment.NewLine ;
+                        c2 += $"   {Jvedio.Language.Resources.ID}：{kvp.Key}" + Environment.NewLine ;
                         (string maxfilepath, List<string> Excludelsist) = ExcludeMaximumSize(kvp.Value);
                         removelist.AddRange(Excludelsist);
-                        c2 += $"      导入的：{maxfilepath}，文件大小：{new FileInfo(maxfilepath).Length}" + Environment.NewLine;
+                        c2 += $"      {Jvedio.Language.Resources.ImportFile} ：{maxfilepath}，{Jvedio.Language.Resources.FileSize} ：{new FileInfo(maxfilepath).Length}" + Environment.NewLine;
                         Excludelsist.ForEach(arg =>
                         {
-                            c2 += $"      未导入：{arg}，文件大小：{new FileInfo(arg).Length}" + Environment.NewLine;
+                            c2 += $"      {Jvedio.Language.Resources.NotImport} ：{arg}，{Jvedio.Language.Resources.FileSize} ：{new FileInfo(arg).Length}" + Environment.NewLine;
                         });
                     }
 
@@ -450,7 +450,7 @@ namespace Jvedio
 
                 }
             }
-            Logger.LogScanInfo($"\n【重复的视频：{removelist.Count + subsectionlist.Count}个】" + Environment.NewLine + c2);
+            Logger.LogScanInfo($"\n【 {Jvedio.Language.Resources.RepeatVideo}：{removelist.Count + subsectionlist.Count}个】" + Environment.NewLine + c2);
             List<string> insertList = r1.Except(removelist).ToList();
 
             Console.WriteLine("removelist:" + removelist.Count);
@@ -548,7 +548,7 @@ namespace Jvedio
                 totalinsertnum += 1;
             }
             
-            Logger.LogScanInfo(Environment.NewLine + $"总计导入 => {totalinsertnum}个，由于数据库中可能有重复视频，故导入数目大于实际影片数目" + Environment.NewLine);
+            Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.TotalImport} => {totalinsertnum}，{Jvedio.Language.Resources.ImportAttention}" + Environment.NewLine);
 
 
             //从 主数据库中 复制信息

@@ -384,7 +384,7 @@ namespace Jvedio
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
 
-            if (value == null || value.ToString() == "") return "宋体";
+            if (value == null || value.ToString() == "") return "微软雅黑";
 
             return value.ToString();
 

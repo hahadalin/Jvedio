@@ -116,7 +116,7 @@ namespace Jvedio
                 //满足一定条件才下载信息
                 (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet(movie); });
                 InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = movie, progress = downLoadProgress.value,Success=success });//委托到主界面显示
-                if (!success) MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {movie.id} 信息下载失败，原因：{(resultMessage.ToStatusMessage())}"));
+                if (!success) MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {movie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{(resultMessage.ToStatusMessage())}"));
             }
 
 

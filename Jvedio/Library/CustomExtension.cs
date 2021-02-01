@@ -189,13 +189,13 @@ namespace Jvedio
             switch (status)
             {
                 case "403":
-                    return "此商品未在您的居住国家公开";
+                    return Jvedio.Language.Resources.NotShowInCountry;
                 case "404":
-                    return "网址无该资源，或找不到该商品";
+                    return Jvedio.Language.Resources.NoID;
                 case "504":
-                    return "网关请求超时，网址可能被屏蔽了";
+                    return Jvedio.Language.Resources.TimeOut;
                 case "302":
-                    return "检索过于频繁，稍后再试";
+                    return Jvedio.Language.Resources.TooFrequent;
                 default:
                     return status;
             }
@@ -299,7 +299,7 @@ namespace Jvedio
                 {
                     if(Properties.Settings.Default.AddLabelTagWhenRename && Identify.IsCHS(oldName))
                     {
-                        result[i] = Path.Combine(dir, $"{newName}-{i + 1}_中文{ext}");
+                        result[i] = Path.Combine(dir, $"{newName}-{i + 1}_{Jvedio.Language.Resources.Translated}{ext}");
                     }
                     else
                     {
@@ -313,7 +313,7 @@ namespace Jvedio
             {
                 if (Properties.Settings.Default.AddLabelTagWhenRename && Identify.IsCHS(oldName))
                 {
-                    return new string[] { Path.Combine(dir, $"{newName}_中文{ext}") };
+                    return new string[] { Path.Combine(dir, $"{newName}_{Jvedio.Language.Resources.Translated}{ext}") };
                 }
                 else
                 {

@@ -10,8 +10,8 @@ namespace Jvedio
     public static class Identify
     {
 
-        public static string[] FLOWOUT = new string[] {"流出", "留出", "泄露", "泄密", "曝光" };
-        public static string[] CHS = new string[] {  "中字", "中文字幕", "字幕","中文" };
+        public static string[] FLOWOUT = new string[] {"流出", "留出", "泄露", "泄密", "曝光" ,"flowout"};
+        public static string[] CHS = new string[] {  "中字", "中文字幕", "字幕","中文","translated" , "translate" };
         public static string[] HDV = new string[] { "hd", "high_definition", "high definition","高清" };
 
         public static void InitFanhaoList()

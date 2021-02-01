@@ -1296,4 +1296,34 @@
   <data name="Complete" xml:space="preserve">
     <value>実施する</value>
   </data>
+  <data name="BeginAsync" xml:space="preserve">
+    <value>同期を開始します</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>飛び越える</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+  <data name="NoScreenShotDuration" xml:space="preserve">
+    <value>動画の全長を超える最初または最後をスキップする</value>
+  </data>
+  <data name="NewFileExists" xml:space="preserve">
+    <value>新しいファイルはすでに存在します</value>
+  </data>
+  <data name="SourceFile" xml:space="preserve">
+    <value>元のファイル</value>
+  </data>
+  <data name="NotShowInCountry" xml:space="preserve">
+    <value>この製品はお住まいの国では公開されていません</value>
+  </data>
+  <data name="NoID" xml:space="preserve">
+    <value>URLにリソースがないか、製品が見つかりません</value>
+  </data>
+  <data name="TimeOut" xml:space="preserve">
+    <value>ゲートウェイリクエストがタイムアウトしました。URLがブロックされている可能性があります</value>
+  </data>
+  <data name="TooFrequent" xml:space="preserve">
+    <value>取得頻度が高すぎる場合は、後で再試行してください</value>
+  </data>
 </root>

@@ -1314,4 +1314,73 @@
   <data name="SourceFile" xml:space="preserve">
     <value>原文件</value>
   </data>
+  <data name="NotShowInCountry" xml:space="preserve">
+    <value>此商品未在您的居住国家公开</value>
+  </data>
+  <data name="NoID" xml:space="preserve">
+    <value>网址无该资源，或找不到该商品</value>
+  </data>
+  <data name="TimeOut" xml:space="preserve">
+    <value>网关请求超时，网址可能被屏蔽了</value>
+  </data>
+  <data name="TooFrequent" xml:space="preserve">
+    <value>检索过于频繁，稍后再试</value>
+  </data>
+  <data name="GetSourceCodeFail" xml:space="preserve">
+    <value>获取网页源码失败</value>
+  </data>
+  <data name="ParseFail" xml:space="preserve">
+    <value>解析失败</value>
+  </data>
+  <data name="DownLoadImageFail" xml:space="preserve">
+    <value>图片下载失败</value>
+  </data>
+  <data name="NoActorInfo" xml:space="preserve">
+    <value>该网址无演员信息</value>
+  </data>
+  <data name="UrlNotSet" xml:space="preserve">
+    <value>网址未配置</value>
+  </data>
+  <data name="UrlEuropeNotset" xml:space="preserve">
+    <value>未开启欧美网址</value>
+  </data>
+  <data name="UrlDBNotset" xml:space="preserve">
+    <value>未开启 DB 网址</value>
+  </data>
+  <data name="ScanNFO" xml:space="preserve">
+    <value>扫描出NFO</value>
+  </data>
+  <data name="SuccessImportToDataBase" xml:space="preserve">
+    <value>成功导入数据库</value>
+  </data>
+  <data name="ImportNFONumber" xml:space="preserve">
+    <value>总计导入 nfo 文件个数</value>
+  </data>
+  <data name="ImportVideioNumber" xml:space="preserve">
+    <value>总计导入个视频个数</value>
+  </data>
+  <data name="ScanVideo" xml:space="preserve">
+    <value>扫描出视频个数</value>
+  </data>
+  <data name="NotRecognizeNumber" xml:space="preserve">
+    <value>未识别出的视频个数</value>
+  </data>
+  <data name="NotImport" xml:space="preserve">
+    <value>未导入</value>
+  </data>
+  <data name="ImportSubSection" xml:space="preserve">
+    <value>导入的分段视频个数</value>
+  </data>
+  <data name="ImportFile" xml:space="preserve">
+    <value>导入的文件为</value>
+  </data>
+  <data name="RepeatVideo" xml:space="preserve">
+    <value>重复的视频</value>
+  </data>
+  <data name="TotalImport" xml:space="preserve">
+    <value>总计导入个数</value>
+  </data>
+  <data name="ImportAttention" xml:space="preserve">
+    <value>由于数据库中可能有重复视频，故导入数目大于实际影片数目</value>
+  </data>
 </root>

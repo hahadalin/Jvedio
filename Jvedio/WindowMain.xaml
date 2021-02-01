@@ -942,7 +942,7 @@
                                                 <MenuItem  Header="{x:Static lang:Resources.Picture}" Click="OpenImageSavePath"   />
                                                 <MenuItem  Header="{x:Static lang:Resources.SoftWare}" Click="OpenApplicationPath"  />
                                             </MenuItem>
-                                            <MenuItem  Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="ScreenShot"   />
+                                            <MenuItem Visibility="Collapsed"  Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="ScreenShot"   />
                                             <MenuItem Visibility="Collapsed"  Header="{x:Static lang:Resources.Upgrade}" PreviewMouseLeftButtonUp="ShowUpdate"   />
 
                                             <MenuItem Visibility="Collapsed"  Header="赞助"   Click="OpenThanks"  />

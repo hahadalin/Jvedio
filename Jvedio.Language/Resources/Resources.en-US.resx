@@ -1305,4 +1305,25 @@
   <data name="Download" xml:space="preserve">
     <value>Download</value>
   </data>
+  <data name="NoScreenShotDuration" xml:space="preserve">
+    <value>Skip the beginning or end that exceeds the total length of the video</value>
+  </data>
+  <data name="NewFileExists" xml:space="preserve">
+    <value>New file already exists</value>
+  </data>
+  <data name="SourceFile" xml:space="preserve">
+    <value>Original file</value>
+  </data>
+  <data name="NotShowInCountry" xml:space="preserve">
+    <value>This product is not published in your country of residence</value>
+  </data>
+  <data name="NoID" xml:space="preserve">
+    <value>The URL does not have the resource, or the product cannot be found</value>
+  </data>
+  <data name="TimeOut" xml:space="preserve">
+    <value>The gateway request timed out, the URL may be blocked</value>
+  </data>
+  <data name="TooFrequent" xml:space="preserve">
+    <value>Retrieving too frequently, try again later</value>
+  </data>
 </root>
