@@ -1164,4 +1164,136 @@
   <data name="Reason" xml:space="preserve">
     <value>理由</value>
   </data>
+  <data name="Management" xml:space="preserve">
+    <value>管理</value>
+  </data>
+  <data name="Statistic" xml:space="preserve">
+    <value>統計</value>
+  </data>
+  <data name="ResetDataBase" xml:space="preserve">
+    <value>情報データベースをリセットする</value>
+  </data>
+  <data name="DeleteMovieNotExist" xml:space="preserve">
+    <value>存在しないビデオを削除する</value>
+  </data>
+  <data name="DeleteMovieNotInScan" xml:space="preserve">
+    <value>[起動時にスキャン]ディレクトリにない動画を削除する</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>または</value>
+  </data>
+  <data name="SmallToBig" xml:space="preserve">
+    <value>上昇</value>
+  </data>
+  <data name="BigToSmall" xml:space="preserve">
+    <value>降順</value>
+  </data>
+  <data name="ViewNumber" xml:space="preserve">
+    <value>訪問</value>
+  </data>
+  <data name="ListView" xml:space="preserve">
+    <value>リスト</value>
+  </data>
+  <data name="CurrentVersion" xml:space="preserve">
+    <value>現行版</value>
+  </data>
+  <data name="LatestVersion" xml:space="preserve">
+    <value>最新バージョン</value>
+  </data>
+  <data name="SuccessScreenShotTo" xml:space="preserve">
+    <value>スクリーンショットを成功させる</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="IsUsing" xml:space="preserve">
+    <value>使用されています</value>
+  </data>
+  <data name="PleaseEnter" xml:space="preserve">
+    <value>入ってください</value>
+  </data>
+  <data name="SuccessDelete" xml:space="preserve">
+    <value>正常に削除されました</value>
+  </data>
+  <data name="DownloadMessageFailFor" xml:space="preserve">
+    <value>情報のダウンロードに失敗しました。理由：</value>
+  </data>
+  <data name="RebootToTakeEffect" xml:space="preserve">
+    <value>再起動後に有効になります</value>
+  </data>
+  <data name="NoPermissionToListen" xml:space="preserve">
+    <value>監視する権限がありません</value>
+  </data>
+  <data name="FilePathIntersection" xml:space="preserve">
+    <value>フォルダに交差があるか、フォルダがすでに現在のコレクションにあります</value>
+  </data>
+  <data name="Scanning" xml:space="preserve">
+    <value>走査...</value>
+  </data>
+  <data name="DeleteImage" xml:space="preserve">
+    <value>画像を削除する</value>
+  </data>
+  <data name="SetAs" xml:space="preserve">
+    <value>として設定され</value>
+  </data>
+  <data name="ThumbnailAndPoster" xml:space="preserve">
+    <value>略語 + ポスター</value>
+  </data>
+  <data name="DataBase" xml:space="preserve">
+    <value>データベース</value>
+  </data>
+  <data name="CurrentAndTotal" xml:space="preserve">
+    <value>現在/合計</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>タイムアウト</value>
+  </data>
+  <data name="Batch_SyncInfo" xml:space="preserve">
+    <value>バッチ同期：サーバーのクラッシュを回避するために、情報の同期と画像のプレビュー、低速同期にのみ使用されます</value>
+  </data>
+  <data name="Batch_Gif" xml:space="preserve">
+    <value>GIFの生成：GIFをランダムにインターセプトします</value>
+  </data>
+  <data name="Batch_ScreenShot" xml:space="preserve">
+    <value>スクリーンショットの生成：等間隔でスクリーンショットを生成します</value>
+  </data>
+  <data name="Batch_Rename" xml:space="preserve">
+    <value>名前の変更：[設定-名前の変更]のルールに従います</value>
+  </data>
+  <data name="TaskNumber" xml:space="preserve">
+    <value>タスクの数</value>
+  </data>
+  <data name="TaskSettings" xml:space="preserve">
+    <value>タスク設定</value>
+  </data>
+  <data name="ForeceToSync" xml:space="preserve">
+    <value>上書き情報の同期を強制されます（選択されていない場合、同期された情報はスキップされます）</value>
+  </data>
+  <data name="SkipExistGif" xml:space="preserve">
+    <value>傍受をスキップ</value>
+  </data>
+  <data name="GifDuration" xml:space="preserve">
+    <value>傍受時間</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>高さ</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>幅</value>
+  </data>
+  <data name="SkipExistsScreenShot" xml:space="preserve">
+    <value>保存場所に画像がある場合はスキップします</value>
+  </data>
+  <data name="ThreadNumber" xml:space="preserve">
+    <value>スレッド数</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>Second</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>続ける</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>実施する</value>
+  </data>
 </root>

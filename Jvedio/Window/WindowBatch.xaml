@@ -8,9 +8,10 @@
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
+        xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         x:Class="Jvedio.WindowBatch"
         mc:Ignorable="d"
-        Title="批量处理" 
+        Title="{x:Static lang:Resources.BatchProcessing}" 
         MinHeight="500" MinWidth="800"
     Height="500"
     Width="800"
@@ -88,7 +89,7 @@
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Margin" Value="0,5,0,5"/>
+            <Setter Property="Margin" Value="20 5"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         </Style>
 
@@ -541,265 +542,188 @@
 
     </local:Jvedio_BaseWindow.Resources>
 
-    <Grid  Background="Transparent"   >
+    <Grid  Background="{DynamicResource BackgroundMain}"   >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
+
         <JvedioControls:WaitingPanel Visibility="Collapsed"  ShowCancelButton="Collapsed" x:Name="WaitingPanel"  Panel.ZIndex="5" ></JvedioControls:WaitingPanel>
 
-        
-        
-        
-
         <!--消息提示框-->
-        <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="20 50">
+        <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="20">
             <StackPanel hc:Growl.Token="BatchGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
 
+        <JvedioControls:OutputPanel x:Name="OutputPanel" Visibility="Collapsed"    Panel.ZIndex="5" Margin="20"></JvedioControls:OutputPanel>
 
-        <!--<TabControl Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl"  Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
-            <TabItem Header="批量同步">
-                
+
+
+
+        <TabControl SelectedIndex="0" Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl" Grid.Row="0" Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
+            <TabItem FontSize="15"  Background="Transparent" Header="{x:Static lang:Resources.SyncInfo}">
+                <StackPanel>
+
+                    <Border Margin="10" Style="{StaticResource BorderTipPrimary}" Background="{DynamicResource BackgroundSide}" >
+                        <TextBlock Text="{x:Static lang:Resources.Batch_SyncInfo}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" TextWrapping="NoWrap"/>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal"  Margin="10">
+                        <Label Content="{x:Static lang:Resources.TaskNumber}" Style="{StaticResource LabelPrimary}"  />
+                        <TextBlock  Text="{Binding TotalNum}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center"  Margin="10"/>
+                    </StackPanel>
+
+                    <StackPanel   Margin="10" HorizontalAlignment="Left">
+                        <Label Content="{x:Static lang:Resources.TaskSettings}" HorizontalAlignment="Left" Style="{StaticResource LabelSuccess}"  />
+                        <CheckBox Margin="15 15 0 0"   PreviewMouseLeftButtonUp="ResetTaskWithCheckbox"    IsChecked="{Binding Info_ForceDownload,Mode=TwoWay}"  Content="{x:Static lang:Resources.ForeceToSync}"/>
+                        <WrapPanel Margin="5">
+                            <CheckBox  IsChecked="{Binding DownloadSmallPic,Mode=TwoWay}"   Content="{x:Static lang:Resources.Thumbnail}"/>
+                            <CheckBox  IsChecked="{Binding DownloadBigPic,Mode=TwoWay}" Content="{x:Static lang:Resources.Poster}"/>
+                            <CheckBox  IsChecked="{Binding DownloadExtraPic,Mode=TwoWay}"  Content="{x:Static lang:Resources.Preview}"/>
+                        </WrapPanel>
+
+                    </StackPanel>
+                </StackPanel>
+
             </TabItem>
-        </TabControl>-->
+
+            <TabItem FontSize="15"  Background="Transparent" Header="{x:Static lang:Resources.Menu_GenerateGif}">
+
+                <StackPanel >
+                    <Border Margin="10" Style="{StaticResource BorderTipPrimary}"  Background="{DynamicResource BackgroundSide}" >
+                        <TextBlock Text="{x:Static lang:Resources.Batch_Gif}"  Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" />
+                    </Border>
+                    <StackPanel Orientation="Horizontal"  Margin="10">
+                        <Label Content="{x:Static lang:Resources.TaskNumber}" Style="{StaticResource LabelPrimary}"  />
+                        <TextBlock  Text="{Binding TotalNum}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center"  Margin="10"/>
+                    </StackPanel>
+                    <StackPanel   Margin="10" HorizontalAlignment="Left">
+                        <Label Content="{x:Static lang:Resources.TaskSettings}" HorizontalAlignment="Left" Style="{StaticResource LabelSuccess}"  />
+
+                        <CheckBox Margin="15" HorizontalAlignment="Left"  PreviewMouseLeftButtonUp="ResetTaskWithCheckbox"  IsChecked="{Binding Gif_Skip}"  Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="{x:Static lang:Resources.SkipExistGif}"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock   MinWidth="100" TextAlignment="Left"   Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="{x:Static lang:Resources.GifDuration}"/>
+                            <Slider x:Name="Gif_IntervalSlider" Value="{Binding Gif_Length}" Minimum="1" Maximum="20" Width="100" VerticalAlignment="Center"/>
+                            <TextBlock MinWidth="30" TextAlignment="Center" Text="{Binding Value, ElementName=Gif_IntervalSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{x:Static lang:Resources.Second}" Margin="0" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock MinWidth ="100" TextAlignment="Left"   Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="{x:Static lang:Resources.Resolution}"/>
+
+                            <TextBlock Margin="0 0 20 0" MinWidth="50" Text="{x:Static lang:Resources.Height}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            <Slider x:Name="Gif_HeightSlider" Value="{Binding Gif_Height}" Minimum="30" Maximum="500" Width="100" VerticalAlignment="Center"/>
+                            <TextBlock   Text="{Binding Value, ElementName=Gif_HeightSlider, StringFormat=\{0\} px}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+
+                            <TextBlock MinWidth="50"   Text="{x:Static lang:Resources.Width}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+                            <Slider x:Name="Gif_WidthSlider" Value="{Binding Gif_Width}" Minimum="30" Maximum="500" Width="100" VerticalAlignment="Center"/>
+                            <TextBlock  Text="{Binding Value, ElementName=Gif_WidthSlider, StringFormat=\{0\} px}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+
+                        </StackPanel>
+
+                    </StackPanel>
+
+
+                </StackPanel>
+
+            </TabItem>
+
+            <TabItem FontSize="15"  Background="Transparent" Header="{x:Static lang:Resources.Menu_GenerateScreenShot}">
+                <StackPanel >
+
+                    <Border Margin="10" Style="{StaticResource BorderTipPrimary}"  Background="{DynamicResource BackgroundSide}" >
+                        <TextBlock Text="{x:Static lang:Resources.Batch_ScreenShot}"  Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
+                    </Border>
+                    
+                    <StackPanel Orientation="Horizontal"  Margin="10">
+                        <Label Content="{x:Static lang:Resources.TaskNumber}" Style="{StaticResource LabelPrimary}"  />
+                        <TextBlock  Text="{Binding TotalNum}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center"  Margin="10"/>
+                    </StackPanel>
+
+                    <StackPanel   Margin="10" HorizontalAlignment="Left">
+                        <Label Content="{x:Static lang:Resources.TaskSettings}" HorizontalAlignment="Left" Style="{StaticResource LabelSuccess}"  />
+                        <CheckBox Margin="15" PreviewMouseLeftButtonUp="ResetTaskWithCheckbox" IsChecked="{Binding ScreenShot_Skip}"   Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="{x:Static lang:Resources.SkipExistsScreenShot}"/>
+                        <StackPanel Orientation="Horizontal">
+
+                            <TextBlock MinWidth="120" TextAlignment="Left"  Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="{x:Static lang:Resources.ScreenShotNumber}"/>
+
+                            <Slider x:Name="Screen_IntervalSlider" Value="{Binding ScreenShotNum,Source={x:Static p:Settings.Default},Mode=TwoWay}" Minimum="1" Maximum="30" Width="100" VerticalAlignment="Center"/>
+                            <TextBlock Width="30" TextAlignment="Center" Text="{Binding Value, ElementName=Screen_IntervalSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+
+                            <TextBlock MinWidth="120" TextAlignment="Left"  Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="{x:Static lang:Resources.ThreadNumber}"/>
+
+                            <Slider x:Name="Screen_ThreadSlider" Value="{Binding ScreenShot_Num}" Minimum="1" Maximum="10" Width="100" VerticalAlignment="Center"/>
+                            <TextBlock Width="30" TextAlignment="Center" Text="{Binding Value, ElementName=Screen_ThreadSlider}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
+
+                        </StackPanel>
+
+                    </StackPanel>
 
 
 
-        <Grid Grid.Row="0" Background="{DynamicResource BackgroundMain}"   >
+
+                </StackPanel>
+
+            </TabItem>
+            
+            
+
+            <TabItem   Background="Transparent" Header="{x:Static lang:Resources.Rename}" FontSize="15" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+
+
+
+                <StackPanel >
+                    <Border Margin="10" Style="{StaticResource BorderTipPrimary}"  Background="{DynamicResource BackgroundSide}" >
+                        <TextBlock Text="{x:Static lang:Resources.Batch_Rename}"  Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal"  Margin="10">
+                        <Label Content="{x:Static lang:Resources.TaskNumber}" Style="{StaticResource LabelPrimary}"  />
+                        <TextBlock  Text="{Binding TotalNum}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center"  Margin="10"/>
+                    </StackPanel>
+
+                    <StackPanel   Margin="10" HorizontalAlignment="Left">
+                        <Label Content="{x:Static lang:Resources.TaskSettings}" HorizontalAlignment="Left" Style="{StaticResource LabelSuccess}"  />
+
+                        <TextBlock TextWrapping="Wrap" Cursor="Hand" MouseLeftButtonUp="TextBlock_MouseLeftButtonUp" Foreground="SkyBlue" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" Text="{x:Static lang:Resources.Settings}" Style="{StaticResource  BaseTextBlock}"  Margin="20 10" HorizontalAlignment="Left"  ></TextBlock>
+
+                        <TextBlock MinWidth="100" TextAlignment="Left"  Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="{x:Static lang:Resources.RenameRule}"/>
+                        <TextBlock Text="{Binding RenameFormat,Mode=OneWay,Source={x:Static p:Settings.Default}}" Style="{StaticResource BaseTextBlock}"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+        </TabControl>
+
+
+
+
+        <Grid  Grid.Row="1"  Background="{DynamicResource BackgroundTitle}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+
             </Grid.ColumnDefinitions>
+            <ProgressBar x:Name="ProgressBar" Grid.Column="0" Minimum="0" Maximum="100" Margin="10" Value="{Binding Progress}"  Style="{StaticResource ProgressBarSuccess}" Height="20"/>
+
+            <StackPanel  Orientation="Horizontal"   Grid.Column="1">
 
 
-
-            <StackPanel x:Name="SideStackPanel" Grid.Column="0"  Height="auto" Width="200" VerticalAlignment="Stretch"  Background="{DynamicResource BackgroundSide}"    >
-                
-                <RadioButton IsChecked="True" Click="ShowGrid"  Content="批量同步"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0" />
-                <RadioButton Click="ShowGrid"  Content="生成 Gif"  Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0" />
-                <RadioButton  Content="生成截图"  Click="ShowGrid"    Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
-                <RadioButton Visibility="Collapsed" Content="翻译"  Click="ShowGrid"    Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
-                <RadioButton Visibility="Collapsed"   Content="人工智能"  Click="ShowGrid"    Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
-                <RadioButton  Content="重命名"  Click="ShowGrid"    Style="{StaticResource RadioButtonStyleSide}" Margin="5 5 5 0"/>
+                <Button Content="{x:Static lang:Resources.Run}" Style="{StaticResource ButtonPrimary}" MinWidth="80"  Margin="10"       Click="StartTask" />
+                <Button Content="{x:Static lang:Resources.Pause}"  x:Name="PauseButton" IsEnabled="False"  Margin="10"  Style="{StaticResource ButtonWarning}" MinWidth="80"    Click="Button_Click_1" />
+                <Button Content="{x:Static lang:Resources.Cancel}"  Style="{StaticResource ButtonDanger}" Margin="10" MinWidth="80"    Click="Button_Click_2" />
             </StackPanel>
 
 
-                <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-
-                <Grid >
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid Grid.Column="0" x:Name="MainGrid">
-
-
-                        <StackPanel Orientation="Horizontal" Visibility="Visible">
-                            <TextBlock Text="批量同步：仅用于同步信息与预览图，低速同步，避免服务器崩溃" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" Margin="10"/>
-                        </StackPanel>
-
-
-                        <StackPanel Orientation="Horizontal" Visibility="Hidden">
-                        <TextBlock Text="生成 Gif" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" Margin="10"/>
-                    </StackPanel>
-
-                    <StackPanel  Orientation="Horizontal"  Visibility="Hidden">
-                            <TextBlock Text="生成截图" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" Margin="10"/>
-                        </StackPanel>
-
-                    <StackPanel Orientation="Horizontal"  Visibility="Hidden">
-                            <TextBlock Text="翻译" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" Margin="10"/>
-                        </StackPanel>
-
-                    <StackPanel  Orientation="Horizontal"  Visibility="Hidden">
-                            <TextBlock Text="人工智能" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" Margin="10"/>
-                        </StackPanel>
-
-                        <StackPanel  Orientation="Horizontal"  Visibility="Hidden">
-                            <TextBlock Text="重命名" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" Margin="10"/>
-                        </StackPanel>
-
-                    </Grid>
-
-                    <StackPanel Orientation="Horizontal" Grid.Column="1">
-                        <TextBlock Text="影片个数：" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" Margin="10"/>
-                        <TextBlock Height="auto" Text="{Binding TotalNum}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10"/>
-                    </StackPanel>
-                </Grid>
-
-                <Grid x:Name="SettingsGrid" Grid.Row="1">
-
-                    <StackPanel Orientation="Vertical" Visibility="Visible" VerticalAlignment="Center" Margin="20 5">
-       
-
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="信息：" Style="{StaticResource BaseTextBlock}"/>
-                            <!--<RadioButton Foreground="{DynamicResource ForegroundSearch}" FontSize="15"  Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"  IsChecked="{Binding Info_Skip}" Margin="5 0"  VerticalAlignment="Center" Content="名称为空则同步"/>
-                            <RadioButton Foreground="{DynamicResource ForegroundSearch}" FontSize="15"    Margin="5 0"  VerticalAlignment="Center" Content="强制同步信息"/>-->
-
-                            <CheckBox  PreviewMouseLeftButtonUp="ResetTaskWithCheckbox"    IsChecked="{Binding Info_ForceDownload}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="强制同步覆盖信息（不选则跳过已同步的）"/>
-
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="网址：请在【设置-同步信息】中配置" Style="{StaticResource BaseTextBlock}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="图片（仅链接为 DMM）：" Style="{StaticResource BaseTextBlock}"/>
-                            <CheckBox Visibility="Collapsed"  IsChecked="{Binding Info_DS}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="缩略图"/>
-                            <CheckBox Visibility="Collapsed"    IsChecked="{Binding Info_DB}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="海报图"/>
-                            <CheckBox   IsChecked="{Binding Info_DE}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="预览图"/>
-                        </StackPanel>
-                        <!--<CheckBox  IsChecked="{Binding Info_SkipImage}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="跳过已下载的图片"/>-->
-
-                    </StackPanel>
-
-
-                    <StackPanel Orientation="Vertical" Visibility="Collapsed" VerticalAlignment="Center" Margin="20 5">
-                        <CheckBox  PreviewMouseLeftButtonUp="ResetTaskWithCheckbox"  IsChecked="{Binding Gif_Skip}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="跳过已截取"/>
-
-                        <StackPanel Orientation="Horizontal">
-
-
-
-                            <TextBlock Margin="5 0"  Width="100" TextAlignment="Left"   Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="截取时长："/>
-
-                        <Slider x:Name="Gif_IntervalSlider" Value="{Binding Gif_Length}" Minimum="1" Maximum="20" Width="100" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding Value, ElementName=Gif_IntervalSlider, StringFormat=\{0\} 秒}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Width="100" TextAlignment="Left"  Margin="5 0" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="分辨率："/>
-
-                            <TextBlock Margin="5 0" Text="高度" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                            <Slider x:Name="Gif_HeightSlider" Value="{Binding Gif_Height}" Minimum="30" Maximum="500" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock  Margin="5 0"  Text="{Binding Value, ElementName=Gif_HeightSlider, StringFormat=\{0\} px}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-
-                            <TextBlock  Margin="5 0"  Text="宽度" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-                            <Slider x:Name="Gif_WidthSlider" Value="{Binding Gif_Width}" Minimum="30" Maximum="500" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock  Margin="5 0"  Text="{Binding Value, ElementName=Gif_WidthSlider, StringFormat=\{0\} px}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-
-                        </StackPanel>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Vertical" Visibility="Collapsed" VerticalAlignment="Center" Margin="20 5">
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox PreviewMouseLeftButtonUp="ResetTaskWithCheckbox" IsChecked="{Binding ScreenShot_Skip}" Margin="5 0" Style="{StaticResource CheckBoxStyle1}" VerticalAlignment="Center" Content="保存位置若有图片则跳过"/>
-                        </StackPanel>
-                       <StackPanel Orientation="Horizontal">
-                            <TextBlock  Margin="5 0" Width="100" TextAlignment="Left"  Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="保存选项："/>
-
-                            <RadioButton Margin="5 0" IsChecked="{Binding ScreenShotToExtraPicPath,Source={x:Static p:Settings.Default},Mode=TwoWay}" FontSize="15" Foreground="{DynamicResource ForegroundSearch}"  GroupName="ScreenShot" Content="保存到预览图位置"/>
-                            <RadioButton Margin="5 0"   FontSize="15" Foreground="{DynamicResource ForegroundSearch}"    GroupName="ScreenShot" Content="保存到截图位置"/>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal">
-
-                            <TextBlock Margin="5 0" Width="100" TextAlignment="Left"  Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="图片数目："/>
-
-                            <Slider x:Name="Screen_IntervalSlider" Value="{Binding ScreenShotNum,Source={x:Static p:Settings.Default},Mode=TwoWay}" Minimum="1" Maximum="30" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=Screen_IntervalSlider, StringFormat=\{0\} 个}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-
-                            <TextBlock Margin="5 0" Width="100" TextAlignment="Left"  Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Text="调用线程："/>
-
-                            <Slider x:Name="Screen_ThreadSlider" Value="{Binding ScreenShot_Num}" Minimum="1" Maximum="10" Width="100" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Value, ElementName=Screen_ThreadSlider, StringFormat=\{0\} 个}" Style="{StaticResource TextBlockTitle}" VerticalAlignment="Center"/>
-
-                        </StackPanel>
-
-                    </StackPanel>
-
-                    <StackPanel  Orientation="Vertical"  Visibility="Collapsed" VerticalAlignment="Center" Margin="20 5">
-
-                    </StackPanel>
-
-                    <StackPanel  Orientation="Vertical"  Visibility="Collapsed" VerticalAlignment="Center" Margin="20 5">
-
-                    </StackPanel>
-
-                    <StackPanel  Orientation="Vertical"  Visibility="Collapsed" VerticalAlignment="Center" Margin="20 5">
-
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding RenameFormat,Mode=OneWay,Source={x:Static p:Settings.Default},StringFormat='重命名规则：{0}'}" Style="{StaticResource BaseTextBlock}"/>
-                        </StackPanel>
-                    </StackPanel>
-
-                </Grid>
-
-
-
-
-
-                <Grid Grid.Row="2" >
-                        <TextBlock  VerticalAlignment="Top"  Text="输出" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" Margin="10"/>
-                        <TextBox x:Name="StatusTextBox" IsReadOnly="True"   Text="" Padding="5" VerticalContentAlignment="Top" TextWrapping="WrapWithOverflow" Background="{DynamicResource BackgroundMenu}" Opacity="0.8" Foreground="{DynamicResource ForegroundSearch}" Height="auto" Margin="20 40 20 20 " Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-
-                    <Button Cursor="Hand"  Margin="22" Content="清空" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" Foreground="{DynamicResource ForegroundSearch}" Click="Button_Click_4"/>
-
-
-                </Grid>
-
-                <StackPanel Grid.Row="3" Orientation="Vertical" >
-                    <Grid x:Name="FirsrProgressBar" Visibility="Visible"   Margin="20 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="100"/>
-                        </Grid.ColumnDefinitions>
-                        <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress_S}" Grid.Column="0" Style="{StaticResource ProgressBarStyle1}" Height="10"/>
-                        <TextBlock Grid.Column="1" Margin="10 0" Style="{StaticResource BaseTextBlock}">
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0}/{1}">
-                                    <Binding Path="CurrentNum_S" />
-                                    <Binding Path="TotalNum_S" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </Grid>
-
-                    <Grid  x:Name="SecondProgressBar"    Margin="20 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="100"/>
-                        </Grid.ColumnDefinitions>
-                        <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}" Grid.Column="0" Style="{StaticResource ProgressBarStyle1}" Height="10"/>
-                        <TextBlock Grid.Column="1" Margin="10 0" Style="{StaticResource BaseTextBlock}">
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0}/{1}">
-                                    <Binding Path="CurrentNum" />
-                                    <Binding Path="TotalNum" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </Grid>
-
-                </StackPanel>
-            </Grid>
-
-
-
-
-
         </Grid>
-        <StackPanel Grid.Row="1" FlowDirection="RightToLeft" Orientation="Horizontal" HorizontalAlignment="Stretch" Background="{DynamicResource BackgroundTitle}"  Height="auto" VerticalAlignment="Bottom">
 
-            <Button Content="开始" Style="{StaticResource ButtonStyleFill}"  Background="#22D7BB" VerticalAlignment="Center" HorizontalAlignment="Right"  Click="StartTask" />
-            <Button x:Name="PauseButton" IsEnabled="False" Content="暂停" Style="{StaticResource ButtonStyleFill}" VerticalAlignment="Center" HorizontalAlignment="Right"  Click="Button_Click_1" />
-            <Button Content="取消" Style="{StaticResource ButtonStyleFill}" Background="OrangeRed" VerticalAlignment="Center" HorizontalAlignment="Right"  Click="Button_Click_2" />
-        </StackPanel>
+
 
     </Grid>
 </local:Jvedio_BaseWindow>

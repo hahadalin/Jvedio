@@ -36,98 +36,63 @@ namespace Jvedio
 
         public CancellationTokenSource cts;
         public CancellationToken ct;
-        public bool Running = false;
+
+
+        private bool running = false;
+        public bool Running
+        {
+            get => running;
+            set
+            {
+                running = value;
+                if (running)
+                    SetEnable(false);
+                else
+                    SetEnable(true);
+
+                if (running) ProgressBar.Visibility = Visibility.Visible;
+            }
+        }
+
+
+
+
+
         public bool Pause = false;
+
 
 
         public WindowBatch()
         {
             InitializeComponent();
-
-            var stackPanels = MainGrid.Children.OfType<StackPanel>().ToList();
-            foreach (var item in stackPanels) item.Visibility = Visibility.Collapsed;
-
-
-            var wrapPanels = SettingsGrid.Children.OfType<StackPanel>().ToList();
-            foreach (var item in wrapPanels) item.Visibility = Visibility.Collapsed;
-            var RadioButtons = SideStackPanel.Children.OfType<RadioButton>().ToList();
-
-
-            stackPanels[Properties.Settings.Default.BatchIndex].Visibility = Visibility.Visible;
-            wrapPanels[Properties.Settings.Default.BatchIndex].Visibility = Visibility.Visible;
-            RadioButtons[Properties.Settings.Default.BatchIndex].IsChecked = true;
-
-            
-
-            if (Properties.Settings.Default.BatchIndex == 2 || Properties.Settings.Default.BatchIndex == 0) FirsrProgressBar.Visibility = Visibility.Visible;
-            else FirsrProgressBar.Visibility = Visibility.Collapsed;
-
-
-
             cts = new CancellationTokenSource();
-            cts.Token.Register(() => { HandyControl.Controls.Growl.Info("取消当前任务！", "BatchGrowl"); });
+            cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Cancel, "BatchGrowl"); });
             ct = cts.Token;
-
+            ProgressBar.Visibility = Visibility.Hidden;
+            TabControl.SelectedIndex = Properties.Settings.Default.BatchIndex;
         }
 
-        private void ShowGrid(object sender, RoutedEventArgs e)
-        {
-            RadioButton radioButton = (RadioButton)sender;
-            StackPanel SP = radioButton.Parent as StackPanel;
-            var radioButtons = SP.Children.OfType<RadioButton>().ToList();
-            
-
-            Properties.Settings.Default.BatchIndex = radioButtons.IndexOf(radioButton);
-            Properties.Settings.Default.Save();
-
-            
-            
-            var stackPanels = MainGrid.Children.OfType<StackPanel>().ToList();
-            foreach (var item in stackPanels) item.Visibility = Visibility.Collapsed;
-
-
-            var wrapPanels = SettingsGrid.Children.OfType<StackPanel>().ToList();
-            foreach (var item in wrapPanels) item.Visibility = Visibility.Collapsed;
-
-
-            stackPanels[Properties.Settings.Default.BatchIndex].Visibility = Visibility.Visible;
-            wrapPanels[Properties.Settings.Default.BatchIndex].Visibility = Visibility.Visible;
-
-
-
-
-            if (Properties.Settings.Default.BatchIndex == 2 || Properties.Settings.Default.BatchIndex == 0) FirsrProgressBar.Visibility = Visibility.Visible;
-            else FirsrProgressBar.Visibility = Visibility.Collapsed;
-
-            ResetTask();
-
-        }
-
-        private void ShowStatus(string str,bool newline=true)
+        private void ShowStatus(string str, bool newline = true)
         {
             if (App.Current != null)
             {
-                if (newline)
+                App.Current.Dispatcher.Invoke((Action)delegate
                 {
-                    App.Current.Dispatcher.Invoke((Action)delegate {
-                        StatusTextBox.AppendText(str + '\n');
-                        StatusTextBox.ScrollToEnd();
-                    });
-                }
-                else
-                {
-                    App.Current.Dispatcher.Invoke((Action)delegate {
-                        StatusTextBox.AppendText(str);
-                    });
-                }
-
+                    OutputPanel.Visibility = Visibility.Visible;
+                    OutputPanel.AppendText(str, newline);
+                    OutputPanel.ScrollToEnd();
+                });
             }
 
         }
 
 
+        private int ScreenShotNumber;
         public Semaphore SemaphoreScreenShot;
         public object lockobject = new object();
+
+
+
 
         public bool ScreenShot(string id)
         {
@@ -136,10 +101,10 @@ namespace Jvedio
             Movie movie = DataBase.SelectMovieByID(id);
             int SemaphoreNum = vieModel.ScreenShot_Num;
             string ScreenShotPath = "";
-            if (Properties.Settings.Default.ScreenShotToExtraPicPath)
-                ScreenShotPath = BasePicPath + "ExtraPic\\" + movie.id;
-            else
-                ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
+            //if (Properties.Settings.Default.ScreenShotToExtraPicPath)
+            //    ScreenShotPath = BasePicPath + "ExtraPic\\" + movie.id;
+            //else
+            ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
 
             if (!Directory.Exists(ScreenShotPath)) Directory.CreateDirectory(ScreenShotPath);
 
@@ -148,10 +113,10 @@ namespace Jvedio
             string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
             if (cutoffArray.Length == 0) return false;
             SemaphoreScreenShot = new Semaphore(SemaphoreNum, SemaphoreNum);
-            vieModel.ScreenShot_TotalNum_S = cutoffArray.Count();
-            vieModel.ScreenShot_CurrentProgress_S = 0;
+            int total = cutoffArray.Count();
+            ScreenShotNumber = 0;
 
-            
+
             for (int i = 0; i < cutoffArray.Count(); i++)
             {
                 List<object> list = new List<object>() { cutoffArray[i], i.ToString(), movie.filepath, ScreenShotPath };
@@ -160,7 +125,7 @@ namespace Jvedio
             }
 
             //等待直到所有线程完成
-            while (vieModel.ScreenShot_CurrentProgress_S < vieModel.ScreenShot_TotalNum_S)
+            while (ScreenShotNumber < total)
             {
                 Task.Delay(500).Wait();
             }
@@ -171,42 +136,16 @@ namespace Jvedio
 
         public void BeginScreenShot(object o)
         {
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) {
-                lock (lockobject)
-                {
-                    vieModel.ScreenShot_CurrentProgress_S++;
-                }
+            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path))
+            {
                 return;
-            };
+            }
 
             List<object> list = o as List<object>;
             string cutoffTime = list[0] as string;
             string i = list[1] as string;
             string filePath = list[2] as string;
             string ScreenShotPath = list[3] as string;
-
-            if (string.IsNullOrEmpty(cutoffTime))
-            {
-                lock (lockobject)
-                {
-                    vieModel.ScreenShot_CurrentProgress_S++;
-                }
-                return;
-            }
-
-            //try
-            //{
-            //    ct.ThrowIfCancellationRequested();
-
-            //    if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
-
-            //    while (Pause) { Task.Delay(500).Wait(); }
-            //}
-            //catch (OperationCanceledException ex)
-            //{
-            //    return;
-            //}
-
 
             SemaphoreScreenShot.WaitOne();
             System.Diagnostics.Process p = new System.Diagnostics.Process();
@@ -217,25 +156,15 @@ namespace Jvedio
             p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
             p.StartInfo.CreateNoWindow = true;//不显示程序窗口
             p.Start();//启动程序
-
             string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -threads 1 -ss {cutoffTime} -i \"{filePath}\" -f image2 -frames:v 1 \"{ScreenShotPath}\\ScreenShot-{i.PadLeft(2, '0')}.jpg\"";
-
-
-
             p.StandardInput.WriteLine(str + "&exit");
             p.StandardInput.AutoFlush = true;
             _ = p.StandardOutput.ReadToEnd();
-            //App.Current.Dispatcher.Invoke((Action)delegate { cmdTextBox.AppendText(output + "\n"); });
             p.WaitForExit();//等待程序执行完退出进程
             p.Close();
+            lock (lockobject) { ScreenShotNumber++; }
+            ShowStatus(">", false);
             SemaphoreScreenShot.Release();
-
-            lock (lockobject)
-            {
-                vieModel.ScreenShot_CurrentProgress_S++;
-            }
-            ShowStatus(">",false);
-
         }
 
 
@@ -254,14 +183,11 @@ namespace Jvedio
             Movie movie = DataBase.SelectMovieByID(id);
             string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
             if (cutoffArray.Count() < 2) return false;
-            string cutoffTime = cutoffArray[new Random().Next(1, cutoffArray.Count()-1)];
+            string cutoffTime = cutoffArray[new Random().Next(1, cutoffArray.Count() - 1)];
             string filePath = movie.filepath;
-
             string GifSavePath = BasePicPath + "Gif\\";
             if (!Directory.Exists(GifSavePath)) Directory.CreateDirectory(GifSavePath);
             GifSavePath += id + ".gif";
-            
-
             if (string.IsNullOrEmpty(cutoffTime)) return false;
             if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) return false;
 
@@ -289,476 +215,306 @@ namespace Jvedio
 
         private void SetEnable(bool enable)
         {
-            if (!enable)
-            {
-
-                var radioButtons = SideStackPanel.Children.OfType<RadioButton>().ToList();
-                for (int i = 0; i < radioButtons.Count; i++)
-                {
-                    if (i != Properties.Settings.Default.BatchIndex) radioButtons[i].IsEnabled = false;
-                }
-
-                var stackpanels = SettingsGrid.Children.OfType<StackPanel>().ToList();
-                foreach (var item in stackpanels) { item.IsEnabled = false;  }
-
-
-            }
-            else
-            {
-                var radioButtons = SideStackPanel.Children.OfType<RadioButton>().ToList();
-                for (int i = 0; i < radioButtons.Count; i++)
-                {
-                     radioButtons[i].IsEnabled = true;
-                }
-                var stackpanels = SettingsGrid.Children.OfType<StackPanel>().ToList();
-                foreach (var item in stackpanels) { item.IsEnabled = true; }
-            }
+            TabControl.IsEnabled = enable;
         }
 
 
-        private async  Task<bool> DownLoad(string id)
+        private async Task<bool> DownLoad(string id)
         {
-            
-
             Movie movie = DataBase.SelectMovieByID(id);
             bool success; string resultMessage;
 
-            if (vieModel.Info_ForceDownload)
+            (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet(movie, vieModel.Info_ForceDownload); });
+            if (success)
             {
-                (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet(movie); });
-                if (success)
-                {
-                    ShowStatus($"同步信息成功：{id}");
-                    Task.Delay(3000).Wait();
-                }
-                else
-                    ShowStatus($"同步信息失败：{id}，原因为：{resultMessage}");
-
-                if (id.ToUpper().IndexOf("FC2") >= 0) Task.Delay(5000).Wait();
+                ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo} {Jvedio.Language.Resources.Message_Success}");
+                Task.Delay(vieModel.Timeout_Short).Wait();
             }
             else
             {
-                //智能判断
-                if (movie.title == "" || movie.smallimageurl == "" || movie.bigimageurl == "" || movie.extraimageurl == "")
-                {
-                    (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet(movie); });
-                    if (success)
-                    {
-                        ShowStatus($"同步信息成功：{id}");
-                        Task.Delay(3000).Wait();
-                    }
-                    else
-                        ShowStatus($"同步信息失败：{id}，原因为：{resultMessage}");
-
-                    if (id.ToUpper().IndexOf("FC2") >= 0) Task.Delay(5000).Wait();
-                }
-                else
-                {
-                    ShowStatus($"跳过已同步的信息：{id}");
-                }
+                ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{resultMessage}");
             }
 
-            
-            
+            if (id.ToUpper().IndexOf("FC2") >= 0)
+                Task.Delay(vieModel.Timeout_Medium).Wait();
 
-            vieModel.Info_CurrentProgress_S++;
+
+            if (!vieModel.Info_ForceDownload && !Net.IsToDownLoadInfo(movie))
+                ShowStatus($"{id}：{Jvedio.Language.Resources.Skip} {Jvedio.Language.Resources.SyncInfo}");
+
             movie = DataBase.SelectMovieByID(id);
-
             List<string> extraImageList = new List<string>();
-
-            if (!string.IsNullOrEmpty(movie.extraimageurl) && movie.extraimageurl.IndexOf(";") > 0) {
-                extraImageList = movie.extraimageurl.Split(';').ToList().Where(arg =>  !string.IsNullOrEmpty(arg) && arg.IndexOf("http")>=0 && arg.IndexOf("dmm") >= 0).ToList();
+            if (!string.IsNullOrEmpty(movie.extraimageurl) && movie.extraimageurl.IndexOf(";") > 0)
+            {
+                extraImageList = movie.extraimageurl.Split(';').ToList().Where(arg => !string.IsNullOrEmpty(arg) && arg.IndexOf("http") >= 0).ToList();
             }
-            vieModel.Info_TotalNum_S += extraImageList.Count;
+
+            if (CheckPause()) return false;
+
 
             //同步缩略图
-            if (vieModel.Info_DS)
+            if (vieModel.DownloadSmallPic)
             {
-                (success, resultMessage) = await DownLoadSmallPic(movie);
-                ShowStatus($"下载缩略图：{resultMessage}");
-                if (success) Task.Delay(1000).Wait();
+                (success, resultMessage) = await Net.DownLoadImage(movie.smallimageurl, ImageType.SmallImage, movie.id);
+                ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Thumbnail}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}，{resultMessage}");
+                if (success) Task.Delay(vieModel.Timeout_Short).Wait();
             }
-
-            vieModel.Info_CurrentProgress_S++;
-
-            try
-            {
-                if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
-                while (Pause) { Task.Delay(500).Wait(); }
-                ct.ThrowIfCancellationRequested();
-            }
-            catch (OperationCanceledException ex) { return false; }
+            if (CheckPause()) return false;
 
             //同步海报图
-            if (vieModel.Info_DB)
+            if (vieModel.DownloadBigPic)
             {
-                (success, resultMessage) = await DownLoadBigPic(movie);
-                ShowStatus($"下载海报图：{resultMessage}");
-                if (success) Task.Delay(1000).Wait();
+                (success, resultMessage) = await Net.DownLoadImage(movie.bigimageurl, ImageType.BigImage, movie.id);
+                ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Thumbnail}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}，{resultMessage}");
+                if (success) Task.Delay(vieModel.Timeout_Medium).Wait();
             }
-            vieModel.Info_CurrentProgress_S++;
-
-            try
-            {
-                if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
-                while (Pause) { Task.Delay(500).Wait(); }
-                ct.ThrowIfCancellationRequested();
-            }
-            catch (OperationCanceledException ex) { return false; }
+            if (CheckPause()) return false;
 
             //同步预览图
-            if (vieModel.Info_DE)
+            if (vieModel.DownloadExtraPic)
             {
                 string cookies = "";
                 bool extraImageSuccess = false;
                 string filepath = "";
-            
+
                 for (int i = 0; i < extraImageList.Count; i++)
                 {
-                    try
-                    {
-                        if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
-                        while (Pause) { Task.Delay(500).Wait(); }
-                        ct.ThrowIfCancellationRequested();
-                    } catch (OperationCanceledException ex) { break; }
-
+                    if (CheckPause()) return false;
                     if (extraImageList[i].Length > 0)
                     {
-                        filepath = GlobalVariable.BasePicPath + "ExtraPic\\" + movie.id + "\\" + Path.GetFileName(new Uri(extraImageList[i]).LocalPath);
+                        filepath = Path.Combine(BasePicPath, "ExtraPic", movie.id, Path.GetFileName(new Uri(extraImageList[i]).LocalPath));
                         if (!File.Exists(filepath))
                         {
                             (extraImageSuccess, cookies) = await Task.Run(() => { return Net.DownLoadImage(extraImageList[i], ImageType.ExtraImage, movie.id, Cookie: cookies); });
                             if (extraImageSuccess)
                             {
-                                Task.Delay(5000).Wait();
-                                ShowStatus($"下载预览图成功{i+1}/{extraImageList.Count}");
+                                Task.Delay(vieModel.Timeout_Medium).Wait();
+                                ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Preview} {Jvedio.Language.Resources.Message_Success} {i + 1}/{extraImageList.Count}");
                             }
                             else
                             {
-                                ShowStatus($"下载预览图失败{i + 1}/{extraImageList.Count}");
+                                ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Preview} {Jvedio.Language.Resources.Message_Fail} {i + 1}/{extraImageList.Count}");
                             }
                         }
                     }
-                    vieModel.Info_CurrentProgress_S++;
                 }
 
             }
+            vieModel.CurrentNum += 1;
             return true;
         }
 
-
-        private async Task<(bool, string)> DownLoadSmallPic(Movie movie)
+        private void ShowResultMessage(bool result, int i, string message = "")
         {
-            if(movie.smallimageurl.IndexOf("pics.dmm")<=0) return (false, "失败，原因：链接仅支持 dmm");
+            if (result)
+                ShowStatus($"{i + 1}/{vieModel.TotalNum} => {Jvedio.Language.Resources.Message_Success}");
+            else
+                ShowStatus($"{i + 1}/{vieModel.TotalNum} =>  {Jvedio.Language.Resources.Message_Success}" + message == "" ? "" : $"，{Jvedio.Language.Resources.Reason} ：" + message);
+            vieModel.CurrentNum += 1;
+        }
 
-            if (!File.Exists(GlobalVariable.BasePicPath + $"SmallPic\\{movie.id}.jpg"))  
+        private bool CheckPause()
+        {
+            try
             {
-                if (movie.source == "javdb" ) return (false, "失败，原因：链接仅支持 dmm");
-                else return await Net.DownLoadImage(movie.smallimageurl, ImageType.SmallImage, movie.id);
+                if (Pause)
+                {
+                    ShowStatus($"{Jvedio.Language.Resources.Pause}……");
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        WaitingPanel.Visibility = Visibility.Collapsed;
+                    });
+                }
+                while (Pause)
+                {
+                    Task.Delay(500).Wait();
+                }
+                ct.ThrowIfCancellationRequested();
             }
-            else return (false, "跳过");
-
-        }
-
-        private async Task<(bool, string)> DownLoadBigPic(Movie movie)
-        {
-            if (movie.smallimageurl.IndexOf("pics.dmm") <= 0) return (false, "失败，原因：链接仅支持 dmm");
-
-            if ( !File.Exists(GlobalVariable.BasePicPath + $"BigPic\\{movie.id}.jpg"))
+            catch(OperationCanceledException ex)
             {
-                if (movie.source == "javdb") return (false, "失败，原因：链接仅支持 dmm");
-                else return await Net.DownLoadImage(movie.bigimageurl, ImageType.BigImage, movie.id);
+                Console.WriteLine(  ex.Message);
+                ShowStatus($"------------{Jvedio.Language.Resources.Cancel}------------");
+                App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });
+                return true;
             }
-            else return (false, "跳过");
-
+            return false;
         }
 
-        private int GetInfoNum_S()
+
+
+
+        private async void SyncInfo()
         {
-            int num = 1;
-            if (vieModel.Info_DS) num++;
-            if (vieModel.Info_DB) num++;
-            return num;
+            ShowStatus($"------------{Jvedio.Language.Resources.BeginAsync}------------");
+            await Task.Run(async () =>
+           {
+               for (int i = 0; i < vieModel.TotalNum; i++)
+               {
+                   if (CheckPause()) break;
+                   bool result = await DownLoad(vieModel.Movies[i]);
+               }
+           }, ct);
+            ShowStatus($"------------{Jvedio.Language.Resources.Complete}------------");
+            cts.Dispose();
+            Running = false;
         }
+
+
+        private async void GenerateGif()
+        {
+            ShowStatus($"------------{Jvedio.Language.Resources.Batch_Gif}------------");
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < vieModel.TotalNum; i++)
+                {
+                    if (CheckPause()) break;
+                    bool result = GenGif(vieModel.Movies[i]);
+                    ShowResultMessage(result, i);
+                }
+            }, ct);
+            ShowStatus($"------------{Jvedio.Language.Resources.Complete}------------");
+            cts.Dispose();
+            Running = false;
+        }
+
+        private async void GenerateScreenShot()
+        {
+            ShowStatus($"------------{Jvedio.Language.Resources.ScreenShot}------------");
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < vieModel.TotalNum; i++)
+                {
+                    if (CheckPause()) break;
+                    bool result = ScreenShot(vieModel.Movies[i]);
+                    ShowResultMessage(result, i);
+
+                }
+            }, ct);
+            ShowStatus($"------------{Jvedio.Language.Resources.Complete}------------");
+            cts.Dispose();
+            Running = false;
+        }
+
+
+        private async void Rename()
+        {
+            if (Properties.Settings.Default.RenameFormat.IndexOf("{") < 0)
+            {
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_SetRenameRule);
+                cts.Dispose();
+                Running = false;
+                return;
+            }
+
+            ShowStatus($"------------{Jvedio.Language.Resources.Rename}------------");
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < vieModel.TotalNum; i++)
+                {
+                    if (CheckPause()) break;
+                    (bool result, string message) = Rename(vieModel.Movies[i]);
+                    ShowResultMessage(result, i, message);
+                }
+            }, ct);
+            ShowStatus($"------------{Jvedio.Language.Resources.Complete}------------");
+            cts.Dispose();
+            Running = false;
+        }
+
+
 
         private async void StartTask(object sender, RoutedEventArgs e)
         {
-
-            // n 个线程截图
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path))
-            {
-                HandyControl.Controls.Growl.Error("请在【设置-视频处理】中配置 FFmpeg.exe 路径", "BatchGrowl");
-                return;
-            }
-
             if (Running)
             {
-                HandyControl.Controls.Growl.Error("其他任务正在进行！", "BatchGrowl");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.OtherTaskIsRunning, "BatchGrowl");
                 return;
             }
-            bool success=await ResetTask();
-            if (!success) return;
-            SetEnable(false);
 
+            int idx = TabControl.SelectedIndex;
+
+            if ((idx == 1 || idx == 2) && !File.Exists(Properties.Settings.Default.FFMPEG_Path))
+            {
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_SetFFmpeg, "BatchGrowl");
+                return;
+            }
+
+            bool success = await ResetTask();
+            if (!success) return;
 
             cts = new CancellationTokenSource();
-            cts.Token.Register(() => { HandyControl.Controls.Growl.Info("取消当前任务！", "BatchGrowl");  });
+            cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_CancelCurrentTask, "BatchGrowl"); });
             ct = cts.Token;
 
             Running = true;
-            StatusTextBox.Text = "";
+
+            OutputPanel.Clear();
             PauseButton.IsEnabled = true;
-            PauseButton.Content = "暂停";
+            PauseButton.Content = Jvedio.Language.Resources.Pause;
             vieModel.CurrentNum = 0;
             vieModel.Progress = 0;
 
-            int idx = Properties.Settings.Default.BatchIndex;
-            switch (idx)
+            if (vieModel.Movies != null)
             {
-                case 0:
-                    //信息同步
-                    await Task.Run(async () =>
-                    {
-                        try
-                        {
-                            ShowStatus("------------开始同步------------");
-                            if (vieModel.Movies == null) return;
-                            for (int i = 0; i < vieModel.Info_TotalNum; i++)
-                            {
 
-                                if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
-                                while (Pause) { Task.Delay(500).Wait(); }
-                                ct.ThrowIfCancellationRequested();
+                if (idx == 0)
+                {
+                    SyncInfo();
+                }
+                else if (idx == 1)
+                {
+                    GenerateGif();
+                }
 
-                                vieModel.Info_TotalNum_S = GetInfoNum_S();
-                                vieModel.Info_CurrentProgress_S = 0;
-                                if ( i >= vieModel.Movies.Count) break;
+                else if (idx == 2)
+                {
+                    GenerateScreenShot();
+                }
 
-                                bool result =  await DownLoad(vieModel.Movies[i]);
-                                vieModel.Info_CurrentProgress = i + 1;
-
-                                //每 10 个停一分钟，FC2停 2 分钟
-                                if(i>0 && i % 10 == 0)
-                                {
-                                    if (vieModel.Movies[i].ToUpper().IndexOf("FC2") >= 0)
-                                    {
-                                        ShowStatus("暂停 2 分钟……");
-                                        Task.Delay(120000).Wait();
-                                    }
-                                    else
-                                    {
-                                        ShowStatus("暂停 1 分钟……");
-                                        Task.Delay(60000).Wait();
-                                    }
-                                }
-
-
-                            }
-
-                            ShowStatus("------------完成------------");
-
-
-
-                        }
-                        catch (OperationCanceledException ex)
-                        {
-                            ShowStatus("------------任务已取消------------");
-                            App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });
-                        }
-                        finally
-                        {
-                            cts.Dispose();
-                            Running = false;
-                        }
-                    }, ct);
-
-                    break;
-
-
-                case 1:
-                    //Gif
-                    await Task.Run(() =>
-                    {
-                        try
-                        {
-                            ShowStatus("------------开始截取Gif------------");
-                            for (int i = 0; i < vieModel.Gif_TotalNum; i++)
-                            {
-                                
-                                if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
-                                while (Pause) { Task.Delay(500).Wait(); }
-                                ct.ThrowIfCancellationRequested();
-
-                                if (i >= vieModel.Movies.Count) break;
-                                bool result = GenGif(vieModel.Movies[i]);
-                                if (result)
-                                    ShowStatus($"{i+1}/{vieModel.Gif_TotalNum} => 成功");
-                                else
-                                    ShowStatus($"{i + 1}/{vieModel.Gif_TotalNum} => 失败");
-                                vieModel.Gif_CurrentProgress = i + 1;
-                            }
-                            ShowStatus("------------完成------------");
-
-
-                        }
-                        catch (OperationCanceledException ex)
-                        {
-                            ShowStatus("------------任务已取消------------");
-                            App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });
-                        }
-                        finally
-                        {
-                            cts.Dispose();
-                            Running = false;
-                        }
-                    }, ct);
-                    break;
-
-
-                case 2:
-                    //ScreenShot
-                    await Task.Run(() =>
-                    {
-                        try
-                        {
-                            ShowStatus("------------开始截图------------");
-                            for (int i = 0; i < vieModel.ScreenShot_TotalNum; i++)
-                            {
-                                if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
-                                while (Pause) { Task.Delay(500).Wait(); }
-                                ct.ThrowIfCancellationRequested();
-
-                                if (i >= vieModel.Movies.Count) break;
-                                bool result = ScreenShot(vieModel.Movies[i]);
-                                if (result)
-                                    ShowStatus($"\n{i + 1}/{vieModel.ScreenShot_TotalNum} => 成功：{vieModel.Movies[i]}");
-                                else
-                                    ShowStatus($"\n{i + 1}/{vieModel.ScreenShot_TotalNum} => 失败：{vieModel.Movies[i]}");
-
-                                vieModel.ScreenShot_CurrentProgress = i + 1;
-                            }
-
-                            ShowStatus("------------完成------------");
-
-
-                        }
-                        catch (OperationCanceledException ex)
-                        {
-                            ShowStatus("------------任务已取消------------");
-                            App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });
-                        }
-                        finally
-                        {
-                            cts.Dispose();
-                            Running = false;
-                        }
-                    }, ct);
-                    break;
-
-                case 3:
-
-                    break;
-
-                case 4:
-
-                    break;
-                case 5:
-                    //重命名
-                    if (Properties.Settings.Default.RenameFormat.IndexOf("{") < 0)
-                    {
-                        HandyControl.Controls.Growl.Error("请在设置中配置【重命名】规则");
-                        cts.Dispose();
-                        Running = false;
-                        return;
-                    }
-
-
-                    await Task.Run(() =>
-                    {
-                        try
-                        {
-                            double totalcount = vieModel.Movies.Count;
-                            ShowStatus("------------开始重命名------------");
-                            for (int i = 0; i < totalcount; i++)
-                            {
-                                if (Pause) { ShowStatus("暂停中……"); App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; }); }
-                                while (Pause) { Task.Delay(500).Wait(); }
-                                ct.ThrowIfCancellationRequested();
-
-                                if (i >= vieModel.Movies.Count) break;
-                                (bool result,string message) = Rename(vieModel.Movies[i]);
-                                if (result)
-                                    ShowStatus($"\n{i + 1}/{totalcount} => 成功：{vieModel.Movies[i]}");
-                                else
-                                    ShowStatus($"\n{i + 1}/{totalcount} => 失败：{vieModel.Movies[i]}，原因为：{message}");
-
-                                //进度+1
-                                vieModel.Rename_CurrentProgress = i + 1;
-                            }
-
-                            ShowStatus("------------完成------------");
-
-
-                        }
-                        catch (OperationCanceledException ex)
-                        {
-                            ShowStatus("------------任务已取消------------");
-                            App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });
-                        }
-                        finally
-                        {
-                            cts.Dispose();
-                            Running = false;
-                        }
-                    }, ct);
-                    break;
-
-                default:
-
-                    break;
+                else if (idx == 3)
+                {
+                    Rename();
+                }
             }
-
-            SetEnable(true);
-
-
         }
 
 
 
-        private (bool,string) Rename(string id)
+        private (bool, string) Rename(string id)
         {
             DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
 
-            if (!File.Exists(detailMovie.filepath)) return (false,$"文件不存在：{detailMovie.filepath}");
+            if (!File.Exists(detailMovie.filepath)) return (false, $"{Jvedio.Language.Resources.Message_FileNotExist} {detailMovie.filepath}");
             DetailMovie movie = DataBase.SelectDetailMovieById(id);
             //try
             //{
-                string[] newPath = movie.ToFileName();
-                if (movie.hassubsection)
-                {
+            string[] newPath = movie.ToFileName();
+            if (movie.hassubsection)
+            {
                 for (int i = 0; i < newPath.Length; i++)
                 {
                     if (File.Exists(newPath[i])) return (false, $"新文件已存在：{newPath[i]}，原文件为：{detailMovie.filepath}");
                 }
 
                 for (int i = 0; i < newPath.Length; i++)
-                    {
-                        File.Move(movie.subsectionlist[i], newPath[i]);
-                    }
-                    movie.filepath = newPath[0];
-                    movie.subsection = string.Join(";", newPath);
-                    DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
-                    DataBase.UpdateMovieByID(movie.id, "subsection", movie.subsection, "string");//保存
-                    
-                }
-                else
                 {
-                    if(File.Exists(newPath[0])) return (false, $"新文件已存在：{newPath[0]}，原文件为：{detailMovie.filepath}");
-                    File.Move(movie.filepath, newPath[0]);
-                    movie.filepath = newPath[0];
-                    DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
+                    File.Move(movie.subsectionlist[i], newPath[i]);
                 }
-                return (true, "");
+                movie.filepath = newPath[0];
+                movie.subsection = string.Join(";", newPath);
+                DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
+                DataBase.UpdateMovieByID(movie.id, "subsection", movie.subsection, "string");//保存
+
+            }
+            else
+            {
+                if (File.Exists(newPath[0])) return (false, $"新文件已存在：{newPath[0]}，原文件为：{detailMovie.filepath}");
+                File.Move(movie.filepath, newPath[0]);
+                movie.filepath = newPath[0];
+                DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
+            }
+            return (true, "");
             //}
             //catch (Exception ex)
             //{
@@ -774,18 +530,19 @@ namespace Jvedio
             if (Pause)
             {
                 Pause = false;
-                button.Content = "暂停";
+                button.Content = Jvedio.Language.Resources.Pause;
+                WaitingPanel.Visibility = Visibility.Hidden;
             }
             else
             {
                 Pause = true;
-                button.Content = "继续";
+                button.Content = Jvedio.Language.Resources.Continue;
                 WaitingPanel.Visibility = Visibility.Visible;
             }
 
-            
 
-            
+
+
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -798,37 +555,41 @@ namespace Jvedio
                     cts?.Cancel();
                     WaitingPanel.Visibility = Visibility.Visible;
                 }
-                catch (ObjectDisposedException ex) { }
+                catch { }
                 PauseButton.IsEnabled = false;
-                SetEnable(true);
-
+                WaitingPanel.Visibility = Visibility.Hidden;
             }
-            
-
         }
 
-        private  void Jvedio_BaseWindow_Closing(object sender, CancelEventArgs e)
+        private void Jvedio_BaseWindow_Closing(object sender, CancelEventArgs e)
         {
             if (Running) { cts.Cancel(); }
+            Properties.Settings.Default.BatchIndex = TabControl.SelectedIndex;
+            Properties.Settings.Default.Save();
         }
 
-        private async Task<bool>  ResetTask()
+        private async Task<bool> ResetTask()
         {
             if (Running)
             {
-                HandyControl.Controls.Growl.Error("其他任务正在进行！", "BatchGrowl");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.OtherTaskIsRunning, "BatchGrowl");
                 return false;
             }
+            int idx = TabControl.SelectedIndex;
             WaitingPanel.Visibility = Visibility.Visible;
-            return await Task.Run(() => {
-                return vieModel.Reset((message) => { Dispatcher.BeginInvoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });  });
+            return await Task.Run(() =>
+            {
+                return vieModel.Reset(idx, (message) =>
+                {
+                    Dispatcher.BeginInvoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });
+                });
             });
         }
 
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
-            StatusTextBox.Clear();
+            OutputPanel.Clear();
         }
 
 
@@ -845,8 +606,30 @@ namespace Jvedio
         {
             await ResetTask();
         }
+
+
+        private void TextBlock_MouseEnter(object sender, MouseEventArgs e)
+        {
+            TextBlock textBlock = (TextBlock)sender;
+            textBlock.TextDecorations = TextDecorations.Underline;
+        }
+
+        private void TextBlock_MouseLeave(object sender, MouseEventArgs e)
+        {
+            TextBlock textBlock = (TextBlock)sender;
+            textBlock.TextDecorations = null;
+        }
+
+        private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Settings settings = (Settings)Jvedio.GlobalMethod.GetWindowByName("Settings");
+            if (settings == null) settings = new Settings();
+            settings.Show();
+            settings.Activate();
+            settings.TabControl.SelectedIndex = settings.TabControl.Items.Count - 1;
+        }
     }
 
 
 
-    }
+}

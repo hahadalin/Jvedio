@@ -327,8 +327,9 @@ namespace Jvedio
 
                 int num = Properties.Settings.Default.ScreenShot_ThreadNum;
                 string ScreenShotPath = "";
-                if (Properties.Settings.Default.ScreenShotToExtraPicPath) ScreenShotPath = BasePicPath + "ExtraPic\\" + movie.id;
-                else ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
+                //if (Properties.Settings.Default.ScreenShotToExtraPicPath) ScreenShotPath = BasePicPath + "ExtraPic\\" + movie.id;
+                //else 
+                    ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
 
                 if (!Directory.Exists(ScreenShotPath)) Directory.CreateDirectory(ScreenShotPath);
 

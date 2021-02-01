@@ -546,7 +546,7 @@ namespace Jvedio
         /// </summary>
         /// <param name="movie"></param>
         /// <returns></returns>
-        public static async Task<(bool, string)> DownLoadFromNet(Movie movie)
+        public static async Task<(bool, string)> DownLoadFromNet(Movie movie,bool forceToDownload=false)
         {
             bool success = false;
             string message = "网址未配置";

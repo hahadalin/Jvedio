@@ -1,6 +1,4 @@
-﻿
-
-using Jvedio.ViewModel;
+﻿using Jvedio.ViewModel;
 using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
@@ -71,7 +69,6 @@ namespace Jvedio
                     myLinearGradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(62, 191, 223), 1));
                     myLinearGradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(11, 114, 189), 0));
                     BackBorder.Background = myLinearGradientBrush;
-
                     break;
             }
 
@@ -174,8 +171,6 @@ namespace Jvedio
                 if (success) HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "DetailsGrowl");
                 else HandyControl.Controls.Growl.Error(message, "DetailsGrowl");
             }
-
-
         }
 
         public Semaphore SemaphoreScreenShot;
@@ -188,9 +183,9 @@ namespace Jvedio
 
             int num = Properties.Settings.Default.ScreenShot_ThreadNum;
             string ScreenShotPath = "";
-            if (Properties.Settings.Default.ScreenShotToExtraPicPath)
-                ScreenShotPath = BasePicPath + "ExtraPic\\" + movie.id;
-            else
+            //if (Properties.Settings.Default.ScreenShotToExtraPicPath)
+            //    ScreenShotPath = BasePicPath + "ExtraPic\\" + movie.id;
+            //else
                 ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
 
             if (!Directory.Exists(ScreenShotPath)) Directory.CreateDirectory(ScreenShotPath);

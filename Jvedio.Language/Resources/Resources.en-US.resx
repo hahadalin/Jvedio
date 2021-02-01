@@ -1167,4 +1167,142 @@
   <data name="Or" xml:space="preserve">
     <value>Or</value>
   </data>
+  <data name="Management" xml:space="preserve">
+    <value>Management</value>
+  </data>
+  <data name="Statistic" xml:space="preserve">
+    <value>Statistic</value>
+  </data>
+  <data name="ResetDataBase" xml:space="preserve">
+    <value>Reset DataBase</value>
+  </data>
+  <data name="DeleteMovieNotExist" xml:space="preserve">
+    <value>Delete non-existent video</value>
+  </data>
+  <data name="DeleteMovieNotInScan" xml:space="preserve">
+    <value>Delete the movies that are not in the [Scan at startup] directory</value>
+  </data>
+  <data name="SmallToBig" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="BigToSmall" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="ViewNumber" xml:space="preserve">
+    <value>Visits</value>
+  </data>
+  <data name="ListView" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="CurrentVersion" xml:space="preserve">
+    <value>Current Version</value>
+  </data>
+  <data name="LatestVersion" xml:space="preserve">
+    <value>Latest Version</value>
+  </data>
+  <data name="SuccessScreenShotTo" xml:space="preserve">
+    <value>Successfully screenshot to</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="IsUsing" xml:space="preserve">
+    <value>Being used</value>
+  </data>
+  <data name="PleaseEnter" xml:space="preserve">
+    <value>Please Enter</value>
+  </data>
+  <data name="SuccessDelete" xml:space="preserve">
+    <value>Success Delete</value>
+  </data>
+  <data name="DownloadMessageFailFor" xml:space="preserve">
+    <value>Information download failed, reason:</value>
+  </data>
+  <data name="RebootToTakeEffect" xml:space="preserve">
+    <value>Take effect after restart</value>
+  </data>
+  <data name="NoPermissionToListen" xml:space="preserve">
+    <value>No permission to monitor</value>
+  </data>
+  <data name="FilePathIntersection" xml:space="preserve">
+    <value>The folder has an intersection or the folder is already in the current collection</value>
+  </data>
+  <data name="Scanning" xml:space="preserve">
+    <value>Scanning...</value>
+  </data>
+  <data name="DeleteImage" xml:space="preserve">
+    <value>Delete picture</value>
+  </data>
+  <data name="SetAs" xml:space="preserve">
+    <value>Set as</value>
+  </data>
+  <data name="ThumbnailAndPoster" xml:space="preserve">
+    <value>Thumbnail + Poster</value>
+  </data>
+  <data name="DataBase" xml:space="preserve">
+    <value>DataBase</value>
+  </data>
+  <data name="CurrentAndTotal" xml:space="preserve">
+    <value>Current/Total</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Batch_SyncInfo" xml:space="preserve">
+    <value>Batch synchronization: only used to synchronize information and preview images, low-speed synchronization, to avoid server crash</value>
+  </data>
+  <data name="Batch_Gif" xml:space="preserve">
+    <value>Generate GIF: Randomly intercept GIF</value>
+  </data>
+  <data name="Batch_ScreenShot" xml:space="preserve">
+    <value>Generate screenshots: generate screenshots at equal intervals</value>
+  </data>
+  <data name="Batch_Rename" xml:space="preserve">
+    <value>Rename: Follow the rules in [Settings-Rename]</value>
+  </data>
+  <data name="TaskNumber" xml:space="preserve">
+    <value>Number of tasks</value>
+  </data>
+  <data name="TaskSettings" xml:space="preserve">
+    <value>Task settings</value>
+  </data>
+  <data name="ForeceToSync" xml:space="preserve">
+    <value>Forced to synchronize overwrite information (if not selected, the synchronized ones will be skipped)</value>
+  </data>
+  <data name="SkipExistGif" xml:space="preserve">
+    <value>Skip intercepted</value>
+  </data>
+  <data name="GifDuration" xml:space="preserve">
+    <value>Intercept time</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="SkipExistsScreenShot" xml:space="preserve">
+    <value>Skip if there is a picture in the save location</value>
+  </data>
+  <data name="ThreadNumber" xml:space="preserve">
+    <value>Number of threads</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>Second</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="BeginAsync" xml:space="preserve">
+    <value>Begin Async</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
 </root>
