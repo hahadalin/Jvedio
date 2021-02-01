@@ -1326,4 +1326,76 @@
   <data name="TooFrequent" xml:space="preserve">
     <value>Retrieving too frequently, try again later</value>
   </data>
+  <data name="GetSourceCodeFail" xml:space="preserve">
+    <value>Failed to get webpage source code</value>
+  </data>
+  <data name="ParseFail" xml:space="preserve">
+    <value>Parsing failed</value>
+  </data>
+  <data name="DownLoadImageFail" xml:space="preserve">
+    <value>Image download failed</value>
+  </data>
+  <data name="NoActorInfo" xml:space="preserve">
+    <value>There is no cast information on this URL</value>
+  </data>
+  <data name="UrlNotSet" xml:space="preserve">
+    <value>URL is not configured</value>
+  </data>
+  <data name="UrlEuropeNotset" xml:space="preserve">
+    <value>European and American URLs are not opened</value>
+  </data>
+  <data name="UrlDBNotset" xml:space="preserve">
+    <value>DB URL is not opened</value>
+  </data>
+  <data name="ScanNFO" xml:space="preserve">
+    <value>Scan out NFO</value>
+  </data>
+  <data name="SuccessImportToDataBase" xml:space="preserve">
+    <value>Import the database successfully</value>
+  </data>
+  <data name="ImportNFONumber" xml:space="preserve">
+    <value>Total number of imported nfo files</value>
+  </data>
+  <data name="ImportVideioNumber" xml:space="preserve">
+    <value>Total number of imported videos</value>
+  </data>
+  <data name="ScanVideo" xml:space="preserve">
+    <value>Number of videos scanned</value>
+  </data>
+  <data name="NotRecognizeNumber" xml:space="preserve">
+    <value>Number of unrecognized videos</value>
+  </data>
+  <data name="NotImport" xml:space="preserve">
+    <value>Not imported</value>
+  </data>
+  <data name="ImportSubSection" xml:space="preserve">
+    <value>Number of imported segmented videos</value>
+  </data>
+  <data name="ImportFile" xml:space="preserve">
+    <value>The imported file is</value>
+  </data>
+  <data name="RepeatVideo" xml:space="preserve">
+    <value>Duplicate video</value>
+  </data>
+  <data name="TotalImport" xml:space="preserve">
+    <value>Total number of imports</value>
+  </data>
+  <data name="ImportAttention" xml:space="preserve">
+    <value>Since there may be duplicate videos in the database, the number of imported videos is greater than the actual number of videos</value>
+  </data>
+  <data name="Playable" xml:space="preserve">
+    <value>Playable</value>
+  </data>
+  <data name="OnlyShowSubsection" xml:space="preserve">
+    <value>Fragmented video only</value>
+  </data>
+  <data name="WithImage" xml:space="preserve">
+    <value>There are pictures</value>
+  </data>
+  <data name="NoImage" xml:space="preserve">
+    <value>No picture</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
 </root>

@@ -1732,9 +1732,9 @@
                                                     <MenuItem   Command="{Binding ResetCommand}"    IsCheckable="True"   IsChecked="{Binding ShowFlowOut, Mode=TwoWay}"   Header="流出" />
                                                 </MenuItem>
                                                 <MenuItem Header="{x:Static lang:Resources.ShowImageType}" >
-                                                    <MenuItem  Click="SaveShowViewMode" IsCheckable="True"  IsChecked="{Binding Path=ShowViewMode, ConverterParameter=默认, Converter={StaticResource ViewTypeEnumConverter}, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Header="默认"    />
-                                                    <MenuItem  Click="SaveShowViewMode" IsCheckable="True"    IsChecked="{Binding Path=ShowViewMode, ConverterParameter=有图, Converter={StaticResource ViewTypeEnumConverter}, Mode=TwoWay,Source={x:Static p:Settings.Default}}"   Header="有图" />
-                                                    <MenuItem  Click="SaveShowViewMode"  IsCheckable="True"   IsChecked="{Binding Path=ShowViewMode, ConverterParameter=无图, Converter={StaticResource ViewTypeEnumConverter}, Mode=TwoWay,Source={x:Static p:Settings.Default}}"   Header="无图" />
+                                                    <MenuItem  Click="SaveShowViewMode" IsCheckable="True"   IsChecked="True" Header="{x:Static lang:Resources.Default}"    />
+                                                    <MenuItem  Click="SaveShowViewMode" IsCheckable="True"      Header="{x:Static lang:Resources.WithImage}" />
+                                                    <MenuItem  Click="SaveShowViewMode"  IsCheckable="True"     Header="{x:Static lang:Resources.NoImage}" />
                                                 </MenuItem>
                                                 <MenuItem Header="{x:Static lang:Resources.ScrollToEnd}" Click="ScrollToEnd" />
                                             </ContextMenu>
@@ -1997,11 +1997,11 @@
                                 <!--<Border CornerRadius="5" Background="{DynamicResource  BackgroundTitle}" HorizontalAlignment="Stretch" Width="auto"/>-->
                                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right"  >
                                     <fa:ImageAwesome x:Name="StatusSpin" Visibility="{Binding ElementName=ProgressBar,Path=Visibility}" Icon="Refresh" Spin="True" Height="20" Width="20" Foreground="{DynamicResource ForegroundGlobal}" Margin="10 0"/>
-                                    <Image  ToolTip="信息"  Source="{Binding Themes, Mode=OneWay, ConverterParameter=info,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" HorizontalAlignment="Left" Height="27" Margin="5"/>
+                                    <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=info,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" HorizontalAlignment="Left" Height="27" Margin="5"/>
                                     <TextBlock Margin="10 0" x:Name="StatusTextBlock"  Text="{Binding TextType}" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center"/>
                                     <TextBlock x:Name="CountTextBlock"  Margin="10 0" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center">
                                         <TextBlock.Text>
-                                            <MultiBinding StringFormat="当前页面 {0} 个，总计 {1} 个">
+                                            <MultiBinding StringFormat="{}{0}/{1} ">
                                                 <Binding Path="CurrentCount" />
                                                 <Binding Path="TotalCount" />
                                                 <!--<Binding trace:PresentationTraceSources.TraceLevel="High"></Binding>-->

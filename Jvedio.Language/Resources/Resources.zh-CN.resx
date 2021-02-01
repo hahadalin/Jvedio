@@ -1383,4 +1383,19 @@
   <data name="ImportAttention" xml:space="preserve">
     <value>由于数据库中可能有重复视频，故导入数目大于实际影片数目</value>
   </data>
+  <data name="Playable" xml:space="preserve">
+    <value>可播放</value>
+  </data>
+  <data name="OnlyShowSubsection" xml:space="preserve">
+    <value>仅分段视频</value>
+  </data>
+  <data name="WithImage" xml:space="preserve">
+    <value>有图</value>
+  </data>
+  <data name="NoImage" xml:space="preserve">
+    <value>无图</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>默认</value>
+  </data>
 </root>

@@ -1371,6 +1371,11 @@ namespace Jvedio
             Properties.Settings.Default.SettingsIndex = TabControl.SelectedIndex;
             Properties.Settings.Default.Save();
         }
+
+        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start("https://github.com/BtbN/FFmpeg-Builds/releases");
+        }
     }
 
 

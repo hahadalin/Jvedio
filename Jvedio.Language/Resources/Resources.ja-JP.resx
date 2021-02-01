@@ -1326,4 +1326,76 @@
   <data name="TooFrequent" xml:space="preserve">
     <value>取得頻度が高すぎる場合は、後で再試行してください</value>
   </data>
+  <data name="GetSourceCodeFail" xml:space="preserve">
+    <value>Webページのソースコードを取得できませんでした</value>
+  </data>
+  <data name="ParseFail" xml:space="preserve">
+    <value>解析に失敗しました</value>
+  </data>
+  <data name="DownLoadImageFail" xml:space="preserve">
+    <value>画像のダウンロードに失敗しました</value>
+  </data>
+  <data name="NoActorInfo" xml:space="preserve">
+    <value>このURLにはキャスト情報はありません</value>
+  </data>
+  <data name="UrlNotSet" xml:space="preserve">
+    <value>URLが構成されていません</value>
+  </data>
+  <data name="UrlEuropeNotset" xml:space="preserve">
+    <value>ヨーロッパとアメリカのURLは開かれていません</value>
+  </data>
+  <data name="UrlDBNotset" xml:space="preserve">
+    <value>DBURLが開かれていません</value>
+  </data>
+  <data name="ScanNFO" xml:space="preserve">
+    <value>NFOをスキャンアウト</value>
+  </data>
+  <data name="SuccessImportToDataBase" xml:space="preserve">
+    <value>データベースを正常にインポートします</value>
+  </data>
+  <data name="ImportNFONumber" xml:space="preserve">
+    <value>インポートされたnfoファイルの総数</value>
+  </data>
+  <data name="ImportVideioNumber" xml:space="preserve">
+    <value>インポートされたビデオの総数</value>
+  </data>
+  <data name="ScanVideo" xml:space="preserve">
+    <value>スキャンされたビデオの数</value>
+  </data>
+  <data name="NotRecognizeNumber" xml:space="preserve">
+    <value>認識されないビデオの数</value>
+  </data>
+  <data name="NotImport" xml:space="preserve">
+    <value>インポートされません</value>
+  </data>
+  <data name="ImportSubSection" xml:space="preserve">
+    <value>インポートされたセグメント化されたビデオの数</value>
+  </data>
+  <data name="ImportFile" xml:space="preserve">
+    <value>インポートされたファイルは</value>
+  </data>
+  <data name="RepeatVideo" xml:space="preserve">
+    <value>ビデオの複製</value>
+  </data>
+  <data name="TotalImport" xml:space="preserve">
+    <value>輸入総数</value>
+  </data>
+  <data name="ImportAttention" xml:space="preserve">
+    <value>データベースに重複するビデオがある可能性があるため、インポートされたビデオの数は実際のビデオの数よりも多くなります</value>
+  </data>
+  <data name="Playable" xml:space="preserve">
+    <value>再生可能</value>
+  </data>
+  <data name="OnlyShowSubsection" xml:space="preserve">
+    <value>断片化されたビデオのみ</value>
+  </data>
+  <data name="WithImage" xml:space="preserve">
+    <value>写真があります</value>
+  </data>
+  <data name="NoImage" xml:space="preserve">
+    <value>写真なし</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>デフォルト</value>
+  </data>
 </root>

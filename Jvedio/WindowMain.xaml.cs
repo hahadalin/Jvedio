@@ -2047,7 +2047,24 @@ namespace Jvedio
         public void SaveShowViewMode(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = sender as MenuItem;
-            Properties.Settings.Default.ShowViewMode = menuItem.Header.ToString();
+            MenuItem father = menuItem.Parent as MenuItem;
+            int idx = father.Items.IndexOf(menuItem);
+
+            for (int i = 0; i < father.Items.Count; i++)
+            {
+                MenuItem item =(MenuItem) father.Items[i];
+                if (i == idx)
+                {
+                    item.IsChecked = true;
+                }
+                else
+                {
+                    item.IsChecked = false;
+                }
+            }
+
+
+            Properties.Settings.Default.ShowViewMode = idx.ToString();
             Properties.Settings.Default.Save();
             vieModel.Reset();
         }

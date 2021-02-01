@@ -646,6 +646,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 默认 的本地化字符串。
+        /// </summary>
+        public static string Default {
+            get {
+                return ResourceManager.GetString("Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 删除 的本地化字符串。
         /// </summary>
         public static string Delete {
@@ -2194,6 +2203,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 无图 的本地化字符串。
+        /// </summary>
+        public static string NoImage {
+            get {
+                return ResourceManager.GetString("NoImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 无报告 的本地化字符串。
         /// </summary>
         public static string NoLog {
@@ -2338,6 +2356,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 仅分段视频 的本地化字符串。
+        /// </summary>
+        public static string OnlyShowSubsection {
+            get {
+                return ResourceManager.GetString("OnlyShowSubsection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 透明度 的本地化字符串。
         /// </summary>
         public static string Opacity {
@@ -2424,6 +2451,15 @@ namespace Jvedio.Language {
         public static string Picture {
             get {
                 return ResourceManager.GetString("Picture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 可播放 的本地化字符串。
+        /// </summary>
+        public static string Playable {
+            get {
+                return ResourceManager.GetString("Playable", resourceCulture);
             }
         }
         
@@ -3819,6 +3855,15 @@ namespace Jvedio.Language {
         public static string WithGenre {
             get {
                 return ResourceManager.GetString("WithGenre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 有图 的本地化字符串。
+        /// </summary>
+        public static string WithImage {
+            get {
+                return ResourceManager.GetString("WithImage", resourceCulture);
             }
         }
         

@@ -1194,7 +1194,6 @@ namespace Jvedio.ViewModel
 
             }
             stopwatch.Stop();
-            Console.WriteLine($"\n演员翻页用时：{stopwatch.ElapsedMilliseconds} ms");
 
         }
 
@@ -1331,7 +1330,7 @@ namespace Jvedio.ViewModel
             stopwatch.Restart();
             List<Actress> Actresses = DataBase.SelectAllActorName(VedioType);
             stopwatch.Stop();
-            Console.WriteLine($"\n加载演员用时：{stopwatch.ElapsedMilliseconds} ms");
+
 
             if (ActorList != null && Actresses != null && Actresses.Count == ActorList.ToList().Count) { return; }
             ActorList = new ObservableCollection<Actress>();
@@ -1479,9 +1478,20 @@ namespace Jvedio.ViewModel
             SqlCommands.Add(sqlInfo);
             SqlIndex = SqlCommands.Count - 1;
             TextType = textType;
-            if (Properties.Settings.Default.ShowViewMode != "默认") TextType = TextType + "，" + Properties.Settings.Default.ShowViewMode;
-            if (Properties.Settings.Default.OnlyShowPlay ) TextType = TextType + "，可播放" ;
-            if (Properties.Settings.Default.OnlyShowSubSection) TextType = TextType + "，仅分段";
+
+            string viewText = "";
+            int.TryParse(Properties.Settings.Default.ShowViewMode, out int vm);
+            if (vm == 1)
+            {
+                viewText = Jvedio.Language.Resources.WithImage;
+            }else if (vm == 2)
+            {
+                viewText = Jvedio.Language.Resources.NoImage;
+            }
+
+            if (vm!=0) TextType = TextType + "，" + viewText;
+            if (Properties.Settings.Default.OnlyShowPlay ) TextType = TextType + "，"  +Jvedio.Language.Resources.Playable;
+            if (Properties.Settings.Default.OnlyShowSubSection) TextType = TextType + "，" + Jvedio.Language.Resources.OnlyShowSubsection;
 
             Task.Run(() =>
             {

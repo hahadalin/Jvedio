@@ -345,8 +345,8 @@ namespace Jvedio
 
 
                         //记录日志
-                        Logger.LogScanInfo($"\n-----【" + DateTime.Now.ToString() + $"】NFO {Jvedio.Language.Resources.Scan}-----");
-                        Logger.LogScanInfo($"\n{Jvedio.Language.Resources.Scan}{Jvedio.Language.Resources.Number} => {nfoFiles.Count}  ");
+                        Logger.LogScanInfo(Environment.NewLine+ $"-----【" + DateTime.Now.ToString() + $"】NFO {Jvedio.Language.Resources.Scan}-----");
+                        Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.Scan}{Jvedio.Language.Resources.Number} => {nfoFiles.Count}  ");
 
 
                         //导入所有 nfo 文件信息

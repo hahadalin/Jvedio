@@ -47,7 +47,7 @@ namespace Jvedio
             if (nfopaths.Count > 0 && Properties.Settings.Default.ScanNfo)
             {
                 Logger.LogScanInfo(Environment.NewLine + "-----【" + DateTime.Now.ToString() + "】-----");
-                Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.ScanNFO} => {nfopaths.Count}  个 \n");
+                Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.ScanNFO} => {nfopaths.Count}  " + Environment.NewLine);
 
                 double total = 0;
                 //导入 nfo 文件
@@ -60,7 +60,7 @@ namespace Jvedio
                         {
                             DataBase.InsertFullMovie(movie);
                             total += 1;
-                            Logger.LogScanInfo($"\n{Jvedio.Language.Resources.SuccessImportToDataBase} => {item}  ");
+                            Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.SuccessImportToDataBase} => {item}  ");
                         }
 
                     }
@@ -355,7 +355,7 @@ namespace Jvedio
         public static double DistinctMovieAndInsert(List<string> MoviePaths , CancellationToken ct, bool IsEurope = false)
         {
             Logger.LogScanInfo(Environment.NewLine +  "-----【" + DateTime.Now.ToString() + "】-----");
-            Logger.LogScanInfo(Environment.NewLine +  $"{Jvedio.Language.Resources.ScanVideo} => {MoviePaths.Count} \n");
+            Logger.LogScanInfo(Environment.NewLine +  $"{Jvedio.Language.Resources.ScanVideo} => {MoviePaths.Count} " +  Environment.NewLine);
 
 
             //检查未识别出番号的视频
@@ -385,7 +385,7 @@ namespace Jvedio
                     }
                 }
             }
-            Logger.LogScanInfo($"\n【{Jvedio.Language.Resources.NotRecognizeNumber} ：{unidentifynum}】\n" + c1);
+            Logger.LogScanInfo(Environment.NewLine + $"【{Jvedio.Language.Resources.NotRecognizeNumber} ：{unidentifynum}】" + Environment.NewLine  + c1);
 
             //检查 重复|分段 视频
             Dictionary<string, List<string>> repeatlist = new Dictionary<string, List<string>>();
@@ -450,7 +450,7 @@ namespace Jvedio
 
                 }
             }
-            Logger.LogScanInfo($"\n【 {Jvedio.Language.Resources.RepeatVideo}：{removelist.Count + subsectionlist.Count}个】" + Environment.NewLine + c2);
+            Logger.LogScanInfo(Environment.NewLine + $"【 {Jvedio.Language.Resources.RepeatVideo}：{removelist.Count + subsectionlist.Count}】" + Environment.NewLine + c2);
             List<string> insertList = r1.Except(removelist).ToList();
 
             Console.WriteLine("removelist:" + removelist.Count);
