@@ -14,6 +14,12 @@ namespace Jvedio
         public static string[] CHS = new string[] {  "中字", "中文字幕", "字幕","中文","translated" , "translate" };
         public static string[] HDV = new string[] { "hd", "high_definition", "high definition","高清" };
 
+
+
+
+
+
+
         public static void InitFanhaoList()
         {
             Qibing = new List<string>();

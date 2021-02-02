@@ -1398,4 +1398,10 @@
   <data name="Default" xml:space="preserve">
     <value>Default</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="DoubleClickToCancel" xml:space="preserve">
+    <value>Double Click To Cancel</value>
+  </data>
 </root>

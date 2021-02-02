@@ -772,6 +772,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 双击取消 的本地化字符串。
+        /// </summary>
+        public static string DoubleClickToCancel {
+            get {
+                return ResourceManager.GetString("DoubleClickToCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 下载 的本地化字符串。
         /// </summary>
         public static string Download {
@@ -1470,6 +1479,15 @@ namespace Jvedio.Language {
         public static string ListView {
             get {
                 return ResourceManager.GetString("ListView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 加载该演员其他作品 的本地化字符串。
+        /// </summary>
+        public static string LoadActorOtherMovie {
+            get {
+                return ResourceManager.GetString("LoadActorOtherMovie", resourceCulture);
             }
         }
         
@@ -2221,6 +2239,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 下一页 的本地化字符串。
+        /// </summary>
+        public static string NextPage {
+            get {
+                return ResourceManager.GetString("NextPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 该网址无演员信息 的本地化字符串。
         /// </summary>
         public static string NoActorInfo {
@@ -2550,6 +2577,15 @@ namespace Jvedio.Language {
         public static string Preview {
             get {
                 return ResourceManager.GetString("Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 上一页 的本地化字符串。
+        /// </summary>
+        public static string PreviewPage {
+            get {
+                return ResourceManager.GetString("PreviewPage", resourceCulture);
             }
         }
         
@@ -2928,6 +2964,15 @@ namespace Jvedio.Language {
         public static string ScrollToEnd {
             get {
                 return ResourceManager.GetString("ScrollToEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 搜索 的本地化字符串。
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

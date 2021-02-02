@@ -35,7 +35,9 @@ namespace Jvedio.ViewModel
         public event EventHandler CurrentMovieListChangedCompleted;
 
         public bool IsFlipOvering = false;
+        public bool StopFlipOver = false;
 
+        public bool StopLoadMovie = false;
 
         public VedioType CurrentVedioType = VedioType.所有;
 
@@ -43,6 +45,7 @@ namespace Jvedio.ViewModel
 
 
         public int SideIdx = 0;
+
 
 
         public FixedList<List<string>> Record = new FixedList<List<string>>(10);//固定长度
@@ -726,6 +729,19 @@ namespace Jvedio.ViewModel
             }
         }
 
+        private string _SearchHint = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.ID;
+
+
+        public string SearchHint
+        {
+            get { return _SearchHint; }
+            set
+            {
+                _SearchHint = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private Actress actress;
         public Actress Actress
@@ -946,9 +962,9 @@ namespace Jvedio.ViewModel
         public async void BeginSearch()
         {
             IsSearching = true;
+            GetSearchCandidate(Search.ToProperSql());
             await Query();
             IsSearching = false;
-            GetSearchCandidate(Search.ToProperSql());
             FlipOver();
         }
 
@@ -1036,6 +1052,12 @@ namespace Jvedio.ViewModel
         {
             CurrentSearchCandidate = new ObservableCollection<string>();
             if (Search == "") return;
+
+            //提取出英文和数字
+            string extraSearch = "";
+            string number = Identify.GetNum(Search);
+            string eng = Identify.GetEng(Search);
+            if (!string.IsNullOrEmpty(number)) extraSearch = eng + "-" + number;
             List<Movie> movies = new List<Movie>();
             if (AllSearchType == MySearchType.名称)
             {
@@ -1066,6 +1088,7 @@ namespace Jvedio.ViewModel
             else if (AllSearchType == MySearchType.识别码)
             {
                 movies = MovieList.Where(m => m.id.ToUpper().Contains(Search.ToUpper())).ToList();
+                if (movies.Count==0) movies = MovieList.Where(m => m.id.ToUpper().Contains(extraSearch.ToUpper())).ToList();
                 foreach (Movie movie in movies)
                 {
                     CurrentSearchCandidate.Add(movie.id);
@@ -1121,13 +1144,13 @@ namespace Jvedio.ViewModel
                     movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
                     movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
                     App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
+                    if (StopLoadMovie) break;
                 }
 
                 App.Current.Dispatcher.Invoke((Action)delegate
                 {
                     Main main = App.Current.Windows[0] as Main;
                     if (Properties.Settings.Default.ShowImageMode == "2") main.ImageSlideTimer.Start();//0.5s后开始展示预览图
-                    IsFlipOvering = false;
                     if (main != null)
                     {
                         //main.IsFlowing = false;
@@ -1261,20 +1284,22 @@ namespace Jvedio.ViewModel
                         }
                         for (int i = 0; i < Movies.Count; i++)
                         {
+
                             //添加标签戳
                             if (Identify.IsHDV(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_HD) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.HD;
                             if (Identify.IsCHS(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_Translated) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_Translated) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_Translated) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.Translated;
                             if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.FlowOut;
                         }
 
-
-
                         App.Current.Dispatcher.BeginInvoke((Action)delegate { 
                             CurrentMovieList = new ObservableCollection<Movie>();
                             CurrentCount = Movies.Count;
                         });
+
                         foreach (Movie movie in Movies)
                         {
+
+                            if (StopFlipOver) break;
                             movie.smallimage = ImageProcess. GetBitmapImage(movie.id, "SmallPic");
                             movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
                             App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
@@ -1282,16 +1307,11 @@ namespace Jvedio.ViewModel
 
                         App.Current.Dispatcher.Invoke((Action)delegate
                         {
-                            Main main = App.Current.Windows[0] as Main;
-                            if (Properties.Settings.Default.ShowImageMode == "2") main.ImageSlideTimer.Start();//0.5s后开始展示预览图
-                            IsFlipOvering = false;
-                            if (main != null)
+                            if (GetWindowByName("Main") is Main main)
                             {
-                                //main.IsFlowing = false;
-                                main.SetSelected();
                                 CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
                             }
-                            
+
                         });
                     }
                 });
@@ -1396,7 +1416,7 @@ namespace Jvedio.ViewModel
         /// <summary>
         /// 在数据库中搜索影片
         /// </summary>
-        public async Task<bool> Query()
+        public async  Task<bool> Query()
         {
             if (!DataBase.IsTableExist("movie")) { return false; }
 
@@ -1419,9 +1439,9 @@ namespace Jvedio.ViewModel
 
             List<Movie> oldMovieList = MovieList.ToList();
 
-            if (Properties.Settings.Default.AllSearchType == "识别码")
+            if (AllSearchType== MySearchType.识别码)
             {
-                TextType = "搜索识别码：" + searchContent;
+                TextType =Jvedio.Language.Resources.Search + Jvedio.Language.Resources.ID + searchContent;
 
                 if (SearchInCurrent)
                     MovieList = oldMovieList.Where(arg => arg.id.IndexOf(searchContent) >= 0).ToList();
@@ -1431,18 +1451,18 @@ namespace Jvedio.ViewModel
                 
             }
 
-            else if (Properties.Settings.Default.AllSearchType == "名称")
+            else if (AllSearchType == MySearchType.名称)
             {
-                TextType = "搜索名称：" + searchContent;
+                TextType = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.Title + searchContent;
                 if (SearchInCurrent)
                     MovieList = oldMovieList.Where(arg => arg.title.IndexOf(searchContent) >= 0).ToList();
                 else
                     MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where title like '%{searchContent}%'");
             }
 
-            else if (Properties.Settings.Default.AllSearchType == "演员")
+            else if (AllSearchType == MySearchType.演员)
             {
-                TextType = "搜索演员：" + searchContent;
+                TextType = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.Actor + searchContent;
                 if (SearchInCurrent)
                     MovieList = oldMovieList.Where(arg => arg.actor.IndexOf(searchContent) >= 0).ToList();
                 else

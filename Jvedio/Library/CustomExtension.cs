@@ -54,14 +54,6 @@ namespace Jvedio
         }
 
 
-
-        public static string ToMySearchType(this string str)
-        {
-            if(str=="ID" || str == "身元") return "识别码";
-            if (str == "Title" || str == "名前") return "名称";
-            if (str == "Actor" || str == "俳優") return "演员";
-            return str;
-        }
         public static string ToSqlString(this Sort sort)
         {
             string result;

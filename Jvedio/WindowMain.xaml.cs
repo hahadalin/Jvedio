@@ -74,9 +74,6 @@ namespace Jvedio
         private HwndSource _hwndSource;
 
         public DetailMovie CurrentLabelMovie;
-
-
-        public DispatcherTimer FlowTimer = new DispatcherTimer();
         public bool IsFlowing = false;
 
 
@@ -118,26 +115,7 @@ namespace Jvedio
             Properties.Settings.Default.Selected_BorderBrush = "#FF8000";
             //Properties.Settings.Default.DisplayNumber = 5;
 
-            //设置排序类型
-            var radioButtons = SortStackPanel.Children.OfType<RadioButton>().ToList();
-            foreach (RadioButton item in radioButtons)
-            {
-                item.Click += SetSortValue;
-            }
-
-            //设置图片显示模式
-            var rbs = ImageTypeStackPanel.Children.OfType<RadioButton>().ToList();
-            foreach (RadioButton item in rbs)
-            {
-                item.Click += SaveShowImageMode;
-            }
-
-            //设置视频格式
-            var rbs2 = VedioTypeStackPanel.Children.OfType<RadioButton>().ToList();
-            foreach (RadioButton item in rbs2)
-            {
-                item.Click += SetTypeValue;
-            }
+            BindingEvent();
 
             if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported) taskbarInstance = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
 
@@ -385,6 +363,45 @@ namespace Jvedio
 
         #endregion
 
+        //绑定事件
+        private void BindingEvent()
+        {
+
+
+            //绑定演员奥村
+            foreach (StackPanel item in ActorInfoStackPanel.Children.OfType<StackPanel>().ToList())
+            {
+                TextBox textBox = item.Children[1] as TextBox;
+                textBox.PreviewKeyUp += SaveActress;
+            }
+
+
+
+
+            //设置排序类型
+            var radioButtons = SortStackPanel.Children.OfType<RadioButton>().ToList();
+            foreach (RadioButton item in radioButtons)
+            {
+                item.Click += SetSortValue;
+            }
+
+            //设置图片显示模式
+            var rbs = ImageTypeStackPanel.Children.OfType<RadioButton>().ToList();
+            foreach (RadioButton item in rbs)
+            {
+                item.Click += SaveShowImageMode;
+            }
+
+            //设置视频格式
+            var rbs2 = VedioTypeStackPanel.Children.OfType<RadioButton>().ToList();
+            foreach (RadioButton item in rbs2)
+            {
+                item.Click += SetTypeValue;
+            }
+        }
+
+
+
 
         private void ImageSlideTimer_Tick(object sender, EventArgs e)
         {
@@ -409,20 +426,15 @@ namespace Jvedio
             vieModel.CurrentMovieListChangedCompleted += (s, ev) =>
             {
                 //等待加载
-
-                Task.Run(() =>
-                {
-                    if (!IsToScrollToEnd) Task.Delay(500).Wait();
-                    IsFlowing = false;
-                });
-
+                    Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        IsFlowing = false;
+                        vieModel.StopLoadMovie = false;
+                        vieModel.IsFlipOvering = false;
+                        if (Properties.Settings.Default.EditMode) SetSelected();
+                        if (Properties.Settings.Default.ShowImageMode == "2") ImageSlideTimer.Start();//0.5s后开始展示预览图
+                    }, DispatcherPriority.ContextIdle, null);
             };
-            FlowTimer.Interval = TimeSpan.FromMilliseconds(1);
-            FlowTimer.Tick += new EventHandler(FlowTimer_Tick);
-
-
-            FlipoverTimer.Interval = TimeSpan.FromMilliseconds(1);
-            FlipoverTimer.Tick += new EventHandler(FlipoverTimer_Tick);
 
 
             CheckurlTimer.Interval = TimeSpan.FromMinutes(CheckurlInterval);
@@ -467,19 +479,8 @@ namespace Jvedio
             Resizing = false;
             ResizingTimer.Stop();
         }
-        private void FlowTimer_Tick(object sender, EventArgs e)
-        {
-            vieModel.FlowNum++;
-            vieModel.Flow();
-            FlowTimer.Stop();
-        }
 
-        private void FlipoverTimer_Tick(object sender, EventArgs e)
-        {
-            vieModel.FlipOver();
-            ScrollViewer.ScrollToTop();
-            FlipoverTimer.Stop();
-        }
+
 
 
         public void Notify_Close(object sender, RoutedEventArgs e)
@@ -716,21 +717,7 @@ namespace Jvedio
 
         }
 
-        public async void ScrollToEnd(object sender, RoutedEventArgs e)
-        {
-            await Task.Run(() =>
-            {
-                while (ScrollViewer.VerticalOffset < ScrollViewer.ScrollableHeight)
-                {
-                    this.Dispatcher.Invoke((Action)delegate
-                    {
-                        IsToScrollToEnd = true;
-                        ScrollViewer.ScrollToBottom();
-                    });
-                    Task.Delay(100).Wait();
-                }
-            });
-        }
+
 
 
         public void Refresh(InfoUpdateEventArgs eventArgs, double totalcount)
@@ -1300,24 +1287,17 @@ namespace Jvedio
 
         private void SetSearchValue(object sender, MouseButtonEventArgs e)
         {
-            AllSearchTextBox.Text = ((TextBlock)sender).Text;
-            AllSearchTextBox.Select(AllSearchTextBox.Text.Length, 0);
+            SearchBar.Text = ((TextBlock)sender).Text;
+            SearchBar.Select(SearchBar.Text.Length, 0);
             AllSearchPopup.IsOpen = false;
             Resizing = true;
             ResizingTimer.Start();
-            vieModel.Search = AllSearchTextBox.Text;
+            vieModel.Search = SearchBar.Text;
         }
 
-        private void SearchTextBox_GotFocus(object sender, RoutedEventArgs e)
+        private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
         {
-            TextBox tb = sender as TextBox;
-            Grid grid = tb.Parent as Grid;
-            if (grid.Name == "AllSearchGrid") { vieModel.SearchAll = true; } else { vieModel.SearchAll = false; }
-
-
-            //if ( vieModel.SearchAll) AllSearchPopup.IsOpen = true;
-            //if (SearchCandidate != null & !vieModel.SearchAll) SearchCandidate.Visibility = Visibility.Visible;
-
+            if (AllSearchGrid.Width > 300) return;
             //动画
             DoubleAnimation doubleAnimation = new DoubleAnimation(300, 400, new Duration(TimeSpan.FromMilliseconds(200)));
             AllSearchGrid.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation);
@@ -1327,18 +1307,12 @@ namespace Jvedio
             AllSearchBorder.BorderBrush = new SolidColorBrush(color1);
             ColorAnimation colorAnimation = new ColorAnimation(color1, color2, new Duration(TimeSpan.FromMilliseconds(200)));
             AllSearchBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
-            if (AllSearchTextBox.Text == Jvedio.Language.Resources.SearchHint)
-            {
-                AllSearchTextBox.Text = "";
-            }
-
-
         }
 
-        private void SearchTextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void SearchBar_LostFocus()
         {
+            if (AllSearchGrid.Width <400) return;
             AllSearchPopup.IsOpen = false;
-
             DoubleAnimation doubleAnimation = new DoubleAnimation(400, 300, new Duration(TimeSpan.FromMilliseconds(200)));
             AllSearchGrid.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation);
             //边框颜色
@@ -1347,78 +1321,27 @@ namespace Jvedio
             AllSearchBorder.BorderBrush = new SolidColorBrush(color2);
             ColorAnimation colorAnimation = new ColorAnimation(color2, color1, new Duration(TimeSpan.FromMilliseconds(200)));
             AllSearchBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
-            if (AllSearchTextBox.Text == "")
-            {
-                AllSearchTextBox.Text = Jvedio.Language.Resources.SearchHint;
-            }
-            //Task.Run(() => {
-            //    Task.Delay(200).Wait();
-            //    App.Current.Dispatcher.Invoke((Action)delegate {
-
-            //    });
-
-            //});
-
-
-
 
         }
 
 
         public bool CanSearch = false;
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void RefreshCandiadte(object sender, TextChangedEventArgs e)
         {
-            if (AllSearchTextBox.Text == "" || AllSearchTextBox.Text == Jvedio.Language.Resources.SearchHint)
-            {
-                if (ClearImage != null) ClearImage.Visibility = Visibility.Hidden;
-                return;
-            }
-            if (ClearImage != null) ClearImage.Visibility = Visibility.Visible;
-
-
-            TextBox SearchTextBox = sender as TextBox;
-            Grid grid = SearchTextBox.Parent as Grid;
-            string searchtext = SearchTextBox.Text;
             AllSearchPopup.IsOpen = true;
-            vieModel?.GetSearchCandidate(searchtext);
-
-
+            vieModel?.GetSearchCandidate(SearchBar.Text);
         }
 
 
         private int SearchSelectIdex = -1;
 
-        private void SearchTextBox_PreviewKeyUp(object sender, KeyEventArgs e)
+        private void SearchBar_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                TextBox SearchTextBox = sender as TextBox;
-                if (SearchSelectIdex != -1)
-                {
-                    ContentPresenter c = (ContentPresenter)SearchItemsControl.ItemContainerGenerator.ContainerFromItem(SearchItemsControl.Items[SearchSelectIdex]);
-                    StackPanel stackPanel = FindElementByName<StackPanel>(c, "SearchStackPanel");
-                    if (stackPanel != null)
-                    {
-                        TextBlock textBlock = stackPanel.Children[0] as TextBlock;
-                        SearchTextBox.Text = textBlock.Text;
-                        SearchTextBox.Select(textBlock.Text.Length, 0);
-                        SearchSelectIdex = -1;
-                    }
-                }
-                else
-                {
-
-                    Grid grid = SearchTextBox.Parent as Grid;
-                    if (SearchTextBox != null)
-                    {
-                        string searchtext = SearchTextBox.Text;
-                        vieModel.Search = searchtext;
-                    }
-                }
+                vieModel.Search = SearchBar.Text;
                 AllSearchPopup.IsOpen = false;
-
-
             }
             else if (e.Key == Key.Down)
             {
@@ -1444,7 +1367,7 @@ namespace Jvedio
             }
             else if (e.Key == Key.Delete)
             {
-                AllSearchTextBox.Text = "";
+                SearchBar.Clear();
             }
         }
 
@@ -2007,10 +1930,14 @@ namespace Jvedio
         public void SaveAllSearchType(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
+            StackPanel stackPanel = radioButton.Parent as StackPanel;
             radioButton.IsChecked = true;
-            Properties.Settings.Default.AllSearchType = radioButton.Content.ToString().ToMySearchType();
-            vieModel?.GetSearchCandidate(AllSearchTextBox.Text);
-
+            int idx = stackPanel.Children.OfType<RadioButton>().ToList().IndexOf(radioButton);
+            Properties.Settings.Default.AllSearchType = idx.ToString();
+            vieModel?.GetSearchCandidate(SearchBar.Text);
+            vieModel.SearchHint = Jvedio.Language.Resources.Search + radioButton.Content.ToString();
+            Properties.Settings.Default.Save();
+            vieModel.AllSearchType = Properties.Settings.Default.AllSearchType.Length == 1 ? (MySearchType)int.Parse(Properties.Settings.Default.AllSearchType) : 0;
 
         }
 
@@ -2105,15 +2032,19 @@ namespace Jvedio
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-
             //无进度条时
             ScrollViewer sv = sender as ScrollViewer;
-
             if (sv.VerticalOffset == 0 && sv.VerticalOffset == sv.ScrollableHeight && vieModel.CurrentMovieList.Count < Properties.Settings.Default.DisplayNumber && !IsFlowing)
             {
                 IsFlowing = true;
-                FlowTimer.Start();
+                LoadMovie();
             }
+        }
+
+        private void LoadMovie()
+        {
+            vieModel.FlowNum++;
+            vieModel.Flow();
         }
 
 
@@ -2132,11 +2063,7 @@ namespace Jvedio
                 if (!IsFlowing && vieModel.CurrentMovieList.Count < Properties.Settings.Default.DisplayNumber && vieModel.CurrentMovieList.Count < vieModel.MovieList.Count && vieModel.CurrentMovieList.Count + (vieModel.CurrentPage - 1) * Properties.Settings.Default.DisplayNumber < vieModel.MovieList.Count)
                 {
                     IsFlowing = true;
-                    FlowTimer.Start();
-                    if (Properties.Settings.Default.EditMode) SetSelected();
-
-                    if (vieModel.CurrentMovieList != null && sv.VerticalOffset == sv.ScrollableHeight && vieModel.CurrentMovieList.Count == Properties.Settings.Default.DisplayNumber) IsToScrollToEnd = false;
-
+                    LoadMovie();
                 }
 
             }
@@ -2392,13 +2319,6 @@ namespace Jvedio
         }
 
 
-        public void ClearSearch(object sender, MouseButtonEventArgs e)
-        {
-            if (AllSearchTextBox.Text == "") return;
-            AllSearchTextBox.Text = "";
-            vieModel.Reset();
-        }
-
         public async void GenerateActor(object sender, RoutedEventArgs e)
         {
             if (!Properties.Settings.Default.Enable_BaiduAI) { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_SetBaiduAI, "Main"); return; }
@@ -2505,8 +2425,6 @@ namespace Jvedio
             new HandyControl.Controls.Screenshot().Start();
         }
 
-
-        private bool IsToScrollToEnd = false;
         public async void GetScreenShot(object sender, RoutedEventArgs e)
         {
 
@@ -3559,7 +3477,7 @@ namespace Jvedio
 
             if (vieModel.EnableEditActress && e.Key == Key.Enter)
             {
-                AllSearchTextBox.Focus();
+                SearchBar.Focus();
                 vieModel.EnableEditActress = false;
                 //Console.WriteLine(vieModel.Actress.age);
                 DataBase.InsertActress(vieModel.Actress);
@@ -3729,78 +3647,51 @@ namespace Jvedio
 
 
 
-        private void PreviousPage(object sender, MouseButtonEventArgs e)
+        //TODO
+        private async void PreviousPage(object sender, MouseButtonEventArgs e)
         {
-            if (vieModel.TotalPage <= 1 || vieModel.IsFlipOvering) return;
-            FlipoverTimer.Stop();
-            if (vieModel.CurrentPage - 1 <= 0)
-                vieModel.CurrentPage = vieModel.TotalPage;
-            else
-                vieModel.CurrentPage -= 1;
-            FlipoverTimer.Start();
+            if (vieModel.IsFlipOvering) return;
+            if (vieModel.TotalPage <= 1) return;
+            vieModel.StopFlipOver = true;
+            await WaitUntilStopLoad();
 
 
-        }
-
-        private void NextPage(object sender, MouseButtonEventArgs e)
-        {
-            //vieModel.CurrentMovieList = new ObservableCollection<Movie>();
-
-            if (vieModel.TotalPage <= 1 || vieModel.IsFlipOvering) return;
-            FlipoverTimer.Stop();
-            if (vieModel.CurrentPage + 1 > vieModel.TotalPage)
-                vieModel.CurrentPage = 1;
-            else
-                vieModel.CurrentPage += 1;
-            FlipoverTimer.Start();
-
-        }
-
-        private void PreviousRecord(object sender, MouseButtonEventArgs e)
-        {
-            if (vieModel.IsFlipOvering || vieModel.Record == null || vieModel.Record.Count == 0) return;
-            FlipoverTimer.Stop();
-            vieModel.RecordIndex--;
-            if (vieModel.RecordIndex < 0)
-            {
-                vieModel.RecordIndex = 0;
-                BackBorder.IsEnabled = false;
-                return;
-            }
-            vieModel.MovieList = new List<Movie>();
-
-            foreach (var item in vieModel.Record[vieModel.RecordIndex])
-            {
-                vieModel.MovieList.Add(DataBase.SelectMovieByID(item));
-            }
-            vieModel.CurrentPage = 1;
+            if (vieModel.CurrentPage - 1 <= 0) vieModel.CurrentPage = vieModel.TotalPage;
+            else vieModel.CurrentPage -= 1;
+            if (vieModel.IsFlipOvering) return;
+            //vieModel.StopFlipOver = false;
             vieModel.FlipOver();
+            ScrollViewer.ScrollToTop();
+
         }
 
-        private void NextRecord(object sender, MouseButtonEventArgs e)
+        private async Task<bool> WaitUntilStopLoad()
         {
-            if (vieModel.IsFlipOvering || vieModel.Record == null || vieModel.Record.Count == 0) return;
-            FlipoverTimer.Stop();
-
-            vieModel.RecordIndex++;
-            if (vieModel.RecordIndex >= vieModel.Record.Count)
-            {
-                vieModel.RecordIndex = vieModel.Record.Count - 1;
-                ForwardBorder.IsEnabled = false;
-                return;
-            }
-            vieModel.MovieList = new List<Movie>();
-            foreach (var item in vieModel.Record[vieModel.RecordIndex])
-            {
-                vieModel.MovieList.Add(DataBase.SelectMovieByID(item));
-            }
-            vieModel.CurrentPage = 1;
-            vieModel.FlipOver();
-
-
-
+            return await Task.Run(() => {
+                while (vieModel.IsFlipOvering)
+                {
+                    Task.Delay(100).Wait();
+                }
+                return false;
+            });
 
         }
+
+        private async void NextPage(object sender, MouseButtonEventArgs e)
+        {
+            if (vieModel.TotalPage <= 1) return;
+            //vieModel.StopFlipOver = true;
+            //await WaitUntilStopLoad();
+            if (vieModel.CurrentPage + 1 > vieModel.TotalPage) vieModel.CurrentPage = 1;
+            else vieModel.CurrentPage += 1;
+            //vieModel.StopFlipOver = false;
+
+            vieModel.FlipOver();
+            ScrollViewer.ScrollToTop();
+
+        }
+
+
 
 
 
@@ -4420,7 +4311,7 @@ namespace Jvedio
             else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Down)
             {
                 //滑倒底端
-                ScrollToEnd(sender, new RoutedEventArgs());
+
             }
             else if (Grid_GAL.Visibility == Visibility.Hidden && e.Key == Key.Right)
                 NextPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
@@ -4571,7 +4462,7 @@ namespace Jvedio
             textBox.IsReadOnly = true;
             textBox.Focusable = false;
 
-            AllSearchTextBox.Focus();
+            SearchBar.Focus();
 
             //保存
             if (name != "")
@@ -4694,7 +4585,7 @@ namespace Jvedio
         }
 
 
-        private void AllSearchTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void ShowSearchPopup(object sender, MouseButtonEventArgs e)
         {
             AllSearchPopup.IsOpen = true;
         }
@@ -6026,6 +5917,7 @@ namespace Jvedio
         private void Grid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             FocusTextBlock.Focus();
+            SearchBar_LostFocus();
         }
 
         private async void HideSide(object sender, MouseButtonEventArgs e)
