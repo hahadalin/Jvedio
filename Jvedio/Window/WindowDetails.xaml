@@ -735,7 +735,7 @@
                 </Border.Effect>
             </Border>
 
-            <Border Height="30" Width="30" HorizontalAlignment="Right"  VerticalAlignment="Top" PreviewMouseLeftButtonUp="HideGrid"   CornerRadius="3" Style="{StaticResource CloseBorderStyle}" >
+            <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
             </Border>
 

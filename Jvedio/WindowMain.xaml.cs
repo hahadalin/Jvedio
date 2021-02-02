@@ -482,13 +482,13 @@ namespace Jvedio
         }
 
 
-
-
         public void Notify_Close(object sender, RoutedEventArgs e)
         {
             NotifyIcon.Visibility = Visibility.Collapsed;
             this.Close();
         }
+
+
 
         public void Notify_Show(object sender, RoutedEventArgs e)
         {
@@ -1045,6 +1045,8 @@ namespace Jvedio
 
 
 
+
+
         private void Window_Closed(object sender, EventArgs e)
         {
             if (!IsToUpdate && Properties.Settings.Default.CloseToTaskBar && this.IsVisible == true)
@@ -1052,6 +1054,10 @@ namespace Jvedio
                 NotifyIcon.Visibility = Visibility.Visible;
                 this.Hide();
                 WindowSet?.Hide();
+                WindowTools?.Hide();
+                WindowBatch?.Hide();
+                WindowEdit?.Hide();
+                window_DBManagement?.Hide();
             }
             else
             {
@@ -1172,33 +1178,6 @@ namespace Jvedio
             ResizingTimer.Start();
         }
 
-        public void FullScreen(object sender, MouseButtonEventArgs e)
-        {
-            if (WinState == JvedioWindowState.FullScreen)
-            {
-                WinState = JvedioWindowState.Normal;
-                this.WindowState = WindowState.Normal;
-                this.Left = WindowPoint.X;
-                this.Top = WindowPoint.Y;
-                this.Width = WindowSize.Width;
-                this.Height = WindowSize.Height;
-            }
-            else if (WinState == JvedioWindowState.Normal)
-            {
-                WinState = JvedioWindowState.FullScreen;
-                WindowPoint = new Point(this.Left, this.Top);
-                WindowSize = new Size(this.Width, this.Height);
-                this.WindowState = WindowState.Maximized;
-            }
-            else
-            {
-                WinState = JvedioWindowState.FullScreen;
-                this.WindowState = WindowState.Maximized;
-            }
-            this.OnLocationChanged(EventArgs.Empty);
-            this.OnStateChanged(EventArgs.Empty);
-            HideMargin();
-        }
 
 
         private void MoveWindow(object sender, MouseEventArgs e)
@@ -1229,23 +1208,17 @@ namespace Jvedio
 
         private void OpenTools(object sender, RoutedEventArgs e)
         {
-            //SettingsPopup.IsOpen = false;
-            if (WindowTools != null) { WindowTools.Close(); }
-            WindowTools = new WindowTools();
+            if (WindowTools == null) WindowTools = new WindowTools();
             WindowTools.Show();
-
+            WindowTools.Activate();
         }
 
-
+        Window_DBManagement window_DBManagement;
         private void OpenDataBase(object sender, RoutedEventArgs e)
         {
-            if (!(GetWindowByName("Window_DBManagement") is Window_DBManagement window_DBManagement))
-                window_DBManagement = new Window_DBManagement();
-
-
+            if (window_DBManagement == null) window_DBManagement = new Window_DBManagement();
             window_DBManagement.Show();
-
-
+            window_DBManagement.Activate();
         }
 
 
@@ -1306,11 +1279,9 @@ namespace Jvedio
 
         private void OpenSet_MouseDown(object sender, RoutedEventArgs e)
         {
-            //SettingsPopup.IsOpen = false;
-            if (WindowSet != null) { WindowSet.Close(); }
-            WindowSet = new Settings();
+            if (WindowSet == null) WindowSet = new Settings();
             WindowSet.Show();
-
+            WindowSet.Activate();
         }
 
 

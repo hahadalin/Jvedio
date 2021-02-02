@@ -1398,4 +1398,22 @@
   <data name="Default" xml:space="preserve">
     <value>默认</value>
   </data>
+  <data name="OpenJvedio" xml:space="preserve">
+    <value>打开 Jvedio</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>系统提示</value>
+  </data>
+  <data name="BeginUpgrade" xml:space="preserve">
+    <value>开始更新</value>
+  </data>
+  <data name="DownLoadFromUrl" xml:space="preserve">
+    <value>官网下载</value>
+  </data>
+  <data name="CheckUpgrade" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
 </root>

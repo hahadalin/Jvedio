@@ -412,6 +412,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 开始更新 的本地化字符串。
+        /// </summary>
+        public static string BeginUpgrade {
+            get {
+                return ResourceManager.GetString("BeginUpgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 降序 的本地化字符串。
         /// </summary>
         public static string BigToSmall {
@@ -480,6 +489,15 @@ namespace Jvedio.Language {
         public static string Channel {
             get {
                 return ResourceManager.GetString("Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 检查更新 的本地化字符串。
+        /// </summary>
+        public static string CheckUpgrade {
+            get {
+                return ResourceManager.GetString("CheckUpgrade", resourceCulture);
             }
         }
         
@@ -781,6 +799,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 官网下载 的本地化字符串。
+        /// </summary>
+        public static string DownLoadFromUrl {
+            get {
+                return ResourceManager.GetString("DownLoadFromUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 图片下载失败 的本地化字符串。
         /// </summary>
         public static string DownLoadImageFail {
@@ -876,6 +903,15 @@ namespace Jvedio.Language {
         public static string EuropeScan {
             get {
                 return ResourceManager.GetString("EuropeScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 退出 的本地化字符串。
+        /// </summary>
+        public static string Exit {
+            get {
+                return ResourceManager.GetString("Exit", resourceCulture);
             }
         }
         
@@ -2275,6 +2311,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 系统提示 的本地化字符串。
+        /// </summary>
+        public static string Notice {
+            get {
+                return ResourceManager.GetString("Notice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 未导入 的本地化字符串。
         /// </summary>
         public static string NotImport {
@@ -2370,6 +2415,15 @@ namespace Jvedio.Language {
         public static string Opacity {
             get {
                 return ResourceManager.GetString("Opacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开 Jvedio 的本地化字符串。
+        /// </summary>
+        public static string OpenJvedio {
+            get {
+                return ResourceManager.GetString("OpenJvedio", resourceCulture);
             }
         }
         
