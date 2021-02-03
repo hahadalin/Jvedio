@@ -1115,11 +1115,18 @@ namespace Jvedio.ViewModel
         {
             if (MovieList != null)
             {
+                App.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    ((Main)GetWindowByName("Main")).LoadingGrid.Visibility = Visibility.Visible;
+                });
+
                 CurrentMovieListHideOrChanged?.Invoke(this, EventArgs.Empty); //停止下载
                 int DisPlayNum = Properties.Settings.Default.DisplayNumber;//每页展示数目
                 int SetFlowNum = Properties.Settings.Default.FlowNum;//流动数目
                 Movies = new List<Movie>();
-                for (int i = (CurrentPage - 1) * DisPlayNum + FlowNum * SetFlowNum; i < (CurrentPage - 1) * DisPlayNum + (FlowNum + 1) * SetFlowNum; i++)
+                int min = (CurrentPage - 1) * DisPlayNum + FlowNum * SetFlowNum;
+                int max =  (CurrentPage - 1) * DisPlayNum + (FlowNum + 1) * SetFlowNum;
+                for (int i = min;i<max ; i++)
                 {
                     if (CurrentMovieList.Count + Movies.Count< DisPlayNum)
                     {
@@ -1140,15 +1147,6 @@ namespace Jvedio.ViewModel
 
                 }
 
-                
-
-                App.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    if (CurrentMovieList != null) CurrentCount = CurrentMovieList.Count + Movies.Count;
-                    if (CurrentCount > MovieList.Count) CurrentCount = MovieList.Count;
-
-                });
-
                 foreach (Movie movie in Movies)
                 {
                     movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
@@ -1159,19 +1157,28 @@ namespace Jvedio.ViewModel
 
                 App.Current.Dispatcher.Invoke((Action)delegate
                 {
-                    Main main = App.Current.Windows[0] as Main;
-                    if (Properties.Settings.Default.ShowImageMode == "2") main.ImageSlideTimer.Start();//0.5s后开始展示预览图
-                    if (main != null)
+                    if (GetWindowByName("Main") is Main main)
                     {
-                        //main.IsFlowing = false;
-                        main.SetSelected();
                         CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
                     }
-                    
+
                 });
 
             }
         }
+
+
+        public async Task<bool>  ClearCurrentMovieList()
+        {
+            if (CurrentMovieList == null) CurrentMovieList = new ObservableCollection<Movie>();
+            for (int i = CurrentMovieList.Count-1; i >=0; i--)
+            {
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new RemoveItemDelegate(RemoveMovie), CurrentMovieList[i]);
+            }
+            return true;
+        }
+
+
 
 
         public void Refresh()
@@ -1241,7 +1248,6 @@ namespace Jvedio.ViewModel
         public void DisposeMovieList(ObservableCollection<Movie> movies)
         {
             if (movies == null) return;
-
             for (int i = 0; i < movies.Count; i++)
             {
                 movies[i].bigimage = null;
@@ -1269,17 +1275,16 @@ namespace Jvedio.ViewModel
             {
                 Sort();
                 IsFlipOvering = true;
-                Task.Run(() =>
+               
+                Task.Run( async() =>
                 {
                     if (MovieList != null)
                     {
-
+                        await App.Current.Dispatcher.BeginInvoke((Action)delegate { ((Main)GetWindowByName("Main")).LoadingGrid.Visibility = Visibility.Visible; });
                         TotalPage = (int)Math.Ceiling((double)MovieList.Count / (double)Properties.Settings.Default.DisplayNumber);
                         int DisPlayNum = Properties.Settings.Default.DisplayNumber;
                         int FlowNum = Properties.Settings.Default.FlowNum;
                         DisposeMovieList(CurrentMovieList);
-
-                        //Console.WriteLine("CurrentPage=" + CurrentPage);
                         Movies = new List<Movie>();
                         for (int i = (CurrentPage - 1) * DisPlayNum; i < (CurrentPage - 1) * DisPlayNum + FlowNum; i++)
                         {
@@ -1301,10 +1306,10 @@ namespace Jvedio.ViewModel
                             if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.FlowOut;
                         }
 
-                        App.Current.Dispatcher.BeginInvoke((Action)delegate { 
-                            CurrentMovieList = new ObservableCollection<Movie>();
-                            CurrentCount = Movies.Count;
-                        });
+                        await App.Current.Dispatcher.BeginInvoke((Action)delegate { CurrentCount = Movies.Count; });
+                       
+
+                        await ClearCurrentMovieList();
 
                         foreach (Movie movie in Movies)
                         {
@@ -1312,21 +1317,20 @@ namespace Jvedio.ViewModel
                             if (StopFlipOver) break;
                             movie.smallimage = ImageProcess. GetBitmapImage(movie.id, "SmallPic");
                             movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
-                            App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
+                            await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
                         }
 
-                        App.Current.Dispatcher.Invoke((Action)delegate
+                        await App.Current.Dispatcher.BeginInvoke((Action)delegate
                         {
                             if (GetWindowByName("Main") is Main main)
                             {
                                 CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
                             }
-
                         });
                     }
                 });
             }
-
+            
             return true;
         }
 
@@ -1334,6 +1338,12 @@ namespace Jvedio.ViewModel
         private void LoadMovie(Movie movie)
         {
             CurrentMovieList.Add(movie);
+        }
+
+        private delegate void RemoveItemDelegate(Movie movie);
+        private void RemoveMovie(Movie movie)
+        {
+            CurrentMovieList.Remove(movie);
         }
 
 

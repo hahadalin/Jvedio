@@ -3148,6 +3148,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 显示剩余影片 的本地化字符串。
+        /// </summary>
+        public static string ShowRest {
+            get {
+                return ResourceManager.GetString("ShowRest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 标签戳显示模式 的本地化字符串。
         /// </summary>
         public static string ShowStamp {

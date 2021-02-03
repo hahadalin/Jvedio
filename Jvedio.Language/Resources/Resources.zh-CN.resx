@@ -1431,4 +1431,7 @@
   <data name="NextPage" xml:space="preserve">
     <value>下一页</value>
   </data>
+  <data name="ShowRest" xml:space="preserve">
+    <value>显示剩余影片</value>
+  </data>
 </root>

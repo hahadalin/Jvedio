@@ -104,6 +104,7 @@ namespace Jvedio
             ImageSlideTimer.Tick += new EventHandler(ImageSlideTimer_Tick);
 
 
+            LoadingGrid.Visibility = Visibility.Collapsed;
             ProgressBar.Visibility = Visibility.Hidden;
             FilterGrid.Visibility = Visibility.Collapsed;
             WinState = 0;
@@ -428,11 +429,13 @@ namespace Jvedio
                 //等待加载
                     Dispatcher.BeginInvoke((Action)delegate
                     {
+                        vieModel.CurrentCount = vieModel.CurrentMovieList.Count;
                         IsFlowing = false;
                         vieModel.StopLoadMovie = false;
                         vieModel.IsFlipOvering = false;
                         if (Properties.Settings.Default.EditMode) SetSelected();
                         if (Properties.Settings.Default.ShowImageMode == "2") ImageSlideTimer.Start();//0.5s后开始展示预览图
+                        LoadingGrid.Visibility = Visibility.Collapsed;
                     }, DispatcherPriority.ContextIdle, null);
             };
 
@@ -4943,10 +4946,7 @@ namespace Jvedio
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            Dialog_NewMovie dialog_NewMovie = new Dialog_NewMovie(this,500,300);
-            dialog_NewMovie.ShowDialog();
-
-
+            vieModel.ClearCurrentMovieList();
         }
 
 
@@ -5951,6 +5951,20 @@ namespace Jvedio
                 doubleAnimation1.Completed += (s, _) => SideBorder.Width = SideBorderWidth;
                 SideBorder.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation1);
             }
+        }
+
+        private void ShowRestMovie(object sender, RoutedEventArgs e)
+        {
+            int low = ++vieModel.FlowNum;
+
+            for (int i = low; i < 5; i++)
+            {
+                vieModel.FlowNum = i;
+                vieModel.Flow();
+            }
+
+
+
         }
     }
 
