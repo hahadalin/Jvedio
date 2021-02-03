@@ -1195,17 +1195,17 @@ namespace Jvedio
 
         private void OpenTools(object sender, RoutedEventArgs e)
         {
-            if (WindowTools == null) WindowTools = new WindowTools();
+            if (WindowTools != null) WindowTools.Close();
+            WindowTools = new WindowTools();
             WindowTools.Show();
-            WindowTools.Activate();
         }
 
         Window_DBManagement window_DBManagement;
         private void OpenDataBase(object sender, RoutedEventArgs e)
         {
-            if (window_DBManagement == null) window_DBManagement = new Window_DBManagement();
+            if (window_DBManagement != null) window_DBManagement.Close();
+            window_DBManagement = new Window_DBManagement();
             window_DBManagement.Show();
-            window_DBManagement.Activate();
         }
 
 
@@ -1266,9 +1266,9 @@ namespace Jvedio
 
         private void OpenSet_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (WindowSet == null) WindowSet = new Settings();
+            if (WindowSet != null) WindowSet.Close();
+            WindowSet = new Settings();
             WindowSet.Show();
-            WindowSet.Activate();
         }
 
 
@@ -1723,10 +1723,9 @@ namespace Jvedio
             {
                 StopDownLoad();
 
-                if (wd != null) { wd.Close(); }
+                if (wd != null)  wd.Close(); 
                 wd = new WindowDetails(TB.Text);
                 wd.Show();
-                //wd.AdjustWindow();
             }
 
             canShowDetails = false;
@@ -4937,7 +4936,7 @@ namespace Jvedio
 
         private void OpenBatching(object sender, RoutedEventArgs e)
         {
-            if (WindowBatch != null) { WindowBatch.Close(); }
+            if (WindowBatch != null) WindowBatch.Close(); 
             WindowBatch = new WindowBatch();
             WindowBatch.Show();
         }
@@ -5902,10 +5901,11 @@ namespace Jvedio
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
         }
 
+        LoadActorMovies loadActorMovies;
         private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (!(GetWindowByName("LoadActorMovies") is LoadActorMovies loadActorMovies))
-                loadActorMovies = new LoadActorMovies();
+            if (loadActorMovies != null) loadActorMovies.Close();
+            loadActorMovies = new LoadActorMovies();
             loadActorMovies.Show();
         }
 
