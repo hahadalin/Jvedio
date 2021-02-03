@@ -379,7 +379,17 @@ namespace Jvedio.ViewModel
 
         #region "Variable"
 
+        private bool _HideSide = false;
 
+        public bool HideSide
+        {
+            get { return _HideSide; }
+            set
+            {
+                _HideSide = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
         private List<string> _CurrentMovieLabelList;

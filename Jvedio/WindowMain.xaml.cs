@@ -986,8 +986,8 @@ namespace Jvedio
 
             HideMargin();
 
-            SideGridColumn.Width = new GridLength(Properties.Settings.Default.SideGridWidth);
-            if (Properties.Settings.Default.SideGridWidth < 200) ShowSideGrid.Visibility = Visibility.Visible;
+            SideBorder.Width = Properties.Settings.Default.SideGridWidth<200?200: Properties.Settings.Default.SideGridWidth;
+
 
             if (Properties.Settings.Default.ShowImageMode == "4")
             {
@@ -4385,21 +4385,19 @@ namespace Jvedio
 
 
         private bool IsDragingSideGrid = false;
-        public bool CanSideExpand = true;
 
         private void DragRectangle_MouseMove(object sender, MouseEventArgs e)
         {
-            if (SideGridColumn.Width.Value > 10) { if (sender is Rectangle rectangle) rectangle.Cursor = Cursors.SizeWE; }
+            if (SideBorder.Width >= 200) { if (sender is Rectangle rectangle) rectangle.Cursor = Cursors.SizeWE; }
             if (IsDragingSideGrid)
             {
                 this.Cursor = Cursors.SizeWE;
                 double width = e.GetPosition(this).X;
-                if (width >= 500 || width <= 200)
+                if (width > 500 || width < 200)
                     return;
                 else
                 {
-                    Side_Grid.Visibility = Visibility.Visible;
-                    SideGridColumn.Width = new GridLength(width);
+                    SideBorder.Width = width;
                 }
 
             }
@@ -4407,7 +4405,7 @@ namespace Jvedio
 
         private void DragRectangle_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed && SideGridColumn.Width.Value >= 50)
+            if (e.LeftButton == MouseButtonState.Pressed && SideBorder.Width >= 200)
             {
                 IsDragingSideGrid = true;
             }
@@ -4415,12 +4413,9 @@ namespace Jvedio
 
         private void DragRectangle_MouseUp(object sender, MouseButtonEventArgs e)
         {
-
-
             IsDragingSideGrid = false;
-            Properties.Settings.Default.SideGridWidth = SideGridColumn.Width.Value;
+            Properties.Settings.Default.SideGridWidth = SideBorder.Width;
             Properties.Settings.Default.Save();
-            CanSideExpand = true;
         }
 
 
@@ -5920,41 +5915,9 @@ namespace Jvedio
             SearchBar_LostFocus();
         }
 
-        private async void HideSide(object sender, MouseButtonEventArgs e)
-        {
-            ShowSideGrid.Visibility = Visibility.Visible;
-            await Task.Run(() =>
-           {
-               for (double i = Properties.Settings.Default.SideGridWidth; i >= 0; i -= 10)
-               {
-                   if (i <= 0) i = 0;
-                   this.Dispatcher.Invoke((Action)delegate { SideGridColumn.Width = new GridLength(i); });
-                   Task.Delay(1).Wait();
-               }
-           });
-            SideGridColumn.Width = new GridLength(0);
 
 
-        }
 
-        private void ShowSide(object sender, MouseButtonEventArgs e)
-        {
-            ShowSideGrid.Visibility = Visibility.Collapsed;
-            if (Properties.Settings.Default.SideGridWidth < 200)
-            {
-                Properties.Settings.Default.SideGridWidth = 200;
-                Properties.Settings.Default.Save();
-            }
-            Task.Run(() =>
-            {
-                for (double i = 0; i <= Properties.Settings.Default.SideGridWidth; i += 10)
-                {
-                    if (i > Properties.Settings.Default.SideGridWidth) i = Properties.Settings.Default.SideGridWidth;
-                    this.Dispatcher.Invoke((Action)delegate { SideGridColumn.Width = new GridLength(i); });
-                    Task.Delay(1).Wait();
-                }
-            });
-        }
 
         private void ClearActressInfo(object sender, RoutedEventArgs e)
         {
@@ -5969,6 +5932,26 @@ namespace Jvedio
 
         }
 
+        private double SideBorderWidth=200;
+
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (vieModel.HideSide)
+            {
+                SideBorderWidth = SideBorder.Width;
+                DoubleAnimation doubleAnimation1 = new DoubleAnimation(SideBorder.Width, 0, new Duration(TimeSpan.FromMilliseconds(300)),FillBehavior.Stop);
+                doubleAnimation1.Completed += (s, _) => SideBorder.Width = 0;
+                SideBorder.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation1);
+                ShowSideBorderGrid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ShowSideBorderGrid.Visibility = Visibility.Collapsed;
+                DoubleAnimation doubleAnimation1 = new DoubleAnimation(0, SideBorderWidth, new Duration(TimeSpan.FromMilliseconds(300)), FillBehavior.Stop);
+                doubleAnimation1.Completed += (s, _) => SideBorder.Width = SideBorderWidth;
+                SideBorder.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation1);
+            }
+        }
     }
 
 

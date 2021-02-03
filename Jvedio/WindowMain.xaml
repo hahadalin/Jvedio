@@ -782,7 +782,16 @@
             </Border>
         </Grid>
 
-
+        <!--显示侧边栏-->
+        <Grid x:Name="ShowSideBorderGrid" Visibility="Collapsed" Panel.ZIndex="10"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10 50"   >
+            <ToggleButton Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" Click="ToggleButton_Click">
+                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" RenderTransformOrigin=".5,.5"  >
+                    <Image.RenderTransform>
+                        <RotateTransform Angle="180" />
+                    </Image.RenderTransform>
+                </Image>
+            </ToggleButton>
+        </Grid>
 
 
         <Grid x:Name="Grid" Visibility="Visible"    Background="Transparent"  Margin="5">
@@ -818,88 +827,36 @@
                 
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition x:Name="SideGridColumn" Width="200" MinWidth="200" />
+                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Grid   ToolTip="网址是否可用"  Panel.ZIndex="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10 0 0 10"  MouseEnter="ShowStatus" MouseLeave="ShowStatus" >
-                        <Border x:Name="AllStatus"  Background="Red"  CornerRadius="10" Height="20" Width="20" >
-                            <Border.Effect>
-                                <BlurEffect Radius="2" KernelType="Box"  RenderingBias="Quality"/>
-                            </Border.Effect>
-                            <Border.Style>
-                                <Style>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding CheckingUrl}" Value="True">
-                                            <DataTrigger.EnterActions>
-                                                <BeginStoryboard x:Name="BorderBeginStoryboard">
-                                                    <Storyboard>
-                                                        <DoubleAnimation RepeatBehavior="Forever"  From="1" To="0.2" Duration="0:0:1" Storyboard.TargetProperty="Opacity"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </DataTrigger.EnterActions>
-                                            <DataTrigger.ExitActions>
-                                                <RemoveStoryboard BeginStoryboardName="BorderBeginStoryboard"/>
-                                            </DataTrigger.ExitActions>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                        </Border>
-
-
-                        <Popup x:Name="StatusPopup" Placement="Top" PopupAnimation="Fade"  PlacementTarget="{Binding ElementName=AllStatus}" AllowsTransparency="True" StaysOpen="False" IsOpen="False">
-                            <Grid    Margin="5"   >
-                                <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                    </Border.Effect>
-                                </Border>
-                                <StackPanel  Panel.ZIndex="5" Background="Transparent" Orientation="Vertical" Width="auto" Height="auto" >
-                                    <StackPanel Margin="5" Orientation="Horizontal" Visibility="{Binding EnableBus, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}">
-                                        <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="Bus" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
-                                        <Ellipse x:Name="BusStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5"/>
-                                    </StackPanel>
-                                    <StackPanel Margin="5" Orientation="Horizontal" Visibility="{Binding EnableBusEu, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
-                                        <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="BusEu" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
-                                        <Ellipse x:Name="BusEuropeStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
-                                    </StackPanel>
-                                    <StackPanel  Margin="5" Orientation="Horizontal"  Visibility="{Binding EnableLibrary, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
-                                        <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="Library" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
-                                        <Ellipse x:Name="LibraryStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
-                                    </StackPanel>
-                                    <StackPanel  Margin="5" Orientation="Horizontal"   Visibility="{Binding EnableDB, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
-                                        <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="DB" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
-                                        <Ellipse x:Name="DBStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
-                                    </StackPanel>
-                                    <StackPanel  Margin="5" Orientation="Horizontal"   Visibility="{Binding EnableFC2, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
-                                        <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="FC2" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
-                                        <Ellipse x:Name="FC2Status" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
-                                    </StackPanel>
-                                    <StackPanel  Margin="5" Orientation="Horizontal"   Visibility="{Binding Enable321, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
-                                        <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="321" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
-                                        <Ellipse x:Name="Jav321Status" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
-                                    </StackPanel>
-                                    <StackPanel  Margin="5" Orientation="Horizontal"   Visibility="{Binding EnableDMM, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
-                                        <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="DMM" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
-                                        <Ellipse x:Name="DMMStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Grid>
-                        </Popup>
-                    </Grid>
-
-
-                    <Grid   ToolTip="隐藏侧边栏"  Panel.ZIndex="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10"   >
-                        <Border   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="HideSide"  >
-                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
-                        </Border>
-                    </Grid>
 
 
                     <!--侧边栏-->
-                    <Border    PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}" x:Name="SideBorder" CornerRadius="0 0 0 5" BorderBrush="{DynamicResource BorderBursh}" BorderThickness="0" >
-                        <Grid   x:Name="Side_Grid"   HorizontalAlignment="Stretch" Height="auto" VerticalAlignment="Stretch" >
+                    <Border x:Name="SideBorder"   PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}"  CornerRadius="0 0 0 5" BorderBrush="{DynamicResource BorderBursh}" BorderThickness="0" >
+                        <!--<Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HideSide}" Value="True">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard x:Name="BorderBeginStoryboard">
+                                                <Storyboard>
+                                                    <DoubleAnimation 
+                                                                     From="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}" 
+                                                                     To="0" Duration="0:0:1" Storyboard.TargetProperty="Width"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <RemoveStoryboard BeginStoryboardName="BorderBeginStoryboard"/>
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>-->
+                        
+                        <Grid   x:Name="Side_Grid"    >
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="40"/>
@@ -907,10 +864,15 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="40"/>
                             </Grid.RowDefinitions>
-                            <Grid Grid.Row="0" Panel.ZIndex="3" Height="auto"   Background="Transparent">
-                                <ComboBox FontSize="16"  Style="{StaticResource SideComboBoxStyle}" HorizontalAlignment="Left" Margin="5 0"  SelectionChanged="DatabaseComboBox_SelectionChanged" x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150"  Height="30"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
+                            <Grid Grid.Row="0"   >
 
-                                <Border HorizontalAlignment="Right"  ToolTip="{x:Static lang:Resources.Settings}" ContextMenuService.IsEnabled="False" x:Name="SettingsBorder" Width="27" Height="27"  Margin="5 0"  CornerRadius="3" Style="{StaticResource BorderStyle}"  MouseLeftButtonUp="ShowSettingsPopup">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox Grid.Column="0" FontSize="16"  Style="{StaticResource SideComboBoxStyle}" HorizontalAlignment="Left" Margin="5 0"  SelectionChanged="DatabaseComboBox_SelectionChanged" x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   Width="150"  Height="30"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
+
+                                <Border Grid.Column="1"  ToolTip="{x:Static lang:Resources.Settings}" ContextMenuService.IsEnabled="False" x:Name="SettingsBorder" Width="27" Height="27"  Margin="5 0"  CornerRadius="3" Style="{StaticResource BorderStyle}"  MouseLeftButtonUp="ShowSettingsPopup">
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=menu,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" Margin="4,4,3.2,0" VerticalAlignment="Center"   />
 
                                     <Border.ContextMenu >
@@ -1170,11 +1132,92 @@
 
                             </StackPanel>
 
+                            <Grid  Grid.Row="3">
+                                <Grid   ToolTip="网址是否可用"  Panel.ZIndex="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10 0 0 10"  MouseEnter="ShowStatus" MouseLeave="ShowStatus" >
+                                    <Border x:Name="AllStatus"  Background="Red"  CornerRadius="10" Height="20" Width="20" >
+                                        <Border.Effect>
+                                            <BlurEffect Radius="2" KernelType="Box"  RenderingBias="Quality"/>
+                                        </Border.Effect>
+                                        <Border.Style>
+                                            <Style>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CheckingUrl}" Value="True">
+                                                        <DataTrigger.EnterActions>
+                                                            <BeginStoryboard x:Name="BorderBeginStoryboard">
+                                                                <Storyboard>
+                                                                    <DoubleAnimation RepeatBehavior="Forever"  From="1" To="0.2" Duration="0:0:1" Storyboard.TargetProperty="Opacity"/>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </DataTrigger.EnterActions>
+                                                        <DataTrigger.ExitActions>
+                                                            <RemoveStoryboard BeginStoryboardName="BorderBeginStoryboard"/>
+                                                        </DataTrigger.ExitActions>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                    </Border>
+
+
+                                    <Popup x:Name="StatusPopup" Placement="Top" PopupAnimation="Fade"  PlacementTarget="{Binding ElementName=AllStatus}" AllowsTransparency="True" StaysOpen="False" IsOpen="False">
+                                        <Grid    Margin="5"   >
+                                            <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
+                                                <Border.Effect>
+                                                    <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                                </Border.Effect>
+                                            </Border>
+                                            <StackPanel  Panel.ZIndex="5" Background="Transparent" Orientation="Vertical" Width="auto" Height="auto" >
+                                                <StackPanel Margin="5" Orientation="Horizontal" Visibility="{Binding EnableBus, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}">
+                                                    <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="Bus" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
+                                                    <Ellipse x:Name="BusStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5"/>
+                                                </StackPanel>
+                                                <StackPanel Margin="5" Orientation="Horizontal" Visibility="{Binding EnableBusEu, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
+                                                    <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="BusEu" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
+                                                    <Ellipse x:Name="BusEuropeStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
+                                                </StackPanel>
+                                                <StackPanel  Margin="5" Orientation="Horizontal"  Visibility="{Binding EnableLibrary, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
+                                                    <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="Library" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
+                                                    <Ellipse x:Name="LibraryStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
+                                                </StackPanel>
+                                                <StackPanel  Margin="5" Orientation="Horizontal"   Visibility="{Binding EnableDB, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
+                                                    <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="DB" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
+                                                    <Ellipse x:Name="DBStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
+                                                </StackPanel>
+                                                <StackPanel  Margin="5" Orientation="Horizontal"   Visibility="{Binding EnableFC2, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
+                                                    <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="FC2" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
+                                                    <Ellipse x:Name="FC2Status" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
+                                                </StackPanel>
+                                                <StackPanel  Margin="5" Orientation="Horizontal"   Visibility="{Binding Enable321, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
+                                                    <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="321" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
+                                                    <Ellipse x:Name="Jav321Status" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
+                                                </StackPanel>
+                                                <StackPanel  Margin="5" Orientation="Horizontal"   Visibility="{Binding EnableDMM, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
+                                                    <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="DMM" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
+                                                    <Ellipse x:Name="DMMStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Popup>
+                                </Grid>
+
+
+                                <!--收起侧边栏-->
+                                <Grid  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10"   >
+                                    <ToggleButton Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" Click="ToggleButton_Click">
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                                    </ToggleButton>
+                                </Grid>
+
+                            </Grid>
+
                         </Grid>
                     </Border>
 
+                    
+                   
+
                     <!--左右调节-->
-                    <Rectangle IsEnabled="True" MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="6" x:Name="DragRectangle" Margin="0 0 -3 0" />
+                    <Rectangle  IsEnabled="True" MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="6" x:Name="DragRectangle" Margin="0 0 -3 0" />
 
 
 
@@ -2406,17 +2449,6 @@
                     </StackPanel>
                 </Grid>
 
-                <!--显示侧边栏-->
-
-                <Grid x:Name="ShowSideGrid"     Panel.ZIndex="5"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 10 40" Visibility="Collapsed"   >
-                    <Border   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowSide"  >
-                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" RenderTransformOrigin=".5,.5"  >
-                            <Image.RenderTransform>
-                                <RotateTransform Angle="180" />
-                            </Image.RenderTransform>
-                        </Image>
-                    </Border>
-                </Grid>
 
 
                 <!--关于-->
