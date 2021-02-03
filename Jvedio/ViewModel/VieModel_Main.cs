@@ -1637,19 +1637,19 @@ namespace Jvedio.ViewModel
             }
             else if (idx == 4)
             {
-                main.GenreRB.IsChecked = true;
+
             }
             else if (idx == 5)
             {
-                main.ActorRB.IsChecked = true;
+
             }
             else if (idx == 6)
             {
-                main.LabelRB.IsChecked = true;
+
             }
             else if (idx == 7)
             {
-                main.DirRB.IsChecked = true;
+
             }
             else if (idx == 8)
             {
@@ -1728,7 +1728,6 @@ namespace Jvedio.ViewModel
         {
             SideIdx = 0;
             ExecutiveSqlCommand(0, "所有视频", "SELECT * FROM movie");
-
         }
 
         public void GetFavoritesMovie()

@@ -1434,4 +1434,7 @@
   <data name="ShowRest" xml:space="preserve">
     <value>显示剩余影片</value>
   </data>
+  <data name="AddToFavorites" xml:space="preserve">
+    <value>添加收藏</value>
+  </data>
 </root>

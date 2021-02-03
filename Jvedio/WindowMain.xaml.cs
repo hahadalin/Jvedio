@@ -105,7 +105,8 @@ namespace Jvedio
 
 
             LoadingGrid.Visibility = Visibility.Collapsed;
-            ProgressBar.Visibility = Visibility.Hidden;
+            ProgressBar.Visibility = Visibility.Collapsed;
+            ActorProgressBar.Visibility = Visibility.Hidden;
             FilterGrid.Visibility = Visibility.Collapsed;
             WinState = 0;
 
@@ -731,8 +732,6 @@ namespace Jvedio
               ProgressBar.Visibility = Visibility.Visible;
               if (ProgressBar.Value == ProgressBar.Maximum) { DownLoader.State = DownLoadState.Completed; ProgressBar.Visibility = Visibility.Hidden; }
               if (DownLoader.State == DownLoadState.Completed | DownLoader.State == DownLoadState.Fail) ProgressBar.Visibility = Visibility.Hidden;
-              if (!eventArgs.Success) ProgressBar.Foreground = new SolidColorBrush(Colors.Red);
-              else ProgressBar.Foreground = new SolidColorBrush(Colors.LightGreen);
               RefreshMovieByID(eventArgs.Movie.id);
           });
         }
@@ -1395,42 +1394,23 @@ namespace Jvedio
 
         private void ShowMovieGrid(object sender, RoutedEventArgs e)
         {
-            Grid_GAL.Visibility = Visibility.Hidden;
+            Grid_Classify.Visibility = Visibility.Hidden;
             Grid_Movie.Visibility = Visibility.Visible;
             ActorInfoGrid.Visibility = Visibility.Collapsed;
 
             BeginScanStackPanel.Visibility = Visibility.Hidden;
-            ExpandRadioButton1.IsChecked = false;
             ExpandRadioButton2.IsChecked = false;
             ScrollViewer.ScrollToTop();
 
 
         }
 
-
-        public void ShowGenreGrid(object sender, RoutedEventArgs e)
+        private void ShowClassifyGrid(object sender, RoutedEventArgs e)
         {
             Grid_Movie.Visibility = Visibility.Hidden;
-            Grid_GAL.Visibility = Visibility.Visible;
-            Grid_Genre.Visibility = Visibility.Visible;
-            Grid_Actor.Visibility = Visibility.Hidden;
-            Grid_Label.Visibility = Visibility.Hidden;
-            this.vieModel.ClickGridType = 0;
-            ActorToolsStackPanel.Visibility = Visibility.Hidden;
-        }
-
-        private void ShowActorGrid(object sender, RoutedEventArgs e)
-        {
-            Grid_Movie.Visibility = Visibility.Hidden;
-            Grid_GAL.Visibility = Visibility.Visible;
-            Grid_Genre.Visibility = Visibility.Hidden;
-            Grid_Actor.Visibility = Visibility.Visible;
-            Grid_Label.Visibility = Visibility.Hidden;
+            Grid_Classify.Visibility = Visibility.Visible;
             this.vieModel.ClickGridType = 1;
-            ActorToolsStackPanel.Visibility = Visibility.Visible;
             LoveActressCheckBox.IsChecked = false;
-
-
         }
 
         private void HideListScrollViewer(object sender, EventArgs e)
@@ -1456,16 +1436,6 @@ namespace Jvedio
 
 
 
-        private void ShowLabelGrid(object sender, RoutedEventArgs e)
-        {
-            Grid_Movie.Visibility = Visibility.Hidden;
-            Grid_GAL.Visibility = Visibility.Visible;
-            Grid_Genre.Visibility = Visibility.Hidden;
-            Grid_Actor.Visibility = Visibility.Hidden;
-            Grid_Label.Visibility = Visibility.Visible;
-            this.vieModel.ClickGridType = 2;
-            ActorToolsStackPanel.Visibility = Visibility.Hidden;
-        }
 
         private void ShowLabelEditGrid(object sender, RoutedEventArgs e)
         {
@@ -1801,7 +1771,7 @@ namespace Jvedio
             SearchOptionPopup.IsOpen = true;
         }
 
-
+        //TODO
         /// <summary>
         /// 演员里的视频类型分类
         /// </summary>
@@ -1825,18 +1795,10 @@ namespace Jvedio
 
             vieModel.VedioType = (VedioType)Enum.Parse(typeof(VedioType), Properties.Settings.Default.VedioType);
             //刷新侧边栏显示
-            if (Grid_Genre.Visibility == Visibility.Visible)
-            {
-                vieModel.GetGenreList();
-            }
-            else if (Grid_Actor.Visibility == Visibility.Visible)
-            {
-                vieModel.GetActorList();
-            }
-            else if (Grid_Label.Visibility == Visibility.Visible)
-            {
-                vieModel.GetLabelList();
-            }
+
+            TabControl_SelectionChanged(sender, null);
+
+
         }
 
 
@@ -3835,9 +3797,9 @@ namespace Jvedio
                                 Dispatcher.Invoke((Action)delegate ()
                                 {
                                     vieModel.ActorList[i] = actressUpdateEventArgs.Actress;
-                                    ProgressBar.Value = actressUpdateEventArgs.progressBarUpdate.value / actressUpdateEventArgs.progressBarUpdate.maximum * 100; ProgressBar.Visibility = Visibility.Visible;
-                                    if (ProgressBar.Value == ProgressBar.Maximum) downLoadActress.State = DownLoadState.Completed;
-                                    if (ProgressBar.Value == ProgressBar.Maximum | actressUpdateEventArgs.state == DownLoadState.Fail | actressUpdateEventArgs.state == DownLoadState.Completed) { ProgressBar.Visibility = Visibility.Hidden; }
+                                    ActorProgressBar.Value = actressUpdateEventArgs.progressBarUpdate.value / actressUpdateEventArgs.progressBarUpdate.maximum * 100; ActorProgressBar.Visibility = Visibility.Visible;
+                                    if (ActorProgressBar.Value == ActorProgressBar.Maximum) downLoadActress.State = DownLoadState.Completed;
+                                    if (ActorProgressBar.Value == ProgressBar.Maximum | actressUpdateEventArgs.state == DownLoadState.Fail | actressUpdateEventArgs.state == DownLoadState.Completed) { ActorProgressBar.Visibility = Visibility.Hidden; }
                                 });
                             }
                             catch (TaskCanceledException ex) { Logger.LogE(ex); }
@@ -3873,10 +3835,7 @@ namespace Jvedio
         }
 
 
-        private void Grid_Actor_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (!(bool)e.NewValue) { downLoadActress?.CancelDownload(); ProgressBar.Visibility = Visibility.Hidden; }
-        }
+
 
         private void ProgressBar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -4273,7 +4232,7 @@ namespace Jvedio
             else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Right)
             {
                 //末页
-                if (Grid_GAL.Visibility == Visibility.Hidden)
+                if (Grid_Classify.Visibility == Visibility.Hidden)
                 {
                     vieModel.CurrentPage = vieModel.TotalPage;
                     vieModel.FlipOver();
@@ -4290,7 +4249,7 @@ namespace Jvedio
             else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Left)
             {
                 //首页
-                if (Grid_GAL.Visibility == Visibility.Hidden)
+                if (Grid_Classify.Visibility == Visibility.Hidden)
                 {
                     vieModel.CurrentPage = 1;
                     vieModel.FlipOver();
@@ -4315,13 +4274,13 @@ namespace Jvedio
                 //滑倒底端
 
             }
-            else if (Grid_GAL.Visibility == Visibility.Hidden && e.Key == Key.Right)
+            else if (Grid_Classify.Visibility == Visibility.Hidden && e.Key == Key.Right)
                 NextPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if (Grid_GAL.Visibility == Visibility.Hidden && e.Key == Key.Left)
+            else if (Grid_Classify.Visibility == Visibility.Hidden && e.Key == Key.Left)
                 PreviousPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if (Grid_GAL.Visibility == Visibility.Visible && e.Key == Key.Right)
+            else if (Grid_Classify.Visibility == Visibility.Visible && e.Key == Key.Right)
                 NextActorPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if (Grid_GAL.Visibility == Visibility.Visible && e.Key == Key.Left)
+            else if (Grid_Classify.Visibility == Visibility.Visible && e.Key == Key.Left)
                 PreviousActorPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
 
 
@@ -5388,30 +5347,7 @@ namespace Jvedio
 
         private void ExpandSide1(bool init = false)
         {
-            if (init && !Properties.Settings.Default.IsExpanded1) return;
-            if (Properties.Settings.Default.IsExpanded1)
-            {
-                DoubleAnimation dbAscending = new DoubleAnimation(180, 0, new Duration(TimeSpan.FromMilliseconds(300)));
-                Storyboard storyboard = new Storyboard();
-                storyboard.Children.Add(dbAscending);
-                Storyboard.SetTarget(dbAscending, RBExpandImage1);
-                Storyboard.SetTargetProperty(dbAscending, new PropertyPath("RenderTransform.Angle"));
-                storyboard.Begin();
-                DoubleAnimation doubleAnimation1 = new DoubleAnimation(0, 500, new Duration(TimeSpan.FromMilliseconds(300)));
-                StackPanelExpand1.BeginAnimation(FrameworkElement.MaxHeightProperty, doubleAnimation1);
 
-            }
-            else
-            {
-                DoubleAnimation dbAscending = new DoubleAnimation(0, 180, new Duration(TimeSpan.FromMilliseconds(300)));
-                Storyboard storyboard = new Storyboard();
-                storyboard.Children.Add(dbAscending);
-                Storyboard.SetTarget(dbAscending, RBExpandImage1);
-                Storyboard.SetTargetProperty(dbAscending, new PropertyPath("RenderTransform.Angle"));
-                storyboard.Begin();
-                DoubleAnimation doubleAnimation1 = new DoubleAnimation(500, 0, new Duration(TimeSpan.FromMilliseconds(300)));
-                StackPanelExpand1.BeginAnimation(FrameworkElement.MaxHeightProperty, doubleAnimation1);
-            }
         }
 
 
@@ -5443,12 +5379,6 @@ namespace Jvedio
             }
         }
 
-        private void RadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.IsExpanded1 = !Properties.Settings.Default.IsExpanded1;
-            Properties.Settings.Default.Save();
-            ExpandSide1();
-        }
 
         private void RadioButton_Click_1(object sender, RoutedEventArgs e)
         {
@@ -5786,6 +5716,7 @@ namespace Jvedio
 
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if(ProgressTextBox!=null) ProgressTextBox.Text =(int)e.NewValue + "%";
             if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported && taskbarInstance!=null)
             {
                 taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal,this);
@@ -5794,6 +5725,11 @@ namespace Jvedio
             }
         }
 
+        private void ActorProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (ActorProgressTextBox != null) ActorProgressTextBox.Text = (int)e.NewValue + "%";
+            ActorProgressBar.Visibility = Visibility.Visible;
+        }
 
 
         public string GetCurrentList()
@@ -5965,6 +5901,35 @@ namespace Jvedio
 
 
 
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(ClassTabControl != null)
+            {
+                ActorToolsStackPanel.Visibility = Visibility.Collapsed;
+                ActorPageGrid.Visibility = Visibility.Collapsed;
+                switch (ClassTabControl.SelectedIndex)
+                {
+                    case 0:
+                        ActorToolsStackPanel.Visibility = Visibility.Visible;
+                        ActorPageGrid.Visibility = Visibility.Visible;
+                        vieModel.GetActorList();
+                        break;
+
+                    case 1:
+                        vieModel.GetGenreList();
+                        break;
+
+                    case 2:
+                        vieModel.GetLabelList();
+                        break;
+
+                    default:
+
+                        break;
+                }
+            }
         }
     }
 

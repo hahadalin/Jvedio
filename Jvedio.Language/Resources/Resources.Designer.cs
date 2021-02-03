@@ -196,6 +196,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 添加收藏 的本地化字符串。
+        /// </summary>
+        public static string AddToFavorites {
+            get {
+                return ResourceManager.GetString("AddToFavorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 人工智能 的本地化字符串。
         /// </summary>
         public static string AI {

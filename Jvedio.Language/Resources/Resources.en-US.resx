@@ -1404,4 +1404,7 @@
   <data name="DoubleClickToCancel" xml:space="preserve">
     <value>Double Click To Cancel</value>
   </data>
+  <data name="AddToFavorites" xml:space="preserve">
+    <value>Add To Favorites</value>
+  </data>
 </root>
