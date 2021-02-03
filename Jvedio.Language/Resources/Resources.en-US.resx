@@ -1407,4 +1407,10 @@
   <data name="AddToFavorites" xml:space="preserve">
     <value>Add To Favorites</value>
   </data>
+  <data name="Censored" xml:space="preserve">
+    <value>Censored</value>
+  </data>
+  <data name="Uncensored" xml:space="preserve">
+    <value>Uncensored</value>
+  </data>
 </root>

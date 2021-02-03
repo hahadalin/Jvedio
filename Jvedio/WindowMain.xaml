@@ -983,61 +983,6 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
-                                    <Grid Grid.Row="0" Cursor="Hand" >
-                                        <Image x:Name="RBExpandImage2" Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0" RenderTransformOrigin=".5,.5"    >
-                                            <Image.RenderTransform>
-                                                <RotateTransform Angle="180" />
-                                            </Image.RenderTransform>
-                                        </Image>
-                                        <RadioButton  x:Name="ExpandRadioButton2" Background="Transparent" Click="RadioButton_Click_1" Cursor="Hand"  GroupName="RBExpand1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="{x:Static lang:Resources.VedioType}"     />
-                                    </Grid>
-                                    <StackPanel x:Name="StackPanelExpand2" Orientation="Vertical" Grid.Row="1" MaxHeight="0">
-                                        <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
-                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                            <RadioButton x:Name="TypeRB1"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding UncensoredCommand}"  Click="ShowMovieGrid">
-                                                <RadioButton.ContextMenu>
-                                                    <ContextMenu>
-                                                        <MenuItem Header="{x:Static lang:Resources.Raname}" Click="RenameType" />
-                                                    </ContextMenu>
-                                                </RadioButton.ContextMenu>
-                                                <RadioButton.Content>
-                                                    <TextBox x:Name="TypeNameTextBox1" PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="UnCensored"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <TextBlock Text="{Binding VedioTypeACount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                        </Grid>
-
-                                        <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
-                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                            <RadioButton  x:Name="TypeRB2"   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding CensoredCommand}"  Click="ShowMovieGrid" >
-                                                <RadioButton.ContextMenu>
-                                                    <ContextMenu>
-                                                        <MenuItem Header="{x:Static lang:Resources.Rename}" Click="RenameType" />
-                                                    </ContextMenu>
-                                                </RadioButton.ContextMenu>
-                                                <RadioButton.Content>
-                                                    <TextBox  x:Name="TypeNameTextBox2"  PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="Censored"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <TextBlock Text="{Binding VedioTypeBCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                        </Grid>
-
-                                        <Grid  Width="{Binding ElementName=SideBorder,Path=ActualWidth,Converter={StaticResource WidthToMarginConverter}}">
-                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=dir,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="18" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                            <RadioButton  x:Name="TypeRB3"   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding EuropeCommand}"  Click="ShowMovieGrid" >
-                                                <RadioButton.ContextMenu>
-                                                    <ContextMenu>
-                                                        <MenuItem Header="{x:Static lang:Resources.Rename}" Click="RenameType" />
-                                                    </ContextMenu>
-                                                </RadioButton.ContextMenu>
-                                                <RadioButton.Content>
-                                                    <TextBox  x:Name="TypeNameTextBox3"  PreviewKeyUp="TextBox_PreviewKeyUp" LostFocus="TextBox_LostFocus" CaretBrush="{DynamicResource ForegroundGlobal}" Cursor="Arrow" Focusable="False" Text="Europe"  Width="auto" Foreground="{DynamicResource ForegroundGlobal}" BorderThickness="0" Background="Transparent" IsReadOnly="True"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <TextBlock Text="{Binding VedioTypeCCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
-                                        </Grid>
-                                    </StackPanel>
-
                                 </Grid>
 
 
@@ -1306,7 +1251,7 @@
                                     </Border>
 
 
-                                    <Button Visibility="Visible" Click="Button_Click_2" Content="测试" />
+                                    <Button Visibility="Collapsed" Click="Button_Click_2" Content="测试" />
 
                                 </StackPanel>
 
@@ -1387,9 +1332,9 @@
 
                                         <WrapPanel  >
                                             <TextBlock Text="{x:Static lang:Resources.VedioType}" Style="{StaticResource BaseFilterTextBlock}"/>
-                                            <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{Binding TypeName1,Source={x:Static p:Settings.Default}}" />
-                                            <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{Binding TypeName2,Source={x:Static p:Settings.Default}}"  />
-                                            <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{Binding TypeName3,Source={x:Static p:Settings.Default}}" />
+                                            <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{x:Static lang:Resources.Uncensored}" />
+                                            <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{x:Static lang:Resources.Censored}"  />
+                                            <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{x:Static lang:Resources.Europe}" />
                                         </WrapPanel>
 
 
@@ -1741,6 +1686,12 @@
                                                     <MenuItem  Click="SaveShowViewMode" IsCheckable="True"      Header="{x:Static lang:Resources.WithImage}" />
                                                     <MenuItem  Click="SaveShowViewMode"  IsCheckable="True"     Header="{x:Static lang:Resources.NoImage}" />
                                                 </MenuItem>
+                                                <MenuItem Header="{x:Static lang:Resources.VedioType}" >
+                                                    <MenuItem   Click="SaveVedioType"   Command="{Binding ResetCommand}"   IsCheckable="True"   IsChecked="True" Header="{x:Static lang:Resources.Default}"    />
+                                                    <MenuItem   Click="SaveVedioType"  Command="{Binding UncensoredCommand}"   IsCheckable="True"    Header="{x:Static lang:Resources.Uncensored}"    />
+                                                    <MenuItem   Click="SaveVedioType"   Command="{Binding CensoredCommand}"   IsCheckable="True"      Header="{x:Static lang:Resources.Censored}" />
+                                                    <MenuItem   Click="SaveVedioType"   Command="{Binding EuropeCommand}"    IsCheckable="True"     Header="{x:Static lang:Resources.Europe}" />
+                                                </MenuItem>
                                                 <MenuItem Header="{x:Static lang:Resources.ShowRest}" Click="ShowRestMovie" />
                                             </ContextMenu>
                                         </ScrollViewer.ContextMenu>
@@ -2071,9 +2022,9 @@
                                 <Border Background="{DynamicResource BackgroundSide}" CornerRadius="5" >
                                     <StackPanel x:Name="VedioTypeStackPanel" Orientation="Horizontal" Margin="5">
                                         <RadioButton GroupName="VedioTypeRadioButton"   Content="{x:Static lang:Resources.All}" Style="{StaticResource FlatRadioButton}"/>
-                                        <RadioButton GroupName="VedioTypeRadioButton"   Content="{Binding TypeName1,Source={x:Static p:Settings.Default}}" Style="{StaticResource FlatRadioButton}"/>
-                                        <RadioButton GroupName="VedioTypeRadioButton"     Content="{Binding TypeName2,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
-                                        <RadioButton GroupName="VedioTypeRadioButton"      Content="{Binding TypeName3,Source={x:Static p:Settings.Default}}"  Style="{StaticResource FlatRadioButton}"/>
+                                        <RadioButton GroupName="VedioTypeRadioButton"   Content="{x:Static lang:Resources.Uncensored}" Style="{StaticResource FlatRadioButton}"/>
+                                        <RadioButton GroupName="VedioTypeRadioButton"     Content="{x:Static lang:Resources.Censored}"  Style="{StaticResource FlatRadioButton}"/>
+                                        <RadioButton GroupName="VedioTypeRadioButton"      Content="{x:Static lang:Resources.Europe}"  Style="{StaticResource FlatRadioButton}"/>
                                     </StackPanel>
                                 </Border>
 

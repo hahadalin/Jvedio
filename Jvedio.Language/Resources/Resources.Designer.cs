@@ -493,6 +493,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 骑兵 的本地化字符串。
+        /// </summary>
+        public static string Censored {
+            get {
+                return ResourceManager.GetString("Censored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 声道数 的本地化字符串。
         /// </summary>
         public static string Channel {
@@ -3783,6 +3792,15 @@ namespace Jvedio.Language {
         public static string TranslateSuccess {
             get {
                 return ResourceManager.GetString("TranslateSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 步兵 的本地化字符串。
+        /// </summary>
+        public static string Uncensored {
+            get {
+                return ResourceManager.GetString("Uncensored", resourceCulture);
             }
         }
         

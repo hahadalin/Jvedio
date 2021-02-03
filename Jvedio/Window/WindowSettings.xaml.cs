@@ -655,8 +655,34 @@ namespace Jvedio
             else
                 hint = "重启后生效";
             HandyControl.Controls.Growl.Success(hint, "SettingsGrowl");
+
+
+            //SetLanguageDictionary();
+
+
         }
 
+        private void SetLanguageDictionary()
+        {
+            //设置语言
+            string language = Jvedio.Properties.Settings.Default.Language;
+            switch (language)
+            {
+                case "日本語":
+                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("ja-JP");
+                    break;
+                case "中文":
+                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("zh-CN");
+                    break;
+                case "English":
+                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                    break;
+                default:
+                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                    break;
+            }
+            //Jvedio.Language.Resources.Culture.ClearCachedData();
+        }
 
         private void Border_MouseLeftButtonUp1(object sender, MouseButtonEventArgs e)
         {

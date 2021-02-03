@@ -110,7 +110,6 @@ namespace Jvedio
             FilterGrid.Visibility = Visibility.Collapsed;
             WinState = 0;
 
-            RefreshSideRB();
             AdjustWindow();
 
             Properties.Settings.Default.Selected_Background = "#FF8000";
@@ -431,6 +430,7 @@ namespace Jvedio
                     Dispatcher.BeginInvoke((Action)delegate
                     {
                         vieModel.CurrentCount = vieModel.CurrentMovieList.Count;
+                        vieModel.TotalCount = vieModel.MovieList.Count;
                         IsFlowing = false;
                         vieModel.StopLoadMovie = false;
                         vieModel.IsFlipOvering = false;
@@ -1397,9 +1397,7 @@ namespace Jvedio
             Grid_Classify.Visibility = Visibility.Hidden;
             Grid_Movie.Visibility = Visibility.Visible;
             ActorInfoGrid.Visibility = Visibility.Collapsed;
-
             BeginScanStackPanel.Visibility = Visibility.Hidden;
-            ExpandRadioButton2.IsChecked = false;
             ScrollViewer.ScrollToTop();
 
 
@@ -1929,6 +1927,27 @@ namespace Jvedio
             Properties.Settings.Default.ShowViewMode = idx.ToString();
             Properties.Settings.Default.Save();
             vieModel.Reset();
+        }
+
+        public void SaveVedioType(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            MenuItem father = menuItem.Parent as MenuItem;
+            int idx = father.Items.IndexOf(menuItem);
+
+            for (int i = 0; i < father.Items.Count; i++)
+            {
+                MenuItem item = (MenuItem)father.Items[i];
+                if (i == idx)
+                {
+                    item.IsChecked = true;
+                }
+                else
+                {
+                    item.IsChecked = false;
+                }
+            }
+
         }
 
 
@@ -4093,12 +4112,8 @@ namespace Jvedio
             else
                 SortImage.Source = new BitmapImage(new Uri("/Resources/Picture/sort_up.png", UriKind.Relative));
 
-
-            //WaitingPanel.Visibility = Visibility.Visible;
             InitList();
 
-            ExpandSide1(true);
-            ExpandSide2(true);
 
 
         }
@@ -4437,15 +4452,8 @@ namespace Jvedio
                 }
                 Properties.Settings.Default.Save();
             }
-            RefreshSideRB();
         }
 
-        private void RefreshSideRB()
-        {
-            TypeNameTextBox1.Text = Properties.Settings.Default.TypeName1;
-            TypeNameTextBox2.Text = Properties.Settings.Default.TypeName2;
-            TypeNameTextBox3.Text = Properties.Settings.Default.TypeName3;
-        }
 
         private void TextBox_PreviewKeyUp(object sender, KeyEventArgs e)
         {
@@ -5143,21 +5151,15 @@ namespace Jvedio
 
             List<int> vediotype = new List<int>();
             WrapPanel wrapPanel = WrapPanels[0];
-            foreach (var item in wrapPanel.Children.OfType<ToggleButton>())
+            var tbs = wrapPanel.Children.OfType<ToggleButton>().ToList();
+
+            for (int i = 0; i < tbs.Count; i++)
             {
-                if (item.GetType() == typeof(ToggleButton))
+                ToggleButton tb = tbs[i] as ToggleButton;
+                if((bool)tb.IsChecked)
                 {
-                    ToggleButton tb = item as ToggleButton;
-                    if (tb != null)
-                        if ((bool)tb.IsChecked)
-                        {
-                            if (tb.Content.ToString() == Properties.Settings.Default.TypeName1)
-                                vediotype.Add(1);
-                            else if (tb.Content.ToString() == Properties.Settings.Default.TypeName2)
-                                vediotype.Add(2);
-                            else if (tb.Content.ToString() == Properties.Settings.Default.TypeName3)
-                                vediotype.Add(3);
-                        }
+                    vediotype.Add(i+1);
+                    break;
                 }
             }
 
@@ -5345,47 +5347,12 @@ namespace Jvedio
             }
         }
 
-        private void ExpandSide1(bool init = false)
-        {
-
-        }
 
 
-        private void ExpandSide2(bool init = false)
-        {
-            if (init && !Properties.Settings.Default.IsExpanded2) return;
-            if (Properties.Settings.Default.IsExpanded2)
-            {
-                DoubleAnimation dbAscending = new DoubleAnimation(180, 0, new Duration(TimeSpan.FromMilliseconds(300)));
-                Storyboard storyboard = new Storyboard();
-                storyboard.Children.Add(dbAscending);
-                Storyboard.SetTarget(dbAscending, RBExpandImage2);
-                Storyboard.SetTargetProperty(dbAscending, new PropertyPath("RenderTransform.Angle"));
-                storyboard.Begin();
-                DoubleAnimation doubleAnimation1 = new DoubleAnimation(0, 500, new Duration(TimeSpan.FromMilliseconds(300)));
-                StackPanelExpand2.BeginAnimation(FrameworkElement.MaxHeightProperty, doubleAnimation1);
-
-            }
-            else
-            {
-                DoubleAnimation dbAscending = new DoubleAnimation(0, 180, new Duration(TimeSpan.FromMilliseconds(300)));
-                Storyboard storyboard = new Storyboard();
-                storyboard.Children.Add(dbAscending);
-                Storyboard.SetTarget(dbAscending, RBExpandImage2);
-                Storyboard.SetTargetProperty(dbAscending, new PropertyPath("RenderTransform.Angle"));
-                storyboard.Begin();
-                DoubleAnimation doubleAnimation1 = new DoubleAnimation(500, 0, new Duration(TimeSpan.FromMilliseconds(300)));
-                StackPanelExpand2.BeginAnimation(FrameworkElement.MaxHeightProperty, doubleAnimation1);
-            }
-        }
 
 
-        private void RadioButton_Click_1(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.IsExpanded2 = !Properties.Settings.Default.IsExpanded2;
-            Properties.Settings.Default.Save();
-            ExpandSide2();
-        }
+
+
 
 
 

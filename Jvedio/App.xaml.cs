@@ -64,7 +64,6 @@ namespace Jvedio
                     Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
                     break;
             }
-
         }
 
 

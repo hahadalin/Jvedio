@@ -1437,4 +1437,10 @@
   <data name="AddToFavorites" xml:space="preserve">
     <value>添加收藏</value>
   </data>
+  <data name="Censored" xml:space="preserve">
+    <value>骑兵</value>
+  </data>
+  <data name="Uncensored" xml:space="preserve">
+    <value>步兵</value>
+  </data>
 </root>

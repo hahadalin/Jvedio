@@ -219,7 +219,6 @@ namespace Jvedio.ViewModel
                 currentmovielist = value;
                 RaisePropertyChanged();
                 CurrentMovieListHideOrChanged?.Invoke(this, EventArgs.Empty);
-                if (MovieList != null) TotalCount = MovieList.Count;
                 IsFlipOvering = false;
             }
         }
@@ -1306,7 +1305,9 @@ namespace Jvedio.ViewModel
                             if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.FlowOut;
                         }
 
-                        await App.Current.Dispatcher.BeginInvoke((Action)delegate { CurrentCount = Movies.Count; });
+                        await App.Current.Dispatcher.BeginInvoke((Action)delegate { 
+                            CurrentCount = Movies.Count;
+                        });
                        
 
                         await ClearCurrentMovieList();
@@ -1653,15 +1654,15 @@ namespace Jvedio.ViewModel
             }
             else if (idx == 8)
             {
-                main.TypeRB1.IsChecked = true;
+
             }
             else if (idx == 9)
             {
-                main.TypeRB2.IsChecked = true;
+
             }
             else if (idx == 9)
             {
-                main.TypeRB3.IsChecked = true;
+
             }
 
 
@@ -1945,7 +1946,6 @@ namespace Jvedio.ViewModel
 
                 }
                 CurrentCount = DetailsDataList.Count;
-                TotalCount = MovieList.Count;
                 IsFlipOvering = false;
                 //App.Current.Windows[0].Cursor = Cursors.Arrow;
             });
