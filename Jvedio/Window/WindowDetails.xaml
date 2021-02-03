@@ -189,7 +189,7 @@
 
 
                 <Grid Grid.Column="0" PreviewMouseWheel="Border_PreviewMouseWheel" >
-                    <Border  Cursor="Hand"  Height="60"      ToolTip="{x:Static lang:Resources.Previous}"    Width="30" Margin="5 0" CornerRadius="10" MouseLeftButtonUp="PreviewMovie">
+                    <Border x:Name="PreviousBorder"  Cursor="Hand"  Height="60"      ToolTip="{x:Static lang:Resources.Previous}"    Width="30" Margin="5 0" CornerRadius="10" MouseLeftButtonUp="PreviewMovie">
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
@@ -230,8 +230,8 @@
                             <ColumnDefinition Width="auto" MinWidth="50"/>
                         </Grid.ColumnDefinitions>
 
-                        <Grid MouseMove="MoveWindow"  Grid.Column="0" Background="{DynamicResource BackgroundMain}"/>
-                        <TextBox Grid.Column="0" Background="{DynamicResource BackgroundMain}"   Style="{StaticResource ViewTextBox}" VerticalAlignment="Center" HorizontalAlignment="Left"   TextAlignment="Left"  FontWeight="Bold"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 50 0" ></TextBox>
+                        <Grid x:Name="MouseMoveGrid" MouseMove="MoveWindow"  Grid.Column="0" Background="{DynamicResource BackgroundMain}"/>
+                        <TextBox x:Name="TitleTextBox" Grid.Column="0" Background="{DynamicResource BackgroundMain}"   Style="{StaticResource ViewTextBox}" VerticalAlignment="Center" HorizontalAlignment="Left"   TextAlignment="Left"  FontWeight="Bold"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 50 0" ></TextBox>
 
 
                         <Button  Click="EditInfo"  Grid.Column="1" Content="{x:Static lang:Resources.Edit}"   Style="{StaticResource  EditButton}" />
@@ -318,7 +318,7 @@
                             </StackPanel>
 
                             <!--大图-->
-                            <Grid Background="{DynamicResource BackgroundMain}" HorizontalAlignment="Stretch"   ContextMenuOpening="BigImage_ContextMenuOpening"  Grid.Row="0" PreviewMouseWheel="Grid_PreviewMouseWheel" MouseMove="MoveWindow"   MouseLeftButtonDown="Grid_MouseLeftButtonDown"   AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"  >
+                            <Grid x:Name="ImageGrid" Background="{DynamicResource BackgroundMain}" HorizontalAlignment="Stretch"   ContextMenuOpening="BigImage_ContextMenuOpening"  Grid.Row="0" PreviewMouseWheel="Grid_PreviewMouseWheel" MouseMove="MoveWindow"   MouseLeftButtonDown="Grid_MouseLeftButtonDown"   AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"  >
                                 <Grid.ContextMenu>
                                     <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp">
                                         <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoad"/>
@@ -423,8 +423,8 @@
 
 
 
-                            <Border Margin="0 0 0 10" Grid.Column="0" Background="Transparent" CornerRadius="5"  >
-                                <TabControl Style="{DynamicResource TapControlStyle}" HorizontalAlignment="Stretch" Background="Transparent"  >
+                            <Border x:Name="InfoBorder" Margin="0 0 0 10" Grid.Column="0"  CornerRadius="5"  >
+                                <TabControl Style="{DynamicResource TapControlStyle}" HorizontalAlignment="Stretch" Background="Transparent" Margin="10"  >
                                     <TabItem   Margin="5" Padding="5"  Header="{x:Static lang:Resources.MovieInfo}" Style="{DynamicResource TopTabItemStyle}" >
                                         <StackPanel  >
                                                     <TextBox Margin="-1 20 0 5" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"/>
@@ -704,7 +704,7 @@
 
 
                             <Grid  PreviewMouseWheel="Border_PreviewMouseWheel"  Grid.Column="1">
-                                <Border  Cursor="Hand"  Height="60"      ToolTip="{x:Static lang:Resources.Next}"    Width="30" Margin="5 0" CornerRadius="10"  MouseLeftButtonUp="NextMovie">
+                                <Border x:Name="NextBorder"  Cursor="Hand"  Height="60"      ToolTip="{x:Static lang:Resources.Next}"    Width="30" Margin="5 0" CornerRadius="10"  MouseLeftButtonUp="NextMovie">
                                     <Border.Style>
                                         <Style TargetType="Border">
                                             <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>

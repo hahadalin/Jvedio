@@ -340,11 +340,11 @@ namespace Jvedio
                             int v = 1;
                             int.TryParse(value, out v);
                             if (v == 1)
-                                value = Properties.Settings.Default.TypeName1;
+                                value = Jvedio.Language.Resources.Uncensored;
                             else if (v == 2)
-                                value = Properties.Settings.Default.TypeName2;
+                                value = Jvedio.Language.Resources.Censored;
                             else if (v == 3)
-                                value = Properties.Settings.Default.TypeName3;
+                                value = Jvedio.Language.Resources.Europe;
                         }
 
                        

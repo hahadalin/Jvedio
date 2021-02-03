@@ -18,6 +18,25 @@ namespace Jvedio
     public static class ImageProcess
     {
 
+        public static void SetImage(ref Movie movie)
+        {
+            //加载图片
+            BitmapImage smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
+            BitmapImage bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
+            if (smallimage == null) smallimage = DefaultSmallImage;
+            if (bigimage == null) bigimage = DefaultBigImage;
+            movie.smallimage = smallimage;
+            movie.bigimage = bigimage;
+        }
+
+        public static BitmapImage GetActorImage( string name)
+        {
+            //加载图片
+            BitmapImage image = ImageProcess.GetBitmapImage(name, "Actresses");
+            if (image == null) image = DefaultActorImage;
+            return image;
+        }
+
         public static System.Drawing.Bitmap byteArrayToImage(byte[] byteArrayIn)
         {
             MemoryStream ms = new MemoryStream(byteArrayIn);
@@ -220,7 +239,7 @@ namespace Jvedio
         /// </summary>
         /// <param name="filepath"></param>
         /// <returns></returns>
-        public static BitmapImage BitmapImageFromFile(string filepath)
+        public static BitmapImage BitmapImageFromFile(string filepath,double DecodePixelWidth=0)
         {
             try
             {
@@ -232,7 +251,7 @@ namespace Jvedio
                     BitmapImage bitmap = new BitmapImage();
                     bitmap.BeginInit();
                     bitmap.StreamSource = ms;
-                    //bitmap.DecodePixelWidth = Properties.Settings.Default.GlobalImageWidth;
+                    if (DecodePixelWidth!=0) bitmap.DecodePixelWidth = (int)DecodePixelWidth;
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
                     bitmap.Freeze();
@@ -250,11 +269,11 @@ namespace Jvedio
 
 
 
-        public static BitmapImage GetBitmapImage(string filename, string imagetype)
+        public static BitmapImage GetBitmapImage(string filename, string imagetype, double DecodePixelWidth = 0)
         {
             filename = BasePicPath + $"{imagetype}\\{filename}.jpg";
             if (File.Exists(filename))
-                return BitmapImageFromFile(filename);
+                return BitmapImageFromFile(filename, DecodePixelWidth);
             else
                 return null;
         }

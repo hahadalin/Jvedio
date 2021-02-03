@@ -18,6 +18,7 @@ using System.Windows.Threading;
 using System.Diagnostics;
 using static Jvedio.GlobalMethod;
 using static Jvedio.GlobalVariable;
+using static Jvedio.ImageProcess;
 using System.Windows.Input;
 using System.Drawing;
 using DynamicData;
@@ -110,7 +111,7 @@ namespace Jvedio.ViewModel
 
 
         #region "enum"
-        private VedioType vedioType =  Properties.Settings.Default.VedioType.Length == 1? (VedioType) int.Parse(Properties.Settings.Default.VedioType):0; 
+        private VedioType vedioType =  0; 
         public VedioType VedioType
         {
             get { return vedioType; }
@@ -123,7 +124,7 @@ namespace Jvedio.ViewModel
 
 
 
-        private MyImageType _ShowImageMode= Properties.Settings.Default.ShowImageMode.Length == 1 ? (MyImageType)int.Parse(Properties.Settings.Default.ShowImageMode) : 0;
+        private MyImageType _ShowImageMode=  0;
 
         public MyImageType ShowImageMode
         {
@@ -138,7 +139,7 @@ namespace Jvedio.ViewModel
 
 
 
-        private ViewType _ShowViewMode = Properties.Settings.Default.ShowViewMode.Length == 1 ? (ViewType)int.Parse(Properties.Settings.Default.ShowViewMode) : 0;
+        private ViewType _ShowViewMode =  0;
 
         public ViewType ShowViewMode
         {
@@ -151,20 +152,9 @@ namespace Jvedio.ViewModel
         }
 
 
-        private MySearchType _SearchType = Properties.Settings.Default.SearchType.Length == 1 ? (MySearchType)int.Parse(Properties.Settings.Default.SearchType) : 0;
-
-        public MySearchType SearchType
-        {
-            get { return _SearchType; }
-            set
-            {
-                _SearchType = value;
-                RaisePropertyChanged();
-            }
-        }
 
 
-        private MySearchType _AllSearchType = Properties.Settings.Default.AllSearchType.Length == 1 ? (MySearchType)int.Parse(Properties.Settings.Default.AllSearchType) : 0;
+        private MySearchType _AllSearchType =  0;
 
         public MySearchType AllSearchType
         {
@@ -1146,10 +1136,10 @@ namespace Jvedio.ViewModel
 
                 }
 
-                foreach (Movie movie in Movies)
+                foreach (Movie item in Movies)
                 {
-                    movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
-                    movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
+                    Movie movie = item;
+                    SetImage(ref movie);
                     App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
                     if (StopLoadMovie) break;
                 }
@@ -1211,7 +1201,7 @@ namespace Jvedio.ViewModel
                     if (i < ActorList.Count)
                     {
                         Actress actress = ActorList[i];
-                        actress.smallimage = ImageProcess.GetBitmapImage(actress.name, "Actresses");
+                        actress.smallimage = GetActorImage(actress.name);
                         actresses.Add(actress);
                     }
                     else { break; }
@@ -1312,12 +1302,11 @@ namespace Jvedio.ViewModel
 
                         await ClearCurrentMovieList();
 
-                        foreach (Movie movie in Movies)
+                        foreach (Movie item in Movies)
                         {
-
                             if (StopFlipOver) break;
-                            movie.smallimage = ImageProcess. GetBitmapImage(movie.id, "SmallPic");
-                            movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
+                            Movie movie = item;
+                            SetImage(ref movie);
                             await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
                         }
 
@@ -1334,6 +1323,9 @@ namespace Jvedio.ViewModel
             
             return true;
         }
+
+
+
 
         private delegate void LoadItemDelegate(Movie movie);
         private void LoadMovie(Movie movie)

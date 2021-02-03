@@ -2182,5 +2182,17 @@ namespace Jvedio.Properties {
                 this["BackgroundImage"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double MovieOpacity {
+            get {
+                return ((double)(this["MovieOpacity"]));
+            }
+            set {
+                this["MovieOpacity"] = value;
+            }
+        }
     }
 }

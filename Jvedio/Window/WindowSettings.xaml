@@ -467,13 +467,13 @@
                         <CheckBox IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.ShowTranslate2}"  />
                         <CheckBox IsChecked="{Binding DetialWindowShowAllMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.DetailViewAll}"  />
                     </StackPanel>
-                    <WrapPanel Visibility="Collapsed" Orientation="Horizontal" Margin="20 0">
-                        <TextBlock Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="0 2 20 0" Text="每页影片数目" />
-                        <hc:NumericUpDown Maximum="100" Minimum="4" Increment="1"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"   BorderThickness="0" Value="{Binding DisplayNumber, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"    />
-                        <TextBlock   Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="每次滚动数目"/>
-                        <hc:NumericUpDown Maximum="25" Minimum="1" Increment="1"   Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"     BorderThickness="0" Value="{Binding FlowNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"       />
-                        <TextBlock  Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="每页演员数目"/>
-                        <hc:NumericUpDown Maximum="100" Minimum="5" Increment="5"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"      BorderThickness="0" Value="{Binding ActorDisplayNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Width="100"       />
+                    <WrapPanel Visibility="Visible" Orientation="Horizontal" Margin="20 0">
+                        <TextBlock Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="0 2 20 0" Text="{x:Static lang:Resources.MoviePerPage}" />
+                        <hc:NumericUpDown  ToolTip="5-200"  Maximum="200" Minimum="4" Increment="10"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"   BorderThickness="0" Value="{Binding DisplayNumber, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"    />
+                        <TextBlock   Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="{x:Static lang:Resources.NumherEachFlow}"/>
+                        <hc:NumericUpDown ToolTip="5-50" Maximum="50" Minimum="1" Increment="5"   Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"     BorderThickness="0" Value="{Binding FlowNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"       />
+                        <TextBlock  Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="{x:Static lang:Resources.ActorNumberPerPage}"/>
+                        <hc:NumericUpDown ToolTip="5-100" Maximum="100" Minimum="5" Increment="5"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"      BorderThickness="0" Value="{Binding ActorDisplayNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Width="100"       />
                     </WrapPanel>
 
 
@@ -611,7 +611,7 @@
 
             <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.VedioProcessing}" >
                 <StackPanel  >
-                    <CheckBox Margin="20 5" HorizontalAlignment="Left" IsChecked="{Binding ScreenShotToExtraPicPath, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.ScreenShotToPreviewDir}"  VerticalContentAlignment="Center"/>
+                    <CheckBox Visibility="Collapsed" Margin="20 5" HorizontalAlignment="Left" IsChecked="{Binding ScreenShotToExtraPicPath, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.ScreenShotToPreviewDir}"  VerticalContentAlignment="Center"/>
 
                     <StackPanel Orientation="Horizontal" Margin="20 5">
                         <TextBlock Text="{x:Static lang:Resources.FFmpegPath}" Style="{StaticResource BaseTextBlock}"   />
@@ -678,7 +678,12 @@
                         <CheckBox IsChecked="{Binding DisplayFavorites, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.Favorites}"  />
                     </WrapPanel>
 
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20 5">
+                        <Label Content="{x:Static lang:Resources.MovieOpacity}" Style="{StaticResource InfoLabel}"    />
+                        <Slider x:Name="MovieBorderOpacitySlider" IsSnapToTickEnabled="True" Width="200" VerticalAlignment="Center" Margin="5 0" Value="{Binding MovieOpacity, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="1" Minimum="0" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" Cursor="Hand" TickPlacement="None"  />
+                        <Label Content="{Binding Value, ElementName=MovieBorderOpacitySlider}" Style="{StaticResource InfoLabel}"  />
 
+                    </WrapPanel>
 
 
                     <StackPanel Orientation="Horizontal" Margin="20 5">

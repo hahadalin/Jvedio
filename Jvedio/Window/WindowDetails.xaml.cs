@@ -73,16 +73,18 @@ namespace Jvedio
             }
 
             //设置背景
-            if (File.Exists(Properties.Settings.Default.BackgroundImage))
-            {
-                BackGroundImage.Source = ImageProcess.BitmapImageFromFile(Properties.Settings.Default.BackgroundImage);
-            }
-            else
-            {
-                if(File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"background.jpg")))
-                    BackGroundImage.Source = ImageProcess.BitmapImageFromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "background.jpg"));
-            }
 
+            BackGroundImage.Source = GlobalVariable.BackgroundImage;
+            MouseMoveGrid.Background = Brushes.Transparent;
+            ImageGrid.Background = Brushes.Transparent;
+            ExtraImageBorder.Background = Brushes.Transparent;
+            TitleTextBox.Background = Brushes.Transparent;
+            InfoBorder.Background = (SolidColorBrush)Application.Current.Resources["BackgroundMain"];
+            InfoBorder.Opacity = 0.7;
+            ExtraImageRadioButton.Opacity = 0.7;
+            ScreenShotRadioButton.Opacity = 0.7;
+            NextBorder.Opacity = 0.7;
+            PreviousBorder. Opacity = 0.7;
         }
 
 
@@ -1058,6 +1060,7 @@ namespace Jvedio
                         windowMain.vieModel.CurrentMovieList[i] = null;
                         movie.favorites = vieModel.DetailMovie.favorites;
                         windowMain.vieModel.CurrentMovieList[i] = movie;
+                        windowMain.vieModel.Statistic();
                     }
                 }
                 catch (Exception ex1)
@@ -1782,6 +1785,7 @@ namespace Jvedio
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
+            SetSkin();
             if (MovieID != "")
             {
                 vieModel = new VieModel_Details();
@@ -1802,7 +1806,7 @@ namespace Jvedio
             }
             else { this.DataContext = null; }
             FatherGrid.Focus();
-            SetSkin();
+
             InitList();
         }
 
@@ -1830,7 +1834,6 @@ namespace Jvedio
                     vieModel.DetailMovie.extraimagelist[i] = null;
                 }
             }
-            //if (vieModel.DetailMovie.bigimage != null) vieModel.DetailMovie.bigimage = null;
         }
 
         private async void LoadImage()

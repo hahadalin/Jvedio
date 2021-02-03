@@ -1271,11 +1271,11 @@ namespace Jvedio
                             int v = 1;
                             int.TryParse(value, out v);
                             if (v == 1)
-                                value = Properties.Settings.Default.TypeName1;
+                                value = Jvedio.Language.Resources.Uncensored;
                             else if (v == 2)
-                                value = Properties.Settings.Default.TypeName2;
+                                value = Jvedio.Language.Resources.Censored;
                             else if (v == 3)
-                                value = Properties.Settings.Default.TypeName3;
+                                value = Jvedio.Language.Resources.Europe;
                         }
                         vieModel_Settings.ViewRenameFormat = vieModel_Settings.ViewRenameFormat.Replace("{" + property + "}", value);
                     }
@@ -1382,6 +1382,11 @@ namespace Jvedio
                 string path = OpenFileDialog1.FileName;
                 if (File.Exists(path))
                 {
+                    //设置背景
+                    GlobalVariable.BackgroundImage = null;
+                    GC.Collect();
+                    GlobalVariable.BackgroundImage = ImageProcess.BitmapImageFromFile(path);
+
                     Properties.Settings.Default.BackgroundImage = path;
                     Main main = ((Main)GetWindowByName("Main"));
                     if (main != null) main.SetSkin();

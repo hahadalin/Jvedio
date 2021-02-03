@@ -97,6 +97,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 每页演员数目 的本地化字符串。
+        /// </summary>
+        public static string ActorNumberPerPage {
+            get {
+                return ResourceManager.GetString("ActorNumberPerPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 年龄 的本地化字符串。
         /// </summary>
         public static string Actress_Age {
@@ -2194,6 +2203,24 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 影片不透明度 的本地化字符串。
+        /// </summary>
+        public static string MovieOpacity {
+            get {
+                return ResourceManager.GetString("MovieOpacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 每页影片数目 的本地化字符串。
+        /// </summary>
+        public static string MoviePerPage {
+            get {
+                return ResourceManager.GetString("MoviePerPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 影片评分 的本地化字符串。
         /// </summary>
         public static string MovieRating {
@@ -2433,6 +2460,15 @@ namespace Jvedio.Language {
         public static string Number {
             get {
                 return ResourceManager.GetString("Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 每次滚动数目 的本地化字符串。
+        /// </summary>
+        public static string NumherEachFlow {
+            get {
+                return ResourceManager.GetString("NumherEachFlow", resourceCulture);
             }
         }
         

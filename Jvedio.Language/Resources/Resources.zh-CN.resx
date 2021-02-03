@@ -1443,4 +1443,16 @@
   <data name="Uncensored" xml:space="preserve">
     <value>步兵</value>
   </data>
+  <data name="MovieOpacity" xml:space="preserve">
+    <value>影片不透明度</value>
+  </data>
+  <data name="MoviePerPage" xml:space="preserve">
+    <value>每页影片数目</value>
+  </data>
+  <data name="NumherEachFlow" xml:space="preserve">
+    <value>每次滚动数目</value>
+  </data>
+  <data name="ActorNumberPerPage" xml:space="preserve">
+    <value>每页演员数目</value>
+  </data>
 </root>

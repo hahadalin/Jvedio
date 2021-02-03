@@ -65,6 +65,12 @@ namespace Jvedio
         //最近播放
         public static Dictionary<DateTime, List<string>> RecentWatched =new Dictionary<DateTime, List<string>>();
 
+        //默认图片
+        public static BitmapSource BackgroundImage;
+        public static BitmapImage DefaultSmallImage;
+        public static BitmapImage DefaultBigImage;
+        public static BitmapImage DefaultActorImage;
+
         #region "热键"
         [DllImport("user32.dll")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
@@ -127,9 +133,9 @@ namespace Jvedio
             Properties.Settings.Default.Save();
 
             //每页数目
-            Properties.Settings.Default.DisplayNumber = 100;
-            Properties.Settings.Default.FlowNum = 20;
-            Properties.Settings.Default.ActorDisplayNum = 30;
+            //Properties.Settings.Default.DisplayNumber = 100;
+            //Properties.Settings.Default.FlowNum = 20;
+            //Properties.Settings.Default.ActorDisplayNum = 30;
 
             //添加演员分隔符
             if(!actorSplitDict.ContainsKey(0)) actorSplitDict.Add(0, new char[] { ' ', '/' });

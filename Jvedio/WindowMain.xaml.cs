@@ -31,6 +31,7 @@ using System.Windows.Threading;
 using static Jvedio.GlobalMethod;
 using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
+using static Jvedio.ImageProcess;
 using System.Windows.Media.Effects;
 
 namespace Jvedio
@@ -84,17 +85,7 @@ namespace Jvedio
 
         public Main()
         {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                MessageBox.Show(e.StackTrace);
-            }
-
-
+            InitializeComponent();
             SettingsContextMenu.Placement = PlacementMode.Mouse;
 
             this.Cursor = Cursors.Wait;
@@ -103,7 +94,7 @@ namespace Jvedio
             ImageSlideTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
             ImageSlideTimer.Tick += new EventHandler(ImageSlideTimer_Tick);
 
-
+            ActorInfoGrid.Visibility = Visibility.Collapsed;
             LoadingGrid.Visibility = Visibility.Collapsed;
             ProgressBar.Visibility = Visibility.Collapsed;
             ActorProgressBar.Visibility = Visibility.Hidden;
@@ -111,6 +102,8 @@ namespace Jvedio
             WinState = 0;
 
             AdjustWindow();
+
+            InitImage();
 
             Properties.Settings.Default.Selected_Background = "#FF8000";
             Properties.Settings.Default.Selected_BorderBrush = "#FF8000";
@@ -363,6 +356,22 @@ namespace Jvedio
 
 
         #endregion
+
+
+        private void InitImage()
+        {
+            //设置背景
+            string path = Properties.Settings.Default.BackgroundImage;
+            if (!File.Exists(path)) path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "background.jpg");
+            GlobalVariable.BackgroundImage = null;
+            GC.Collect();
+            GlobalVariable.BackgroundImage = ImageProcess.BitmapImageFromFile(path);
+
+            DefaultBigImage= new BitmapImage(new Uri("/Resources/Picture/NoPrinting_B.png", UriKind.Relative));
+            DefaultSmallImage = new BitmapImage(new Uri("/Resources/Picture/NoPrinting_S.png", UriKind.Relative));
+            DefaultActorImage = new BitmapImage(new Uri("/Resources/Picture/NoPrinting_A.png", UriKind.Relative));
+
+        }
 
         //绑定事件
         private void BindingEvent()
@@ -746,8 +755,7 @@ namespace Jvedio
             }
             else
             {
-                movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
-                movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
+                SetImage(ref movie);
             }
             (Movie currentMovie1, int idx1) = GetMovieFromCurrentMovie(ID);
             (Movie currentMovie2, int idx2) = GetMovieFromAllMovie(ID);
@@ -1001,6 +1009,8 @@ namespace Jvedio
                 MovieMainGrid.Visibility = Visibility.Visible;
                 //DetailGrid.Visibility = Visibility.Hidden;
             }
+
+
 
         }
 
@@ -1500,7 +1510,7 @@ namespace Jvedio
         {
             vieModel.GetMoviebyActress(actress);
             actress = DataBase.SelectInfoFromActress(actress);
-            actress.smallimage = ImageProcess.GetBitmapImage(actress.name, "Actresses");//不加载图片能节约 1s
+            actress.smallimage = GetActorImage(actress.name);
             vieModel.Actress = actress;
             ShowMovieGrid(this, new RoutedEventArgs());
             ActorInfoGrid.Visibility = Visibility.Visible;
@@ -1547,7 +1557,13 @@ namespace Jvedio
         {
             if (Properties.Settings.Default.EditMode)
             {
-                Border border = sender as Border;
+
+                Image image = sender as Image;
+                Grid grid = image.Parent as Grid;
+                StackPanel stackPanel = grid.Parent as StackPanel;
+                Grid grid1 = stackPanel.Parent as Grid;
+                Border border = grid1.Children[0] as Border;
+
                 border.BorderBrush = (SolidColorBrush)Application.Current.Resources["Selected_BorderBrush"];
             }
 
@@ -1557,7 +1573,12 @@ namespace Jvedio
         {
             if (Properties.Settings.Default.EditMode)
             {
-                Border border = sender as Border;
+                Image image = sender as Image;
+                Grid grid = image.Parent as Grid;
+                StackPanel stackPanel = grid.Parent as StackPanel;
+                Grid grid1 = stackPanel.Parent as Grid;
+                Border border = grid1.Children[0] as Border;
+
                 border.BorderBrush = Brushes.Transparent;
             }
         }
@@ -1778,18 +1799,9 @@ namespace Jvedio
         public void SetTypeValue(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
-            if ((bool)radioButton.IsChecked)
-            {
-                if (radioButton.Content.ToString() == Properties.Settings.Default.TypeName1)
-                    Properties.Settings.Default.VedioType = "1";
-                else if (radioButton.Content.ToString() == Properties.Settings.Default.TypeName2)
-                    Properties.Settings.Default.VedioType = "2";
-                else if (radioButton.Content.ToString() == Properties.Settings.Default.TypeName3)
-                    Properties.Settings.Default.VedioType = "3";
-                else
-                    Properties.Settings.Default.VedioType = "0";
-                Properties.Settings.Default.Save();
-            }
+            int idx = VedioTypeStackPanel.Children.OfType<RadioButton>().ToList().IndexOf(radioButton);
+
+            Properties.Settings.Default.VedioType = idx.ToString();
 
             vieModel.VedioType = (VedioType)Enum.Parse(typeof(VedioType), Properties.Settings.Default.VedioType);
             //刷新侧边栏显示
@@ -1823,7 +1835,6 @@ namespace Jvedio
                             if (movie.id == textBox.Text)
                             {
                                 border.Background = (SolidColorBrush)Application.Current.Resources["Selected_Background"];
-                                //Console.WriteLine(textBox.Text);
                                 break;
                             }
                         }
@@ -2356,7 +2367,7 @@ namespace Jvedio
                 {
                     if (!string.IsNullOrEmpty(movie1.actor) && movie1.actor.IndexOf(vieModel.Actress.name) >= 0)
                     {
-                        vieModel.Actress.smallimage = ImageProcess.GetBitmapImage(vieModel.Actress.name, "Actresses");
+                        vieModel.Actress.smallimage = GetActorImage(vieModel.Actress.name);
                         break;
                     }
                 }
@@ -2774,8 +2785,7 @@ namespace Jvedio
                     if (vieModel.CurrentMovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
                         Movie movie = DataBase.SelectMovieByID(newID);
-                        movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
-                        movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
+                       SetImage(ref movie);
                         vieModel.CurrentMovieList[i] = null;
                         vieModel.CurrentMovieList[i] = movie;
                         break;
@@ -2792,8 +2802,7 @@ namespace Jvedio
                     if (vieModel.MovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
                         Movie movie = DataBase.SelectMovieByID(newID);
-                        movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
-                        movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
+                        SetImage(ref movie);
 
                         vieModel.MovieList[i] = null;
                         vieModel.MovieList[i] = movie;
@@ -3631,22 +3640,7 @@ namespace Jvedio
 
 
         //TODO
-        private async void PreviousPage(object sender, MouseButtonEventArgs e)
-        {
-            if (vieModel.IsFlipOvering) return;
-            if (vieModel.TotalPage <= 1) return;
-            vieModel.StopFlipOver = true;
-            await WaitUntilStopLoad();
 
-
-            if (vieModel.CurrentPage - 1 <= 0) vieModel.CurrentPage = vieModel.TotalPage;
-            else vieModel.CurrentPage -= 1;
-            if (vieModel.IsFlipOvering) return;
-            //vieModel.StopFlipOver = false;
-            vieModel.FlipOver();
-            ScrollViewer.ScrollToTop();
-
-        }
 
         private async Task<bool> WaitUntilStopLoad()
         {
@@ -3660,21 +3654,28 @@ namespace Jvedio
 
         }
 
-        private async void NextPage(object sender, MouseButtonEventArgs e)
+        private  void NextPage(object sender, MouseButtonEventArgs e)
         {
             if (vieModel.TotalPage <= 1) return;
-            //vieModel.StopFlipOver = true;
-            //await WaitUntilStopLoad();
             if (vieModel.CurrentPage + 1 > vieModel.TotalPage) vieModel.CurrentPage = 1;
             else vieModel.CurrentPage += 1;
-            //vieModel.StopFlipOver = false;
 
             vieModel.FlipOver();
             ScrollViewer.ScrollToTop();
 
         }
 
+        private  void PreviousPage(object sender, MouseButtonEventArgs e)
+        {
 
+            if (vieModel.TotalPage <= 1) return;
+            if (vieModel.CurrentPage - 1 <= 0) vieModel.CurrentPage = vieModel.TotalPage;
+            else vieModel.CurrentPage -= 1;
+
+            vieModel.FlipOver();
+            ScrollViewer.ScrollToTop();
+
+        }
 
 
 
@@ -3762,7 +3763,7 @@ namespace Jvedio
                 string name = TB.Text.Split('(')[0];
                 Actress CurrentActress = GetActressFromVieModel(name);
                 if (!SelectedActress.Select(g => g.name).ToList().Contains(CurrentActress.name)) SelectedActress.Add(CurrentActress);
-
+                DataBase.CreateTable(DataBase.SQLITETABLE_ACTRESS_LOVE);
                 foreach (Actress actress in SelectedActress)
                 {
                     DataBase.SaveActressLikeByName(actress.name, 1);
@@ -4203,15 +4204,7 @@ namespace Jvedio
 
 
             //设置背景
-            if (File.Exists(Properties.Settings.Default.BackgroundImage))
-            {
-                BackGroundImage.Source = ImageProcess.BitmapImageFromFile(Properties.Settings.Default.BackgroundImage);
-            }
-            else
-            {
-                if (File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "background.jpg")))
-                    BackGroundImage.Source = ImageProcess.BitmapImageFromFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "background.jpg"));
-            }
+            BackGroundImage.Source = GlobalVariable.BackgroundImage;
 
         }
 
@@ -4420,49 +4413,8 @@ namespace Jvedio
 
         }
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            SaveText(sender);
-        }
-
-        private void SaveText(object sender)
-        {
-            TextBox textBox = sender as TextBox;
-            string tbname = textBox.Name;
-            string name = textBox.Text;
-            textBox.IsReadOnly = true;
-            textBox.Focusable = false;
-
-            SearchBar.Focus();
-
-            //保存
-            if (name != "")
-            {
-                if (tbname == "TypeNameTextBox1")
-                {
-                    Properties.Settings.Default.TypeName1 = name;
-                }
-                else if (tbname == "TypeNameTextBox2")
-                {
-                    Properties.Settings.Default.TypeName2 = name;
-                }
-                else if (tbname == "TypeNameTextBox3")
-                {
-                    Properties.Settings.Default.TypeName3 = name;
-                }
-                Properties.Settings.Default.Save();
-            }
-        }
 
 
-        private void TextBox_PreviewKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                SaveText(sender);
-            }
-
-        }
 
         private void TopBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -4637,9 +4589,7 @@ namespace Jvedio
                             {
                                 DataBase.UpdateMovieByID(item.id, "favorites", item.favorites, "string");
                             }
-
-
-
+                            vieModel.Statistic();
                             break;
                         }
                     }
@@ -5053,7 +5003,7 @@ namespace Jvedio
                     File.Copy(fileInfo.FullName, BasePicPath + $"Actresses\\{vieModel.Actress.name}.jpg", true);
                     Actress actress = vieModel.Actress;
                     actress.smallimage = null;
-                    actress.smallimage = ImageProcess.GetBitmapImage(actress.name, "Actresses");
+                    actress.smallimage = GetActorImage(actress.name);
                     vieModel.Actress = null;
                     vieModel.Actress = actress;
 
@@ -5113,7 +5063,7 @@ namespace Jvedio
                     File.Copy(fileInfo.FullName, BasePicPath + $"Actresses\\{currentActress.name}.jpg", true);
                     Actress actress = currentActress;
                     actress.smallimage = null;
-                    actress.smallimage = ImageProcess.GetBitmapImage(actress.name, "Actresses");
+                    actress.smallimage = GetActorImage(actress.name);
 
                     if (vieModel.ActorList == null || vieModel.ActorList.Count == 0) return;
 
