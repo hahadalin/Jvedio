@@ -1166,6 +1166,7 @@ namespace Jvedio
             //从主界面删除
             windowMain.vieModel.CurrentMovieList.Remove(movie);
             windowMain.vieModel.MovieList.Remove(movie);
+            windowMain.vieModel.FilterMovieList.Remove(movie);
             windowMain.vieModel.Statistic();
 
             if (windowMain.vieModel.CurrentMovieList.Count == 0)
@@ -1215,13 +1216,15 @@ namespace Jvedio
 
             int index1 = main.vieModel.CurrentMovieList.IndexOf(main.vieModel.CurrentMovieList.Where(arg => arg.id == movie.id).First()); ;
             int index2 = main.vieModel.MovieList.IndexOf(main.vieModel.MovieList.Where(arg => arg.id == movie.id).First());
-
+            int index3 = main.vieModel.FilterMovieList.IndexOf(main.vieModel.FilterMovieList.Where(arg => arg.id == movie.id).First());
             try
             {
                 main.vieModel.CurrentMovieList[index1] = null;
                 main.vieModel.MovieList[index2] = null;
                 main.vieModel.CurrentMovieList[index1] = movie;
                 main.vieModel.MovieList[index2] = movie;
+                main.vieModel.FilterMovieList[index3] = null;
+                main.vieModel.FilterMovieList[index3] = movie;
             }
             catch (ArgumentNullException) { }
 

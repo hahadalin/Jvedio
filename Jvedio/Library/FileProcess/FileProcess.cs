@@ -15,9 +15,6 @@ namespace Jvedio
 {
     public static class FileProcess
     {
-
-        public static event EventHandler MovieListChanged;
-
         public static List<Movie> FilterMovie(List<Movie> movies )
         {
             List<Movie> result = new List<Movie>();
@@ -48,7 +45,6 @@ namespace Jvedio
             }
 
             result = FilterImage(result);//有图|无图
-            MovieListChanged?.Invoke(null, new EventArgs());
             return result;
         }
 

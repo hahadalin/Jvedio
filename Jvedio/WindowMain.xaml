@@ -1134,7 +1134,7 @@
 
 
                         <!--工具栏-->
-                        <Grid Background="{DynamicResource BackgroundMain}" PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown"  Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                        <Grid x:Name="ToolsGrid" Background="{DynamicResource BackgroundMain}" PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown"  Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -1994,7 +1994,7 @@
                                 </TextBlock>
                             </StackPanel>
                             <!--页码-->
-                            <StackPanel Visibility="Visible" Grid.Column="3" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
+                            <StackPanel x:Name="PageStackPanel" Visibility="Visible" Grid.Column="3" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
 
                                 <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousPage"    Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.PreviewPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />

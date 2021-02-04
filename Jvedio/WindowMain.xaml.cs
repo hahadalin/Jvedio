@@ -440,12 +440,9 @@ namespace Jvedio
                     {
                         vieModel.CurrentCount = vieModel.CurrentMovieList.Count;
                         vieModel.TotalCount = vieModel.FilterMovieList.Count;
-                        IsFlowing = false;
-                        vieModel.StopLoadMovie = false;
-                        vieModel.IsFlipOvering = false;
                         if (Properties.Settings.Default.EditMode) SetSelected();
                         if (Properties.Settings.Default.ShowImageMode == "2") ImageSlideTimer.Start();//0.5s后开始展示预览图
-                        LoadingGrid.Visibility = Visibility.Collapsed;
+                        SetLoadingStatus(false);
                     }, DispatcherPriority.ContextIdle, null);
             };
 
@@ -460,6 +457,24 @@ namespace Jvedio
 
 
         }
+
+        public void SetLoadingStatus(bool loading)
+        {
+            if (loading)
+            {
+                LoadingGrid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LoadingGrid.Visibility = Visibility.Hidden;
+            }
+            PageStackPanel.IsEnabled = !loading;
+            IsFlowing = loading;
+            vieModel.IsFlipOvering = loading;
+            SideBorder.IsEnabled = !loading;
+            ToolsGrid.IsEnabled = !loading;
+        }
+
 
 
         public async Task<bool> InitActor()
@@ -759,6 +774,8 @@ namespace Jvedio
             }
             (Movie currentMovie1, int idx1) = GetMovieFromCurrentMovie(ID);
             (Movie currentMovie2, int idx2) = GetMovieFromAllMovie(ID);
+            (Movie currentMovie3, int idx3) = GetMovieFromFilterMovie(ID);
+
             if (currentMovie1 != null && idx1 < vieModel.CurrentMovieList.Count)
             {
                 vieModel.CurrentMovieList[idx1] = null;
@@ -768,6 +785,12 @@ namespace Jvedio
             {
                 vieModel.MovieList[idx2] = null;
                 vieModel.MovieList[idx2] = movie;
+            }
+
+            if (currentMovie3 != null && idx3 < vieModel.FilterMovieList.Count)
+            {
+                vieModel.FilterMovieList[idx2] = null;
+                vieModel.FilterMovieList[idx2] = movie;
             }
         }
 
@@ -1684,6 +1707,22 @@ namespace Jvedio
             return (result, idx);
         }
 
+        private (Movie, int) GetMovieFromFilterMovie(string id)
+        {
+            Movie result = null;
+            int idx = 0;
+            for (int i = 0; i < vieModel.FilterMovieList.Count; i++)
+            {
+                if (vieModel.FilterMovieList[i].id == id)
+                {
+                    result = vieModel.FilterMovieList[i];
+                    idx = i;
+                    break;
+                }
+            }
+            return (result, idx);
+        }
+
         public int idx1;
         public int idx2;
 
@@ -2056,7 +2095,7 @@ namespace Jvedio
             if (!IsFlowing && sv.ScrollableHeight - sv.VerticalOffset <= 10 && sv.VerticalOffset != 0)
             {
                 Console.WriteLine("1");
-                if (!IsFlowing && vieModel.CurrentMovieList.Count < Properties.Settings.Default.DisplayNumber && vieModel.CurrentMovieList.Count < vieModel.MovieList.Count && vieModel.CurrentMovieList.Count + (vieModel.CurrentPage - 1) * Properties.Settings.Default.DisplayNumber < vieModel.MovieList.Count)
+                if (!IsFlowing && vieModel.CurrentMovieList.Count < Properties.Settings.Default.DisplayNumber && vieModel.CurrentMovieList.Count < vieModel.FilterMovieList.Count && vieModel.CurrentMovieList.Count + (vieModel.CurrentPage - 1) * Properties.Settings.Default.DisplayNumber < vieModel.FilterMovieList.Count)
                 {
                     IsFlowing = true;
                     LoadMovie();
@@ -2277,13 +2316,16 @@ namespace Jvedio
                             //显示
                             int index1 = vieModel.CurrentMovieList.IndexOf(vieModel.CurrentMovieList.Where(arg => arg.id == movie.id).First()); ;
                             int index2 = vieModel.MovieList.IndexOf(vieModel.MovieList.Where(arg => arg.id == movie.id).First());
+                            int index3 = vieModel.FilterMovieList.IndexOf(vieModel.FilterMovieList.Where(arg => arg.id == movie.id).First());
                             movie.title = result;
                             try
                             {
                                 vieModel.CurrentMovieList[index1] = null;
                                 vieModel.MovieList[index2] = null;
+                                vieModel.FilterMovieList[index3] = null;
                                 vieModel.CurrentMovieList[index1] = movie;
                                 vieModel.MovieList[index2] = movie;
+                                vieModel.FilterMovieList[index3] = movie;
                                 successNum++;
                             }
                             catch (ArgumentNullException) { }
@@ -2313,6 +2355,7 @@ namespace Jvedio
             }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
         }
+
 
 
         public async void GenerateActor(object sender, RoutedEventArgs e)
@@ -2505,7 +2548,7 @@ namespace Jvedio
                 Movie movie = vieModel.MovieList.Where(arg => arg.id == ID).First();
                 int idx1 = vieModel.CurrentMovieList.IndexOf(vieModel.CurrentMovieList.Where(arg => arg.id == ID).First());
                 int idx2 = vieModel.MovieList.IndexOf(vieModel.MovieList.Where(arg => arg.id == ID).First());
-
+                int idx3 = vieModel.FilterMovieList.IndexOf(vieModel.FilterMovieList.Where(arg => arg.id == ID).First());
                 //movie.gif = null;
                 //if (File.Exists(BasePicPath + $"Gif\\{movie.id}.gif"))
                 //    movie.gif = new Uri("pack://siteoforigin:,,,/" + BasePicPath.Replace("\\", "/") + $"Gif/{movie.id}.gif");
@@ -2517,8 +2560,10 @@ namespace Jvedio
                 {
                     vieModel.CurrentMovieList[idx1] = null;
                     vieModel.MovieList[idx2] = null;
+                    vieModel.FilterMovieList[idx3] = null;
                     vieModel.CurrentMovieList[idx1] = movie;
                     vieModel.MovieList[idx2] = movie;
+                    vieModel.FilterMovieList[idx3] = movie;
                 }
                 catch (ArgumentNullException ex) { }
 
@@ -2595,11 +2640,15 @@ namespace Jvedio
                             //读取
                             int index1 = vieModel.CurrentMovieList.IndexOf(movie);
                             int index2 = vieModel.MovieList.IndexOf(movie);
+                            int index3 = vieModel.FilterMovieList.IndexOf(movie);
                             movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
+
                             vieModel.CurrentMovieList[index1] = null;
                             vieModel.MovieList[index2] = null;
+                            vieModel.FilterMovieList[index3] = null;
                             vieModel.CurrentMovieList[index1] = movie;
                             vieModel.MovieList[index2] = movie;
+                            vieModel.FilterMovieList[index3] = movie;
                         }
 
                     }
@@ -2659,6 +2708,7 @@ namespace Jvedio
                             //显示
                             int index1 = vieModel.CurrentMovieList.IndexOf(vieModel.CurrentMovieList.Where(arg => arg.id == movie.id).First()); ;
                             int index2 = vieModel.MovieList.IndexOf(vieModel.MovieList.Where(arg => arg.id == movie.id).First());
+                            int index3 = vieModel.FilterMovieList.IndexOf(vieModel.FilterMovieList.Where(arg => arg.id == movie.id).First());
                             movie.filepath = newPath[0];
                             movie.subsection = string.Join(";", newPath);
                             try
@@ -2667,6 +2717,8 @@ namespace Jvedio
                                 vieModel.MovieList[index2].filepath = movie.filepath;
                                 vieModel.CurrentMovieList[index1].subsection = movie.subsection;
                                 vieModel.MovieList[index2].subsection = movie.subsection;
+                                vieModel.FilterMovieList[index3].filepath = movie.filepath;
+                                vieModel.FilterMovieList[index3].subsection = movie.subsection;
                             }
                             catch (ArgumentNullException) { }
                             DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
@@ -2682,11 +2734,13 @@ namespace Jvedio
                                 //显示
                                 int index1 = vieModel.CurrentMovieList.IndexOf(vieModel.CurrentMovieList.Where(arg => arg.id == movie.id).First()); ;
                                 int index2 = vieModel.MovieList.IndexOf(vieModel.MovieList.Where(arg => arg.id == movie.id).First());
+                                int index3 = vieModel.FilterMovieList.IndexOf(vieModel.FilterMovieList.Where(arg => arg.id == movie.id).First());
                                 movie.filepath = newPath[0];
                                 try
                                 {
                                     vieModel.CurrentMovieList[index1].filepath = movie.filepath;
                                     vieModel.MovieList[index2].filepath = movie.filepath;
+                                    vieModel.FilterMovieList[index3].filepath = movie.filepath;
                                 }
                                 catch (ArgumentNullException) { }
                                 DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
@@ -2758,7 +2812,7 @@ namespace Jvedio
                                 DataBase.DeleteByField("movie", "id", oldID);
                                 newMovie.id = newID;
                                 DataBase.InsertFullMovie(newMovie);
-                                UpdateMain(oldID, newID);
+                                UpdateInfo(oldID, newID);
                                 successnum++;
                             }
                         }
@@ -2778,16 +2832,17 @@ namespace Jvedio
             SetSelected();
         }
 
-        private void UpdateMain(string oldID, string newID)
+        private void UpdateInfo(string oldID, string newID)
         {
+            Movie movie = DataBase.SelectMovieByID(newID);
+            SetImage(ref movie);
+
             for (int i = 0; i < vieModel.CurrentMovieList.Count; i++)
             {
                 try
                 {
                     if (vieModel.CurrentMovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
-                        Movie movie = DataBase.SelectMovieByID(newID);
-                       SetImage(ref movie);
                         vieModel.CurrentMovieList[i] = null;
                         vieModel.CurrentMovieList[i] = movie;
                         break;
@@ -2803,11 +2858,22 @@ namespace Jvedio
                 {
                     if (vieModel.MovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
-                        Movie movie = DataBase.SelectMovieByID(newID);
-                        SetImage(ref movie);
-
                         vieModel.MovieList[i] = null;
                         vieModel.MovieList[i] = movie;
+                        break;
+                    }
+                }
+                catch { }
+            }
+
+            for (int i = 0; i < vieModel.FilterMovieList.Count; i++)
+            {
+                try
+                {
+                    if (vieModel.FilterMovieList[i]?.id.ToUpper() == oldID.ToUpper())
+                    {
+                        vieModel.FilterMovieList[i] = null;
+                        vieModel.FilterMovieList[i] = movie;
                         break;
                     }
                 }
@@ -2912,6 +2978,7 @@ namespace Jvedio
                             DataBase.DeleteByField("movie", "id", arg.id);
                             vieModel.CurrentMovieList.Remove(arg); //从主界面删除
                             vieModel.MovieList.Remove(arg);
+                            vieModel.FilterMovieList.Remove(arg);
                         });
 
                         //从详情窗口删除
@@ -2984,6 +3051,7 @@ namespace Jvedio
                         DataBase.DeleteByField("movie", "id", arg.id);
                         vieModel.CurrentMovieList.Remove(arg); //从主界面删除
                         vieModel.MovieList.Remove(arg);
+                        vieModel.FilterMovieList.Remove(arg);
                     });
 
                     //从详情窗口删除
@@ -3137,7 +3205,6 @@ namespace Jvedio
                             break;
                         }
                     }
-
                 }
                 HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "Main");
 
@@ -5699,6 +5766,7 @@ namespace Jvedio
 
                             vieModel.CurrentMovieList.Remove(arg); //从主界面删除
                             vieModel.MovieList.Remove(arg);
+                            vieModel.FilterMovieList.Remove(arg);
                         });
                     dB.Close();
                     //从详情窗口删除

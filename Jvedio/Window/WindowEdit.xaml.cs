@@ -90,6 +90,10 @@ namespace Jvedio
         private  void UpdateMain(string oldID,string newID)
         {
             Main main = App.Current.Windows[0] as Main;
+            Movie movie = SelectMovie(newID);
+            addTag(ref movie);
+            movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
+            movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
 
             for (int i = 0; i < main.vieModel.CurrentMovieList.Count; i++)
             {
@@ -97,10 +101,6 @@ namespace Jvedio
                 {
                     if (main.vieModel.CurrentMovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
-                        Movie movie = SelectMovie(newID);
-                        addTag(ref movie);
-                        movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
-                        movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
                         main.vieModel.CurrentMovieList[i] = null;
                         main.vieModel.CurrentMovieList[i] = movie;
                         break;
@@ -116,13 +116,22 @@ namespace Jvedio
                 {
                     if (main.vieModel.MovieList[i]?.id.ToUpper() == oldID.ToUpper())
                     {
-                        Movie movie = SelectMovie(newID);
-                        addTag(ref movie);
-                        movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
-                        movie.bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
-                        
                         main.vieModel.MovieList[i] = null;
                         main.vieModel.MovieList[i] = movie;
+                        break;
+                    }
+                }
+                catch { }
+            }
+
+            for (int i = 0; i < main.vieModel.FilterMovieList.Count; i++)
+            {
+                try
+                {
+                    if (main.vieModel.FilterMovieList[i]?.id.ToUpper() == oldID.ToUpper())
+                    {
+                        main.vieModel.FilterMovieList[i] = null;
+                        main.vieModel.FilterMovieList[i] = movie;
                         break;
                     }
                 }

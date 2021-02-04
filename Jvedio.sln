@@ -5,12 +5,13 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jvedio", "Jvedio\Jvedio.csproj", "{DCFB456D-B299-459F-A4C7-EC3D183B3971}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "关于项目", "关于项目", "{5E071E27-3F24-46D1-9C5C-22585015CAA1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "About", "About", "{5E071E27-3F24-46D1-9C5C-22585015CAA1}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		README.md = README.md
 		README_CHS.md = README_CHS.md
 		README_JP.md = README_JP.md
+		Test_Process.md = Test_Process.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jvedio.Language", "Jvedio.Language\Jvedio.Language.csproj", "{D7A06C53-5742-4894-820E-3697F81A3785}"

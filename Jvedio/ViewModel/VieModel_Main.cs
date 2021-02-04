@@ -36,10 +36,6 @@ namespace Jvedio.ViewModel
         public event EventHandler CurrentMovieListChangedCompleted;
 
         public bool IsFlipOvering = false;
-        public bool StopFlipOver = false;
-
-        public bool StopLoadMovie = false;
-
         public VedioType CurrentVedioType = VedioType.所有;
 
         private DispatcherTimer SearchTimer = new DispatcherTimer();
@@ -86,9 +82,6 @@ namespace Jvedio.ViewModel
             SearchTimer.Tick += new EventHandler(SearchTimer_Tick);
             //获得所有数据库
             LoadDataBaseList();
-            FileProcess.MovieListChanged += (o, e) => { CurrentPage = 1; };
-
-
         }
 
 
@@ -998,6 +991,7 @@ namespace Jvedio.ViewModel
                 DataBase.InsertScanMovie(movie1);
                 MovieList.Insert(0, movie1);
                 CurrentMovieList.Insert(0, movie1);
+                FilterMovieList.Insert(0, movie1);
             }
         }
 
@@ -1018,6 +1012,7 @@ namespace Jvedio.ViewModel
             return result;
         }
 
+        //TODO
         public void GetSearchCandidate(string Search)
         {
             CurrentSearchCandidate = new ObservableCollection<string>();
@@ -1073,11 +1068,10 @@ namespace Jvedio.ViewModel
 
         public void Flow()
         {
-            if (MovieList != null)
-            {
+            if (FilterMovieList == null) return;
                 App.Current.Dispatcher.Invoke((Action)delegate
                 {
-                    ((Main)GetWindowByName("Main")).LoadingGrid.Visibility = Visibility.Visible;
+                    ((Main)GetWindowByName("Main")).SetLoadingStatus(true);
                 });
 
                 CurrentMovieListHideOrChanged?.Invoke(this, EventArgs.Empty); //停止下载
@@ -1090,9 +1084,9 @@ namespace Jvedio.ViewModel
                 {
                     if (CurrentMovieList.Count + Movies.Count< DisPlayNum)
                     {
-                        if (i <= MovieList.Count - 1)
+                        if (i <= FilterMovieList.Count - 1)
                         {
-                            Movie movie = MovieList[i];
+                            Movie movie = FilterMovieList[i];
                             //添加标签戳
                             FileProcess.addTag(ref movie);
 
@@ -1112,7 +1106,6 @@ namespace Jvedio.ViewModel
                     Movie movie = item;
                     SetImage(ref movie);
                     App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
-                    if (StopLoadMovie) break;
                 }
 
                 App.Current.Dispatcher.Invoke((Action)delegate
@@ -1124,7 +1117,7 @@ namespace Jvedio.ViewModel
 
                 });
 
-            }
+            
         }
 
 
@@ -1236,11 +1229,20 @@ namespace Jvedio.ViewModel
                 if (MovieList == null) return false;
                 Sort();
                 IsFlipOvering = true;
+
+                int number = 0;
+                if (FilterMovieList != null) number = FilterMovieList.Count;
                 FilterMovieList = FileProcess.FilterMovie(MovieList);
+
+                // FilterMovieList 是否改变
+                if (FilterMovieList.Count < number) CurrentPage = 1;
 
                 Task.Run( async() =>
                 {
-                        await App.Current.Dispatcher.BeginInvoke((Action)delegate { ((Main)GetWindowByName("Main")).LoadingGrid.Visibility = Visibility.Visible; });
+                        await App.Current.Dispatcher.BeginInvoke((Action)delegate {
+                            ((Main)GetWindowByName("Main")).SetLoadingStatus(true);
+                        });
+
                         TotalPage = (int)Math.Ceiling((double)FilterMovieList.Count / Properties.Settings.Default.DisplayNumber);
                         int DisPlayNum = Properties.Settings.Default.DisplayNumber;
                         int FlowNum = Properties.Settings.Default.FlowNum;
@@ -1275,7 +1277,6 @@ namespace Jvedio.ViewModel
 
                         foreach (Movie item in Movies)
                         {
-                            if (StopFlipOver) break;
                             Movie movie = item;
                             SetImage(ref movie);
                             await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
@@ -1729,6 +1730,7 @@ namespace Jvedio.ViewModel
 
         public void ShowDetailsData()
         {
+            if (MovieList == null) return;
             Task.Run(() =>
             {
 
@@ -1736,8 +1738,8 @@ namespace Jvedio.ViewModel
                 Statistic();
                 List<Movie> movies = new List<Movie>();
 
-                TotalPage = (int)Math.Ceiling((double)MovieList.Count / (double)Properties.Settings.Default.DisplayNumber);
-                if (MovieList != null && MovieList.Count > 0)
+                TotalPage = (int)Math.Ceiling((double)FilterMovieList.Count / (double)Properties.Settings.Default.DisplayNumber);
+                if (MovieList.Count > 0)
                 {
                     MovieList.ForEach(arg =>
                     {
