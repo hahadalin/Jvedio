@@ -1430,7 +1430,6 @@ namespace Jvedio
             Grid_Classify.Visibility = Visibility.Hidden;
             Grid_Movie.Visibility = Visibility.Visible;
             ActorInfoGrid.Visibility = Visibility.Collapsed;
-            BeginScanStackPanel.Visibility = Visibility.Hidden;
             ScrollViewer.ScrollToTop();
 
 
@@ -4106,8 +4105,9 @@ namespace Jvedio
 
             if (Properties.Settings.Default.FirstRun)
             {
-                BeginScanStackPanel.Visibility = Visibility.Visible;
+                BeginScanGrid.Visibility = Visibility.Visible;
                 Properties.Settings.Default.FirstRun = false;
+                Properties.Settings.Default.Save();
             }
 
 
@@ -4291,6 +4291,7 @@ namespace Jvedio
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
+            BeginScanGrid.Visibility = Visibility.Hidden;
             OpenTools(sender, e);
         }
 
@@ -5919,6 +5920,10 @@ namespace Jvedio
             AllSearchPopup.IsOpen = false;
         }
 
+        private void HideBeginScanGrid(object sender, MouseButtonEventArgs e)
+        {
+            BeginScanGrid.Visibility = Visibility.Hidden;
+        }
     }
 
 

@@ -6,7 +6,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ShowImageMode" Type="System.String" Scope="User">
-      <Value Profile="(Default)">缩略图</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="RandomDisplay" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -54,7 +54,7 @@
       <Value Profile="(Default)">123456</Value>
     </Setting>
     <Setting Name="SortType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">识别码</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="SortDescending" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -111,7 +111,7 @@
       <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="SearchType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">识别码</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ActorClickShowAll" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -138,7 +138,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="AllSearchType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">识别码</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ShowNotice" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

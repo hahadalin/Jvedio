@@ -2383,10 +2383,44 @@
                 </Grid>
 
 
-                <StackPanel  FocusVisualStyle="{x:Null}" x:Name="BeginScanStackPanel" Visibility="Hidden" Panel.ZIndex="1" Orientation="Horizontal"  HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="拖入文件夹与视频或 " Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="20"></TextBlock>
-                    <Button Content="扫描" Style="{StaticResource ButtonStyleFill}"  Click="Button_Click_4"/>
-                </StackPanel>
+                <Grid  x:Name="BeginScanGrid" Grid.Row="1" Visibility="Hidden" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid    >
+                        <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
+                            <Border.Effect>
+                                <BlurEffect Radius="4" KernelType="Box"  RenderingBias="Quality"/>
+                            </Border.Effect>
+                        </Border>
+
+                        <Border  CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5"  >
+
+                            <StackPanel  Margin="5"  FocusVisualStyle="{x:Null}"  Visibility="Visible" Panel.ZIndex="1" Orientation="Horizontal"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="拖入文件夹与视频或 " Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="20"></TextBlock>
+                                <Button Content="扫描" Style="{StaticResource ButtonStyleFill}"  Click="Button_Click_4"/>
+                            </StackPanel>
+
+
+                        </Border>
+                    </Grid>
+
+                    <Border HorizontalAlignment="Right" VerticalAlignment="Top"     Height="27" Width="27" Margin="-10" CornerRadius="20"   MouseLeftButtonUp="HideBeginScanGrid" Panel.ZIndex="5">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="OrangeRed"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                    </Border>
+
+                </Grid>
+
+
+
+
 
                 <!--鸣谢-->
 

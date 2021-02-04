@@ -37,7 +37,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("缩略图")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string ShowImageMode {
             get {
                 return ((string)(this["ShowImageMode"]));
@@ -229,7 +229,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("识别码")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string SortType {
             get {
                 return ((string)(this["SortType"]));
@@ -457,7 +457,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("识别码")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string SearchType {
             get {
                 return ((string)(this["SearchType"]));
@@ -565,7 +565,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("识别码")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string AllSearchType {
             get {
                 return ((string)(this["AllSearchType"]));
