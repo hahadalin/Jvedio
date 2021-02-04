@@ -15,6 +15,125 @@ namespace Jvedio
 {
     public static class FileProcess
     {
+
+        public static event EventHandler MovieListChanged;
+
+        public static List<Movie> FilterMovie(List<Movie> movies )
+        {
+            List<Movie> result = new List<Movie>();
+            result.AddRange(movies);
+            //可播放|不可播放
+            if (Properties.Settings.Default.OnlyShowPlay)
+            {
+                foreach (var item in movies)
+                {
+                    if (!File.Exists((item.filepath))) result.Remove(item);
+                }
+            }
+
+            //分段|不分段
+            if (Properties.Settings.Default.OnlyShowSubSection)
+            {
+                foreach (var item in movies)
+                {
+                    if (item.subsectionlist.Count <= 1) result.Remove(item);
+                }
+            }
+
+            //视频类型
+            int.TryParse(Properties.Settings.Default.VedioType, out int vt);
+            if (vt > 0)
+            {
+                result = result.Where(arg => arg.vediotype == vt).ToList();
+            }
+
+            result = FilterImage(result);//有图|无图
+            MovieListChanged?.Invoke(null, new EventArgs());
+            return result;
+        }
+
+        private static List<Movie> FilterImage(List<Movie> originMovies)
+        {
+            List<Movie> result = new List<Movie>();
+            result.AddRange(originMovies);
+
+            ViewType ShowViewMode = ViewType.默认;
+            Enum.TryParse(Properties.Settings.Default.ShowViewMode, out ShowViewMode);
+            MyImageType ShowImageMode = MyImageType.缩略图;
+            if (Properties.Settings.Default.ShowImageMode.Length == 1)
+            {
+                ShowImageMode = (MyImageType)(int.Parse(Properties.Settings.Default.ShowImageMode));
+            }
+
+
+            if (ShowViewMode == ViewType.有图)
+            {
+                foreach (var item in originMovies)
+                {
+                    if (ShowImageMode == MyImageType.缩略图)
+                    {
+                        if (!File.Exists(BasePicPath + $"SmallPic\\{item.id}.jpg")) { result.Remove(item); }
+                    }
+
+                    else if (ShowImageMode == MyImageType.海报图)
+                    {
+                        if (!File.Exists(BasePicPath + $"BigPic\\{item.id}.jpg")) { result.Remove(item); }
+                    }
+
+                    else if (ShowImageMode == MyImageType.动态图)
+                    {
+                        if (!File.Exists(BasePicPath + $"Gif\\{item.id}.gif")) { result.Remove(item); }
+                    }
+
+                    else if (ShowImageMode == MyImageType.预览图)
+                    {
+                        if (!Directory.Exists(BasePicPath + $"ExtraPic\\{item.id}\\")) { result.Remove(item); }
+                        else
+                        {
+                            try { if (Directory.GetFiles(BasePicPath + $"ExtraPic\\{item.id}\\", "*.*", SearchOption.TopDirectoryOnly).Count() == 0) result.Remove(item); }
+                            catch { }
+                        }
+                    }
+                }
+
+
+            }
+            else if (ShowViewMode == ViewType.无图)
+            {
+                foreach (var item in originMovies)
+                {
+                    if (ShowImageMode == MyImageType.缩略图)
+                    {
+                        if (File.Exists(BasePicPath + $"SmallPic\\{item.id}.jpg")) { result.Remove(item); }
+                    }
+
+                    else if (ShowImageMode == MyImageType.海报图)
+                    {
+                        if (File.Exists(BasePicPath + $"BigPic\\{item.id}.jpg")) { result.Remove(item); }
+                    }
+
+                    else if (ShowImageMode == MyImageType.动态图)
+                    {
+                        if (File.Exists(BasePicPath + $"Gif\\{item.id}.gif")) { result.Remove(item); }
+                    }
+
+                    else if (ShowImageMode == MyImageType.预览图)
+                    {
+                        if (Directory.Exists(BasePicPath + $"ExtraPic\\{item.id}\\"))
+                        {
+                            try { if (Directory.GetFiles(BasePicPath + $"ExtraPic\\{item.id}\\", "*.*", SearchOption.TopDirectoryOnly).Count() > 0) result.Remove(item); }
+                            catch { }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+
+
+
+
         /// <summary>
         /// 判断拖入的是文件夹还是文件
         /// </summary>

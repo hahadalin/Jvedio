@@ -136,9 +136,10 @@ namespace Jvedio
             //Properties.Settings.Default.DisplayNumber = 100;
             //Properties.Settings.Default.FlowNum = 20;
             //Properties.Settings.Default.ActorDisplayNum = 30;
+            Properties.Settings.Default.VedioType ="0";
 
             //添加演员分隔符
-            if(!actorSplitDict.ContainsKey(0)) actorSplitDict.Add(0, new char[] { ' ', '/' });
+            if (!actorSplitDict.ContainsKey(0)) actorSplitDict.Add(0, new char[] { ' ', '/' });
             if (!actorSplitDict.ContainsKey(1)) actorSplitDict.Add(1, new char[] { ' ', '/' });
             if (!actorSplitDict.ContainsKey(2)) actorSplitDict.Add(2, new char[] { ' ', '/' });
             if (!actorSplitDict.ContainsKey(3)) actorSplitDict.Add(3, new char[] {'/' });//欧美

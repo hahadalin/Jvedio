@@ -22,7 +22,7 @@ namespace Jvedio
         public static string SQLITETABLE_BAIDUTRANSLATE = "create table if not exists baidu (id VARCHAR(50) PRIMARY KEY , title TEXT , translate_title TEXT, plot TEXT, translate_plot TEXT)";
         public static string SQLITETABLE_YOUDAO = "create table if not exists youdao (id VARCHAR(50) PRIMARY KEY , title TEXT , translate_title TEXT, plot TEXT, translate_plot TEXT)";
         public static string SqlitePath { get; set; }
-        public static event EventHandler MovieListChanged;
+
 
 
         public static void Init()
@@ -202,113 +202,17 @@ namespace Jvedio
 
                     List<Movie> movies = new List<Movie>();
                     movies.AddRange(result);
-                    FilterMovie(movies, ref result);
+                    //FilterMovie(movies, ref result);
                     return result;
                 }
             }
         }
 
 
-        private static void FilterMovie(List<Movie> movies, ref List<Movie> result)
-        {
-            //可播放|不可播放
-            if (Properties.Settings.Default.OnlyShowPlay)
-            {
-                foreach (var item in movies)
-                {
-                    if (!File.Exists((item.filepath))) result.Remove(item);
-                }
-            }
-
-            //分段|不分段
-            if (Properties.Settings.Default.OnlyShowSubSection)
-            {
-                foreach (var item in movies)
-                {
-                    if (item.subsectionlist.Count <= 1) result.Remove(item);
-                }
-            }
-            movies.Clear();
-            movies.AddRange(result);
-            FilterImage(movies, ref result);//有图|无图
-            MovieListChanged?.Invoke(null, new EventArgs());
-        }
 
 
-        private static void FilterImage(List<Movie> allMovies, ref List<Movie> movies)
-        {
-            ViewType ShowViewMode = ViewType.默认;
-            Enum.TryParse(Properties.Settings.Default.ShowViewMode, out ShowViewMode);
-
-            MyImageType ShowImageMode = MyImageType.缩略图;
-
-            if (Properties.Settings.Default.ShowImageMode.Length == 1)
-            {
-                ShowImageMode = (MyImageType)(int.Parse(Properties.Settings.Default.ShowImageMode));
-            }
-
-            if (ShowViewMode == ViewType.有图)
-            {
-                foreach (var item in allMovies)
-                {
-                    if (ShowImageMode == MyImageType.缩略图)
-                    {
-                        if (!File.Exists(BasePicPath + $"SmallPic\\{item.id}.jpg")) { movies.Remove(item); }
-                    }
-
-                    else if (ShowImageMode == MyImageType.海报图)
-                    {
-                        if (!File.Exists(BasePicPath + $"BigPic\\{item.id}.jpg")) { movies.Remove(item); }
-                    }
-
-                    else if (ShowImageMode == MyImageType.动态图)
-                    {
-                        if (!File.Exists(BasePicPath + $"Gif\\{item.id}.gif")) { movies.Remove(item); }
-                    }
-
-                    else if (ShowImageMode == MyImageType.预览图)
-                    {
-                        if (!Directory.Exists(BasePicPath + $"ExtraPic\\{item.id}\\")) { movies.Remove(item); }
-                        else
-                        {
-                            try { if (Directory.GetFiles(BasePicPath + $"ExtraPic\\{item.id}\\", "*.*", SearchOption.TopDirectoryOnly).Count() == 0) movies.Remove(item); }
-                            catch { }
-                        }
-                    }
-                }
 
 
-            }
-            else if (ShowViewMode == ViewType.无图)
-            {
-                foreach (var item in allMovies)
-                {
-                    if (ShowImageMode == MyImageType.缩略图)
-                    {
-                        if (File.Exists(BasePicPath + $"SmallPic\\{item.id}.jpg")) { movies.Remove(item); }
-                    }
-
-                    else if (ShowImageMode == MyImageType.海报图)
-                    {
-                        if (File.Exists(BasePicPath + $"BigPic\\{item.id}.jpg")) { movies.Remove(item); }
-                    }
-
-                    else if (ShowImageMode == MyImageType.动态图)
-                    {
-                        if (File.Exists(BasePicPath + $"Gif\\{item.id}.gif")) { movies.Remove(item); }
-                    }
-
-                    else if (ShowImageMode == MyImageType.预览图)
-                    {
-                        if (Directory.Exists(BasePicPath + $"ExtraPic\\{item.id}\\"))
-                        {
-                            try { if (Directory.GetFiles(BasePicPath + $"ExtraPic\\{item.id}\\", "*.*", SearchOption.TopDirectoryOnly).Count() > 0) movies.Remove(item); }
-                            catch { }
-                        }
-                    }
-                }
-            }
-        }
 
 
         private static Dictionary<string, int> SelectLabelLikeByVedioType(string field, int vediotype, object splitchar = null)
@@ -528,7 +432,7 @@ namespace Jvedio
             }
             List<Movie> movies = new List<Movie>();
             movies.AddRange(result);
-            FilterMovie(movies, ref result);
+            //FilterMovie(movies, ref result);
             return result;
         }
 

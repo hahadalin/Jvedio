@@ -30,6 +30,7 @@
     SizeChanged="Window_SizeChanged"
     PreviewKeyDown="Window_PreviewKeyDown"
     
+    Deactivated="Window_Deactivated"
 
 
     >
@@ -1685,8 +1686,8 @@
                                             <ContextMenu>
                                                 <MenuItem Header="{x:Static lang:Resources.Refresh}" Click="RefreshCurrentPage" />
                                                 <MenuItem Header="{x:Static lang:Resources.SelectAll}" Click="SelectAll" />
-                                                <MenuItem Header="{x:Static lang:Resources.ShowExists}" IsCheckable="True"  IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding ResetCommand}" />
-                                                <MenuItem Header="{x:Static lang:Resources.ShowSubSection}" IsCheckable="True"  IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding ResetCommand}" />
+                                                <MenuItem Header="{x:Static lang:Resources.ShowExists}" IsCheckable="True"  IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding FlipOverCommand}"  />
+                                                <MenuItem Header="{x:Static lang:Resources.ShowSubSection}" IsCheckable="True"  IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding FlipOverCommand}" />
                                                 <MenuItem Header="{x:Static lang:Resources.ShowStamp}" Visibility="Collapsed">
                                                     <MenuItem  Command="{Binding ResetCommand}"    IsCheckable="True"  IsChecked="{Binding ShowHDV, Mode=TwoWay}" Header="高清"    />
                                                     <MenuItem  Command="{Binding ResetCommand}"    IsCheckable="True"    IsChecked="{Binding ShowCHS, Mode=TwoWay}"   Header="中文" />
@@ -1698,10 +1699,10 @@
                                                     <MenuItem  Click="SaveShowViewMode"  IsCheckable="True"     Header="{x:Static lang:Resources.NoImage}" />
                                                 </MenuItem>
                                                 <MenuItem Header="{x:Static lang:Resources.VedioType}" >
-                                                    <MenuItem   Click="SaveVedioType"   Command="{Binding ResetCommand}"   IsCheckable="True"   IsChecked="True" Header="{x:Static lang:Resources.Default}"    />
-                                                    <MenuItem   Click="SaveVedioType"  Command="{Binding UncensoredCommand}"   IsCheckable="True"    Header="{x:Static lang:Resources.Uncensored}"    />
-                                                    <MenuItem   Click="SaveVedioType"   Command="{Binding CensoredCommand}"   IsCheckable="True"      Header="{x:Static lang:Resources.Censored}" />
-                                                    <MenuItem   Click="SaveVedioType"   Command="{Binding EuropeCommand}"    IsCheckable="True"     Header="{x:Static lang:Resources.Europe}" />
+                                                    <MenuItem   Click="SaveVedioType"      IsCheckable="True"   IsChecked="True" Header="{x:Static lang:Resources.Default}"    />
+                                                    <MenuItem   Click="SaveVedioType"     IsCheckable="True"    Header="{x:Static lang:Resources.Uncensored}"    />
+                                                    <MenuItem   Click="SaveVedioType"     IsCheckable="True"      Header="{x:Static lang:Resources.Censored}" />
+                                                    <MenuItem   Click="SaveVedioType"      IsCheckable="True"     Header="{x:Static lang:Resources.Europe}" />
                                                 </MenuItem>
                                                 <MenuItem Header="{x:Static lang:Resources.ShowRest}" Click="ShowRestMovie" />
                                             </ContextMenu>
@@ -2033,8 +2034,8 @@
                             <StackPanel  Orientation="Horizontal">
 
                                 <Border Background="{DynamicResource BackgroundSide}" CornerRadius="5" >
-                                    <StackPanel x:Name="VedioTypeStackPanel" Orientation="Horizontal" Margin="5">
-                                        <RadioButton GroupName="VedioTypeRadioButton"   Content="{x:Static lang:Resources.All}" Style="{StaticResource FlatRadioButton}"/>
+                                    <StackPanel x:Name="ClassifyVedioTypeStackPanel" Orientation="Horizontal" Margin="5">
+                                        <RadioButton GroupName="VedioTypeRadioButton" IsChecked="True"   Content="{x:Static lang:Resources.All}" Style="{StaticResource FlatRadioButton}"/>
                                         <RadioButton GroupName="VedioTypeRadioButton"   Content="{x:Static lang:Resources.Uncensored}" Style="{StaticResource FlatRadioButton}"/>
                                         <RadioButton GroupName="VedioTypeRadioButton"     Content="{x:Static lang:Resources.Censored}"  Style="{StaticResource FlatRadioButton}"/>
                                         <RadioButton GroupName="VedioTypeRadioButton"      Content="{x:Static lang:Resources.Europe}"  Style="{StaticResource FlatRadioButton}"/>

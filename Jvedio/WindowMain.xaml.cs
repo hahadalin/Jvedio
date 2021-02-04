@@ -402,8 +402,8 @@ namespace Jvedio
                 item.Click += SaveShowImageMode;
             }
 
-            //设置视频格式
-            var rbs2 = VedioTypeStackPanel.Children.OfType<RadioButton>().ToList();
+            //设置分类中的视频格式
+            var rbs2 = ClassifyVedioTypeStackPanel.Children.OfType<RadioButton>().ToList();
             foreach (RadioButton item in rbs2)
             {
                 item.Click += SetTypeValue;
@@ -439,7 +439,7 @@ namespace Jvedio
                     Dispatcher.BeginInvoke((Action)delegate
                     {
                         vieModel.CurrentCount = vieModel.CurrentMovieList.Count;
-                        vieModel.TotalCount = vieModel.MovieList.Count;
+                        vieModel.TotalCount = vieModel.FilterMovieList.Count;
                         IsFlowing = false;
                         vieModel.StopLoadMovie = false;
                         vieModel.IsFlipOvering = false;
@@ -1790,6 +1790,10 @@ namespace Jvedio
             SearchOptionPopup.IsOpen = true;
         }
 
+
+
+
+
         //TODO
         /// <summary>
         /// 演员里的视频类型分类
@@ -1799,16 +1803,10 @@ namespace Jvedio
         public void SetTypeValue(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
-            int idx = VedioTypeStackPanel.Children.OfType<RadioButton>().ToList().IndexOf(radioButton);
-
-            Properties.Settings.Default.VedioType = idx.ToString();
-
-            vieModel.VedioType = (VedioType)Enum.Parse(typeof(VedioType), Properties.Settings.Default.VedioType);
+            int idx = ClassifyVedioTypeStackPanel.Children.OfType<RadioButton>().ToList().IndexOf(radioButton);
+            vieModel.ClassifyVedioType=(VedioType)idx;
             //刷新侧边栏显示
-
             TabControl_SelectionChanged(sender, null);
-
-
         }
 
 
@@ -1937,7 +1935,7 @@ namespace Jvedio
 
             Properties.Settings.Default.ShowViewMode = idx.ToString();
             Properties.Settings.Default.Save();
-            vieModel.Reset();
+            vieModel.FlipOver();
         }
 
         public void SaveVedioType(object sender, RoutedEventArgs e)
@@ -1945,6 +1943,7 @@ namespace Jvedio
             MenuItem menuItem = sender as MenuItem;
             MenuItem father = menuItem.Parent as MenuItem;
             int idx = father.Items.IndexOf(menuItem);
+            
 
             for (int i = 0; i < father.Items.Count; i++)
             {
@@ -1959,6 +1958,9 @@ namespace Jvedio
                 }
             }
 
+            Properties.Settings.Default.VedioType = idx.ToString();
+            Properties.Settings.Default.Save();
+            vieModel.FlipOver();
         }
 
 
@@ -2998,7 +3000,7 @@ namespace Jvedio
                         }
                     }
 
-                    HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Menu_DeleteInfo} {vieModel.SelectedMovie.Count} ", "Main");
+                    HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.SuccessDelete} {vieModel.SelectedMovie.Count} ", "Main");
                     //修复数字显示
                     vieModel.CurrentCount -= vieModel.SelectedMovie.Count;
                     vieModel.TotalCount -= vieModel.SelectedMovie.Count;
@@ -4101,12 +4103,6 @@ namespace Jvedio
             int.TryParse(Properties.Settings.Default.ShowImageMode, out int idx2);
             rbs[idx2].IsChecked = true;
 
-            //设置视频类型
-            var rbs2 = VedioTypeStackPanel.Children.OfType<RadioButton>().ToList();
-            int.TryParse(Properties.Settings.Default.VedioType, out int idx3);
-            rbs2[idx3].IsChecked = true;
-
-
 
             if (vieModel.SortDescending)
                 SortImage.Source = new BitmapImage(new Uri("/Resources/Picture/sort_down.png", UriKind.Relative));
@@ -4357,6 +4353,7 @@ namespace Jvedio
 
         private void DragRectangle_MouseMove(object sender, MouseEventArgs e)
         {
+            if(sender.GetType().Name== "Border") AllSearchPopup.IsOpen = false;
             if (SideBorder.Width >= 200) { if (sender is Rectangle rectangle) rectangle.Cursor = Cursors.SizeWE; }
             if (IsDragingSideGrid)
             {
@@ -5848,6 +5845,12 @@ namespace Jvedio
                 }
             }
         }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            AllSearchPopup.IsOpen = false;
+        }
+
     }
 
 
