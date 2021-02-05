@@ -1124,7 +1124,7 @@
                     <Rectangle  IsEnabled="True" MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="6" x:Name="DragRectangle" Margin="0 0 -3 0" />
 
                     <!--影片-->
-                    <Grid     x:Name="Grid_Movie" Visibility="Hidden"   MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="1"  >
+                    <Grid     x:Name="Grid_Movie" Visibility="Visible"   MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="1"  >
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -2020,7 +2020,7 @@
 
 
                     <!--演员、类别、标签-->
-                    <Grid Grid.Column="1" Visibility="Visible" x:Name="Grid_Classify" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" PreviewKeyDown="ActorGrid_PreviewKeyDown"  >
+                    <Grid Grid.Column="1" Visibility="Hidden" x:Name="Grid_Classify" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" PreviewKeyDown="ActorGrid_PreviewKeyDown"  >
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>

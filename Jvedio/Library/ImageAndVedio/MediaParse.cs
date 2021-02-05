@@ -186,8 +186,11 @@ namespace Jvedio
                 };
             }
             if (!string.IsNullOrEmpty(vedioInfo.Width) && !string.IsNullOrEmpty(vedioInfo.Height)) vedioInfo.Resolution = vedioInfo.Width + "x" + vedioInfo.Height;
-            vedioInfo.Extension = Path.GetExtension(vediopath).ToUpper().Replace(".","");
-            vedioInfo.FileName = Path.GetFileNameWithoutExtension(vediopath);
+            if (!string.IsNullOrEmpty(vediopath))
+            {
+                vedioInfo.Extension = Path.GetExtension(vediopath)?.ToUpper().Replace(".", "");
+                vedioInfo.FileName = Path.GetFileNameWithoutExtension(vediopath);
+            }
             return vedioInfo;
         }
 

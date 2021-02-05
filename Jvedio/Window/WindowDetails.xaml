@@ -147,6 +147,10 @@
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
                 </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
         
@@ -188,7 +192,7 @@
 
 
 
-                <Grid Grid.Column="0" PreviewMouseWheel="Border_PreviewMouseWheel" >
+                <Grid x:Name="PreviousGrid" Grid.Column="0" PreviewMouseWheel="Border_PreviewMouseWheel" >
                     <Border x:Name="PreviousBorder"  Cursor="Hand"  Height="60"      ToolTip="{x:Static lang:Resources.Previous}"    Width="30" Margin="5 0" CornerRadius="10" MouseLeftButtonUp="PreviewMovie">
                         <Border.Style>
                             <Style TargetType="Border">
@@ -204,7 +208,7 @@
                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" Canvas.Left="9" Canvas.Top="11" Cursor="Hand"/>
                     </Border>
 
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Margin="0 20">
+                    <StackPanel x:Name="ImageChangeStackPanel" Orientation="Vertical" VerticalAlignment="Bottom" Margin="0 20">
                         <RadioButton x:Name="ExtraImageRadioButton" ToolTip="{x:Static lang:Resources.Poster}" Height="30" IsChecked="True"  Style="{StaticResource RadioButtonStyleSide}" GroupName="ExtraImageView"  Margin="5 5 5 0" Background="{DynamicResource BackgroundSide}" Click="ExtraImageRadioButton_Click">
                             <Image Source="/Resources/Picture/图像.png" Height="22" Width="22"  />
                         </RadioButton>
@@ -223,7 +227,7 @@
                     </Grid.RowDefinitions>
                     
                     <!--标题-->
-                    <Grid Grid.Row="0" >
+                    <Grid Grid.Row="0"  >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto" MinWidth="50"/>
@@ -356,7 +360,7 @@
 
                             <!--预览图-->
                             <Grid Grid.Row="1" x:Name="ThumbGrid"      >
-                                <ProgressBar IsVisibleChanged="ProgressBar_IsVisibleChanged"  x:Name="ProgressBar" ValueChanged="ProgressBar_ValueChanged" Visibility="Visible" Style="{StaticResource ProgressBarSuccess}"   Height="10" Margin="10 -6"  Value="20"  VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
+                                <ProgressBar Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" IsVisibleChanged="ProgressBar_IsVisibleChanged"  x:Name="ProgressBar" ValueChanged="ProgressBar_ValueChanged" Visibility="Visible"    Height="10" Margin="10 -6"  Value="20"  VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
 
                                 <Border x:Name="ExtraImageBorder" Visibility="Visible" Margin="0 10 0 10" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
                                     <ScrollViewer Margin="5" VerticalContentAlignment="Center"   PreviewMouseWheel="scrollViewer_PreviewMouseWheel"   x:Name="scrollViewer"      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
@@ -423,32 +427,45 @@
 
 
 
-                            <Border x:Name="InfoBorder" Margin="0 0 0 10" Grid.Column="0"  CornerRadius="5"  >
-                                <TabControl Style="{DynamicResource TapControlStyle}" HorizontalAlignment="Stretch" Background="Transparent" Margin="10"  >
-                                    <TabItem   Margin="5" Padding="5"  Header="{x:Static lang:Resources.MovieInfo}" Style="{DynamicResource TopTabItemStyle}" >
-                                        <StackPanel  >
-                                                    <TextBox Margin="-1 20 0 5" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"/>
-                                                    <StackPanel  x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 5 0 10" >
-                                                        <Label Margin="0 0 5 0"  BorderThickness="0" Visibility="{Binding DetailMovie.tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=0,Mode=OneWay}" Background="#9A58B7" Content="{x:Static lang:Resources.HD}" Foreground="{DynamicResource ForegroundSearch}"/>
-                                                        <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=1,Mode=OneWay}"  Background="YellowGreen"   Content="{x:Static lang:Resources.Translated}" Foreground="{DynamicResource ForegroundSearch}" />
-                                                        <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=2,Mode=OneWay}" Background="#00B0F0" Content="{x:Static lang:Resources.FlowOut}" Foreground="{DynamicResource ForegroundSearch}" />
-                                                    </StackPanel>
+                            <Border x:Name="InfoBorder"  Grid.Column="0"  CornerRadius="5" VerticalAlignment="Top" Margin="10" >
+                                <TabControl Style="{DynamicResource TapControlStyle}"  Background="Transparent"  Margin="10 5"  >
+                                    <TabItem   Margin="5" Padding="5"  Header="{x:Static lang:Resources.MovieInfo}" Style="{DynamicResource TopTabItemStyle}"  >
 
-                                                    <StackPanel Orientation="Horizontal" >
-                                                        <TextBox   FontSize="14"  VerticalAlignment="Center" Style="{StaticResource ViewTextBox}"   Text="{Binding DetailMovie.releasedate}" ></TextBox>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            
+    
+                                        <StackPanel Grid.Row="0">
+                                            <TextBox Margin="-1 20 0 5" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"/>
+                                            <StackPanel  x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 5 0 10" >
+                                                <Label Margin="0 0 5 0"  BorderThickness="0" Visibility="{Binding DetailMovie.tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=0,Mode=OneWay}" Background="#9A58B7" Content="{x:Static lang:Resources.HD}" Foreground="{DynamicResource ForegroundSearch}"/>
+                                                <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=1,Mode=OneWay}"  Background="YellowGreen"   Content="{x:Static lang:Resources.Translated}" Foreground="{DynamicResource ForegroundSearch}" />
+                                                <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=2,Mode=OneWay}" Background="#00B0F0" Content="{x:Static lang:Resources.FlowOut}" Foreground="{DynamicResource ForegroundSearch}" />
+                                            </StackPanel>
 
-                                                        <StackPanel Orientation="Horizontal" Margin="10 0">
-                                                            <Image VerticalAlignment="Center" Source="{Binding Themes, Mode=OneWay, ConverterParameter=runtime,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" />
-                                                            <TextBox Margin="5 0" FontSize="14" VerticalAlignment="Center" Style="{StaticResource ViewTextBox}"   Text="{Binding  DetailMovie.runtime , StringFormat='\{0} min'}" ></TextBox>
-                                                        </StackPanel>
+                                            <StackPanel Orientation="Horizontal" >
+                                                <TextBox   FontSize="14"  VerticalAlignment="Center" Style="{StaticResource ViewTextBox}"   Text="{Binding DetailMovie.releasedate}" ></TextBox>
 
-                                                    </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                                    <Image VerticalAlignment="Center" Source="{Binding Themes, Mode=OneWay, ConverterParameter=runtime,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" />
+                                                    <TextBox Margin="5 0" FontSize="14" VerticalAlignment="Center" Style="{StaticResource ViewTextBox}"   Text="{Binding  DetailMovie.runtime , StringFormat='\{0} min'}" ></TextBox>
+                                                </StackPanel>
+
+                                            </StackPanel>
 
                                             <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="0 20" Cursor="Hand">
                                                 <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0"/>
                                             </StackPanel>
+                                        </StackPanel>
 
-                                            <!--演员-->
+                                            
+                                            <!--可滚动-->
+                                            <ScrollViewer Grid.Row="1">
+                                                <StackPanel  >
+                                                    <!--演员-->
                                                     <Grid  >
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="auto"/>
@@ -591,6 +608,8 @@
                                                     </Grid>
 
                                                 </StackPanel>
+                                            </ScrollViewer>
+                                        </Grid>
 
                                     </TabItem>
                                     <TabItem  Margin="5" Padding="10 5"   Header="{x:Static lang:Resources.VedioInfo}" Style="{DynamicResource TopTabItemStyle}" >
@@ -703,7 +722,7 @@
 
 
 
-                            <Grid  PreviewMouseWheel="Border_PreviewMouseWheel"  Grid.Column="1">
+                            <Grid x:Name="NextGrid"  PreviewMouseWheel="Border_PreviewMouseWheel"  Grid.Column="1">
                                 <Border x:Name="NextBorder"  Cursor="Hand"  Height="60"      ToolTip="{x:Static lang:Resources.Next}"    Width="30" Margin="5 0" CornerRadius="10"  MouseLeftButtonUp="NextMovie">
                                     <Border.Style>
                                         <Style TargetType="Border">

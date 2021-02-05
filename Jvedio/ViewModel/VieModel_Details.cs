@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.IO;
 using System.Text.RegularExpressions;
 using DynamicData;
+using System.Windows.Media.Imaging;
 
 namespace Jvedio.ViewModel
 {
@@ -140,8 +141,8 @@ namespace Jvedio.ViewModel
 
         public void Query(string movieid)
         {
+            ((WindowDetails)GlobalMethod.GetWindowByName("WindowDetails")).SetStatus(false);
             DetailMovie detailMovie = null;
-
                 detailMovie = DataBase.SelectDetailMovieById(movieid);
                 //访问次数+1
                 if (detailMovie != null)
@@ -172,7 +173,9 @@ namespace Jvedio.ViewModel
             DetailMovie = new DetailMovie();
             if (detailMovie != null)
             {
-                detailMovie.bigimage = ImageProcess.GetBitmapImage(detailMovie.id, "BigPic");
+                BitmapImage bigimage= ImageProcess.GetBitmapImage(detailMovie.id, "BigPic");
+                if (bigimage == null) bigimage = DefaultBigImage;
+                detailMovie.bigimage = bigimage;
                 MySqlite db = new MySqlite("Translate");
                 //加载翻译结果
                 if (Properties.Settings.Default.TitleShowTranslate)
