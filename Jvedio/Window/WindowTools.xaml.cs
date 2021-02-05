@@ -810,6 +810,18 @@ namespace Jvedio
             Properties.Settings.Default.ToolsIndex = TabControl.SelectedIndex;
             Properties.Settings.Default.Save();
         }
+
+        private void LoadingStackPanel_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (LoadingStackPanel.Visibility == Visibility.Visible)
+            {
+                TabControl.IsEnabled = false;
+            }
+            else
+            {
+                TabControl.IsEnabled = true;
+            }
+        }
     }
 
 }

@@ -240,7 +240,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="EnableWindowFade" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="DisplayStamp" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -405,25 +405,25 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Timeout_forcestop" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="Timeout_tcp" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="Timeout_http" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="Timeout_download" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="Timeout_stream" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="ScreenShot_ThreadNum" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="ScreenShot_TimeOut" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="SaveInfoToNFO" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

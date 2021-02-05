@@ -254,7 +254,7 @@ namespace Jvedio
             //BigWetButts.20.06.16
             MatchCollection mc = Regex.Matches(FileName, pattern,RegexOptions.IgnoreCase);
             if (mc.Count > 0) { result= mc[0].Value; } else { result= ""; }
-            return result.ToUpper();
+            return result;
         }
 
 

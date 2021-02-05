@@ -34,9 +34,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-
-
-            <TextBox x:Name="AddMovieTextBox" Style="{StaticResource MultiLineTextBox}" Text="" Margin="10" />
+            <TextBox  x:Name="AddMovieTextBox" FontSize="15"  hc:InfoElement.Placeholder="{x:Static lang:Resources.EnterSplit}" Grid.Row="0" Margin="10" VerticalContentAlignment="Top"  Padding="10" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"  CaretBrush="{DynamicResource ForegroundSearch}" BorderBrush="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"  hc:InfoElement.Title="" Style="{StaticResource TextBoxExtend}"   />
 
 
             <WrapPanel Grid.Row="1">

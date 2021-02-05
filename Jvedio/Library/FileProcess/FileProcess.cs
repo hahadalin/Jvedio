@@ -225,7 +225,7 @@ namespace Jvedio
                 {
 
                     var movielist = Scan.FirstFilter(files.ToList(), movie.id);
-                    if (movielist.Count == 1)
+                    if (movielist.Count == 1 && !movielist[0].ToLower().EndsWith(".nfo"))
                     {
                         movie.filepath = movielist[0];
                     }

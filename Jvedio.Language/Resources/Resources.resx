@@ -1479,4 +1479,13 @@
   <data name="Theme" xml:space="preserve">
     <value>主题</value>
   </data>
+  <data name="ScanAllAttention" xml:space="preserve">
+    <value>以管理员模式启动后生效（然后不以管理员模式才能拖入文件夹）</value>
+  </data>
+  <data name="EnterSplit" xml:space="preserve">
+    <value>回车分割</value>
+  </data>
+  <data name="SuccessGifTo" xml:space="preserve">
+    <value>成功生成 GIF 到</value>
+  </data>
 </root>

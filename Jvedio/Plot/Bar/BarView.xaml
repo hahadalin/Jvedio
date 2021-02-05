@@ -181,10 +181,12 @@
             <StackPanel x:Name="ToolStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20 0 0 5">
                 <Button Opacity="0.7" x:Name="ResetButton" Content="{x:Static lang:Resources.Restore}" Margin="10"/>
                 <Button Opacity="0.7" x:Name="SortButton"  Content="{x:Static lang:Resources.SmallToBig}" Margin="10" />
+                <Button Opacity="0.7" x:Name="ApplyButton"  Content="{x:Static lang:Resources.Apply}" Margin="10" />
+                <TextBlock Margin="5 0" Text="{Binding ElementName=Slider,Path=Value,StringFormat=\{0\}}"  VerticalAlignment="Center"/>
                 <Slider x:Name="Slider" VerticalAlignment="Center" VerticalContentAlignment="Center" IsSnapToTickEnabled="True" TickFrequency="1"  Width="150" Height="auto" Maximum="100" Minimum="1" Value="{Binding Current,Mode=OneWay}" />
 
-                <TextBlock Margin="5 0" Text="{Binding ElementName=Slider,Path=Value,StringFormat=\{0\}}"  VerticalAlignment="Center"/>
-                <Button Opacity="0.7" x:Name="ApplyButton"  Content="{x:Static lang:Resources.Apply}" Margin="10" />
+                
+
 
             </StackPanel>
 

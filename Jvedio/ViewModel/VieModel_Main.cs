@@ -1014,6 +1014,7 @@ namespace Jvedio.ViewModel
                 {
                     id = id,
                     vediotype = (int)vedioType,
+                    releasedate= "1900-01-01",
                     otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                 };
                 DataBase.InsertScanMovie(movie1);
@@ -1410,7 +1411,6 @@ namespace Jvedio.ViewModel
         //获得类别
         public void GetGenreList()
         {
-            //TextType = "类别";
             Statistic();
             List<Genre> Genres = DataBase.SelectGenreByVedioType(ClassifyVedioType);
             GenreList = new ObservableCollection<Genre>();

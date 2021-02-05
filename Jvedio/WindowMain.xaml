@@ -12,7 +12,8 @@
     xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
     x:Class="Jvedio.Main"
     mc:Ignorable="d"
-    Title="Jvedio" Height="600" Width="1100"
+    Title="Jvedio" 
+    Height="600" Width="1100"
     WindowStyle="None"
     ResizeMode="CanResize"
     AllowsTransparency="True"
@@ -67,7 +68,6 @@
         <local:LabelToListConverter x:Key="LabelToListConverter" />
         <local:PlusToVisibilityConverter x:Key="PlusToVisibilityConverter" />
         <BooleanToVisibilityConverter x:Key="bool2VisibilityConverter"/>
-
 
 
 
@@ -1221,7 +1221,7 @@
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
-                                    <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}"  Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch" />
+                                    <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}"  Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch"  />
 
                                     <Border x:Name="ImageSortBorder"   ToolTip="{x:Static lang:Resources.ImageType}" Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowImagePopup">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=image,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
@@ -1268,8 +1268,8 @@
                                     </Grid>
                                 </Popup>
 
-                                <Popup  HorizontalOffset="-40" x:Name="SortPopup" Placement="Bottom" PopupAnimation="Fade"  PlacementTarget="{Binding ElementName=SortBorder}" AllowsTransparency="True" StaysOpen="False" IsOpen="False">
-                                    <Grid    Margin="5"   >
+                                <Popup  HorizontalOffset="-40" x:Name="SortPopup"  Placement="Bottom" PopupAnimation="Fade"  PlacementTarget="{Binding ElementName=SortBorder}" AllowsTransparency="True" StaysOpen="False" IsOpen="False">
+                                    <Grid  Margin="5"   >
                                         <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
                                             <Border.Effect>
                                                 <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
@@ -1595,6 +1595,7 @@
                                         <Image  Style="{StaticResource ActorInfoImage}" DragOver="Image_DragOver" Drop="Image_Drop"  AllowDrop="True"   >
                                             <Image.ContextMenu>
                                                 <ContextMenu>
+                                                    <MenuItem Header="{x:Static lang:Resources.OpenPath}" Click="OpenActorPath"/>
                                                     <MenuItem Header="{x:Static lang:Resources.Clear}" Click="ClearActressInfo"/>
                                                 </ContextMenu>
                                             </Image.ContextMenu>
@@ -1765,7 +1766,7 @@
                                                                             <MenuItem Header="{x:Static lang:Resources.Menu_GenerateThumbnail}" Click="GenerateSmallImage" />
                                                                             <MenuItem Header="{x:Static lang:Resources.Menu_GenerateActressImage}" Click="GenerateActor" />
                                                                             <MenuItem Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" Click="GetScreenShot" />
-                                                                            <MenuItem Visibility="Collapsed" Header="{x:Static lang:Resources.Menu_GenerateGif}" Click="GetGif" />
+                                                                            <MenuItem  Header="{x:Static lang:Resources.Menu_GenerateGif}" Click="GetGif" />
                                                                             <MenuItem Header="{x:Static lang:Resources.Menu_RenameFile}" Click="RenameFile" />
                                                                             <MenuItem  Header="{x:Static lang:Resources.Menu_RemoveZero}" Click="ReMoveZero" />
                                                                         </MenuItem>

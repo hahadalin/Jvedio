@@ -9,6 +9,7 @@ using static Jvedio.GlobalVariable;
 using System.Windows.Shapes;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
+using System.Windows.Media.Animation;
 
 namespace Jvedio
 {
@@ -273,39 +274,25 @@ namespace Jvedio
             }
         }
 
-        public async void FadeIn()
+        public  void FadeIn()
         {
             if (Properties.Settings.Default.EnableWindowFade)
             {
-                this.Opacity = 0;
-                double opacity = this.Opacity;
-                await Task.Run(() => {
-                    while (opacity < 0.5)
-                    {
-                        this.Dispatcher.Invoke((Action)delegate { this.Opacity += 0.05; opacity = this.Opacity; });
-                        Task.Delay(1).Wait();
-                    }
-                });
+                var anim = new DoubleAnimation(0,1, (Duration)FadeInterval);
+                anim.Completed += (s, _) =>  this.Opacity = 1; 
+                this.BeginAnimation(UIElement.OpacityProperty, anim);
             }
-            this.Opacity = 1;
+            
         }
 
-        public async void FadeOut()
+        public  void FadeOut()
         {
             if (Properties.Settings.Default.EnableWindowFade)
             {
-                double opacity = this.Opacity;
-                await Task.Run(() => {
-                    while (opacity > 0.1)
-                    {
-                        this.Dispatcher.Invoke((Action)delegate { this.Opacity -= 0.05; opacity = this.Opacity; });
-                        Task.Delay(1).Wait();
-                    }
-                });
-                this.Opacity = 0;
+                var anim = new DoubleAnimation(0, (Duration)FadeInterval);
+                anim.Completed += (s, _) => this.Close();
+                this.BeginAnimation(UIElement.OpacityProperty, anim);
             }
-           
-            this.Close();
         }
 
 

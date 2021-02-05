@@ -300,46 +300,50 @@ namespace Jvedio
             {
                 if (vediotype == VedioType.欧美)
                 {
-                    if (GenreEurope[0].IndexOf(item.Key) > 0) { newgenre.theme.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreEurope[1].IndexOf(item.Key) > 0) { newgenre.role.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreEurope[2].IndexOf(item.Key) > 0) { newgenre.clothing.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreEurope[3].IndexOf(item.Key) > 0) { newgenre.body.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreEurope[4].IndexOf(item.Key) > 0) { newgenre.behavior.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreEurope[5].IndexOf(item.Key) > 0) { newgenre.playmethod.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreEurope[6].IndexOf(item.Key) > 0) { newgenre.other.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreEurope[7].IndexOf(item.Key) > 0) { newgenre.scene.Add(item.Key + "( " + item.Value + " )"); }
+                    if (GenreEurope[0].IndexOf(item.Key) > 0) { newgenre.theme.Add(item.Key + "( " + item.Value + " )");continue; }
+                    if (GenreEurope[1].IndexOf(item.Key) > 0) { newgenre.role.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreEurope[2].IndexOf(item.Key) > 0) { newgenre.clothing.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreEurope[3].IndexOf(item.Key) > 0) { newgenre.body.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreEurope[4].IndexOf(item.Key) > 0) { newgenre.behavior.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreEurope[5].IndexOf(item.Key) > 0) { newgenre.playmethod.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreEurope[6].IndexOf(item.Key) > 0) { newgenre.other.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreEurope[7].IndexOf(item.Key) > 0) { newgenre.scene.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    newgenre.other.Add(item.Key + "( " + item.Value + " )");
                 }
                 else if (vediotype == VedioType.骑兵)
                 {
-                    if (GenreCensored[0].IndexOf(item.Key) > 0) { newgenre.theme.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreCensored[1].IndexOf(item.Key) > 0) { newgenre.role.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreCensored[2].IndexOf(item.Key) > 0) { newgenre.clothing.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreCensored[3].IndexOf(item.Key) > 0) { newgenre.body.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreCensored[4].IndexOf(item.Key) > 0) { newgenre.behavior.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreCensored[5].IndexOf(item.Key) > 0) { newgenre.playmethod.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreCensored[6].IndexOf(item.Key) > 0) { newgenre.other.Add(item.Key + "( " + item.Value + " )"); }
+                    if (GenreCensored[0].IndexOf(item.Key) > 0) { newgenre.theme.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreCensored[1].IndexOf(item.Key) > 0) { newgenre.role.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreCensored[2].IndexOf(item.Key) > 0) { newgenre.clothing.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreCensored[3].IndexOf(item.Key) > 0) { newgenre.body.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreCensored[4].IndexOf(item.Key) > 0) { newgenre.behavior.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreCensored[5].IndexOf(item.Key) > 0) { newgenre.playmethod.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreCensored[6].IndexOf(item.Key) > 0) { newgenre.other.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    newgenre.other.Add(item.Key + "( " + item.Value + " )");
                 }
                 else if (vediotype == VedioType.步兵)
                 {
-                    if (GenreUncensored[0].IndexOf(item.Key) > 0) { newgenre.theme.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[1].IndexOf(item.Key) > 0) { newgenre.role.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[2].IndexOf(item.Key) > 0) { newgenre.clothing.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[3].IndexOf(item.Key) > 0) { newgenre.body.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[4].IndexOf(item.Key) > 0) { newgenre.behavior.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[5].IndexOf(item.Key) > 0) { newgenre.playmethod.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[6].IndexOf(item.Key) > 0) { newgenre.other.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[7].IndexOf(item.Key) > 0) { newgenre.scene.Add(item.Key + "( " + item.Value + " )"); }
+                    if (GenreUncensored[0].IndexOf(item.Key) > 0) { newgenre.theme.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[1].IndexOf(item.Key) > 0) { newgenre.role.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[2].IndexOf(item.Key) > 0) { newgenre.clothing.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[3].IndexOf(item.Key) > 0) { newgenre.body.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[4].IndexOf(item.Key) > 0) { newgenre.behavior.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[5].IndexOf(item.Key) > 0) { newgenre.playmethod.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[6].IndexOf(item.Key) > 0) { newgenre.other.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[7].IndexOf(item.Key) > 0) { newgenre.scene.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    newgenre.other.Add(item.Key + "( " + item.Value + " )");
                 }
                 else if (vediotype == VedioType.所有)
                 {
-                    if (GenreUncensored[0].IndexOf(item.Key) > 0 | GenreCensored[0].IndexOf(item.Key) > 0) { newgenre.theme.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[1].IndexOf(item.Key) > 0 | GenreCensored[1].IndexOf(item.Key) > 0) { newgenre.role.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[2].IndexOf(item.Key) > 0 | GenreCensored[2].IndexOf(item.Key) > 0) { newgenre.clothing.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[3].IndexOf(item.Key) > 0 | GenreCensored[3].IndexOf(item.Key) > 0) { newgenre.body.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[4].IndexOf(item.Key) > 0 | GenreCensored[4].IndexOf(item.Key) > 0) { newgenre.behavior.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[5].IndexOf(item.Key) > 0 | GenreCensored[5].IndexOf(item.Key) > 0) { newgenre.playmethod.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[6].IndexOf(item.Key) > 0 | GenreCensored[6].IndexOf(item.Key) > 0) { newgenre.other.Add(item.Key + "( " + item.Value + " )"); }
-                    if (GenreUncensored[7].IndexOf(item.Key) > 0) { newgenre.scene.Add(item.Key + "( " + item.Value + " )"); }
+                    if (GenreUncensored[0].IndexOf(item.Key) > 0 | GenreCensored[0].IndexOf(item.Key) > 0) { newgenre.theme.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[1].IndexOf(item.Key) > 0 | GenreCensored[1].IndexOf(item.Key) > 0) { newgenre.role.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[2].IndexOf(item.Key) > 0 | GenreCensored[2].IndexOf(item.Key) > 0) { newgenre.clothing.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[3].IndexOf(item.Key) > 0 | GenreCensored[3].IndexOf(item.Key) > 0) { newgenre.body.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[4].IndexOf(item.Key) > 0 | GenreCensored[4].IndexOf(item.Key) > 0) { newgenre.behavior.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[5].IndexOf(item.Key) > 0 | GenreCensored[5].IndexOf(item.Key) > 0) { newgenre.playmethod.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[6].IndexOf(item.Key) > 0 | GenreCensored[6].IndexOf(item.Key) > 0) { newgenre.other.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    if (GenreUncensored[7].IndexOf(item.Key) > 0) { newgenre.scene.Add(item.Key + "( " + item.Value + " )"); continue; }
+                    newgenre.other.Add(item.Key + "( " + item.Value + " )");
                 }
             }
             result.Add(newgenre);

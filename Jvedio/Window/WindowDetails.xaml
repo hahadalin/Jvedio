@@ -340,7 +340,6 @@
                                             <MenuItem Header="Gif" Click="OpenImagePath"   ></MenuItem>
                                             <MenuItem Header="{x:Static lang:Resources.Preview}" Click="OpenImagePath"   ></MenuItem>
                                             <MenuItem Header="{x:Static lang:Resources.ScreenShot}" Click="OpenImagePath"   ></MenuItem>
-                                            <MenuItem Header="{x:Static lang:Resources.Actor}" Click="OpenImagePath"   ></MenuItem>
                                         </MenuItem>
 
                                         <MenuItem Header="{x:Static lang:Resources.Menu_AddToList}"   Name="ListMenuItem"   />

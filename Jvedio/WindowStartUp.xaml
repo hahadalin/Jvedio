@@ -108,7 +108,7 @@
 
         <Style x:Key="DBBorder" TargetType="{x:Type Border}">
             <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="{DynamicResource BackgroundSide}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Style.Triggers>

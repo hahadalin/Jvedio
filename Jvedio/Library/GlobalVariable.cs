@@ -71,6 +71,8 @@ namespace Jvedio
         public static BitmapImage DefaultBigImage;
         public static BitmapImage DefaultActorImage;
 
+        public static TimeSpan FadeInterval = TimeSpan.FromMilliseconds(150);
+
         #region "热键"
         [DllImport("user32.dll")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);

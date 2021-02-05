@@ -293,6 +293,10 @@ namespace Jvedio
     public class ScreenShot
     {
         public event EventHandler SingleScreenShotCompleted;
+
+        public Semaphore SemaphoreScreenShot;
+        public int ScreenShotCurrent = 0;
+        public object ScreenShotLockObject = 0;
         public void BeginScreenShot(object o)
         {
             List<object> list = o as List<object>;
@@ -331,9 +335,40 @@ namespace Jvedio
         }
 
 
-        public Semaphore SemaphoreScreenShot;
-        public int ScreenShotCurrent = 0;
-        public object ScreenShotLockObject = 0;
+        public async Task<bool> BeginGenGif(object o)
+        {
+            return await Task.Run(() => { 
+                object[] list = o as object[];
+                string cutoffTime = list[0] as string;
+                string filePath = list[1] as string;
+                string GifPath = list[2] as string;
+
+                if (string.IsNullOrEmpty(cutoffTime)) return false;
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                p.StartInfo.FileName = "cmd.exe";
+                p.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
+                p.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
+                p.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
+                p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
+                p.StartInfo.CreateNoWindow = true;//不显示程序窗口
+                p.Start();//启动程序
+
+                string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t 5 -ss {cutoffTime} -i \"{filePath}\" -s 280x170  \"{GifPath}\"";
+                Console.WriteLine(str);
+
+
+                p.StandardInput.WriteLine(str + "&exit");
+                p.StandardInput.AutoFlush = true;
+                string output = p.StandardOutput.ReadToEnd();
+                p.WaitForExit();//等待程序执行完退出进程
+                p.Close();
+                SingleScreenShotCompleted?.Invoke(this, new ScreenShotEventArgs(str, GifPath));
+                return true;
+            });
+        }
+
+
+
 
         public async Task<(bool, string)> AsyncScreenShot(Movie movie)
         {
@@ -346,9 +381,7 @@ namespace Jvedio
 
                 int num = Properties.Settings.Default.ScreenShot_ThreadNum;
                 string ScreenShotPath = "";
-                //if (Properties.Settings.Default.ScreenShotToExtraPicPath) ScreenShotPath = BasePicPath + "ExtraPic\\" + movie.id;
-                //else 
-                    ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
+                ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
 
                 if (!Directory.Exists(ScreenShotPath)) Directory.CreateDirectory(ScreenShotPath);
 
@@ -387,6 +420,37 @@ namespace Jvedio
                     break;
                 }
             }
+            return (result, message);
+        }
+
+
+        public async Task<(bool, string)> AsyncGenrateGif(Movie movie)
+        {
+            bool result = true;
+            string message = "";
+            string GifPath = "";
+
+            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = "未配置 FFmpeg.exe 路径"; return (result, message); }
+
+            int num = Properties.Settings.Default.ScreenShot_ThreadNum;
+                
+            GifPath = BasePicPath + "Gif\\" + movie.id +".gif";
+
+            if (!Directory.Exists(BasePicPath + "Gif\\")) Directory.CreateDirectory(BasePicPath + "Gif\\");
+
+            string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
+            if (cutoffArray.Length == 0) { result = false; message = "未成功分割影片截图"; return (result, message); }
+            string cutofftime = cutoffArray[new Random().Next(cutoffArray.Length-1)];
+            object[] list = new object[] { cutofftime, movie.filepath, GifPath };
+
+            await BeginGenGif(list);
+
+            if (!File.Exists(GifPath))
+            {
+                result = false;
+                message = $"未成功生成 {GifPath}";
+            }
+            
             return (result, message);
         }
     }

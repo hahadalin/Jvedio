@@ -46,7 +46,7 @@
 
 
 
-            <TabControl Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl" Grid.Row="0" Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
+            <TabControl  Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl" Grid.Row="0" Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
                 <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.VedioScan}" HorizontalAlignment="Left" Height="auto" VerticalAlignment="Top" Width="auto">
                     <Grid Background="Transparent">
                         <StackPanel Orientation="Vertical">
@@ -84,6 +84,10 @@
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox x:Name="ScanAll" Content="{x:Static lang:Resources.ScanAllFile}"/>
                                     <fa:ImageAwesome Margin="10 0" Icon="Shield" Height="20" Width="auto" Foreground="{DynamicResource ForegroundSearch}"/>
+                                    <TextBlock   Foreground="{DynamicResource ForegroundSearch}" FontSize="20" VerticalAlignment="Center" Margin="20 5" Visibility="Visible" Text="{x:Static lang:Resources.ScanAllAttention}"  HorizontalAlignment="Stretch"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"/>
+
+
+                                    <TextBlock />
                                 </StackPanel>
                             </StackPanel>
 
@@ -308,7 +312,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Button   Content="{x:Static lang:Resources.ViewLog}"  Style="{StaticResource ButtonStyleFill}" Margin="5" Click="ShowRunInfo" HorizontalAlignment="Left"/>
                     <TextBlock x:Name="StatusTextBlock" Foreground="{DynamicResource ForegroundSearch}" FontSize="20" VerticalAlignment="Center" Margin="20 5" Visibility="Visible" Text="{x:Static lang:Resources.Scanning}"  HorizontalAlignment="Stretch"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"/>
-                    <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}" Height="30"  x:Name="LoadingStackPanel"/>
+                    <hc:LoadingCircle IsVisibleChanged="LoadingStackPanel_IsVisibleChanged" Foreground="{DynamicResource ForegroundGlobal}" Height="30"  x:Name="LoadingStackPanel"/>
                 </StackPanel>
                  <Button  Content="{x:Static lang:Resources.Run}"   Style="{StaticResource ButtonStyleFill}" Margin="5" Click="StartRun"/>
                 <Button  Content="{x:Static lang:Resources.Stop}"   Style="{StaticResource ButtonStyleFill}" Margin="120 5" Click="CancelRun"/>

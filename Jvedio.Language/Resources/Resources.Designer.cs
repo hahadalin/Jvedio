@@ -952,6 +952,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 回车分割 的本地化字符串。
+        /// </summary>
+        public static string EnterSplit {
+            get {
+                return ResourceManager.GetString("EnterSplit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 欧美 的本地化字符串。
         /// </summary>
         public static string Europe {
@@ -2977,6 +2986,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 以管理员模式启动后生效（然后不以管理员模式才能拖入文件夹） 的本地化字符串。
+        /// </summary>
+        public static string ScanAllAttention {
+            get {
+                return ResourceManager.GetString("ScanAllAttention", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 全盘扫描（Everything引擎极速扫描） 的本地化字符串。
         /// </summary>
         public static string ScanAllFile {
@@ -3585,6 +3603,15 @@ namespace Jvedio.Language {
         public static string SuccessDelete {
             get {
                 return ResourceManager.GetString("SuccessDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 成功生成 GIF 到 的本地化字符串。
+        /// </summary>
+        public static string SuccessGifTo {
+            get {
+                return ResourceManager.GetString("SuccessGifTo", resourceCulture);
             }
         }
         

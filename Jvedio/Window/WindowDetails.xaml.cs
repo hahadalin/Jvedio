@@ -811,7 +811,6 @@ namespace Jvedio
                     else if (index == 3) { filepath = BasePicPath + $"Gif\\{detailMovie.id}.gif"; }
                     else if (index == 4) { filepath = BasePicPath + $"ExtraPic\\{detailMovie.id}\\"; }
                     else if (index == 5) { filepath = BasePicPath + $"ScreenShot\\{detailMovie.id}\\"; }
-                    else if (index == 6) { if (detailMovie.actor.Length > 0) filepath = BasePicPath + $"Actresses\\{detailMovie.actor.Split(actorSplitDict[detailMovie.vediotype])[0]}.jpg"; else filepath = ""; }
 
                     if (index == 4 | index == 5)
                     {
@@ -1808,7 +1807,7 @@ namespace Jvedio
                     if ((bool)ExtraImageRadioButton.IsChecked) await LoadImage();
                     else await LoadScreenShotImage();
                     SetStatus(true);
-                    Task.Run(() => {
+                    await Task.Run(() => {
                         vieModel.VedioInfo = MediaParse.GetMediaInfo(vieModel.DetailMovie.filepath);
                     });
                 };
@@ -1886,7 +1885,7 @@ namespace Jvedio
             await Task.Run(async() => {
                 foreach (var path in imagePathList)
                 {
-                    if (Path.GetDirectoryName(path).Split('\\').Last().ToUpper() != vieModel.DetailMovie.id) break;
+                    if (Path.GetDirectoryName(path).Split('\\').Last().ToUpper() != vieModel.DetailMovie.id.ToUpper()) break;
                     await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraImageDelegate(LoadExtraImage), GetExtraImage(path));
                     await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadExtraPathDelegate(LoadExtraPath), path);
 
