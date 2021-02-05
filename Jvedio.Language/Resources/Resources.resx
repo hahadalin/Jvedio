@@ -1455,4 +1455,28 @@
   <data name="ActorNumberPerPage" xml:space="preserve">
     <value>每页演员数目</value>
   </data>
+  <data name="Other" xml:space="preserve">
+    <value>其他</value>
+  </data>
+  <data name="Scene" xml:space="preserve">
+    <value>场景</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>玩法</value>
+  </data>
+  <data name="Behaviour" xml:space="preserve">
+    <value>行为</value>
+  </data>
+  <data name="Body" xml:space="preserve">
+    <value>体型</value>
+  </data>
+  <data name="Clothing" xml:space="preserve">
+    <value>服装</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>主题</value>
+  </data>
 </root>

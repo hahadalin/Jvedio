@@ -432,8 +432,9 @@ namespace Jvedio
             }
             //AsyncLoadImage();
             this.DataContext = vieModel;
+
             vieModel.CurrentMovieListHideOrChanged += (s, ev) => { StopDownLoad(); };
-            vieModel.CurrentMovieListChangedCompleted += (s, ev) =>
+            vieModel.MovieFlipOverCompleted += (s, ev) =>
             {
                 //等待加载
                     Dispatcher.BeginInvoke((Action)delegate
@@ -443,7 +444,28 @@ namespace Jvedio
                         if (Properties.Settings.Default.EditMode) SetSelected();
                         if (Properties.Settings.Default.ShowImageMode == "2") ImageSlideTimer.Start();//0.5s后开始展示预览图
                         SetLoadingStatus(false);
+
+
+
                     }, DispatcherPriority.ContextIdle, null);
+            };
+
+            vieModel.ActorFlipOverCompleted += (s, ev) =>
+            {
+                //等待加载
+                Dispatcher.BeginInvoke((Action)delegate
+                {
+                    vieModel.ActorCurrentCount = vieModel.CurrentActorList.Count;
+                    vieModel.ActorTotalCount = vieModel.ActorList.Count;
+                    if (Properties.Settings.Default.ActorEditMode) ActorSetSelected();
+                    SetActorLoadingStatus(false);
+
+                    //Grid grid = (Grid)ActorItemsControl.Parent;
+                    //TabItem tabItem = (TabItem)grid.Parent;
+                    //var scrollViewer = this.FindVisualChildOrContentByType<ScrollViewer>(tabItem);
+                    //scrollViewer.ScrollToTop();
+
+                }, DispatcherPriority.ContextIdle, null);
             };
 
 
@@ -473,6 +495,22 @@ namespace Jvedio
             vieModel.IsFlipOvering = loading;
             SideBorder.IsEnabled = !loading;
             ToolsGrid.IsEnabled = !loading;
+        }
+
+
+        public void SetActorLoadingStatus(bool loading)
+        {
+            if (loading)
+            {
+                LoadingActorGrid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LoadingActorGrid.Visibility = Visibility.Hidden;
+            }
+            ActorPageStackPanel.IsEnabled = !loading;
+            SideBorder.IsEnabled = !loading;
+            ActorToolsGrid.IsEnabled = !loading;
         }
 
 
@@ -1556,16 +1594,17 @@ namespace Jvedio
                     Border border = grid.Children[0] as Border;
                     if (c.ContentTemplate.FindName("ActorNameTextBox", c) is TextBox textBox)
                     {
-                        DropShadowEffect dropShadowEffect = new DropShadowEffect() { Color = Colors.SkyBlue, BlurRadius = 10, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
-                        border.Effect = dropShadowEffect;
-                        //border.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
+                        //DropShadowEffect dropShadowEffect = new DropShadowEffect() { Color = Colors.SkyBlue, BlurRadius = 10, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
+                        //border.Effect = dropShadowEffect;
+                        border.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
                         foreach (Actress actress in SelectedActress)
                         {
                             if (actress.name == textBox.Text.Split('(')[0])
                             {
-                                //border.Background = Brushes.LightGreen; break;
-                                dropShadowEffect = new DropShadowEffect() { Color = Colors.OrangeRed, BlurRadius = 10, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
-                                border.Effect = dropShadowEffect;
+                                border.Background = (SolidColorBrush)Application.Current.Resources["Selected_Background"];
+                                break;
+                                //dropShadowEffect = new DropShadowEffect() { Color = Colors.OrangeRed, BlurRadius = 10, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
+                                //border.Effect = dropShadowEffect;
                             }
                         }
                     }
@@ -1577,22 +1616,21 @@ namespace Jvedio
 
         public void BorderMouseEnter(object sender, RoutedEventArgs e)
         {
+
             if (Properties.Settings.Default.EditMode)
             {
-
                 Image image = sender as Image;
                 Grid grid = image.Parent as Grid;
                 StackPanel stackPanel = grid.Parent as StackPanel;
                 Grid grid1 = stackPanel.Parent as Grid;
                 Border border = grid1.Children[0] as Border;
-
                 border.BorderBrush = (SolidColorBrush)Application.Current.Resources["Selected_BorderBrush"];
             }
-
         }
 
         public void BorderMouseLeave(object sender, RoutedEventArgs e)
         {
+
             if (Properties.Settings.Default.EditMode)
             {
                 Image image = sender as Image;
@@ -1600,7 +1638,6 @@ namespace Jvedio
                 StackPanel stackPanel = grid.Parent as StackPanel;
                 Grid grid1 = stackPanel.Parent as Grid;
                 Border border = grid1.Children[0] as Border;
-
                 border.BorderBrush = Brushes.Transparent;
             }
         }
@@ -1609,9 +1646,16 @@ namespace Jvedio
 
         public void ActorBorderMouseEnter(object sender, RoutedEventArgs e)
         {
-            if (!Properties.Settings.Default.ActorEditMode)
+            Image image = sender as Image;
+            StackPanel stackPanel = image.Parent as StackPanel;
+            Border border = ((Grid)stackPanel.Parent).Children[0] as Border;
+            if (Properties.Settings.Default.ActorEditMode)
             {
-                Border border = sender as Border;
+
+                border.BorderBrush = (SolidColorBrush)Application.Current.Resources["Selected_BorderBrush"];
+            }
+            else
+            {
                 border.Background = (SolidColorBrush)Application.Current.Resources["BackgroundTitle"];
             }
 
@@ -1619,21 +1663,25 @@ namespace Jvedio
 
         public void ActorBorderMouseLeave(object sender, RoutedEventArgs e)
         {
-            if (!Properties.Settings.Default.ActorEditMode)
+            Image image = sender as Image;
+            StackPanel stackPanel = image.Parent as StackPanel;
+            Border border = ((Grid)stackPanel.Parent).Children[0] as Border;
+            if (Properties.Settings.Default.ActorEditMode)
             {
-                Border border = sender as Border;
+                border.BorderBrush = Brushes.Transparent;
+            }
+            else
+            {
                 border.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
             }
         }
 
         public void ShowSameActor(object sender, MouseButtonEventArgs e)
         {
-            Border border = sender as Border;
-            StackPanel sp = border.Child as StackPanel;
-            TextBox textBox = sp.Children.OfType<TextBox>().First();
+            Image image = sender as Image;
+            StackPanel stackPanel = image.Parent as StackPanel;
+            TextBox textBox = stackPanel.Children.OfType<TextBox>().First();
             string name = textBox.Text.Split('(')[0];
-
-
             if (Properties.Settings.Default.ActorEditMode)
             {
                 foreach (Actress actress in vieModel.ActorList)
@@ -3693,16 +3741,57 @@ namespace Jvedio
                 vieModel.CurrentActorPage -= 1;
             vieModel.ActorFlipOver();
 
+
         }
 
-        private void NextActorPage(object sender, MouseButtonEventArgs e)
+        private  void NextActorPage(object sender, MouseButtonEventArgs e)
         {
             if (vieModel.TotalActorPage <= 1) return;
             if (vieModel.CurrentActorPage + 1 > vieModel.TotalActorPage)
                 vieModel.CurrentActorPage = 1;
             else
                 vieModel.CurrentActorPage += 1;
-            vieModel.ActorFlipOver();
+             vieModel.ActorFlipOver();
+        }
+
+
+
+        public T FindVisualChildOrContentByType<T>(DependencyObject parent)
+       where T : DependencyObject
+        {
+            if (parent == null)
+            {
+                return null;
+            }
+
+            if (parent.GetType() == typeof(T))
+            {
+                return parent as T;
+            }
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child.GetType() == typeof(T))
+                {
+                    return child as T;
+                }
+                else
+                {
+                    T result = FindVisualChildOrContentByType<T>(child);
+                    if (result != null)
+                        return result;
+                }
+            }
+
+            if (parent is ContentControl contentControl)
+            {
+                return this.FindVisualChildOrContentByType<T>(contentControl.Content as DependencyObject);
+            }
+
+            return null;
+
         }
 
 

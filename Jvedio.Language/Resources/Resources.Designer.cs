@@ -439,6 +439,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 行为 的本地化字符串。
+        /// </summary>
+        public static string Behaviour {
+            get {
+                return ResourceManager.GetString("Behaviour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 降序 的本地化字符串。
         /// </summary>
         public static string BigToSmall {
@@ -462,6 +471,15 @@ namespace Jvedio.Language {
         public static string BitRate {
             get {
                 return ResourceManager.GetString("BitRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 体型 的本地化字符串。
+        /// </summary>
+        public static string Body {
+            get {
+                return ResourceManager.GetString("Body", resourceCulture);
             }
         }
         
@@ -588,6 +606,15 @@ namespace Jvedio.Language {
         public static string CloseToBar {
             get {
                 return ResourceManager.GetString("CloseToBar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 服装 的本地化字符串。
+        /// </summary>
+        public static string Clothing {
+            get {
+                return ResourceManager.GetString("Clothing", resourceCulture);
             }
         }
         
@@ -2536,6 +2563,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 其他 的本地化字符串。
+        /// </summary>
+        public static string Other {
+            get {
+                return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 其他任务正在进行 的本地化字符串。
         /// </summary>
         public static string OtherTaskIsRunning {
@@ -2586,6 +2622,15 @@ namespace Jvedio.Language {
         public static string Picture {
             get {
                 return ResourceManager.GetString("Picture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 玩法 的本地化字符串。
+        /// </summary>
+        public static string Play {
+            get {
+                return ResourceManager.GetString("Play", resourceCulture);
             }
         }
         
@@ -2806,6 +2851,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 角色 的本地化字符串。
+        /// </summary>
+        public static string Role {
+            get {
+                return ResourceManager.GetString("Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 执行 的本地化字符串。
         /// </summary>
         public static string Run {
@@ -2982,6 +3036,15 @@ namespace Jvedio.Language {
         public static string ScanWhenRefresh {
             get {
                 return ResourceManager.GetString("ScanWhenRefresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 场景 的本地化字符串。
+        /// </summary>
+        public static string Scene {
+            get {
+                return ResourceManager.GetString("Scene", resourceCulture);
             }
         }
         
@@ -3612,6 +3675,15 @@ namespace Jvedio.Language {
         public static string Thanks_Content2 {
             get {
                 return ResourceManager.GetString("Thanks_Content2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 主题 的本地化字符串。
+        /// </summary>
+        public static string Theme {
+            get {
+                return ResourceManager.GetString("Theme", resourceCulture);
             }
         }
         

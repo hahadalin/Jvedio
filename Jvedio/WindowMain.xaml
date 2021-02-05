@@ -78,6 +78,10 @@
         </Style>
 
         <Style x:Key="ActorImage" TargetType="{x:Type Image}">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="AllowDrop" Value="True"/>
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="Width" Value="100"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="10 20"/>
             <Setter Property="Source" Value="{Binding smallimage}" />
@@ -425,10 +429,6 @@
         </Style>
 
         <Style x:Key="ActorBorder" TargetType="{x:Type Border}">
-            <Setter Property="Width" Value="auto" />
-            <Setter Property="Height" Value="auto" />
-            <Setter Property="Background" Value="{DynamicResource BackgroundSide}" />
-            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
@@ -1124,7 +1124,7 @@
                     <Rectangle  IsEnabled="True" MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="6" x:Name="DragRectangle" Margin="0 0 -3 0" />
 
                     <!--影片-->
-                    <Grid     x:Name="Grid_Movie" Visibility="Visible"   MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="1"  >
+                    <Grid     x:Name="Grid_Movie" Visibility="Hidden"   MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="1"  >
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -2020,7 +2020,7 @@
 
 
                     <!--演员、类别、标签-->
-                    <Grid Grid.Column="1" Visibility="Hidden" x:Name="Grid_Classify" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" PreviewKeyDown="ActorGrid_PreviewKeyDown"  >
+                    <Grid Grid.Column="1" Visibility="Visible" x:Name="Grid_Classify" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" PreviewKeyDown="ActorGrid_PreviewKeyDown"  >
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -2028,8 +2028,40 @@
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
 
+
+                        <!--等待-->
+                        <Grid Grid.Row="1" x:Name="LoadingActorGrid" Visibility="Visible" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Grid MinWidth="150" MaxWidth="250"   >
+                                <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
+                                    <Border.Effect>
+                                        <BlurEffect Radius="4" KernelType="Box"  RenderingBias="Quality"/>
+                                    </Border.Effect>
+                                </Border>
+
+                                <Border CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5"  >
+
+                                    <Grid Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"  >
+                                            <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
+                                            <TextBox Background="Transparent" Margin="5" BorderThickness="0" MaxHeight="300" Grid.Row="0"   HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Loading}" />
+
+                                        </StackPanel >
+
+
+                                    </Grid>
+
+
+                                </Border>
+                            </Grid>
+
+                        </Grid>
+
                         <!--工具栏-->
-                        <Grid Background="{DynamicResource BackgroundMain}" PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown"  Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                        <Grid x:Name="ActorToolsGrid" Background="{DynamicResource BackgroundMain}" PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown"  Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
 
                             <StackPanel  Orientation="Horizontal">
 
@@ -2107,36 +2139,44 @@
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </EventTrigger>
+                                                    <EventTrigger   RoutedEvent="FrameworkElement.Unloaded">
+                                                        <BeginStoryboard  >
+                                                            <Storyboard   AutoReverse="False" >
+                                                                <DoubleAnimationUsingKeyFrames    Storyboard.TargetName="ActorWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                    <EasingDoubleKeyFrame KeyTime="0" Value="1" />
+                                                                    <EasingDoubleKeyFrame   KeyTime="0:0:0.25" Value="0" />
+                                                                </DoubleAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
                                                 </DataTemplate.Triggers>
 
                                                 <WrapPanel x:Name="ActorWrapPanel">
                                                     <Grid Margin="5">
-                                                        <Border  Style="{StaticResource ActorBorder}" MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave" CornerRadius="5">
+                                                        <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="5" MinHeight="250" >
                                                             <Border.Effect>
                                                                 <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                             </Border.Effect>
-                                                            <StackPanel Orientation="Vertical">
-                                                                <Image x:Name="ActorImage"  Height="100" Width="100" Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver" AllowDrop="True" Drop="ActorImage_Drop"  />
-                                                                <TextBox x:Name="ActorNameTextBox" TextAlignment="Center" Margin="10 5" Foreground="{DynamicResource ForegroundGlobal}" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
-                                                                    <TextBox.Text>
-                                                                        <MultiBinding StringFormat="{}{0}({1})">
-                                                                            <Binding Path="name" />
-                                                                            <Binding Path="num" />
-                                                                            <!--<Binding trace:PresentationTraceSources.TraceLevel="High"></Binding>-->
-                                                                        </MultiBinding>
-                                                                    </TextBox.Text>
-                                                                </TextBox>
-                                                                <TextBlock Text="{Binding id}" Visibility="Collapsed"/>
-                                                                <StackPanel.ContextMenu>
-                                                                    <ContextMenu>
-                                                                        <MenuItem Header="{x:Static lang:Resources.SyncInfo}" Icon="pack://application:,,,/Resources/menuitem/download.png" Click="DownLoadSelectedActor" />
-                                                                        <MenuItem Header="{x:Static lang:Resources.AddToFavorites}" Icon="pack://application:,,,/Resources/menuitem/like.png" Click="LikeSelectedActor" />
-                                                                    </ContextMenu>
-                                                                </StackPanel.ContextMenu>
-                                                            </StackPanel>
-
-
                                                         </Border>
+                                                        <StackPanel Orientation="Vertical" Margin="10">
+                                                            <Image x:Name="ActorImage" MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave"  Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver"  Drop="ActorImage_Drop"  />
+                                                            <TextBox x:Name="ActorNameTextBox" TextAlignment="Center" MaxHeight="80" Margin="10 5" Foreground="{DynamicResource ForegroundGlobal}" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
+                                                                <TextBox.Text>
+                                                                    <MultiBinding StringFormat="{}{0}({1})">
+                                                                        <Binding Path="name" />
+                                                                        <Binding Path="num" />
+                                                                        <!--<Binding trace:PresentationTraceSources.TraceLevel="High"></Binding>-->
+                                                                    </MultiBinding>
+                                                                </TextBox.Text>
+                                                            </TextBox>
+                                                            <TextBlock Text="{Binding id}" Visibility="Collapsed"/>
+                                                            <StackPanel.ContextMenu>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="{x:Static lang:Resources.SyncInfo}" Icon="pack://application:,,,/Resources/menuitem/download.png" Click="DownLoadSelectedActor" />
+                                                                    <MenuItem Header="{x:Static lang:Resources.AddToFavorites}" Icon="pack://application:,,,/Resources/menuitem/like.png" Click="LikeSelectedActor" />
+                                                                </ContextMenu>
+                                                            </StackPanel.ContextMenu>
+                                                        </StackPanel>
                                                     </Grid>
                                                 </WrapPanel>
                                             </DataTemplate>
@@ -2156,7 +2196,7 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel>
-                                                    <TextBlock Style="{StaticResource GenTitle}" Text="主题" />
+                                                    <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Theme}" />
                                                     <ItemsControl ItemsSource="{Binding theme}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -2173,7 +2213,7 @@
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
-                                                    <TextBlock Style="{StaticResource GenTitle}" Text="角色" />
+                                                    <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Role}" />
                                                     <ItemsControl ItemsSource="{Binding role}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -2190,7 +2230,7 @@
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
-                                                    <TextBlock Style="{StaticResource GenTitle}" Text="服装" />
+                                                    <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Clothing}" />
                                                     <ItemsControl ItemsSource="{Binding clothing}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -2207,7 +2247,7 @@
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
-                                                    <TextBlock Style="{StaticResource GenTitle}" Text="体型" />
+                                                    <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Body}" />
                                                     <ItemsControl ItemsSource="{Binding body}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -2224,7 +2264,7 @@
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
-                                                    <TextBlock Style="{StaticResource GenTitle}" Text="行为" />
+                                                    <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Behaviour}" />
                                                     <ItemsControl ItemsSource="{Binding behavior}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -2241,7 +2281,7 @@
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
-                                                    <TextBlock Style="{StaticResource GenTitle}" Text="玩法" />
+                                                    <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Play}" />
                                                     <ItemsControl ItemsSource="{Binding playmethod}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -2258,7 +2298,7 @@
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
-                                                    <TextBlock Style="{StaticResource GenTitle}" Text="场景" />
+                                                    <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Scene}" />
                                                     <ItemsControl ItemsSource="{Binding scene}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -2275,7 +2315,7 @@
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
-                                                    <TextBlock Style="{StaticResource GenTitle}" Text="其他" />
+                                                    <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Other}" />
                                                     <ItemsControl ItemsSource="{Binding other}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -2317,7 +2357,32 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <WrapPanel>
+                                                <DataTemplate.Triggers >
+                                                    <EventTrigger   RoutedEvent="FrameworkElement.Loaded">
+                                                        <BeginStoryboard  >
+                                                            <Storyboard   AutoReverse="False" >
+                                                                <DoubleAnimationUsingKeyFrames    Storyboard.TargetName="LabelWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                    <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+                                                                    <EasingDoubleKeyFrame x:Name="EasingDoubleKeyFrame_2"  KeyTime="0:0:0.25" Value="1" />
+                                                                </DoubleAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger   RoutedEvent="FrameworkElement.Unloaded">
+                                                        <BeginStoryboard  >
+                                                            <Storyboard   AutoReverse="False" >
+                                                                <DoubleAnimationUsingKeyFrames    Storyboard.TargetName="LabelWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                    <EasingDoubleKeyFrame KeyTime="0" Value="1" />
+                                                                    <EasingDoubleKeyFrame   KeyTime="0:0:0.25" Value="0" />
+                                                                </DoubleAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </DataTemplate.Triggers>
+
+
+
+                                                <WrapPanel x:Name="LabelWrapPanel">
                                                     <Border  Style="{StaticResource GenBorder}">
                                                         <Grid>
                                                             <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Label_MouseDown"/>
@@ -2344,6 +2409,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
 
 
@@ -2358,8 +2424,23 @@
                                 <ProgressBar x:Name="ActorProgressBar" Grid.Column="0" Background="{DynamicResource BackgroundSide}" ValueChanged="ActorProgressBar_ValueChanged"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"        Value="50"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"    Maximum="100" Minimum="0"  />
                                 <TextBox x:Name="ActorProgressTextBox"    Grid.Column="1" Text="50%" Visibility="{Binding ElementName=ActorProgressBar,Path=Visibility}" Style="{StaticResource BaseTextBox}" Margin="5 0"/>
                             </Grid>
+
+
+                            <!--当前页信息-->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right"  >
+                                <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=info,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" HorizontalAlignment="Left" Height="27" Margin="5"/>
+                                <TextBlock   Margin="10 0" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0}/{1} ">
+                                            <Binding Path="ActorCurrentCount" />
+                                            <Binding Path="ActorTotalCount" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+
                             <!--页码-->
-                            <StackPanel Grid.Column="1"  Visibility="Visible" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
+                            <StackPanel x:Name="ActorPageStackPanel"  Grid.Column="2"  Visibility="Visible" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
 
                                 <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousActorPage"    Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.PreviewPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />

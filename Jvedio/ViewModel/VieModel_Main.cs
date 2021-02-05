@@ -33,7 +33,8 @@ namespace Jvedio.ViewModel
     {
         public event EventHandler CurrentMovieListHideOrChanged;
         public event EventHandler CurrentActorListHideOrChanged;
-        public event EventHandler CurrentMovieListChangedCompleted;
+        public event EventHandler MovieFlipOverCompleted;
+        public event EventHandler ActorFlipOverCompleted;
 
         public bool IsFlipOvering = false;
         public VedioType CurrentVedioType = VedioType.所有;
@@ -602,6 +603,33 @@ namespace Jvedio.ViewModel
         }
 
 
+
+        public double _ActorCurrentCount = 0;
+        public double ActorCurrentCount
+        {
+            get { return _ActorCurrentCount; }
+            set
+            {
+                _ActorCurrentCount = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+
+        public double _ActorTotalCount = 0;
+        public double ActorTotalCount
+        {
+            get { return _ActorTotalCount; }
+            set
+            {
+                _ActorTotalCount = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+
         public int currentactorpage = 1;
         public int CurrentActorPage
         {
@@ -1112,7 +1140,7 @@ namespace Jvedio.ViewModel
                 {
                     if (GetWindowByName("Main") is Main main)
                     {
-                        CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
+                        MovieFlipOverCompleted?.Invoke(this, EventArgs.Empty);
                     }
 
                 });
@@ -1127,6 +1155,17 @@ namespace Jvedio.ViewModel
             for (int i = CurrentMovieList.Count-1; i >=0; i--)
             {
                 await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new RemoveItemDelegate(RemoveMovie), CurrentMovieList[i]);
+            }
+            return true;
+        }
+
+
+        public async Task<bool> ClearCurrentActorList()
+        {
+            if (CurrentActorList == null) CurrentActorList = new ObservableCollection<Actress>();
+            for (int i = CurrentActorList.Count - 1; i >= 0; i--)
+            {
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new RemoveActorDelegate(RemoveActor), CurrentActorList[i]);
             }
             return true;
         }
@@ -1150,14 +1189,17 @@ namespace Jvedio.ViewModel
         }
 
 
-        public void ActorFlipOver()
+        public  bool ActorFlipOver()
         {
-            stopwatch.Restart();
-            if (ActorList != null)
-            {
-                TotalActorPage = (int)Math.Ceiling((double)ActorList.Count / (double)Properties.Settings.Default.ActorDisplayNum);
 
-                //只在翻页时加载图片、显示翻译结果
+            if (ActorList == null) return false;
+            Task.Run(async () => {
+
+                await App.Current.Dispatcher.BeginInvoke((Action)delegate {
+                    ((Main)GetWindowByName("Main")).SetActorLoadingStatus(true);
+                });
+
+                TotalActorPage = (int)Math.Ceiling((double)ActorList.Count / (double)Properties.Settings.Default.ActorDisplayNum);
                 int ActorDisplayNum = Properties.Settings.Default.ActorDisplayNum;
                 List<Actress> actresses = new List<Actress>();
                 for (int i = (CurrentActorPage - 1) * ActorDisplayNum; i < CurrentActorPage * ActorDisplayNum; i++)
@@ -1171,22 +1213,23 @@ namespace Jvedio.ViewModel
                     else { break; }
                     if (actresses.Count == ActorDisplayNum) { break; }
                 }
-
-                App.Current.Dispatcher.BeginInvoke((Action)delegate {
-                    CurrentActorList = new ObservableCollection<Actress>();
-                });
+                await ClearCurrentActorList();
+                
                 foreach (Actress actress1 in actresses)
                 {
-                    App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadActorDelegate(LoadActor), actress1);
+                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadActorDelegate(LoadActor), actress1);
                 }
 
-                App.Current.Dispatcher.BeginInvoke((Action)delegate {
-                    if (App.Current.Windows[0] is Main main) { main.ActorSetSelected(); }
+                await App.Current.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    if (GetWindowByName("Main") is Main main)
+                    {
+                        ActorFlipOverCompleted?.Invoke(this, EventArgs.Empty);
+                    }
                 });
-                
 
-            }
-            stopwatch.Stop();
+            });
+            return true;
 
         }
 
@@ -1197,6 +1240,13 @@ namespace Jvedio.ViewModel
         {
             CurrentActorList.Add(actress);
         }
+
+        private delegate void RemoveActorDelegate(Actress actress);
+        private void RemoveActor(Actress actress)
+        {
+            CurrentActorList.Remove(actress);
+        }
+
 
         public void DisposeMovieList(ObservableCollection<Movie> movies)
         {
@@ -1268,9 +1318,6 @@ namespace Jvedio.ViewModel
                             if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.FlowOut;
                         }
 
-                        await App.Current.Dispatcher.BeginInvoke((Action)delegate { 
-                            CurrentCount = Movies.Count;
-                        });
                        
 
                         await ClearCurrentMovieList();//动态清除当前影片
@@ -1286,7 +1333,7 @@ namespace Jvedio.ViewModel
                         {
                             if (GetWindowByName("Main") is Main main)
                             {
-                                CurrentMovieListChangedCompleted?.Invoke(this, EventArgs.Empty);
+                                MovieFlipOverCompleted?.Invoke(this, EventArgs.Empty);
                             }
                         });
                     
@@ -1312,36 +1359,51 @@ namespace Jvedio.ViewModel
         }
 
 
+        private delegate void LoadLabelDelegate(string str);
+        private void LoadLabel( string str)
+        {
+            LabelList.Add(str);
+        }
+
+
 
         //获得标签
         public void GetLabelList()
         {
             List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType);
-            App.Current.Dispatcher.Invoke((Action)delegate
-            {
-                LabelList = new ObservableCollection<string>();
-                LabelList.AddRange(labels);
+            LabelList = new ObservableCollection<string>();
+            Task.Run(async()=>{
+                for (int i = 0; i < labels.Count; i++)
+                {
+                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadLabel), labels[i]);
+                }
+                
             });
+
         }
 
 
         //获得演员，信息照片都获取
         public void GetActorList()
         {
-            //TextType = "演员";
             Statistic();
-            stopwatch.Restart();
             List<Actress> Actresses = DataBase.SelectAllActorName(ClassifyVedioType);
-            stopwatch.Stop();
-
-
             if (ActorList != null && Actresses != null && Actresses.Count == ActorList.ToList().Count) { return; }
             ActorList = new ObservableCollection<Actress>();
             ActorList.AddRange(Actresses);
-
             ActorFlipOver();
 
 
+        }
+
+
+
+
+
+        private delegate void LoadGenreDelegate(Genre genre);
+        private void LoadGenre(Genre genre)
+        {
+            GenreList.Add(genre);
         }
 
 
@@ -1352,7 +1414,13 @@ namespace Jvedio.ViewModel
             Statistic();
             List<Genre> Genres = DataBase.SelectGenreByVedioType(ClassifyVedioType);
             GenreList = new ObservableCollection<Genre>();
-            GenreList.AddRange(Genres);
+            Task.Run(async () => {
+                for (int i = 0; i < Genres.Count; i++)
+                {
+                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadGenreDelegate(LoadGenre), Genres[i]);
+                }
+            });
+            //GenreList.AddRange(Genres);
 
         }
 

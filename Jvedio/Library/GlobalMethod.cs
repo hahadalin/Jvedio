@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
     public static class GlobalMethod
     {
-
 
 
         public static Window GetWindowByName(string name)
