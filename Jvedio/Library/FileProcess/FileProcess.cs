@@ -15,6 +15,18 @@ namespace Jvedio
 {
     public static class FileProcess
     {
+
+        public static void ClearDateBefore(DateTime dateTime)
+        {
+            if (!File.Exists("RecentWatch")) return;
+            RecentWatchedConfig recentWatchedConfig = new RecentWatchedConfig();
+            for (int i = 1; i < 60; i++)
+            {
+                DateTime date = dateTime.AddDays(-1 * i);
+                recentWatchedConfig.Remove(date);
+            }
+
+        }
         public static List<Movie> FilterMovie(List<Movie> movies )
         {
             List<Movie> result = new List<Movie>();

@@ -1488,4 +1488,13 @@
   <data name="SuccessGifTo" xml:space="preserve">
     <value>成功生成 GIF 到</value>
   </data>
+  <data name="AutoHeight" xml:space="preserve">
+    <value>原视频宽高比</value>
+  </data>
+  <data name="FailToCutOffVideo" xml:space="preserve">
+    <value>未成功分割影片截图</value>
+  </data>
+  <data name="FailToGenerate" xml:space="preserve">
+    <value>未成功生成</value>
+  </data>
 </root>

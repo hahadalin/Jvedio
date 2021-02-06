@@ -117,6 +117,23 @@ namespace Jvedio
         }
 
 
+        public static (double, double) GetWidthHeight(string vediopath)
+        {
+
+                if (!File.Exists(vediopath)) return (0, 0);
+            
+                MediaInfo MI = new MediaInfo();
+                MI.Open(vediopath);
+                string width = MI.Get(StreamKind.Video, 0, "Width");
+                string height = MI.Get(StreamKind.Video, 0, "Height");
+
+            int.TryParse(width, out int Width);
+            int.TryParse(height, out int Height);
+
+            return (Width, Height);
+
+        } 
+
 
         /// <summary>
         /// 获取视频信息 （wmv  10ms，其他  100ms）

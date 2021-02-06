@@ -926,7 +926,7 @@ namespace Jvedio
                 DeleteServerInfoFromConfig(WebSite.DMM);
             }
 
-            else if (server.ServerTitle == "FC2官网" | server.Url.ToLower() == Properties.Settings.Default.FC2.ToLower())
+            else if (server.ServerTitle == "FC2官网" || server.ServerTitle == "FC2" | server.Url.ToLower() == Properties.Settings.Default.FC2.ToLower())
             {
                 Properties.Settings.Default.FC2 = "";
                 DeleteServerInfoFromConfig(WebSite.FC2);
@@ -1017,7 +1017,7 @@ namespace Jvedio
                 }
                 else if (title.IndexOf("FC2コンテンツマーケット") >= 0 || title.IndexOf("FC2电子市场") >= 0)
                 {
-                    server.ServerTitle = "FC2官网";
+                    server.ServerTitle = "FC2";
                 }
                 else if (title.IndexOf("JAV321") >= 0)
                 {
@@ -1087,11 +1087,11 @@ namespace Jvedio
                     SaveServersInfoToConfig(WebSite.DMM, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
                 }
             }
-            else if (server.ServerTitle == "FC2官网")
+            else if (server.ServerTitle == "FC2官网" || server.ServerTitle == "FC2")
             {
                 Properties.Settings.Default.FC2 = server.Url;
                 Properties.Settings.Default.EnableFC2 = (bool)checkBox.IsChecked;
-                SaveServersInfoToConfig(WebSite.FC2, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
+                SaveServersInfoToConfig(WebSite.FC2, new List<string>() { server.Url, "FC2", server.LastRefreshDate });
             }
             else if (server.ServerTitle == "JAV321")
             {
@@ -1218,7 +1218,7 @@ namespace Jvedio
                 Properties.Settings.Default.EnableDMM = enable;
             else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JAV321")
                 Properties.Settings.Default.Enable321 = enable;
-            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "FC2官网")
+            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "FC2官网" || vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "FC2")
                 Properties.Settings.Default.EnableFC2 = enable;
 
             Properties.Settings.Default.Save();

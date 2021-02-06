@@ -340,6 +340,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 原视频宽高比 的本地化字符串。
+        /// </summary>
+        public static string AutoHeight {
+            get {
+                return ResourceManager.GetString("AutoHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 背景图 的本地化字符串。
         /// </summary>
         public static string BackgroundImage {
@@ -993,6 +1002,24 @@ namespace Jvedio.Language {
         public static string FadeInOut {
             get {
                 return ResourceManager.GetString("FadeInOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未成功分割影片截图 的本地化字符串。
+        /// </summary>
+        public static string FailToCutOffVideo {
+            get {
+                return ResourceManager.GetString("FailToCutOffVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未成功生成 的本地化字符串。
+        /// </summary>
+        public static string FailToGenerate {
+            get {
+                return ResourceManager.GetString("FailToGenerate", resourceCulture);
             }
         }
         

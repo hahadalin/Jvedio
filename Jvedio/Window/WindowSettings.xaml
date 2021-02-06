@@ -24,6 +24,8 @@
 
     <local:Jvedio_BaseWindow.Resources>
 
+
+        <local:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
         <local:SkinTypeEnumConverter x:Key="SkinTypeEnumConverter"/>
@@ -642,6 +644,19 @@
                         <TextBlock  Width="30"     Style="{StaticResource BaseTextBlock}"   Text="{Binding ElementName=ScreenShotIgnoreSlider2, Mode=OneWay,Path=Value}"  />
                         <TextBlock  Text ="{x:Static lang:Resources.SkipEnd}" Style="{StaticResource BaseTextBlock}" />
                     </StackPanel>
+
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 5">
+                        <Label Content="GIF" Style="{StaticResource InfoLabel}"    />
+                        <Slider x:Name="GifSlider1"  IsSnapToTickEnabled="True" Width="200" VerticalAlignment="Center" Margin="5 0" Value="{Binding Gif_Width, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="1980" Minimum="50" SmallChange="1" LargeChange="10" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
+                        <Label Content="{Binding Value, ElementName=GifSlider1,StringFormat='{}{0} px'}" Style="{StaticResource InfoLabel}"  />
+                        <Slider x:Name="GifSlider2" IsEnabled="{Binding Gif_AutoHeight, Mode=TwoWay, Source={x:Static p:Settings.Default},Converter={StaticResource OppositeBooleanConverter}}"  IsSnapToTickEnabled="True" Width="200" VerticalAlignment="Center" Margin="5 0" Value="{Binding Gif_Height, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="1080" Minimum="50" SmallChange="1" LargeChange="10" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
+                        <Label Content="{Binding Value, ElementName=GifSlider2,StringFormat='{}{0} px'}" Style="{StaticResource InfoLabel}"  />
+                        <CheckBox IsChecked="{Binding Gif_AutoHeight, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="20 10"  Content="{x:Static lang:Resources.AutoHeight}" />
+
+
+                    </WrapPanel>
+
+
                     <WrapPanel Visibility="Collapsed" Orientation="Horizontal" Margin="20 10">
                         <TextBlock  Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2" Text="线程数量"/>
                         <Slider x:Name="ThreadNumSlider" Value="{Binding ScreenShot_ThreadNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="1" Maximum="10" SmallChange="1" LargeChange="2" TickFrequency="1" Width="100" VerticalAlignment="Center"/>

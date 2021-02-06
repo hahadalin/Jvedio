@@ -343,6 +343,18 @@ namespace Jvedio
                 string filePath = list[1] as string;
                 string GifPath = list[2] as string;
 
+                int width = Properties.Settings.Default.Gif_Width;
+                int height = Properties.Settings.Default.Gif_Height;
+                if (Properties.Settings.Default.Gif_AutoHeight) {
+                    (double w, double h) = MediaParse.GetWidthHeight(filePath);
+                    if(w!=0) height = (int)(h / w * (double)width);
+                }
+
+
+
+                if (width <= 0 || width > 1980) width = 280;
+                if (height <= 0 || height > 1080) height = 170;
+
                 if (string.IsNullOrEmpty(cutoffTime)) return false;
                 System.Diagnostics.Process p = new System.Diagnostics.Process();
                 p.StartInfo.FileName = "cmd.exe";
@@ -353,7 +365,7 @@ namespace Jvedio
                 p.StartInfo.CreateNoWindow = true;//不显示程序窗口
                 p.Start();//启动程序
 
-                string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t 5 -ss {cutoffTime} -i \"{filePath}\" -s 280x170  \"{GifPath}\"";
+                string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t 5 -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifPath}\"";
                 Console.WriteLine(str);
 
 
@@ -377,7 +389,7 @@ namespace Jvedio
             List<string> outputPath = new List<string>();
             await Task.Run(() => {
                 // n 个线程截图
-                if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = "未配置 FFmpeg.exe 路径"; return; }
+                if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = Jvedio.Language.Resources.Message_SetFFmpeg; return; }
 
                 int num = Properties.Settings.Default.ScreenShot_ThreadNum;
                 string ScreenShotPath = "";
@@ -386,7 +398,7 @@ namespace Jvedio
                 if (!Directory.Exists(ScreenShotPath)) Directory.CreateDirectory(ScreenShotPath);
 
                 string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
-                if (cutoffArray.Length == 0) { result = false; message = "未成功分割影片截图"; return; }
+                if (cutoffArray.Length == 0) { result = false; message = Jvedio.Language.Resources.FailToCutOffVideo; return; }
                 int SemaphoreNum = cutoffArray.Length > 10 ? 10 : cutoffArray.Length;//最多 10 个线程截图
                 SemaphoreScreenShot = new Semaphore(SemaphoreNum, SemaphoreNum);
 
@@ -416,7 +428,7 @@ namespace Jvedio
                 if (!File.Exists(item))
                 {
                     result = false;
-                    message = $"未成功生成 {item}";
+                    message = $"{Jvedio.Language.Resources.FailToGenerate} {item}";
                     break;
                 }
             }
@@ -430,7 +442,7 @@ namespace Jvedio
             string message = "";
             string GifPath = "";
 
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = "未配置 FFmpeg.exe 路径"; return (result, message); }
+            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = Jvedio.Language.Resources.Message_SetFFmpeg; return (result, message); }
 
             int num = Properties.Settings.Default.ScreenShot_ThreadNum;
                 
@@ -439,7 +451,7 @@ namespace Jvedio
             if (!Directory.Exists(BasePicPath + "Gif\\")) Directory.CreateDirectory(BasePicPath + "Gif\\");
 
             string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
-            if (cutoffArray.Length == 0) { result = false; message = "未成功分割影片截图"; return (result, message); }
+            if (cutoffArray.Length == 0) { result = false; message = Jvedio.Language.Resources.FailToCutOffVideo; return (result, message); }
             string cutofftime = cutoffArray[new Random().Next(cutoffArray.Length-1)];
             object[] list = new object[] { cutofftime, movie.filepath, GifPath };
 
@@ -448,7 +460,7 @@ namespace Jvedio
             if (!File.Exists(GifPath))
             {
                 result = false;
-                message = $"未成功生成 {GifPath}";
+                message = $"{Jvedio.Language.Resources.FailToGenerate} {GifPath}";
             }
             
             return (result, message);

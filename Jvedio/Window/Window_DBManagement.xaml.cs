@@ -344,6 +344,11 @@ namespace Jvedio
                 //重置信息
                 db.DeleteTable("movie");
                 db.CreateTable(DataBase.SQLITETABLE_MOVIE);
+                //清空最近播放和最近创建
+                ClearDateBefore(DateTime.Now);
+
+
+
                 HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "DBManageGrowl");
             }
 

@@ -2194,5 +2194,41 @@ namespace Jvedio.Properties {
                 this["MovieOpacity"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("280")]
+        public int Gif_Width {
+            get {
+                return ((int)(this["Gif_Width"]));
+            }
+            set {
+                this["Gif_Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("170")]
+        public int Gif_Height {
+            get {
+                return ((int)(this["Gif_Height"]));
+            }
+            set {
+                this["Gif_Height"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Gif_AutoHeight {
+            get {
+                return ((bool)(this["Gif_AutoHeight"]));
+            }
+            set {
+                this["Gif_AutoHeight"] = value;
+            }
+        }
     }
 }
