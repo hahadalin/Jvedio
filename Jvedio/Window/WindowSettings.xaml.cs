@@ -25,6 +25,7 @@ using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Jvedio.Library.Encrypt;
 
 namespace Jvedio
 {
@@ -290,6 +291,9 @@ namespace Jvedio
                     imageAwesome.Icon = FontAwesomeIcon.CheckCircle;
                     imageAwesome.Spin = false;
                     imageAwesome.Foreground = new SolidColorBrush(Color.FromRgb(32, 183, 89));
+                    string clientId = Properties.Settings.Default.Baidu_API_KEY.Replace(" ", "");
+                    string clientSecret = Properties.Settings.Default.Baidu_SECRET_KEY.Replace(" ", "");
+                    SaveKeyValue(clientId, clientSecret, "BaiduAI.key");
                 }
                 else
                 {
@@ -336,6 +340,12 @@ namespace Jvedio
                     imageAwesome.Icon = FontAwesomeIcon.CheckCircle;
                     imageAwesome.Spin = false;
                     imageAwesome.Foreground = new SolidColorBrush(Color.FromRgb(32, 183, 89));
+
+                    string Youdao_appKey = Properties.Settings.Default.TL_YOUDAO_APIKEY.Replace(" ", "");
+                    string Youdao_appSecret = Properties.Settings.Default.TL_YOUDAO_SECRETKEY.Replace(" ", "");
+
+                    //成功，保存在本地
+                    SaveKeyValue(Youdao_appKey, Youdao_appSecret,"youdao.key");
                 }
                 else
                 {
@@ -346,6 +356,21 @@ namespace Jvedio
             }
 
 
+        }
+
+        public void SaveKeyValue(string key,string value,string filename)
+        {
+            string v = Encrypt.AesEncrypt(key +" " + value, EncryptKeys[0]);
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(filename, append: false))
+                {
+                    sw.Write(v);
+                }
+            }catch(Exception ex)
+            {
+                Logger.LogF(ex);
+            }      
         }
 
         public void DelPath(object sender, MouseButtonEventArgs e)
@@ -1406,6 +1431,49 @@ namespace Jvedio
         private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             Process.Start("https://github.com/BtbN/FFmpeg-Builds/releases");
+        }
+
+        private void LoadTranslate(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists("youdao.key")) return;
+            string v = GetValueKey("youdao.key");
+            if(v.Split(' ').Length == 2)
+            {
+                Properties.Settings.Default.TL_YOUDAO_APIKEY = v.Split(' ')[0];
+                Properties.Settings.Default.TL_YOUDAO_SECRETKEY = v.Split(' ')[1];
+            } 
+        }
+
+
+        public string GetValueKey(string filename)
+        {
+            string v = "";
+            try
+            {
+                using (StreamReader sr = new StreamReader(filename))
+                {
+                    v = sr.ReadToEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogF(ex);
+            }
+            if (v != "")
+                return Encrypt.AesDecrypt(v, EncryptKeys[0]);
+            else
+                return "";
+        }
+
+        private void LoadAI(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists("BaiduAI.key")) return;
+            string v = GetValueKey("BaiduAI.key");
+            if (v.Split(' ').Length == 2)
+            {
+                Properties.Settings.Default.Baidu_API_KEY = v.Split(' ')[0];
+                Properties.Settings.Default.Baidu_SECRET_KEY = v.Split(' ')[1];
+            }
         }
     }
 

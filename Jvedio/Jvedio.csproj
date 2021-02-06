@@ -226,6 +226,7 @@
     </Compile>
     <Compile Include="Library\BaseClass.cs" />
     <Compile Include="Library\Converter.cs" />
+    <Compile Include="Library\Encrypt\Encrypt.cs" />
     <Compile Include="Library\FileProcess\FileProcess.cs" />
     <Compile Include="Library\GlobalMethod.cs" />
     <Compile Include="Library\ImageAndVedio\MediaParse.cs" />

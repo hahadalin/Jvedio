@@ -535,7 +535,7 @@
                         <StackPanel Orientation="Horizontal">
                             <CheckBox IsChecked="{Binding Enable_TL_YOUDAO, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="20 10" Content="{x:Static lang:Resources.Youdao}" />
                             <Button Click="TestTranslate"  Content="{x:Static lang:Resources.Test}"  Style="{StaticResource ButtonStyleFill}"  />
-                            
+                            <Button Click="LoadTranslate"  Content="{x:Static lang:Resources.LoadLocalKey}"  Style="{StaticResource ButtonStyleFill}"  />
                             <!--TODO WIN7-->
                             <fa:ImageAwesome    Height="20"  Foreground="{DynamicResource ForegroundSearch}" Margin="5 0"    />
                             <Button Style="{StaticResource ButtonPrimary}" Content=" ？" Width="auto" HorizontalAlignment="Left"  Cursor="Hand"  Click="Button_Click_2"/>
@@ -591,6 +591,7 @@
                         <StackPanel Orientation="Horizontal">
                             <CheckBox IsChecked="{Binding Enable_BaiduAI, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="20 10"  Content="{x:Static lang:Resources.BaiduFaceRecognition}" />
                             <Button Click="TestAI"  Content="{x:Static lang:Resources.Test}"  Style="{StaticResource ButtonStyleFill}"  />
+                            <Button Click="LoadAI"  Content="{x:Static lang:Resources.LoadLocalKey}"  Style="{StaticResource ButtonStyleFill}"  />
                             <fa:ImageAwesome    Height="20"  Foreground="{DynamicResource ForegroundSearch}" Margin="5 0"    />
                             <Button Style="{StaticResource ButtonPrimary}" Content=" ？"  Cursor="Hand" Click="Button_Click_5"/>
 
@@ -606,6 +607,7 @@
                         </StackPanel>
 
                     </StackPanel>
+                    <CheckBox IsChecked="{Binding HalfCutOFf, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="20 10"  Content="{x:Static lang:Resources.HalfCutOff}" />
 
 
                 </StackPanel>

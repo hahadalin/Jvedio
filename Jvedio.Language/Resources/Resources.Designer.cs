@@ -1195,6 +1195,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 裁剪海报右侧部分 的本地化字符串。
+        /// </summary>
+        public static string HalfCutOff {
+            get {
+                return ResourceManager.GetString("HalfCutOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 已复制 的本地化字符串。
         /// </summary>
         public static string HasCopy {
@@ -1587,6 +1596,15 @@ namespace Jvedio.Language {
         public static string Loading {
             get {
                 return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 从本地文件载入 的本地化字符串。
+        /// </summary>
+        public static string LoadLocalKey {
+            get {
+                return ResourceManager.GetString("LoadLocalKey", resourceCulture);
             }
         }
         

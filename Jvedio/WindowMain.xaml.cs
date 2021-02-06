@@ -33,6 +33,9 @@ using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
 using static Jvedio.ImageProcess;
 using System.Windows.Media.Effects;
+using System.Text;
+using System.Security.Cryptography;
+using Jvedio.Library.Encrypt;
 
 namespace Jvedio
 {
@@ -2586,12 +2589,6 @@ namespace Jvedio
 
 
 
-        public void GenerateGif(Movie movie)
-        {
-
-
-        }
-
         public async void GenerateSmallImage(object sender, RoutedEventArgs e)
         {
             if (!Properties.Settings.Default.Enable_BaiduAI) { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_SetBaiduAI, "Main"); return; }
@@ -2613,36 +2610,53 @@ namespace Jvedio
                     string SmallPicPath = Properties.Settings.Default.BasePicPath + $"SmallPic\\{movie.id}.jpg";
                     if (File.Exists(BigPicPath))
                     {
-                        Int32Rect int32Rect = await FaceDetect.GetAIResult(movie, BigPicPath);
-
-                        if (int32Rect != Int32Rect.Empty)
+                        System.Drawing.Bitmap SourceBitmap = new System.Drawing.Bitmap(BigPicPath);
+                        BitmapImage bitmapImage = ImageProcess.BitmapToBitmapImage(SourceBitmap);
+                        if (Properties.Settings.Default.HalfCutOFf)
                         {
-                            await Task.Delay(500);
-                            //切割缩略图
-                            System.Drawing.Bitmap SourceBitmap = new System.Drawing.Bitmap(BigPicPath);
-                            BitmapImage bitmapImage = ImageProcess.BitmapToBitmapImage(SourceBitmap);
-                            ImageSource smallImage = ImageProcess.CutImage(bitmapImage, ImageProcess.GetRect(bitmapImage, int32Rect));
+                            double rate = 380f / 800f;
+
+                            Int32Rect int32Rect = new Int32Rect() { Height = SourceBitmap.Height, Width = (int)(rate * SourceBitmap.Width), X = (int)((1 - rate) * SourceBitmap.Width), Y = 0 };
+                            ImageSource smallImage = ImageProcess.CutImage(bitmapImage, int32Rect);
                             System.Drawing.Bitmap bitmap = ImageProcess.ImageSourceToBitmap(smallImage);
                             try
                             {
                                 bitmap.Save(SmallPicPath, System.Drawing.Imaging.ImageFormat.Jpeg); successNum++;
                             }
                             catch (Exception ex) { Logger.LogE(ex); }
-
-
-                            //读取
-                            int index1 = vieModel.CurrentMovieList.IndexOf(movie);
-                            int index2 = vieModel.MovieList.IndexOf(movie);
-                            int index3 = vieModel.FilterMovieList.IndexOf(movie);
-                            movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
-
-                            vieModel.CurrentMovieList[index1] = null;
-                            vieModel.MovieList[index2] = null;
-                            vieModel.FilterMovieList[index3] = null;
-                            vieModel.CurrentMovieList[index1] = movie;
-                            vieModel.MovieList[index2] = movie;
-                            vieModel.FilterMovieList[index3] = movie;
                         }
+                        else
+                        {
+                            Int32Rect int32Rect = await FaceDetect.GetAIResult(movie, BigPicPath);
+                            if (int32Rect != Int32Rect.Empty)
+                            {
+                                await Task.Delay(500);
+                                //切割缩略图
+                                ImageSource smallImage = ImageProcess.CutImage(bitmapImage, ImageProcess.GetRect(bitmapImage, int32Rect));
+                                System.Drawing.Bitmap bitmap = ImageProcess.ImageSourceToBitmap(smallImage);
+                                try
+                                {
+                                    bitmap.Save(SmallPicPath, System.Drawing.Imaging.ImageFormat.Jpeg); successNum++;
+                                }
+                                catch (Exception ex) { Logger.LogE(ex); }
+                            }
+
+                        }
+
+                        //读取
+                        int index1 = vieModel.CurrentMovieList.IndexOf(movie);
+                        int index2 = vieModel.MovieList.IndexOf(movie);
+                        int index3 = vieModel.FilterMovieList.IndexOf(movie);
+                        movie.smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
+
+                        vieModel.CurrentMovieList[index1] = null;
+                        vieModel.MovieList[index2] = null;
+                        vieModel.FilterMovieList[index3] = null;
+                        vieModel.CurrentMovieList[index1] = movie;
+                        vieModel.MovieList[index2] = movie;
+                        vieModel.FilterMovieList[index3] = movie;
+
+
 
                     }
                     else
@@ -4967,8 +4981,10 @@ namespace Jvedio
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            vieModel.ClearCurrentMovieList();
+
         }
+
+
 
 
         private void WaitingPanel_Cancel(object sender, RoutedEventArgs e)

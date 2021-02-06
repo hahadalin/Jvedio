@@ -73,6 +73,8 @@ namespace Jvedio
 
         public static TimeSpan FadeInterval = TimeSpan.FromMilliseconds(150);
 
+        public static string[] EncryptKeys = new string[] { "ShS69pNGvLac6ZF+", "Yv4x4beWwe+vhFwg", "+C+bPEbF5W4v3/H0" };
+
         #region "热键"
         [DllImport("user32.dll")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);

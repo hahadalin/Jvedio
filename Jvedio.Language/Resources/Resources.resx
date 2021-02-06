@@ -1497,4 +1497,10 @@
   <data name="FailToGenerate" xml:space="preserve">
     <value>未成功生成</value>
   </data>
+  <data name="LoadLocalKey" xml:space="preserve">
+    <value>从本地文件载入</value>
+  </data>
+  <data name="HalfCutOff" xml:space="preserve">
+    <value>裁剪海报右侧部分</value>
+  </data>
 </root>

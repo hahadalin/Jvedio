@@ -1247,7 +1247,7 @@
                                     </Border>
 
 
-                                    <Button Visibility="Collapsed" Click="Button_Click_2" Content="测试" />
+                                    <Button Visibility="Visible" Click="Button_Click_2" Content="测试" />
 
                                 </StackPanel>
 

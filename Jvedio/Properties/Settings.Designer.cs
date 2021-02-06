@@ -2230,5 +2230,17 @@ namespace Jvedio.Properties {
                 this["Gif_AutoHeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HalfCutOFf {
+            get {
+                return ((bool)(this["HalfCutOFf"]));
+            }
+            set {
+                this["HalfCutOFf"] = value;
+            }
+        }
     }
 }
