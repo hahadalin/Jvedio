@@ -198,6 +198,33 @@
     </Style>
 
 
-   
+
+
+
+    <!--动态资源-->
+
+    <!--黑色皮肤-->
+    <SolidColorBrush x:Key="BackgroundTitle"  Color="#22252A"/>
+    <SolidColorBrush x:Key="BackgroundMain" Color="#1B1B1F" />
+    <SolidColorBrush x:Key="BackgroundSide"  Color="#101013" />
+    <SolidColorBrush x:Key="BackgroundTab"  Color="#383838" />
+    <SolidColorBrush x:Key="BackgroundSearch"  Color="#18191B" />
+    <SolidColorBrush x:Key="BackgroundMenu"  Color="Black"/>
+    <SolidColorBrush x:Key="ForegroundGlobal"  Color="#AFAFAF" />
+    <SolidColorBrush x:Key="ForegroundSearch"  Color="#FFFFFF" />
+    <SolidColorBrush x:Key= "BorderBursh"  Color="Transparent" />
+
+    <!--白色皮肤-->
+    <!--<SolidColorBrush x:Key="BackgroundTitle"  Color="#E2E3E5"/>
+    <SolidColorBrush x:Key="BackgroundMain" Color="#F9F9F9" />
+    <SolidColorBrush x:Key="BackgroundSide"  Color="#F2F3F4" />
+    <SolidColorBrush x:Key="BackgroundTab"  Color="#FFF5EE" />
+    <SolidColorBrush x:Key="BackgroundSearch"  Color="#D1D1D1" />
+    <SolidColorBrush x:Key="BackgroundMenu"  Color="White"/>
+    <SolidColorBrush x:Key="ForegroundGlobal"  Color="#555555" />
+    <SolidColorBrush x:Key="ForegroundSearch"  Color="#000000" />
+    <SolidColorBrush x:Key= "BorderBursh"  Color="Gray" />-->
+
+
 
 </ResourceDictionary>

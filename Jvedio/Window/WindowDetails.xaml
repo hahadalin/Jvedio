@@ -74,7 +74,7 @@
             <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
             <Setter Property="Margin" Value="0 0"/>
-            <Setter Property="Opacity" Value="0.5"/>
+            <Setter Property="Opacity" Value="0.9"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>

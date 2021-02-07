@@ -51,7 +51,7 @@
                     <Grid Background="Transparent">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Vertical"  Margin="20 0">
-                                <ListBox  AllowDrop="True" DragOver="PathListBox_DragOver" Drop="PathListBox_Drop"  ItemsSource="{Binding ScanPath}" x:Name="PathListBox"  Height="300" Background="Transparent" Margin="0,20,0,0" >
+                                <ListBox  AllowDrop="True" DragOver="PathListBox_DragOver" Drop="PathListBox_Drop"  ItemsSource="{Binding ScanPath}" x:Name="PathListBox"  Height="250" Background="Transparent" Margin="0,20,0,0" >
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Orientation="Vertical"/>
@@ -84,11 +84,12 @@
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox x:Name="ScanAll" Content="{x:Static lang:Resources.ScanAllFile}"/>
                                     <fa:ImageAwesome Margin="10 0" Icon="Shield" Height="20" Width="auto" Foreground="{DynamicResource ForegroundSearch}"/>
-                                    <TextBlock   Foreground="{DynamicResource ForegroundSearch}" FontSize="20" VerticalAlignment="Center" Margin="20 5" Visibility="Visible" Text="{x:Static lang:Resources.ScanAllAttention}"  HorizontalAlignment="Stretch"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"/>
-
-
-                                    <TextBlock />
+                                    <Border Margin="10 5" Style="{StaticResource BorderTipInfo}" Background="{DynamicResource BackgroundMenu}">
+                                        <TextBlock Text="{x:Static lang:Resources.ScanAllAttention}" TextWrapping="Wrap" Foreground="{DynamicResource ForegroundGlobal}"/>
+                                    </Border>
                                 </StackPanel>
+
+
                             </StackPanel>
 
 

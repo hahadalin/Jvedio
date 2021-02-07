@@ -115,7 +115,7 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="0" >
 
-                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.NewLibrary}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click"/>
+                            <Button Margin="20" Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.NewLibrary}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click"/>
                             <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Import}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click_1"/>
 
 

@@ -69,25 +69,4 @@
     </Style>
 
 
-    
-    <!--动态资源-->
-    
-    <!--皮肤-->
-    <SolidColorBrush x:Key="BackgroundTitle"  Color="#22252A"/>
-    <SolidColorBrush x:Key="BackgroundMain" Color="#1B1B1F" />
-    <SolidColorBrush x:Key="BackgroundSide"  Color="#101013" />
-    <SolidColorBrush x:Key="BackgroundTab"  Color="#383838" />
-    <SolidColorBrush x:Key="BackgroundSearch"  Color="#18191B" />
-    <SolidColorBrush x:Key="BackgroundMenu"  Color="Black"/>
-    <SolidColorBrush x:Key="ForegroundGlobal"  Color="#AFAFAF" />
-    <SolidColorBrush x:Key="ForegroundSearch"  Color="#FFFFFF" />
-    <SolidColorBrush x:Key= "BorderBursh"  Color="Transparent" />
-
-    
-    <!--其他-->
-
-    <SolidColorBrush x:Key= "Selected_BorderBrush"  Color="{Binding Selected_BorderBrush,Mode=OneWay,Source={x:Static p:Settings.Default}}" />
-    <SolidColorBrush x:Key= "Selected_Background"  Color="{Binding Selected_Background,Mode=OneWay,Source={x:Static p:Settings.Default}}" />
-
-
 </ResourceDictionary>
