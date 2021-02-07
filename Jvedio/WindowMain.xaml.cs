@@ -4191,8 +4191,7 @@ namespace Jvedio
 
 
             //检查更新
-            //if (Properties.Settings.Default.AutoCheckUpdate) CheckUpdate();
-            CheckUpdate();
+            //CheckUpdate();
 
 
             //检查网络连接
