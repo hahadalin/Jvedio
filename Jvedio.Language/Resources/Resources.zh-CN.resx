@@ -1503,4 +1503,7 @@
   <data name="HalfCutOff" xml:space="preserve">
     <value>裁剪海报右侧部分</value>
   </data>
+  <data name="StopUpgrade" xml:space="preserve">
+    <value>停止更新</value>
+  </data>
 </root>

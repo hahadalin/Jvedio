@@ -539,6 +539,7 @@
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="Data\BusActress.sqlite" />
+    <None Include="Data\Upgrade.bat" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -798,6 +799,7 @@ XCOPY "$(ProjectDir)Data\x64" "$(TargetDir)\x64" /E /Y /i
 XCOPY "$(ProjectDir)Lib\MediaInfo.dll" "$(TargetDir)" /E /Y /i
 XCOPY "$(ProjectDir)Lib\MediaInfoNET.dll" "$(TargetDir)" /E /Y /i
 XCOPY "$(ProjectDir)Data\BusActress.sqlite" "$(TargetDir)" /E /Y /i
+XCOPY "$(ProjectDir)Data\Upgrade.bat" "$(TargetDir)" /E /Y /i
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

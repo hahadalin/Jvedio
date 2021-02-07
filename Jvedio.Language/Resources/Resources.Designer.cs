@@ -3616,6 +3616,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 停止更新 的本地化字符串。
+        /// </summary>
+        public static string StopUpgrade {
+            get {
+                return ResourceManager.GetString("StopUpgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 发行商 的本地化字符串。
         /// </summary>
         public static string Studio {

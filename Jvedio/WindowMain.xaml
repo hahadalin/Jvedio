@@ -891,9 +891,7 @@
                                                 <MenuItem  Header="{x:Static lang:Resources.SoftWare}" Click="OpenApplicationPath"  />
                                             </MenuItem>
                                             <MenuItem Visibility="Collapsed"  Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="ScreenShot"   />
-                                            <MenuItem Visibility="Collapsed"  Header="{x:Static lang:Resources.Upgrade}" PreviewMouseLeftButtonUp="ShowUpdate"   />
-
-                                            <MenuItem Visibility="Collapsed"  Header="赞助"   Click="OpenThanks"  />
+                                            <MenuItem Header="{x:Static lang:Resources.Upgrade}" PreviewMouseLeftButtonUp="ShowUpdate"   />
                                         </ContextMenu>
                                     </Border.ContextMenu>
 
@@ -2643,7 +2641,7 @@
 
                 <!--升级-->
 
-                <Grid Visibility="Hidden" x:Name="UpdateGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="400" MinWidth="550"  >
+                <Grid Visibility="Visible" x:Name="UpdateGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="400" MinWidth="550"  >
                     <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Opacity="1" Margin="2">
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
@@ -2654,6 +2652,7 @@
                     </Border>
                     <Grid  Margin="0 40">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
@@ -2689,13 +2688,20 @@
 
 
                             <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                                <Button  Margin="0 10"  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.BeginUpgrade}" MinWidth="120"  FontSize="15" Click="OpenUpdate" />
+                                <Button  Margin="0 10"  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.BeginUpgrade}" MinWidth="120"  FontSize="15" Click="BeginUpgrade" />
                                 <Button Margin="0 10"  Style="{StaticResource ButtonPrimary}" Content="{x:Static lang:Resources.DownLoadFromUrl}" MinWidth="120"  FontSize="15" Click="GotoDownloadUrl" />
                             </StackPanel>
 
                         </Grid>
 
-                        <Grid Grid.Row="1"    Margin="50 10" >
+                        <StackPanel x:Name="UpgradeProgressStackPanel" Visibility="Collapsed" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ProgressBar x:Name="UpgradeProgressBar" Style="{StaticResource ProgressBarSuccessStripe}" Width="300" Value="50"  Maximum="100" Minimum="0"  />
+
+                            <TextBlock x:Name="progressText" Margin="20 0" Style="{StaticResource BaseTextBlock}" Text="{Binding ElementName=UpgradeProgressBar,Path=Value,StringFormat='{}{0}%'}"/>
+
+                        </StackPanel>
+
+                        <Grid x:Name="UpgradeInfoGrid" Grid.Row="2"    Margin="50 10"  >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="*"/>
@@ -2705,6 +2711,8 @@
                             <TextBox Grid.Row="1" HorizontalScrollBarVisibility="Auto" x:Name="UpdateContentTextBox"  TextAlignment="Left" VerticalContentAlignment="Top" IsReadOnly="True" VerticalScrollBarVisibility="Auto"  Background="Transparent"  BorderThickness="0" Height="auto"    FontSize="18" Width="auto"  Text="https://github.com/hitchao/Jvedio/releases" Foreground="{DynamicResource ForegroundGlobal}" Margin="10"   />
 
                         </Grid>
+
+
                     </Grid>
 
                 </Grid>

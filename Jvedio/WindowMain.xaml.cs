@@ -44,9 +44,9 @@ namespace Jvedio
     /// </summary>
     public partial class Main : Window
     {
-        public const string UpdateUrl = "http://hitchao.gitee.io/jvedioupdate/Version";
-        public const string UpdateExeVersionUrl = "http://hitchao.gitee.io/jvedioupdate/update";
-        public const string UpdateExeUrl = "http://hitchao.gitee.io/jvedioupdate/JvedioUpdate.exe";
+        public const string UpdateUrl = "https://hitchao.github.io/jvedioupdate/Version";
+        public const string UpdateExeVersionUrl = "https://hitchao.github.io/jvedioupdate/update";
+        public const string UpdateExeUrl = "https://hitchao.github.io/jvedioupdate/JvedioUpdate.exe";
         public const string NoticeUrl = "https://hitchao.github.io/JvedioWebPage/notice";
 
         public DispatcherTimer CheckurlTimer = new DispatcherTimer();
@@ -570,7 +570,7 @@ namespace Jvedio
         }
 
 
-        void CheckUpdate()
+        private void CheckUpdate()
         {
             Task.Run(async () =>
             {
@@ -1311,10 +1311,6 @@ namespace Jvedio
             Process.Start("https://github.com/hitchao/Jvedio/wiki");
         }
 
-        private void OpenThanks(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://www.kancloud.cn/hitchao/jvedio/1921337");
-        }
 
         private void OpenJvedioWebPage(object sender, RoutedEventArgs e)
         {
@@ -4992,7 +4988,8 @@ namespace Jvedio
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-
+            System.Diagnostics.Process.Start("upgrade.bat");
+            Application.Current.Shutdown();
         }
 
 
@@ -6028,6 +6025,38 @@ namespace Jvedio
             vieModel.SearchHistory.Clear();
             vieModel.SaveSearchHistory();
             SearchHistoryStackPanel.Visibility = Visibility.Collapsed;
+        }
+
+        Upgrade upgrade;
+        private void BeginUpgrade(object sender, RoutedEventArgs e)
+        {
+
+
+
+            Button button = (Button)sender;
+            string text = button.Content.ToString();
+            if (text == Jvedio.Language.Resources.BeginUpgrade)
+            {
+                button.Content = Jvedio.Language.Resources.StopUpgrade;
+                upgrade = new Upgrade();
+                upgrade.Start();
+                UpgradeProgressStackPanel.Visibility = Visibility.Visible;
+
+
+
+
+            }
+            else
+            {
+                button.Content = Jvedio.Language.Resources.BeginUpgrade;
+                upgrade?.Stop();
+                UpgradeProgressStackPanel.Visibility = Visibility.Collapsed;
+            }
+
+
+
+
+
         }
     }
 
