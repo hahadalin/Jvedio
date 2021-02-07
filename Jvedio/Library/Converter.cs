@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ using static Jvedio.GlobalVariable;
 namespace Jvedio
 {
 
+
+    
 
     public class OppositeBooleanConverter : IValueConverter
     {
@@ -36,6 +39,26 @@ namespace Jvedio
             double width = 0;
             double.TryParse(value.ToString(), out width);
             return width;
+
+        }
+
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+
+
+    }
+
+    public class WidthConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null || parameter==null) return 0;
+            double.TryParse(value.ToString(), out double width);
+            double.TryParse(parameter.ToString(), out double w);
+            return width + w;
 
         }
 

@@ -300,12 +300,13 @@
             <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.SyncInfo}" >
                 <StackPanel >
 
-                    <StackPanel Orientation="Horizontal" Margin="20 5">
-                        <Button HorizontalAlignment="Left"  Content="{x:Static lang:Resources.Add}" Style="{DynamicResource ButtonStyleFill}"  Click="Button_Click_4" />
-                        <TextBlock TextAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" Text="{x:Static lang:Resources.Attention_UrlTest}" HorizontalAlignment="Left" TextWrapping="Wrap" />
-                    </StackPanel>
-                   
-                    
+
+                        <Button Margin="20 10" HorizontalAlignment="Left"  Content="{x:Static lang:Resources.Add}" MinWidth="100" Style="{DynamicResource ButtonPrimary}"  Click="Button_Click_4" />
+
+                    <Border Margin="20 5" Style="{StaticResource BorderTipInfo}" Background="{DynamicResource BackgroundMenu}">
+                        <TextBlock Text="{x:Static lang:Resources.Attention_UrlTest}" TextWrapping="Wrap" Foreground="{DynamicResource ForegroundGlobal}"/>
+                    </Border>
+
 
 
                     <DataGrid Visibility="Visible" Background="{DynamicResource BackgroundSide}" MinHeight="200" ScrollViewer.HorizontalScrollBarVisibility="Disabled"   PreviewMouseLeftButtonDown="Previe_Mouse_LBtnDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"   DataContextChanged="ServersDataGrid_DataContextChanged" Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">

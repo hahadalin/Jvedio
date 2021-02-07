@@ -161,7 +161,7 @@ namespace Jvedio
         }
         public static string ToProperSql(this string sql)
         {
-            return sql.Replace(" ", "").Replace("%", "").Replace("'", "").ToUpper();
+            return sql.Replace("%", "").Replace("'", "").ToUpper();
         }
 
         public static string ToProperUrl(this string url)

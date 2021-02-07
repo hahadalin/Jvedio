@@ -1383,10 +1383,9 @@ namespace Jvedio
 
         private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (AllSearchGrid.Width > 300) return;
-            //动画
-            DoubleAnimation doubleAnimation = new DoubleAnimation(300, 400, new Duration(TimeSpan.FromMilliseconds(200)));
-            AllSearchGrid.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation);
+            //if (AllSearchGrid.Width > 300) return;
+            //DoubleAnimation doubleAnimation = new DoubleAnimation(300, 400, new Duration(TimeSpan.FromMilliseconds(200)));
+            //AllSearchGrid.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation);
             //边框颜色
             Color color1 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["BackgroundSide"].ToString());
             Color color2 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["ForegroundSearch"].ToString());
@@ -1395,12 +1394,12 @@ namespace Jvedio
             AllSearchBorder.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
         }
 
-        private void SearchBar_LostFocus()
+        private void SearchBar_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (AllSearchGrid.Width <400) return;
+            //if (AllSearchGrid.Width <400) return;
             AllSearchPopup.IsOpen = false;
-            DoubleAnimation doubleAnimation = new DoubleAnimation(400, 300, new Duration(TimeSpan.FromMilliseconds(200)));
-            AllSearchGrid.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation);
+            //DoubleAnimation doubleAnimation = new DoubleAnimation(400, 300, new Duration(TimeSpan.FromMilliseconds(200)));
+            //AllSearchGrid.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation);
             //边框颜色
             Color color1 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["BackgroundSide"].ToString());
             Color color2 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["ForegroundSearch"].ToString());
@@ -1426,6 +1425,11 @@ namespace Jvedio
         {
             if (e.Key == Key.Enter)
             {
+                if (vieModel.CurrentSearchCandidate !=null && (SearchSelectIdex >= 0 & SearchSelectIdex < vieModel.CurrentSearchCandidate.Count))
+                    SearchBar.Text = vieModel.CurrentSearchCandidate[SearchSelectIdex];
+                
+
+                if (SearchBar.Text == "") return;
                 vieModel.Search = SearchBar.Text;
                 AllSearchPopup.IsOpen = false;
             }
@@ -1465,11 +1469,18 @@ namespace Jvedio
                 StackPanel stackPanel = FindElementByName<StackPanel>(c, "SearchStackPanel");
                 if (stackPanel != null)
                 {
-                    TextBlock textBlock = stackPanel.Children[0] as TextBlock;
+
+                    Border border = stackPanel.Children[0] as Border;
+                    TextBlock textBlock = border.Child as TextBlock;
                     if (i == SearchSelectIdex)
-                        textBlock.Background = (SolidColorBrush)Application.Current.Resources["BackgroundMain"];
+                    {
+                        border.Background = (SolidColorBrush)Application.Current.Resources["BackgroundMain"];
+                    }
                     else
-                        textBlock.Background = new SolidColorBrush(Colors.Transparent);
+                    {
+                        border.Background = new SolidColorBrush(Colors.Transparent);
+                    }
+                        
                 }
             }
 
@@ -3550,7 +3561,7 @@ namespace Jvedio
 
             if (vieModel.EnableEditActress && e.Key == Key.Enter)
             {
-                FocusTextBlock.Focus();
+                FocusTextBox.Focus();
                 vieModel.EnableEditActress = false;
                 //Console.WriteLine(vieModel.Actress.age);
                 DataBase.InsertActress(vieModel.Actress);
@@ -5883,11 +5894,6 @@ namespace Jvedio
             loadActorMovies.Show();
         }
 
-        private void Grid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            FocusTextBlock.Focus();
-            SearchBar_LostFocus();
-        }
 
 
 
@@ -6000,6 +6006,29 @@ namespace Jvedio
             }
         }
 
+        private void SearchBar_SearchStarted(object sender, HandyControl.Data.FunctionEventArgs<string> e)
+        {
+            if (SearchBar.Text == "") return;
+            vieModel.Search = SearchBar.Text;
+            AllSearchPopup.IsOpen = false;
+        }
+
+        private void ToolsGrid_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void ToolsGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            FocusTextBox.Focus();
+        }
+
+        private void ClearSearchHistory(object sender, MouseButtonEventArgs e)
+        {
+            vieModel.SearchHistory.Clear();
+            vieModel.SaveSearchHistory();
+            SearchHistoryStackPanel.Visibility = Visibility.Collapsed;
+        }
     }
 
 
