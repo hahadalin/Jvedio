@@ -1413,4 +1413,103 @@
   <data name="Uncensored" xml:space="preserve">
     <value>Uncensored</value>
   </data>
+  <data name="OpenJvedio" xml:space="preserve">
+    <value>Open Jvedio</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Notice</value>
+  </data>
+  <data name="BeginUpgrade" xml:space="preserve">
+    <value>Start Update</value>
+  </data>
+  <data name="DownLoadFromUrl" xml:space="preserve">
+    <value>download file</value>
+  </data>
+  <data name="CheckUpgrade" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="LoadActorOtherMovie" xml:space="preserve">
+    <value>Load other works of this actor</value>
+  </data>
+  <data name="NextPage" xml:space="preserve">
+    <value>Next Page</value>
+  </data>
+  <data name="PreviewPage" xml:space="preserve">
+    <value>Preview Page</value>
+  </data>
+  <data name="ShowRest" xml:space="preserve">
+    <value>Show Rest</value>
+  </data>
+  <data name="MovieOpacity" xml:space="preserve">
+    <value>Video opacity</value>
+  </data>
+  <data name="MoviePerPage" xml:space="preserve">
+    <value>Number of videos per page</value>
+  </data>
+  <data name="NumherEachFlow" xml:space="preserve">
+    <value>Number of scrolls at a time</value>
+  </data>
+  <data name="ActorNumberPerPage" xml:space="preserve">
+    <value>Number of actors per page</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Scene" xml:space="preserve">
+    <value>Scene</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="Behaviour" xml:space="preserve">
+    <value>Behaviour</value>
+  </data>
+  <data name="Body" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="Clothing" xml:space="preserve">
+    <value>Clothing</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="ScanAllAttention" xml:space="preserve">
+    <value>It takes effect after starting in administrator mode (then you can drag into the folder without being in administrator mode)</value>
+  </data>
+  <data name="EnterSplit" xml:space="preserve">
+    <value>Carriage return split</value>
+  </data>
+  <data name="SuccessGifTo" xml:space="preserve">
+    <value>GIF successfully generated to</value>
+  </data>
+  <data name="AutoHeight" xml:space="preserve">
+    <value>Original video aspect ratio</value>
+  </data>
+  <data name="FailToCutOffVideo" xml:space="preserve">
+    <value>Unsuccessful split video screenshot</value>
+  </data>
+  <data name="FailToGenerate" xml:space="preserve">
+    <value>Unsuccessfully generated</value>
+  </data>
+  <data name="LoadLocalKey" xml:space="preserve">
+    <value>Load from local file</value>
+  </data>
+  <data name="HalfCutOff" xml:space="preserve">
+    <value>Cut the right part of the poster</value>
+  </data>
+  <data name="StopUpgrade" xml:space="preserve">
+    <value>Stop update</value>
+  </data>
+  <data name="HotKeyConflict" xml:space="preserve">
+    <value>Hotkey Conflict</value>
+  </data>
+  <data name="UpgradeSource" xml:space="preserve">
+    <value>Update source</value>
+  </data>
 </root>

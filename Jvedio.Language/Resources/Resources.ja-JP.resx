@@ -1398,4 +1398,118 @@
   <data name="Default" xml:space="preserve">
     <value>デフォルト</value>
   </data>
+  <data name="OpenJvedio" xml:space="preserve">
+    <value>Jvedioを開く</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>脱落</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>システムヒント</value>
+  </data>
+  <data name="BeginUpgrade" xml:space="preserve">
+    <value>更新を開始</value>
+  </data>
+  <data name="DownLoadFromUrl" xml:space="preserve">
+    <value>ダウンロードファイル</value>
+  </data>
+  <data name="CheckUpgrade" xml:space="preserve">
+    <value>アップデートを確認</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>検索する</value>
+  </data>
+  <data name="LoadActorOtherMovie" xml:space="preserve">
+    <value>この俳優の他の作品をロードする</value>
+  </data>
+  <data name="DoubleClickToCancel" xml:space="preserve">
+    <value>ダブルクリックしてキャンセル</value>
+  </data>
+  <data name="NextPage" xml:space="preserve">
+    <value>次のページ</value>
+  </data>
+  <data name="PreviewPage" xml:space="preserve">
+    <value>前のページ</value>
+  </data>
+  <data name="ShowRest" xml:space="preserve">
+    <value>残りの動画を表示する</value>
+  </data>
+  <data name="AddToFavorites" xml:space="preserve">
+    <value>お気に入りに追加</value>
+  </data>
+  <data name="Censored" xml:space="preserve">
+    <value>モザイク付き</value>
+  </data>
+  <data name="Uncensored" xml:space="preserve">
+    <value>モザイクなし</value>
+  </data>
+  <data name="MovieOpacity" xml:space="preserve">
+    <value>ビデオの不透明度</value>
+  </data>
+  <data name="MoviePerPage" xml:space="preserve">
+    <value>1ページあたりの動画数</value>
+  </data>
+  <data name="NumherEachFlow" xml:space="preserve">
+    <value>一度に巻物の数</value>
+  </data>
+  <data name="ActorNumberPerPage" xml:space="preserve">
+    <value>1ページあたりの俳優の数</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>その他</value>
+  </data>
+  <data name="Scene" xml:space="preserve">
+    <value>シーン</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>遊び方</value>
+  </data>
+  <data name="Behaviour" xml:space="preserve">
+    <value>動作</value>
+  </data>
+  <data name="Body" xml:space="preserve">
+    <value>ボディタイプ</value>
+  </data>
+  <data name="Clothing" xml:space="preserve">
+    <value>衣類</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>キャラクター</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
+  <data name="ScanAllAttention" xml:space="preserve">
+    <value>管理者モードで起動すると有効になります（管理者モードでなくてもフォルダにドラッグできます）</value>
+  </data>
+  <data name="EnterSplit" xml:space="preserve">
+    <value>キャリッジリターンスプリット</value>
+  </data>
+  <data name="SuccessGifTo" xml:space="preserve">
+    <value>GIFが正常に生成されました</value>
+  </data>
+  <data name="AutoHeight" xml:space="preserve">
+    <value>元のビデオのアスペクト比</value>
+  </data>
+  <data name="FailToCutOffVideo" xml:space="preserve">
+    <value>失敗した分割ビデオのスクリーンショット</value>
+  </data>
+  <data name="FailToGenerate" xml:space="preserve">
+    <value>生成に失敗しました</value>
+  </data>
+  <data name="LoadLocalKey" xml:space="preserve">
+    <value>ローカルファイルからロード</value>
+  </data>
+  <data name="HalfCutOff" xml:space="preserve">
+    <value>ポスターの右側をカットします</value>
+  </data>
+  <data name="StopUpgrade" xml:space="preserve">
+    <value>更新を停止します</value>
+  </data>
+  <data name="HotKeyConflict" xml:space="preserve">
+    <value>ホットキーの競合</value>
+  </data>
+  <data name="UpgradeSource" xml:space="preserve">
+    <value>ソースを更新</value>
+  </data>
 </root>
