@@ -216,43 +216,43 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AI\Baidu.cs" />
+    <Compile Include="Utils\AI\Baidu.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\OutputPanel.xaml.cs">
+    <Compile Include="UserControls\OutputPanel.xaml.cs">
       <DependentUpon>OutputPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Library\BaseClass.cs" />
-    <Compile Include="Library\Converter.cs" />
-    <Compile Include="Library\Encrypt\Encrypt.cs" />
-    <Compile Include="Library\FileProcess\FileProcess.cs" />
-    <Compile Include="Library\GlobalMethod.cs" />
-    <Compile Include="Library\ImageAndVedio\MediaParse.cs" />
-    <Compile Include="Config\RecentWatchedConfig.cs" />
-    <Compile Include="Config\ServerConfig.cs" />
-    <Compile Include="Config\ScanPathConfig.cs" />
-    <Compile Include="Controls\WaitingPanel.xaml.cs">
+    <Compile Include="Utils\BaseClass.cs" />
+    <Compile Include="Utils\Converter.cs" />
+    <Compile Include="Utils\Encrypt\Encrypt.cs" />
+    <Compile Include="Utils\FileProcess\FileProcess.cs" />
+    <Compile Include="Utils\GlobalMethod.cs" />
+    <Compile Include="Utils\ImageAndVedio\MediaParse.cs" />
+    <Compile Include="Utils\Config\RecentWatchedConfig.cs" />
+    <Compile Include="Utils\Config\ServerConfig.cs" />
+    <Compile Include="Utils\Config\ScanPathConfig.cs" />
+    <Compile Include="UserControls\WaitingPanel.xaml.cs">
       <DependentUpon>WaitingPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Library\CustomExtension.cs" />
-    <Compile Include="Library\Sqlite.cs" />
-    <Compile Include="Library\MySqlite.cs" />
-    <Compile Include="Library\ImageAndVedio\MediaInfo.cs" />
-    <Compile Include="Library\ImageAndVedio\ImageProcess.cs" />
-    <Compile Include="Library\FileProcess\XML.cs" />
-    <Compile Include="Dialog\BaseDialog.cs" />
-    <Compile Include="Dialog\Dialog_NewMovie.xaml.cs">
+    <Compile Include="Utils\CustomExtension.cs" />
+    <Compile Include="Utils\Sqlite.cs" />
+    <Compile Include="Utils\MySqlite.cs" />
+    <Compile Include="Utils\ImageAndVedio\MediaInfo.cs" />
+    <Compile Include="Utils\ImageAndVedio\ImageProcess.cs" />
+    <Compile Include="Utils\FileProcess\XML.cs" />
+    <Compile Include="DialogWindow\BaseDialog.cs" />
+    <Compile Include="DialogWindow\Dialog_NewMovie.xaml.cs">
       <DependentUpon>Dialog_NewMovie.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Plot\Bar\BarView.xaml.cs">
+    <Compile Include="Utils\Plot\Bar\BarView.xaml.cs">
       <DependentUpon>BarView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Plot\Bar\BarViewModel.cs" />
+    <Compile Include="Utils\Plot\Bar\BarViewModel.cs" />
     <Compile Include="Window\Jvedio_BaseWindow.cs" />
-    <Compile Include="Library\Net\MultiDownLoader.cs" />
-    <Compile Include="Library\Net\Translate.cs" />
+    <Compile Include="Utils\Net\MultiDownLoader.cs" />
+    <Compile Include="Utils\Net\Translate.cs" />
     <Compile Include="Resource_IDData.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -264,27 +264,26 @@
       <DependentUpon>Resource_String.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\VieModel_Batch.cs" />
-    <Compile Include="Controls\DialogInput.xaml.cs">
+    <Compile Include="Window\DialogInput.xaml.cs">
       <DependentUpon>DialogInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Library\Net\DownLoader.cs" />
-    <Compile Include="Library\ImageAndVedio\ImageSlide.cs" />
-    <Compile Include="Library\Net\Crawler.cs" />
-    <Compile Include="Library\DataBase.cs" />
-    <Compile Include="Library\FileProcess\Identify.cs" />
-    <Compile Include="Library\FileProcess\Logger.cs" />
-    <Compile Include="Library\Net\Net.cs" />
-    <Compile Include="Library\Net\CrawlerParse.cs" />
-    <Compile Include="Library\FileProcess\NFO.cs" />
-    <Compile Include="Library\FileProcess\Scan.cs" />
-    <Compile Include="Config\WindowConfig.cs" />
-    <Compile Include="Controls\Msgbox.xaml.cs">
+    <Compile Include="Utils\Net\DownLoader.cs" />
+    <Compile Include="Utils\ImageAndVedio\ImageSlide.cs" />
+    <Compile Include="Utils\Net\Crawler.cs" />
+    <Compile Include="Utils\DataBase.cs" />
+    <Compile Include="Utils\FileProcess\Identify.cs" />
+    <Compile Include="Utils\FileProcess\Logger.cs" />
+    <Compile Include="Utils\Net\Net.cs" />
+    <Compile Include="Utils\Net\CrawlerParse.cs" />
+    <Compile Include="Utils\FileProcess\NFO.cs" />
+    <Compile Include="Utils\FileProcess\Scan.cs" />
+    <Compile Include="Utils\Config\WindowConfig.cs" />
+    <Compile Include="Window\Msgbox.xaml.cs">
       <DependentUpon>Msgbox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Library\GlobalVariable.cs" />
+    <Compile Include="Utils\GlobalVariable.cs" />
     <Compile Include="ViewModel\VieModel_Details.cs" />
     <Compile Include="ViewModel\VieModel_Edit.cs" />
-    <Compile Include="ViewModel\VieModel_ImageViewer.cs" />
     <Compile Include="ViewModel\VieModel_Main.cs" />
     <Compile Include="ViewModel\VieModel_Tools.cs" />
     <Compile Include="ViewModel\VieModel_DBManagement.cs" />
@@ -314,23 +313,23 @@
     <Compile Include="Window\Window_DBManagement.xaml.cs">
       <DependentUpon>Window_DBManagement.xaml</DependentUpon>
     </Compile>
-    <Page Include="Controls\OutputPanel.xaml">
+    <Page Include="UserControls\OutputPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\WaitingPanel.xaml">
+    <Page Include="UserControls\WaitingPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialog\BaseDialogStyle.xaml">
+    <Page Include="DialogWindow\BaseDialogStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialog\Dialog_NewMovie.xaml">
+    <Page Include="DialogWindow\Dialog_NewMovie.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Plot\Bar\BarView.xaml">
+    <Page Include="Utils\Plot\Bar\BarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -410,11 +409,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\DialogInput.xaml">
+    <Page Include="Window\DialogInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Msgbox.xaml">
+    <Page Include="Window\Msgbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -462,12 +461,8 @@
     </Compile>
     <Content Include="Data\x64\SQLite.Interop.dll" />
     <Content Include="Data\x86\SQLite.Interop.dll" />
-    <Content Include="Lib\PInvoke.dll" />
-    <Content Include="Lib\QueryEngine.dll" />
-    <Content Include="Lib\UsnOperation.dll" />
     <Resource Include="Resources\Skin\white\classify.png" />
     <Resource Include="Resources\Skin\black\classify.png" />
-    <Resource Include="Resources\Picture\bg.jpg" />
     <Resource Include="Resources\Skin\black\hide.png" />
     <Resource Include="Resources\Skin\white\hide.png" />
     <Resource Include="Resources\Picture\其他.png" />
@@ -485,10 +480,8 @@
     <Resource Include="Resources\Picture\score.png" />
     <Resource Include="Resources\Skin\white\runtime.png" />
     <Resource Include="Resources\Skin\black\runtime.png" />
-    <Resource Include="Resources\Picture\NoPrinting_B.gif" />
     <Resource Include="Resources\Skin\white\create.png" />
     <Resource Include="Resources\Skin\black\create.png" />
-    <Resource Include="Resources\Gif\loading.gif" />
     <Resource Include="Resources\Picture\sort_up.png" />
     <Resource Include="Resources\Picture\sort_down.png" />
     <Resource Include="Resources\Skin\black\selectmode.png" />
@@ -546,9 +539,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="README.md" />
-    <Resource Include="Resources\Cursors\03.ani" />
-    <Resource Include="Resources\Cursors\04.ani" />
-    <Resource Include="Resources\Cursors\07.ani" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -767,13 +757,16 @@
     <Resource Include="Resources\Picture\delete.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Reference\PInvoke.dll" />
+    <Content Include="Reference\QueryEngine.dll" />
+    <Content Include="Reference\UsnOperation.dll" />
     <Content Include="Resources\Jvedio.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Lib\MediaInfo.dll" />
-    <Content Include="Lib\MediaInfoNET.dll" />
+    <Content Include="Reference\MediaInfo.dll" />
+    <Content Include="Reference\MediaInfoNET.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jvedio.Language\Jvedio.Language.csproj">
@@ -794,13 +787,12 @@
   <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.113.1\build\net46\System.Data.SQLite.Core.targets')" />
   <PropertyGroup>
-    <PreBuildEvent>XCOPY "$(ProjectDir)Data\x86" "$(TargetDir)\x86" /E /Y /i
-XCOPY "$(ProjectDir)Data\x64" "$(TargetDir)\x64" /E /Y /i
-XCOPY "$(ProjectDir)Lib\MediaInfo.dll" "$(TargetDir)" /E /Y /i
-XCOPY "$(ProjectDir)Lib\MediaInfoNET.dll" "$(TargetDir)" /E /Y /i
+    <PreBuildEvent>XCOPY "$(ProjectDir)Reference\MediaInfo.dll" "$(TargetDir)" /E /Y /i
+XCOPY "$(ProjectDir)Reference\MediaInfoNET.dll" "$(TargetDir)" /E /Y /i
 XCOPY "$(ProjectDir)Data\BusActress.sqlite" "$(TargetDir)" /E /Y /i
 XCOPY "$(ProjectDir)Data\Upgrade.bat" "$(TargetDir)" /E /Y /i
-</PreBuildEvent>
+XCOPY "$(ProjectDir)Data\x86" "$(TargetDir)\x86" /E /Y /i
+XCOPY "$(ProjectDir)Data\x64" "$(TargetDir)\x64" /E /Y /i</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>XCOPY  "$(ProjectDir)bin\Debug"  "$(SolutionDir)ToGitee\public\File"    /E /Y /i</PostBuildEvent>

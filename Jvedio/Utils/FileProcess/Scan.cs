@@ -1,0 +1,593 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using QueryEngine;
+using System.Collections.Specialized;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Security.Permissions;
+using static Jvedio.GlobalVariable;
+
+namespace Jvedio
+{
+    public static class Scan
+    {
+        public static double MinFileSize = Properties.Settings.Default.ScanMinFileSize * 1024 * 1024;
+        public static List<string> SearchPattern = new List<string>();
+
+
+        public static void InitSearchPattern()
+        {
+            //视频后缀来自 Everything (位置：搜索-管理筛选器-视频-编辑)
+
+            //MinFileSize = 0;
+             SearchPattern = new List<string>();
+            string ScanVetioType = Resource_String.ScanVetioType;
+            foreach (var item in ScanVetioType.Split(','))
+                SearchPattern.Add("." + item.ToLower());
+        }
+
+
+        public static double InsertWithNfo(List<string> filepaths, CancellationToken ct, Action<string> messageCallBack = null,bool IsEurope=false)
+        {
+            List<string> nfopaths = new List<string>();
+            List<string> vediopaths = new List<string>();
+
+            foreach (var item in filepaths)
+            {
+                if (item.ToLower().EndsWith(".nfo"))
+                    nfopaths.Add(item);
+                else
+                    vediopaths.Add(item);
+            }
+
+            //先导入 nfo 再导入视频，避免路径覆盖
+            if (nfopaths.Count > 0 && Properties.Settings.Default.ScanNfo)
+            {
+                Logger.LogScanInfo(Environment.NewLine + "-----【" + DateTime.Now.ToString() + "】-----");
+                Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.ScanNFO} => {nfopaths.Count}  " + Environment.NewLine);
+
+                double total = 0;
+                //导入 nfo 文件
+                nfopaths.ForEach(item =>
+                {
+                    if (File.Exists(item))
+                    {
+                        Movie movie = FileProcess. GetInfoFromNfo(item);
+                        if (movie != null && !string.IsNullOrEmpty(movie.id))
+                        {
+                            DataBase.InsertFullMovie(movie);
+                            total += 1;
+                            Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.SuccessImportToDataBase} => {item}  ");
+                        }
+
+                    }
+                });
+
+                
+                Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.ImportNFONumber}： {total}" + Environment.NewLine );
+                messageCallBack?.Invoke($"{Jvedio.Language.Resources.ImportNFONumber}： {total}");
+
+                
+
+            }
+
+
+            //导入视频
+            if (vediopaths.Count > 0)
+            {
+                double _num = Scan.DistinctMovieAndInsert(vediopaths, ct, IsEurope);
+                messageCallBack?.Invoke($"{Jvedio.Language.Resources.ImportVideioNumber}：{_num}，详情请看日志");
+                return _num;
+            }
+            return 0;
+        }
+
+
+
+
+        public static bool IsProperMovie(string FilePath)
+        {
+            bool result = false;
+            if (!File.Exists(FilePath)) { return false; }
+            if (SearchPattern.Contains(System.IO.Path.GetExtension(FilePath).ToLower()))
+            {
+                if (new System.IO.FileInfo(FilePath).Length >= MinFileSize) { result = true; }
+            }
+            return result;
+        }
+
+
+
+
+        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+        public static List<string> ScanAllDrives()
+        {
+            List<string> result = new List<string>();
+            try
+            {
+                var entries = Engine.GetAllFilesAndDirectories();
+                entries.ForEach(arg => {
+                    if (arg is FileAndDirectoryEntry & !arg.IsFolder)
+                    {
+                        result.Add(arg.FullFileName);
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Logger.LogE(e);
+            }
+
+            //扫描根目录
+            StringCollection stringCollection = new StringCollection();
+            foreach (var item in Environment.GetLogicalDrives())
+            {
+                try
+                {
+                    if (Directory.Exists(item)) { stringCollection.Add(item); }
+                }
+                catch (Exception e)
+                {
+                    Logger.LogE(e);
+                    continue;
+                }
+
+            }
+            result.AddRange(ScanTopPaths(stringCollection));
+
+           
+            return FirstFilter(result);
+        }
+
+
+        //根据 视频后缀文件大小筛选
+        public static List<string> FirstFilter(List<string> FilePathList, string ID = "")
+        {
+            if (ID == "")
+            {
+                return FilePathList
+                    .Where(s => SearchPattern.Contains(Path.GetExtension(s).ToLower()))
+                    .Where(s => !File.Exists(s) || new FileInfo(s).Length >= MinFileSize).OrderBy(s => s).ToList();
+            }
+            else
+            {
+                return FilePathList
+                    .Where(s => SearchPattern.Contains(Path.GetExtension(s).ToLower()))
+                    .Where(s => !File.Exists(s) || new FileInfo(s).Length >= MinFileSize)
+                    .Where(s => { try { return Identify.GetFanhao(new FileInfo(s).Name).ToUpper() == ID.ToUpper(); } catch{ Logger.LogScanInfo($"错误路径：{s}"); return false; } })
+                    .OrderBy(s => s).ToList();
+            }
+        }
+
+        public static List<string> ScanTopPaths(StringCollection stringCollection)
+        {
+            List<string> result = new List<string>();
+            foreach (var item in stringCollection)
+            {
+                try
+                {
+                    foreach (var path in Directory.GetFiles(item, "*.*", SearchOption.TopDirectoryOnly)) result.Add(path);
+                }
+                catch { continue; }
+            }
+            return result;
+        }
+
+        public static List<string> GetSubSectionFeature()
+        {
+            List<string> result = new List<string>();
+            string SubSectionFeature = Resource_String.SubSectionFeature;
+            string SplitFeature = SubSectionFeature.Replace("，", ",");
+            if (SplitFeature.Split(',').Count() > 0) { foreach (var item in SplitFeature.Split(',')) { if (!result.Contains(item)) { result.Add(item); } } }
+            return result;
+        }
+
+
+        /// <summary>
+        /// 给出一组视频路径，返回否是分段视频，并返回分段的视频列表，以及不是分段的视频列表
+        /// </summary>
+        /// <param name="FilePathList"></param>
+        /// <returns></returns>
+
+        public static (bool,List<string>, List<string>) IsSubSection(List<string> FilePathList)
+        {
+
+            if (Identify.GetFanhao(FilePathList[0].ToUpper() ) == "FC2-1552855")
+            {
+                Console.WriteLine("123");
+            }
+
+            bool result = true;
+            List<string> notSubSection = new List<string>();
+            string FatherPath = new FileInfo(FilePathList[0]).Directory.FullName;
+
+            bool IsAllFileSameFP = FilePathList.All(arg => new FileInfo(arg).Directory.FullName == FatherPath);
+
+            if (!IsAllFileSameFP)
+            {
+                //并不是所有父目录都相同，提取出父目录最多的文件
+                Dictionary<string, int> fatherpathDic = new Dictionary<string, int>();
+                FilePathList.ForEach(path => {
+                    string fatherPath = new FileInfo(path).Directory.FullName;
+                    if (fatherpathDic.ContainsKey(fatherPath))
+                        fatherpathDic[fatherPath] += 1;
+                    else
+                        fatherpathDic.Add(fatherPath, 1);
+                });
+                string maxValueKey = fatherpathDic.FirstOrDefault(x => x.Value == fatherpathDic.Values.Max()).Key;
+                if (!string.IsNullOrEmpty(maxValueKey))
+                {
+                    try { 
+                    var notsub = fatherpathDic.Where(arg => arg.Key!=null && new FileInfo(arg.Key)?.Directory.FullName != maxValueKey).ToList();
+                    notsub.ForEach(arg => notSubSection.Add(arg.Key));
+                    }
+                    catch (Exception e) { Logger.LogE(e); }
+                    FilePathList = FilePathList.Where(arg => new FileInfo(arg).Directory.FullName == maxValueKey).ToList();
+                }
+            }
+
+
+            //目录都相同，判断是否分段视频的特征
+
+
+            // -1  cd1  _1   fhd1  
+            string regexFeature = "";
+            foreach (var item in GetSubSectionFeature()) { regexFeature += item + "|"; }
+            regexFeature = "(" + regexFeature.Substring(0, regexFeature.Length - 1) + ")[1-9]{1}";
+
+
+            string MatchesName = "";
+            foreach (var item in FilePathList)
+            {
+                foreach (var re in Regex.Matches(item, regexFeature)) { MatchesName += re.ToString(); }
+            }
+
+            for (int i = 1; i <= FilePathList.Count; i++) { result &= MatchesName.IndexOf(i.ToString()) >= 0; }
+
+
+            if (!result)
+            {
+                result = true;
+                //数字后面存在 A,B,C……
+                //XXX-000-A  
+                //XXX-000-B
+                regexFeature = "";
+                foreach (var item in GetSubSectionFeature()) { regexFeature += item + "|"; }
+                regexFeature = "((" + regexFeature.Substring(0, regexFeature.Length - 1) + ")|[0-9]{1,})[a-n]{1}";
+
+                MatchesName = "";
+                foreach (var item in FilePathList)
+                {
+                    foreach (var re in Regex.Matches(item, regexFeature, RegexOptions.IgnoreCase)) { MatchesName += re.ToString(); }
+                }
+                MatchesName = MatchesName.ToLower();
+                string characters = "abcdefghijklmn";
+                for (int i = 0; i < Math.Min( FilePathList.Count,characters.Length); i++) {  result &= MatchesName.IndexOf(characters[i]) >= 0;  }
+            }
+
+
+
+            return (result,FilePathList, notSubSection);
+
+        }
+
+
+
+
+
+
+        public static List<string> ScanPaths(StringCollection stringCollection, CancellationToken cancellationToken)
+        {
+            List<string> result = new List<string>();
+            foreach (var item in stringCollection) { result.AddRange(GetAllFilesFromFolder(item, cancellationToken)); }
+            var result2 = result
+                .Where(s => SearchPattern.Contains(System.IO.Path.GetExtension(s).ToLower()))
+                .Where(s => !File.Exists(s) || new System.IO.FileInfo(s).Length >= MinFileSize).OrderBy(s => s).ToList();
+            return result2;
+        }
+
+        public static List<string> ScanNFO(StringCollection stringCollection, CancellationToken cancellationToken, Action<string> callBack)
+        {
+            List<string> result = new List<string>();
+            foreach (var item in stringCollection) { result.AddRange(GetAllFilesFromFolder(item, cancellationToken, "*.*", callBack)); }
+            return result.Where(s => Path.GetExtension(s).ToLower().IndexOf("nfo") > 0).ToList();
+        }
+
+
+
+
+        public static  List<string> GetAllFilesFromFolder(string root, CancellationToken cancellationToken , string pattern = "", Action<string> callBack = null)
+        {
+            Queue<string> folders = new Queue<string>();
+            List<string> files = new List<string>();
+            folders.Enqueue(root);
+            while (folders.Count != 0)
+            {
+                try
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+                catch (OperationCanceledException e)
+                {
+                    Logger.LogE(e);
+                    break;
+                }
+
+                string currentFolder = folders.Dequeue();
+                //Console.WriteLine($"扫描中{currentFolder}");
+                try
+                {
+                    string[] filesInCurrent = System.IO.Directory.GetFiles(currentFolder, pattern == "" ? "*.*" : pattern, System.IO.SearchOption.TopDirectoryOnly);
+                    files.AddRange(filesInCurrent);
+                    foreach(var file in filesInCurrent) { callBack?.Invoke(file); }
+                }
+                catch
+                {
+                }
+                try
+                {
+                    string[] foldersInCurrent = System.IO.Directory.GetDirectories(currentFolder, pattern == "" ? "*.*" : pattern, System.IO.SearchOption.TopDirectoryOnly);
+                    foreach (string _current in foldersInCurrent)
+                    {
+                        folders.Enqueue(_current);
+                        callBack?.Invoke(_current);
+                    }
+                }
+                catch
+                {
+                }
+            }
+            return files;
+        }
+
+
+
+        /// <summary>
+        /// 分类视频并导入
+        /// </summary>
+        /// <param name="MoviePaths"></param>
+        /// <param name="ct"></param>
+        /// <param name="IsEurope"></param>
+        /// <returns></returns>
+        public static double DistinctMovieAndInsert(List<string> MoviePaths , CancellationToken ct, bool IsEurope = false)
+        {
+            Logger.LogScanInfo(Environment.NewLine +  "-----【" + DateTime.Now.ToString() + "】-----");
+            Logger.LogScanInfo(Environment.NewLine +  $"{Jvedio.Language.Resources.ScanVideo} => {MoviePaths.Count} " +  Environment.NewLine);
+
+
+            //检查未识别出番号的视频
+            List<string> r1 = new List<string>();
+            string c1 = "";
+            string id = "";
+            VedioType  vt = 0;
+            double totalinsertnum = 0;
+            double unidentifynum = 0;
+            foreach (var item in MoviePaths)
+            {
+                if (File.Exists(item))
+                {
+                    
+                    id = IsEurope ? Identify.GetEuFanhao(new FileInfo(item).Name) : Identify.GetFanhao(new FileInfo(item).Name);
+
+                    if (IsEurope) { if (string.IsNullOrEmpty(id)) vt = 0; else vt = VedioType.欧美; }
+                    else vt = Identify.GetVedioType(id);
+
+
+                    if (vt != 0) r1.Add(item);
+                    else
+                    {
+                        //写日志
+                        c1 += "   " + item + Environment.NewLine ;
+                        unidentifynum++;
+                    }
+                }
+            }
+            Logger.LogScanInfo(Environment.NewLine + $"【{Jvedio.Language.Resources.NotRecognizeNumber} ：{unidentifynum}】" + Environment.NewLine  + c1);
+
+            //检查 重复|分段 视频
+            Dictionary<string, List<string>> repeatlist = new Dictionary<string, List<string>>();
+            string c2 = "";
+            foreach (var item in r1)
+            {
+                if (File.Exists(item))
+                {
+
+                    id = IsEurope ? Identify.GetEuFanhao(new FileInfo(item).Name) : Identify.GetFanhao(new FileInfo(item).Name);
+                    if (!repeatlist.ContainsKey(id))
+                    {
+                        List<string> pathlist = new List<string> { item };
+                        repeatlist.Add(id, pathlist);
+                    }
+                    else
+                    {
+                        repeatlist[id].Add(item);
+                    }
+                }
+            }
+
+            List<string> removelist = new List<string>();
+            List<List<string>> subsectionlist = new List<List<string>>();
+            foreach (KeyValuePair<string, List<string>> kvp in repeatlist)
+            {
+                if (kvp.Value.Count > 1)
+                {
+                    (bool issubsection,List<string> filepathlist,List<string> notsubsection) = IsSubSection(kvp.Value);
+                    if (issubsection)
+                    {
+                        subsectionlist.Add(filepathlist);
+                        if(filepathlist.Count< kvp.Value.Count)
+                        {
+                            //其中几个不是分段视频
+                            c2 += $"   {Jvedio.Language.Resources.ID} ：{kvp.Key}" + Environment.NewLine;
+                            removelist.AddRange(notsubsection);
+                            c2 += $"      {Jvedio.Language.Resources.ImportSubSection}： {filepathlist.Count} ，：{string.Join(";",filepathlist)}" + Environment.NewLine;
+                            notsubsection.ForEach(arg =>
+                            {
+                                c2 += $"      {Jvedio.Language.Resources.NotImport} ：{arg}" + Environment.NewLine;
+                            });
+                        }
+
+
+                    }
+                    else
+                    {
+                        c2 += $"   {Jvedio.Language.Resources.ID}：{kvp.Key}" + Environment.NewLine ;
+                        (string maxfilepath, List<string> Excludelsist) = ExcludeMaximumSize(kvp.Value);
+                        removelist.AddRange(Excludelsist);
+                        c2 += $"      {Jvedio.Language.Resources.ImportFile} ：{maxfilepath}，{Jvedio.Language.Resources.FileSize} ：{new FileInfo(maxfilepath).Length}" + Environment.NewLine;
+                        Excludelsist.ForEach(arg =>
+                        {
+                            c2 += $"      {Jvedio.Language.Resources.NotImport} ：{arg}，{Jvedio.Language.Resources.FileSize} ：{new FileInfo(arg).Length}" + Environment.NewLine;
+                        });
+                    }
+
+                }
+                else
+                {
+
+                }
+            }
+            Logger.LogScanInfo(Environment.NewLine + $"【 {Jvedio.Language.Resources.RepeatVideo}：{removelist.Count + subsectionlist.Count}】" + Environment.NewLine + c2);
+            List<string> insertList = r1.Except(removelist).ToList();
+
+            Console.WriteLine("removelist:" + removelist.Count);
+            Console.WriteLine("subsectionlist:" + subsectionlist.Count);
+
+
+            //导入分段视频
+            foreach (var item in subsectionlist)
+            {
+                insertList = insertList.Except(item).ToList();
+
+                try
+                {
+                    ct.ThrowIfCancellationRequested();
+                }
+                catch (OperationCanceledException ex)
+                {
+                    Logger.LogE(ex);
+                    break;
+                }
+                string subsection = "";
+                FileInfo fileinfo = new FileInfo(item[0]);
+                id = IsEurope ? Identify.GetEuFanhao(fileinfo.Name) : Identify.GetFanhao(fileinfo.Name);
+                if (IsEurope) { if (string.IsNullOrEmpty(id)) continue; else vt = VedioType.欧美; } else { vt = Identify.GetVedioType(id); }
+                if (string.IsNullOrEmpty(id) | vt == 0) { continue; }
+
+                //文件大小视为所有文件之和
+                double filesize = 0;
+                for (int i = 0; i < item.Count; i++)
+                {
+                    if (!File.Exists(item[i])) { continue; }
+                    FileInfo fi = new FileInfo(item[i]);
+                    subsection += item[i] + ";";
+                    filesize += fi.Length;
+                }
+
+                //获取创建日期
+                string createDate = "";
+                try { createDate = fileinfo.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss"); }
+                catch { }
+                if (createDate == "") createDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                Movie movie = new Movie()
+                {
+                    filepath = item[0],
+                    id = id,
+                    filesize = filesize,
+                    vediotype = (int)vt,
+                    subsection = subsection.Substring(0, subsection.Length - 1),
+                    otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    scandate= createDate 
+            };
+                
+                 DataBase.InsertScanMovie(movie); 
+                totalinsertnum += 1;
+            }
+
+            Console.WriteLine("insertList:" + insertList.Count);
+
+
+            //导入所有视频
+
+
+            foreach (var item in insertList)
+            {
+                try
+                {
+                    ct.ThrowIfCancellationRequested();
+                }
+                catch (OperationCanceledException ex)
+                {
+                    Logger.LogE(ex);
+                    break;
+                }
+                if (!File.Exists(item)) { continue; }
+                FileInfo fileinfo = new FileInfo(item);
+
+                string createDate = "";
+                try { createDate = fileinfo.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss"); }
+                catch { }
+                if (createDate == "") createDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                id = IsEurope ? Identify.GetEuFanhao(fileinfo.Name) : Identify.GetFanhao(fileinfo.Name);
+                if (IsEurope) { if (string.IsNullOrEmpty(id)) continue; else vt = VedioType.欧美; } else { vt = Identify.GetVedioType(id); }
+                Movie movie = new Movie()
+                {
+                    filepath = item,
+                    id = id,
+                    filesize = fileinfo.Length,
+                    vediotype = (int)vt,
+                    otherinfo= DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    scandate = createDate
+                };
+                DataBase.InsertScanMovie(movie); 
+                totalinsertnum += 1;
+            }
+            
+            Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.TotalImport} => {totalinsertnum}，{Jvedio.Language.Resources.ImportAttention}" + Environment.NewLine);
+
+
+            //从 主数据库中 复制信息
+            if (Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower() != "info")
+            {
+                try
+                {
+                    //待修复 的 bug
+                    string src= AppDomain.CurrentDomain.BaseDirectory + "info.sqlite";
+                    string dst = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower()}.sqlite"; ;
+                    DataBase. CopyDatabaseInfo(src,dst);
+                }
+                catch { }
+            }
+                
+
+
+
+            return totalinsertnum;
+        }
+
+        public static (string, List<string>) ExcludeMaximumSize(List<string> pathlist)
+        {
+            double maxsize = 0;
+            int maxsizeindex = 0;
+            int i = 0;
+            foreach (var item in pathlist)
+            {
+                if (File.Exists(item))
+                {
+                    double filesize = new FileInfo(item).Length;
+                    if (maxsize < filesize) { maxsize = filesize; maxsizeindex = i; }
+                }
+                i++;
+            }
+            string maxsizepth = pathlist[maxsizeindex];
+            pathlist.RemoveAt(maxsizeindex);
+            return (maxsizepth, pathlist);
+        }
+
+    }
+}

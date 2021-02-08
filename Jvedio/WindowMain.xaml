@@ -2641,7 +2641,7 @@
 
                 <!--升级-->
 
-                <Grid Visibility="Collapsed" x:Name="UpdateGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="400" MinWidth="550"  >
+                <Grid Visibility="Visible" x:Name="UpdateGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="400" MinWidth="550"  >
                     <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Opacity="1" Margin="2">
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
