@@ -58,7 +58,11 @@ namespace Jvedio
             if (value == null || parameter==null) return 0;
             double.TryParse(value.ToString(), out double width);
             double.TryParse(parameter.ToString(), out double w);
-            return width + w;
+            if (width + w > 0)
+                return width + w;
+            else
+                return 0;
+            
 
         }
 

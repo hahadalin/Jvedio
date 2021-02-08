@@ -343,6 +343,8 @@ namespace Jvedio
                 string filePath = list[1] as string;
                 string GifPath = list[2] as string;
 
+                int duration = Properties.Settings.Default.Gif_Duration;
+
                 int width = Properties.Settings.Default.Gif_Width;
                 int height = Properties.Settings.Default.Gif_Height;
                 if (Properties.Settings.Default.Gif_AutoHeight) {
@@ -365,7 +367,7 @@ namespace Jvedio
                 p.StartInfo.CreateNoWindow = true;//不显示程序窗口
                 p.Start();//启动程序
 
-                string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t 5 -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifPath}\"";
+                string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t {duration} -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifPath}\"";
                 Console.WriteLine(str);
 
 

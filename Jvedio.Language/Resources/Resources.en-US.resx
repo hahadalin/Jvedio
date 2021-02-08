@@ -1512,4 +1512,13 @@
   <data name="UpgradeSource" xml:space="preserve">
     <value>Update source</value>
   </data>
+  <data name="Gif_Duration" xml:space="preserve">
+    <value>Gif Duration</value>
+  </data>
+  <data name="SuccessCopyUrl" xml:space="preserve">
+    <value>The download address has been successfully copied</value>
+  </data>
+  <data name="CopyToDownload" xml:space="preserve">
+    <value>Please copy the download address to download</value>
+  </data>
 </root>

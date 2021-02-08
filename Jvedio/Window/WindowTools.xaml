@@ -51,7 +51,7 @@
                     <Grid Background="Transparent">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Vertical"  Margin="20 0">
-                                <ListBox  AllowDrop="True" DragOver="PathListBox_DragOver" Drop="PathListBox_Drop"  ItemsSource="{Binding ScanPath}" x:Name="PathListBox"  Height="250" Background="Transparent" Margin="0,20,0,0" >
+                                <ListBox  AllowDrop="True" DragOver="PathListBox_DragOver"  Drop="PathListBox_Drop"  ItemsSource="{Binding ScanPath}" x:Name="PathListBox"  Height="250" Background="Transparent" Margin="0,20,0,0" >
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Orientation="Vertical"/>

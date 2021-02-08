@@ -43,8 +43,8 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Border}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="Gray"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="LightGray"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

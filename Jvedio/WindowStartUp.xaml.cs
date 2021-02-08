@@ -38,6 +38,17 @@ namespace Jvedio
             cts = new CancellationTokenSource();
             cts.Token.Register(() => Console.WriteLine("取消任务"));
             ct = cts.Token;
+
+            if (File.Exists("upgrade.bat"))
+            {
+                try{ File.Delete("upgrade.bat"); } catch { }
+            }
+
+            if (Directory.Exists("Temp"))
+            {
+                try { Directory.Delete("Temp",true); } catch { }
+            }
+
         }
 
 

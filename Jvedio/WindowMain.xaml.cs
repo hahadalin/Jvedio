@@ -97,10 +97,6 @@ namespace Jvedio
 
             ImageSlideTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
             ImageSlideTimer.Tick += new EventHandler(ImageSlideTimer_Tick);
-
-            ActorInfoGrid.Visibility = Visibility.Collapsed;
-            LoadingGrid.Visibility = Visibility.Collapsed;
-            ProgressBar.Visibility = Visibility.Collapsed;
             ActorProgressBar.Visibility = Visibility.Hidden;
             FilterGrid.Visibility = Visibility.Collapsed;
             WinState = 0;
@@ -326,17 +322,18 @@ namespace Jvedio
                 {
                     if (OpeningWindows.Contains(window.GetType().ToString()))
                     {
-                        window.Visibility = Visibility.Visible;
+                        window.Show();
                     }
                 }
                 IsHide = false;
+                ShowMainWindow(this, null);
             }
             else
             {
                 OpeningWindows.Clear();
                 foreach (Window window in App.Current.Windows)
                 {
-                    window.Visibility = Visibility.Hidden;
+                    window.Hide();
                     OpeningWindows.Add(window.GetType().ToString());
                 }
                 IsHide = true;
@@ -432,7 +429,7 @@ namespace Jvedio
             }
             else
             {
-                vieModel.Reset();
+                //vieModel.Reset();
                 AllRB.IsChecked = true;
             }
             //AsyncLoadImage();
@@ -487,36 +484,17 @@ namespace Jvedio
 
         public void SetLoadingStatus(bool loading)
         {
-            if (loading)
-            {
-                LoadingGrid.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                LoadingGrid.Visibility = Visibility.Hidden;
-            }
-            PageStackPanel.IsEnabled = !loading;
+            vieModel.IsLoadingMovie = loading;
             IsFlowing = loading;
             vieModel.IsFlipOvering = loading;
-            SideBorder.IsEnabled = !loading;
-            ToolsGrid.IsEnabled = !loading;
             SortStackPanel.IsEnabled = !loading;
         }
 
 
         public void SetActorLoadingStatus(bool loading)
         {
-            if (loading)
-            {
-                LoadingActorGrid.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                LoadingActorGrid.Visibility = Visibility.Hidden;
-            }
             ActorPageStackPanel.IsEnabled = !loading;
-            SideBorder.IsEnabled = !loading;
-            ActorToolsGrid.IsEnabled = !loading;
+            vieModel.IsLoadingMovie = loading;
         }
 
 
@@ -567,12 +545,10 @@ namespace Jvedio
         {
             NotifyIcon.Visibility = Visibility.Collapsed;
             this.Show();
-            this.WindowState = WindowState.Normal;
             double opacity = Properties.Settings.Default.Opacity_Main >= 0.5 ? Properties.Settings.Default.Opacity_Main : 1;
-            var anim = new DoubleAnimation(0, opacity, (Duration)FadeInterval);
+            var anim = new DoubleAnimation(1, opacity, (Duration)FadeInterval, FillBehavior.Stop);
             anim.Completed += (s, _) => this.Opacity = opacity;
             this.BeginAnimation(UIElement.OpacityProperty, anim);
-
         }
 
 
@@ -607,11 +583,17 @@ namespace Jvedio
                         RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
                         UpdateContentTextBox.Text = updateContent;
 
-                        if (local.CompareTo(remote) < 0) UpdateGrid.Visibility = Visibility.Visible;
+                        if (local.CompareTo(remote) < 0)
+                        {
+                            UpdateGrid.Visibility = Visibility.Visible;
 
-                        App.Current.Dispatcher.Invoke((Action)delegate { UpgradeLoadingCircle.Visibility = Visibility.Hidden; });
+                        }
+
+
                     });
                 }
+                App.Current.Dispatcher.Invoke((Action)delegate { UpgradeLoadingCircle.Visibility = Visibility.Hidden; });
+
             });
         }
 
@@ -695,7 +677,7 @@ namespace Jvedio
             DownLoader.MessageCallBack += (s, e) =>
             {
                 MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
-                HandyControl.Controls.Growl.Error(eventArgs.Message);
+                if(eventArgs!=null) HandyControl.Controls.Growl.Error(eventArgs.Message);
             };
 
 
@@ -803,10 +785,10 @@ namespace Jvedio
         {
             Dispatcher.Invoke((Action)delegate ()
           {
-              ProgressBar.Value = ProgressBar.Maximum * (eventArgs.progress / totalcount);
-              ProgressBar.Visibility = Visibility.Visible;
-              if (ProgressBar.Value == ProgressBar.Maximum) { DownLoader.State = DownLoadState.Completed; ProgressBar.Visibility = Visibility.Hidden; }
-              if (DownLoader.State == DownLoadState.Completed | DownLoader.State == DownLoadState.Fail) ProgressBar.Visibility = Visibility.Hidden;
+              vieModel.ProgressBarValue = (int)(100 * eventArgs.progress / totalcount);
+              vieModel.ProgressBarVisibility = Visibility.Visible;
+              if (vieModel.ProgressBarValue == 100) { DownLoader.State = DownLoadState.Completed; vieModel.ProgressBarVisibility = Visibility.Hidden; }
+              if (DownLoader.State == DownLoadState.Completed | DownLoader.State == DownLoadState.Fail) vieModel.ProgressBarVisibility = Visibility.Hidden;
               RefreshMovieByID(eventArgs.Movie.id);
           });
         }
@@ -1073,19 +1055,6 @@ namespace Jvedio
             SideBorder.Width = Properties.Settings.Default.SideGridWidth<200?200: Properties.Settings.Default.SideGridWidth;
 
 
-            if (Properties.Settings.Default.ShowImageMode == "4")
-            {
-                MovieMainGrid.Visibility = Visibility.Hidden;
-                //DetailGrid.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                MovieMainGrid.Visibility = Visibility.Visible;
-                //DetailGrid.Visibility = Visibility.Hidden;
-            }
-
-
-
         }
 
         private void SetWindowProperty()
@@ -1136,7 +1105,7 @@ namespace Jvedio
             {
                 StopDownLoad();
                 SaveRecentWatched();
-                ProgressBar.Visibility = Visibility.Hidden;
+                vieModel.ProgressBarVisibility = Visibility.Hidden;
                 WindowTools windowTools = null;
                 foreach (Window item in App.Current.Windows)
                 {
@@ -1173,10 +1142,17 @@ namespace Jvedio
         {
             if (Properties.Settings.Default.EnableWindowFade)
             {
-                double opacity = Properties.Settings.Default.Opacity_Main >= 0.5 ? Properties.Settings.Default.Opacity_Main : 1;
-                var anim = new DoubleAnimation(0, opacity, (Duration)FadeInterval);
-                anim.Completed += (s, _) => this.Opacity = opacity;
-                this.BeginAnimation(UIElement.OpacityProperty, anim);
+                //double opacity = Properties.Settings.Default.Opacity_Main >= 0.5 ? Properties.Settings.Default.Opacity_Main : 1;
+                //var anim = new DoubleAnimation(0, opacity, (Duration)FadeInterval,FillBehavior.Stop);
+                //anim.Completed += (s, _) => this.Opacity = opacity;
+                //this.BeginAnimation(UIElement.OpacityProperty, anim);
+                this.Show();
+                this.Opacity = Properties.Settings.Default.Opacity_Main;
+            }
+            else
+            {
+                this.Show();
+                this.Opacity = Properties.Settings.Default.Opacity_Main;
             }
 
         }
@@ -1188,24 +1164,9 @@ namespace Jvedio
             FadeOut();
         }
 
-        public async void MinWindow(object sender, RoutedEventArgs e)
+        public  void MinWindow(object sender, RoutedEventArgs e)
         {
-            if (Properties.Settings.Default.EnableWindowFade)
-            {
-                double opacity = this.Opacity;
-                await Task.Run(() =>
-                {
-                    while (opacity > 0.2)
-                    {
-                        this.Dispatcher.Invoke((Action)delegate { this.Opacity -= 0.1; opacity = this.Opacity; });
-                        Task.Delay(20).Wait();
-                    }
-                });
-            }
-
             this.WindowState = WindowState.Minimized;
-            this.Opacity = 1;
-
         }
 
 
@@ -1368,7 +1329,6 @@ namespace Jvedio
         {
             Grid grid = ((Canvas)(sender)).Parent as Grid;
             TextBox SearchTextBox = grid.Children.OfType<TextBox>().First() as TextBox;
-            if (grid.Name == "AllSearchGrid") { vieModel.SearchAll = true; } else { vieModel.SearchAll = false; }
             vieModel.Search = SearchTextBox.Text;
         }
 
@@ -1388,9 +1348,6 @@ namespace Jvedio
 
         private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
         {
-            //if (AllSearchGrid.Width > 300) return;
-            //DoubleAnimation doubleAnimation = new DoubleAnimation(300, 400, new Duration(TimeSpan.FromMilliseconds(200)));
-            //AllSearchGrid.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation);
             //边框颜色
             Color color1 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["BackgroundSide"].ToString());
             Color color2 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["ForegroundSearch"].ToString());
@@ -1401,10 +1358,7 @@ namespace Jvedio
 
         private void SearchBar_LostFocus(object sender, RoutedEventArgs e)
         {
-            //if (AllSearchGrid.Width <400) return;
             AllSearchPopup.IsOpen = false;
-            //DoubleAnimation doubleAnimation = new DoubleAnimation(400, 300, new Duration(TimeSpan.FromMilliseconds(200)));
-            //AllSearchGrid.BeginAnimation(FrameworkElement.WidthProperty, doubleAnimation);
             //边框颜色
             Color color1 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["BackgroundSide"].ToString());
             Color color2 = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["ForegroundSearch"].ToString());
@@ -1494,10 +1448,10 @@ namespace Jvedio
 
         private void ShowMovieGrid(object sender, RoutedEventArgs e)
         {
-            Grid_Classify.Visibility = Visibility.Hidden;
+            vieModel.Grid_Classify = Visibility.Hidden;
             Grid_Movie.Visibility = Visibility.Visible;
-            ActorInfoGrid.Visibility = Visibility.Collapsed;
-            ScrollViewer.ScrollToTop();
+            vieModel.ActorInfoGrid  = Visibility.Collapsed;
+            MovieScrollViewer.ScrollToTop();
 
 
         }
@@ -1505,7 +1459,7 @@ namespace Jvedio
         private void ShowClassifyGrid(object sender, RoutedEventArgs e)
         {
             Grid_Movie.Visibility = Visibility.Hidden;
-            Grid_Classify.Visibility = Visibility.Visible;
+            vieModel.Grid_Classify = Visibility.Visible;
             this.vieModel.ClickGridType = 1;
             LoveActressCheckBox.IsChecked = false;
         }
@@ -1602,7 +1556,7 @@ namespace Jvedio
             actress.smallimage = GetActorImage(actress.name);
             vieModel.Actress = actress;
             ShowMovieGrid(this, new RoutedEventArgs());
-            ActorInfoGrid.Visibility = Visibility.Visible;
+            vieModel.ActorInfoGrid  = Visibility.Visible;
         }
 
         public void ActorCheckBox_Click(object sender, RoutedEventArgs e)
@@ -1745,7 +1699,7 @@ namespace Jvedio
                 vieModel.Actress = actress;
                 vieModel.FlipOver();
                 ShowMovieGrid(sender, new RoutedEventArgs());
-                ActorInfoGrid.Visibility = Visibility.Visible;
+                vieModel.ActorInfoGrid  = Visibility.Visible;
                 vieModel.TextType = actress.name;
             }
         }
@@ -1940,7 +1894,7 @@ namespace Jvedio
                 Border border = FindElementByName<Border>(c, "MovieBorder");
                 if (border != null)
                 {
-                    if (c.ContentTemplate.FindName("idTextBox", c) is TextBox textBox)
+                    if (c.ContentTemplate.FindName("IDTextBox", c) is TextBox textBox)
                     {
                         border.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
                         foreach (Movie movie in vieModel.SelectedMovie)
@@ -2092,16 +2046,11 @@ namespace Jvedio
 
             if (sortindex ==4)
             {
-                MovieMainGrid.Visibility = Visibility.Hidden;
-                //DetailGrid.Visibility = Visibility.Visible;
                 vieModel.ShowDetailsData();
             }
             else
             {
-                MovieMainGrid.Visibility = Visibility.Visible;
-                //DetailGrid.Visibility = Visibility.Hidden;
-                //vieModel.FlowNum = 0;
-                //vieModel.FlipOver();
+
             }
 
             if (sortindex == 0)
@@ -2164,9 +2113,9 @@ namespace Jvedio
             //流动模式
             ScrollViewer sv = sender as ScrollViewer;
             if (sv.VerticalOffset >= 500)
-                GoToTopCanvas.Visibility = Visibility.Visible;
+                vieModel.GoToTopCanvas = Visibility.Visible;
             else
-                GoToTopCanvas.Visibility = Visibility.Hidden;
+                vieModel.GoToTopCanvas = Visibility.Hidden;
 
             if (!IsFlowing && sv.ScrollableHeight - sv.VerticalOffset <= 10 && sv.VerticalOffset != 0)
             {
@@ -2193,7 +2142,7 @@ namespace Jvedio
 
         public void GotoTop(object sender, MouseButtonEventArgs e)
         {
-            ScrollViewer.ScrollToTop();
+            MovieScrollViewer.ScrollToTop();
         }
 
         public void PlayVedio(object sender, MouseButtonEventArgs e)
@@ -2455,7 +2404,7 @@ namespace Jvedio
                     string BigPicPath = Properties.Settings.Default.BasePicPath + $"BigPic\\{movie.id}.jpg";
 
                     string name;
-                    if (ActorInfoGrid.Visibility == Visibility.Visible)
+                    if (vieModel.ActorInfoGrid  == Visibility.Visible)
                         name = vieModel.Actress.name;
                     else
                         name = movie.actor.Split(actorSplitDict[movie.vediotype])[0];
@@ -3701,7 +3650,7 @@ namespace Jvedio
             if (DownLoader != null && DownLoader.State == DownLoadState.DownLoading) HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_Stop, "Main");
             DownLoader?.CancelDownload();
             downLoadActress?.CancelDownload();
-            this.Dispatcher.BeginInvoke((Action)delegate { ProgressBar.Visibility = Visibility.Hidden; });
+            this.Dispatcher.BeginInvoke((Action)delegate { vieModel.ProgressBarVisibility = Visibility.Hidden; });
 
 
         }
@@ -3799,7 +3748,7 @@ namespace Jvedio
             else vieModel.CurrentPage += 1;
 
             vieModel.FlipOver();
-            ScrollViewer.ScrollToTop();
+            MovieScrollViewer.ScrollToTop();
 
         }
 
@@ -3811,7 +3760,7 @@ namespace Jvedio
             else vieModel.CurrentPage -= 1;
 
             vieModel.FlipOver();
-            ScrollViewer.ScrollToTop();
+            MovieScrollViewer.ScrollToTop();
 
         }
 
@@ -3957,7 +3906,7 @@ namespace Jvedio
                                     vieModel.ActorList[i] = actressUpdateEventArgs.Actress;
                                     ActorProgressBar.Value = actressUpdateEventArgs.progressBarUpdate.value / actressUpdateEventArgs.progressBarUpdate.maximum * 100; ActorProgressBar.Visibility = Visibility.Visible;
                                     if (ActorProgressBar.Value == ActorProgressBar.Maximum) downLoadActress.State = DownLoadState.Completed;
-                                    if (ActorProgressBar.Value == ProgressBar.Maximum | actressUpdateEventArgs.state == DownLoadState.Fail | actressUpdateEventArgs.state == DownLoadState.Completed) { ActorProgressBar.Visibility = Visibility.Hidden; }
+                                    if (ActorProgressBar.Value == 100 | actressUpdateEventArgs.state == DownLoadState.Fail | actressUpdateEventArgs.state == DownLoadState.Completed) { ActorProgressBar.Visibility = Visibility.Hidden; }
                                 });
                             }
                             catch (TaskCanceledException ex) { Logger.LogE(ex); }
@@ -3997,7 +3946,7 @@ namespace Jvedio
 
         private void ProgressBar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (ProgressBar.Visibility == Visibility.Hidden && Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported && taskbarInstance != null)
+            if (vieModel.ProgressBarVisibility == Visibility.Hidden && Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported && taskbarInstance != null)
             {
                     taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress,this);
             }
@@ -4005,11 +3954,6 @@ namespace Jvedio
 
         }
 
-        private void ShowSameFilePath(object sender, RoutedEventArgs e)
-        {
-            FilePathPopup.IsOpen = true;
-            vieModel.LoadFilePathClassfication();
-        }
 
         public void ShowSubsection(object sender, MouseButtonEventArgs e)
         {
@@ -4138,12 +4082,6 @@ namespace Jvedio
             }
         }
 
-        private void DoubleAnimation_Completed(object sender, EventArgs e)
-        {
-            Border border = sender as Border;
-            border.Opacity = 1;
-        }
-
 
 
         public void ShowSettingsPopup(object sender, MouseButtonEventArgs e)
@@ -4179,38 +4117,14 @@ namespace Jvedio
                 Properties.Settings.Default.FirstRun = false;
                 Properties.Settings.Default.Save();
             }
-
-
-
-
             FadeIn();
-
-
             SetSkin();
-
-            //监听文件改动
-            //if (Properties.Settings.Default.ListenAllDir)
-            //{
-            //    try { AddListen(); }
-            //    catch (Exception ex) { Logger.LogE(ex); }
-            //}
-
             //显示公告
             ShowNotice();
 
-
             //检查更新
             CheckUpdate();
-
-
-            //检查网络连接
-
-
             this.Cursor = Cursors.Arrow;
-
-            //ScrollViewer.Focus();
-
-
             //设置当前数据库
             for (int i = 0; i < vieModel.DataBases.Count; i++)
             {
@@ -4245,8 +4159,6 @@ namespace Jvedio
                 SortImage.Source = new BitmapImage(new Uri("/Resources/Picture/sort_up.png", UriKind.Relative));
 
             InitList();
-            this.Activate();
-
         }
 
         public void InitList()
@@ -4371,7 +4283,7 @@ namespace Jvedio
             else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Right)
             {
                 //末页
-                if (Grid_Classify.Visibility == Visibility.Hidden)
+                if (vieModel.Grid_Classify == Visibility.Hidden)
                 {
                     vieModel.CurrentPage = vieModel.TotalPage;
                     vieModel.FlipOver();
@@ -4388,7 +4300,7 @@ namespace Jvedio
             else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Left)
             {
                 //首页
-                if (Grid_Classify.Visibility == Visibility.Hidden)
+                if (vieModel.Grid_Classify == Visibility.Hidden)
                 {
                     vieModel.CurrentPage = 1;
                     vieModel.FlipOver();
@@ -4413,13 +4325,13 @@ namespace Jvedio
                 //滑倒底端
 
             }
-            else if (Grid_Classify.Visibility == Visibility.Hidden && e.Key == Key.Right)
+            else if (vieModel.Grid_Classify == Visibility.Hidden && e.Key == Key.Right)
                 NextPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if (Grid_Classify.Visibility == Visibility.Hidden && e.Key == Key.Left)
+            else if (vieModel.Grid_Classify == Visibility.Hidden && e.Key == Key.Left)
                 PreviousPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if (Grid_Classify.Visibility == Visibility.Visible && e.Key == Key.Right)
+            else if (vieModel.Grid_Classify == Visibility.Visible && e.Key == Key.Right)
                 NextActorPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if (Grid_Classify.Visibility == Visibility.Visible && e.Key == Key.Left)
+            else if (vieModel.Grid_Classify == Visibility.Visible && e.Key == Key.Left)
                 PreviousActorPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
 
 
@@ -5748,12 +5660,11 @@ namespace Jvedio
 
         private void HideActressGrid(object sender, MouseButtonEventArgs e)
         {
-            ActorInfoGrid.Visibility = Visibility.Collapsed;
+            vieModel.ActorInfoGrid  = Visibility.Collapsed;
         }
 
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if(ProgressTextBox!=null) ProgressTextBox.Text =(int)e.NewValue + "%";
             if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported && taskbarInstance!=null)
             {
                 taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal,this);

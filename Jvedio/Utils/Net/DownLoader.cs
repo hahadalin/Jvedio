@@ -24,7 +24,7 @@ namespace Jvedio
         public string list_url = "https://hitchao.github.io/jvedioupdate/list";
         public string file_url = "https://hitchao.github.io/jvedioupdate/File/";
 
-        private ProgressBUpdateEventArgs DownLoadProgress=new ProgressBUpdateEventArgs();
+        private ProgressBUpdateEventArgs DownLoadProgress;
         public void Start()
         {
             StopUpgrade = false;
@@ -102,7 +102,7 @@ namespace Jvedio
             //新建临时文件夹
             if (!Directory.Exists(temppath)) Directory.CreateDirectory(temppath);
             await GetDownLoadList();
-
+            DownLoadProgress = new ProgressBUpdateEventArgs();
             DownLoadProgress.maximum = DownLoadList.Count;
             foreach (var item in DownLoadList)
             {
@@ -116,7 +116,7 @@ namespace Jvedio
                     if (filebytes != null) WriteFile(filebytes, filepath);
                 }
                 DownLoadProgress.value += 1;
-                onProgressChanged?.Invoke(this, DownLoadProgress);
+                if(!StopUpgrade) onProgressChanged?.Invoke(this, DownLoadProgress);
             }
 
             //复制文件并覆盖 执行 cmd 命令

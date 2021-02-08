@@ -42,6 +42,7 @@
 
         <!--Converter-->
 
+        <local:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
         <local:WidthConverter x:Key="WidthConverter" />
         <local:BiggerWidthConverter x:Key="BiggerWidthConverter" />
         <local:BoolToImageStretchConverter x:Key="BoolToImageStretchConverter" />
@@ -336,16 +337,6 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="SearchTextGrid" TargetType="{x:Type Border}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsMouseOver, ElementName=AllSearchGrid}" Value="True">
-                    <Setter Property="BorderBrush" Value="{DynamicResource ForegroundSearch}"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsMouseOver, ElementName=AllSearchGrid}" Value="False">
-                    <Setter Property="Background" Value="Transparent"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
 
         <Style x:Key="Ellipse" TargetType="{x:Type Ellipse}">
             <Style.Triggers>
@@ -869,9 +860,6 @@
 
                                     <Border.ContextMenu >
                                         <ContextMenu Opacity="0.8"  StaysOpen="False"  x:Name="SettingsContextMenu"  HorizontalOffset="-30" Placement="Bottom"  Margin="2" >
-                                            <ContextMenu.Effect>
-                                                <DropShadowEffect BlurRadius="10" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
-                                            </ContextMenu.Effect>
 
                                             <MenuItem   Header="{x:Static lang:Resources.Settings}" Click="OpenSet_MouseDown"  />
                                             <MenuItem   Header="{x:Static lang:Resources.Tools}"  Click="OpenTools"    />
@@ -937,35 +925,6 @@
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=classify,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
                                     <RadioButton  Click="ShowClassifyGrid"    Background="Transparent"  Cursor="Hand"    Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="{x:Static lang:Resources.AutoClassification}"    />
                                 </Grid>
-
-
-
-                                <Popup x:Name="FilePathPopup" Focusable="True"  VerticalOffset="2"  HorizontalOffset="0"      Width="auto" Visibility="Visible" PlacementTarget="{Binding ElementName=FilePathGrid}" AllowsTransparency="True" Placement="Right" IsOpen="False" StaysOpen="False" >
-                                    <Grid    Margin="5"   >
-                                        <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                            <Border.Effect>
-                                                <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                            </Border.Effect>
-                                        </Border>
-                                        <ItemsControl Margin="10" Background="Transparent"    ItemsSource="{Binding FilePathClassification}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel   Orientation="Vertical" >
-
-                                                    </StackPanel>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel  >
-                                                        <TextBlock MouseLeave="TextBlock_MouseLeave" MouseEnter="TextBlock_MouseEnter" PreviewMouseLeftButtonDown="ShowSamePath"  TextWrapping="NoWrap" FontSize="15" Width="auto" ToolTip="{Binding Path=Text,RelativeSource={RelativeSource Mode=Self}}" Padding="2" Margin="10 5"    Text="{Binding }"    Style="{StaticResource SearchCandidateTextBlock }"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </Grid>
-                                </Popup>
 
 
                                 <Grid>
@@ -1041,7 +1000,7 @@
                                         </Border.Effect>
                                         <Border.Style>
                                             <Style>
-                                                <Style.Triggers>
+                                                <!--<Style.Triggers>
                                                     <DataTrigger Binding="{Binding CheckingUrl}" Value="True">
                                                         <DataTrigger.EnterActions>
                                                             <BeginStoryboard x:Name="BorderBeginStoryboard">
@@ -1054,7 +1013,7 @@
                                                             <RemoveStoryboard BeginStoryboardName="BorderBeginStoryboard"/>
                                                         </DataTrigger.ExitActions>
                                                     </DataTrigger>
-                                                </Style.Triggers>
+                                                </Style.Triggers>-->
                                             </Style>
                                         </Border.Style>
                                     </Border>
@@ -1118,7 +1077,7 @@
                     <Rectangle  IsEnabled="True" MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="6" x:Name="DragRectangle" Margin="0 0 -3 0" />
 
                     <!--影片-->
-                    <Grid     x:Name="Grid_Movie" Visibility="Visible"   MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="1"  >
+                    <Grid     x:Name="Grid_Movie" Panel.ZIndex="1" Visibility="Visible"   MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="1"  >
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -1128,7 +1087,7 @@
 
 
                         <!--工具栏-->
-                        <Grid x:Name="ToolsGrid" Background="{DynamicResource BackgroundMain}" MouseLeftButtonDown="ToolsGrid_MouseLeftButtonDown"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                        <Grid IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}" Background="{DynamicResource BackgroundMain}" MouseLeftButtonDown="ToolsGrid_MouseLeftButtonDown"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -1141,17 +1100,20 @@
                             <Grid Grid.Row="0">
 
                                 <!--搜索-->
-                                <Grid Focusable="True"  HorizontalAlignment="Left" x:Name="AllSearchGrid"   Height="40"  Width="300" Margin="10 5"   >
-                                    <Border x:Name="AllSearchBorder"    Style="{StaticResource SearchTextGrid}"   CornerRadius="2"  Background="Transparent" BorderBrush="{DynamicResource BackgroundSide}" BorderThickness="2" />
+                                <Grid Focusable="True"  HorizontalAlignment="Left"   Height="40"  Width="300" Margin="10 5"   >
+                                    <Border x:Name="AllSearchBorder"       CornerRadius="2"  Background="Transparent" BorderBrush="{DynamicResource BackgroundSide}" BorderThickness="2" />
 
 
-                                    <Grid x:Name="SearchOptionGrid" VerticalAlignment="Center"  Width="25" Panel.ZIndex="3" HorizontalAlignment="Left" Margin="10 0 0 0" MouseUp="ShowSearchMenu" Cursor="Hand">
+                                    <Grid  VerticalAlignment="Center"  Width="25" Panel.ZIndex="3" HorizontalAlignment="Left" Margin="10 0 0 0" MouseUp="ShowSearchMenu" Cursor="Hand">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  RenderTransformOrigin=".5,.5"   >
                                             <Image.RenderTransform>
                                                 <RotateTransform Angle="180" />
                                             </Image.RenderTransform>
                                         </Image>
-                                        <Popup VerticalOffset="5" HorizontalOffset="-15" x:Name="SearchOptionPopup" Placement="Bottom" PopupAnimation="Fade"  PlacementTarget="{Binding ElementName=SearchOptionGrid}" AllowsTransparency="True" StaysOpen="False" IsOpen="False">
+                                        <Popup  VerticalOffset="5" HorizontalOffset="-15" x:Name="SearchOptionPopup" Placement="Bottom" PopupAnimation="Fade"  AllowsTransparency="True" StaysOpen="False" IsOpen="False">
+                                           
+                                            
+                                            
                                             <Grid    Margin="5"   >
                                                 <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
                                                     <Border.Effect>
@@ -1180,9 +1142,9 @@
                                         </hc:SearchBar.ContextMenu>
                                     </hc:SearchBar>
 
-                                    <Popup x:Name="AllSearchPopup" Focusable="True"  VerticalOffset="2"  HorizontalOffset="0"      Width="{Binding ElementName=AllSearchGrid,Path=ActualWidth}" Visibility="Visible" PlacementTarget="{Binding ElementName=AllSearchGrid}" AllowsTransparency="True" Placement="Bottom" IsOpen="False" StaysOpen="True" >
+                                    <Popup x:Name="AllSearchPopup" Focusable="True"  VerticalOffset="2"  HorizontalOffset="0"      Width="{Binding  RelativeSource={RelativeSource AncestorType={x:Type Grid},Mode=FindAncestor},Path=ActualWidth}" Visibility="Visible"  AllowsTransparency="True" Placement="Bottom" IsOpen="False" StaysOpen="True" >
                                         <Grid    Margin="5"   >
-                                            <Border x:Name="AllSearchPopupBorder"     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
+                                            <Border Name="SearchBorder"    Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
                                                 <Border.Effect>
                                                     <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                 </Border.Effect>
@@ -1199,7 +1161,7 @@
                                                             </Border>
                                                         </StackPanel>
 
-                                                        <ItemsControl Margin="5 0" Width="{Binding ElementName=AllSearchPopupBorder,Path=ActualWidth,Converter={StaticResource WidthConverter},ConverterParameter=-20,Mode=OneWay}" HorizontalAlignment="Left"  Background="Transparent" x:Name="SearchHistoryItemsControl"   ItemsSource="{Binding SearchHistory}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
+                                                        <ItemsControl Margin="5 0" Width="{Binding ElementName=SearchBorder,Path=ActualWidth,Converter={StaticResource WidthConverter},ConverterParameter=-20,Mode=OneWay}" HorizontalAlignment="Left"  Background="Transparent" x:Name="SearchHistoryItemsControl"   ItemsSource="{Binding SearchHistory}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <WrapPanel   Orientation="Horizontal" >
@@ -1562,7 +1524,7 @@
 
 
                         <!--等待-->
-                        <Grid Grid.Row="1" x:Name="LoadingGrid" Visibility="Visible" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Grid Grid.Row="1" Visibility="{Binding IsLoadingMovie,Converter={StaticResource BoolToVisibilityConverter}}"  Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <Grid MinWidth="150" MaxWidth="250"   >
                                 <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
                                     <Border.Effect>
@@ -1593,7 +1555,7 @@
                         </Grid>
 
                         <!--信息展示：演员信息+影片展示-->
-                        <Grid  Grid.Row="1">
+                        <Grid  Grid.Row="1" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="*"/>
@@ -1602,7 +1564,7 @@
 
 
                             <!--演员-->
-                            <Grid Grid.Column="0" Visibility="Visible" x:Name="ActorInfoGrid"      Margin="10">
+                            <Grid Grid.Column="0" Visibility="{Binding ActorInfoGrid}"    Margin="10">
                                 <Border   Background="{DynamicResource BackgroundTitle}" CornerRadius="5" Margin="5"  >
                                     <Border.Effect>
                                         <DropShadowEffect BlurRadius="20" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
@@ -1714,8 +1676,8 @@
                             <!--影片-->
                             <Grid Grid.Column="1" FocusVisualStyle="{x:Null}" Panel.ZIndex="2"  Margin="10"     PreviewKeyDown="Grid_PreviewKeyDown"  PreviewKeyUp="Grid_PreviewKeyUp"    AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver"    >
                                 <!--影片展示 Grid-->
-                                <Grid  FocusVisualStyle="{x:Null}" Visibility="Hidden" x:Name="MovieMainGrid" >
-                                    <ScrollViewer IsDeferredScrollingEnabled="False"  FocusVisualStyle="{x:Null}"   CanContentScroll="True"  x:Name="ScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
+                                <Grid  FocusVisualStyle="{x:Null}"  >
+                                    <ScrollViewer IsDeferredScrollingEnabled="False"  FocusVisualStyle="{x:Null}"   CanContentScroll="True"  x:Name="MovieScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
                                         <ScrollViewer.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Header="{x:Static lang:Resources.Refresh}" Click="RefreshCurrentPage" />
@@ -1753,11 +1715,11 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate  >
                                                     <!--影片加载/卸载动画-->
-                                                    <DataTemplate.Triggers >
+                                                    <!--<DataTemplate.Triggers >
                                                         <EventTrigger   RoutedEvent="FrameworkElement.Loaded">
                                                             <BeginStoryboard  >
                                                                 <Storyboard   AutoReverse="False" >
-                                                                    <DoubleAnimationUsingKeyFrames    Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                    <DoubleAnimationUsingKeyFrames FillBehavior="Stop"    Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
                                                                         <EasingDoubleKeyFrame KeyTime="0" Value="0" />
                                                                         <EasingDoubleKeyFrame x:Name="EasingDoubleKeyFrame_2"  KeyTime="0:0:0.25" Value="1" />
                                                                     </DoubleAnimationUsingKeyFrames>
@@ -1767,19 +1729,19 @@
                                                         <EventTrigger   RoutedEvent="FrameworkElement.Unloaded">
                                                             <BeginStoryboard  >
                                                                 <Storyboard   AutoReverse="False" >
-                                                                    <DoubleAnimationUsingKeyFrames    Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                    <DoubleAnimationUsingKeyFrames  FillBehavior="Stop"      Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
                                                                         <EasingDoubleKeyFrame KeyTime="0" Value="1" />
                                                                         <EasingDoubleKeyFrame   KeyTime="0:0:0.25" Value="0" />
                                                                     </DoubleAnimationUsingKeyFrames>
                                                                 </Storyboard>
                                                             </BeginStoryboard>
                                                         </EventTrigger>
-                                                    </DataTemplate.Triggers>
+                                                    </DataTemplate.Triggers>-->
 
                                                     <!--自定义影片展示格式-->
-                                                    <WrapPanel  x:Name="MovieWrapPanel"  >
+                                                    <WrapPanel    >
                                                         <Grid Margin="5">
-                                                            <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" x:Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"   >
+                                                            <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"   >
                                                                 <Border.Effect>
                                                                     <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                 </Border.Effect>
@@ -1836,18 +1798,18 @@
 
                                                                 <!--图片-->
                                                                 <Grid  >
-                                                                    <Image MouseEnter="BorderMouseEnter" MouseLeave="BorderMouseLeave"   Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}" ToolTip="{Binding id}" x:Name="ViewImage"  ImageFailed="Image_ImageFailed" Style="{StaticResource ViewImage}" MouseLeftButtonDown="CanShowDetails" MouseLeftButtonUp="ShowDetails"  HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                                                    <Image MouseEnter="BorderMouseEnter" MouseLeave="BorderMouseLeave"   Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}" ToolTip="{Binding id}" ImageFailed="Image_ImageFailed" Style="{StaticResource ViewImage}" MouseLeftButtonDown="CanShowDetails" MouseLeftButtonUp="ShowDetails"  HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                                                     <!--显示预览图-->
-                                                                    <Canvas  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails" x:Name="ExtraImageCanvas"  Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode, Converter={StaticResource StringToVisibilityConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}" >
+                                                                    <Canvas  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode, Converter={StaticResource StringToVisibilityConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}" >
                                                                         <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16" Foreground="{DynamicResource ForegroundSearch}" Height="20"  ></TextBlock>
-                                                                        <Image  x:Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}">
+                                                                        <Image  Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}">
                                                                             <Image.RenderTransform>
                                                                                 <TransformGroup>
                                                                                     <TranslateTransform X="0" Y="0" />
                                                                                 </TransformGroup>
                                                                             </Image.RenderTransform>
                                                                         </Image>
-                                                                        <Image   x:Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}">
+                                                                        <Image   Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}">
                                                                             <Image.RenderTransform>
                                                                                 <TransformGroup>
                                                                                     <TranslateTransform X="0" Y="0" />
@@ -1873,14 +1835,14 @@
                                                                             </Image.Style>
                                                                         </Image>
 
-                                                                        <Popup  VerticalOffset="0" HorizontalOffset="0" x:Name="SubSectionPopup"  PopupAnimation="Fade" Placement="MousePoint"    AllowsTransparency="True" StaysOpen="False" IsOpen="False">
+                                                                        <Popup  VerticalOffset="0" HorizontalOffset="0"    PopupAnimation="Fade" Placement="MousePoint"    AllowsTransparency="True" StaysOpen="False" IsOpen="False">
                                                                             <Grid    Margin="5"   >
                                                                                 <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
                                                                                     <Border.Effect>
                                                                                         <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                                     </Border.Effect>
                                                                                 </Border>
-                                                                                <ItemsControl Margin="5 10 " AlternationCount="99"   x:Name="SubsectionItemsControl"  ItemsSource="{Binding subsectionlist}" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent"  >
+                                                                                <ItemsControl Margin="5 10 " AlternationCount="99"    ItemsSource="{Binding subsectionlist}" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent"  >
                                                                                     <ItemsControl.ItemsPanel>
                                                                                         <ItemsPanelTemplate>
                                                                                             <StackPanel Orientation="Vertical" Panel.ZIndex="4"  />
@@ -1928,7 +1890,7 @@
                                                                 </Grid>
 
 
-                                                                <TextBox x:Name="idTextBox"  Text="{Binding id}" Visibility="Collapsed"/>
+                                                                <TextBox Name="IDTextBox"  Text="{Binding id}" Visibility="Collapsed"/>
 
                                                                 <!--标签戳-->
                                                                 <Grid HorizontalAlignment="Stretch" Width="auto"   Margin="5 0"  >
@@ -1977,12 +1939,14 @@
 
 
                                 <!--返回顶部-->
-                                <Canvas Panel.ZIndex="5" MouseLeftButtonUp="GotoTop" x:Name="GoToTopCanvas" Cursor="Hand" Width="20" Height="20"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 50 50"  Visibility="Hidden">
+                                <Canvas Panel.ZIndex="5" MouseLeftButtonUp="GotoTop" Visibility="{Binding GoToTopCanvas}" Cursor="Hand" Width="20" Height="20"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 50 50"  >
                                     <Ellipse Style="{StaticResource Ellipse2}"  Width="40" Height="40"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 5 5" />
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2"  Canvas.Left="8" Canvas.Top="7"    />
                                 </Canvas>
                             </Grid>
                         </Grid>
+                        
+                        
                         <!--底部-->
                         <Grid Grid.Row="2" Panel.ZIndex="5" DockPanel.Dock="Bottom" Width="auto" HorizontalAlignment="Stretch"  Background="Transparent" VerticalAlignment="Bottom" Height="40" Margin="5 0 5 0" Visibility="{Binding DisplayStatusBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
                             <Grid.ColumnDefinitions>
@@ -1994,9 +1958,9 @@
 
                             <StackPanel Grid.Column="0" Orientation="Horizontal">
 
-                                <Slider ValueChanged="ImageSizeSlider_ValueChanged" Value="{Binding Path=GlobalImageWidth,Source={x:Static p:Settings.Default},Mode=TwoWay}" Minimum="200" Maximum="500" SmallChange="5" LargeChange="10"  x:Name="ImageSizeSlider" Grid.Column="0" Width="200" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0"/>
+                                <Slider ValueChanged="ImageSizeSlider_ValueChanged" Value="{Binding Path=GlobalImageWidth,Source={x:Static p:Settings.Default},Mode=TwoWay}" Minimum="200" Maximum="500" SmallChange="5" LargeChange="10"   Grid.Column="0" Width="200" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0"/>
 
-                                <TextBlock Text="{Binding ElementName=ImageSizeSlider,Path=Value,StringFormat=\{0\} px}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Path=GlobalImageWidth,Source={x:Static p:Settings.Default},StringFormat=\{0\} px}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center"/>
 
                             </StackPanel>
 
@@ -2008,16 +1972,16 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <ProgressBar Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged" x:Name="ProgressBar" Visibility="Visible"  Value="50"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
-                                <TextBox x:Name="ProgressTextBox"   Grid.Column="1" Text="50%" Visibility="{Binding ElementName=ProgressBar,Path=Visibility}" Style="{StaticResource BaseTextBox}" Margin="5 0"/>
+                                <ProgressBar Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"  Visibility="{Binding ProgressBarVisibility}"  Value="{Binding ProgressBarValue}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
+                                <TextBox Text="{Binding ProgressBarValue,StringFormat={}{0}%}"  Grid.Column="1"  Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBox}" Margin="5 0"/>
                             </Grid>
 
 
                             <!--当前页信息-->
-                            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"  >
+                            <StackPanel  Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"  >
                                 <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=info,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" HorizontalAlignment="Left" Height="27" Margin="5"/>
-                                <TextBlock Margin="10 0" x:Name="StatusTextBlock"  Text="{Binding TextType}" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center"/>
-                                <TextBlock x:Name="CountTextBlock"  Margin="10 0" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center">
+                                <TextBlock Margin="10 0"   Text="{Binding TextType}" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center"/>
+                                <TextBlock   Margin="10 0" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding StringFormat="{}{0}/{1} ">
                                             <Binding Path="CurrentCount" />
@@ -2028,7 +1992,7 @@
                                 </TextBlock>
                             </StackPanel>
                             <!--页码-->
-                            <StackPanel x:Name="PageStackPanel" Visibility="Visible" Grid.Column="3" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
+                            <StackPanel IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}" Visibility="Visible" Grid.Column="3" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
 
                                 <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousPage"    Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.PreviewPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
@@ -2054,7 +2018,7 @@
 
 
                     <!--演员、类别、标签-->
-                    <Grid Grid.Column="1" Visibility="Hidden" x:Name="Grid_Classify" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" PreviewKeyDown="ActorGrid_PreviewKeyDown"  >
+                    <Grid Grid.Column="1" Visibility="{Binding Grid_Classify}" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" PreviewKeyDown="ActorGrid_PreviewKeyDown"  >
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -2064,7 +2028,7 @@
 
 
                         <!--等待-->
-                        <Grid Grid.Row="1" x:Name="LoadingActorGrid" Visibility="Visible" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Grid Grid.Row="1"  Visibility="{Binding IsLoadingActor,Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <Grid MinWidth="150" MaxWidth="250"   >
                                 <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
                                     <Border.Effect>
@@ -2095,7 +2059,7 @@
                         </Grid>
 
                         <!--工具栏-->
-                        <Grid x:Name="ActorToolsGrid" Background="{DynamicResource BackgroundMain}"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                        <Grid IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}" Background="{DynamicResource BackgroundMain}"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
 
                             <StackPanel  Orientation="Horizontal">
 
@@ -2162,7 +2126,7 @@
                                             <DataTemplate>
 
 
-                                                <DataTemplate.Triggers>
+                                                <!--<DataTemplate.Triggers>
                                                     <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                                                         <BeginStoryboard  >
                                                             <Storyboard  AutoReverse="False">
@@ -2183,7 +2147,7 @@
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </EventTrigger>
-                                                </DataTemplate.Triggers>
+                                                </DataTemplate.Triggers>-->
 
                                                 <WrapPanel x:Name="ActorWrapPanel">
                                                     <Grid Margin="5">
@@ -2391,7 +2355,8 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <DataTemplate.Triggers >
+                                                
+                                                <!--<DataTemplate.Triggers >
                                                     <EventTrigger   RoutedEvent="FrameworkElement.Loaded">
                                                         <BeginStoryboard  >
                                                             <Storyboard   AutoReverse="False" >
@@ -2412,7 +2377,7 @@
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </EventTrigger>
-                                                </DataTemplate.Triggers>
+                                                </DataTemplate.Triggers>-->
 
 
 
@@ -2498,7 +2463,7 @@
                 </Grid>
 
 
-                <Grid  x:Name="BeginScanGrid" Grid.Row="1" Visibility="Hidden" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid  x:Name="BeginScanGrid" Grid.Row="1" Visibility="Collapsed" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Grid    >
                         <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
                             <Border.Effect>
@@ -2539,7 +2504,7 @@
 
                 <!--鸣谢-->
 
-                <Grid x:Name="ThanksGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="500" Visibility="Hidden" >
+                <Grid x:Name="ThanksGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="500" Visibility="Collapsed" >
                     <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5"   >
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
@@ -2581,7 +2546,7 @@
 
 
                 <!--关于-->
-                <Grid x:Name="AboutGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="500" Visibility="Hidden" >
+                <Grid x:Name="AboutGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="500" Visibility="Collapsed" >
                     <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
@@ -2625,7 +2590,7 @@
 
                 <!--公告-->
 
-                <Grid x:Name="NoticeGrid" Panel.ZIndex="10" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="360" Width="500" Visibility="Hidden" >
+                <Grid x:Name="NoticeGrid" Panel.ZIndex="10" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="360" Width="500" Visibility="Collapsed" >
                     <Image Source="Resources/Picture/hankuke.jpg" Stretch="Fill" Margin="2"/>
                     <Border Background="{DynamicResource BackgroundTitle}" CornerRadius="5" Opacity="0.9"></Border>
                     <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
@@ -2640,7 +2605,7 @@
 
                 <!--升级-->
 
-                <Grid Visibility="Visible" x:Name="UpdateGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="400" MinWidth="550"  >
+                <Grid Visibility="Collapsed" x:Name="UpdateGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="400" MinWidth="550"  >
                     <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Opacity="1" Margin="2">
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
@@ -2717,7 +2682,7 @@
 
                 <!--标签-->
 
-                <Grid x:Name="LabelGrid"  Visibility="Hidden"  Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300" Width="500">
+                <Grid x:Name="LabelGrid"  Visibility="Collapsed"  Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300" Width="500">
                     <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
@@ -2768,7 +2733,7 @@
 
                 <!--删除标签-->
 
-                <Grid x:Name="LabelDelGrid" Visibility="Hidden" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300" Width="500"  >
+                <Grid x:Name="LabelDelGrid" Visibility="Collapsed" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300" Width="500"  >
                     <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>

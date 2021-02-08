@@ -664,6 +664,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 请自行复制下载地址去下载 的本地化字符串。
+        /// </summary>
+        public static string CopyToDownload {
+            get {
+                return ResourceManager.GetString("CopyToDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 国家 的本地化字符串。
         /// </summary>
         public static string Country {
@@ -1182,6 +1191,15 @@ namespace Jvedio.Language {
         public static string GetSourceCodeFail {
             get {
                 return ResourceManager.GetString("GetSourceCodeFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Gif时长 的本地化字符串。
+        /// </summary>
+        public static string Gif_Duration {
+            get {
+                return ResourceManager.GetString("Gif_Duration", resourceCulture);
             }
         }
         
@@ -3657,6 +3675,15 @@ namespace Jvedio.Language {
         public static string SubsectionVedio {
             get {
                 return ResourceManager.GetString("SubsectionVedio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 下载地址已成功复制 的本地化字符串。
+        /// </summary>
+        public static string SuccessCopyUrl {
+            get {
+                return ResourceManager.GetString("SuccessCopyUrl", resourceCulture);
             }
         }
         

@@ -35,6 +35,8 @@ namespace Jvedio
     public partial class Settings : Jvedio_BaseWindow
     {
 
+        public const string ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z";
+
         public DetailMovie SampleMovie = new DetailMovie()
         {
             id = "AAA-001",
@@ -1430,7 +1432,17 @@ namespace Jvedio
 
         private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("https://github.com/BtbN/FFmpeg-Builds/releases");
+
+            try
+            {
+                Clipboard.SetText(ffmpeg_url);
+                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.SuccessCopyUrl, "SettingsGrowl");
+            }
+            catch (Exception ex) {
+                new DialogInput(this, Jvedio.Language.Resources.CopyToDownload, ffmpeg_url).ShowDialog();
+                Console.WriteLine(ex.Message);
+            }
+
         }
 
         private void LoadTranslate(object sender, RoutedEventArgs e)

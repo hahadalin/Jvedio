@@ -1512,4 +1512,13 @@
   <data name="UpgradeSource" xml:space="preserve">
     <value>更新源</value>
   </data>
+  <data name="Gif_Duration" xml:space="preserve">
+    <value>Gif时长</value>
+  </data>
+  <data name="SuccessCopyUrl" xml:space="preserve">
+    <value>下载地址已成功复制</value>
+  </data>
+  <data name="CopyToDownload" xml:space="preserve">
+    <value>请自行复制下载地址去下载</value>
+  </data>
 </root>

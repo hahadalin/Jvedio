@@ -459,6 +459,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Data\github.txt" />
     <Content Include="Data\x64\SQLite.Interop.dll" />
     <Content Include="Data\x86\SQLite.Interop.dll" />
     <Resource Include="Resources\Skin\white\classify.png" />
@@ -532,7 +533,6 @@
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="Data\BusActress.sqlite" />
-    <None Include="Data\Upgrade.bat" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -794,6 +794,8 @@ XCOPY "$(ProjectDir)Data\x86" "$(TargetDir)\x86" /E /Y /i
 XCOPY "$(ProjectDir)Data\x64" "$(TargetDir)\x64" /E /Y /i</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>XCOPY  "$(ProjectDir)bin\Debug"  "$(SolutionDir)Release\public\File"    /E /Y /i</PostBuildEvent>
+    <PostBuildEvent>XCOPY  "$(ProjectDir)bin\Debug"  "$(SolutionDir)Release\public\File"    /E /Y /i
+XCOPY  "$(ProjectDir)Data\github.txt"  "$(SolutionDir)Release"    /E /Y /i
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

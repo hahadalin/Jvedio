@@ -88,6 +88,97 @@ namespace Jvedio.ViewModel
 
 
 
+        #region "界面显示属性"
+        private Visibility _ActorInfoGrid=Visibility.Collapsed;
+
+        public Visibility ActorInfoGrid
+        {
+            get { return _ActorInfoGrid; }
+            set
+            {
+                _ActorInfoGrid = value;
+                RaisePropertyChanged();
+            }
+        }
+        
+        private Visibility _GoToTopCanvas = Visibility.Collapsed;
+
+        public Visibility GoToTopCanvas
+        {
+            get { return _GoToTopCanvas; }
+            set
+            {
+                _GoToTopCanvas = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private Visibility _ProgressBarVisibility = Visibility.Collapsed;
+
+        public Visibility ProgressBarVisibility
+        {
+            get { return _ProgressBarVisibility; }
+            set
+            {
+                _ProgressBarVisibility = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private int _ProgressBarValue = 0;
+
+        public int ProgressBarValue
+        {
+            get { return _ProgressBarValue; }
+            set
+            {
+                _ProgressBarValue = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private Visibility _Grid_Classify = Visibility.Collapsed;
+        
+            public Visibility Grid_Classify
+        {
+            get { return _Grid_Classify; }
+            set
+            {
+                _Grid_Classify = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _IsLoadingMovie = true;
+
+        public bool IsLoadingMovie
+        {
+            get { return _IsLoadingMovie; }
+            set
+            {
+                _IsLoadingMovie = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private bool _IsLoadingActor = true;
+
+        public bool IsLoadingActor
+        {
+            get { return _IsLoadingActor; }
+            set
+            {
+                _IsLoadingActor = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        #endregion
+
 
 
 

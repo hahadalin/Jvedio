@@ -2242,5 +2242,17 @@ namespace Jvedio.Properties {
                 this["HalfCutOFf"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int Gif_Duration {
+            get {
+                return ((int)(this["Gif_Duration"]));
+            }
+            set {
+                this["Gif_Duration"] = value;
+            }
+        }
     }
 }

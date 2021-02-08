@@ -1512,4 +1512,13 @@
   <data name="UpgradeSource" xml:space="preserve">
     <value>ソースを更新</value>
   </data>
+  <data name="Gif_Duration" xml:space="preserve">
+    <value>Gif デュレーション</value>
+  </data>
+  <data name="SuccessCopyUrl" xml:space="preserve">
+    <value>ダウンロードアドレスが正常にコピーされました</value>
+  </data>
+  <data name="CopyToDownload" xml:space="preserve">
+    <value>ダウンロードするにはダウンロードアドレスをコピーしてください</value>
+  </data>
 </root>
