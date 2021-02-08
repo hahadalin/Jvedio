@@ -795,6 +795,6 @@ XCOPY "$(ProjectDir)Data\x86" "$(TargetDir)\x86" /E /Y /i
 XCOPY "$(ProjectDir)Data\x64" "$(TargetDir)\x64" /E /Y /i</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>XCOPY  "$(ProjectDir)bin\Debug"  "$(SolutionDir)ToGitee\public\File"    /E /Y /i</PostBuildEvent>
+    <PostBuildEvent>XCOPY  "$(ProjectDir)bin\Debug"  "$(SolutionDir)Release\public\File"    /E /Y /i</PostBuildEvent>
   </PropertyGroup>
 </Project>
