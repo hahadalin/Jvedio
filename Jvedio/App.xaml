@@ -31,7 +31,7 @@
                 <ResourceDictionary Source="XAML/CheckBoxStyle.xaml"/>
                 <ResourceDictionary Source="XAML/BasicStyle.xaml"/>
                 <ResourceDictionary Source="Window/Jvedio_BaseWindowStyle.xaml"/>
-                <ResourceDictionary Source="Dialog/BaseDialogStyle.xaml"/>
+                <ResourceDictionary Source="DialogWindow/BaseDialogStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
 
