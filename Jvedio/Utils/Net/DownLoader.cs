@@ -17,12 +17,14 @@ namespace Jvedio
     public class Upgrade
     {
         public event EventHandler UpgradeCompleted;
+        public event EventHandler onProgressChanged;
         public bool StopUpgrade = false;
-        public DownLoadProgress DownLoadProgress;
+
         public List<string> DownLoadList;
         public string list_url = "https://hitchao.github.io/jvedioupdate/list";
         public string file_url = "https://hitchao.github.io/jvedioupdate/File/";
 
+        private ProgressBUpdateEventArgs DownLoadProgress=new ProgressBUpdateEventArgs();
         public void Start()
         {
             StopUpgrade = false;
@@ -101,46 +103,31 @@ namespace Jvedio
             if (!Directory.Exists(temppath)) Directory.CreateDirectory(temppath);
             await GetDownLoadList();
 
+            DownLoadProgress.maximum = DownLoadList.Count;
             foreach (var item in DownLoadList)
             {
                 if (StopUpgrade) return;
+                Console.WriteLine(item);
                 string filepath = Path.Combine(temppath, item);
                 if (!File.Exists(filepath))
                 {
-                    var file = await Task.Run(() =>
-                    {
-                        return DownLoadFile(file_url + item);
-                    });
+                    var (filebytes, cookies, statuscode) = await  AsyncDownLoadFile(file_url + item);
                     //写入本地
-                    if (file.filebytes != null) WriteFile(file.filebytes, filepath);
+                    if (filebytes != null) WriteFile(filebytes, filepath);
                 }
+                DownLoadProgress.value += 1;
+                onProgressChanged?.Invoke(this, DownLoadProgress);
             }
 
-            //复制文件并覆盖
-            //执行 cmd 命令
-            foreach (var item in DownLoadList)
-            {
-                string src = Path.Combine(temppath, item);
-                string dst = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, item);
-                if (!Directory.Exists(new FileInfo(dst).Directory.FullName)) Directory.CreateDirectory(new FileInfo(dst).Directory.FullName);
-                try
-                {
-                    File.Copy(src, dst, true);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    continue;
-                }
-            }
-            //删除 Temp 文件夹
-            try { if (Directory.Exists(temppath)) Directory.Delete(temppath, true); }
-            catch { }
+            //复制文件并覆盖 执行 cmd 命令
+            UpgradeCompleted?.Invoke(this, null);
         }
 
 
     }
 
+
+   
 
 
 
@@ -444,6 +431,12 @@ namespace Jvedio
         public Actress Actress;
         public ProgressBarUpdate progressBarUpdate;
         public DownLoadState state;
+    }
+
+    public class ProgressBUpdateEventArgs : EventArgs
+    {
+        public double value=0;
+        public double maximum=0;
     }
 
     public class ProgressBarUpdate

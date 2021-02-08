@@ -361,6 +361,15 @@ namespace Jvedio
 
 
 
+        public static async Task<(byte[] filebytes, string cookies, int statuscode)> AsyncDownLoadFile(string Url, string SetCookie = "")
+        {
+            return await Task.Run(() => {
+                return DownLoadFile(Url);
+            });
+        }
+
+
+
         /// <summary>
         /// 异步下载图片
         /// </summary>

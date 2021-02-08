@@ -44,6 +44,7 @@ namespace Jvedio
     /// </summary>
     public partial class Main : Window
     {
+        public const string UpgradeSource = "https://hitchao.github.io";
         public const string UpdateUrl = "https://hitchao.github.io/jvedioupdate/Version";
         public const string UpdateExeVersionUrl = "https://hitchao.github.io/jvedioupdate/update";
         public const string UpdateExeUrl = "https://hitchao.github.io/jvedioupdate/JvedioUpdate.exe";
@@ -286,7 +287,7 @@ namespace Jvedio
             {
                 UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消之前的热键
                 bool success = RegisterHotKey(_windowHandle, HOTKEY_ID, modifier, vk);
-                if (!success) { MessageBox.Show("热键冲突！", "热键冲突"); }
+                if (!success) { MessageBox.Show(Jvedio.Language.Resources.HotKeyConflict, Jvedio.Language.Resources.HotKeyConflict); }
             }
 
         }
@@ -354,6 +355,7 @@ namespace Jvedio
             UnregisterHotKey(_windowHandle, HOTKEY_ID);
             //取消热键
             Console.WriteLine("UnregisterHotKey");
+            NotifyIcon.Visibility = Visibility.Hidden;
             base.OnClosed(e);
         }
 
@@ -561,12 +563,16 @@ namespace Jvedio
 
 
 
-        public void Notify_Show(object sender, RoutedEventArgs e)
+        public void ShowMainWindow(object sender, RoutedEventArgs e)
         {
             NotifyIcon.Visibility = Visibility.Collapsed;
             this.Show();
-            this.Opacity = 1;
             this.WindowState = WindowState.Normal;
+            double opacity = Properties.Settings.Default.Opacity_Main >= 0.5 ? Properties.Settings.Default.Opacity_Main : 1;
+            var anim = new DoubleAnimation(0, opacity, (Duration)FadeInterval);
+            anim.Completed += (s, _) => this.Opacity = opacity;
+            this.BeginAnimation(UIElement.OpacityProperty, anim);
+
         }
 
 
@@ -574,6 +580,7 @@ namespace Jvedio
         {
             Task.Run(async () =>
             {
+                App.Current.Dispatcher.Invoke((Action)delegate { UpgradeLoadingCircle.Visibility = Visibility.Visible; });
                 string content = ""; int statusCode;
                 try
                 {
@@ -595,12 +602,14 @@ namespace Jvedio
                             sw.WriteLine(local + "\n");
                             sw.WriteLine(updateContent);
                         }
-
+                        UpgradeSourceTextBlock.Text = $"{Jvedio.Language.Resources.UpgradeSource}：{UpgradeSource}";
                         LocalVersionTextBlock.Text = $"{Jvedio.Language.Resources.CurrentVersion}：{local}";
                         RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
                         UpdateContentTextBox.Text = updateContent;
 
                         if (local.CompareTo(remote) < 0) UpdateGrid.Visibility = Visibility.Visible;
+
+                        App.Current.Dispatcher.Invoke((Action)delegate { UpgradeLoadingCircle.Visibility = Visibility.Hidden; });
                     });
                 }
             });
@@ -4191,7 +4200,7 @@ namespace Jvedio
 
 
             //检查更新
-            //CheckUpdate();
+            CheckUpdate();
 
 
             //检查网络连接
@@ -4236,8 +4245,7 @@ namespace Jvedio
                 SortImage.Source = new BitmapImage(new Uri("/Resources/Picture/sort_up.png", UriKind.Relative));
 
             InitList();
-
-
+            this.Activate();
 
         }
 
@@ -4419,10 +4427,6 @@ namespace Jvedio
 
         }
 
-        private void Window_Activated(object sender, EventArgs e)
-        {
-            //AllSearchTextBox.Focus();
-        }
 
         private void DatabaseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -4647,18 +4651,7 @@ namespace Jvedio
             ShowMovieGrid(sender, new RoutedEventArgs());
         }
 
-        private void NotifyIcon_Click(object sender, RoutedEventArgs e)
-        {
-            NotifyIcon.Visibility = Visibility.Collapsed;
-            this.Show();
-            this.Opacity = 1;
-            this.WindowState = WindowState.Normal;
-        }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void ImageSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -6038,18 +6031,42 @@ namespace Jvedio
             {
                 button.Content = Jvedio.Language.Resources.StopUpgrade;
                 upgrade = new Upgrade();
+                upgrade.UpgradeCompleted += (s, _) =>
+                {
+                    UpgradeLoadingCircle.Visibility = Visibility.Hidden;
+                    //执行命令
+                    string arg = "xcopy /y/e Temp %cd%&TIMEOUT /T 1&start \"\" \"jvedio.exe\" &exit";
+                    using (StreamWriter sw=new StreamWriter("upgrade.bat"))
+                    {
+                        sw.Write(arg);
+                    }
+                    System.Diagnostics.Process.Start("upgrade.bat");
+                    Application.Current.Shutdown();
+                };
+
+                upgrade.onProgressChanged += (s, _) =>
+                {
+                    ProgressBUpdateEventArgs ev = _ as ProgressBUpdateEventArgs;
+                    UpgradeProgressStackPanel.Visibility = Visibility;
+                    if (ev.maximum != 0)
+                    {
+                        UpgradeProgressBar.Value = (int)(ev.value / ev.maximum * 100);
+                    }
+
+                };
+                button.Style = (Style)App.Current.Resources["ButtonDanger"];
+                UpgradeProgressBar.Value = 0;
+                UpgradeLoadingCircle.Visibility = Visibility.Visible;
                 upgrade.Start();
                 UpgradeProgressStackPanel.Visibility = Visibility.Visible;
-
-
-
-
             }
             else
             {
                 button.Content = Jvedio.Language.Resources.BeginUpgrade;
+                button.Style= (Style)App.Current.Resources["ButtonStyleFill"];
                 upgrade?.Stop();
                 UpgradeProgressStackPanel.Visibility = Visibility.Collapsed;
+                UpgradeLoadingCircle.Visibility = Visibility.Collapsed;
             }
 
 

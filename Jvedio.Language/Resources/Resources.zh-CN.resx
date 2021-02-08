@@ -1506,4 +1506,10 @@
   <data name="StopUpgrade" xml:space="preserve">
     <value>停止更新</value>
   </data>
+  <data name="HotKeyConflict" xml:space="preserve">
+    <value>热键冲突</value>
+  </data>
+  <data name="UpgradeSource" xml:space="preserve">
+    <value>更新源</value>
+  </data>
 </root>

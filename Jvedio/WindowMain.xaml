@@ -27,7 +27,6 @@
 
     ContentRendered="Window_ContentRendered"
     PreviewKeyUp="Window_PreviewKeyUp"
-    Activated="Window_Activated"
     SizeChanged="Window_SizeChanged"
     PreviewKeyDown="Window_PreviewKeyDown"
     
@@ -755,10 +754,10 @@
         </ScrollViewer>
 
         <!--托盘图标-->
-        <hc:NotifyIcon Click="NotifyIcon_Click" x:Name="NotifyIcon" Text="Jvedio" IsBlink="False" Visibility="Collapsed" Icon="/Jvedio;component/Resources/Jvedio.ico">
+        <hc:NotifyIcon Click="ShowMainWindow" x:Name="NotifyIcon" Text="Jvedio" IsBlink="False" Visibility="Collapsed" Icon="/Jvedio;component/Resources/Jvedio.ico">
             <hc:NotifyIcon.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="{x:Static lang:Resources.OpenJvedio}" Click="Notify_Show"/>
+                    <MenuItem Header="{x:Static lang:Resources.OpenJvedio}" Click="ShowMainWindow"/>
                     <MenuItem Header="{x:Static lang:Resources.Exit}" Click="Notify_Close"/>
                 </ContextMenu>
             </hc:NotifyIcon.ContextMenu>
@@ -2671,18 +2670,15 @@
                                 <StackPanel Orientation="Horizontal" Margin="20 5">
                                     <Image Source="/Resources/Picture/升级.png"/>
                                     <TextBlock FontSize="20"  Text="{x:Static lang:Resources.CheckUpgrade}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" FontWeight="Bold"/>
+                                    <hc:LoadingCircle x:Name="UpgradeLoadingCircle" Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
+
                                 </StackPanel>
 
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="50 0">
-                                    <TextBlock x:Name="LocalVersionTextBlock" HorizontalAlignment="Left"  FontSize="14"  Text="{x:Static lang:Resources.CurrentVersion}" TextAlignment="Center" Foreground="{DynamicResource ForegroundGlobal}" Margin="10" />
-                                    <TextBlock  x:Name="RemoteVersionTextBlock"   FontSize="16"  Text="{x:Static lang:Resources.LatestVersion}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" />
+                                    <TextBlock x:Name="UpgradeSourceTextBlock" HorizontalAlignment="Left"  FontSize="14"  Text="{x:Static lang:Resources.UpgradeSource}"  Foreground="{DynamicResource ForegroundGlobal}" Margin="10" />
+                                    <TextBlock x:Name="LocalVersionTextBlock" HorizontalAlignment="Left"  FontSize="14"  Text="{x:Static lang:Resources.CurrentVersion}"  Foreground="{DynamicResource ForegroundGlobal}" Margin="10" />
+                                    <TextBlock  x:Name="RemoteVersionTextBlock"   FontSize="16"  Text="{x:Static lang:Resources.LatestVersion}"  Foreground="{DynamicResource ForegroundSearch}" Margin="10" />
                                 </StackPanel>
-
-
-
-
-
-
                             </StackPanel>
 
 

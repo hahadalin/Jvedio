@@ -1258,6 +1258,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 热键冲突 的本地化字符串。
+        /// </summary>
+        public static string HotKeyConflict {
+            get {
+                return ResourceManager.GetString("HotKeyConflict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 识别码 的本地化字符串。
         /// </summary>
         public static string ID {
@@ -4008,6 +4017,15 @@ namespace Jvedio.Language {
         public static string Upgrade {
             get {
                 return ResourceManager.GetString("Upgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 更新源 的本地化字符串。
+        /// </summary>
+        public static string UpgradeSource {
+            get {
+                return ResourceManager.GetString("UpgradeSource", resourceCulture);
             }
         }
         

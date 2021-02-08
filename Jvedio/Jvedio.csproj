@@ -790,7 +790,6 @@
     <PreBuildEvent>XCOPY "$(ProjectDir)Reference\MediaInfo.dll" "$(TargetDir)" /E /Y /i
 XCOPY "$(ProjectDir)Reference\MediaInfoNET.dll" "$(TargetDir)" /E /Y /i
 XCOPY "$(ProjectDir)Data\BusActress.sqlite" "$(TargetDir)" /E /Y /i
-XCOPY "$(ProjectDir)Data\Upgrade.bat" "$(TargetDir)" /E /Y /i
 XCOPY "$(ProjectDir)Data\x86" "$(TargetDir)\x86" /E /Y /i
 XCOPY "$(ProjectDir)Data\x64" "$(TargetDir)\x64" /E /Y /i</PreBuildEvent>
   </PropertyGroup>
