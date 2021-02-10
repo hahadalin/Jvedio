@@ -445,7 +445,7 @@ namespace Jvedio
 
         }
 
-        public void CloseWindow(object sender, MouseEventArgs e)
+        public void CloseWindow(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

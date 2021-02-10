@@ -44,10 +44,7 @@ namespace Jvedio
     /// </summary>
     public partial class Main : Window
     {
-        public const string UpgradeSource = "https://hitchao.github.io";
-        public const string UpdateUrl = "https://hitchao.github.io/jvedioupdate/Version";
-        public const string UpdateExeVersionUrl = "https://hitchao.github.io/jvedioupdate/update";
-        public const string UpdateExeUrl = "https://hitchao.github.io/jvedioupdate/JvedioUpdate.exe";
+
         public const string NoticeUrl = "https://hitchao.github.io/JvedioWebPage/notice";
 
         public DispatcherTimer CheckurlTimer = new DispatcherTimer();
@@ -542,50 +539,7 @@ namespace Jvedio
         }
 
 
-        private void CheckUpdate()
-        {
-            Task.Run(async () =>
-            {
-                App.Current.Dispatcher.Invoke((Action)delegate { UpgradeLoadingCircle.Visibility = Visibility.Visible; });
-                string content = ""; int statusCode;
-                try
-                {
-                    (content, statusCode) = await Net.Http(UpdateUrl, Proxy: null);
-                }
-                catch (TimeoutException ex) { Logger.LogN($"URL={UpdateUrl},Message-{ex.Message}"); }
 
-                if (content != "")
-                {
-                    //检查更新
-                    this.Dispatcher.Invoke((Action)delegate ()
-                    {
-                        string remote = content.Split('\n')[0];
-                        string updateContent = content.Replace(remote + "\n", "");
-                        string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-
-                        using (StreamWriter sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "OldVersion"))
-                        {
-                            sw.WriteLine(local + "\n");
-                            sw.WriteLine(updateContent);
-                        }
-                        UpgradeSourceTextBlock.Text = $"{Jvedio.Language.Resources.UpgradeSource}：{UpgradeSource}";
-                        LocalVersionTextBlock.Text = $"{Jvedio.Language.Resources.CurrentVersion}：{local}";
-                        RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
-                        UpdateContentTextBox.Text = updateContent;
-
-                        if (local.CompareTo(remote) < 0)
-                        {
-                            UpdateGrid.Visibility = Visibility.Visible;
-
-                        }
-
-
-                    });
-                }
-                App.Current.Dispatcher.Invoke((Action)delegate { UpgradeLoadingCircle.Visibility = Visibility.Hidden; });
-
-            });
-        }
 
 
         void ShowNotice()
@@ -615,8 +569,7 @@ namespace Jvedio
                         sw.Close();
                         this.Dispatcher.Invoke((Action)delegate ()
                         {
-                            NoticeTextBlock.Text = content;
-                            NoticeGrid.Visibility = Visibility.Visible;
+                            new Dialog_Notice(this, false, content).ShowDialog();
                         });
                     }
 
@@ -1279,20 +1232,36 @@ namespace Jvedio
 
         private void ShowAbout(object sender, RoutedEventArgs e)
         {
-            AboutGrid.Visibility = Visibility.Visible;
-            VersionTextBlock.Text = Jvedio.Language.Resources.Version + $" : {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
+            new Dialog_About(this, false).ShowDialog();
+
         }
 
         private void ShowThanks(object sender, RoutedEventArgs e)
         {
-            ThanksGrid.Visibility = Visibility.Visible;
+            new Dialog_Thanks(this,false).ShowDialog();
         }
 
-        private void ShowUpdate(object sender, MouseButtonEventArgs e)
+        private async  void CheckUpgrade(object sender, RoutedEventArgs e)
         {
-            CheckUpdate();
-            UpdateGrid.Visibility = Visibility.Visible;
+            if (sender != null)
+            {
+                new Dialog_Upgrade(this, false, "", "").ShowDialog();
+            }
+            else
+            {
+                (bool success, string remote, string updateContent) = await Net.CheckUpdate();
+                string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                if (success && local.CompareTo(remote) > 0)
+                {
+                    new Dialog_Upgrade(this, false, remote, updateContent).ShowDialog();
+                }
+            }
+
+
+
+
         }
+
 
 
 
@@ -3983,53 +3952,7 @@ namespace Jvedio
 
 
 
-        private async void OpenUpdate(object sender, RoutedEventArgs e)
-        {
-            if (new Msgbox(this, Jvedio.Language.Resources.IsToUpdate).ShowDialog() == true)
-            {
-                try
-                {
-                    //检查升级程序是否是最新的
-                    string content = ""; int statusCode; bool IsToDownLoadUpdate = false;
-                    try { (content, statusCode) = await Net.Http(UpdateExeVersionUrl, Proxy: null); }
-                    catch (TimeoutException ex) { Logger.LogN($"URL={UpdateUrl},Message-{ex.Message}"); }
-                    if (content != "")
-                    {
-                        //跟本地的 md5 对比
-                        if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe")) { IsToDownLoadUpdate = true; }
-                        else
-                        {
-                            string md5 = GetFileMD5(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
-                            if (md5 != content) { IsToDownLoadUpdate = true; }
-                        }
-                    }
-                    if (IsToDownLoadUpdate)
-                    {
-                        (byte[] filebyte, string cookie, int statuscode) = Net.DownLoadFile(UpdateExeUrl);
-                        try
-                        {
-                            using (var fs = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe", FileMode.Create, FileAccess.Write))
-                            {
-                                fs.Write(filebyte, 0, filebyte.Length);
-                            }
-                        }
-                        catch { }
-                    }
-                    try
-                    {
-                        Process.Start(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
-                    }catch(Exception ex)
-                    {
-                        HandyControl.Controls.Growl.Error(ex.Message, "Main");
-                    }
 
-                    IsToUpdate = true;
-                    Application.Current.Shutdown();//直接关闭
-                }
-                catch { MessageBox.Show($"{Jvedio.Language.Resources.CannotOpen} JvedioUpdate.exe"); }
-
-            }
-        }
 
 
 
@@ -4066,7 +3989,8 @@ namespace Jvedio
             ShowNotice();
 
             //检查更新
-            CheckUpdate();
+            CheckUpgrade(null,null);
+
             this.Cursor = Cursors.Arrow;
             //设置当前数据库
             for (int i = 0; i < vieModel.DataBases.Count; i++)
@@ -4262,10 +4186,7 @@ namespace Jvedio
             }
         }
 
-        private void GotoDownloadUrl(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://github.com/hitchao/Jvedio/releases");
-        }
+
 
         private void RandomDisplay(object sender, MouseButtonEventArgs e)
         {
@@ -5803,61 +5724,7 @@ namespace Jvedio
             SearchHistoryStackPanel.Visibility = Visibility.Collapsed;
         }
 
-        Upgrade upgrade;
-        private void BeginUpgrade(object sender, RoutedEventArgs e)
-        {
 
-
-
-            Button button = (Button)sender;
-            string text = button.Content.ToString();
-            if (text == Jvedio.Language.Resources.BeginUpgrade)
-            {
-                button.Content = Jvedio.Language.Resources.StopUpgrade;
-                upgrade = new Upgrade();
-                upgrade.UpgradeCompleted += (s, _) =>
-                {
-                    UpgradeLoadingCircle.Visibility = Visibility.Hidden;
-                    //执行命令
-                    string arg = "xcopy /y/e Temp %cd%&TIMEOUT /T 1&start \"\" \"jvedio.exe\" &exit";
-                    using (StreamWriter sw=new StreamWriter("upgrade.bat"))
-                    {
-                        sw.Write(arg);
-                    }
-                    System.Diagnostics.Process.Start("upgrade.bat");
-                    Application.Current.Shutdown();
-                };
-
-                upgrade.onProgressChanged += (s, _) =>
-                {
-                    ProgressBUpdateEventArgs ev = _ as ProgressBUpdateEventArgs;
-                    UpgradeProgressStackPanel.Visibility = Visibility;
-                    if (ev.maximum != 0)
-                    {
-                        UpgradeProgressBar.Value = (int)(ev.value / ev.maximum * 100);
-                    }
-
-                };
-                button.Style = (Style)App.Current.Resources["ButtonDanger"];
-                UpgradeProgressBar.Value = 0;
-                UpgradeLoadingCircle.Visibility = Visibility.Visible;
-                upgrade.Start();
-                UpgradeProgressStackPanel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                button.Content = Jvedio.Language.Resources.BeginUpgrade;
-                button.Style= (Style)App.Current.Resources["ButtonStyleFill"];
-                upgrade?.Stop();
-                UpgradeProgressStackPanel.Visibility = Visibility.Collapsed;
-                UpgradeLoadingCircle.Visibility = Visibility.Collapsed;
-            }
-
-
-
-
-
-        }
 
         private void CmdTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -5870,6 +5737,8 @@ namespace Jvedio
             vieModel.ShowMovieGrid = false;
 
         }
+
+
     }
 
 

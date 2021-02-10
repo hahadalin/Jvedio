@@ -44,7 +44,7 @@
                     </AdornerDecorator>
                 </Grid>
 
-                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel x:Name="ButtonStackPanel"  Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
 
                     <Button  x:Name="ConfirmButton"   Content="{x:Static lang:Resources.Confirm}" Style="{StaticResource ButtonStyleFill}"  />
 

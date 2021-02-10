@@ -760,7 +760,6 @@
 
 
         <Grid  Visibility="{Binding CmdVisibility,FallbackValue=Hidden}" Panel.ZIndex="5">
-
             <TextBox    Text="{Binding CmdText}" TextChanged="CmdTextChanged" Padding="10" TextWrapping="WrapWithOverflow"  DockPanel.Dock="Top" Background="{DynamicResource BackgroundMenu}" Opacity="0.8" Foreground="{DynamicResource ForegroundSearch}" Height="auto" Margin="50 100" Width="auto" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
             <Border     Height="27" Width="27" Margin="20 100" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="Border_MouseLeftButtonUp" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
@@ -769,7 +768,7 @@
 
         <!--显示侧边栏-->
         <Grid  Visibility="{Binding HideSide,Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="10"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10 50"   >
-            <ToggleButton Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" >
+            <ToggleButton Cursor="Hand" Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" >
                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" RenderTransformOrigin=".5,.5"  >
                     <Image.RenderTransform>
                         <RotateTransform Angle="180" />
@@ -793,15 +792,15 @@
                     </StackPanel>
 
                     <StackPanel Panel.ZIndex="5" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Border   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="MinWindow" >
+                        <Button     Style="{StaticResource TitleButton}" Click="MinWindow" >
                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
-                        </Border>
-                        <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="MaxWindow">
+                        </Button>
+                        <Button   Style="{StaticResource TitleButton}" Click="MaxWindow">
                             <Image    Source="{Binding Themes, Mode=OneWay, ConverterParameter=max,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                        </Border>
-                        <Border     Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="CloseWindow">
+                        </Button>
+                        <Button    Style="{StaticResource CloseButton}" Click="CloseWindow">
                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                        </Border>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -815,9 +814,6 @@
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
-
-
                     <!--侧边栏-->
                     <Border Visibility="{Binding HideSide,Converter={StaticResource BoolToOppositeVisibilityConverter}}" Width="{Binding SideBorderWidth}"    PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}"    BorderThickness="0" >
                         <Grid  >
@@ -838,7 +834,6 @@
 
                                 <Border Grid.Column="1"  ToolTip="{x:Static lang:Resources.Settings}"   Width="27" Height="27"  Margin="5 0"  CornerRadius="3" Style="{StaticResource BorderStyle}"  MouseLeftButtonUp="ShowSettingsPopup">
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=menu,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" Margin="4,4,3.2,0" VerticalAlignment="Center"   />
-
                                     <Border.ContextMenu >
                                         <ContextMenu Opacity="0.8" VerticalOffset="-10"   HorizontalOffset="-50" Placement="Mouse"   >
 
@@ -859,11 +854,9 @@
                                                 <MenuItem  Header="{x:Static lang:Resources.SoftWare}" Click="OpenApplicationPath"  />
                                             </MenuItem>
                                             <MenuItem Visibility="Collapsed"  Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="ScreenShot"   />
-                                            <MenuItem Header="{x:Static lang:Resources.Upgrade}" PreviewMouseLeftButtonUp="ShowUpdate"   />
+                                            <MenuItem Header="{x:Static lang:Resources.Upgrade}" Click="CheckUpgrade"   />
                                         </ContextMenu>
                                     </Border.ContextMenu>
-
-
                                 </Border>
 
                             </Grid>
@@ -906,20 +899,10 @@
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=classify,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
                                     <RadioButton Click="ShowClassifyGrid"   Background="Transparent"  Cursor="Hand"    Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="{x:Static lang:Resources.AutoClassification}"    />
                                 </Grid>
-
-
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                </Grid>
-
-
                             </StackPanel>
 
                             <StackPanel Grid.Row="2"  >
-                                <Rectangle HorizontalAlignment="Stretch" Fill="{DynamicResource ForegroundGlobal}" Height="1" Margin="5 0"/>
+                                <Rectangle HorizontalAlignment="Stretch" Fill="{DynamicResource ForegroundGlobal}" Height="2" RadiusX="1" RadiusY="1" Margin="2 0"/>
 
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -939,9 +922,7 @@
                                     <ItemsControl Background="Transparent" x:Name="ListItemsControl"   ItemsSource="{Binding MyList}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <StackPanel   Orientation="Vertical" >
-
-                                                </StackPanel>
+                                                <StackPanel   Orientation="Vertical" />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
 
@@ -964,8 +945,6 @@
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
-
-
                                 </ScrollViewer>
 
 
@@ -976,12 +955,14 @@
                             <Grid  Grid.Row="3">
                                 <Grid  Panel.ZIndex="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10 0 0 10"  MouseEnter="ShowStatus" MouseLeave="ShowStatus" >
                                     <Border  Background="{Binding WebStatusBackground,FallbackValue=Red}"  CornerRadius="10" Height="20" Width="20" >
+
                                         <Border.Effect>
                                             <BlurEffect Radius="2" KernelType="Box"  RenderingBias="Quality"/>
                                         </Border.Effect>
+
                                         <Border.Style>
                                             <Style>
-                                                <!--<Style.Triggers>
+                                                <Style.Triggers>
                                                     <DataTrigger Binding="{Binding CheckingUrl}" Value="True">
                                                         <DataTrigger.EnterActions>
                                                             <BeginStoryboard x:Name="BorderBeginStoryboard">
@@ -994,7 +975,7 @@
                                                             <RemoveStoryboard BeginStoryboardName="BorderBeginStoryboard"/>
                                                         </DataTrigger.ExitActions>
                                                     </DataTrigger>
-                                                </Style.Triggers>-->
+                                                </Style.Triggers>
                                             </Style>
                                         </Border.Style>
                                     </Border>
@@ -1026,7 +1007,7 @@
                                                         <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                     </Border.Effect>
                                                 </Border>
-                                                <StackPanel  Panel.ZIndex="5" Background="Transparent" Orientation="Vertical" Width="auto" Height="auto" >
+                                                <StackPanel  Panel.ZIndex="5" Background="Transparent" Orientation="Vertical"  >
                                                     <StackPanel Margin="5" Orientation="Horizontal" Visibility="{Binding EnableBus, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}">
                                                         <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="Bus" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
                                                         <Ellipse x:Name="BusStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5"/>
@@ -1058,17 +1039,10 @@
                                                 </StackPanel>
                                             </Grid>
                                         </ToolTip>
-
-
-
                                     </Grid.ToolTip>
-
-
                                 </Grid>
 
-
-                                <!--收起侧边栏-->
-                                <Grid  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10"   >
+                                <Grid Cursor="Hand"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10"   >
                                     <ToggleButton Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" >
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                     </ToggleButton>
@@ -1080,7 +1054,7 @@
                     </Border>
 
                     <!--左右调节-->
-                    <Rectangle  IsEnabled="True" MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="6"  Margin="0 0 -3 0" />
+                    <Rectangle   MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent"  HorizontalAlignment="Right" Width="6"  Margin="0 0 -3 0" />
 
                     <!--影片-->
                     <Grid     Visibility="{Binding ShowMovieGrid ,Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}"   MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="1"  >
@@ -1224,7 +1198,7 @@
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
-                                    <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}"  Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch"  />
+                                    <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}"  Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch"   />
 
                                     <Border   ToolTip="{x:Static lang:Resources.ImageType}" Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowImagePopup">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=image,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
@@ -1724,9 +1698,9 @@
                                                 <MenuItem Header="{x:Static lang:Resources.ShowRest}" Click="ShowRestMovie" />
                                             </ContextMenu>
                                         </ScrollViewer.ContextMenu>
-                                        
-                                        
-                                        
+
+
+
 
                                         <!--影片-->
                                         <ItemsControl   FocusVisualStyle="{x:Null}"    x:Name="MovieItemsControl" AlternationCount="999"  ItemsSource="{Binding CurrentMovieList}" ScrollViewer.VerticalScrollBarVisibility="Auto" >
@@ -2487,7 +2461,7 @@
                 </Grid>
 
                 <!--首次运行-->
-                <Grid   Grid.Row="1" Visibility="{Binding ShowFirstRun,FallbackValue=Collapsed}" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid   Grid.Row="1" Visibility="{Binding ShowFirstRun,FallbackValue=Hidden}" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Grid    >
                         <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
                             <Border.Effect>
@@ -2497,8 +2471,8 @@
 
                         <Border  CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5"  >
 
-                            <StackPanel  Margin="5"  FocusVisualStyle="{x:Null}"  Visibility="Visible" Panel.ZIndex="1" Orientation="Horizontal"  HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Static lang:Resources.DragFileInOr}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="20"></TextBlock>
+                            <StackPanel  Margin="20"  FocusVisualStyle="{x:Null}"  Visibility="Visible" Panel.ZIndex="1" Orientation="Horizontal"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Static lang:Resources.DragFileInOr}" Margin="20 0" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="20"></TextBlock>
                                 <Button Content="{x:Static lang:Resources.Scan}" Style="{StaticResource ButtonStyleFill}"  Click="Button_Click_4"/>
                             </StackPanel>
 
@@ -2512,7 +2486,7 @@
                                 <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="OrangeRed"/>
+                                        <Setter Property="Background" Value="Red"/>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -2522,181 +2496,10 @@
 
                 </Grid>
 
-                <!--鸣谢-->
-
-                <Grid x:Name="ThanksGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="500" Visibility="Collapsed" >
-                    <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5"   >
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
-                        </Border.Effect>
-                    </Border>
-
-                    <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
-                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                    </Border>
-
-
-                    <StackPanel Orientation="Vertical" Margin="20">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Image VerticalAlignment="Center" Margin="10 5" HorizontalAlignment="Left" Height="35"  Source="/Resources/Picture/Jvedio.png"/>
-                            <Image Margin="5 12" HorizontalAlignment="Left" Height="35"  VerticalAlignment="Top"  Source="Resources/Picture/Title.png"/>
-                        </StackPanel>
-
-
-                        <TextBlock x:Name="ThankTextBlock" FontSize="17" FontWeight="Bold" HorizontalAlignment="Center" Text="{x:Static lang:Resources.Thanks}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10 30"/>
-
-
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-
-                            <TextBlock TextAlignment="Left"  Text="软件开发：Chao" Style="{StaticResource BaseTextBlock}" ></TextBlock>
-                            <TextBlock FontSize="15" Margin="0 5"    TextAlignment="Left" Foreground="{DynamicResource ForegroundSearch}" >界面控件：<Hyperlink NavigateUri="https://github.com/HandyOrg/HandyControl" Click="OpenUrl" ><Run Text="HandyControl"/></Hyperlink></TextBlock>
-
-                            <TextBlock TextAlignment="Left"  Text="界面设计：青萍之末, Engine, Erdon, Erik" Style="{StaticResource BaseTextBlock}"></TextBlock>
-                            <TextBlock TextAlignment="Left"  Text="技术支持：javgo, javsdt " Style="{StaticResource BaseTextBlock}"></TextBlock>
-                            <TextBlock TextAlignment="Left"   Text="软件调试：sheldon, SHAWN, dddsG, EEE, jion, 猫仔 等网友" Style="{StaticResource BaseTextBlock}"></TextBlock>
-                            <TextBlock TextAlignment="Left"   Text="赞助支持：小猪培根 等人" Style="{StaticResource BaseTextBlock}"></TextBlock>
-                            <TextBlock Visibility="Hidden" FontSize="16"    TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="2 10"></TextBlock>
-
-                            <TextBlock HorizontalAlignment="Center"  Text="{x:Static lang:Resources.Thanks_Content1}" Style="{StaticResource BaseTextBlock}"></TextBlock>
-                            <TextBlock  HorizontalAlignment="Center"       Text="{x:Static lang:Resources.Thanks_Content2}" Style="{StaticResource BaseTextBlock}"></TextBlock>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
 
 
 
-                <!--关于-->
-                <Grid x:Name="AboutGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="500" Visibility="Collapsed" >
-                    <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
-                        </Border.Effect>
-                    </Border>
 
-                    <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
-                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                    </Border>
-
-                    <StackPanel Orientation="Vertical" Margin="0 50 0 20">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Image Height="40" HorizontalAlignment="Center"  VerticalAlignment="Center" Source="/Resources/Picture/Jvedio.png"/>
-                            <Image Margin="0 10 0 10" HorizontalAlignment="Center" Height="40"  VerticalAlignment="Center"  Source="Resources/Picture/Title.png"/>
-                        </StackPanel>
-
-                        <TextBlock  FontSize="20"  Text="{x:Static lang:Resources.About_Outline}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10"/>
-
-                        <TextBox IsReadOnly="True" Background="Transparent" BorderThickness="0"  FontSize="15"  TextWrapping="Wrap" TextAlignment="Left"  Text="{x:Static lang:Resources.About_Content}"  Foreground="{DynamicResource ForegroundSearch}" Margin="40 10"/>
-
-
-                        <TextBlock x:Name="VersionTextBlock" FontSize="20"  Text="{x:Static lang:Resources.Version}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10"/>
-
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-
-
-                            <StackPanel Orientation="Horizontal" Margin="20 0">
-                                <Image Source="Resources/Ico/github.png" Width="25" />
-                                <TextBlock FontSize="20"    TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="5 10"><Hyperlink NavigateUri="https://github.com/hitchao/Jvedio" Click="OpenUrl" ><Run Text="Github"/></Hyperlink></TextBlock>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="20 0">
-                                <Image Source="Resources/Jvedio.ico" Width="25" />
-                                <TextBlock FontSize="20"    TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="5 10"><Hyperlink NavigateUri="https://hitchao.github.io/JvedioWebPage/" Click="OpenUrl" ><Run Text="{x:Static lang:Resources.OfficialWebsite}"/></Hyperlink></TextBlock>
-                            </StackPanel>
-
-                        </StackPanel>
-                    </StackPanel>
-
-                </Grid>
-
-                <!--公告-->
-
-                <Grid x:Name="NoticeGrid" Panel.ZIndex="10" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="360" Width="500" Visibility="Collapsed" >
-                    <Image Source="Resources/Picture/hankuke.jpg" Stretch="Fill" Margin="2"/>
-                    <Border Background="{DynamicResource BackgroundTitle}" CornerRadius="5" Opacity="0.9"></Border>
-                    <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
-                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                    </Border>
-                    <StackPanel Orientation="Vertical" Margin="0 50">
-                        <TextBlock FontSize="20"  Text="{x:Static lang:Resources.Notice}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" FontWeight="Bold"/>
-                        <TextBox FontFamily="微软雅黑" Height="200" VerticalContentAlignment="Top" Padding="10" Style="{StaticResource BaseTextBox}" Background="Transparent" IsReadOnly="True" x:Name="NoticeTextBlock" TextWrapping="Wrap" FontSize="20"    TextAlignment="Left" Foreground="{DynamicResource ForegroundSearch}" Margin="40 5" Text="{x:Static lang:Resources.Notice}"/>
-                    </StackPanel>
-
-                </Grid>
-
-                <!--升级-->
-
-                <Grid Visibility="Collapsed" x:Name="UpdateGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="400" MinWidth="550"  >
-                    <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Opacity="1" Margin="2">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
-                        </Border.Effect>
-                    </Border>
-                    <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
-                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                    </Border>
-                    <Grid  Margin="0 40">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
-
-
-                            </Grid.ColumnDefinitions>
-
-
-                            <StackPanel Grid.Column="0" Orientation="Vertical">
-
-                                <StackPanel Orientation="Horizontal" Margin="20 5">
-                                    <Image Source="/Resources/Picture/升级.png"/>
-                                    <TextBlock FontSize="20"  Text="{x:Static lang:Resources.CheckUpgrade}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" FontWeight="Bold"/>
-                                    <hc:LoadingCircle x:Name="UpgradeLoadingCircle" Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
-
-                                </StackPanel>
-
-                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="50 0">
-                                    <TextBlock x:Name="UpgradeSourceTextBlock" HorizontalAlignment="Left"  FontSize="14"  Text="{x:Static lang:Resources.UpgradeSource}"  Foreground="{DynamicResource ForegroundGlobal}" Margin="10" />
-                                    <TextBlock x:Name="LocalVersionTextBlock" HorizontalAlignment="Left"  FontSize="14"  Text="{x:Static lang:Resources.CurrentVersion}"  Foreground="{DynamicResource ForegroundGlobal}" Margin="10" />
-                                    <TextBlock  x:Name="RemoteVersionTextBlock"   FontSize="16"  Text="{x:Static lang:Resources.LatestVersion}"  Foreground="{DynamicResource ForegroundSearch}" Margin="10" />
-                                </StackPanel>
-                            </StackPanel>
-
-
-
-                            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="20">
-                                <Button  Margin="0 10"  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.BeginUpgrade}" MinWidth="120"  FontSize="15" Click="BeginUpgrade" />
-                                <Button Margin="0 10"  Style="{StaticResource ButtonPrimary}" Content="{x:Static lang:Resources.DownLoadFromUrl}" MinWidth="120"  FontSize="15" Click="GotoDownloadUrl" />
-                            </StackPanel>
-
-                        </Grid>
-
-                        <StackPanel x:Name="UpgradeProgressStackPanel" Visibility="Collapsed" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <ProgressBar x:Name="UpgradeProgressBar" Style="{StaticResource ProgressBarSuccessStripe}" Width="300" Value="50"  Maximum="100" Minimum="0"  />
-
-                            <TextBlock x:Name="progressText" Margin="20 0" Style="{StaticResource BaseTextBlock}" Text="{Binding ElementName=UpgradeProgressBar,Path=Value,StringFormat='{}{0}%'}"/>
-
-                        </StackPanel>
-
-                        <Grid x:Name="UpgradeInfoGrid" Grid.Row="2"    Margin="50 10"  >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-
-                            <TextBlock Grid.Row="0"  HorizontalAlignment="Left"  FontSize="18"  Text="{x:Static lang:Resources.Log}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" FontWeight="Bold"/>
-                            <TextBox Grid.Row="1" HorizontalScrollBarVisibility="Auto" x:Name="UpdateContentTextBox"  TextAlignment="Left" VerticalContentAlignment="Top" IsReadOnly="True" VerticalScrollBarVisibility="Auto"  Background="Transparent"  BorderThickness="0" Height="auto"    FontSize="18" Width="auto"  Text="https://github.com/hitchao/Jvedio/releases" Foreground="{DynamicResource ForegroundGlobal}" Margin="10"   />
-
-                        </Grid>
-
-
-                    </Grid>
-
-                </Grid>
 
 
 
@@ -2807,13 +2610,7 @@
 
 
             </Grid>
-
-
-
         </Grid>
-
-
-
         <Grid x:Name="resizeGrid" Margin="3">
             <Rectangle
                 
@@ -2877,6 +2674,5 @@
                             Height="5"
                             x:Name="TopLeft" />
         </Grid>
-
     </Grid>
 </Window>

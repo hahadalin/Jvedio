@@ -240,9 +240,9 @@
 
                         <Button  Click="EditInfo"  Grid.Column="1" Content="{x:Static lang:Resources.Edit}"   Style="{StaticResource  EditButton}" />
 
-                        <Border   Grid.Column="2"    Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="CloseWindow">
+                        <Button   Grid.Column="2"  Style="{StaticResource CloseButton}" Click="CloseWindow">
                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                        </Border>
+                        </Button>
 
 
                     </Grid>

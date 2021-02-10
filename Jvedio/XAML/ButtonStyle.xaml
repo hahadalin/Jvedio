@@ -89,6 +89,9 @@
     </Style>
 
     <Style x:Key="CloseButton" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="27"/>
+        <Setter Property="Width" Value="27"/>
+        <Setter Property="Margin" Value="5 0"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -110,14 +113,14 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard FillBehavior="HoldEnd">
-                                        <ColorAnimation Duration="0:0:0.5" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color" To="Red" />
+                                        <ColorAnimation Duration="0:0:0.2" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color" To="Red" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard >
-                                        <ColorAnimation Duration="0:0:0.15" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color" To="Transparent" />
+                                        <ColorAnimation Duration="0:0:0.2" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color" To="Transparent" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -129,6 +132,9 @@
     </Style>
 
     <Style x:Key="TitleButton" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="27"/>
+        <Setter Property="Width" Value="27"/>
+        <Setter Property="Margin" Value="5 0"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -150,14 +156,14 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard FillBehavior="HoldEnd">
-                                        <ColorAnimation Duration="0:0:0.5" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color" To="Gray" />
+                                        <ColorAnimation Duration="0:0:0.2" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color" To="Gray" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard >
-                                        <ColorAnimation Duration="0:0:0.15" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color" To="Transparent" />
+                                        <ColorAnimation Duration="0:0:0.2" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color" To="Transparent" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>

@@ -23,10 +23,6 @@ namespace Jvedio
     public partial class Dialog_NewMovie : BaseDialog
     {
         public NewMovieDialogResult Result { get; private set; }
-        public Dialog_NewMovie(Window owner,double width,double height):base(owner,width, height)
-        {
-            InitializeComponent();
-        }
 
         public Dialog_NewMovie(Window owner) : base(owner)
         {

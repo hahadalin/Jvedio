@@ -90,7 +90,7 @@ namespace Jvedio
 
 
 
-        public void AddPath(object sender, MouseButtonEventArgs e)
+        public void AddPath(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
@@ -113,7 +113,7 @@ namespace Jvedio
 
         }
 
-        public void DelPath(object sender, MouseButtonEventArgs e)
+        public void DelPath(object sender, RoutedEventArgs e)
         {
             if (PathListBox.SelectedIndex != -1)
             {
@@ -124,14 +124,14 @@ namespace Jvedio
             }
         }
 
-        public void ClearPath(object sender, MouseButtonEventArgs e)
+        public void ClearPath(object sender, RoutedEventArgs e)
         {
             vieModel.ScanPath.Clear();
         }
 
 
 
-        public void AddEuPath(object sender, MouseButtonEventArgs e)
+        public void AddEuPath(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             folderBrowserDialog.Description =Jvedio.Language.Resources.ChooseDir;
@@ -151,7 +151,7 @@ namespace Jvedio
 
         }
 
-        public void DelEuPath(object sender, MouseButtonEventArgs e)
+        public void DelEuPath(object sender, RoutedEventArgs e)
         {
             if (EuropePathListBox.SelectedIndex != -1)
             {
@@ -162,7 +162,7 @@ namespace Jvedio
             }
         }
 
-        public void ClearEuPath(object sender, MouseButtonEventArgs e)
+        public void ClearEuPath(object sender, RoutedEventArgs e)
         {
             vieModel.ScanEuPath.Clear();
         }
@@ -172,7 +172,7 @@ namespace Jvedio
 
 
 
-        public void AddNFOPath(object sender, MouseButtonEventArgs e)
+        public void AddNFOPath(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
@@ -556,7 +556,7 @@ namespace Jvedio
             catch { }
         }
 
-        public void DelNFOPath(object sender, MouseButtonEventArgs e)
+        public void DelNFOPath(object sender, RoutedEventArgs e)
         {
             if (NFOPathListBox.SelectedIndex != -1)
             {
@@ -567,7 +567,7 @@ namespace Jvedio
             }
         }
 
-        public void ClearNFOPath(object sender, MouseButtonEventArgs e)
+        public void ClearNFOPath(object sender, RoutedEventArgs e)
         {
             vieModel.NFOScanPath.Clear();
         }

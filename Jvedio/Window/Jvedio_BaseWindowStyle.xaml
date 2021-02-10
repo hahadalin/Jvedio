@@ -29,13 +29,13 @@
                     <Grid  >
                     <TextBlock Text="{TemplateBinding Title }" Foreground="{DynamicResource ForegroundSearch}" FontSize="18"  VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="auto" />
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
-                        <Button   x:Name="BorderMin"  Height="27" Width="27" Margin="5 0"  Style="{StaticResource TitleButton}"  >
+                        <Button   Name="BorderMin"    Style="{StaticResource TitleButton}"  >
                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                         </Button>
-                            <Button    x:Name="BorderMax"  Height="27" Width="27" Margin="5 0"  Style="{StaticResource TitleButton}" >
+                            <Button    Name="BorderMax"    Style="{StaticResource TitleButton}" >
                             <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=max,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Button>
-                            <Button  x:Name="BorderClose"  Height="27" Width="27" Margin="5 0" Style="{StaticResource CloseButton}" >
+                            <Button  Name="BorderClose"  Style="{StaticResource CloseButton}" >
                             <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Button>
                     </StackPanel>

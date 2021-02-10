@@ -19,23 +19,27 @@ namespace Jvedio
     public  class BaseDialog : Window
     {
 
+        public bool showbutton = true;
+
         public BaseDialog(Window owner)
         {
             this.Style = (Style)App.Current.Resources["BaseDialogStyle"];
             this.Loaded += delegate { InitEvent(); };//初始化载入事件
+            this.ContentRendered += (s, e) => 
+            {
+                ControlTemplate baseDialogControlTemplate = (ControlTemplate)App.Current.Resources["BaseDialogControlTemplate"];
+                StackPanel sp = (StackPanel)baseDialogControlTemplate.FindName("ButtonStackPanel", this);
+                if (!showbutton) sp.Visibility = Visibility.Collapsed;
+            };
             this.Owner = owner;
-            this.Width = SystemParameters.WorkArea.Width * 0.4;
-            this.Height = SystemParameters.WorkArea.Height * 0.4;
         }
 
-
-
-        public BaseDialog(Window owner,double width,double height):this(owner)
+        public BaseDialog(Window owner, bool showbutton) : this(owner)
         {
-            this.Width = width;
-            this.Height = height;
-        }
+            this.showbutton = showbutton;
 
+
+        }
 
 
         private void InitEvent()
@@ -107,40 +111,30 @@ namespace Jvedio
         }
 
 
-        public async void FadeIn()
+        public  void FadeIn()
         {
             if (Properties.Settings.Default.EnableWindowFade)
             {
-                this.Opacity = 0;
-                double opacity = this.Opacity;
-                await Task.Run(() => {
-                    while (opacity < 0.5)
-                    {
-                        this.Dispatcher.Invoke((Action)delegate { this.Opacity += 0.05; opacity = this.Opacity; });
-                        Task.Delay(1).Wait();
-                    }
-                });
+                var anim = new DoubleAnimation(0, 1, (Duration)FadeInterval, FillBehavior.Stop);
+                anim.Completed += (s, _) => this.Opacity = 1;
+                this.BeginAnimation(UIElement.OpacityProperty, anim);
             }
-            this.Opacity = 1;
         }
 
-        public async void FadeOut()
+        public  void FadeOut()
         {
             if (Properties.Settings.Default.EnableWindowFade)
             {
-                double opacity = this.Opacity;
-                await Task.Run(() => {
-                    while (opacity > 0.1)
-                    {
-                        this.Dispatcher.Invoke((Action)delegate { this.Opacity -= 0.05; opacity = this.Opacity; });
-                        Task.Delay(1).Wait();
-                    }
-                });
-                this.Opacity = 0;
+                var anim = new DoubleAnimation(1, 0, (Duration)FadeInterval, FillBehavior.Stop);
+                anim.Completed += (s, _) =>
+                {
+                    this.DialogResult = false;
+                    this.Close();
+                };
+                this.BeginAnimation(UIElement.OpacityProperty, anim);
+
             }
 
-            this.DialogResult = false;
-            this.Close();
         }
 
 

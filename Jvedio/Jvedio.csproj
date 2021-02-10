@@ -219,6 +219,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DialogWindow\Dialog_Upgrade.xaml.cs">
+      <DependentUpon>Dialog_Upgrade.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DialogWindow\Dialog_Notice.xaml.cs">
+      <DependentUpon>Dialog_Notice.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DialogWindow\Dialog_NewMovie.xaml.cs">
+      <DependentUpon>Dialog_NewMovie.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DialogWindow\Dialog_About.xaml.cs">
+      <DependentUpon>Dialog_About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\AI\Baidu.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -246,8 +258,8 @@
     <Compile Include="Utils\ImageAndVedio\ImageProcess.cs" />
     <Compile Include="Utils\FileProcess\XML.cs" />
     <Compile Include="DialogWindow\BaseDialog.cs" />
-    <Compile Include="DialogWindow\Dialog_NewMovie.xaml.cs">
-      <DependentUpon>Dialog_NewMovie.xaml</DependentUpon>
+    <Compile Include="DialogWindow\Dialog_Thanks.xaml.cs">
+      <DependentUpon>Dialog_Thanks.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Plot\Bar\BarView.xaml.cs">
       <DependentUpon>BarView.xaml</DependentUpon>
@@ -316,6 +328,22 @@
     <Compile Include="Window\Window_DBManagement.xaml.cs">
       <DependentUpon>Window_DBManagement.xaml</DependentUpon>
     </Compile>
+    <Page Include="DialogWindow\Dialog_Upgrade.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DialogWindow\Dialog_Notice.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DialogWindow\Dialog_NewMovie.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DialogWindow\Dialog_About.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UserControls\OutputPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -328,7 +356,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DialogWindow\Dialog_NewMovie.xaml">
+    <Page Include="DialogWindow\Dialog_Thanks.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -69,15 +69,15 @@
 
                                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left"  >
 
-                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="AddPath">
+                                    <Button  Style="{StaticResource TitleButton}" Click="AddPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
-                                    </Border>
-                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="DelPath">
+                                    </Button>
+                                    <Button   Style="{StaticResource TitleButton}" Click="DelPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                    </Border>
-                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearPath">
+                                    </Button>
+                                    <Button   Style="{StaticResource CloseButton}" Click="ClearPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                    </Border>
+                                    </Button>
 
                                 </StackPanel>
 
@@ -160,15 +160,15 @@
 
                                             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left" >
 
-                                                <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="AddNFOPath">
+                                                <Button   Style="{StaticResource TitleButton}" Click="AddNFOPath">
                                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
-                                                </Border>
-                                                <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="DelNFOPath">
+                                                </Button>
+                                                <Button   Style="{StaticResource TitleButton}" Click="DelNFOPath">
                                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                                </Border>
-                                                <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearNFOPath">
+                                                </Button>
+                                                <Button   Style="{StaticResource CloseButton}" Click="ClearNFOPath">
                                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                                </Border>
+                                                </Button>
 
                                             </StackPanel>
                                         </StackPanel>
@@ -238,15 +238,15 @@
 
                                 <StackPanel Orientation="Horizontal" Margin="25 5" HorizontalAlignment="Left" >
 
-                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="AddEuPath">
+                                    <Button   Style="{StaticResource TitleButton}" Click="AddEuPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                    </Border>
-                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="DelEuPath">
+                                    </Button>
+                                    <Button Style="{StaticResource TitleButton}" Click="DelEuPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                    </Border>
-                                    <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearEuPath">
+                                    </Button>
+                                    <Button   Style="{StaticResource CloseButton}" Click="ClearEuPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
-                                    </Border>
+                                    </Button>
 
 
                                 </StackPanel>

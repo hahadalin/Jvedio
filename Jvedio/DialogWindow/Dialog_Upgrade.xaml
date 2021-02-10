@@ -1,0 +1,97 @@
+﻿<local:BaseDialog
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
+        xmlns:local="clr-namespace:Jvedio"
+        x:Class="Jvedio.Dialog_Upgrade"
+        mc:Ignorable="d"
+        Title="{x:Static lang:Resources.Upgrade}" 
+        Width="570"
+        Height="400"
+        WindowStartupLocation="CenterScreen"
+    ContentRendered="BaseDialog_ContentRendered"
+    
+        >
+
+    <Window.Resources>
+
+        <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="微软雅黑"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Margin" Value="0,5,0,5"/>
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
+        </Style>
+    </Window.Resources>
+
+
+    <Grid  Background="{DynamicResource BackgroundMain}"  >
+        <Grid  Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+
+
+                </Grid.ColumnDefinitions>
+
+
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+
+                    <StackPanel Orientation="Horizontal" Margin="20 5">
+                        <Image Source="/Resources/Picture/升级.png"/>
+                        <TextBlock FontSize="20"  Text="{x:Static lang:Resources.CheckUpgrade}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" FontWeight="Bold"/>
+                        <hc:LoadingCircle x:Name="UpgradeLoadingCircle" Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
+
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="50 0">
+                        <TextBlock x:Name="UpgradeSourceTextBlock" HorizontalAlignment="Left"  FontSize="14"  Text="{x:Static lang:Resources.UpgradeSource}"  Foreground="{DynamicResource ForegroundGlobal}" Margin="10" />
+                        <TextBlock x:Name="LocalVersionTextBlock" HorizontalAlignment="Left"  FontSize="14"  Text="{x:Static lang:Resources.CurrentVersion}"  Foreground="{DynamicResource ForegroundGlobal}" Margin="10" />
+                        <TextBlock  x:Name="RemoteVersionTextBlock"   FontSize="16"  Text="{x:Static lang:Resources.LatestVersion}"  Foreground="{DynamicResource ForegroundSearch}" Margin="10" />
+                    </StackPanel>
+                </StackPanel>
+
+
+
+                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center"  VerticalAlignment="Center">
+                    <Button  Margin="0 10"  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.BeginUpgrade}" MinWidth="120"  FontSize="15" Click="BeginUpgrade" />
+                    <Button Margin="0 10"  Style="{StaticResource ButtonPrimary}" Content="{x:Static lang:Resources.DownLoadFromUrl}" MinWidth="120"  FontSize="15" Click="GotoDownloadUrl" />
+                </StackPanel>
+
+            </Grid>
+
+            <StackPanel x:Name="UpgradeProgressStackPanel" Visibility="Collapsed" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressBar x:Name="UpgradeProgressBar" Style="{StaticResource ProgressBarSuccessStripe}" Width="300" Value="50"  Maximum="100" Minimum="0"  />
+
+                <TextBlock x:Name="progressText" Margin="20 0" Style="{StaticResource BaseTextBlock}" Text="{Binding ElementName=UpgradeProgressBar,Path=Value,StringFormat='{}{0}%'}"/>
+
+            </StackPanel>
+
+            <Grid x:Name="UpgradeInfoGrid" Grid.Row="2"    Margin="50 10"  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"  HorizontalAlignment="Left"  FontSize="18"  Text="{x:Static lang:Resources.Log}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" FontWeight="Bold"/>
+                <TextBox Grid.Row="1" HorizontalScrollBarVisibility="Auto" x:Name="UpdateContentTextBox"  TextAlignment="Left" VerticalContentAlignment="Top" IsReadOnly="True" VerticalScrollBarVisibility="Auto"  Background="Transparent"  BorderThickness="0" Height="auto"    FontSize="18" Width="auto"  Text="https://github.com/hitchao/Jvedio/releases" Foreground="{DynamicResource ForegroundGlobal}" Margin="10"   />
+
+            </Grid>
+
+
+        </Grid>
+
+    </Grid>
+</local:BaseDialog>

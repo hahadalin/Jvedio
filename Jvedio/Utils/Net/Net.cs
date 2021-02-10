@@ -27,6 +27,11 @@ namespace Jvedio
         public static int FILE_REQUESTTIMEOUT = 30000;//图片下载超时
         public static int READWRITETIMEOUT = 30000;
 
+        public const string UpgradeSource = "https://hitchao.github.io";
+        public const string UpdateUrl = "https://hitchao.github.io/jvedioupdate/Version";
+        public const string UpdateExeVersionUrl = "https://hitchao.github.io/jvedioupdate/update";
+        public const string UpdateExeUrl = "https://hitchao.github.io/jvedioupdate/JvedioUpdate.exe";
+
 
         public static void Init()
         {
@@ -43,6 +48,33 @@ namespace Jvedio
         {
             Normal = 0,
             RedirectGet = 1
+        }
+
+        public static async Task<(bool,string,string)> CheckUpdate()
+        {
+            return await Task.Run(async () =>
+            {
+                string content = ""; int statusCode;
+                try
+                {
+                    (content, statusCode) = await Net.Http(UpdateUrl, Proxy: null);
+                }
+                catch (TimeoutException ex) { Logger.LogN($"URL={UpdateUrl},Message-{ex.Message}"); }
+                if (string.IsNullOrEmpty(content)) return (false,"","");
+
+                string remote = content.Split('\n')[0];
+                string updateContent = content.Replace(remote + "\n", "");
+                string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+                using (StreamWriter sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "OldVersion"))
+                {
+                    sw.WriteLine(local + "\n");
+                    sw.WriteLine(updateContent);
+                }
+                return (true, remote, updateContent);
+
+
+            });
         }
 
         public static async Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, TimeSpan timeout)
