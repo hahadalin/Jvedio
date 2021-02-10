@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Jvedio"
     xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
+    xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
     xmlns:p="clr-namespace:Jvedio.Properties"
     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -1723,6 +1724,9 @@
                                                 <MenuItem Header="{x:Static lang:Resources.ShowRest}" Click="ShowRestMovie" />
                                             </ContextMenu>
                                         </ScrollViewer.ContextMenu>
+                                        
+                                        
+                                        
 
                                         <!--影片-->
                                         <ItemsControl   FocusVisualStyle="{x:Null}"    x:Name="MovieItemsControl" AlternationCount="999"  ItemsSource="{Binding CurrentMovieList}" ScrollViewer.VerticalScrollBarVisibility="Auto" >
@@ -1735,13 +1739,13 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate  >
                                                     <!--影片加载/卸载动画-->
-                                                    <!--<DataTemplate.Triggers >
+                                                    <DataTemplate.Triggers >
                                                         <EventTrigger   RoutedEvent="FrameworkElement.Loaded">
                                                             <BeginStoryboard  >
                                                                 <Storyboard   AutoReverse="False" >
                                                                     <DoubleAnimationUsingKeyFrames FillBehavior="Stop"    Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
                                                                         <EasingDoubleKeyFrame KeyTime="0" Value="0" />
-                                                                        <EasingDoubleKeyFrame x:Name="EasingDoubleKeyFrame_2"  KeyTime="0:0:0.25" Value="1" />
+                                                                        <EasingDoubleKeyFrame x:Name="EasingDoubleKeyFrame_2"  KeyTime="0:0:0.3" Value="1" />
                                                                     </DoubleAnimationUsingKeyFrames>
                                                                 </Storyboard>
                                                             </BeginStoryboard>
@@ -1751,15 +1755,15 @@
                                                                 <Storyboard   AutoReverse="False" >
                                                                     <DoubleAnimationUsingKeyFrames  FillBehavior="Stop"      Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
                                                                         <EasingDoubleKeyFrame KeyTime="0" Value="1" />
-                                                                        <EasingDoubleKeyFrame   KeyTime="0:0:0.25" Value="0" />
+                                                                        <EasingDoubleKeyFrame   KeyTime="0:0:0.3" Value="0" />
                                                                     </DoubleAnimationUsingKeyFrames>
                                                                 </Storyboard>
                                                             </BeginStoryboard>
                                                         </EventTrigger>
-                                                    </DataTemplate.Triggers>-->
+                                                    </DataTemplate.Triggers>
 
                                                     <!--自定义影片展示格式-->
-                                                    <WrapPanel    >
+                                                    <WrapPanel Name="MovieWrapPanel"  VirtualizingPanel.IsVirtualizing="True"  >
                                                         <Grid Margin="5">
                                                             <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"   >
                                                                 <Border.Effect>
@@ -2482,7 +2486,7 @@
                     </Grid>
                 </Grid>
 
-
+                <!--首次运行-->
                 <Grid   Grid.Row="1" Visibility="{Binding ShowFirstRun,FallbackValue=Collapsed}" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Grid    >
                         <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
@@ -2517,10 +2521,6 @@
                     </Border>
 
                 </Grid>
-
-
-
-
 
                 <!--鸣谢-->
 
