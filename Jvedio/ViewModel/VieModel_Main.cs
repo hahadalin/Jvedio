@@ -26,6 +26,7 @@ using DynamicData.Binding;
 using System.Xml;
 using HandyControl.Tools.Extension;
 using DynamicData.Annotations;
+using System.Windows.Media;
 
 namespace Jvedio.ViewModel
 {
@@ -89,6 +90,33 @@ namespace Jvedio.ViewModel
 
 
         #region "界面显示属性"
+
+        private SolidColorBrush _WebStatusBackground = System.Windows.Media.Brushes.Red;
+
+        public SolidColorBrush WebStatusBackground
+        {
+            get { return _WebStatusBackground; }
+            set
+            {
+                _WebStatusBackground = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _DatabaseSelectedIndex =0;
+
+        public int DatabaseSelectedIndex
+        {
+            get { return _DatabaseSelectedIndex; }
+            set
+            {
+                _DatabaseSelectedIndex = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
         private Visibility _ActorInfoGrid=Visibility.Collapsed;
 
         public Visibility ActorInfoGrid
@@ -126,6 +154,33 @@ namespace Jvedio.ViewModel
         }
 
 
+        private Visibility _CmdVisibility = Visibility.Collapsed;
+
+        public Visibility CmdVisibility
+        {
+            get { return _CmdVisibility; }
+            set
+            {
+                _CmdVisibility = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _CmdText = "";
+
+        public string CmdText
+        {
+            get { return _CmdText; }
+            set
+            {
+                _CmdText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        
+
+
         private int _ProgressBarValue = 0;
 
         public int ProgressBarValue
@@ -139,17 +194,81 @@ namespace Jvedio.ViewModel
         }
 
 
-        private Visibility _Grid_Classify = Visibility.Collapsed;
-        
-            public Visibility Grid_Classify
+        private bool _ShowSearchPopup = false;
+
+        public bool ShowSearchPopup
         {
-            get { return _Grid_Classify; }
+            get { return _ShowSearchPopup; }
             set
             {
-                _Grid_Classify = value;
+                _ShowSearchPopup = value;
                 RaisePropertyChanged();
             }
         }
+
+        private bool _ShowActorTools = false;
+
+        public bool ShowActorTools
+        {
+            get { return _ShowActorTools; }
+            set
+            {
+                _ShowActorTools = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private BitmapSource _BackgroundImage = GlobalVariable.BackgroundImage;
+
+        public BitmapSource BackgroundImage
+        {
+            get { return _BackgroundImage; }
+            set
+            {
+                _BackgroundImage = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _ShowMovieGrid = true;
+
+        public bool ShowMovieGrid
+        {
+            get { return _ShowMovieGrid; }
+            set
+            {
+                _ShowMovieGrid = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _HideSide = false;
+
+        public bool HideSide
+        {
+            get { return _HideSide; }
+            set
+            {
+                _HideSide = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private double _SideBorderWidth = 200;
+
+        public double SideBorderWidth
+        {
+            get { return _SideBorderWidth; }
+            set
+            {
+                _SideBorderWidth = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
 
         private bool _IsLoadingMovie = true;
 
@@ -164,7 +283,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        private bool _IsLoadingActor = true;
+        private bool _IsLoadingActor = false;
 
         public bool IsLoadingActor
         {
@@ -172,6 +291,31 @@ namespace Jvedio.ViewModel
             set
             {
                 _IsLoadingActor = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _HideToIcon = false;
+
+        public bool HideToIcon
+        {
+            get { return _HideToIcon; }
+            set
+            {
+                _HideToIcon = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private Thickness _MainGridThickness = new Thickness(10);
+
+        public Thickness MainGridThickness
+        {
+            get { return _MainGridThickness; }
+            set
+            {
+                _MainGridThickness = value;
                 RaisePropertyChanged();
             }
         }
@@ -457,17 +601,7 @@ namespace Jvedio.ViewModel
 
         #region "Variable"
 
-        private bool _HideSide = false;
 
-        public bool HideSide
-        {
-            get { return _HideSide; }
-            set
-            {
-                _HideSide = value;
-                RaisePropertyChanged();
-            }
-        }
 
 
         private List<string> _CurrentMovieLabelList;
@@ -1373,11 +1507,10 @@ namespace Jvedio.ViewModel
 
         public bool ActorFlipOver()
         {
-
+            ShowMovieGrid = false;
             if (ActorList == null) return false;
             Task.Run(async () =>
             {
-
                 await App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     ((Main)GetWindowByName("Main")).SetActorLoadingStatus(true);
@@ -1453,6 +1586,7 @@ namespace Jvedio.ViewModel
         /// </summary>
         public bool FlipOver()
         {
+            ShowMovieGrid = true;
             GetLabelList();
             if (Properties.Settings.Default.ShowImageMode == "4")
             {

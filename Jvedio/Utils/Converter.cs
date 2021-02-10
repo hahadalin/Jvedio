@@ -13,8 +13,30 @@ using static Jvedio.GlobalVariable;
 namespace Jvedio
 {
 
-
     
+    public class SmallerThicknessConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null || parameter == null) return new Thickness(0);
+            else
+            {
+                int.TryParse(parameter.ToString(), out int t);
+                Thickness thickness = (Thickness)value;
+                if(thickness.Left + t<=0)
+                    return new Thickness(0);
+                else
+                    return new Thickness(thickness.Left + t);
+            }
+
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+
+
+    }
 
     public class OppositeBooleanConverter : IValueConverter
     {
@@ -75,7 +97,41 @@ namespace Jvedio
 
     }
 
+    
+            public class ShowFilterConverter : IValueConverter
+    {
+        //数字转换为选中项的地址
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value) return 600; 
+            else return 0;
+        }
 
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+
+
+    }
+
+    public class BoolToOppositeVisibilityConverter : IValueConverter
+    {
+        //数字转换为选中项的地址
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value) return Visibility.Collapsed; else return Visibility.Visible;
+        }
+
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+
+
+    }
     public class BoolToVisibilityConverter : IValueConverter
     {
         //数字转换为选中项的地址

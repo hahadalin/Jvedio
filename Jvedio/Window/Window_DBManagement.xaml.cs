@@ -62,23 +62,18 @@ namespace Jvedio
             TextBlock textBlock = grid1.Children[1] as TextBlock;
             name = textBlock.Text.ToLower();
 
-            Main main = App.Current.Windows[0] as Main;
-            main.DatabaseComboBox.SelectedItem = name;
+            Main main =GetWindowByName("Main") as Main;
+            main.vieModel.DatabaseSelectedIndex = main.vieModel.DataBases.IndexOf(name);
 
         }
 
         public void RefreshMain()
         {
             //刷新主界面
-            Main main = App.Current.Windows[0] as Main;
+            string name= Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
+            Main main = GetWindowByName("Main") as Main;
             main.vieModel.LoadDataBaseList();
-            if (main.vieModel.DataBases.Count > 1)
-            {
-                main.DatabaseComboBox.Visibility = Visibility.Visible;
-                main.DatabaseComboBox.SelectedItem = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
-
-
-            }
+            main.vieModel.DatabaseSelectedIndex = main.vieModel.DataBases.IndexOf(name);
         }
 
         public void EditDataBase(object sender, MouseButtonEventArgs e)
