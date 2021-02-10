@@ -367,7 +367,7 @@ namespace Jvedio
             }
 
             ProgressBarUpdate.maximum = actresslist.Count;
-            //待修复
+            //TODO
             for (int i = 0; i < actresslist.Count; i++)
             {
                 Console.WriteLine("开始进程 " + i);
@@ -415,9 +415,9 @@ namespace Jvedio
                 ProgressBarUpdate.value += 1;
                 InfoUpdate?.Invoke(this, new ActressUpdateEventArgs() { Actress = actress, progressBarUpdate = ProgressBarUpdate, state = State });
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
             finally
             {

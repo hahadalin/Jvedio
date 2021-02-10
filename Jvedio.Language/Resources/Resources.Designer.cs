@@ -925,6 +925,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 拖入文件夹与视频或 的本地化字符串。
+        /// </summary>
+        public static string DragFileInOr {
+            get {
+                return ResourceManager.GetString("DragFileInOr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 或拖入文件夹至此 的本地化字符串。
         /// </summary>
         public static string DragFolderIn {

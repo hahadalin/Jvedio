@@ -2169,7 +2169,7 @@
                                                     </EventTrigger>
                                                 </DataTemplate.Triggers>-->
 
-                                                <WrapPanel x:Name="ActorWrapPanel">
+                                                <WrapPanel Name="ActorWrapPanel">
                                                     <Grid Margin="5">
                                                         <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="5" MinHeight="250" >
                                                             <Border.Effect>
@@ -2177,8 +2177,8 @@
                                                             </Border.Effect>
                                                         </Border>
                                                         <StackPanel Orientation="Vertical" Margin="10">
-                                                            <Image x:Name="ActorImage" MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave"  Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver"  Drop="ActorImage_Drop"  />
-                                                            <TextBox x:Name="ActorNameTextBox" TextAlignment="Center" MaxHeight="80" Margin="10 5" Foreground="{DynamicResource ForegroundGlobal}" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
+                                                            <Image MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave"  Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver"  Drop="ActorImage_Drop"  />
+                                                            <TextBox Name="ActorNameTextBox" TextAlignment="Center" MaxHeight="80" Margin="10 5" Foreground="{DynamicResource ForegroundGlobal}" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
                                                                 <TextBox.Text>
                                                                     <MultiBinding StringFormat="{}{0}({1})">
                                                                         <Binding Path="name" />
@@ -2401,7 +2401,7 @@
 
 
 
-                                                <WrapPanel x:Name="LabelWrapPanel">
+                                                <WrapPanel Name="LabelWrapPanel">
                                                     <Border  Style="{StaticResource GenBorder}">
                                                         <Grid>
                                                             <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Label_MouseDown"/>
@@ -2424,7 +2424,7 @@
 
 
                         <!--底部-->
-                        <Grid x:Name="ActorPageGrid" Grid.Row="2"    >
+                        <Grid  Grid.Row="2"    >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
@@ -2440,8 +2440,8 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <ProgressBar x:Name="ActorProgressBar" Grid.Column="0" Background="{DynamicResource BackgroundSide}" ValueChanged="ActorProgressBar_ValueChanged"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"        Value="50"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"    Maximum="100" Minimum="0"  />
-                                <TextBox x:Name="ActorProgressTextBox"    Grid.Column="1" Text="50%" Visibility="{Binding ElementName=ActorProgressBar,Path=Visibility}" Style="{StaticResource BaseTextBox}" Margin="5 0"/>
+                                <ProgressBar  Grid.Column="0" Background="{DynamicResource BackgroundSide}" ValueChanged="ActorProgressBar_ValueChanged"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"    Visibility="{Binding ActorProgressBarVisibility}"  Value="{Binding ActorProgressBarValue}"    Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"    Maximum="100" Minimum="0"  />
+                                <TextBox     Grid.Column="1" Text="{Binding ActorProgressBarValue,StringFormat={}{0}%}" Visibility="{Binding ActorProgressBarVisibility}" Style="{StaticResource BaseTextBox}" Margin="5 0"/>
                             </Grid>
 
 
@@ -2483,7 +2483,7 @@
                 </Grid>
 
 
-                <Grid  x:Name="BeginScanGrid" Grid.Row="1" Visibility="Collapsed" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid   Grid.Row="1" Visibility="{Binding ShowFirstRun,FallbackValue=Collapsed}" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Grid    >
                         <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
                             <Border.Effect>
@@ -2494,8 +2494,8 @@
                         <Border  CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5"  >
 
                             <StackPanel  Margin="5"  FocusVisualStyle="{x:Null}"  Visibility="Visible" Panel.ZIndex="1" Orientation="Horizontal"  HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="拖入文件夹与视频或 " Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="20"></TextBlock>
-                                <Button Content="扫描" Style="{StaticResource ButtonStyleFill}"  Click="Button_Click_4"/>
+                                <TextBlock Text="{x:Static lang:Resources.DragFileInOr}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="20"></TextBlock>
+                                <Button Content="{x:Static lang:Resources.Scan}" Style="{StaticResource ButtonStyleFill}"  Click="Button_Click_4"/>
                             </StackPanel>
 
 

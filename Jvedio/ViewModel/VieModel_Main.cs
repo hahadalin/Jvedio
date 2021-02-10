@@ -116,6 +116,18 @@ namespace Jvedio.ViewModel
         }
 
 
+        private Visibility _ShowFirstRun = Visibility.Collapsed;
+
+        public Visibility ShowFirstRun
+        {
+            get { return _ShowFirstRun; }
+            set
+            {
+                _ShowFirstRun = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private Visibility _ActorInfoGrid=Visibility.Collapsed;
 
@@ -153,6 +165,17 @@ namespace Jvedio.ViewModel
             }
         }
 
+        private Visibility _ActorProgressBarVisibility = Visibility.Collapsed;
+
+        public Visibility ActorProgressBarVisibility
+        {
+            get { return _ActorProgressBarVisibility; }
+            set
+            {
+                _ActorProgressBarVisibility = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private Visibility _CmdVisibility = Visibility.Collapsed;
 
@@ -178,7 +201,17 @@ namespace Jvedio.ViewModel
             }
         }
 
-        
+        private int _ActorProgressBarValue = 0;
+
+        public int ActorProgressBarValue
+        {
+            get { return _ActorProgressBarValue; }
+            set
+            {
+                _ActorProgressBarValue = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
         private int _ProgressBarValue = 0;

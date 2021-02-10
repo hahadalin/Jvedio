@@ -95,7 +95,6 @@ namespace Jvedio
 
             ImageSlideTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
             ImageSlideTimer.Tick += new EventHandler(ImageSlideTimer_Tick);
-            ActorProgressBar.Visibility = Visibility.Hidden;
             FilterGrid.Visibility = Visibility.Collapsed;
             WinState = 0;
 
@@ -3848,38 +3847,25 @@ namespace Jvedio
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "BusActress.sqlite")) return;
 
             downLoadActress = new DownLoadActress(actresses);
-            downLoadActress?.BeginDownLoad();
-            try
-            {
+            
 
-                //进度提示
-                downLoadActress.InfoUpdate += (s, ev) =>
+            downLoadActress.InfoUpdate += (s, ev) =>
                 {
-                    ActressUpdateEventArgs actressUpdateEventArgs = ev as ActressUpdateEventArgs;
-                    for (int i = 0; i < vieModel.ActorList.Count; i++)
-                    {
-                        if (vieModel.ActorList[i].name == actressUpdateEventArgs.Actress.name)
-                        {
-                            try
-                            {
-                                Dispatcher.Invoke((Action)delegate ()
-                                {
-                                    vieModel.ActorList[i] = actressUpdateEventArgs.Actress;
-                                    ActorProgressBar.Value = actressUpdateEventArgs.progressBarUpdate.value / actressUpdateEventArgs.progressBarUpdate.maximum * 100; ActorProgressBar.Visibility = Visibility.Visible;
-                                    if (ActorProgressBar.Value == ActorProgressBar.Maximum) downLoadActress.State = DownLoadState.Completed;
-                                    if (ActorProgressBar.Value == 100 | actressUpdateEventArgs.state == DownLoadState.Fail | actressUpdateEventArgs.state == DownLoadState.Completed) { ActorProgressBar.Visibility = Visibility.Hidden; }
-                                });
-                            }
-                            catch (TaskCanceledException ex) { Logger.LogE(ex); }
-                            break;
-                        }
-                    }
+                    ActressUpdateEventArgs ae = ev as ActressUpdateEventArgs;
+                    var actores = vieModel.ActorList.Where(arg => arg.name.ToUpper() == ae.Actress.name.ToUpper()).ToList();
+                    if (actores == null || actores.Count == 0) return;
+                    int idx = vieModel.ActorList.IndexOf(actores.First());
+                    if (idx >= vieModel.ActorList.Count) return;
+
+                    vieModel.ActorList[idx] = ae.Actress;
+                    vieModel.ActorProgressBarValue = (int)(ae.progressBarUpdate.value / ae.progressBarUpdate.maximum * 100); 
+                    if (vieModel.ActorProgressBarValue == 100) downLoadActress.State = DownLoadState.Completed;
+                    if (vieModel.ActorProgressBarValue == 100 || ae.state == DownLoadState.Fail || ae.state == DownLoadState.Completed) vieModel.ActorProgressBarVisibility = Visibility.Hidden; 
                 };
-            }
-            catch (Exception e) { Console.WriteLine(e.Message); }
 
 
 
+            downLoadActress?.BeginDownLoad();
         }
 
 
@@ -4069,7 +4055,7 @@ namespace Jvedio
 
             if (Properties.Settings.Default.FirstRun)
             {
-                BeginScanGrid.Visibility = Visibility.Visible;
+                vieModel.ShowFirstRun = Visibility.Visible;
                 Properties.Settings.Default.FirstRun = false;
                 Properties.Settings.Default.Save();
             }
@@ -4188,7 +4174,7 @@ namespace Jvedio
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
-            BeginScanGrid.Visibility = Visibility.Hidden;
+            vieModel.ShowFirstRun = Visibility.Hidden;
             OpenTools(sender, e);
         }
 
@@ -5586,8 +5572,7 @@ namespace Jvedio
 
         private void ActorProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (ActorProgressTextBox != null) ActorProgressTextBox.Text = (int)e.NewValue + "%";
-            ActorProgressBar.Visibility = Visibility.Visible;
+            vieModel.ActorProgressBarVisibility = Visibility.Visible;
         }
 
 
@@ -5775,7 +5760,7 @@ namespace Jvedio
 
         private void HideBeginScanGrid(object sender, MouseButtonEventArgs e)
         {
-            BeginScanGrid.Visibility = Visibility.Hidden;
+            vieModel.ShowFirstRun = Visibility.Hidden;
         }
 
         private void OpenActorPath(object sender, RoutedEventArgs e)
