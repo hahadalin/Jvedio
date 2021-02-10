@@ -237,12 +237,18 @@
                         <Grid x:Name="MouseMoveGrid" MouseMove="MoveWindow"  Grid.Column="0" Background="{DynamicResource BackgroundMain}"/>
                         <TextBox x:Name="TitleTextBox" Grid.Column="0" Background="{DynamicResource BackgroundMain}"   Style="{StaticResource ViewTextBox}" VerticalAlignment="Center" HorizontalAlignment="Left"   TextAlignment="Left"  FontWeight="Bold"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 50 0" ></TextBox>
 
+                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                            <Border  Height="auto" Width="auto" CornerRadius="3" Margin="10 5" Padding="5" Cursor="Hand"    Style="{StaticResource BorderStyle}">
+                                <TextBlock  MouseLeftButtonUp="EditInfo"  Grid.Column="1" Text="{x:Static lang:Resources.Edit}"   Style="{StaticResource  BaseTextBlock}" />
+                            </Border>
 
-                        <Button  Click="EditInfo"  Grid.Column="1" Content="{x:Static lang:Resources.Edit}"   Style="{StaticResource  EditButton}" />
 
-                        <Button   Grid.Column="2"  Style="{StaticResource CloseButton}" Click="CloseWindow">
-                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                        </Button>
+
+                            <Button     Style="{StaticResource CloseButton}" Click="CloseWindow">
+                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                            </Button>
+                        </StackPanel>
+
 
 
                     </Grid>

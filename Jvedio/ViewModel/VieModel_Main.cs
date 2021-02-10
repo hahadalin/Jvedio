@@ -70,16 +70,10 @@ namespace Jvedio.ViewModel
             ActorCommand = new RelayCommand(GetActorList);
             LabelCommand = new RelayCommand(GetLabelList);
             FlipOverCommand = new RelayCommand<bool>(t => FlipOver());
-
             FavoritesCommand = new RelayCommand(GetFavoritesMovie);
             RecentWatchCommand = new RelayCommand<bool>(t => GetRecentWatch());
             RecentCommand = new RelayCommand(GetRecentMovie);
-
-
             AddNewMovie = new RelayCommand(AddSingleMovie);
-
-
-
             SearchTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(0.3) };
             SearchTimer.Tick += new EventHandler(SearchTimer_Tick);
             //获得所有数据库
@@ -264,14 +258,14 @@ namespace Jvedio.ViewModel
             }
         }
 
-        private bool _ShowMovieGrid = true;
+        private int _TabSelectedIndex = 0;
 
-        public bool ShowMovieGrid
+        public int TabSelectedIndex
         {
-            get { return _ShowMovieGrid; }
+            get { return _TabSelectedIndex; }
             set
             {
-                _ShowMovieGrid = value;
+                _TabSelectedIndex = value;
                 RaisePropertyChanged();
             }
         }
@@ -1540,7 +1534,7 @@ namespace Jvedio.ViewModel
 
         public bool ActorFlipOver()
         {
-            ShowMovieGrid = false;
+            TabSelectedIndex = 1;
             if (ActorList == null) return false;
             Task.Run(async () =>
             {
@@ -1619,7 +1613,7 @@ namespace Jvedio.ViewModel
         /// </summary>
         public bool FlipOver()
         {
-            ShowMovieGrid = true;
+            TabSelectedIndex = 0;
             GetLabelList();
             if (Properties.Settings.Default.ShowImageMode == "4")
             {

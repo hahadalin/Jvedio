@@ -424,7 +424,6 @@ namespace Jvedio
             {
                 vieModel.Reset();
             }
-            //AsyncLoadImage();
             this.DataContext = vieModel;
 
             vieModel.CurrentMovieListHideOrChanged += (s, ev) => { StopDownLoad(); };
@@ -438,9 +437,6 @@ namespace Jvedio
                         if (Properties.Settings.Default.EditMode) SetSelected();
                         if (Properties.Settings.Default.ShowImageMode == "2") ImageSlideTimer.Start();//0.5s后开始展示预览图
                         SetLoadingStatus(false);
-
-
-
                     }, DispatcherPriority.ContextIdle, null);
             };
 
@@ -4111,7 +4107,7 @@ namespace Jvedio
             else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Right)
             {
                 //末页
-                if (vieModel.ShowMovieGrid)
+                if (vieModel.TabSelectedIndex==0)
                 {
                     vieModel.CurrentPage = vieModel.TotalPage;
                     vieModel.FlipOver();
@@ -4128,7 +4124,7 @@ namespace Jvedio
             else if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.Left)
             {
                 //首页
-                if (vieModel.ShowMovieGrid)
+                if (vieModel.TabSelectedIndex==0)
                 {
                     vieModel.CurrentPage = 1;
                     vieModel.FlipOver();
@@ -4153,13 +4149,13 @@ namespace Jvedio
                 //滑倒底端
 
             }
-            else if (vieModel.ShowMovieGrid  && e.Key == Key.Right)
+            else if (vieModel.TabSelectedIndex==0 && e.Key == Key.Right)
                 NextPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if (vieModel.ShowMovieGrid && e.Key == Key.Left)
+            else if (vieModel.TabSelectedIndex == 0 && e.Key == Key.Left)
                 PreviousPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if (!vieModel.ShowMovieGrid && e.Key == Key.Right)
+            else if (vieModel.TabSelectedIndex == 1 && e.Key == Key.Right)
                 NextActorPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if (!vieModel.ShowMovieGrid  && e.Key == Key.Left)
+            else if (vieModel.TabSelectedIndex == 1 && e.Key == Key.Left)
                 PreviousActorPage(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
 
 
@@ -5253,7 +5249,7 @@ namespace Jvedio
         }
 
 
-        private void AddListItem(object sender, MouseButtonEventArgs e)
+        private void AddListItem(object sender, RoutedEventArgs e)
         {
             var r = new DialogInput(this, Jvedio.Language.Resources.InputTitle4);
             if (r.ShowDialog() == true)
@@ -5647,12 +5643,10 @@ namespace Jvedio
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            TabControl tabControl = (TabControl)sender;
-
-            if (tabControl != null)
+            if (ActorTabControl != null)
             {
                 vieModel.ShowActorTools = false;
-                switch (tabControl.SelectedIndex)
+                switch (ActorTabControl.SelectedIndex)
                 {
                     case 0:
                         vieModel.ShowActorTools = true;
@@ -5734,7 +5728,7 @@ namespace Jvedio
 
         private void ShowClassifyGrid(object sender, RoutedEventArgs e)
         {
-            vieModel.ShowMovieGrid = false;
+            vieModel.TabSelectedIndex = 1;
 
         }
 
