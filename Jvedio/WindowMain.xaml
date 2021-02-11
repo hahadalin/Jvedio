@@ -103,7 +103,6 @@
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="Width" Value="{Binding ElementName=ActorImage,Path=Width,TargetNullValue=100}" />
         </Style>
 
 
@@ -393,14 +392,14 @@
 
 
         <Style x:Key="GenTitle" TargetType="{x:Type TextBlock}">
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="Width" Value="auto" />
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Padding" Value="5 0 0 0"/>
-            <Setter Property="TextAlignment" Value="Left" />
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Height" Value="auto" />
+            <Setter Property="Background" Value="{DynamicResource BackgroundSide}" />
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
+            <Setter Property="FontSize" Value="20"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
         </Style>
 
@@ -857,7 +856,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <!--侧边栏-->
-                    <Border Visibility="{Binding HideSide,Converter={StaticResource BoolToOppositeVisibilityConverter}}" Width="{Binding SideBorderWidth}"    PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}"    BorderThickness="0" >
+                    <Border  IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}" Visibility="{Binding HideSide,Converter={StaticResource BoolToOppositeVisibilityConverter}}" Width="{Binding SideBorderWidth}"    PreviewMouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" Grid.Column="0" Background="{DynamicResource BackgroundSide}"    BorderThickness="0" >
                         <Grid  >
 
                             <Grid.RowDefinitions>
@@ -1099,7 +1098,7 @@
                     <Rectangle   MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent"  HorizontalAlignment="Right" Width="6"  Margin="0 0 -3 0" />
 
 
-                    <TabControl SelectedIndex="{Binding TabSelectedIndex,FallbackValue=0}" Grid.Column="1" Background="Transparent" Style="{DynamicResource TabControlStyle1}"  >
+                    <TabControl FocusVisualStyle="{x:Null}" SelectedIndex="{Binding TabSelectedIndex,FallbackValue=0}" Grid.Column="1" Background="Transparent" Style="{DynamicResource TabControlStyle1}"  >
                         <TabItem  Background="Transparent"  >
                             <!--影片-->
                             <Grid      MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" >
@@ -1157,7 +1156,7 @@
                                                 </Popup>
                                             </Grid>
 
-                                            <hc:SearchBar x:Name="SearchBar"  Focusable="True" LostFocus="SearchBar_LostFocus" GotFocus="SearchBar_GotFocus"  SearchStarted="SearchBar_SearchStarted" PreviewKeyUp="SearchBar_PreviewKeyUp"    TextChanged="RefreshCandiadte" PreviewMouseLeftButtonDown="ShowSearchPopup" BorderThickness="0" Padding="35 0" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{Binding SearchHint}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  >
+                                            <hc:SearchBar x:Name="SearchBar"  Focusable="True" LostFocus="SearchBar_LostFocus" GotFocus="SearchBar_GotFocus"  PreviewKeyUp="SearchBar_PreviewKeyUp"    TextChanged="RefreshCandiadte" PreviewMouseLeftButtonDown="ShowSearchPopup" BorderThickness="0" Padding="35 0" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{Binding SearchHint}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  >
                                                 <hc:SearchBar.ContextMenu>
                                                     <ContextMenu>
                                                         <MenuItem Command="ApplicationCommands.Copy" />
@@ -1282,7 +1281,7 @@
                                             </Border>
 
 
-                                            <Button Visibility="Collapsed" Click="Button_Click_2" Content="测试" />
+                                            <Button Visibility="Visible" Click="Test" Content="Test" />
 
                                         </StackPanel>
 
@@ -1604,7 +1603,7 @@
 
 
                                     <!--演员-->
-                                    <Grid Grid.Column="0" Visibility="{Binding ActorInfoGrid}"    Margin="10">
+                                    <Grid Grid.Column="0" Visibility="{Binding ActorInfoGrid,FallbackValue=Collapsed}"    Margin="10">
                                         <Border   Background="{DynamicResource BackgroundTitle}" CornerRadius="5" Margin="5"  >
                                             <Border.Effect>
                                                 <DropShadowEffect BlurRadius="20" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
@@ -2072,7 +2071,7 @@
 
 
                                 <!--等待-->
-                                <Grid Grid.Row="1"  Visibility="{Binding IsLoadingActor,Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Grid Grid.Row="1"  Visibility="{Binding IsLoadingClassify,Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <Grid MinWidth="150" MaxWidth="250"   >
                                         <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
                                             <Border.Effect>
@@ -2103,7 +2102,7 @@
                                 </Grid>
 
                                 <!--工具栏-->
-                                <Grid IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}" Background="{DynamicResource BackgroundMain}"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                                <Grid IsEnabled="{Binding IsLoadingClassify,Converter={StaticResource OppositeBooleanConverter}}" Background="{DynamicResource BackgroundMain}"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
 
                                     <StackPanel  Orientation="Horizontal">
 
@@ -2139,6 +2138,10 @@
 
                                         </StackPanel>
 
+                                        <Border  Visibility="{Binding ShowActorTools,Converter={StaticResource BoolToOppositeVisibilityConverter}}"   ToolTip="{x:Static lang:Resources.Refresh}"     Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="RefreshClassify">
+                                            <Image Source="/Resources/menuitem/refresh.png" Height="20" Width="20"   />
+                                        </Border>
+
 
                                     </StackPanel>
                                 </Grid>
@@ -2147,7 +2150,7 @@
 
 
 
-                                <TabControl x:Name="ActorTabControl"  Grid.Row="1" SelectionChanged="TabControl_SelectionChanged"   Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
+                                <TabControl x:Name="ActorTabControl"  IsEnabled="{Binding IsLoadingClassify,Converter={StaticResource OppositeBooleanConverter}}"  Grid.Row="1" SelectionChanged="TabControl_SelectionChanged"   Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
 
                                     <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.Actor}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
 
@@ -2168,7 +2171,8 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Grid Margin="5" Width="150">
+                                                        <WrapPanel  Name="ActorWrapPanel" Orientation="Horizontal">
+                                                            <Grid Margin="5" Width="150">
                                                                 <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="5"  >
                                                                     <Border.Effect>
                                                                         <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
@@ -2194,7 +2198,7 @@
                                                                     </StackPanel.ContextMenu>
                                                                 </StackPanel>
                                                             </Grid>
-
+                                                        </WrapPanel>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
@@ -2333,8 +2337,6 @@
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
                                                         </StackPanel>
-
-
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
@@ -2482,7 +2484,7 @@
                                     </StackPanel>
 
                                     <!--页码-->
-                                    <StackPanel IsEnabled="{Binding IsLoadingActor,Converter={StaticResource OppositeBooleanConverter},FallbackValue=False}"  Grid.Column="2"  Visibility="{Binding ShowActorTools,Converter={StaticResource BoolToVisibilityConverter}}" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
+                                    <StackPanel IsEnabled="{Binding IsLoadingClassify,Converter={StaticResource OppositeBooleanConverter},FallbackValue=False}"  Grid.Column="2"  Visibility="{Binding ShowActorTools,Converter={StaticResource BoolToVisibilityConverter}}" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
 
                                         <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousActorPage"    Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.PreviewPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
                                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />

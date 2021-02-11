@@ -452,23 +452,17 @@ namespace Jvedio
 
 
 
-        Main windowMain;
+        Main windowMain = GetWindowByName("Main") as Main;
 
 
         //显示类别
         public void ShowSameGenre(object sender, MouseButtonEventArgs e)
         {
-            string genretext = ((Label)sender).Content.ToString();
+            string genretext = ((TextBlock)sender).Text;
             if (string.IsNullOrEmpty(genretext)) return;
-            foreach (Window window in App.Current.Windows)
-            {
-                if (window.GetType().Name == "Main") { windowMain = (Main)window; break; }
-            }
-            if (windowMain != null)
-            {
-                windowMain.Genre_MouseDown(sender, e);
-                this.Close();
-            }
+            windowMain.Genre_MouseDown(sender, e);
+            this.Close();
+            
 
         }
 
@@ -477,30 +471,15 @@ namespace Jvedio
         {
             Label label = sender as Label;
             string name = label.Content.ToString();
-
             if (string.IsNullOrEmpty(name)) return;
-            foreach (Window window in App.Current.Windows)
+            Actress actress = vieModel.DetailMovie.actorlist.Where(arg => arg.name == name).First();
+            if (actress != null)
             {
-                if (window.GetType().Name == "Main") { windowMain = (Main)window; break; }
+                actress.id = "";
+                windowMain.ShowActorMovieFromDetailWindow(actress);
+                this.Close();
             }
-            if (windowMain != null)
-            {
-                Actress actress = null;
-                foreach (Actress item in vieModel.DetailMovie.actorlist)
-                {
-                    if (name == item.name)
-                    {
-                        actress = item; break;
-                    }
-                }
-                if (actress != null)
-                {
-                    actress.id = "";
-                    windowMain.ShowActorMovieFromDetailWindow(actress);
-                    this.Close();
-                }
 
-            }
 
         }
 
@@ -537,15 +516,8 @@ namespace Jvedio
             }
             else
             {
-                foreach (Window window in App.Current.Windows)
-                {
-                    if (window.GetType().Name == "Main") { windowMain = (Main)window; break; }
-                }
-                if (windowMain != null)
-                {
-                    windowMain.Label_MouseDown(sender, e);
-                    this.Close();
-                }
+                windowMain.Label_MouseDown(sender, e);
+                this.Close();
             }
         }
 
@@ -554,15 +526,9 @@ namespace Jvedio
         {
             string genretext = ((Label)sender).Content.ToString();
             if (string.IsNullOrEmpty(genretext)) return;
-            foreach (Window window in App.Current.Windows)
-            {
-                if (window.GetType().Name == "Main") { windowMain = (Main)window; break; }
-            }
-            if (windowMain != null)
-            {
-                windowMain.Director_MouseDown(sender, e);
+            windowMain.Director_MouseDown(sender, e);
                 this.Close();
-            }
+            
 
         }
 
@@ -571,15 +537,9 @@ namespace Jvedio
         {
             string genretext = ((Label)sender).Content.ToString();
             if (string.IsNullOrEmpty(genretext)) return;
-            foreach (Window window in App.Current.Windows)
-            {
-                if (window.GetType().Name == "Main") { windowMain = (Main)window; break; }
-            }
-            if (windowMain != null)
-            {
-                windowMain.Studio_MouseDown(sender, e);
+            windowMain.Studio_MouseDown(sender, e);
                 this.Close();
-            }
+            
 
         }
 
@@ -588,15 +548,9 @@ namespace Jvedio
         {
             string genretext = ((Label)sender).Content.ToString();
             if (string.IsNullOrEmpty(genretext)) return;
-            foreach (Window window in App.Current.Windows)
-            {
-                if (window.GetType().Name == "Main") { windowMain = (Main)window; break; }
-            }
-            if (windowMain != null)
-            {
-                windowMain.Tag_MouseDown(sender, e);
-                this.Close();
-            }
+            windowMain.Tag_MouseDown(sender, e);
+            this.Close();
+            
         }
 
 

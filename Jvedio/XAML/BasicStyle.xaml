@@ -129,23 +129,10 @@
         <Setter Property="Margin" Value="10"/>
         <Setter Property="Padding" Value="10 5"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Background" Value="{StaticResource BackgroundSide}"/>
+        <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Trigger.EnterActions>
-                    <BeginStoryboard >
-                        <Storyboard FillBehavior="HoldEnd" >
-                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="{StaticResource Color_BackgroundTitle}" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard >
-                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="{StaticResource Color_BackgroundSide}" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.ExitActions>
+                <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

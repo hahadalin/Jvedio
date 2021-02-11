@@ -90,12 +90,13 @@ namespace Jvedio
 
             if (Properties.Settings.Default.ScanGivenPath)
             {
-
                 await Task.Run(() =>
                 {
                     try
                     {
-                        this.Dispatcher.BeginInvoke(new Action(() => { statusText.Text = Jvedio.Language.Resources.Status_ScanDir; }), System.Windows.Threading.DispatcherPriority.Render);
+                        this.Dispatcher.BeginInvoke(new Action(() => { 
+                            statusText.Text = Jvedio.Language.Resources.Status_ScanDir; 
+                        }), System.Windows.Threading.DispatcherPriority.Background);
                         List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath)), ct);
                         Scan.InsertWithNfo(filepaths, ct);
 
@@ -115,14 +116,13 @@ namespace Jvedio
             statusText.Text = Jvedio.Language.Resources.Status_InitMovie;
             try
             {
-                main.InitMovie();
+                await main.InitMovie();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
-
 
             main.Show();
             this.Close();
@@ -150,7 +150,7 @@ namespace Jvedio
 
 
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
             statusText.Text = Jvedio.Language.Resources.Status_UpdateConfig;
@@ -277,7 +277,7 @@ namespace Jvedio
                 statusText.Text = Jvedio.Language.Resources.Status_InitMovie;
                 try
                 {
-                    main.InitMovie();
+                    await main.InitMovie();
                 }
                 catch (Exception ex)
                 {
@@ -445,6 +445,16 @@ namespace Jvedio
                 Application.Current.Resources["Color_BorderBursh"] = (Color)ColorConverter.ConvertFromString("#95DCED");
 
             }
+
+            Application.Current.Resources["BackgroundTitle"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundTitle"]);
+            Application.Current.Resources["BackgroundMain"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundMain"]);
+            Application.Current.Resources["BackgroundSide"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundSide"]);
+            Application.Current.Resources["BackgroundTab"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundTab"]);
+            Application.Current.Resources["BackgroundSearch"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundSearch"]);
+            Application.Current.Resources["BackgroundMenu"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundMenu"]);
+            Application.Current.Resources["ForegroundGlobal"] = new SolidColorBrush((Color)Application.Current.Resources["Color_ForegroundGlobal"]);
+            Application.Current.Resources["ForegroundSearch"] = new SolidColorBrush((Color)Application.Current.Resources["Color_ForegroundSearch"]);
+            Application.Current.Resources["BorderBursh"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BorderBursh"]);
 
         }
 

@@ -103,16 +103,27 @@ namespace Jvedio
             var st = new StackTrace(x, true);
             var frames = st.GetFrames();
             var traceString = new StringBuilder();
-            foreach (var frame in new StackTrace(x, true).GetFrames())
+            try
             {
-                if (frame.GetFileLineNumber() < 1)
-                    continue;
-                traceString.Append($"    文件: {frame.GetFileName()}" );
-                traceString.Append($" 方法: {frame.GetMethod().Name}");
-                traceString.Append($" 行数: {frame.GetFileLineNumber()}{Environment.NewLine}");
+                foreach (var frame in new StackTrace(x, true).GetFrames())
+                {
+                    if (frame.GetFileLineNumber() < 1)
+                        continue;
+                    traceString.Append($"    文件: {frame.GetFileName()}");
+                    traceString.Append($" 方法: {frame.GetMethod().Name}");
+                    traceString.Append($" 行数: {frame.GetFileLineNumber()}{Environment.NewLine}");
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
 
             return traceString.ToString();
+            
+
+
+
         }
 
 

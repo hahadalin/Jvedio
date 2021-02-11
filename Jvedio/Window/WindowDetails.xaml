@@ -468,7 +468,7 @@
 
                                             
                                             <!--可滚动-->
-                                            <ScrollViewer Grid.Row="1">
+                                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
                                                 <StackPanel  >
                                                     <!--演员-->
                                                     <Grid  >
@@ -482,9 +482,7 @@
                                                         <ItemsControl  Grid.Column="2" ItemsSource="{Binding DetailMovie.actorlist}" Height="auto"  VerticalAlignment="Top"  Background="Transparent" >
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
-
-                                                                    <WrapPanel Orientation="Horizontal" >
-                                                                    </WrapPanel>
+                                                                    <WrapPanel Orientation="Horizontal" />
                                                                 </ItemsPanelTemplate>
                                                             </ItemsControl.ItemsPanel>
 
@@ -551,7 +549,9 @@
 
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <Label Style="{StaticResource GenLabel}" Content="{Binding}"  MouseLeftButtonUp="ShowSameGenre" ToolTip="{x:Null}"></Label>
+                                                                    <Border Padding="5 2" Cursor="Hand" CornerRadius="3" Margin="5 0" Style="{StaticResource BorderStyle}">
+                                                                        <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="ShowSameGenre" ToolTip="{x:Null}"/>
+                                                                    </Border>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>

@@ -40,7 +40,6 @@ namespace Jvedio.ViewModel
         public bool IsFlipOvering = false;
         public VedioType CurrentVedioType = VedioType.所有;
 
-        private DispatcherTimer SearchTimer = new DispatcherTimer();
 
 
         public int SideIdx = 0;
@@ -74,8 +73,6 @@ namespace Jvedio.ViewModel
             RecentWatchCommand = new RelayCommand<bool>(t => GetRecentWatch());
             RecentCommand = new RelayCommand(GetRecentMovie);
             AddNewMovie = new RelayCommand(AddSingleMovie);
-            SearchTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(0.3) };
-            SearchTimer.Tick += new EventHandler(SearchTimer_Tick);
             //获得所有数据库
             LoadDataBaseList();
             LoadSearchHistory();
@@ -310,14 +307,14 @@ namespace Jvedio.ViewModel
         }
 
 
-        private bool _IsLoadingActor = false;
+        private bool _IsLoadingClassify = false;
 
-        public bool IsLoadingActor
+        public bool IsLoadingClassify
         {
-            get { return _IsLoadingActor; }
+            get { return _IsLoadingClassify; }
             set
             {
-                _IsLoadingActor = value;
+                _IsLoadingClassify = value;
                 RaisePropertyChanged();
             }
         }
@@ -992,7 +989,6 @@ namespace Jvedio.ViewModel
 
         private string search = string.Empty;
 
-        private bool IsSearching = false;
 
         public string Search
         {
@@ -1001,13 +997,7 @@ namespace Jvedio.ViewModel
             {
                 search = value;
                 RaisePropertyChanged();
-                if (search != "") 
-                {
-
-                    SearchTimer.Stop();
-                    SearchTimer.Start();
-                }
-
+                BeginSearch();
             }
         }
 
@@ -1192,8 +1182,9 @@ namespace Jvedio.ViewModel
             }
         }
 
-        public void GetFilterInfo()
+        public async void GetFilterInfo()
         {
+            IsLoadingMovie = true;
             Year = new ObservableCollection<string>();
             Genre = new ObservableCollection<string>();
             Actor = new ObservableCollection<string>();
@@ -1201,7 +1192,7 @@ namespace Jvedio.ViewModel
             Runtime = new ObservableCollection<string>();
             FileSize = new ObservableCollection<string>();
             Rating = new ObservableCollection<string>();
-            var models = DataBase.GetAllFilter();
+            var models = await DataBase.GetAllFilter();
             Year.AddRange(models[0]);
             Runtime.AddRange(models[4]);
             FileSize.AddRange(models[5]);
@@ -1209,32 +1200,23 @@ namespace Jvedio.ViewModel
             Genre.AddRange(models[1].Take(30));
             Actor.AddRange(models[2].Take(30));
             Label.AddRange(models[3]);
-
-
-
-
         }
 
 
-        public ObservableCollection<string> GetAllGenre()
+        //TODO
+        public  ObservableCollection<string> GetAllGenre()
         {
-            //Genre = new ObservableCollection<string>();
-            //var models = DataBase.GetAllFilter();
-            //Genre.AddRange(models[1]);
             ObservableCollection<string> result = new ObservableCollection<string>();
-            var models = DataBase.GetAllFilter();
-            result.AddRange(models[1]);
+            //var models = await DataBase.GetAllFilter();
+            //result.AddRange(models[1]);
             return result;
         }
 
         public ObservableCollection<string> GetAllActor()
         {
-            //Actor = new ObservableCollection<string>();
-            //var models = DataBase.GetAllFilter();
-            //Actor.AddRange(models[2]);
             ObservableCollection<string> result = new ObservableCollection<string>();
-            var models = DataBase.GetAllFilter();
-            result.AddRange(models[2]);
+            //var models = DataBase.GetAllFilter();
+            //result.AddRange(models[2]);
             return result;
 
         }
@@ -1250,10 +1232,8 @@ namespace Jvedio.ViewModel
 
         public async void BeginSearch()
         {
-            IsSearching = true;
             GetSearchCandidate(Search.ToProperSql());
             await Query();
-            IsSearching = false;
             FlipOver();
         }
 
@@ -1274,11 +1254,6 @@ namespace Jvedio.ViewModel
 
 
 
-        private void SearchTimer_Tick(object sender, EventArgs e)
-        {
-            if (!IsSearching) BeginSearch();
-            SearchTimer.Stop();
-        }
 
 
         private void AddSingleMovie()
@@ -1560,7 +1535,11 @@ namespace Jvedio.ViewModel
 
         public void RefreshActor()
         {
-            GetActorList();
+            Statistic();
+            List<Actress> Actresses = DataBase.SelectAllActorName(ClassifyVedioType);
+            ActorList = new ObservableCollection<Actress>();
+            ActorList.AddRange(Actresses);
+            ActorFlipOver();
         }
 
 
@@ -1570,11 +1549,7 @@ namespace Jvedio.ViewModel
             if (ActorList == null) return false;
             Task.Run(async () =>
             {
-                await App.Current.Dispatcher.BeginInvoke((Action)delegate
-                {
-                    ((Main)GetWindowByName("Main")).SetActorLoadingStatus(true);
-                });
-
+                 SetClassifyLoadingStatus(true);
                 TotalActorPage = (int)Math.Ceiling((double)ActorList.Count / (double)Properties.Settings.Default.ActorDisplayNum);
                 int ActorDisplayNum = Properties.Settings.Default.ActorDisplayNum;
                 List<Actress> actresses = new List<Actress>();
@@ -1654,22 +1629,23 @@ namespace Jvedio.ViewModel
             else
             {
                 if (MovieList == null) return false;
-                Sort();
-                IsFlipOvering = true;
+                App.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    ((Main)GetWindowByName("Main")).SetLoadingStatus(true);
+                    ((Main)GetWindowByName("Main")).MovieScrollViewer.ScrollToTop();
+                });
 
+
+
+                Sort();
                 int number = 0;
                 if (FilterMovieList != null) number = FilterMovieList.Count;
                 FilterMovieList = FileProcess.FilterMovie(MovieList);
 
-                // FilterMovieList 是否改变
-                if (FilterMovieList.Count < number) CurrentPage = 1;
+                if (FilterMovieList.Count < number) CurrentPage = 1;                // FilterMovieList 是否改变
 
                 Task.Run(async () =>
                {
-                   await App.Current.Dispatcher.BeginInvoke((Action)delegate
-                   {
-                       ((Main)GetWindowByName("Main")).SetLoadingStatus(true);
-                   });
 
                    TotalPage = (int)Math.Ceiling((double)FilterMovieList.Count / Properties.Settings.Default.DisplayNumber);
                    int DisPlayNum = Properties.Settings.Default.DisplayNumber;
@@ -1721,7 +1697,11 @@ namespace Jvedio.ViewModel
             return true;
         }
 
-
+        public void SetClassifyLoadingStatus(bool loading)
+        {
+            IsLoadingClassify = loading;
+            //IsLoadingMovie = loading;
+        }
 
 
         private delegate void LoadItemDelegate(Movie movie);
@@ -1744,71 +1724,59 @@ namespace Jvedio.ViewModel
         private void LoadDirector(string str) => DirectorList.Add(str);
 
         //获得标签
-        public void GetLabelList()
+        public async void GetLabelList()
         {
             List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType);
             LabelList = new ObservableCollection<string>();
-            Task.Run(async () =>
+            SetClassifyLoadingStatus(true);
+            for (int i = 0; i < labels.Count; i++)
             {
-                for (int i = 0; i < labels.Count; i++)
-                {
-                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadLabel), labels[i]);
-                }
-
-            });
-
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadLabel), labels[i]);
+            }
+            SetClassifyLoadingStatus(false);
         }
 
 
 
 
 
-        public void GetTagList()
+        public async void GetTagList()
         {
             List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType,"tag");
             TagList = new ObservableCollection<string>();
-            Task.Run(async () =>
+            SetClassifyLoadingStatus(true);
+            for (int i = 0; i < labels.Count; i++)
             {
-                for (int i = 0; i < labels.Count; i++)
-                {
-                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadTag), labels[i]);
-                }
-
-            });
-
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadTag), labels[i]);
+            }
+            SetClassifyLoadingStatus(false);
         }
 
 
 
-        public void GetStudioList()
+        public async void GetStudioList()
         {
             List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType, "studio");
             StudioList = new ObservableCollection<string>();
-            Task.Run(async () =>
+            SetClassifyLoadingStatus(true);
+            for (int i = 0; i < labels.Count; i++)
             {
-                for (int i = 0; i < labels.Count; i++)
-                {
-                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadStudio), labels[i]);
-                }
-
-            });
-
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadStudio), labels[i]);
+            }
+            SetClassifyLoadingStatus(false);
         }
 
 
-        public void GetDirectoroList()
+        public async void GetDirectoroList()
         {
             List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType, "director");
             DirectorList = new ObservableCollection<string>();
-            Task.Run(async () =>
-            {
+            SetClassifyLoadingStatus(true);
                 for (int i = 0; i < labels.Count; i++)
                 {
                     await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadDirector), labels[i]);
                 }
-
-            });
-
+            SetClassifyLoadingStatus(false);
         }
 
 
@@ -1821,13 +1789,7 @@ namespace Jvedio.ViewModel
             ActorList = new ObservableCollection<Actress>();
             ActorList.AddRange(Actresses);
             ActorFlipOver();
-
-
         }
-
-
-
-
 
         private delegate void LoadGenreDelegate(Genre genre);
         private void LoadGenre(Genre genre)
@@ -1837,21 +1799,22 @@ namespace Jvedio.ViewModel
 
 
         //获得类别
-        public void GetGenreList()
+        public async void GetGenreList()
         {
             Statistic();
             List<Genre> Genres = DataBase.SelectGenreByVedioType(ClassifyVedioType);
+            SetClassifyLoadingStatus(true);
             GenreList = new ObservableCollection<Genre>();
-            Task.Run(async () =>
+            for (int i = 0; i < Genres.Count; i++)
             {
-                for (int i = 0; i < Genres.Count; i++)
-                {
-                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadGenreDelegate(LoadGenre), Genres[i]);
-                }
-            });
-            //GenreList.AddRange(Genres);
-
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadGenreDelegate(LoadGenre), Genres[i]);
+            }
+            SetClassifyLoadingStatus(false);
         }
+
+
+
+
 
 
         public void AddToRecentWatch(string ID)
@@ -1899,10 +1862,7 @@ namespace Jvedio.ViewModel
         public async Task<bool> Query()
         {
             if (!DataBase.IsTableExist("movie")) { return false; }
-
-            IsSearching = true;
             if (Search == "") return false;
-
             string FormatSearch = Search.ToProperSql();
 
             if (string.IsNullOrEmpty(FormatSearch)) { return false; }
@@ -1957,7 +1917,6 @@ namespace Jvedio.ViewModel
                 SearchHistory.Add(searchContent);
                 SaveSearchHistory();
             }
-                
             return true;
         }
 
@@ -1974,7 +1933,7 @@ namespace Jvedio.ViewModel
 
         public void ExecutiveSqlCommand(int sideIndex, string textType, string sql, string dbName = "")
         {
-
+            IsLoadingMovie = true;
             Dictionary<string, string> sqlInfo = new Dictionary<string, string>
             {
                 { "SideIndex", sideIndex.ToString() },
@@ -2087,6 +2046,7 @@ namespace Jvedio.ViewModel
 
         public void GetRecentWatch(bool add = true)
         {
+            IsLoadingMovie = true;
             SideIdx = 3;
             List<Movie> movies = new List<Movie>();
             foreach (var keyValuePair in RecentWatched)
@@ -2097,34 +2057,17 @@ namespace Jvedio.ViewModel
                     {
                         Movie movie = DataBase.SelectMovieByID(item);
                         if (movie != null) movies.Add(movie);
-
-
                     }
                 }
             }
 
             TextType = $"{Properties.Settings.Default.RecentDays} 天内的最近播放";
-            Statistic();
-            MovieList = new List<Movie>();
-            MovieList.AddRange(movies);
-            CurrentPage = 1;
-
-
-            FlipOver();
-            //if (MovieList.Count == 0 && RecentWatchedCount > 0)
-            //    HandyControl.Controls.Growl.Info("该库中无最近播放，请切换到其他库！");
-            //else if (MovieList.Count < RecentWatchedCount)
-            //    HandyControl.Controls.Growl.Info($"该库中仅发现 {MovieList.Count} 个最近播放");
-            if (add)
-            {
-                Dictionary<string, string> sqlInfo = new Dictionary<string, string>
-                {
-                    { "SideIndex", "3" },
-                    { "TextType", TextType },
-                    { "SqlCommand", "RecentWatch" }
-                };
-            }
-
+            Task.Run(() => { 
+                Statistic();
+                MovieList = new List<Movie>();
+                MovieList.AddRange(movies);
+                FlipOver();
+            });
         }
 
 

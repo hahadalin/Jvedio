@@ -7,6 +7,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using static Jvedio.GlobalVariable;
 
 namespace Jvedio
@@ -711,11 +712,12 @@ namespace Jvedio
 
 
 
-        private static Movie DicToMovie(Dictionary<string, string> info)
+        public static Movie DicToMovie(Dictionary<string, string> info)
         {
 
             Movie movie= new Movie();
             movie.id = info["id"];
+            if (info.ContainsKey("vediotype")) movie.vediotype = int.Parse(info["vediotype"]);
             movie.title = info.ContainsKey("title") ? info["title"] : "";
             movie.plot = info.ContainsKey("plot") ? info["plot"] : "";
             movie.outline = info.ContainsKey("outline") ? info["outline"] : "";
@@ -867,10 +869,11 @@ namespace Jvedio
         /// 组合搜索，获得所有筛选值
         /// </summary>
         /// <returns></returns>
-        public static List<List<string>> GetAllFilter()
+        public async static Task<List<List<string>>> GetAllFilter()
         {
             Init();
-            using (SQLiteConnection cn = new SQLiteConnection("data source=" + SqlitePath))
+            return await Task.Run(() => {
+                using (SQLiteConnection cn = new SQLiteConnection("data source=" + SqlitePath))
             {
                 cn.Open();
                 using (SQLiteCommand cmd = new SQLiteCommand())
@@ -1062,6 +1065,7 @@ namespace Jvedio
 
                 }
             }
+            });
         }
 
         /// <summary>

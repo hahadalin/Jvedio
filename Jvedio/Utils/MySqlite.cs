@@ -32,6 +32,7 @@ namespace Jvedio
                 SqlitePath = Properties.Settings.Default.DataBasePath;
             else
                 SqlitePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path.EndsWith(".sqlite")?path:path + ".sqlite");
+            if (absolute && path != "") SqlitePath = path;
             cn = new SQLiteConnection("data source=" + SqlitePath);
             cn.Open();
             cmd = new SQLiteCommand();

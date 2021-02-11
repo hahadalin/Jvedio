@@ -36,6 +36,7 @@ using System.Windows.Media.Effects;
 using System.Text;
 using System.Security.Cryptography;
 using Jvedio.Library.Encrypt;
+using Jvedio.Utils;
 
 namespace Jvedio
 {
@@ -403,6 +404,14 @@ namespace Jvedio
             {
                 item.Click += SetTypeValue;
             }
+
+
+
+            CheckurlTimer.Interval = TimeSpan.FromMinutes(CheckurlInterval);
+            CheckurlTimer.Tick += new EventHandler(CheckurlTimer_Tick);
+
+            ResizingTimer.Interval = TimeSpan.FromSeconds(0.5);
+            ResizingTimer.Tick += new EventHandler(ResizingTimer_Tick);
         }
 
 
@@ -413,8 +422,9 @@ namespace Jvedio
             Loadslide();
             ImageSlideTimer.Stop();
         }
-        public void InitMovie()
+        public async Task<bool> InitMovie()
         {
+            return await Task.Run(() => {
             vieModel = new VieModel_Main();
             if (Properties.Settings.Default.RandomDisplay)
             {
@@ -424,8 +434,8 @@ namespace Jvedio
             {
                 vieModel.Reset();
             }
-            this.DataContext = vieModel;
-
+             Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate { this.DataContext = vieModel; });
+            
             vieModel.CurrentMovieListHideOrChanged += (s, ev) => { StopDownLoad(); };
             vieModel.MovieFlipOverCompleted += (s, ev) =>
             {
@@ -437,6 +447,7 @@ namespace Jvedio
                         if (Properties.Settings.Default.EditMode) SetSelected();
                         if (Properties.Settings.Default.ShowImageMode == "2") ImageSlideTimer.Start();//0.5s后开始展示预览图
                         SetLoadingStatus(false);
+                        Console.WriteLine("加载影片完成");
                     }, DispatcherPriority.ContextIdle, null);
             };
 
@@ -448,20 +459,13 @@ namespace Jvedio
                     vieModel.ActorCurrentCount = vieModel.CurrentActorList.Count;
                     vieModel.ActorTotalCount = vieModel.ActorList.Count;
                     if (Properties.Settings.Default.ActorEditMode) ActorSetSelected();
-                    SetActorLoadingStatus(false);
-
+                    vieModel.SetClassifyLoadingStatus(false);
                 }, DispatcherPriority.ContextIdle, null);
             };
 
 
-            CheckurlTimer.Interval = TimeSpan.FromMinutes(CheckurlInterval);
-            CheckurlTimer.Tick += new EventHandler(CheckurlTimer_Tick);
-
-            ResizingTimer.Interval = TimeSpan.FromSeconds(0.5);
-            ResizingTimer.Tick += new EventHandler(ResizingTimer_Tick);
-
-
-
+            return true;
+            });
 
         }
 
@@ -471,14 +475,11 @@ namespace Jvedio
             IsFlowing = loading;
             vieModel.IsFlipOvering = loading;
             SortStackPanel.IsEnabled = !loading;
+
         }
 
 
-        public void SetActorLoadingStatus(bool loading)
-        {
-            vieModel.IsLoadingActor = loading;
-            vieModel.IsLoadingMovie = loading;
-        }
+
 
 
 
@@ -1272,12 +1273,6 @@ namespace Jvedio
 
 
 
-        public void SearchContent(object sender, MouseButtonEventArgs e)
-        {
-            Grid grid = ((Canvas)(sender)).Parent as Grid;
-            TextBox SearchTextBox = grid.Children.OfType<TextBox>().First() as TextBox;
-            vieModel.Search = SearchTextBox.Text;
-        }
 
 
 
@@ -1335,11 +1330,10 @@ namespace Jvedio
             {
                 if (vieModel.CurrentSearchCandidate !=null && (SearchSelectIdex >= 0 & SearchSelectIdex < vieModel.CurrentSearchCandidate.Count))
                     SearchBar.Text = vieModel.CurrentSearchCandidate[SearchSelectIdex];
-                
-
                 if (SearchBar.Text == "") return;
                 vieModel.Search = SearchBar.Text;
                 vieModel.ShowSearchPopup = false;
+
             }
             else if (e.Key == Key.Down)
             {
@@ -1444,14 +1438,16 @@ namespace Jvedio
                 {
                     label = label.Replace(match.Value, "");
                 }
+                TabItem tabItem = ActorTabControl.SelectedItem as TabItem;
+                vieModel.GetMoviebyLabel(label, tabItem.Header.ToString().ToSqlString());
             }
             else if (type == "HandyControl.Controls.Tag")
             {
                 HandyControl.Controls.Tag Tag = (HandyControl.Controls.Tag)sender;
                 label = Tag.Content.ToString();
+                vieModel.GetMoviebyLabel(label);
             }
-            TabItem tabItem = ActorTabControl.SelectedItem as TabItem;
-            vieModel.GetMoviebyLabel(label,tabItem.Header.ToString().ToSqlString());
+
         }
 
         public void Studio_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1625,8 +1621,8 @@ namespace Jvedio
                 actress.id = "";//不按照 id 选取演员
                 vieModel.GetMoviebyActressAndVetioType(actress);
                 vieModel.Actress = actress;
+
                 vieModel.FlipOver();
-                
                 vieModel.ActorInfoGrid  = Visibility.Visible;
                 vieModel.TextType = actress.name;
             }
@@ -1804,7 +1800,7 @@ namespace Jvedio
             int idx = ClassifyVedioTypeStackPanel.Children.OfType<RadioButton>().ToList().IndexOf(radioButton);
             vieModel.ClassifyVedioType=(VedioType)idx;
             //刷新侧边栏显示
-            TabControl_SelectionChanged(sender, null);
+            SetClassify(true);
         }
 
 
@@ -4072,6 +4068,16 @@ namespace Jvedio
 
             }
 
+            Application.Current.Resources["BackgroundTitle"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundTitle"]);
+            Application.Current.Resources["BackgroundMain"] =new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundMain"]);
+            Application.Current.Resources["BackgroundSide"] =new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundSide"]);
+            Application.Current.Resources["BackgroundTab"] =new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundTab"]);
+            Application.Current.Resources["BackgroundSearch"] =new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundSearch"]);
+            Application.Current.Resources["BackgroundMenu"] =new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundMenu"]);
+            Application.Current.Resources["ForegroundGlobal"] =new SolidColorBrush((Color)Application.Current.Resources["Color_ForegroundGlobal"]);
+            Application.Current.Resources["ForegroundSearch"] =new SolidColorBrush((Color)Application.Current.Resources["Color_ForegroundSearch"]);
+            Application.Current.Resources["BorderBursh"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BorderBursh"]);
+
         }
 
         private void SetSkinProperty(object sender, RoutedEventArgs e)
@@ -4178,7 +4184,6 @@ namespace Jvedio
                 vieModel.IsRefresh = true;
                 vieModel.Reset();
                 vieModel.GetFilterInfo();
-
             }
         }
 
@@ -4711,11 +4716,11 @@ namespace Jvedio
             WindowBatch.Show();
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void Test(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("upgrade.bat");
-            Application.Current.Shutdown();
+            new CreateSample(50000).Create();
         }
+
 
 
 
@@ -5641,7 +5646,7 @@ namespace Jvedio
 
         }
 
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SetClassify(bool refresh=false)
         {
             if (ActorTabControl != null)
             {
@@ -5650,27 +5655,33 @@ namespace Jvedio
                 {
                     case 0:
                         vieModel.ShowActorTools = true;
+                        if (vieModel.ActorList != null && vieModel.ActorList.Count > 0 && !refresh) return;
                         vieModel.GetActorList();
                         break;
 
                     case 1:
+                        if (vieModel.GenreList != null && vieModel.GenreList.Count > 0 && !refresh) return;
                         vieModel.GetGenreList();
                         break;
 
                     case 2:
+                        if (vieModel.LabelList != null && vieModel.LabelList.Count > 0 && !refresh) return;
                         vieModel.GetLabelList();
                         break;
 
                     case 3:
+                        if (vieModel.TagList != null && vieModel.TagList.Count > 0 && !refresh) return;
                         vieModel.GetTagList();
                         break;
 
                     case 4:
+                        if (vieModel.StudioList != null && vieModel.StudioList.Count > 0 && !refresh) return;
                         vieModel.GetStudioList();
                         break;
 
 
                     case 5:
+                        if (vieModel.DirectorList != null && vieModel.DirectorList.Count > 0 && !refresh) return;
                         vieModel.GetDirectoroList();
                         break;
 
@@ -5679,6 +5690,11 @@ namespace Jvedio
                         break;
                 }
             }
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetClassify();
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
@@ -5707,12 +5723,6 @@ namespace Jvedio
             }
         }
 
-        private void SearchBar_SearchStarted(object sender, HandyControl.Data.FunctionEventArgs<string> e)
-        {
-            if (SearchBar.Text == "") return;
-            vieModel.Search = SearchBar.Text;
-            vieModel.ShowSearchPopup = false;
-        }
 
         private void ToolsGrid_MouseMove(object sender, MouseEventArgs e)
         {
@@ -5745,7 +5755,10 @@ namespace Jvedio
 
         }
 
-
+        private void RefreshClassify(object sender, MouseButtonEventArgs e)
+        {
+            SetClassify(true);
+        }
     }
 
 
