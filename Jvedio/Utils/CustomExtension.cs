@@ -54,6 +54,31 @@ namespace Jvedio
         }
 
 
+        public static string ToSqlString(this string str)
+        {
+            string result="";
+
+            if (str == "标签")
+            {
+                result = "label";
+            }else if (str == "系列")
+            {
+                result = "tag";
+            }
+            else if (str == "发行商")
+            {
+                result = "studio";
+            }
+            else if (str == "导演")
+            {
+                result = "director";
+            }
+
+            return result;
+
+
+        }
+
         public static string ToSqlString(this Sort sort)
         {
             string result;

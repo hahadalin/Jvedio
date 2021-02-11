@@ -2061,8 +2061,6 @@
 
                         </TabItem>
                         <TabItem  Background="Transparent"   >
-
-
                             <!--演员、类别、标签-->
                             <Grid Grid.Column="1" Visibility="{Binding ShowMovieGrid,Converter={StaticResource BoolToOppositeVisibilityConverter},FallbackValue=Visible}" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" PreviewKeyDown="ActorGrid_PreviewKeyDown"  >
 
@@ -2165,46 +2163,20 @@
                                             <ItemsControl x:Name="ActorItemsControl" ItemsSource="{Binding CurrentActorList}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
-                                                        <WrapPanel Orientation="Horizontal"/>
+                                                        <WrapPanel  Orientation="Horizontal"/>
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-
-
-                                                        <!--<DataTemplate.Triggers>
-                                                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                                        <BeginStoryboard  >
-                                                            <Storyboard  AutoReverse="False">
-                                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ActorWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                                    <EasingDoubleKeyFrame KeyTime="0" Value="0" />
-                                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="1" />
-                                                                </DoubleAnimationUsingKeyFrames>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </EventTrigger>
-                                                    <EventTrigger   RoutedEvent="FrameworkElement.Unloaded">
-                                                        <BeginStoryboard  >
-                                                            <Storyboard   AutoReverse="False" >
-                                                                <DoubleAnimationUsingKeyFrames    Storyboard.TargetName="ActorWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                                    <EasingDoubleKeyFrame KeyTime="0" Value="1" />
-                                                                    <EasingDoubleKeyFrame   KeyTime="0:0:0.25" Value="0" />
-                                                                </DoubleAnimationUsingKeyFrames>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </EventTrigger>
-                                                </DataTemplate.Triggers>-->
-
-                                                        <WrapPanel Name="ActorWrapPanel">
-                                                            <Grid Margin="5">
-                                                                <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="5" MinHeight="250" >
+                                                        <Grid Margin="5" Width="150">
+                                                                <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="5"  >
                                                                     <Border.Effect>
                                                                         <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                     </Border.Effect>
                                                                 </Border>
                                                                 <StackPanel Orientation="Vertical" Margin="10">
                                                                     <Image MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave"  Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver"  Drop="ActorImage_Drop"  />
-                                                                    <TextBox Name="ActorNameTextBox" TextAlignment="Center" MaxHeight="80" Margin="10 5" Foreground="{DynamicResource ForegroundGlobal}" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
+                                                                    <TextBox Name="ActorNameTextBox" TextWrapping="Wrap" TextAlignment="Center" MaxHeight="80" Margin="10 5" Foreground="{DynamicResource ForegroundGlobal}" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
                                                                         <TextBox.Text>
                                                                             <MultiBinding StringFormat="{}{0}({1})">
                                                                                 <Binding Path="name" />
@@ -2222,7 +2194,7 @@
                                                                     </StackPanel.ContextMenu>
                                                                 </StackPanel>
                                                             </Grid>
-                                                        </WrapPanel>
+
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
@@ -2249,11 +2221,9 @@
                                                                 </ItemsControl.ItemsPanel>
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <WrapPanel>
-                                                                            <Border  Style="{StaticResource GenBorder}">
-                                                                                <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Genre_MouseDown"/>
-                                                                            </Border>
-                                                                        </WrapPanel>
+                                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                        </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
@@ -2266,11 +2236,9 @@
                                                                 </ItemsControl.ItemsPanel>
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <WrapPanel>
-                                                                            <Border  Style="{StaticResource GenBorder}">
-                                                                                <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Genre_MouseDown"/>
-                                                                            </Border>
-                                                                        </WrapPanel>
+                                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                        </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
@@ -2283,11 +2251,9 @@
                                                                 </ItemsControl.ItemsPanel>
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <WrapPanel>
-                                                                            <Border  Style="{StaticResource GenBorder}">
-                                                                                <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Genre_MouseDown"/>
-                                                                            </Border>
-                                                                        </WrapPanel>
+                                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                        </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
@@ -2300,11 +2266,9 @@
                                                                 </ItemsControl.ItemsPanel>
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <WrapPanel>
-                                                                            <Border  Style="{StaticResource GenBorder}">
-                                                                                <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Genre_MouseDown"/>
-                                                                            </Border>
-                                                                        </WrapPanel>
+                                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                        </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
@@ -2317,11 +2281,9 @@
                                                                 </ItemsControl.ItemsPanel>
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <WrapPanel>
-                                                                            <Border  Style="{StaticResource GenBorder}">
-                                                                                <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Genre_MouseDown"/>
-                                                                            </Border>
-                                                                        </WrapPanel>
+                                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                        </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
@@ -2334,11 +2296,9 @@
                                                                 </ItemsControl.ItemsPanel>
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <WrapPanel>
-                                                                            <Border  Style="{StaticResource GenBorder}">
-                                                                                <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Genre_MouseDown"/>
-                                                                            </Border>
-                                                                        </WrapPanel>
+                                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                        </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
@@ -2351,11 +2311,9 @@
                                                                 </ItemsControl.ItemsPanel>
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <WrapPanel>
-                                                                            <Border  Style="{StaticResource GenBorder}">
-                                                                                <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Genre_MouseDown"/>
-                                                                            </Border>
-                                                                        </WrapPanel>
+                                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                        </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
@@ -2368,11 +2326,9 @@
                                                                 </ItemsControl.ItemsPanel>
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <WrapPanel>
-                                                                            <Border  Style="{StaticResource GenBorder}">
-                                                                                <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Genre_MouseDown"/>
-                                                                            </Border>
-                                                                        </WrapPanel>
+                                                                        <Border Width="auto" Height="50" Style="{StaticResource GenreBorderStyle}">
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                        </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
@@ -2388,12 +2344,59 @@
 
 
                                     </TabItem>
-
-
                                     <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.Label}" >
 
                                         <Grid Margin="10"    >
                                             <ItemsControl ItemsSource="{Binding LabelList}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5" Background="Transparent">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel  Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Label_MouseDown"/>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+
+                                        </Grid>
+
+
+
+                                    </TabItem>
+                                    <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.Tag}" >
+
+                                        <Grid Margin="10"    >
+                                            <ItemsControl ItemsSource="{Binding TagList}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5" Background="Transparent">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Name="LabelWrapPanel" Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate >
+                                                    <DataTemplate >
+
+                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Label_MouseDown"/>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+
+                                        </Grid>
+
+
+
+                                    </TabItem>
+                                    <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.Studio}" >
+
+                                        <Grid Margin="10"    >
+                                            <ItemsControl ItemsSource="{Binding StudioList}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5" Background="Transparent">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <WrapPanel Orientation="Horizontal"/>
@@ -2401,40 +2404,9 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-
-                                                        <!--<DataTemplate.Triggers >
-                                                    <EventTrigger   RoutedEvent="FrameworkElement.Loaded">
-                                                        <BeginStoryboard  >
-                                                            <Storyboard   AutoReverse="False" >
-                                                                <DoubleAnimationUsingKeyFrames    Storyboard.TargetName="LabelWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                                    <EasingDoubleKeyFrame KeyTime="0" Value="0" />
-                                                                    <EasingDoubleKeyFrame x:Name="EasingDoubleKeyFrame_2"  KeyTime="0:0:0.25" Value="1" />
-                                                                </DoubleAnimationUsingKeyFrames>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </EventTrigger>
-                                                    <EventTrigger   RoutedEvent="FrameworkElement.Unloaded">
-                                                        <BeginStoryboard  >
-                                                            <Storyboard   AutoReverse="False" >
-                                                                <DoubleAnimationUsingKeyFrames    Storyboard.TargetName="LabelWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                                    <EasingDoubleKeyFrame KeyTime="0" Value="1" />
-                                                                    <EasingDoubleKeyFrame   KeyTime="0:0:0.25" Value="0" />
-                                                                </DoubleAnimationUsingKeyFrames>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </EventTrigger>
-                                                </DataTemplate.Triggers>-->
-
-
-
-                                                        <WrapPanel Name="LabelWrapPanel">
-                                                            <Border  Style="{StaticResource GenBorder}">
-                                                                <Grid>
-                                                                    <Label Content="{Binding}" Style="{StaticResource GenLabel}" MouseUp="Label_MouseDown"/>
-                                                                </Grid>
-                                                            </Border>
-
-                                                        </WrapPanel>
+                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Label_MouseDown"/>
+                                                        </Border>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
@@ -2446,6 +2418,31 @@
 
                                     </TabItem>
 
+                                    <TabItem FontSize="15" Background="Transparent" Header="{x:Static lang:Resources.Director}" >
+
+                                        <Grid Margin="10"    >
+                                            <ItemsControl ItemsSource="{Binding DirectorList}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5" Background="Transparent">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+
+                                                        <Border Style="{StaticResource GenreBorderStyle}">
+                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Label_MouseDown"/>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+
+                                        </Grid>
+
+
+
+                                    </TabItem>
                                 </TabControl>
 
 

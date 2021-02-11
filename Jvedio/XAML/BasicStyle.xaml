@@ -3,6 +3,46 @@
 >
 
 
+    <!--动态资源-->
+
+    <!--黑色皮肤-->
+
+    <Color x:Key="Color_BackgroundTitle"  >#22252A</Color>
+    <Color x:Key="Color_BackgroundMain"  >#1B1B1F</Color>
+    <Color x:Key="Color_BackgroundSide"  >#101013</Color>
+    <Color x:Key="Color_BackgroundTab"  >#383838</Color>
+    <Color x:Key="Color_BackgroundSearch"  >#18191B</Color>
+    <Color x:Key="Color_BackgroundMenu" >Black</Color>
+    <Color x:Key="Color_ForegroundGlobal"  >#AFAFAF</Color>
+    <Color x:Key="Color_ForegroundSearch"  >#FFFFFF</Color>
+    <Color x:Key="Color_BorderBursh"  >Transparent</Color>
+
+
+
+
+    <SolidColorBrush x:Key="BackgroundTitle"  Color="{DynamicResource Color_BackgroundTitle}"/>
+    <SolidColorBrush x:Key="BackgroundMain" Color="{DynamicResource Color_BackgroundMain}" />
+    <SolidColorBrush x:Key="BackgroundSide"  Color="{DynamicResource Color_BackgroundSide}" />
+    <SolidColorBrush x:Key="BackgroundTab"  Color="{DynamicResource Color_BackgroundTab}" />
+    <SolidColorBrush x:Key="BackgroundSearch"  Color="{DynamicResource Color_BackgroundSearch}" />
+    <SolidColorBrush x:Key="BackgroundMenu"  Color="{DynamicResource Color_BackgroundMenu}"/>
+    <SolidColorBrush x:Key="ForegroundGlobal"  Color="{DynamicResource Color_ForegroundGlobal}" />
+    <SolidColorBrush x:Key="ForegroundSearch"  Color="{DynamicResource Color_ForegroundSearch}" />
+    <SolidColorBrush x:Key= "BorderBursh"  Color="{DynamicResource Color_BorderBursh}" />
+
+    <!--白色皮肤-->
+    <!--<SolidColorBrush x:Key="BackgroundTitle"  Color="#E2E3E5"/>
+    <SolidColorBrush x:Key="BackgroundMain" Color="#F9F9F9" />
+    <SolidColorBrush x:Key="BackgroundSide"  Color="#F2F3F4" />
+    <SolidColorBrush x:Key="BackgroundTab"  Color="#FFF5EE" />
+    <SolidColorBrush x:Key="BackgroundSearch"  Color="#D1D1D1" />
+    <SolidColorBrush x:Key="BackgroundMenu"  Color="White"/>
+    <SolidColorBrush x:Key="ForegroundGlobal"  Color="#555555" />
+    <SolidColorBrush x:Key="ForegroundSearch"  Color="#000000" />
+    <SolidColorBrush x:Key= "BorderBursh"  Color="Gray" />-->
+
+
+
     <Style x:Key="ToolsBarBorderStyle" TargetType="Border">
         <Setter Property="Margin" Value="5"/>
         <Setter Property="CornerRadius" Value="3"/>
@@ -76,6 +116,33 @@
                     <BeginStoryboard>
                         <Storyboard >
                             <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <Style x:Key="GenreBorderStyle" TargetType="Border">
+        <Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Padding" Value="10 5"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundSide}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard >
+                        <Storyboard FillBehavior="HoldEnd" >
+                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="{StaticResource Color_BackgroundTitle}" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard >
+                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="{StaticResource Color_BackgroundSide}" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.ExitActions>
@@ -201,30 +268,7 @@
 
 
 
-    <!--动态资源-->
-
-    <!--黑色皮肤-->
-    <SolidColorBrush x:Key="BackgroundTitle"  Color="#22252A"/>
-    <SolidColorBrush x:Key="BackgroundMain" Color="#1B1B1F" />
-    <SolidColorBrush x:Key="BackgroundSide"  Color="#101013" />
-    <SolidColorBrush x:Key="BackgroundTab"  Color="#383838" />
-    <SolidColorBrush x:Key="BackgroundSearch"  Color="#18191B" />
-    <SolidColorBrush x:Key="BackgroundMenu"  Color="Black"/>
-    <SolidColorBrush x:Key="ForegroundGlobal"  Color="#AFAFAF" />
-    <SolidColorBrush x:Key="ForegroundSearch"  Color="#FFFFFF" />
-    <SolidColorBrush x:Key= "BorderBursh"  Color="Transparent" />
-
-    <!--白色皮肤-->
-    <!--<SolidColorBrush x:Key="BackgroundTitle"  Color="#E2E3E5"/>
-    <SolidColorBrush x:Key="BackgroundMain" Color="#F9F9F9" />
-    <SolidColorBrush x:Key="BackgroundSide"  Color="#F2F3F4" />
-    <SolidColorBrush x:Key="BackgroundTab"  Color="#FFF5EE" />
-    <SolidColorBrush x:Key="BackgroundSearch"  Color="#D1D1D1" />
-    <SolidColorBrush x:Key="BackgroundMenu"  Color="White"/>
-    <SolidColorBrush x:Key="ForegroundGlobal"  Color="#555555" />
-    <SolidColorBrush x:Key="ForegroundSearch"  Color="#000000" />
-    <SolidColorBrush x:Key= "BorderBursh"  Color="Gray" />-->
-
+   
 
 
 </ResourceDictionary>

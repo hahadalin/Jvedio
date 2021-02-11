@@ -271,9 +271,9 @@ namespace Jvedio
         /// <param name="vediotype"></param>
         /// <returns></returns>
 
-        public static List<string> SelectLabelByVedioType(VedioType vediotype)
+        public static List<string> SelectLabelByVedioType(VedioType vediotype,string type="label")
         {
-            Dictionary<string, int> dicresult = SelectLabelLikeByVedioType("label", (int)vediotype);
+            Dictionary<string, int> dicresult = SelectLabelLikeByVedioType(type, (int)vediotype);
             //降序
             var dicSort = from objDic in dicresult orderby objDic.Value descending select objDic;
             List<string> result = new List<string>();

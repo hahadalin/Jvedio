@@ -542,8 +542,40 @@ namespace Jvedio.ViewModel
             }
         }
 
+        private ObservableCollection<string> tagllist;
+        public ObservableCollection<string> TagList
+        {
+            get { return tagllist; }
+            set
+            {
+                tagllist = value;
+                RaisePropertyChanged();
+            }
+        }
 
+        private ObservableCollection<string> studiollist;
+        public ObservableCollection<string> StudioList
+        {
+            get { return studiollist; }
+            set
+            {
+                studiollist = value;
+                RaisePropertyChanged();
+            }
+        }
 
+                    private ObservableCollection<string> directorList
+;
+        public ObservableCollection<string> DirectorList
+
+        {
+            get { return directorList; }
+            set
+            {
+                directorList = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private ObservableCollection<string> _AllSearchCandidate;
 
@@ -1706,12 +1738,10 @@ namespace Jvedio.ViewModel
 
 
         private delegate void LoadLabelDelegate(string str);
-        private void LoadLabel(string str)
-        {
-            LabelList.Add(str);
-        }
-
-
+        private void LoadLabel(string str)=> LabelList.Add(str);
+        private void LoadTag(string str) => TagList.Add(str);
+        private void LoadStudio(string str) => StudioList.Add(str);
+        private void LoadDirector(string str) => DirectorList.Add(str);
 
         //获得标签
         public void GetLabelList()
@@ -1723,6 +1753,58 @@ namespace Jvedio.ViewModel
                 for (int i = 0; i < labels.Count; i++)
                 {
                     await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadLabel), labels[i]);
+                }
+
+            });
+
+        }
+
+
+
+
+
+        public void GetTagList()
+        {
+            List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType,"tag");
+            TagList = new ObservableCollection<string>();
+            Task.Run(async () =>
+            {
+                for (int i = 0; i < labels.Count; i++)
+                {
+                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadTag), labels[i]);
+                }
+
+            });
+
+        }
+
+
+
+        public void GetStudioList()
+        {
+            List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType, "studio");
+            StudioList = new ObservableCollection<string>();
+            Task.Run(async () =>
+            {
+                for (int i = 0; i < labels.Count; i++)
+                {
+                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadStudio), labels[i]);
+                }
+
+            });
+
+        }
+
+
+        public void GetDirectoroList()
+        {
+            List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType, "director");
+            DirectorList = new ObservableCollection<string>();
+            Task.Run(async () =>
+            {
+                for (int i = 0; i < labels.Count; i++)
+                {
+                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadDirector), labels[i]);
                 }
 
             });
@@ -2082,9 +2164,9 @@ namespace Jvedio.ViewModel
             ExecutiveSqlCommand(5, moviegenre, "SELECT * from movie where genre like '%" + moviegenre + "%'");
         }
 
-        public void GetMoviebyLabel(string movielabel)
+        public void GetMoviebyLabel(string movielabel,string type="label")
         {
-            ExecutiveSqlCommand(7, movielabel, "SELECT * from movie where label like '%" + movielabel + "%'");
+            ExecutiveSqlCommand(7, movielabel, $"SELECT * from movie where {type} like '%{movielabel}%'");
         }
 
 
