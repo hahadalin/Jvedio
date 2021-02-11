@@ -632,7 +632,6 @@ namespace Jvedio
             }
 
             //刷新文件夹
-            this.Cursor = Cursors.Wait;
 
             if (vieModel.IsScanning)
             {
@@ -643,19 +642,18 @@ namespace Jvedio
             {
                 if (Properties.Settings.Default.ScanWhenRefresh)
                 {
-                    //WaitingPanel.Visibility = Visibility.Visible;
                     vieModel.IsScanning = true;
                     await ScanWhenRefresh();
-                    //WaitingPanel.Visibility = Visibility.Collapsed;
                     vieModel.IsScanning = false;
                 }
             }
             CancelSelect();
-            if (Properties.Settings.Default.ScanWhenRefresh)
-                vieModel.Reset();
-            else
-                vieModel.Refresh();
-            this.Cursor = Cursors.Arrow;
+            await Task.Run(() => {
+                if (Properties.Settings.Default.ScanWhenRefresh)
+                    vieModel.Reset();
+                else
+                    vieModel.FlipOver();
+            });
         }
 
         public async Task<bool> ScanWhenRefresh()
@@ -1315,10 +1313,11 @@ namespace Jvedio
 
         public bool CanSearch = false;
 
-        private void RefreshCandiadte(object sender, TextChangedEventArgs e)
+        private async void RefreshCandiadte(object sender, TextChangedEventArgs e)
         {
             vieModel.ShowSearchPopup = true;
-            vieModel?.GetSearchCandidate(SearchBar.Text);
+            await vieModel?.GetSearchCandidate(SearchBar.Text);
+
         }
 
 
@@ -1622,7 +1621,7 @@ namespace Jvedio
                 vieModel.GetMoviebyActressAndVetioType(actress);
                 vieModel.Actress = actress;
 
-                vieModel.FlipOver();
+                vieModel.AsyncFlipOver();
                 vieModel.ActorInfoGrid  = Visibility.Visible;
                 vieModel.TextType = actress.name;
             }
@@ -1884,9 +1883,10 @@ namespace Jvedio
             Properties.Settings.Default.SortType =((int)sorttype).ToString();
             Properties.Settings.Default.Save();
             vieModel.SortType = sorttype;
-            vieModel.Sort();
-
-            vieModel.FlipOver();
+            Task.Run(() => {
+                vieModel.Sort();
+                vieModel.FlipOver();
+            });
         }
 
         public void SaveAllSearchType(object sender, RoutedEventArgs e)
@@ -1896,7 +1896,7 @@ namespace Jvedio
             radioButton.IsChecked = true;
             int idx = stackPanel.Children.OfType<RadioButton>().ToList().IndexOf(radioButton);
             Properties.Settings.Default.AllSearchType = idx.ToString();
-            vieModel?.GetSearchCandidate(SearchBar.Text);
+            //vieModel?.GetSearchCandidate(SearchBar.Text);
             vieModel.SearchHint = Jvedio.Language.Resources.Search + radioButton.Content.ToString();
             Properties.Settings.Default.Save();
             vieModel.AllSearchType = Properties.Settings.Default.AllSearchType.Length == 1 ? (MySearchType)int.Parse(Properties.Settings.Default.AllSearchType) : 0;
@@ -1926,7 +1926,7 @@ namespace Jvedio
 
             Properties.Settings.Default.ShowViewMode = idx.ToString();
             Properties.Settings.Default.Save();
-            vieModel.FlipOver();
+            vieModel.AsyncFlipOver();
         }
 
         public void SaveVedioType(object sender, RoutedEventArgs e)
@@ -1951,7 +1951,7 @@ namespace Jvedio
 
             Properties.Settings.Default.VedioType = idx.ToString();
             Properties.Settings.Default.Save();
-            vieModel.FlipOver();
+            vieModel.AsyncFlipOver();
         }
 
 
@@ -3561,7 +3561,7 @@ namespace Jvedio
                 }
                 if (page > vieModel.TotalPage) { page = vieModel.TotalPage; } else if (page <= 0) { page = 1; }
                 vieModel.CurrentPage = page;
-                vieModel.FlipOver();
+                vieModel.AsyncFlipOver();
             }
         }
 
@@ -3668,7 +3668,7 @@ namespace Jvedio
             if (vieModel.CurrentPage + 1 > vieModel.TotalPage) vieModel.CurrentPage = 1;
             else vieModel.CurrentPage += 1;
 
-            vieModel.FlipOver();
+            vieModel.AsyncFlipOver();
             MovieScrollViewer.ScrollToTop();
 
         }
@@ -3680,7 +3680,7 @@ namespace Jvedio
             if (vieModel.CurrentPage - 1 <= 0) vieModel.CurrentPage = vieModel.TotalPage;
             else vieModel.CurrentPage -= 1;
 
-            vieModel.FlipOver();
+            vieModel.AsyncFlipOver();
             MovieScrollViewer.ScrollToTop();
 
         }
@@ -4116,7 +4116,7 @@ namespace Jvedio
                 if (vieModel.TabSelectedIndex==0)
                 {
                     vieModel.CurrentPage = vieModel.TotalPage;
-                    vieModel.FlipOver();
+                    vieModel.AsyncFlipOver();
                     SetSelected();
                 }
                 else
@@ -4133,7 +4133,7 @@ namespace Jvedio
                 if (vieModel.TabSelectedIndex==0)
                 {
                     vieModel.CurrentPage = 1;
-                    vieModel.FlipOver();
+                    vieModel.AsyncFlipOver();
                     SetSelected();
                 }
 
@@ -5752,7 +5752,6 @@ namespace Jvedio
         private void ShowClassifyGrid(object sender, RoutedEventArgs e)
         {
             vieModel.TabSelectedIndex = 1;
-
         }
 
         private void RefreshClassify(object sender, MouseButtonEventArgs e)

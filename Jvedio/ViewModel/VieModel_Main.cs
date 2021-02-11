@@ -58,7 +58,7 @@ namespace Jvedio.ViewModel
         public RelayCommand<bool> RecentWatchCommand { get; set; }
 
         public RelayCommand AddNewMovie { get; set; }
-        public RelayCommand<bool> FlipOverCommand { get; set; }
+        public RelayCommand FlipOverCommand { get; set; }
         #endregion
 
 
@@ -68,7 +68,7 @@ namespace Jvedio.ViewModel
             GenreCommand = new RelayCommand(GetGenreList);
             ActorCommand = new RelayCommand(GetActorList);
             LabelCommand = new RelayCommand(GetLabelList);
-            FlipOverCommand = new RelayCommand<bool>(t => FlipOver());
+            FlipOverCommand = new RelayCommand(AsyncFlipOver);
             FavoritesCommand = new RelayCommand(GetFavoritesMovie);
             RecentWatchCommand = new RelayCommand<bool>(t => GetRecentWatch());
             RecentCommand = new RelayCommand(GetRecentMovie);
@@ -94,7 +94,7 @@ namespace Jvedio.ViewModel
             }
         }
 
-        private int _DatabaseSelectedIndex =0;
+        private int _DatabaseSelectedIndex = 0;
 
         public int DatabaseSelectedIndex
         {
@@ -120,7 +120,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        private Visibility _ActorInfoGrid=Visibility.Collapsed;
+        private Visibility _ActorInfoGrid = Visibility.Collapsed;
 
         public Visibility ActorInfoGrid
         {
@@ -131,7 +131,7 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
-        
+
         private Visibility _GoToTopCanvas = Visibility.Collapsed;
 
         public Visibility GoToTopCanvas
@@ -561,7 +561,7 @@ namespace Jvedio.ViewModel
             }
         }
 
-                    private ObservableCollection<string> directorList
+        private ObservableCollection<string> directorList
 ;
         public ObservableCollection<string> DirectorList
 
@@ -1204,7 +1204,7 @@ namespace Jvedio.ViewModel
 
 
         //TODO
-        public  ObservableCollection<string> GetAllGenre()
+        public ObservableCollection<string> GetAllGenre()
         {
             ObservableCollection<string> result = new ObservableCollection<string>();
             //var models = await DataBase.GetAllFilter();
@@ -1232,7 +1232,7 @@ namespace Jvedio.ViewModel
 
         public async void BeginSearch()
         {
-            GetSearchCandidate(Search.ToProperSql());
+            //GetSearchCandidate(Search.ToProperSql());
             await Query();
             FlipOver();
         }
@@ -1314,11 +1314,23 @@ namespace Jvedio.ViewModel
             return result;
         }
 
-        //TODO
-        public void GetSearchCandidate(string Search)
+        private delegate void LoadSearchDelegate(string str);
+        private void LoadSearch(string str)
         {
+            if (!CurrentSearchCandidate.Contains(str)) CurrentSearchCandidate.Add(str);
+        }
+
+
+
+
+
+        //TODO
+        public async Task<bool> GetSearchCandidate(string Search)
+        {
+            return await Task.Run(async () => { 
+
             CurrentSearchCandidate = new ObservableCollection<string>();
-            if (Search == "") return;
+            if (Search == "") return false;
 
             //提取出英文和数字
             string extraSearch = "";
@@ -1330,31 +1342,23 @@ namespace Jvedio.ViewModel
             List<Movie> movies = new List<Movie>();
             if (AllSearchType == MySearchType.名称)
             {
-
                 if (SearchInCurrent)
-                {
                     movies = MovieList.Where(m => m.title.ToUpper().Contains(Search.ToUpper())).ToList();
-                }
                 else
-                {
                     movies = DataBase.SelectMoviesBySql($"SELECT * from movie where title like '%{Search}%'");
-                }
+
                 foreach (Movie movie in movies)
                 {
-                    CurrentSearchCandidate.Add(movie.title);
+                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadSearchDelegate(LoadSearch), movie.title);
                     if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
                 }
             }
             else if (AllSearchType == MySearchType.演员)
             {
                 if (SearchInCurrent)
-                {
                     movies = MovieList.Where(m => m.actor.ToUpper().Contains(Search.ToUpper())).ToList();
-                }
                 else
-                {
                     movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actor like '%{Search}%'");
-                }
 
                 foreach (Movie movie in movies)
                 {
@@ -1363,7 +1367,10 @@ namespace Jvedio.ViewModel
                     {
                         if (!string.IsNullOrEmpty(item) & item.IndexOf(' ') < 0)
                         {
-                            if (!CurrentSearchCandidate.Contains(item) & item.ToUpper().IndexOf(Search.ToUpper()) >= 0) CurrentSearchCandidate.Add(item);
+                            if (!CurrentSearchCandidate.Contains(item) & item.ToUpper().IndexOf(Search.ToUpper()) >= 0)
+                                {
+                                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadSearchDelegate(LoadSearch), item);
+                                }
                             if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
                         }
                     }
@@ -1373,21 +1380,20 @@ namespace Jvedio.ViewModel
             else if (AllSearchType == MySearchType.识别码)
             {
                 if (SearchInCurrent)
-                {
                     movies = MovieList.Where(m => m.id.ToUpper().Contains(Search.ToUpper())).ToList();
-                }
                 else
-                {
                     movies = DataBase.SelectMoviesBySql($"SELECT * from movie where id like '%{Search}%'");
-                }
 
                 if (movies.Count == 0 && extraSearch != "") movies = MovieList.Where(m => m.id.ToUpper().Contains(extraSearch.ToUpper())).ToList();
                 foreach (Movie movie in movies)
                 {
-                    CurrentSearchCandidate.Add(movie.id);
+                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadSearchDelegate(LoadSearch), movie.id);
                     if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
                 }
             }
+                return true;
+
+            });
         }
 
 
@@ -1522,16 +1528,6 @@ namespace Jvedio.ViewModel
 
 
 
-
-        public void Refresh()
-        {
-            App.Current.Windows[0].Cursor = Cursors.Wait;
-            List<string> CurrentID = new List<string>();
-            foreach (Movie movie in CurrentMovieList) CurrentID.Add(movie.id);
-            CurrentMovieList = new ObservableCollection<Movie>();
-            FlipOver();
-            App.Current.Windows[0].Cursor = Cursors.Arrow;
-        }
 
         public void RefreshActor()
         {
@@ -1783,12 +1779,14 @@ namespace Jvedio.ViewModel
         //获得演员，信息照片都获取
         public void GetActorList()
         {
-            Statistic();
-            List<Actress> Actresses = DataBase.SelectAllActorName(ClassifyVedioType);
-            if (ActorList != null && Actresses != null && Actresses.Count == ActorList.ToList().Count) { return; }
-            ActorList = new ObservableCollection<Actress>();
-            ActorList.AddRange(Actresses);
-            ActorFlipOver();
+            Task.Run(() => { 
+                Statistic(); 
+                List<Actress> Actresses = DataBase.SelectAllActorName(ClassifyVedioType);
+                if (ActorList != null && Actresses != null && Actresses.Count == ActorList.ToList().Count) { return; }
+                ActorList = new ObservableCollection<Actress>();
+                ActorList.AddRange(Actresses);
+                ActorFlipOver();
+            });
         }
 
         private delegate void LoadGenreDelegate(Genre genre);
@@ -2021,7 +2019,12 @@ namespace Jvedio.ViewModel
 
         }
 
-
+        public void AsyncFlipOver()
+        {
+            Task.Run(() => {
+                FlipOver();
+            });
+        }
 
 
         public void Reset()
@@ -2215,20 +2218,18 @@ namespace Jvedio.ViewModel
         /// </summary>
         public void Statistic()
         {
-            if (!DataBase.IsTableExist("movie")) { return; }
+            Task.Run(() => { 
+                if (!DataBase.IsTableExist("movie")) { return; }
+                AllVedioCount = DataBase.SelectCountBySql("");
+                FavoriteVedioCount = DataBase.SelectCountBySql("where favorites>0 and favorites<=5");
+                VedioTypeACount = DataBase.SelectCountBySql("where vediotype=1");
+                VedioTypeBCount = DataBase.SelectCountBySql("where vediotype=2");
+                VedioTypeCCount = DataBase.SelectCountBySql("where vediotype=3");
 
-            stopwatch.Restart();
-            AllVedioCount = DataBase.SelectCountBySql("");
-            FavoriteVedioCount = DataBase.SelectCountBySql("where favorites>0 and favorites<=5");
-            VedioTypeACount = DataBase.SelectCountBySql("where vediotype=1");
-            VedioTypeBCount = DataBase.SelectCountBySql("where vediotype=2");
-            VedioTypeCCount = DataBase.SelectCountBySql("where vediotype=3");
-
-            string date1 = DateTime.Now.AddDays(-1 * Properties.Settings.Default.RecentDays).Date.ToString("yyyy-MM-dd");
-            string date2 = DateTime.Now.ToString("yyyy-MM-dd");
-            RecentVedioCount = DataBase.SelectCountBySql($"WHERE scandate BETWEEN '{date1}' AND '{date2}'");
-            stopwatch.Stop();
-            //Console.WriteLine($"\n统计用时：{stopwatch.ElapsedMilliseconds} ms");
+                string date1 = DateTime.Now.AddDays(-1 * Properties.Settings.Default.RecentDays).Date.ToString("yyyy-MM-dd");
+                string date2 = DateTime.Now.ToString("yyyy-MM-dd");
+                RecentVedioCount = DataBase.SelectCountBySql($"WHERE scandate BETWEEN '{date1}' AND '{date2}'");
+            });
         }
 
 

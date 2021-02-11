@@ -1281,7 +1281,7 @@
                                             </Border>
 
 
-                                            <Button Visibility="Visible" Click="Test" Content="Test" />
+                                            <Button Visibility="Collapsed" Click="Test" Content="Test" />
 
                                         </StackPanel>
 
