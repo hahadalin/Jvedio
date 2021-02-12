@@ -1883,7 +1883,7 @@ namespace Jvedio.ViewModel
                 if (string.IsNullOrEmpty(fanhao)) searchContent = FormatSearch;
                 else searchContent = fanhao;
 
-                TextType = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.ID + searchContent;
+                TextType = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.ID +" " + searchContent;
 
                 if (SearchInCurrent)
                     MovieList = oldMovieList.Where(arg => arg.id.IndexOf(searchContent) >= 0).ToList();
@@ -1895,7 +1895,7 @@ namespace Jvedio.ViewModel
 
             else if (AllSearchType == MySearchType.名称)
             {
-                TextType = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.Title + searchContent;
+                TextType = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.Title + " " + searchContent;
                 if (SearchInCurrent)
                     MovieList = oldMovieList.Where(arg => arg.title.IndexOf(searchContent) >= 0).ToList();
                 else
@@ -1904,7 +1904,7 @@ namespace Jvedio.ViewModel
 
             else if (AllSearchType == MySearchType.演员)
             {
-                TextType = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.Actor + searchContent;
+                TextType = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.Actor + " " + searchContent;
                 if (SearchInCurrent)
                     MovieList = oldMovieList.Where(arg => arg.actor.IndexOf(searchContent) >= 0).ToList();
                 else
@@ -1932,6 +1932,7 @@ namespace Jvedio.ViewModel
         public void ExecutiveSqlCommand(int sideIndex, string textType, string sql, string dbName = "")
         {
             IsLoadingMovie = true;
+            TabSelectedIndex = 0;
             Dictionary<string, string> sqlInfo = new Dictionary<string, string>
             {
                 { "SideIndex", sideIndex.ToString() },
@@ -2143,37 +2144,38 @@ namespace Jvedio.ViewModel
 
 
         //根据视频类型选择演员
-        public void GetMoviebyActressAndVetioType(Actress actress)
+        public async Task<bool> AsyncGetMoviebyActress(Actress actress)
         {
-            Statistic();
-            List<Movie> movies;
-            if (actress.id == "")
-            {
-                if (ClassifyVedioType == 0) { movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actor like '%{actress.name}%'"); }
-                else { movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actor like '%{actress.name}%' and vediotype={(int)ClassifyVedioType}"); }
-            }
-            else
-            {
-                if (ClassifyVedioType == 0) { movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actorid like '%{actress.id}%'"); }
-                else { movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actorid like '%{actress.id}%' and vediotype={(int)ClassifyVedioType}"); }
-            }
-
-
-            MovieList = new List<Movie>();
-            if (movies != null || movies.Count > 0)
-            {
-                movies.ForEach(arg =>
+            return await Task.Run(() => {
+                Statistic();
+                List<Movie> movies;
+                if (actress.id == "")
                 {
-                    try { if (arg.actor.Split(actorSplitDict[arg.vediotype]).Any(m => m.ToUpper() == actress.name.ToUpper())) MovieList.Add(arg); }
-                    catch (Exception e)
+                    if (ClassifyVedioType == 0) { movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actor like '%{actress.name}%'"); }
+                    else { movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actor like '%{actress.name}%' and vediotype={(int)ClassifyVedioType}"); }
+                }
+                else
+                {
+                    if (ClassifyVedioType == 0) { movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actorid like '%{actress.id}%'"); }
+                    else { movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actorid like '%{actress.id}%' and vediotype={(int)ClassifyVedioType}"); }
+                }
+
+
+                MovieList = new List<Movie>();
+                if (movies != null || movies.Count > 0)
+                {
+                    foreach (var item in movies)
                     {
-                        Logger.LogE(e);
+                        try { if (item.actor.Split(actorSplitDict[item.vediotype]).Any(m => m.ToUpper() == actress.name.ToUpper())) MovieList.Add(item); }
+                        catch (Exception e)
+                        {
+                            Logger.LogE(e);
+                        }
                     }
-                });
-
-            }
-            CurrentPage = 1;
-
+                }
+                CurrentPage = 1;
+                return true;
+            });
         }
 
 

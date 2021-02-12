@@ -241,7 +241,7 @@
     </Compile>
     <Compile Include="Utils\BaseClass.cs" />
     <Compile Include="Utils\Converter.cs" />
-    <Compile Include="Utils\CreateSample.cs" />
+    <Compile Include="Utils\SampleMovies.cs" />
     <Compile Include="Utils\Encrypt\Encrypt.cs" />
     <Compile Include="Utils\FileProcess\FileProcess.cs" />
     <Compile Include="Utils\GlobalMethod.cs" />

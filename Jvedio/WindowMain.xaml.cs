@@ -1582,7 +1582,7 @@ namespace Jvedio
             }
         }
 
-        public void ShowSameActor(object sender, MouseButtonEventArgs e)
+        public async void ShowSameActor(object sender, MouseButtonEventArgs e)
         {
             Image image = sender as Image;
             StackPanel stackPanel = image.Parent as StackPanel;
@@ -1606,23 +1606,15 @@ namespace Jvedio
             }
             else
             {
-                Actress actress = new Actress();
-                foreach (Actress item in vieModel.ActorList)
-                {
-                    if (item.name == name)
-                    {
-                        actress.name = name;
-                        actress.smallimage = item.smallimage;
-                        actress = DataBase.SelectInfoFromActress(actress);
-                        break;
-                    }
-                }
+                vieModel.ActorInfoGrid = Visibility.Visible;
+                vieModel.IsLoadingMovie = true;
+                vieModel.TabSelectedIndex = 0;
+                var currentActress = vieModel.ActorList.Where(arg => arg.name == name).First();
+                Actress actress = DataBase.SelectInfoFromActress(currentActress);
                 actress.id = "";//不按照 id 选取演员
-                vieModel.GetMoviebyActressAndVetioType(actress);
+                await vieModel.AsyncGetMoviebyActress(actress);
                 vieModel.Actress = actress;
-
                 vieModel.AsyncFlipOver();
-                vieModel.ActorInfoGrid  = Visibility.Visible;
                 vieModel.TextType = actress.name;
             }
         }
@@ -4718,7 +4710,7 @@ namespace Jvedio
 
         private void Test(object sender, RoutedEventArgs e)
         {
-            new CreateSample(50000).Create();
+            new SampleMovies(50000).Create();
         }
 
 
