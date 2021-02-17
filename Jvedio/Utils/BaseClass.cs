@@ -10,11 +10,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
+
+
+
 
 
 
@@ -126,6 +131,8 @@ namespace Jvedio
         public string smallimageurl { get; set; }
         public string bigimageurl { get; set; }
         public string extraimageurl { get; set; }
+
+        public Uri GifUri { get; set; }
 
 
         private BitmapSource _smallimage;

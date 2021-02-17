@@ -1524,4 +1524,7 @@
   <data name="DragFileInOr" xml:space="preserve">
     <value>拖入文件夹与视频或</value>
   </data>
+  <data name="Size" xml:space="preserve">
+    <value>大小</value>
+  </data>
 </root>

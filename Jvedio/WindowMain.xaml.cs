@@ -446,8 +446,9 @@ namespace Jvedio
                         vieModel.TotalCount = vieModel.FilterMovieList.Count;
                         if (Properties.Settings.Default.EditMode) SetSelected();
                         if (Properties.Settings.Default.ShowImageMode == "2") ImageSlideTimer.Start();//0.5s后开始展示预览图
+                        if (Properties.Settings.Default.ShowImageMode == "3") vieModel.LoadGif();
+
                         SetLoadingStatus(false);
-                        Console.WriteLine("加载影片完成");
                     }, DispatcherPriority.ContextIdle, null);
             };
 
@@ -468,6 +469,10 @@ namespace Jvedio
             });
 
         }
+
+
+
+
 
         public void SetLoadingStatus(bool loading)
         {
@@ -1962,6 +1967,12 @@ namespace Jvedio
             {
                 vieModel.ShowDetailsData();
             }
+            else if (sortindex == 3)
+            {
+                //GIF
+                vieModel.LoadGif();
+                
+            }
             else
             {
 
@@ -1973,6 +1984,8 @@ namespace Jvedio
                 Properties.Settings.Default.GlobalImageWidth = Properties.Settings.Default.BigImage_Width;
             else if (sortindex == 2)
                 Properties.Settings.Default.GlobalImageWidth = Properties.Settings.Default.ExtraImage_Width;
+            else if (sortindex == 3)
+                Properties.Settings.Default.GlobalImageWidth = Properties.Settings.Default.GifImage_Width;
         }
 
 
@@ -2042,6 +2055,79 @@ namespace Jvedio
 
             }
 
+            //查看第一个
+
+            //for (int i = 0; i < MovieItemsControl.Items.Count; i++)
+            //{
+            //if(MovieItemsControl.Items!=null && MovieItemsControl.Items.Count >= 1)
+            //{
+            //    WrapPanel wrapPanel = GetItemsPanel(MovieItemsControl);
+            //    Grid grid = wrapPanel.Children[0] as Grid;
+            //    if (wrapPanel != null && grid!=null)
+            //    {
+            //        Point point = grid.TranslatePoint(new Point(0, 0), wrapPanel);
+            //        var size = grid.DesiredSize;
+            //        Console.WriteLine(point.X);
+            //        Console.WriteLine(point.Y);
+            //        Console.WriteLine(size.Height);
+            //        Console.WriteLine(size.Width);
+            //    }
+            //}
+            //for (int i = 0; i < MovieItemsControl.Items.Count; i++)
+            //{
+
+            //    ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[i]);
+            //    Grid grid = FindElementByName<Grid>(c, "MovieGrid");
+            //    if (grid != null)
+            //    {
+            //        WrapPanel wrapPanel = GetItemsPanel(MovieItemsControl);
+            //        if (wrapPanel != null )
+            //        {
+            //            Point point = grid.TranslatePoint(new Point(0, 0), wrapPanel);
+            //            var size = grid.DesiredSize;
+            //            Console.WriteLine("X="+point.X);
+            //            Console.WriteLine("Y=" + point.Y);
+            //            Console.WriteLine("Height=" + size.Height);
+            //            Console.WriteLine("Width=" + size.Width);
+            //        }
+            //    }
+            //    if (i == 1) break;
+
+            //}
+
+
+            //}
+
+
+        }
+
+        private WrapPanel GetItemsPanel(DependencyObject itemsControl)
+        {
+            ItemsPresenter itemsPresenter = GetVisualChild<ItemsPresenter>(itemsControl);
+            WrapPanel itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as WrapPanel;
+            return itemsPanel;
+        }
+
+
+        public  T GetVisualChild<T>(DependencyObject parent) where T : Visual
+        {
+            T child = default(T);
+
+            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < numVisuals; i++)
+            {
+                Visual v = (Visual)VisualTreeHelper.GetChild(parent, i);
+                child = v as T;
+                if (child == null)
+                {
+                    child = GetVisualChild<T>(v);
+                }
+                if (child != null)
+                {
+                    break;
+                }
+            }
+            return child;
         }
 
         public bool IsUserVisible(FrameworkElement element, FrameworkElement container)
@@ -2387,6 +2473,17 @@ namespace Jvedio
                 vieModel.CmdVisibility = Visibility.Visible;
                 foreach (Movie movie in vieModel.SelectedMovie)
                 {
+                    if (Properties.Settings.Default.SkipExistGif && File.Exists(System.IO.Path.Combine(BasePicPath, "GIF", $"{movie.id}.gif")))
+                    {
+                        App.Current.Dispatcher.Invoke((Action)delegate
+                        {
+                            vieModel.CmdText += $"{movie.id} {Jvedio.Language.Resources.Skip}\n";
+                        });
+
+                        continue;
+                    }
+                        
+
                     bool success = false;
                     string message = "";
                     ScreenShot screenShot = new ScreenShot();
@@ -2396,7 +2493,6 @@ namespace Jvedio
                         {
                             Console.WriteLine(((ScreenShotEventArgs)ev).FFmpegCommand);
                             vieModel.CmdText+=$"{Jvedio.Language.Resources.SuccessGifTo} ： {((ScreenShotEventArgs)ev).FilePath}\n";
-                            //cmdTextBox.ScrollToEnd();
                         });
                     };
                     (success, message) = await screenShot.AsyncGenrateGif(movie);
@@ -3989,7 +4085,7 @@ namespace Jvedio
             BeginCheckurlThread();
             ReadRecentWatchedFromConfig();//显示最近播放
             vieModel.AddToRecentWatch("");
-            vieModel.GetFilterInfo();
+            //vieModel.GetFilterInfo();
 
             //设置排序类型
             var radioButtons = SortStackPanel.Children.OfType<RadioButton>().ToList();
@@ -4175,7 +4271,7 @@ namespace Jvedio
                 //切换数据库
                 vieModel.IsRefresh = true;
                 vieModel.Reset();
-                vieModel.GetFilterInfo();
+                //vieModel.GetFilterInfo();
             }
         }
 
@@ -4195,15 +4291,14 @@ namespace Jvedio
                 FilterGrid.BeginAnimation(FrameworkElement.MaxHeightProperty, doubleAnimation1);
                 await Task.Delay(300);
                 FilterGrid.Visibility = Visibility.Collapsed;
-
             }
             else
             {
+                if(vieModel.Filters==null) vieModel.GetFilterInfo();
                 FilterGrid.Visibility = Visibility.Visible;
                 DoubleAnimation doubleAnimation1 = new DoubleAnimation(0, 600, new Duration(TimeSpan.FromMilliseconds(300)),FillBehavior.HoldEnd);
                 FilterGrid.BeginAnimation(FrameworkElement.MaxHeightProperty, doubleAnimation1);
                 await Task.Delay(300);
-
             }
 
         }
@@ -4401,9 +4496,11 @@ namespace Jvedio
                 Properties.Settings.Default.ExtraImage_Width = Properties.Settings.Default.GlobalImageWidth;
                 Properties.Settings.Default.ExtraImage_Height = (int)(Properties.Settings.Default.GlobalImageWidth * 540f / 800f);
             }
-
-            //Console.WriteLine(Properties.Settings.Default.BigImage_Height);
-            //Console.WriteLine(Properties.Settings.Default.BigImage_Width);
+            else if (Properties.Settings.Default.ShowImageMode == "3")
+            {
+                Properties.Settings.Default.GifImage_Width = Properties.Settings.Default.GlobalImageWidth;
+                Properties.Settings.Default.GifImage_Height = (int)(Properties.Settings.Default.GlobalImageWidth * 540f / 800f);
+            }
             Properties.Settings.Default.Save();
         }
 
@@ -4977,7 +5074,12 @@ namespace Jvedio
                 ToggleButton tb = c.ContentTemplate.FindName("CheckBox", c) as ToggleButton;
                 if (tb != null) tb.IsChecked = false;
             }
-
+            for (int i = 0; i < LabelFilterItemsControl.Items.Count; i++)
+            {
+                ContentPresenter c = (ContentPresenter)LabelFilterItemsControl.ItemContainerGenerator.ContainerFromItem(LabelFilterItemsControl.Items[i]);
+                ToggleButton tb = c.ContentTemplate.FindName("CheckBox", c) as ToggleButton;
+                if (tb != null) tb.IsChecked = false;
+            }
 
         }
 
@@ -5101,19 +5203,33 @@ namespace Jvedio
             return result;
         }
 
-
-
-        public ObservableCollection<string> tempList;
-        private void Genre_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private async void Genre_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (vieModel.Filters == null || vieModel.Filters.Count < 1) return;
             vieModel.IsRefresh = false;
-            foreach (var item in vieModel.GetAllGenre())
+            vieModel.Genre = new ObservableCollection<string>();
+            GenreItemsControl.ItemsSource = null;
+            GenreItemsControl.ItemsSource = vieModel.Genre;
+            foreach (var item in vieModel.Filters[1])
             {
                 if (vieModel.IsRefresh) break;
-                if (!vieModel.Genre.Contains(item))
-                    this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadGenreItem), item);
+                await this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadGenreItem), item);
             }
 
+        }
+
+        private async void Actor_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (vieModel.Filters == null || vieModel.Filters.Count < 2) return;
+            vieModel.IsRefresh = false;
+            vieModel.Actor = new ObservableCollection<string>();
+            ActorFilterItemsControl.ItemsSource = null;
+            ActorFilterItemsControl.ItemsSource = vieModel.Actor;
+            foreach (var item in vieModel.Filters[2])
+            {
+                if (vieModel.IsRefresh) break;
+                await this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadActorItem), item);
+            }
         }
 
         private delegate void LoadItemDelegate(string content);
@@ -5129,16 +5245,7 @@ namespace Jvedio
         }
 
 
-        private void Actor_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            vieModel.IsRefresh = false;
-            foreach (var item in vieModel.GetAllActor())
-            {
-                if (vieModel.IsRefresh) break;
-                if (!vieModel.Actor.Contains(item))
-                    this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadActorItem), item);
-            }
-        }
+
 
 
 

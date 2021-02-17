@@ -291,7 +291,17 @@ namespace Jvedio.ViewModel
             }
         }
 
+        private bool _IsLoadingFilter = true;
 
+        public bool IsLoadingFilter
+        {
+            get { return _IsLoadingFilter; }
+            set
+            {
+                _IsLoadingFilter = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
         private bool _IsLoadingMovie = true;
@@ -1182,9 +1192,11 @@ namespace Jvedio.ViewModel
             }
         }
 
+        public List<List<string>> Filters ;
+
         public async void GetFilterInfo()
         {
-            IsLoadingMovie = true;
+            IsLoadingFilter = true;
             Year = new ObservableCollection<string>();
             Genre = new ObservableCollection<string>();
             Actor = new ObservableCollection<string>();
@@ -1192,42 +1204,32 @@ namespace Jvedio.ViewModel
             Runtime = new ObservableCollection<string>();
             FileSize = new ObservableCollection<string>();
             Rating = new ObservableCollection<string>();
-            var models = await DataBase.GetAllFilter();
-            Year.AddRange(models[0]);
-            Runtime.AddRange(models[4]);
-            FileSize.AddRange(models[5]);
-            Rating.AddRange(models[6]);
-            Genre.AddRange(models[1].Take(30));
-            Actor.AddRange(models[2].Take(30));
-            Label.AddRange(models[3]);
+            Filters = await DataBase.GetAllFilter();
+            Year.AddRange(Filters[0]);
+            Genre.AddRange(Filters[1].Take(30));
+            Actor.AddRange(Filters[2].Take(30));
+            Label.AddRange(Filters[3]);
+            Runtime.AddRange(Filters[4]);
+            FileSize.AddRange(Filters[5]);
+            Rating.AddRange(Filters[6]);
+            IsLoadingFilter = false;
+
+
+            Main main = GetWindowByName("Main") as Main;
+            main.GenreItemsControl.ItemsSource = null;
+            main.GenreItemsControl.ItemsSource = Genre;
+
+            main.ActorFilterItemsControl.ItemsSource = null;
+            main.ActorFilterItemsControl.ItemsSource = Actor;
+
+            main.LabelFilterItemsControl.ItemsSource = null;
+            main.LabelFilterItemsControl.ItemsSource = Label;
         }
 
 
-        //TODO
-        public ObservableCollection<string> GetAllGenre()
-        {
-            ObservableCollection<string> result = new ObservableCollection<string>();
-            //var models = await DataBase.GetAllFilter();
-            //result.AddRange(models[1]);
-            return result;
-        }
-
-        public ObservableCollection<string> GetAllActor()
-        {
-            ObservableCollection<string> result = new ObservableCollection<string>();
-            //var models = DataBase.GetAllFilter();
-            //result.AddRange(models[2]);
-            return result;
-
-        }
 
         #endregion
 
-
-        public void ShowExists()
-        {
-
-        }
 
 
         public async void BeginSearch()
@@ -1812,6 +1814,22 @@ namespace Jvedio.ViewModel
 
 
 
+
+        public void LoadGif()
+        {
+            if (CurrentMovieList == null) return;
+            for (int i = 0; i < CurrentMovieList.Count; i++)
+            {
+                Movie movie = CurrentMovieList[i];
+                string gifpath = Path.Combine(BasePicPath, "GIF", $"{movie.id}.gif");
+                if (File.Exists(gifpath))
+                {
+                    movie.GifUri = new Uri("pack://siteoforigin:,,,/" +gifpath);
+                    CurrentMovieList[i] = null;
+                    CurrentMovieList[i] = movie;
+                }
+            }
+        }
 
 
 

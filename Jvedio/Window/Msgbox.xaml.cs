@@ -22,11 +22,28 @@ namespace Jvedio
 
             TextBlock.Text = text;
             this.Owner = window;
-            this.Left = window.Left + 15;
-            this.Top = window.Top + 15;
-            this.Height = window.Height - 30;
-            this.Width = window.Width - 30;
 
+            if (window.Height == System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height || window.Width == System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width)
+            {
+                this.Left = window.Left;
+                this.Top = window.Top;
+                this.Height = window.Height;
+                this.Width = window.Width;
+            }
+            else if (window.WindowState == WindowState.Maximized)
+            {
+                this.Left = 0;
+                this.Top = 0;
+                this.Height = SystemParameters.PrimaryScreenHeight;
+                this.Width = SystemParameters.PrimaryScreenWidth;
+            }
+            else
+            {
+                this.Left = window.Left + 15;
+                this.Top = window.Top + 15;
+                this.Height = window.Height - 30;
+                this.Width = window.Width - 30;
+            }
             if (window.WindowState == WindowState.Minimized) window.WindowState = WindowState.Normal;
             window.Activate();
             window.Focus();

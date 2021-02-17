@@ -3409,6 +3409,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 大小 的本地化字符串。
+        /// </summary>
+        public static string Size {
+            get {
+                return ResourceManager.GetString("Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 皮肤 的本地化字符串。
         /// </summary>
         public static string Skin {

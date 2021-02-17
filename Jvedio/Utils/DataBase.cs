@@ -232,7 +232,7 @@ namespace Jvedio
                     else
                         cmd.CommandText = $"SELECT {field} FROM movie where vediotype={vediotype}";
 
-                    Console.WriteLine(cmd.CommandText);
+                    //Console.WriteLine(cmd.CommandText);
 
                     char[] splitChar = { ' ' };
                     if (splitChar != null) splitChar = (char[])splitchar;

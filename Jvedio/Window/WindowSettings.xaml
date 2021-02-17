@@ -628,6 +628,8 @@
 
                     </StackPanel>
 
+                    <Label Content="{x:Static lang:Resources.ScreenShot}" Style="{StaticResource LabelPrimary}" HorizontalAlignment="Left" Margin="20 0"/>
+
 
                     <StackPanel Orientation="Horizontal" Margin="20 5">
                         <Slider x:Name="ScreenshotNumSlider" Value="{Binding ScreenShotNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Minimum="1" Maximum="30" SmallChange="1" LargeChange="2" TickFrequency="1" Width="200" VerticalAlignment="Center"/>
@@ -648,8 +650,9 @@
                         <TextBlock  Text ="{x:Static lang:Resources.SkipEnd}" Style="{StaticResource BaseTextBlock}" />
                     </StackPanel>
 
+                    <Label Content="GIF" Style="{StaticResource LabelPrimary}" HorizontalAlignment="Left" Margin="20 0"/>
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 5">
-                        <Label Content="GIF" Style="{StaticResource InfoLabel}"    />
+                        <Label Content="{x:Static lang:Resources.Resolution}" Style="{StaticResource InfoLabel}"    />
                         <Slider x:Name="GifSlider1"  IsSnapToTickEnabled="True" Width="200" VerticalAlignment="Center" Margin="5 0" Value="{Binding Gif_Width, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="1980" Minimum="50" SmallChange="1" LargeChange="10" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
                         <TextBlock Text="{Binding Value, ElementName=GifSlider1,StringFormat={}{0} px}" Style="{StaticResource BaseTextBlock}"  />
                         <Slider x:Name="GifSlider2" IsEnabled="{Binding Gif_AutoHeight, Mode=TwoWay, Source={x:Static p:Settings.Default},Converter={StaticResource OppositeBooleanConverter}}"  IsSnapToTickEnabled="True" Width="200" VerticalAlignment="Center" Margin="5 0" Value="{Binding Gif_Height, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="1080" Minimum="50" SmallChange="1" LargeChange="10" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
@@ -660,10 +663,12 @@
                     </WrapPanel>
 
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 5">
-                        <Label Content="GIF时长" Style="{StaticResource InfoLabel}"    />
+                        <Label Content="{x:Static lang:Resources.Duration}" Style="{StaticResource InfoLabel}"    />
                         <Slider x:Name="GifDurationSlider1"  IsSnapToTickEnabled="True" Width="200" VerticalAlignment="Center" Margin="5 0" Value="{Binding Gif_Duration, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="20" Minimum="1" SmallChange="1" LargeChange="2" TickFrequency="1" Cursor="Hand" TickPlacement="None"  />
                         <TextBlock Text="{Binding Value, ElementName=GifDurationSlider1,StringFormat={}{0} s}" Style="{StaticResource BaseTextBlock}"  />
                     </WrapPanel>
+
+                    <CheckBox IsChecked="{Binding SkipExistGif, Mode=TwoWay, Source={x:Static p:Settings.Default}}" HorizontalAlignment="Left" Margin="20 10"  Content="{x:Static lang:Resources.SkipExistGif}" />
 
 
                     <WrapPanel Visibility="Collapsed" Orientation="Horizontal" Margin="20 10">

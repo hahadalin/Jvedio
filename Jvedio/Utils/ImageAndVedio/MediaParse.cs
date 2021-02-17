@@ -70,10 +70,10 @@ namespace Jvedio
                 {
                         result[i] = SecondToDuration(Properties.Settings.Default.ScreenShotIgnoreStart * 60 + splitLength * i);//加上跳过开头的部分
                 }
-                foreach (var item in result)
-                {
-                    Console.WriteLine(item);
-                }
+                //foreach (var item in result)
+                //{
+                //    Console.WriteLine(item);
+                //}
                 return result;
             }
 

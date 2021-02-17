@@ -1521,4 +1521,7 @@
   <data name="CopyToDownload" xml:space="preserve">
     <value>Please copy the download address to download</value>
   </data>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
 </root>

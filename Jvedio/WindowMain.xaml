@@ -1281,7 +1281,7 @@
                                             </Border>
 
 
-                                            <Button Visibility="Visible" Click="Test" Content="Test" />
+                                            <Button Visibility="Collapsed" Click="Test" Content="Test" />
 
                                         </StackPanel>
 
@@ -1296,7 +1296,7 @@
                                                     <RadioButton  Content="{x:Static lang:Resources.Thumbnail}" Style="{StaticResource RadioButtonStyle}"  GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                     <RadioButton      Content="{x:Static lang:Resources.Poster}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                     <RadioButton     Content="{x:Static lang:Resources.Preview}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                    <RadioButton Visibility="Collapsed"      Content="Gif" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                    <RadioButton     Content="Gif" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                     <RadioButton  Visibility="Collapsed"        Content="{x:Static lang:Resources.ListView}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                 </StackPanel>
                                             </Grid>
@@ -1347,7 +1347,7 @@
 
 
 
-                                    <Grid  x:Name="FilterGrid"  Visibility="Collapsed"   Grid.Row="1" HorizontalAlignment="Stretch"  Background="{DynamicResource BackgroundTitle}"  >
+                                    <Grid  x:Name="FilterGrid"  Visibility="Collapsed" IsEnabled="{Binding IsLoadingFilter,Converter={StaticResource OppositeBooleanConverter},FallbackValue=True}"   Grid.Row="1" HorizontalAlignment="Stretch"  Background="{DynamicResource BackgroundTitle}"  >
 
 
                                         <Grid.RowDefinitions>
@@ -1355,6 +1355,36 @@
                                             <RowDefinition Height="auto"/>
                                             <RowDefinition Height="auto"/>
                                         </Grid.RowDefinitions>
+                                        <!--等待-->
+                                        <Grid  Visibility="{Binding IsLoadingFilter,Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}"  Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <Grid MinWidth="150" MaxWidth="250"   >
+                                                <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
+                                                    <Border.Effect>
+                                                        <BlurEffect Radius="4" KernelType="Box"  RenderingBias="Quality"/>
+                                                    </Border.Effect>
+                                                </Border>
+
+                                                <Border  CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5"  >
+
+                                                    <Grid Margin="5">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="*"/>
+                                                            <RowDefinition Height="auto"/>
+                                                        </Grid.RowDefinitions>
+                                                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"  >
+                                                            <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
+                                                            <TextBox Background="Transparent" Margin="5" BorderThickness="0" MaxHeight="300" Grid.Row="0"  HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Loading}" />
+
+                                                        </StackPanel >
+
+
+                                                    </Grid>
+
+
+                                                </Border>
+                                            </Grid>
+
+                                        </Grid>
 
                                         <Grid Grid.Row="0">
                                             <StackPanel  x:Name="FilterStackPanel"  >
@@ -1463,7 +1493,7 @@
 
                                                 <WrapPanel >
                                                     <TextBlock Text="{x:Static lang:Resources.MovieGenre}" Style="{StaticResource BaseFilterTextBlock}"/>
-                                                    <TextBlock Cursor="Hand" PreviewMouseLeftButtonUp="Genre_PreviewMouseLeftButtonUp" Text="{x:Static lang:Resources.ShowAll}" Style="{StaticResource BaseFilterTextBlock}" TextDecorations="UnderLine" Foreground="BlueViolet"/>
+                                                    <TextBlock Cursor="Hand" PreviewMouseLeftButtonUp="Genre_PreviewMouseLeftButtonUp" Text="{x:Static lang:Resources.ShowAll}"   Style="{StaticResource BaseFilterTextBlock}" TextDecorations="UnderLine" Foreground="#326CF3"/>
                                                     <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
                                                         <ItemsControl x:Name="GenreItemsControl"  ItemsSource="{Binding Genre}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                                                             <ItemsControl.ItemsPanel>
@@ -1489,7 +1519,7 @@
 
                                                 <WrapPanel >
                                                     <TextBlock Text="{x:Static lang:Resources.MovieActors}" Style="{StaticResource BaseFilterTextBlock}"/>
-                                                    <TextBlock Text="{x:Static lang:Resources.ShowAll}" Cursor="Hand"  PreviewMouseLeftButtonUp="Actor_PreviewMouseLeftButtonUp"  Style="{StaticResource BaseFilterTextBlock}" TextDecorations="UnderLine" Foreground="BlueViolet"/>
+                                                    <TextBlock Text="{x:Static lang:Resources.ShowAll}" Cursor="Hand"  PreviewMouseLeftButtonUp="Actor_PreviewMouseLeftButtonUp"  Style="{StaticResource BaseFilterTextBlock}" TextDecorations="UnderLine" Foreground="#326CF3"/>
                                                     <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
 
                                                         <ItemsControl x:Name="ActorFilterItemsControl"  ItemsSource="{Binding Actor}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
@@ -1756,33 +1786,20 @@
 
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate  >
-                                                            <!--影片加载/卸载动画-->
-                                                            <DataTemplate.Triggers >
+                                                            <!--影片加载动画-->
+                                                            <!--<DataTemplate.Triggers >
                                                                 <EventTrigger   RoutedEvent="FrameworkElement.Loaded">
                                                                     <BeginStoryboard  >
-                                                                        <Storyboard   AutoReverse="False" >
-                                                                            <DoubleAnimationUsingKeyFrames FillBehavior="Stop"    Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                                                <EasingDoubleKeyFrame KeyTime="0" Value="0" />
-                                                                                <EasingDoubleKeyFrame x:Name="EasingDoubleKeyFrame_2"  KeyTime="0:0:0.3" Value="1" />
-                                                                            </DoubleAnimationUsingKeyFrames>
+                                                                        <Storyboard    >
+                                                                            <DoubleAnimation FillBehavior="Stop" From="0" To="1" Duration="0:0:0.3"    Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)" />
                                                                         </Storyboard>
                                                                     </BeginStoryboard>
                                                                 </EventTrigger>
-                                                                <EventTrigger   RoutedEvent="FrameworkElement.Unloaded">
-                                                                    <BeginStoryboard  >
-                                                                        <Storyboard   AutoReverse="False" >
-                                                                            <DoubleAnimationUsingKeyFrames  FillBehavior="Stop"      Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                                                <EasingDoubleKeyFrame KeyTime="0" Value="1" />
-                                                                                <EasingDoubleKeyFrame   KeyTime="0:0:0.3" Value="0" />
-                                                                            </DoubleAnimationUsingKeyFrames>
-                                                                        </Storyboard>
-                                                                    </BeginStoryboard>
-                                                                </EventTrigger>
-                                                            </DataTemplate.Triggers>
+                                                            </DataTemplate.Triggers>-->
 
                                                             <!--自定义影片展示格式-->
-                                                            <WrapPanel Name="MovieWrapPanel"  VirtualizingPanel.IsVirtualizing="True"  >
-                                                                <Grid Margin="5">
+                                                            <WrapPanel Name="MovieWrapPanel"    >
+                                                                <Grid Margin="5" Name="MovieGrid">
                                                                     <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"   >
                                                                         <Border.Effect>
                                                                             <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
@@ -1859,6 +1876,11 @@
                                                                                     </Image.RenderTransform>
                                                                                 </Image>
                                                                             </Canvas>
+                                                                            
+                                                                            <!--GIF图-->
+
+                                                                            <hc:GifImage Uri="{Binding GifUri}" Height="{Binding Path=GifImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=GifImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" />
+
 
                                                                             <!--分段视频-->
                                                                             <Grid  Panel.ZIndex="3" Visibility="{Binding hassubsection,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}"  >

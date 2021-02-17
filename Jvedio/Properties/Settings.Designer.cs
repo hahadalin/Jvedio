@@ -2254,5 +2254,41 @@ namespace Jvedio.Properties {
                 this["Gif_Duration"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        public int GifImage_Width {
+            get {
+                return ((int)(this["GifImage_Width"]));
+            }
+            set {
+                this["GifImage_Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public int GifImage_Height {
+            get {
+                return ((int)(this["GifImage_Height"]));
+            }
+            set {
+                this["GifImage_Height"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SkipExistGif {
+            get {
+                return ((bool)(this["SkipExistGif"]));
+            }
+            set {
+                this["SkipExistGif"] = value;
+            }
+        }
     }
 }

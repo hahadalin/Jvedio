@@ -47,7 +47,7 @@ namespace Jvedio.Utils
                         visits = new Random(Guid.NewGuid().GetHashCode()).Next(0, 100),
                         title = GetSomeText(30, i),
                         runtime= new Random(Guid.NewGuid().GetHashCode()).Next(0, 300),
-                        rating = (float)(new Random(Guid.NewGuid().GetHashCode()).Next(0, 10))/10,
+                        rating = (float)(new Random(Guid.NewGuid().GetHashCode()).Next(0, 100))/10,
                         filesize =Math.Abs( 5 * 1024 * new Random(Guid.NewGuid().GetHashCode()).Next(0, 1024 * 1024)),
                         subsection = i % 100 == 0 ? "path1;path2" : "",
                         scandate = DateTime.Now.AddDays(-new Random(Guid.NewGuid().GetHashCode()).Next(-500,500)).ToString("yyyy-MM-dd HH:mm:ss"),

@@ -369,8 +369,6 @@ namespace Jvedio
 
                 string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t {duration} -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifPath}\"";
                 Console.WriteLine(str);
-
-
                 p.StandardInput.WriteLine(str + "&exit");
                 p.StandardInput.AutoFlush = true;
                 string output = p.StandardOutput.ReadToEnd();
@@ -442,14 +440,8 @@ namespace Jvedio
         {
             bool result = true;
             string message = "";
-            string GifPath = "";
-
+            string GifPath = BasePicPath + "Gif\\" + movie.id + ".gif";
             if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = Jvedio.Language.Resources.Message_SetFFmpeg; return (result, message); }
-
-            int num = Properties.Settings.Default.ScreenShot_ThreadNum;
-                
-            GifPath = BasePicPath + "Gif\\" + movie.id +".gif";
-
             if (!Directory.Exists(BasePicPath + "Gif\\")) Directory.CreateDirectory(BasePicPath + "Gif\\");
 
             string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
