@@ -13,7 +13,31 @@ using static Jvedio.GlobalVariable;
 namespace Jvedio
 {
 
-    
+
+
+
+    public class IntToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null || parameter == null) return  Visibility.Collapsed;
+            else
+            {
+                int.TryParse(value.ToString(), out int idx);
+                int.TryParse(parameter.ToString(), out int p);
+                if (idx == p) return Visibility.Visible;
+                else return Visibility.Collapsed;
+            }
+
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+
+
+    }
+
     public class SmallerThicknessConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -23,7 +47,7 @@ namespace Jvedio
             {
                 int.TryParse(parameter.ToString(), out int t);
                 Thickness thickness = (Thickness)value;
-                if(thickness.Left + t<=0)
+                if (thickness.Left + t <= 0)
                     return new Thickness(0);
                 else
                     return new Thickness(thickness.Left + t);
@@ -77,14 +101,14 @@ namespace Jvedio
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || parameter==null) return 0;
+            if (value == null || parameter == null) return 0;
             double.TryParse(value.ToString(), out double width);
             double.TryParse(parameter.ToString(), out double w);
             if (width + w > 0)
                 return width + w;
             else
                 return 0;
-            
+
 
         }
 
@@ -97,13 +121,13 @@ namespace Jvedio
 
     }
 
-    
-            public class ShowFilterConverter : IValueConverter
+
+    public class ShowFilterConverter : IValueConverter
     {
         //数字转换为选中项的地址
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((bool)value) return 600; 
+            if ((bool)value) return 600;
             else return 0;
         }
 
@@ -546,7 +570,7 @@ namespace Jvedio
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value == null || parameter==null) return 0;
+            if (value == null || parameter == null) return 0;
             int.TryParse(value.ToString(), out int w1);
             int.TryParse(parameter.ToString(), out int w2);
             if (w1 - w2 < 0) return 0;

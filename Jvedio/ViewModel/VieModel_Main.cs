@@ -218,6 +218,8 @@ namespace Jvedio.ViewModel
         }
 
 
+
+
         private bool _ShowSearchPopup = false;
 
         public bool ShowSearchPopup
@@ -1192,7 +1194,7 @@ namespace Jvedio.ViewModel
             }
         }
 
-        public List<List<string>> Filters ;
+        public List<List<string>> Filters;
 
         public async void GetFilterInfo()
         {
@@ -1329,70 +1331,71 @@ namespace Jvedio.ViewModel
         //TODO
         public async Task<bool> GetSearchCandidate(string Search)
         {
-            return await Task.Run(async () => { 
-
-            CurrentSearchCandidate = new ObservableCollection<string>();
-            if (Search == "") return false;
-
-            //提取出英文和数字
-            string extraSearch = "";
-            string number = Identify.GetNum(Search);
-            string eng = Identify.GetEng(Search);
-
-            Search = Search.Replace("%", "").Replace("'", "");
-            if (!string.IsNullOrEmpty(number)) extraSearch = eng + "-" + number;
-            List<Movie> movies = new List<Movie>();
-            if (AllSearchType == MySearchType.名称)
+            return await Task.Run(async () =>
             {
-                if (SearchInCurrent)
-                    movies = MovieList.Where(m => m.title.ToUpper().Contains(Search.ToUpper())).ToList();
-                else
-                    movies = DataBase.SelectMoviesBySql($"SELECT * from movie where title like '%{Search}%'");
 
-                foreach (Movie movie in movies)
-                {
-                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadSearchDelegate(LoadSearch), movie.title);
-                    if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
-                }
-            }
-            else if (AllSearchType == MySearchType.演员)
-            {
-                if (SearchInCurrent)
-                    movies = MovieList.Where(m => m.actor.ToUpper().Contains(Search.ToUpper())).ToList();
-                else
-                    movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actor like '%{Search}%'");
+                CurrentSearchCandidate = new ObservableCollection<string>();
+                if (Search == "") return false;
 
-                foreach (Movie movie in movies)
+                //提取出英文和数字
+                string extraSearch = "";
+                string number = Identify.GetNum(Search);
+                string eng = Identify.GetEng(Search);
+
+                Search = Search.Replace("%", "").Replace("'", "");
+                if (!string.IsNullOrEmpty(number)) extraSearch = eng + "-" + number;
+                List<Movie> movies = new List<Movie>();
+                if (AllSearchType == MySearchType.名称)
                 {
-                    string[] actor = movie.actor.Split(actorSplitDict[movie.vediotype]);
-                    foreach (var item in actor)
+                    if (SearchInCurrent)
+                        movies = MovieList.Where(m => m.title.ToUpper().Contains(Search.ToUpper())).ToList();
+                    else
+                        movies = DataBase.SelectMoviesBySql($"SELECT * from movie where title like '%{Search}%'");
+
+                    foreach (Movie movie in movies)
                     {
-                        if (!string.IsNullOrEmpty(item) & item.IndexOf(' ') < 0)
+                        await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadSearchDelegate(LoadSearch), movie.title);
+                        if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
+                    }
+                }
+                else if (AllSearchType == MySearchType.演员)
+                {
+                    if (SearchInCurrent)
+                        movies = MovieList.Where(m => m.actor.ToUpper().Contains(Search.ToUpper())).ToList();
+                    else
+                        movies = DataBase.SelectMoviesBySql($"SELECT * from movie where actor like '%{Search}%'");
+
+                    foreach (Movie movie in movies)
+                    {
+                        string[] actor = movie.actor.Split(actorSplitDict[movie.vediotype]);
+                        foreach (var item in actor)
                         {
-                            if (!CurrentSearchCandidate.Contains(item) & item.ToUpper().IndexOf(Search.ToUpper()) >= 0)
+                            if (!string.IsNullOrEmpty(item) & item.IndexOf(' ') < 0)
+                            {
+                                if (!CurrentSearchCandidate.Contains(item) & item.ToUpper().IndexOf(Search.ToUpper()) >= 0)
                                 {
                                     await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadSearchDelegate(LoadSearch), item);
                                 }
-                            if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
+                                if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
+                            }
                         }
+                        if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
                     }
-                    if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
                 }
-            }
-            else if (AllSearchType == MySearchType.识别码)
-            {
-                if (SearchInCurrent)
-                    movies = MovieList.Where(m => m.id.ToUpper().Contains(Search.ToUpper())).ToList();
-                else
-                    movies = DataBase.SelectMoviesBySql($"SELECT * from movie where id like '%{Search}%'");
-
-                if (movies.Count == 0 && extraSearch != "") movies = MovieList.Where(m => m.id.ToUpper().Contains(extraSearch.ToUpper())).ToList();
-                foreach (Movie movie in movies)
+                else if (AllSearchType == MySearchType.识别码)
                 {
-                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadSearchDelegate(LoadSearch), movie.id);
-                    if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
+                    if (SearchInCurrent)
+                        movies = MovieList.Where(m => m.id.ToUpper().Contains(Search.ToUpper())).ToList();
+                    else
+                        movies = DataBase.SelectMoviesBySql($"SELECT * from movie where id like '%{Search}%'");
+
+                    if (movies.Count == 0 && extraSearch != "") movies = MovieList.Where(m => m.id.ToUpper().Contains(extraSearch.ToUpper())).ToList();
+                    foreach (Movie movie in movies)
+                    {
+                        await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadSearchDelegate(LoadSearch), movie.id);
+                        if (CurrentSearchCandidate.Count >= Properties.Settings.Default.SearchCandidateMaxCount) break;
+                    }
                 }
-            }
                 return true;
 
             });
@@ -1514,6 +1517,7 @@ namespace Jvedio.ViewModel
             {
                 await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new RemoveItemDelegate(RemoveMovie), CurrentMovieList[i]);
             }
+            await DisposeMovieList(); //清除当前影片
             return true;
         }
 
@@ -1547,7 +1551,7 @@ namespace Jvedio.ViewModel
             if (ActorList == null) return false;
             Task.Run(async () =>
             {
-                 SetClassifyLoadingStatus(true);
+                SetClassifyLoadingStatus(true);
                 TotalActorPage = (int)Math.Ceiling((double)ActorList.Count / (double)Properties.Settings.Default.ActorDisplayNum);
                 int ActorDisplayNum = Properties.Settings.Default.ActorDisplayNum;
                 List<Actress> actresses = new List<Actress>();
@@ -1597,15 +1601,22 @@ namespace Jvedio.ViewModel
         }
 
 
-        public void DisposeMovieList(ObservableCollection<Movie> movies)
+        public async Task<bool> DisposeMovieList()
         {
-            if (movies == null) return;
-            for (int i = 0; i < movies.Count; i++)
+            if (CurrentMovieList == null) return false;
+            await App.Current.Dispatcher.BeginInvoke((Action)delegate
             {
-                movies[i].bigimage = null;
-                movies[i].smallimage = null;
+                Main main = GetWindowByName("Main") as Main;
+                main.DisposeGif("", true);
+            });
+            for (int i = 0; i < CurrentMovieList.Count; i++)
+            {
+                CurrentMovieList[i].bigimage = null;
+                CurrentMovieList[i].smallimage = null;
+
             }
             GC.Collect();
+            return true;
         }
 
 
@@ -1619,79 +1630,65 @@ namespace Jvedio.ViewModel
         public bool FlipOver()
         {
             TabSelectedIndex = 0;
-            GetLabelList();
-            if (Properties.Settings.Default.ShowImageMode == "4")
+            if (MovieList == null) return false;
+            App.Current.Dispatcher.Invoke((Action)delegate
             {
-                ShowDetailsData();
-            }
-            else
-            {
-                if (MovieList == null) return false;
-                App.Current.Dispatcher.Invoke((Action)delegate
+                ((Main)GetWindowByName("Main")).SetLoadingStatus(true);//正在加载影片
+                ((Main)GetWindowByName("Main")).MovieScrollViewer.ScrollToTop();//滚到顶部
+            });
+
+            Sort(); //排序
+
+            int number = 0;
+            if (FilterMovieList != null) number = FilterMovieList.Count;
+            FilterMovieList = FileProcess.FilterMovie(MovieList);   //筛选影片
+            if (FilterMovieList.Count < number) CurrentPage = 1;                // FilterMovieList 如果改变了，则回到第一页
+            Task.Run(async () =>
+           {
+               
+               await ClearCurrentMovieList();//动态清除当前影片
+
+               TotalPage = (int)Math.Ceiling((double)FilterMovieList.Count / Properties.Settings.Default.DisplayNumber);
+               int DisPlayNum = Properties.Settings.Default.DisplayNumber;
+               int FlowNum = Properties.Settings.Default.FlowNum;
+
+               Movies = new List<Movie>();
+               //从 FilterMovieList 中添加影片到 临时 Movies 中
+               for (int i = (CurrentPage - 1) * DisPlayNum; i < (CurrentPage - 1) * DisPlayNum + FlowNum; i++)
+               {
+                   if (i <= FilterMovieList.Count - 1)
+                   {
+                       Movie movie = FilterMovieList[i];
+                       Movies.Add(movie);
+                   }
+                   else { break; }
+                   if (Movies.Count == FlowNum) { break; }
+
+               }
+
+               //添加标签戳
+               for (int i = 0; i < Movies.Count; i++)
+               {                      
+                    if (Identify.IsHDV(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_HD) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.HD;
+                   if (Identify.IsCHS(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_Translated) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_Translated) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_Translated) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.Translated;
+                   if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.FlowOut;
+               }
+
+
+
+                   foreach (Movie item in Movies)
+               {
+                   Movie movie = item;
+                   SetImage(ref movie);
+                   await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
+               }
+
+               await App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
-                    ((Main)GetWindowByName("Main")).SetLoadingStatus(true);
-                    ((Main)GetWindowByName("Main")).MovieScrollViewer.ScrollToTop();
+                    MovieFlipOverCompleted?.Invoke(this, EventArgs.Empty);
                 });
 
-
-
-                Sort();
-                int number = 0;
-                if (FilterMovieList != null) number = FilterMovieList.Count;
-                FilterMovieList = FileProcess.FilterMovie(MovieList);
-
-                if (FilterMovieList.Count < number) CurrentPage = 1;                // FilterMovieList 是否改变
-
-                Task.Run(async () =>
-               {
-
-                   TotalPage = (int)Math.Ceiling((double)FilterMovieList.Count / Properties.Settings.Default.DisplayNumber);
-                   int DisPlayNum = Properties.Settings.Default.DisplayNumber;
-                   int FlowNum = Properties.Settings.Default.FlowNum;
-                   DisposeMovieList(CurrentMovieList);
-                   Movies = new List<Movie>();
-                   for (int i = (CurrentPage - 1) * DisPlayNum; i < (CurrentPage - 1) * DisPlayNum + FlowNum; i++)
-                   {
-                       if (i <= FilterMovieList.Count - 1)
-                       {
-                           Movie movie = FilterMovieList[i];
-                           Movies.Add(movie);
-                       }
-                       else { break; }
-                       if (Movies.Count == FlowNum) { break; }
-
-                   }
-                   for (int i = 0; i < Movies.Count; i++)
-                   {
-
-                        //添加标签戳
-                        if (Identify.IsHDV(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_HD) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.HD;
-                       if (Identify.IsCHS(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_Translated) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_Translated) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_Translated) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.Translated;
-                       if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.FlowOut;
-                   }
-
-
-
-                   await ClearCurrentMovieList();//动态清除当前影片
-
-                    foreach (Movie item in Movies)
-                   {
-                       Movie movie = item;
-                       SetImage(ref movie);
-                       await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
-                   }
-
-                   await App.Current.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                           if (GetWindowByName("Main") is Main main)
-                           {
-                               MovieFlipOverCompleted?.Invoke(this, EventArgs.Empty);
-                           }
-                       });
-
-               });
-            }
-
+           });
             return true;
         }
 
@@ -1716,7 +1713,7 @@ namespace Jvedio.ViewModel
 
 
         private delegate void LoadLabelDelegate(string str);
-        private void LoadLabel(string str)=> LabelList.Add(str);
+        private void LoadLabel(string str) => LabelList.Add(str);
         private void LoadTag(string str) => TagList.Add(str);
         private void LoadStudio(string str) => StudioList.Add(str);
         private void LoadDirector(string str) => DirectorList.Add(str);
@@ -1740,7 +1737,7 @@ namespace Jvedio.ViewModel
 
         public async void GetTagList()
         {
-            List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType,"tag");
+            List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType, "tag");
             TagList = new ObservableCollection<string>();
             SetClassifyLoadingStatus(true);
             for (int i = 0; i < labels.Count; i++)
@@ -1770,10 +1767,10 @@ namespace Jvedio.ViewModel
             List<string> labels = DataBase.SelectLabelByVedioType(ClassifyVedioType, "director");
             DirectorList = new ObservableCollection<string>();
             SetClassifyLoadingStatus(true);
-                for (int i = 0; i < labels.Count; i++)
-                {
-                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadDirector), labels[i]);
-                }
+            for (int i = 0; i < labels.Count; i++)
+            {
+                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadLabelDelegate(LoadDirector), labels[i]);
+            }
             SetClassifyLoadingStatus(false);
         }
 
@@ -1781,8 +1778,9 @@ namespace Jvedio.ViewModel
         //获得演员，信息照片都获取
         public void GetActorList()
         {
-            Task.Run(() => { 
-                Statistic(); 
+            Task.Run(() =>
+            {
+                Statistic();
                 List<Actress> Actresses = DataBase.SelectAllActorName(ClassifyVedioType);
                 if (ActorList != null && Actresses != null && Actresses.Count == ActorList.ToList().Count) { return; }
                 ActorList = new ObservableCollection<Actress>();
@@ -1815,21 +1813,38 @@ namespace Jvedio.ViewModel
 
 
 
-        public void LoadGif()
+        public async void LoadGif()
         {
             if (CurrentMovieList == null) return;
+            Main main = GetWindowByName("Main") as Main;
+            main.DisposeGif("", true);
             for (int i = 0; i < CurrentMovieList.Count; i++)
             {
                 Movie movie = CurrentMovieList[i];
                 string gifpath = Path.Combine(BasePicPath, "GIF", $"{movie.id}.gif");
+
                 if (File.Exists(gifpath))
                 {
-                    movie.GifUri = new Uri("pack://siteoforigin:,,,/" +gifpath);
-                    CurrentMovieList[i] = null;
-                    CurrentMovieList[i] = movie;
+                    movie.GifUri = new Uri("pack://siteoforigin:,,,/" + gifpath);
+                    //先加载
+                    await App.Current.Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        CurrentMovieList[i] = null;
+                        CurrentMovieList[i] = movie;
+                    });
+                    await Task.Delay(100);
+                    //再 Dispose
+                    await App.Current.Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        main.ShowGifImage(true, i);
+                        main.DisposeGif(movie.id);
+                    });
                 }
             }
+
         }
+
+
 
 
 
@@ -1885,7 +1900,7 @@ namespace Jvedio.ViewModel
 
 
 
-            string searchContent= FormatSearch;
+            string searchContent = FormatSearch;
 
 
             List<Movie> oldMovieList = MovieList.ToList();
@@ -1901,7 +1916,7 @@ namespace Jvedio.ViewModel
                 if (string.IsNullOrEmpty(fanhao)) searchContent = FormatSearch;
                 else searchContent = fanhao;
 
-                TextType = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.ID +" " + searchContent;
+                TextType = Jvedio.Language.Resources.Search + Jvedio.Language.Resources.ID + " " + searchContent;
 
                 if (SearchInCurrent)
                     MovieList = oldMovieList.Where(arg => arg.id.IndexOf(searchContent) >= 0).ToList();
@@ -2033,14 +2048,15 @@ namespace Jvedio.ViewModel
                         break;
                 }
                 MovieList = new List<Movie>();
-                sortMovieList.ForEach(arg => { MovieList.Add(arg); });
+                MovieList.AddRange(sortMovieList);
             }
 
         }
 
         public void AsyncFlipOver()
         {
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 FlipOver();
             });
         }
@@ -2084,7 +2100,8 @@ namespace Jvedio.ViewModel
             }
 
             TextType = $"{Properties.Settings.Default.RecentDays} 天内的最近播放";
-            Task.Run(() => { 
+            Task.Run(() =>
+            {
                 Statistic();
                 MovieList = new List<Movie>();
                 MovieList.AddRange(movies);
@@ -2129,7 +2146,7 @@ namespace Jvedio.ViewModel
             ExecutiveSqlCommand(5, moviegenre, "SELECT * from movie where genre like '%" + moviegenre + "%'");
         }
 
-        public void GetMoviebyLabel(string movielabel,string type="label")
+        public void GetMoviebyLabel(string movielabel, string type = "label")
         {
             ExecutiveSqlCommand(7, movielabel, $"SELECT * from movie where {type} like '%{movielabel}%'");
         }
@@ -2164,7 +2181,8 @@ namespace Jvedio.ViewModel
         //根据视频类型选择演员
         public async Task<bool> AsyncGetMoviebyActress(Actress actress)
         {
-            return await Task.Run(() => {
+            return await Task.Run(() =>
+            {
                 Statistic();
                 List<Movie> movies;
                 if (actress.id == "")
@@ -2238,7 +2256,8 @@ namespace Jvedio.ViewModel
         /// </summary>
         public void Statistic()
         {
-            Task.Run(() => { 
+            Task.Run(() =>
+            {
                 if (!DataBase.IsTableExist("movie")) { return; }
                 AllVedioCount = DataBase.SelectCountBySql("");
                 FavoriteVedioCount = DataBase.SelectCountBySql("where favorites>0 and favorites<=5");

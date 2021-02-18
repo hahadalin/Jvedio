@@ -43,6 +43,7 @@
 
         <!--Converter-->
 
+        <local:IntToVisibilityConverter x:Key="IntToVisibilityConverter" />
         <local:BoolToOppositeVisibilityConverter x:Key="BoolToOppositeVisibilityConverter" />
         <local:SmallerThicknessConverter x:Key="SmallerThicknessConverter" />
         <local:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
@@ -313,18 +314,6 @@
                     <Setter Property="Width" Value="{Binding BigImage_Width,Source={x:Static p:Settings.Default}}"/>
                     <Setter Property="Height" Value="{Binding BigImage_Height,Source={x:Static p:Settings.Default}}"/>
                 </MultiDataTrigger>
-
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="3"/>
-                        <Condition Binding="{Binding gif}" Value="{x:Null}"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Source" Value="Resources/Picture/NoPrinting_B.png" />
-                    <Setter Property="Visibility" Value="Collapsed" />
-                    <Setter Property="Width" Value="{Binding BigImage_Width,Source={x:Static p:Settings.Default}}"/>
-                    <Setter Property="Height" Value="{Binding BigImage_Height,Source={x:Static p:Settings.Default}}"/>
-                </MultiDataTrigger>
-
 
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
@@ -1879,7 +1868,7 @@
                                                                             
                                                                             <!--GIF图-->
 
-                                                                            <hc:GifImage Uri="{Binding GifUri}" Height="{Binding Path=GifImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=GifImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" />
+                                                                            <hc:GifImage  Name="GifImage"   Tag="{Binding id}" MouseEnter="GifImage_MouseEnter" MouseLeave="GifImage_MouseLeave" Uri="{Binding GifUri}" Height="{Binding Path=GifImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=GifImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" />
 
 
                                                                             <!--分段视频-->

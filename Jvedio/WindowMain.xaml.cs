@@ -340,13 +340,12 @@ namespace Jvedio
 
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected async override void OnClosed(EventArgs e)
         {
             _source.RemoveHook(HwndHook);
-            UnregisterHotKey(_windowHandle, HOTKEY_ID);
-            //取消热键
-            Console.WriteLine("UnregisterHotKey");
-            vieModel.HideToIcon = false;
+            UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消热键
+            vieModel.HideToIcon = false;//隐藏图标
+            DisposeGif("", true);//清除 gif 资源
             base.OnClosed(e);
         }
 
@@ -1834,6 +1833,32 @@ namespace Jvedio
 
         }
 
+
+        public void DisposeGif(string id,bool disposeAll=false)
+        {
+            for (int i = 0; i < MovieItemsControl.Items.Count; i++)
+            {
+                ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[i]);
+                if (c.ContentTemplate.FindName("GifImage", c) is HandyControl.Controls.GifImage GifImage && c.ContentTemplate.FindName("IDTextBox", c) is TextBox textBox)
+                {
+                    if (disposeAll)
+                    {
+                        GifImage.Dispose();
+                    }
+                    else
+                    {
+                        if (id.ToUpper() == textBox.Text.ToUpper())
+                        {
+                            GifImage.Dispose();
+                            break;
+                        }
+                    }
+
+                }
+
+            }
+        }
+
         public T FindElementByName<T>(FrameworkElement element, string sChildName) where T : FrameworkElement
         {
             T childElement = null;
@@ -1880,10 +1905,7 @@ namespace Jvedio
             Properties.Settings.Default.SortType =((int)sorttype).ToString();
             Properties.Settings.Default.Save();
             vieModel.SortType = sorttype;
-            Task.Run(() => {
-                vieModel.Sort();
-                vieModel.FlipOver();
-            });
+            vieModel.AsyncFlipOver();
         }
 
         public void SaveAllSearchType(object sender, RoutedEventArgs e)
@@ -1970,12 +1992,12 @@ namespace Jvedio
             else if (sortindex == 3)
             {
                 //GIF
+
                 vieModel.LoadGif();
-                
             }
             else
             {
-
+                ShowGifImage(false);
             }
 
             if (sortindex == 0)
@@ -1988,6 +2010,39 @@ namespace Jvedio
                 Properties.Settings.Default.GlobalImageWidth = Properties.Settings.Default.GifImage_Width;
         }
 
+        public void ShowGifImage(bool visible=false,int idx=-1)
+        {
+            if (idx != -1)
+            {
+                ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[idx]);
+                if (c.ContentTemplate.FindName("GifImage", c) is HandyControl.Controls.GifImage GifImage)
+                {
+                    if (visible && GifImage.Uri != null)
+                    {
+                        GifImage.Uri = new Uri(GifImage.Uri.OriginalString);
+                        GifImage.Visibility = Visibility.Visible;
+                    }
+                    else GifImage.Visibility = Visibility.Hidden;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < MovieItemsControl.Items.Count; i++)
+                {
+                    ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[i]);
+                    if (c.ContentTemplate.FindName("GifImage", c) is HandyControl.Controls.GifImage GifImage)
+                    {
+                        if (visible && GifImage.Uri != null)
+                        {
+                            GifImage.Uri = new Uri(GifImage.Uri.OriginalString);
+                            GifImage.Visibility = Visibility.Visible;
+                        }
+                        else GifImage.Visibility = Visibility.Hidden;
+                    }
+                }
+            }
+
+        }
 
         public List<ImageSlide> ImageSlides;
         public void Loadslide()
@@ -2052,52 +2107,7 @@ namespace Jvedio
                     IsFlowing = true;
                     LoadMovie();
                 }
-
             }
-
-            //查看第一个
-
-            //for (int i = 0; i < MovieItemsControl.Items.Count; i++)
-            //{
-            //if(MovieItemsControl.Items!=null && MovieItemsControl.Items.Count >= 1)
-            //{
-            //    WrapPanel wrapPanel = GetItemsPanel(MovieItemsControl);
-            //    Grid grid = wrapPanel.Children[0] as Grid;
-            //    if (wrapPanel != null && grid!=null)
-            //    {
-            //        Point point = grid.TranslatePoint(new Point(0, 0), wrapPanel);
-            //        var size = grid.DesiredSize;
-            //        Console.WriteLine(point.X);
-            //        Console.WriteLine(point.Y);
-            //        Console.WriteLine(size.Height);
-            //        Console.WriteLine(size.Width);
-            //    }
-            //}
-            //for (int i = 0; i < MovieItemsControl.Items.Count; i++)
-            //{
-
-            //    ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[i]);
-            //    Grid grid = FindElementByName<Grid>(c, "MovieGrid");
-            //    if (grid != null)
-            //    {
-            //        WrapPanel wrapPanel = GetItemsPanel(MovieItemsControl);
-            //        if (wrapPanel != null )
-            //        {
-            //            Point point = grid.TranslatePoint(new Point(0, 0), wrapPanel);
-            //            var size = grid.DesiredSize;
-            //            Console.WriteLine("X="+point.X);
-            //            Console.WriteLine("Y=" + point.Y);
-            //            Console.WriteLine("Height=" + size.Height);
-            //            Console.WriteLine("Width=" + size.Width);
-            //        }
-            //    }
-            //    if (i == 1) break;
-
-            //}
-
-
-            //}
-
 
         }
 
@@ -5856,6 +5866,19 @@ namespace Jvedio
         private void RefreshClassify(object sender, MouseButtonEventArgs e)
         {
             SetClassify(true);
+        }
+
+        private void GifImage_MouseEnter(object sender, MouseEventArgs e)
+        {
+            HandyControl.Controls.GifImage gifImage = sender as HandyControl.Controls.GifImage;
+            Movie movie = vieModel.CurrentMovieList.Where(arg => arg.id.ToUpper() == gifImage.Tag.ToString().ToUpper()).First();
+            gifImage.Uri =new Uri( movie.GifUri.OriginalString);
+        }
+
+        private void GifImage_MouseLeave(object sender, MouseEventArgs e)
+        {
+            HandyControl.Controls.GifImage gifImage = sender as HandyControl.Controls.GifImage;
+            gifImage.Dispose();
         }
     }
 

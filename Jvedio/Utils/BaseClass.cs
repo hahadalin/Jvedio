@@ -134,7 +134,6 @@ namespace Jvedio
 
         public Uri GifUri { get; set; }
 
-
         private BitmapSource _smallimage;
         public BitmapSource smallimage { get { return _smallimage; } set { _smallimage = value; OnPropertyChanged(); } }
 
