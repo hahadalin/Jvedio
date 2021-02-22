@@ -1824,22 +1824,24 @@ namespace Jvedio.ViewModel
                 string gifpath = Path.Combine(BasePicPath, "GIF", $"{movie.id}.gif");
 
                 if (File.Exists(gifpath))
-                {
                     movie.GifUri = new Uri("pack://siteoforigin:,,,/" + gifpath);
-                    //先加载
-                    await App.Current.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        CurrentMovieList[i] = null;
-                        CurrentMovieList[i] = movie;
-                    });
-                    await Task.Delay(100);
-                    //再 Dispose
-                    await App.Current.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        main.ShowGifImage(true, i);
-                        main.DisposeGif(movie.id);
-                    });
-                }
+
+                else
+                    movie.GifUri = new Uri("pack://application:,,,/Resources/Picture/NoPrinting_G.gif");
+
+                //先加载
+                await App.Current.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    CurrentMovieList[i] = null;
+                    CurrentMovieList[i] = movie;
+                });
+                await Task.Delay(100);
+                //再 Dispose
+                await App.Current.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    main.ShowGifImage(true, i);
+                    main.DisposeGif(movie.id);
+                });
             }
 
         }

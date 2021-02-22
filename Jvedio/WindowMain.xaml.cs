@@ -1677,7 +1677,7 @@ namespace Jvedio
 
         WindowDetails wd;
         //TODO
-        private void ShowDetails(object sender, MouseEventArgs e)
+        private void ShowDetails(object sender, MouseButtonEventArgs e)
         {
             if (Resizing || !canShowDetails) return;
             StackPanel parent = ((sender as FrameworkElement).Parent as Grid).Parent as StackPanel;
@@ -1713,18 +1713,9 @@ namespace Jvedio
 
 
         private bool canShowDetails = false;
-        private void CanShowDetails(object sender, MouseEventArgs e)
+        private void CanShowDetails(object sender, MouseButtonEventArgs e)
         {
             canShowDetails = true;
-        }
-        public void ShowSideBar(object sender, MouseButtonEventArgs e)
-        {
-            if (vieModel.ShowSideBar)
-            {
-                vieModel.ShowSideBar = false;
-            }
-            else { vieModel.ShowSideBar = true; }
-
         }
 
 
@@ -3786,10 +3777,7 @@ namespace Jvedio
 
 
 
-        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
-        {
-            ((Image)sender).Source = new BitmapImage(new Uri("/Resources/Picture/NoPrinting_B.png", UriKind.Relative));
-        }
+
 
 
         private void ActorGrid_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -5880,6 +5868,7 @@ namespace Jvedio
             HandyControl.Controls.GifImage gifImage = sender as HandyControl.Controls.GifImage;
             gifImage.Dispose();
         }
+
     }
 
 
