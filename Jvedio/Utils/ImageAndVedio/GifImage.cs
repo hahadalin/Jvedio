@@ -23,7 +23,7 @@ namespace Jvedio
         private Int32Animation _animation;
 
         private List<BitmapSource> bitmapImages;
-        private List<TimeSpan> spans;
+        private Gif gif;
         public int FrameIndex
         {
             get { return (int)GetValue(FrameIndexProperty); }
@@ -33,7 +33,7 @@ namespace Jvedio
         private void Initialize()
         {
             if (this.GifSource == "") return;
-            Gif gif = new Gif(this.GifSource);
+            gif = new Gif(this.GifSource);
             var decoder = gif.GetDecoder();
             _animation = new Int32Animation(0, decoder.Frames.Count - 1, gif.GetTotalDuration());
             _animation.RepeatBehavior = RepeatBehavior.Forever;
@@ -44,7 +44,7 @@ namespace Jvedio
 
         protected override void OnMouseEnter(MouseEventArgs e)
         {
-            if (bitmapImages == null) bitmapImages = new Gif(this.GifSource).GetAllFrame().BitmapSources;
+            if (bitmapImages == null && gif!=null) bitmapImages = gif.GetAllFrame().BitmapSources;
             this.StartAnimation();
             base.OnMouseEnter(e);
         }
@@ -76,6 +76,8 @@ namespace Jvedio
             else
             {
                 ((GifImage)sender).StopAnimation();
+                ((GifImage)sender).bitmapImages = null;
+                GC.Collect();
             }
         }
 

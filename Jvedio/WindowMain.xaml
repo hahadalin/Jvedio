@@ -1868,7 +1868,7 @@
                                                                             
                                                                             <!--GIF图-->
 
-                                                                            <local:GifImage    GifSource="{Binding GifUri}"    Height="{Binding Path=GifImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=GifImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" />
+                                                                            <local:GifImage x:Name="GifImage"    GifSource="{Binding GifUri}"    Height="{Binding Path=GifImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=GifImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" />
 
 
                                                                             <!--分段视频-->

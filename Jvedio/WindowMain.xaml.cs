@@ -1835,12 +1835,14 @@ namespace Jvedio
                 {
                     if (disposeAll)
                     {
+                        GifImage.Source = null;
                         GifImage.Dispose();
                     }
                     else
                     {
                         if (id.ToUpper() == textBox.Text.ToUpper())
                         {
+                            GifImage.Source = null;
                             GifImage.Dispose();
                             break;
                         }
@@ -1984,12 +1986,18 @@ namespace Jvedio
             else if (sortindex == 3)
             {
                 //GIF
-
                 vieModel.LoadGif();
             }
             else
             {
-                ShowGifImage(false);
+                for (int i = 0; i < MovieItemsControl.Items.Count; i++)
+                {
+                    ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[i]);
+                    if (c.ContentTemplate.FindName("GifImage", c) is GifImage GifImage)
+                    {
+                        GifImage.Visibility = Visibility.Hidden;
+                    }
+                }
             }
 
             if (sortindex == 0)
@@ -2004,14 +2012,14 @@ namespace Jvedio
 
         public void ShowGifImage(bool visible=false,int idx=-1)
         {
-            if (idx != -1)
+            if (idx != -1 && idx<MovieItemsControl.Items.Count)
             {
                 ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[idx]);
-                if (c.ContentTemplate.FindName("GifImage", c) is HandyControl.Controls.GifImage GifImage)
+                if (c.ContentTemplate.FindName("GifImage", c) is GifImage GifImage)
                 {
-                    if (visible && GifImage.Uri != null)
+                    if (visible && GifImage.GifSource != null)
                     {
-                        GifImage.Uri = new Uri(GifImage.Uri.OriginalString);
+                        //GifImage.Uri = new Uri(GifImage.Uri.OriginalString);
                         GifImage.Visibility = Visibility.Visible;
                     }
                     else GifImage.Visibility = Visibility.Hidden;
@@ -2022,11 +2030,11 @@ namespace Jvedio
                 for (int i = 0; i < MovieItemsControl.Items.Count; i++)
                 {
                     ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[i]);
-                    if (c.ContentTemplate.FindName("GifImage", c) is HandyControl.Controls.GifImage GifImage)
+                    if (c.ContentTemplate.FindName("GifImage", c) is GifImage GifImage)
                     {
-                        if (visible && GifImage.Uri != null)
+                        if (visible && GifImage.GifSource != null)
                         {
-                            GifImage.Uri = new Uri(GifImage.Uri.OriginalString);
+                            //GifImage.Uri = new Uri(GifImage.Uri.OriginalString);
                             GifImage.Visibility = Visibility.Visible;
                         }
                         else GifImage.Visibility = Visibility.Hidden;
