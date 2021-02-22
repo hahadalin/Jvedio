@@ -16,12 +16,18 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using static Jvedio.GlobalVariable;
+using System.Windows.Media.Imaging;
 
 namespace Jvedio
 {
     public static class CustomExtension
     {
-
+        public static T GetQueryOrDefault<T>(this BitmapMetadata metadata, string query, T defaultValue)
+        {
+            if (metadata.ContainsQuery(query))
+                return (T)Convert.ChangeType(metadata.GetQuery(query), typeof(T));
+            return defaultValue;
+        }
 
         public static bool IsIntersectWith(this ObservableCollection<string> collections, string str)
         {

@@ -37,6 +37,7 @@ using System.Text;
 using System.Security.Cryptography;
 using Jvedio.Library.Encrypt;
 using Jvedio.Utils;
+using WpfAnimatedGif;
 
 namespace Jvedio
 {
@@ -5856,18 +5857,6 @@ namespace Jvedio
             SetClassify(true);
         }
 
-        private void GifImage_MouseEnter(object sender, MouseEventArgs e)
-        {
-            HandyControl.Controls.GifImage gifImage = sender as HandyControl.Controls.GifImage;
-            Movie movie = vieModel.CurrentMovieList.Where(arg => arg.id.ToUpper() == gifImage.Tag.ToString().ToUpper()).First();
-            gifImage.Uri =new Uri( movie.GifUri.OriginalString);
-        }
-
-        private void GifImage_MouseLeave(object sender, MouseEventArgs e)
-        {
-            HandyControl.Controls.GifImage gifImage = sender as HandyControl.Controls.GifImage;
-            gifImage.Dispose();
-        }
 
     }
 

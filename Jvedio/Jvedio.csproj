@@ -213,6 +213,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfAnimatedGif, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\WpfAnimatedGif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -241,6 +245,8 @@
     </Compile>
     <Compile Include="Utils\BaseClass.cs" />
     <Compile Include="Utils\Converter.cs" />
+    <Compile Include="Utils\ImageAndVedio\Gif.cs" />
+    <Compile Include="Utils\ImageAndVedio\GifImage.cs" />
     <Compile Include="Utils\SampleMovies.cs" />
     <Compile Include="Utils\Encrypt\Encrypt.cs" />
     <Compile Include="Utils\FileProcess\FileProcess.cs" />
@@ -797,6 +803,9 @@
     <Content Include="Reference\PInvoke.dll" />
     <Content Include="Reference\QueryEngine.dll" />
     <Content Include="Reference\UsnOperation.dll" />
+    <Content Include="Reference\WpfAnimatedGif.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Jvedio.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
