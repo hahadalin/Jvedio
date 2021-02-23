@@ -1669,10 +1669,12 @@ namespace Jvedio
         {
             if (e.ClickCount == 2)
             {
-                Main main = App.Current.Windows[0] as Main;
-                main.Resizing = true;
-                main.ResizingTimer.Start();
-                this.Close();
+                //Main main = App.Current.Windows[0] as Main;
+                //main.Resizing = true;
+                //main.ResizingTimer.Start();
+                //this.Close();
+                Window_ImageViewer window_ImageViewer = new Window_ImageViewer(BigImage.Source);
+                window_ImageViewer.ShowDialog();
             }
         }
 

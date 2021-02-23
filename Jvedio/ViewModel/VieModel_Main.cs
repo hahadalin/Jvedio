@@ -36,6 +36,7 @@ namespace Jvedio.ViewModel
         public event EventHandler CurrentActorListHideOrChanged;
         public event EventHandler MovieFlipOverCompleted;
         public event EventHandler ActorFlipOverCompleted;
+        public event EventHandler OnCurrentMovieListRemove;
 
         public bool IsFlipOvering = false;
         public VedioType CurrentVedioType = VedioType.所有;
@@ -1517,7 +1518,19 @@ namespace Jvedio.ViewModel
             {
                 await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new RemoveItemDelegate(RemoveMovie), CurrentMovieList[i]);
             }
-            await DisposeMovieList(); //清除当前影片
+
+            await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate {
+                Main main = (Main)GetWindowByName("Main");
+                if (main.ImageSlides != null)
+                {
+                    for (int i = 0; i < main.ImageSlides.Count; i++)
+                    {
+                        main.ImageSlides[i].Stop();
+                    }
+                    main.ImageSlides.Clear();
+                }
+            });
+           
             return true;
         }
 
@@ -1601,22 +1614,25 @@ namespace Jvedio.ViewModel
         }
 
 
-        public async Task<bool> DisposeMovieList()
+        public void DisposeMovie(string id)
         {
-            if (CurrentMovieList == null) return false;
-            await App.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                Main main = GetWindowByName("Main") as Main;
-                main.DisposeGif("", true);
-            });
+            //if (CurrentMovieList == null) return false;
+            //await App.Current.Dispatcher.BeginInvoke((Action)delegate
+            //{
+            //    Main main = GetWindowByName("Main") as Main;
+            //    main.DisposeGif("", true);
+            //});
             for (int i = 0; i < CurrentMovieList.Count; i++)
             {
-                CurrentMovieList[i].bigimage = null;
-                CurrentMovieList[i].smallimage = null;
-
+                if (CurrentMovieList[i].id == id)
+                {
+                    CurrentMovieList[i].bigimage = null;
+                    CurrentMovieList[i].smallimage = null;
+                    break;
+                }
             }
             GC.Collect();
-            return true;
+            //return true;
         }
 
 
@@ -1647,7 +1663,7 @@ namespace Jvedio.ViewModel
            {
                
                await ClearCurrentMovieList();//动态清除当前影片
-
+               
                TotalPage = (int)Math.Ceiling((double)FilterMovieList.Count / Properties.Settings.Default.DisplayNumber);
                int DisPlayNum = Properties.Settings.Default.DisplayNumber;
                int FlowNum = Properties.Settings.Default.FlowNum;
@@ -1708,6 +1724,8 @@ namespace Jvedio.ViewModel
         private delegate void RemoveItemDelegate(Movie movie);
         private void RemoveMovie(Movie movie)
         {
+            OnCurrentMovieListRemove?.Invoke(movie.id, null);
+            DisposeMovie(movie.id);
             CurrentMovieList.Remove(movie);
         }
 
@@ -1822,7 +1840,7 @@ namespace Jvedio.ViewModel
             {
                 Movie movie = CurrentMovieList[i];
                 string gifpath = Path.Combine(BasePicPath, "GIF", $"{movie.id}.gif");
-
+                if (movie.GifUri != null && movie.GifUri.OriginalString != "") continue;
                 if (File.Exists(gifpath))
                     movie.GifUri = new Uri("pack://siteoforigin:,,,/" + gifpath);
 

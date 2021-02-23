@@ -58,7 +58,6 @@ namespace Jvedio
         public Point WindowPoint = new Point(100, 100);
         public Size WindowSize = new Size(1000, 600);
         public JvedioWindowState WinState = JvedioWindowState.Normal;
-        public DispatcherTimer ImageSlideTimer;
 
         public List<Actress> SelectedActress = new List<Actress>();
 
@@ -90,10 +89,6 @@ namespace Jvedio
         {
             InitializeComponent();
             this.Cursor = Cursors.Wait;
-
-
-            ImageSlideTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
-            ImageSlideTimer.Tick += new EventHandler(ImageSlideTimer_Tick);
             FilterGrid.Visibility = Visibility.Collapsed;
             WinState = 0;
 
@@ -416,12 +411,6 @@ namespace Jvedio
 
 
 
-
-        private void ImageSlideTimer_Tick(object sender, EventArgs e)
-        {
-            Loadslide();
-            ImageSlideTimer.Stop();
-        }
         public async Task<bool> InitMovie()
         {
             return await Task.Run(() => {
@@ -445,11 +434,44 @@ namespace Jvedio
                         vieModel.CurrentCount = vieModel.CurrentMovieList.Count;
                         vieModel.TotalCount = vieModel.FilterMovieList.Count;
                         if (Properties.Settings.Default.EditMode) SetSelected();
-                        if (Properties.Settings.Default.ShowImageMode == "2") ImageSlideTimer.Start();//0.5s后开始展示预览图
+                        if (Properties.Settings.Default.ShowImageMode == "2") Loadslide(); ;//展示预览图
                         if (Properties.Settings.Default.ShowImageMode == "3") vieModel.LoadGif();
-
                         SetLoadingStatus(false);
+                        
                     }, DispatcherPriority.ContextIdle, null);
+            };
+
+            vieModel.OnCurrentMovieListRemove += (s, ev) =>
+            {
+                //清除gif
+                for (int i = 0; i < MovieItemsControl.Items.Count; i++)
+                {
+                    ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[i]);
+                    if (c.ContentTemplate.FindName("GifImage", c) is GifImage GifImage)
+                    {
+                        if (GifImage.Tag.ToString() == s.ToString())
+                        {
+                            GifImage.Source = null;
+                            GC.Collect();
+                            break;
+                        }
+
+                    }
+                }
+                //清除预览图
+                for (int i = 0; i < MovieItemsControl.Items.Count; i++)
+                {
+                    ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[i]);
+                    if (c.ContentTemplate.FindName("myImage", c) is Image myImage && c.ContentTemplate.FindName("myImage2", c) is Image myImage2)
+                    {
+                        if (myImage.Tag.ToString() == s.ToString())
+                        {
+                            myImage.Source = null;
+                            myImage2.Source = null;
+                            break;
+                        }
+                    }
+                }
             };
 
             vieModel.ActorFlipOverCompleted += (s, ev) =>
@@ -1837,6 +1859,7 @@ namespace Jvedio
                     {
                         GifImage.Source = null;
                         GifImage.Dispose();
+                        GC.Collect();
                     }
                     else
                     {
@@ -1844,6 +1867,7 @@ namespace Jvedio
                         {
                             GifImage.Source = null;
                             GifImage.Dispose();
+                            GC.Collect();
                             break;
                         }
                     }
@@ -1990,14 +2014,7 @@ namespace Jvedio
             }
             else
             {
-                for (int i = 0; i < MovieItemsControl.Items.Count; i++)
-                {
-                    ContentPresenter c = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromItem(MovieItemsControl.Items[i]);
-                    if (c.ContentTemplate.FindName("GifImage", c) is GifImage GifImage)
-                    {
-                        GifImage.Visibility = Visibility.Hidden;
-                    }
-                }
+
             }
 
             if (sortindex == 0)
@@ -2009,6 +2026,9 @@ namespace Jvedio
             else if (sortindex == 3)
                 Properties.Settings.Default.GlobalImageWidth = Properties.Settings.Default.GifImage_Width;
         }
+
+
+
 
         public void ShowGifImage(bool visible=false,int idx=-1)
         {
@@ -2044,27 +2064,37 @@ namespace Jvedio
 
         }
 
+
+
         public List<ImageSlide> ImageSlides;
         public void Loadslide()
         {
-            ImageSlides?.Clear();
-            ImageSlides = new List<ImageSlide>();
-            for (int i = 0; i < MovieItemsControl.Items.Count; i++)
+            if(ImageSlides==null) ImageSlides = new List<ImageSlide>();
+            List<Image> images1 = new List<Image>();
+            List<Image> images2 = new List<Image>();
+            for (int i = ImageSlides.Count; i < MovieItemsControl.Items.Count; i++)
             {
                 ContentPresenter myContentPresenter = (ContentPresenter)MovieItemsControl.ItemContainerGenerator.ContainerFromIndex(i);
                 if (myContentPresenter != null)
                 {
-                    Movie movie = (Movie)MovieItemsControl.Items[i];
                     DataTemplate myDataTemplate = myContentPresenter.ContentTemplate;
                     Image myImage = (Image)myDataTemplate.FindName("myImage", myContentPresenter);
                     Image myImage2 = (Image)myDataTemplate.FindName("myImage2", myContentPresenter);
-
-                    ImageSlide imageSlide = new ImageSlide(BasePicPath + $"ExtraPic\\{movie.id}", myImage, myImage2);
-                    ImageSlides.Add(imageSlide);
-                    imageSlide.PlaySlideShow();
+                    images1.Add(myImage);
+                    images2.Add(myImage2);
                 }
-
             }
+
+
+            Task.Run(async() => { 
+                for (int i = 0; i < images1.Count; i++)
+                {
+                    await Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate {
+                        ImageSlide imageSlide = new ImageSlide(BasePicPath + $"ExtraPic\\{images1[i].Tag.ToString()}", images1[i], images2[i]);
+                        ImageSlides.Add(imageSlide);
+                    });
+                }
+            });
         }
 
 
@@ -3502,7 +3532,8 @@ namespace Jvedio
             int index = int.Parse(textBlock.Text);
             if (index < ImageSlides.Count)
             {
-                ImageSlides[index].PlaySlideShow();
+                ImageSlides[index].LoadAllImage();
+                //ImageSlides[index].PlaySlideShow();
                 ImageSlides[index].Start();
             }
 
@@ -3513,12 +3544,13 @@ namespace Jvedio
             if (ImageSlides == null) return;
             Canvas canvas = (Canvas)sender;
             TextBlock textBlock = canvas.Children.OfType<TextBlock>().First();
+            var images= canvas.Children.OfType<Image>().ToList();
             int index = int.Parse(textBlock.Text);
             if (index < ImageSlides.Count)
             {
                 ImageSlides[index].Stop();
             }
-
+            
         }
 
 

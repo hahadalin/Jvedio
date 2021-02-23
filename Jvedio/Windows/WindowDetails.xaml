@@ -183,6 +183,7 @@
             <StackPanel hc:Growl.Token="DetailsGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
 
+
         <Border Margin="5" x:Name="BackBorder"  CornerRadius="5"  BorderBrush="LightBlue" BorderThickness="0">
             <Grid>
                 <Grid.ColumnDefinitions>

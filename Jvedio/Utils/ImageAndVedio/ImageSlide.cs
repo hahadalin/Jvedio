@@ -24,12 +24,12 @@ namespace Jvedio
 	{
 		private Image[] ImageControls;
 		private DispatcherTimer timerImageChange;
-		private List<ImageSource> Images = new List<ImageSource>();
+		private List<ImageSource> Images ;
 		private static string[] ValidImageExtensions = new[] { ".png", ".jpg", ".jpeg", ".bmp", ".gif" };
 		private string strImagePath = "";
-		private int CurrentSourceIndex, CurrentCtrlIndex, IntervalTimer = 2;
+		public int CurrentSourceIndex, CurrentCtrlIndex, IntervalTimer = 2;
 		private int MaxViewNum = 10;//最多展示的图片数量
-
+		private bool stop = false;
 
 		/// <summary>
 		/// 主界面的预览图展示
@@ -41,42 +41,47 @@ namespace Jvedio
 		{
 			strImagePath = imagepath;
 			ImageControls = new[] { image1, image2 };
-
-			LoadImageFolder(strImagePath);
-
+			LoadImageFolder(strImagePath, 1);//仅随机载入一张
+			image1.Source = Images[0];
 			timerImageChange = new DispatcherTimer();
 			timerImageChange.Interval = new TimeSpan(0, 0, IntervalTimer);
 			timerImageChange.Tick += new EventHandler(timerImageChange_Tick);
 		}
 
-		/// <summary>
-		/// 开始图片展示
-		/// </summary>
 		public void Start()
 		{
+			stop = false;
 			timerImageChange.Start();
+
 		}
 
 		public void Stop()
 		{
+			stop = true;
 			timerImageChange.Stop();
 		}
 
 
-		private void LoadImageFolder(string folder)
+		public void LoadAllImage()
+        {
+			LoadImageFolder(strImagePath, MaxViewNum);
+		}
+
+
+		private void LoadImageFolder(string folder,int number)
 		{
-			if (!Directory.Exists(folder)) return;
-			var sw = System.Diagnostics.Stopwatch.StartNew();
-			if (!System.IO.Path.IsPathRooted(folder))
-				folder = System.IO.Path.Combine(Environment.CurrentDirectory, folder);
-			Random r = new Random();
-			var sources = from file in new System.IO.DirectoryInfo(folder).GetFiles().AsParallel().Take(MaxViewNum)
-						  where ValidImageExtensions.Contains(file.Extension, StringComparer.InvariantCultureIgnoreCase)
-						  orderby r.Next()
-						  select CreateImageSource(file.FullName, true);
-			Images.Clear();
-			Images.AddRange(sources);
-			sw.Stop();
+			Images = null;
+			GC.Collect();
+			Images = new List<ImageSource>();
+			if (Directory.Exists(folder))
+            {
+				var sources = from file in new System.IO.DirectoryInfo(folder).GetFiles().AsParallel().Take(number)
+							  where ValidImageExtensions.Contains(file.Extension, StringComparer.InvariantCultureIgnoreCase)
+							  orderby file.FullName
+							  select CreateImageSource(file.FullName, true);
+				Images.AddRange(sources);
+			}
+			if (Images.Count == 0) Images.Add(GlobalVariable.DefaultBigImage);
 		}
 
 		private ImageSource CreateImageSource(string file, bool forcePreLoad)
@@ -101,7 +106,8 @@ namespace Jvedio
 
 		private void timerImageChange_Tick(object sender, EventArgs e)
 		{
-			PlaySlideShow();
+			if(!stop)
+				PlaySlideShow();
 		}
 
 		public void PlaySlideShow()
@@ -118,7 +124,6 @@ namespace Jvedio
 				Image imgFadeIn = ImageControls[CurrentCtrlIndex];
 				ImageSource newSource = Images[CurrentSourceIndex];
 				imgFadeIn.Source = newSource;
-
 				Storyboard StboardFadeOut = new Storyboard();
 				DoubleAnimation FadeOutAnimation = new DoubleAnimation()
 				{
@@ -139,6 +144,11 @@ namespace Jvedio
 				Storyboard.SetTargetProperty(FadeInAnimation, new PropertyPath("Opacity"));
 				StboardFadeIn.Children.Add(FadeInAnimation);
 				StboardFadeIn.Begin(imgFadeIn);
+                if (stop)
+                {
+					Images = null;
+					GC.Collect();
+                }
 			}
 			catch(Exception ex)  { Console.WriteLine(ex.Message); }
 		}

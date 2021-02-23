@@ -1846,31 +1846,16 @@
 
                                                                         <!--图片-->
                                                                         <Grid  >
+                                                                            <!--大小图-->
                                                                             <Image MouseEnter="BorderMouseEnter" MouseLeave="BorderMouseLeave"   Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}" ToolTip="{Binding id}"  Style="{StaticResource ViewImage}" MouseLeftButtonDown="CanShowDetails" MouseLeftButtonUp="ShowDetails"  HorizontalAlignment="Center"  VerticalAlignment="Center" />
-                                                                            <!--显示预览图-->
+                                                                            <!--预览图-->
                                                                             <Canvas  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode, Converter={StaticResource StringToVisibilityConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}" >
                                                                                 <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16" Foreground="{DynamicResource ForegroundSearch}" Height="20"  ></TextBlock>
-                                                                                <Image  Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}">
-                                                                                    <Image.RenderTransform>
-                                                                                        <TransformGroup>
-                                                                                            <TranslateTransform X="0" Y="0" />
-                                                                                        </TransformGroup>
-                                                                                    </Image.RenderTransform>
-                                                                                </Image>
-                                                                                <Image   Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}">
-                                                                                    <Image.RenderTransform>
-                                                                                        <TransformGroup>
-                                                                                            <TranslateTransform X="0" Y="0" />
-                                                                                        </TransformGroup>
-                                                                                    </Image.RenderTransform>
-                                                                                </Image>
+                                                                                <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}" Tag="{Binding id}"  Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
+                                                                                <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}"   Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
                                                                             </Canvas>
-                                                                            
                                                                             <!--GIF图-->
-
-                                                                            <local:GifImage x:Name="GifImage"    GifSource="{Binding GifUri}"    Height="{Binding Path=GifImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=GifImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" />
-
-
+                                                                            <local:GifImage x:Name="GifImage" MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Tag="{Binding id}"    GifSource="{Binding GifUri}" Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=3,Source={x:Static p:Settings.Default}}"    Height="{Binding Path=GifImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=GifImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" />
                                                                             <!--分段视频-->
                                                                             <Grid  Panel.ZIndex="3" Visibility="{Binding hassubsection,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}"  >
                                                                                 <Image  ToolTip="分段视频"  Cursor="Hand"  Panel.ZIndex="3" Height="24" MouseLeftButtonUp="ShowSubsection"  HorizontalAlignment="Right"  VerticalAlignment="Bottom"  Margin="5"  >
@@ -2072,7 +2057,7 @@
                         </TabItem>
                         <TabItem  Background="Transparent"   >
                             <!--演员、类别、标签-->
-                            <Grid Grid.Column="1" Visibility="{Binding ShowMovieGrid,Converter={StaticResource BoolToOppositeVisibilityConverter},FallbackValue=Visible}" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" PreviewKeyDown="ActorGrid_PreviewKeyDown"  >
+                            <Grid Grid.Column="1"  Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" PreviewKeyDown="ActorGrid_PreviewKeyDown"  >
 
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>

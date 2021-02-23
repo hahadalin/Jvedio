@@ -223,16 +223,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DialogWindow\Dialog_Upgrade.xaml.cs">
+    <Compile Include="DialogWindows\Dialog_Upgrade.xaml.cs">
       <DependentUpon>Dialog_Upgrade.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DialogWindow\Dialog_Notice.xaml.cs">
+    <Compile Include="DialogWindows\Dialog_Notice.xaml.cs">
       <DependentUpon>Dialog_Notice.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DialogWindow\Dialog_NewMovie.xaml.cs">
+    <Compile Include="DialogWindows\Dialog_NewMovie.xaml.cs">
       <DependentUpon>Dialog_NewMovie.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DialogWindow\Dialog_About.xaml.cs">
+    <Compile Include="DialogWindows\Dialog_About.xaml.cs">
       <DependentUpon>Dialog_About.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\AI\Baidu.cs" />
@@ -264,15 +264,15 @@
     <Compile Include="Utils\ImageAndVedio\MediaInfo.cs" />
     <Compile Include="Utils\ImageAndVedio\ImageProcess.cs" />
     <Compile Include="Utils\FileProcess\XML.cs" />
-    <Compile Include="DialogWindow\BaseDialog.cs" />
-    <Compile Include="DialogWindow\Dialog_Thanks.xaml.cs">
+    <Compile Include="DialogWindows\BaseDialog.cs" />
+    <Compile Include="DialogWindows\Dialog_Thanks.xaml.cs">
       <DependentUpon>Dialog_Thanks.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Plot\Bar\BarView.xaml.cs">
       <DependentUpon>BarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Plot\Bar\BarViewModel.cs" />
-    <Compile Include="Window\Jvedio_BaseWindow.cs" />
+    <Compile Include="Windows\Jvedio_BaseWindow.cs" />
     <Compile Include="Utils\Net\MultiDownLoader.cs" />
     <Compile Include="Utils\Net\Translate.cs" />
     <Compile Include="Resource_IDData.Designer.cs">
@@ -286,7 +286,7 @@
       <DependentUpon>Resource_String.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\VieModel_Batch.cs" />
-    <Compile Include="Window\DialogInput.xaml.cs">
+    <Compile Include="Windows\DialogInput.xaml.cs">
       <DependentUpon>DialogInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Net\DownLoader.cs" />
@@ -300,7 +300,7 @@
     <Compile Include="Utils\FileProcess\NFO.cs" />
     <Compile Include="Utils\FileProcess\Scan.cs" />
     <Compile Include="Utils\Config\WindowConfig.cs" />
-    <Compile Include="Window\Msgbox.xaml.cs">
+    <Compile Include="Windows\Msgbox.xaml.cs">
       <DependentUpon>Msgbox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\GlobalVariable.cs" />
@@ -311,43 +311,46 @@
     <Compile Include="ViewModel\VieModel_DBManagement.cs" />
     <Compile Include="ViewModel\VieModel_StartUp.cs" />
     <Compile Include="ViewModel\VieModel_Settings.cs" />
-    <Compile Include="Window\WindowDetails.xaml.cs">
+    <Compile Include="Windows\WindowDetails.xaml.cs">
       <DependentUpon>WindowDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Window\WindowEdit.xaml.cs">
+    <Compile Include="Windows\WindowEdit.xaml.cs">
       <DependentUpon>WindowEdit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Window\WindowBatch.xaml.cs">
+    <Compile Include="Windows\WindowBatch.xaml.cs">
       <DependentUpon>WindowBatch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Window\WindowLoadActorMovies.xaml.cs">
+    <Compile Include="Windows\WindowLoadActorMovies.xaml.cs">
       <DependentUpon>WindowLoadActorMovies.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Window\WindowTools.xaml.cs">
+    <Compile Include="Windows\WindowTools.xaml.cs">
       <DependentUpon>WindowTools.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Window\WindowSettings.xaml.cs">
+    <Compile Include="Windows\WindowSettings.xaml.cs">
       <DependentUpon>WindowSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowStartUp.xaml.cs">
       <DependentUpon>WindowStartUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Window\Window_DBManagement.xaml.cs">
+    <Compile Include="Windows\Window_DBManagement.xaml.cs">
       <DependentUpon>Window_DBManagement.xaml</DependentUpon>
     </Compile>
-    <Page Include="DialogWindow\Dialog_Upgrade.xaml">
+    <Compile Include="Windows\Window_ImageViewer.xaml.cs">
+      <DependentUpon>Window_ImageViewer.xaml</DependentUpon>
+    </Compile>
+    <Page Include="DialogWindows\Dialog_Upgrade.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DialogWindow\Dialog_Notice.xaml">
+    <Page Include="DialogWindows\Dialog_Notice.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DialogWindow\Dialog_NewMovie.xaml">
+    <Page Include="DialogWindows\Dialog_NewMovie.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DialogWindow\Dialog_About.xaml">
+    <Page Include="DialogWindows\Dialog_About.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -359,11 +362,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DialogWindow\BaseDialogStyle.xaml">
+    <Page Include="DialogWindows\BaseDialogStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DialogWindow\Dialog_Thanks.xaml">
+    <Page Include="DialogWindows\Dialog_Thanks.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -371,15 +374,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window\WindowBatch.xaml">
+    <Page Include="Windows\WindowBatch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Window\WindowLoadActorMovies.xaml">
+    <Page Include="Windows\WindowLoadActorMovies.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Window\Window_DBManagement.xaml">
+    <Page Include="Windows\Window_DBManagement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Window_ImageViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -447,23 +454,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window\Jvedio_BaseWindowStyle.xaml">
+    <Page Include="Windows\Jvedio_BaseWindowStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window\DialogInput.xaml">
+    <Page Include="Windows\DialogInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window\Msgbox.xaml">
+    <Page Include="Windows\Msgbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window\WindowDetails.xaml">
+    <Page Include="Windows\WindowDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window\WindowEdit.xaml">
+    <Page Include="Windows\WindowEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -471,11 +478,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window\WindowTools.xaml">
+    <Page Include="Windows\WindowTools.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Window\WindowSettings.xaml">
+    <Page Include="Windows\WindowSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -110,7 +110,16 @@ namespace Jvedio.Utils.ImageAndVedio
         public BitmapSource GetFirstFrame()
         {
             GifBitmapDecoder decoder = new GifBitmapDecoder(new Uri(gifpath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-            return decoder.Frames[0];
+            BitmapSource result = null;
+            if (decoder != null && decoder.Frames.Count > 0)
+            {
+                    var frame = decoder.Frames[0];
+                    var metadata = GetFrameMetadata(frame);
+                    int width = decoder.Metadata.GetQueryOrDefault("/logscrdesc/Width", 0);
+                    int height = decoder.Metadata.GetQueryOrDefault("/logscrdesc/Height", 0);
+                    result = MakeFrame(width, height, frame, metadata, frame);
+            }
+            return result;
         }
 
         public GifBitmapDecoder GetDecoder()

@@ -37,9 +37,11 @@ namespace Jvedio
             var decoder = gif.GetDecoder();
             _animation = new Int32Animation(0, decoder.Frames.Count - 1, gif.GetTotalDuration());
             _animation.RepeatBehavior = RepeatBehavior.Forever;
-            this.Source = decoder.Frames[0];
+            this.Source = gif.GetFirstFrame();
             _isInitialized = true;
         }
+
+        
 
 
         protected override void OnMouseEnter(MouseEventArgs e)
@@ -69,16 +71,16 @@ namespace Jvedio
 
         private static void VisibilityPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if ((Visibility)e.NewValue == Visibility.Visible)
-            {
-                ((GifImage)sender).StartAnimation();
-            }
-            else
-            {
-                ((GifImage)sender).StopAnimation();
-                ((GifImage)sender).bitmapImages = null;
-                GC.Collect();
-            }
+            //if ((Visibility)e.NewValue == Visibility.Visible)
+            //{
+            //    ((GifImage)sender).StartAnimation();
+            //}
+            //else
+            //{
+            //    ((GifImage)sender).StopAnimation();
+            //    ((GifImage)sender).bitmapImages = null;
+            //    GC.Collect();
+            //}
         }
 
         public static readonly DependencyProperty FrameIndexProperty =
