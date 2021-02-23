@@ -16,6 +16,7 @@ namespace Jvedio
 {
     public static class GlobalVariable
     {
+        public static int MaxProcessWaitingSecond = 1;
         public static Stopwatch stopwatch = new Stopwatch();//计时
 
         //路径

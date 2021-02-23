@@ -764,9 +764,14 @@ namespace Jvedio
         {
             Movie movie = DataBase.SelectMovieByID(ID);
             addTag(ref movie);
-            if (Properties.Settings.Default.ShowImageMode == "2")
+            if (Properties.Settings.Default.ShowImageMode == "3")
             {
-
+                //gif
+                string gifpath = System.IO.Path.Combine(BasePicPath, "GIF", $"{movie.id}.gif");
+                if (File.Exists(gifpath))
+                    movie.GifUri = new Uri(gifpath);
+                else
+                    movie.GifUri = new Uri("pack://application:,,,/Resources/Picture/NoPrinting_G.gif");
             }
             else
             {
@@ -2490,7 +2495,7 @@ namespace Jvedio
 
 
 
-        public async void GetGif(object sender, RoutedEventArgs e)
+        public async void GenerateGif(object sender, RoutedEventArgs e)
         {
             if (!File.Exists(Properties.Settings.Default.FFMPEG_Path))
             {
@@ -2533,11 +2538,17 @@ namespace Jvedio
                         {
                             Console.WriteLine(((ScreenShotEventArgs)ev).FFmpegCommand);
                             vieModel.CmdText+=$"{Jvedio.Language.Resources.SuccessGifTo} ： {((ScreenShotEventArgs)ev).FilePath}\n";
+                            RefreshMovieByID(movie.id);
                         });
                     };
                     (success, message) = await screenShot.AsyncGenrateGif(movie);
-                    if (success) successNum++;
-                    else this.Dispatcher.Invoke((Action)delegate { vieModel.CmdText += $"{Jvedio.Language.Resources.Message_Fail}，{Jvedio.Language.Resources.Reason}：{message}\n"; });
+                    if (success) 
+                        successNum++;
+                    else 
+                        await this.Dispatcher.BeginInvoke((Action)delegate { 
+                            vieModel.CmdText += $"{movie.id} {Jvedio.Language.Resources.Message_Fail}，{Jvedio.Language.Resources.Reason}：{message}\n";
+
+                        });
                 }
                 HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_SuccessNum} {successNum} / {vieModel.SelectedMovie.Count}", "Main");
             }
@@ -2550,7 +2561,7 @@ namespace Jvedio
             new HandyControl.Controls.Screenshot().Start();
         }
 
-        public async void GetScreenShot(object sender, RoutedEventArgs e)
+        public async void GenerateScreenShot(object sender, RoutedEventArgs e)
         {
 
             if (!File.Exists(Properties.Settings.Default.FFMPEG_Path))
@@ -2588,7 +2599,7 @@ namespace Jvedio
                     };
                     (success, message) = await screenShot.AsyncScreenShot(movie);
                     if (success) successNum++;
-                    else this.Dispatcher.Invoke((Action)delegate { vieModel.CmdText += $"{Jvedio.Language.Resources.Message_Fail}，{Jvedio.Language.Resources.Reason}：{message}\n"; });
+                    else this.Dispatcher.Invoke((Action)delegate { vieModel.CmdText += $"{movie.id} {Jvedio.Language.Resources.Message_Fail}，{Jvedio.Language.Resources.Reason}：{message}\n"; });
                 }
                 HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_SuccessNum} {successNum} / {vieModel.SelectedMovie.Count}", "Main");
             }

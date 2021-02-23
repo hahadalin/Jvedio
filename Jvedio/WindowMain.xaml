@@ -1808,8 +1808,8 @@
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_Translate}" Click="TranslateMovie"  />
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_GenerateThumbnail}" Click="GenerateSmallImage" />
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_GenerateActressImage}" Click="GenerateActor" />
-                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" Click="GetScreenShot" />
-                                                                                    <MenuItem  Header="{x:Static lang:Resources.Menu_GenerateGif}" Click="GetGif" />
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" Click="GenerateScreenShot" />
+                                                                                    <MenuItem  Header="{x:Static lang:Resources.Menu_GenerateGif}" Click="GenerateGif" />
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_RenameFile}" Click="RenameFile" />
                                                                                     <MenuItem  Header="{x:Static lang:Resources.Menu_RemoveZero}" Click="ReMoveZero" />
                                                                                 </MenuItem>

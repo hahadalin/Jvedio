@@ -3886,6 +3886,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 执行命令超时 的本地化字符串。
+        /// </summary>
+        public static string TimeOut_Process {
+            get {
+                return ResourceManager.GetString("TimeOut_Process", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 流读取超时 的本地化字符串。
         /// </summary>
         public static string TimeOut_ReadWrite {

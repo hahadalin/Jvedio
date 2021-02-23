@@ -1,6 +1,7 @@
 ﻿using Jvedio.Utils.ImageAndVedio;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -32,13 +33,21 @@ namespace Jvedio
 
         private void Initialize()
         {
-            if (this.GifSource == "") return;
-            gif = new Gif(this.GifSource);
-            var decoder = gif.GetDecoder();
-            _animation = new Int32Animation(0, decoder.Frames.Count - 1, gif.GetTotalDuration());
-            _animation.RepeatBehavior = RepeatBehavior.Forever;
-            this.Source = gif.GetFirstFrame();
-            _isInitialized = true;
+            if (!File.Exists(GifSource))
+            {
+                this.Source = GlobalVariable.DefaultBigImage;
+            }
+            else
+            {
+                gif = new Gif(this.GifSource);
+                var decoder = gif.GetDecoder();
+                _animation = new Int32Animation(0, decoder.Frames.Count - 1, gif.GetTotalDuration());
+                _animation.RepeatBehavior = RepeatBehavior.Forever;
+                this.Source = null;
+                this.Source = gif.GetFirstFrame();
+                _isInitialized = true;
+            }
+
         }
 
         
@@ -47,7 +56,7 @@ namespace Jvedio
         protected override void OnMouseEnter(MouseEventArgs e)
         {
             if (bitmapImages == null && gif!=null) bitmapImages = gif.GetAllFrame().BitmapSources;
-            this.StartAnimation();
+            if (bitmapImages!=null && bitmapImages .Count>0) this.StartAnimation();
             base.OnMouseEnter(e);
         }
 

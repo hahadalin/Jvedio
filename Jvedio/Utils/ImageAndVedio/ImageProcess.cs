@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jvedio.Utils.ImageAndVedio;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -297,7 +298,7 @@ namespace Jvedio
         public Semaphore SemaphoreScreenShot;
         public int ScreenShotCurrent = 0;
         public object ScreenShotLockObject = 0;
-        public void BeginScreenShot(object o)
+        public async void BeginScreenShot(object o)
         {
             List<object> list = o as List<object>;
             string cutoffTime = list[0] as string;
@@ -309,27 +310,10 @@ namespace Jvedio
             if (string.IsNullOrEmpty(cutoffTime)) return;
             SemaphoreScreenShot.WaitOne();
 
-            //--使用 ffmpeg.exe 截图
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.FileName = Properties.Settings.Default.FFMPEG_Path;
-            startInfo.CreateNoWindow = true;
-            string str = $"-y -threads 1 -ss {cutoffTime} -i \"{filePath}\" -f image2 -frames:v 1 \"{output}\"";
-            startInfo.UseShellExecute = false;
-            startInfo.Arguments = str;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.RedirectStandardError = true;
-            process.StartInfo = startInfo;
-            process.Start();
-            StreamReader readerOut = process.StandardOutput;
-            StreamReader readerErr = process.StandardError;
-            string errors = readerErr.ReadToEnd();
-            string output2 = readerOut.ReadToEnd();
-            while (!process.HasExited) { continue; }
-            //--使用 ffmpeg.exe 截图
+            string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -threads 1 -ss {cutoffTime} -i \"{filePath}\" -f image2 -frames:v 1 \"{output}\"";
+            string error = await new FFmpegHelper(str).Run();
             SemaphoreScreenShot.Release();
-            SingleScreenShotCompleted?.Invoke(this,new ScreenShotEventArgs(str, output));
+            SingleScreenShotCompleted?.Invoke(this,new ScreenShotEventArgs(str, output, error));
             //App.Current.Dispatcher.Invoke((Action)delegate { cmdTextBox.AppendText(str + "\n"); cmdTextBox.ScrollToEnd(); });
             lock (ScreenShotLockObject) { ScreenShotCurrent += 1; }
         }
@@ -337,7 +321,7 @@ namespace Jvedio
 
         public async Task<bool> BeginGenGif(object o)
         {
-            return await Task.Run(() => { 
+            return await Task.Run(async () => { 
                 object[] list = o as object[];
                 string cutoffTime = list[0] as string;
                 string filePath = list[1] as string;
@@ -358,23 +342,9 @@ namespace Jvedio
                 if (height <= 0 || height > 1080) height = 170;
 
                 if (string.IsNullOrEmpty(cutoffTime)) return false;
-                System.Diagnostics.Process p = new System.Diagnostics.Process();
-                p.StartInfo.FileName = "cmd.exe";
-                p.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
-                p.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
-                p.StartInfo.RedirectStandardOutput = true;//由调用程序获取输出信息
-                p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
-                p.StartInfo.CreateNoWindow = true;//不显示程序窗口
-                p.Start();//启动程序
-
                 string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t {duration} -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifPath}\"";
-                Console.WriteLine(str);
-                p.StandardInput.WriteLine(str + "&exit");
-                p.StandardInput.AutoFlush = true;
-                string output = p.StandardOutput.ReadToEnd();
-                p.WaitForExit();//等待程序执行完退出进程
-                p.Close();
-                SingleScreenShotCompleted?.Invoke(this, new ScreenShotEventArgs(str, GifPath));
+                string error=await new FFmpegHelper(str,duration*5).Run();
+                SingleScreenShotCompleted?.Invoke(this, new ScreenShotEventArgs(str, GifPath,error));
                 return true;
             });
         }
@@ -399,6 +369,7 @@ namespace Jvedio
 
                 string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
                 if (cutoffArray.Length == 0) { result = false; message = Jvedio.Language.Resources.FailToCutOffVideo; return; }
+                if (!File.Exists(movie.filepath)) { result = false; message = Jvedio.Language.Resources.NotExists; return ; }
                 int SemaphoreNum = cutoffArray.Length > 10 ? 10 : cutoffArray.Length;//最多 10 个线程截图
                 SemaphoreScreenShot = new Semaphore(SemaphoreNum, SemaphoreNum);
 
@@ -443,7 +414,7 @@ namespace Jvedio
             string GifPath = BasePicPath + "Gif\\" + movie.id + ".gif";
             if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = Jvedio.Language.Resources.Message_SetFFmpeg; return (result, message); }
             if (!Directory.Exists(BasePicPath + "Gif\\")) Directory.CreateDirectory(BasePicPath + "Gif\\");
-
+            if (!File.Exists(movie.filepath)) { result = false; message = Jvedio.Language.Resources.NotExists; return (result, message); }
             string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组
             if (cutoffArray.Length == 0) { result = false; message = Jvedio.Language.Resources.FailToCutOffVideo; return (result, message); }
             string cutofftime = cutoffArray[new Random().Next(cutoffArray.Length-1)];
@@ -466,11 +437,13 @@ namespace Jvedio
     {
         public string FFmpegCommand;
         public string FilePath;
+        public string Error;
 
-        public ScreenShotEventArgs(string _FFmpegCommand,string filepath)
+        public ScreenShotEventArgs(string _FFmpegCommand,string filepath,string error="")
         {
             FFmpegCommand = _FFmpegCommand;
             FilePath = filepath;
+            Error = error;
         }
     }
 

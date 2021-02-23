@@ -245,6 +245,7 @@
     </Compile>
     <Compile Include="Utils\BaseClass.cs" />
     <Compile Include="Utils\Converter.cs" />
+    <Compile Include="Utils\ImageAndVedio\FFmpegHelper.cs" />
     <Compile Include="Utils\ImageAndVedio\Gif.cs" />
     <Compile Include="Utils\ImageAndVedio\GifImage.cs" />
     <Compile Include="Utils\SampleMovies.cs" />

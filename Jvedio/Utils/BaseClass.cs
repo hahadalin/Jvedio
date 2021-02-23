@@ -132,7 +132,22 @@ namespace Jvedio
         public string bigimageurl { get; set; }
         public string extraimageurl { get; set; }
 
-        public Uri GifUri { get; set; }
+
+        private Uri _GifUri;
+
+        public Uri GifUri {
+            get
+            {
+                return _GifUri;
+            }
+
+            set
+            {
+                _GifUri = value;
+                OnPropertyChanged();
+            }
+
+            }
 
         private BitmapSource _smallimage;
         public BitmapSource smallimage { get { return _smallimage; } set { _smallimage = value; OnPropertyChanged(); } }

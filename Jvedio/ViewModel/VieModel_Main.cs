@@ -1842,7 +1842,7 @@ namespace Jvedio.ViewModel
                 string gifpath = Path.Combine(BasePicPath, "GIF", $"{movie.id}.gif");
                 if (movie.GifUri != null && movie.GifUri.OriginalString != "") continue;
                 if (File.Exists(gifpath))
-                    movie.GifUri = new Uri("pack://siteoforigin:,,,/" + gifpath);
+                    movie.GifUri = new Uri(gifpath);
 
                 else
                     movie.GifUri = new Uri("pack://application:,,,/Resources/Picture/NoPrinting_G.gif");

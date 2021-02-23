@@ -87,6 +87,7 @@ namespace Jvedio.Utils.ImageAndVedio
         {
             List<BitmapSource> bitmapSources = new List<BitmapSource>();
             List<TimeSpan> spans = new List<TimeSpan>();
+            if(!File.Exists(gifpath)) return (bitmapSources, spans);
             GifBitmapDecoder decoder = new GifBitmapDecoder(new Uri(gifpath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
             if (decoder != null && decoder.Frames.Count > 0)
             {
