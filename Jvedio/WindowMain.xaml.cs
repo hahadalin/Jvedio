@@ -336,7 +336,7 @@ namespace Jvedio
 
         }
 
-        protected async override void OnClosed(EventArgs e)
+        protected  override void OnClosed(EventArgs e)
         {
             _source.RemoveHook(HwndHook);
             UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消热键
@@ -434,8 +434,8 @@ namespace Jvedio
                         vieModel.CurrentCount = vieModel.CurrentMovieList.Count;
                         vieModel.TotalCount = vieModel.FilterMovieList.Count;
                         if (Properties.Settings.Default.EditMode) SetSelected();
-                        if (Properties.Settings.Default.ShowImageMode == "2") Loadslide(); ;//展示预览图
-                        if (Properties.Settings.Default.ShowImageMode == "3") vieModel.LoadGif();
+                        if (Properties.Settings.Default.ShowImageMode == "2") AsyncLoadExtraPic(); ;
+                        if (Properties.Settings.Default.ShowImageMode == "3") AsyncLoadGif();
                         SetLoadingStatus(false);
                         
                     }, DispatcherPriority.ContextIdle, null);
@@ -2015,11 +2015,11 @@ namespace Jvedio
             else if (sortindex == 3)
             {
                 //GIF
-                vieModel.LoadGif();
+                AsyncLoadGif();
             }
-            else
+            else if(sortindex==2)
             {
-
+                AsyncLoadExtraPic();
             }
 
             if (sortindex == 0)
@@ -2072,7 +2072,7 @@ namespace Jvedio
 
 
         public List<ImageSlide> ImageSlides;
-        public void Loadslide()
+        public void AsyncLoadExtraPic()
         {
             if(ImageSlides==null) ImageSlides = new List<ImageSlide>();
             List<Image> images1 = new List<Image>();
@@ -2092,14 +2092,42 @@ namespace Jvedio
 
 
             Task.Run(async() => { 
-                for (int i = 0; i < images1.Count; i++)
+                for (int i = ImageSlides.Count; i < images1.Count; i++)
                 {
                     await Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate {
-                        ImageSlide imageSlide = new ImageSlide(BasePicPath + $"ExtraPic\\{images1[i].Tag.ToString()}", images1[i], images2[i]);
+                        ImageSlide imageSlide = new ImageSlide(BasePicPath + $"ExtraPic\\{images1[i].Tag}", images1[i], images2[i]);
                         ImageSlides.Add(imageSlide);
+
                     });
                 }
             });
+        }
+
+
+
+        public void AsyncLoadGif()
+        {
+            if (vieModel. CurrentMovieList == null) return;
+            DisposeGif("", true);
+            Task.Run(async () => {
+                for (int i = 0; i < vieModel.CurrentMovieList.Count; i++)
+                {
+                    Movie movie = vieModel.CurrentMovieList[i];
+                    string gifpath = System.IO.Path.Combine(BasePicPath, "GIF", $"{movie.id}.gif");
+                    if (movie.GifUri != null && movie.GifUri.OriginalString != "") continue;
+                    if (File.Exists(gifpath))
+                        movie.GifUri = new Uri(gifpath);
+                    else
+                        movie.GifUri = new Uri("pack://application:,,,/Resources/Picture/NoPrinting_G.gif");
+                    //加载
+                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate
+                    {
+                        vieModel.CurrentMovieList[i] = null;
+                        vieModel.CurrentMovieList[i] = movie;
+                    });
+                }
+            });
+
         }
 
 
@@ -5460,6 +5488,12 @@ namespace Jvedio
 
         private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
+            if (vieModel.IsLoadingMovie)
+            {
+                e.Handled = true;
+                return;
+            }
+
             bool isInList = false;
             for (int i = 0; i < ListItemsControl.Items.Count; i++)
             {

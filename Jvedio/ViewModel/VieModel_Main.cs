@@ -1831,31 +1831,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public async void LoadGif()
-        {
-            if (CurrentMovieList == null) return;
-            Main main = GetWindowByName("Main") as Main;
-            main.DisposeGif("", true);
-            for (int i = 0; i < CurrentMovieList.Count; i++)
-            {
-                Movie movie = CurrentMovieList[i];
-                string gifpath = Path.Combine(BasePicPath, "GIF", $"{movie.id}.gif");
-                if (movie.GifUri != null && movie.GifUri.OriginalString != "") continue;
-                if (File.Exists(gifpath))
-                    movie.GifUri = new Uri(gifpath);
 
-                else
-                    movie.GifUri = new Uri("pack://application:,,,/Resources/Picture/NoPrinting_G.gif");
-
-                //加载
-                await App.Current.Dispatcher.BeginInvoke((Action)delegate
-                {
-                    CurrentMovieList[i] = null;
-                    CurrentMovieList[i] = movie;
-                });
-            }
-
-        }
 
 
 

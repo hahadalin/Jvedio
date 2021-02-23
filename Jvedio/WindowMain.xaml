@@ -1732,12 +1732,12 @@
                                     </Grid>
 
                                     <!--影片-->
-                                    <Grid Grid.Column="1" FocusVisualStyle="{x:Null}" Panel.ZIndex="2"  Margin="10"     PreviewKeyDown="Grid_PreviewKeyDown"  PreviewKeyUp="Grid_PreviewKeyUp"    AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver"    >
+                                    <Grid  Grid.Column="1" FocusVisualStyle="{x:Null}" Panel.ZIndex="2"  Margin="10"     PreviewKeyDown="Grid_PreviewKeyDown"  PreviewKeyUp="Grid_PreviewKeyUp"    AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver"    >
                                         <!--影片展示 Grid-->
                                         <Grid  FocusVisualStyle="{x:Null}"  >
                                             <ScrollViewer IsDeferredScrollingEnabled="False"  FocusVisualStyle="{x:Null}"   CanContentScroll="True"  x:Name="MovieScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
                                                 <ScrollViewer.ContextMenu>
-                                                    <ContextMenu>
+                                                    <ContextMenu  IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}">
                                                         <MenuItem Header="{x:Static lang:Resources.Refresh}" Click="RefreshCurrentPage" />
                                                         <MenuItem Header="{x:Static lang:Resources.SelectAll}" Click="SelectAll" />
                                                         <MenuItem Header="{x:Static lang:Resources.ShowExists}" IsCheckable="True"  IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding FlipOverCommand}"  />
@@ -1794,10 +1794,10 @@
                                                                             <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                         </Border.Effect>
                                                                     </Border>
-                                                                    <StackPanel  Margin="5"   ContextMenuOpening="ContextMenu_ContextMenuOpening"  >
+                                                                    <StackPanel  Margin="5"   ContextMenuOpening="ContextMenu_ContextMenuOpening"   >
                                                                         <!--影片右键菜单-->
                                                                         <StackPanel.ContextMenu  >
-                                                                            <ContextMenu Opacity="0.9"  PreviewKeyUp="ContextMenu_PreviewKeyUp">
+                                                                            <ContextMenu Opacity="0.9"  PreviewKeyUp="ContextMenu_PreviewKeyUp" >
                                                                                 <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoadSelectMovie"   ></MenuItem>
                                                                                 <MenuItem  Header="{x:Static lang:Resources.Menu_SyncExtra}" Visibility="Visible"  >
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_CustomUrl}" Click="DownLoadWithUrl"   ></MenuItem>
@@ -1849,7 +1849,7 @@
                                                                             <!--大小图-->
                                                                             <Image MouseEnter="BorderMouseEnter" MouseLeave="BorderMouseLeave"   Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}" ToolTip="{Binding id}"  Style="{StaticResource ViewImage}" MouseLeftButtonDown="CanShowDetails" MouseLeftButtonUp="ShowDetails"  HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                                                             <!--预览图-->
-                                                                            <Canvas  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode, Converter={StaticResource StringToVisibilityConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}" >
+                                                                            <Canvas  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=2,Source={x:Static p:Settings.Default}}">
                                                                                 <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16" Foreground="{DynamicResource ForegroundSearch}" Height="20"  ></TextBlock>
                                                                                 <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}" Tag="{Binding id}"  Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
                                                                                 <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}"   Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
