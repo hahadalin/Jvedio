@@ -40,10 +40,10 @@ namespace Jvedio
 
         private async Task<bool> GetDownLoadList()
         {
-            (string content, int statusCode) = await Net.Http(list_url);
-            if (content == "") return false;
+            HttpResult httpResult = await Net.Http(list_url);
+            if (httpResult == null || httpResult.SourceCode=="") return false;
             Dictionary<string, string> filemd5 = new Dictionary<string, string>();
-            foreach (var item in content.Split('\n'))
+            foreach (var item in httpResult.SourceCode.Split('\n'))
             {
                 if (!string.IsNullOrEmpty(item))
                 {
@@ -111,9 +111,9 @@ namespace Jvedio
                 string filepath = Path.Combine(temppath, item);
                 if (!File.Exists(filepath))
                 {
-                    var (filebytes, cookies, statuscode) = await  AsyncDownLoadFile(file_url + item);
+                    HttpResult streamResult = await  DownLoadFile(file_url + item);
                     //写入本地
-                    if (filebytes != null) WriteFile(filebytes, filepath);
+                    if (streamResult != null) WriteFile(streamResult.FileByte, filepath);
                 }
                 DownLoadProgress.value += 1;
                 if(!StopUpgrade) onProgressChanged?.Invoke(this, DownLoadProgress);
@@ -227,15 +227,30 @@ namespace Jvedio
                 if (movie.id.ToUpper().StartsWith("FC2")) SemaphoreFC2.Release(); else Semaphore.Release();
                 return;
             }
-            bool success; string resultMessage;
             //下载信息
             State = DownLoadState.DownLoading;
             if (Net.IsToDownLoadInfo(movie) || enforce)
             {
                 //满足一定条件才下载信息
-                (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet(movie); });
-                InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = movie, progress = downLoadProgress.value, Success = success });//委托到主界面显示
-                if (!success) MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {movie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{(resultMessage.ToStatusMessage())}"));
+                HttpResult httpResult = await  Net.DownLoadFromNet(movie); 
+                if(httpResult!=null )
+                {
+                    if (httpResult.Success)
+                    {
+                        InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = movie, progress = downLoadProgress.value, Success = httpResult.Success });//委托到主界面显示
+                    }
+                    else
+                    {
+                        MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {movie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{httpResult.StatusCode.ToStatusMessage()}"));
+                    }
+                    
+                }
+
+
+
+
+
+
             }
 
 
@@ -244,8 +259,7 @@ namespace Jvedio
 
             if (!File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg") || enforce)
             {
-                string message2 = "";
-                (bool success2, string cookie2) = await Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id, callback: (sc) => { message2 = sc.ToString(); });//下载大图
+                var httpResult = await Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);//下载大图
                 //if (!success2) MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {dm.id} 海报图下载失败，原因：{message2.ToStatusMessage()}"));
             }
 
@@ -263,8 +277,7 @@ namespace Jvedio
                 if (!File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg") || enforce)
                 {
 
-                    string message = "";
-                    (bool success1, string cookie) = await Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id, callback: (sc) => { message = sc.ToString(); }); //下载小图
+                    var httpResult = await Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id); //下载小图
                     //if (!success1) MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {dm.id} 缩略图下载失败，原因：{message.ToStatusMessage()}"));
                 }
             }
@@ -394,11 +407,10 @@ namespace Jvedio
                 if (!string.IsNullOrEmpty(actress.imageurl))
                 {
                     string url = actress.imageurl;
-                    byte[] imageBytes = null;
-                    imageBytes = await Task.Run(() => { return Net.DownLoadFile(url).filebytes; });
-                    if (imageBytes != null)
+                    HttpResult streamResult= await Net.DownLoadFile(url);
+                    if (streamResult != null)
                     {
-                        ImageProcess.SaveImage(actress.name, imageBytes, ImageType.ActorImage, url);
+                        ImageProcess.SaveImage(actress.name, streamResult.FileByte, ImageType.ActorImage, url);
                         actress.smallimage = ImageProcess.GetBitmapImage(actress.name, "Actresses");
                     }
 

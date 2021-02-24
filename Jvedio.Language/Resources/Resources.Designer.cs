@@ -799,6 +799,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 详情模式 的本地化字符串。
+        /// </summary>
+        public static string DetailMode {
+            get {
+                return ResourceManager.GetString("DetailMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 详情窗口左右浏览数据库所有影片 的本地化字符串。
         /// </summary>
         public static string DetailViewAll {
@@ -1290,6 +1299,15 @@ namespace Jvedio.Language {
         public static string HotKeyConflict {
             get {
                 return ResourceManager.GetString("HotKeyConflict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Http请求失败 的本地化字符串。
+        /// </summary>
+        public static string HttpFail {
+            get {
+                return ResourceManager.GetString("HttpFail", resourceCulture);
             }
         }
         
@@ -3220,6 +3238,24 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 搜索历史 的本地化字符串。
+        /// </summary>
+        public static string SearchHistory {
+            get {
+                return ResourceManager.GetString("SearchHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 搜索结果 的本地化字符串。
+        /// </summary>
+        public static string SearchResult {
+            get {
+                return ResourceManager.GetString("SearchResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 秒 的本地化字符串。
         /// </summary>
         public static string Second {
@@ -3922,6 +3958,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 超时 的本地化字符串。
+        /// </summary>
+        public static string TO {
+            get {
+                return ResourceManager.GetString("TO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 检索过于频繁，稍后再试 的本地化字符串。
         /// </summary>
         public static string TooFrequent {
@@ -4093,6 +4138,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 未开启 Bus 网址 的本地化字符串。
+        /// </summary>
+        public static string UrlBusNotset {
+            get {
+                return ResourceManager.GetString("UrlBusNotset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 未开启 DB 网址 的本地化字符串。
         /// </summary>
         public static string UrlDBNotset {
@@ -4107,6 +4161,24 @@ namespace Jvedio.Language {
         public static string UrlEuropeNotset {
             get {
                 return ResourceManager.GetString("UrlEuropeNotset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未开启 FC2 网址 的本地化字符串。
+        /// </summary>
+        public static string UrlFC2Notset {
+            get {
+                return ResourceManager.GetString("UrlFC2Notset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未开启 Library 网址 的本地化字符串。
+        /// </summary>
+        public static string UrlLibraryNotset {
+            get {
+                return ResourceManager.GetString("UrlLibraryNotset", resourceCulture);
             }
         }
         

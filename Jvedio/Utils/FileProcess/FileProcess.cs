@@ -16,6 +16,38 @@ namespace Jvedio
     public static class FileProcess
     {
 
+
+        public static void SaveInfo(Dictionary<string, string> Info,string id)
+        {
+            //保存信息
+            if (!Info.ContainsKey("id")) Info.Add("id", id);
+            DataBase.UpdateInfoFromNet(Info);
+            DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
+            FileProcess.SaveNfo(detailMovie);
+        }
+
+        public static void SaveNfo(DetailMovie detailMovie)
+        {
+            if (!Properties.Settings.Default.SaveInfoToNFO) return;
+
+            if (Directory.Exists(Properties.Settings.Default.NFOSavePath))
+            {
+                //固定位置
+                nfo.SaveToNFO(detailMovie, Path.Combine(Properties.Settings.Default.NFOSavePath, $"{detailMovie.id}.nfo"));
+            }
+            else
+            {
+                //与视频同路径
+                string path = detailMovie.filepath;
+                if (File.Exists(path))
+                {
+                    nfo.SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{detailMovie.id}.nfo"));
+                }
+            }
+
+        }
+
+
         public static void ClearDateBefore(DateTime dateTime)
         {
             if (!File.Exists("RecentWatch")) return;

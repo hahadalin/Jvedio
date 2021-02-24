@@ -1170,7 +1170,7 @@
                                                             <StackPanel x:Name="SearchHistoryStackPanel">
 
                                                                 <StackPanel Orientation="Horizontal" >
-                                                                    <TextBlock Margin="5" VerticalAlignment="Center" Height="auto"  Style="{StaticResource BaseTextBlock}" Text="搜索历史" HorizontalAlignment="Left" FontSize="12"/>
+                                                                    <TextBlock Margin="5" VerticalAlignment="Center" Height="auto"  Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SearchHistory}" HorizontalAlignment="Left" FontSize="12"/>
                                                                     <Border     Height="20" Width="20" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonDown="ClearSearchHistory">
                                                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="15" Width="15"   />
                                                                     </Border>
@@ -1197,7 +1197,7 @@
                                                                 </ItemsControl>
                                                             </StackPanel>
 
-                                                            <TextBlock  Margin="5"  Grid.Row="0" Style="{StaticResource BaseTextBlock}" Text="搜索结果" HorizontalAlignment="Left" FontSize="12"/>
+                                                            <TextBlock  Margin="5"  Grid.Row="0" Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SearchResult}" HorizontalAlignment="Left" FontSize="12"/>
 
                                                             <ItemsControl Background="Transparent" x:Name="SearchItemsControl"   ItemsSource="{Binding CurrentSearchCandidate}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
                                                                 <ItemsControl.ItemsPanel>

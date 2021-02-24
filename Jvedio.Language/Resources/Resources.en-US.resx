@@ -580,34 +580,34 @@
     <value>Set password</value>
   </data>
   <data name="Status_ClearLog" xml:space="preserve">
-    <value>Clear log files older than 10 days...</value>
+    <value>Clear log files older than 10 days……</value>
   </data>
   <data name="Status_ClearRecentWatch" xml:space="preserve">
-    <value>Clear more than 10 days of recent viewing...</value>
+    <value>Clear more than 10 days of recent viewing……</value>
   </data>
   <data name="Status_CreateDir" xml:space="preserve">
-    <value>Create folder...</value>
+    <value>Create folder……</value>
   </data>
   <data name="Status_InitDatabase" xml:space="preserve">
-    <value>Initialize the database...</value>
+    <value>Initialize the database……</value>
   </data>
   <data name="Status_InitID" xml:space="preserve">
-    <value>Initialize identification code parameters...</value>
+    <value>Initialize identification code parameters……</value>
   </data>
   <data name="Status_InitMovie" xml:space="preserve">
-    <value>Initialize the movie...</value>
+    <value>Initialize the movie……</value>
   </data>
   <data name="Status_InitNet" xml:space="preserve">
-    <value>Network configuration initialization...</value>
+    <value>Network configuration initialization……</value>
   </data>
   <data name="Status_InitScan" xml:space="preserve">
-    <value>Initialize scan parameters...</value>
+    <value>Initialize scan parameters……</value>
   </data>
   <data name="Status_RepairConfig" xml:space="preserve">
-    <value>Fix setting error...</value>
+    <value>Fix setting error……</value>
   </data>
   <data name="Status_UpdateConfig" xml:space="preserve">
-    <value>Update configuration file...</value>
+    <value>Update configuration file……</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -1072,7 +1072,7 @@
     <value>Save failed, the ID already exists</value>
   </data>
   <data name="Message_EditUpdateSuccess" xml:space="preserve">
-    <value>The path, video type, file size, creation time, and import time are successfully updated!</value>
+    <value>The path, video type, file size, creation time, and import time are successfully updated！</value>
   </data>
   <data name="Translated" xml:space="preserve">
     <value>Translated</value>
@@ -1228,7 +1228,7 @@
     <value>The folder has an intersection or the folder is already in the current collection</value>
   </data>
   <data name="Scanning" xml:space="preserve">
-    <value>Scanning...</value>
+    <value>Scanning……</value>
   </data>
   <data name="DeleteImage" xml:space="preserve">
     <value>Delete picture</value>
@@ -1526,5 +1526,32 @@
   </data>
   <data name="TimeOut_Process" xml:space="preserve">
     <value>TimeOut</value>
+  </data>
+  <data name="SearchHistory" xml:space="preserve">
+    <value>SearchHistory</value>
+  </data>
+  <data name="SearchResult" xml:space="preserve">
+    <value>SearchResult</value>
+  </data>
+  <data name="DetailMode" xml:space="preserve">
+    <value>DetailMode</value>
+  </data>
+  <data name="DragFileInOr" xml:space="preserve">
+    <value>Drag in folders and videos or</value>
+  </data>
+  <data name="TO" xml:space="preserve">
+    <value>TimeOut</value>
+  </data>
+  <data name="HttpFail" xml:space="preserve">
+    <value>HttpFail</value>
+  </data>
+  <data name="UrlFC2Notset" xml:space="preserve">
+    <value>FC2 URL not enabled</value>
+  </data>
+  <data name="UrlBusNotset" xml:space="preserve">
+    <value>Bus URL not enabled</value>
+  </data>
+  <data name="UrlLibraryNotset" xml:space="preserve">
+    <value>Library URL not open</value>
   </data>
 </root>

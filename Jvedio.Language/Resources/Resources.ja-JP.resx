@@ -316,7 +316,7 @@
     <value>多くのネットユーザーのjvedioへの賛助と支持に感謝します!</value>
   </data>
   <data name="Thanks_Content2" xml:space="preserve">
-    <value>jvedioの発展をお祈りします</value>
+    <value>jvedioの発展をお祈りします！</value>
   </data>
   <data name="Menu_SyncInfo" xml:space="preserve">
     <value>同期メッセージ(S)</value>
@@ -946,7 +946,7 @@
     <value>テストは失敗します：1。Cookieが無効な場合は、Cookieを再度コピーしてください。2。再テストまたは3.ネットワークタイムアウトを設定します</value>
   </data>
   <data name="Message_NeedCookies" xml:space="preserve">
-    <value>URLにはCookie！を入力する必要があり、入力後に1回テストします</value>
+    <value>URLにはCookie！を入力する必要があり、入力後に1回テストします！</value>
   </data>
   <data name="BossKeyError" xml:space="preserve">
     <value>ホットキーの競合！</value>
@@ -1072,7 +1072,7 @@
     <value>保存に失敗しました。IDはすでに存在します</value>
   </data>
   <data name="Message_EditUpdateSuccess" xml:space="preserve">
-    <value>パス、ビデオタイプ、ファイルサイズ、作成時間、およびインポート時間が正常に更新されました</value>
+    <value>パス、ビデオタイプ、ファイルサイズ、作成時間、およびインポート時間が正常に更新されました！</value>
   </data>
   <data name="MovieInfo" xml:space="preserve">
     <value>映画情報</value>
@@ -1228,7 +1228,7 @@
     <value>フォルダに交差があるか、フォルダがすでに現在のコレクションにあります</value>
   </data>
   <data name="Scanning" xml:space="preserve">
-    <value>走査...</value>
+    <value>走査……</value>
   </data>
   <data name="DeleteImage" xml:space="preserve">
     <value>画像を削除する</value>
@@ -1523,5 +1523,35 @@
   </data>
   <data name="TimeOut_Process" xml:space="preserve">
     <value>TimeOut</value>
+  </data>
+  <data name="DragFileInOr" xml:space="preserve">
+    <value>フォルダやビデオをドラッグするか</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>サイズ</value>
+  </data>
+  <data name="SearchHistory" xml:space="preserve">
+    <value>検索履歴</value>
+  </data>
+  <data name="SearchResult" xml:space="preserve">
+    <value>の検索結果</value>
+  </data>
+  <data name="DetailMode" xml:space="preserve">
+    <value>詳細モード</value>
+  </data>
+  <data name="TO" xml:space="preserve">
+    <value>TimeOut</value>
+  </data>
+  <data name="HttpFail" xml:space="preserve">
+    <value>httpリクエストに失敗する</value>
+  </data>
+  <data name="UrlFC2Notset" xml:space="preserve">
+    <value>fc2のアドレスは開いていない</value>
+  </data>
+  <data name="UrlLibraryNotset" xml:space="preserve">
+    <value>libraryのアドレスが開いていない</value>
+  </data>
+  <data name="UrlBusNotset" xml:space="preserve">
+    <value>busアドレスは開きません</value>
   </data>
 </root>

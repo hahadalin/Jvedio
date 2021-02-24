@@ -96,27 +96,28 @@ namespace Jvedio
                 try
                 {
                     //检查升级程序是否是最新的
-                    string content = ""; int statusCode; bool IsToDownLoadUpdate = false;
-                    try { (content, statusCode) = await Net.Http(Net.UpdateExeVersionUrl, Proxy: null); }
-                    catch (TimeoutException ex) { Logger.LogN($"URL={Net.UpdateUrl},Message-{ex.Message}"); }
-                    if (content != "")
+                    
+                    bool IsToDownLoadUpdate = false;
+                    HttpResult httpResult = await Net.Http(Net.UpdateExeVersionUrl); 
+
+                    if (httpResult != null && httpResult.SourceCode!="")
                     {
                         //跟本地的 md5 对比
                         if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe")) { IsToDownLoadUpdate = true; }
                         else
                         {
                             string md5 = FileProcess.GetFileMD5(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
-                            if (md5 != content) { IsToDownLoadUpdate = true; }
+                            if (md5 != httpResult.SourceCode) { IsToDownLoadUpdate = true; }
                         }
                     }
                     if (IsToDownLoadUpdate)
                     {
-                        (byte[] filebyte, string cookie, int statuscode) = Net.DownLoadFile(Net.UpdateExeUrl);
+                        HttpResult streamResult = await Net.DownLoadFile(Net.UpdateExeUrl);
                         try
                         {
                             using (var fs = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe", FileMode.Create, FileAccess.Write))
                             {
-                                fs.Write(filebyte, 0, filebyte.Length);
+                                fs.Write(streamResult.FileByte, 0, streamResult.FileByte.Length);
                             }
                         }
                         catch { }

@@ -226,17 +226,15 @@ namespace Jvedio
         private async Task<bool> DownLoad(string id)
         {
             Movie movie = DataBase.SelectMovieByID(id);
-            bool success; string resultMessage;
-
-            (success, resultMessage) = await Task.Run(() => { return Net.DownLoadFromNet(movie, vieModel.Info_ForceDownload); });
-            if (success)
+            HttpResult httpResult = await  Net.DownLoadFromNet(movie, vieModel.Info_ForceDownload);
+            if (httpResult !=null && httpResult. Success)
             {
                 ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo} {Jvedio.Language.Resources.Message_Success}");
                 Task.Delay(vieModel.Timeout_Short).Wait();
             }
-            else
+            else if(httpResult!=null)
             {
-                ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{resultMessage}");
+                ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{httpResult.StatusCode.ToStatusMessage()}");
             }
 
             if (id.ToUpper().IndexOf("FC2") >= 0)
@@ -255,7 +253,8 @@ namespace Jvedio
 
             if (CheckPause()) return false;
 
-
+            bool success = false;
+            string resultMessage = "";
             //同步缩略图
             if (vieModel.DownloadSmallPic)
             {

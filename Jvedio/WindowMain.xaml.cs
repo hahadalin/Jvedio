@@ -578,24 +578,19 @@ namespace Jvedio
                     notices = sr.ReadToEnd();
                     sr.Close();
                 }
-                string content = ""; int statusCode = 404;
-                try
+
+                HttpResult httpResult = await Net.Http(NoticeUrl);
+
+                if (httpResult != null && httpResult.SourceCode!="" && httpResult.SourceCode!=notices)
                 {
-                    (content, statusCode) = await Net.Http(NoticeUrl, Proxy: null);
-                }
-                catch (TimeoutException ex) { Logger.LogN($"URL={NoticeUrl},Message-{ex.Message}"); }
-                if (content != "")
-                {
-                    if (content != notices)
-                    {
                         StreamWriter sw = new StreamWriter(path, false);
-                        sw.Write(content);
+                        sw.Write(httpResult.SourceCode);
                         sw.Close();
                         this.Dispatcher.Invoke((Action)delegate ()
                         {
-                            new Dialog_Notice(this, false, content).ShowDialog();
+                            new Dialog_Notice(this, false, httpResult.SourceCode).ShowDialog();
                         });
-                    }
+                    
 
                 }
             });

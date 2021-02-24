@@ -986,7 +986,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public string textType = "所有视频";
+        public string textType = Jvedio.Language.Resources.AllVideo;
 
         public string TextType
         {
@@ -1943,7 +1943,7 @@ namespace Jvedio.ViewModel
 
         public void RandomDisplay()
         {
-            TextType = "随机展示";
+            TextType = Jvedio.Language.Resources.ToolTip_RandomShow;
             Statistic();
             MovieList = DataBase.SelectMoviesBySql($"SELECT * FROM movie ORDER BY RANDOM() limit {Properties.Settings.Default.DisplayNumber}");
             FlipOver();
@@ -2088,7 +2088,7 @@ namespace Jvedio.ViewModel
                 }
             }
 
-            TextType = $"{Properties.Settings.Default.RecentDays} 天内的最近播放";
+            TextType = $"{Jvedio.Language.Resources.RecentPlay}（{Properties.Settings.Default.RecentDays} ）";
             Task.Run(() =>
             {
                 Statistic();
@@ -2211,7 +2211,7 @@ namespace Jvedio.ViewModel
             Task.Run(() =>
             {
 
-                TextType = "详情模式";
+                TextType = Jvedio.Language.Resources.DetailMode;
                 Statistic();
                 List<Movie> movies = new List<Movie>();
 

@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using static Jvedio.GlobalVariable;
 using System.Windows.Media.Imaging;
+using System.Net;
 
 namespace Jvedio
 {
@@ -207,20 +208,20 @@ namespace Jvedio
 
 
 
-        public static string ToStatusMessage(this string status)
+        public static string ToStatusMessage(this HttpStatusCode status)
         {
-            switch (status)
+            switch ((int)status)
             {
-                case "403":
+                case 403:
                     return Jvedio.Language.Resources.NotShowInCountry;
-                case "404":
+                case 404:
                     return Jvedio.Language.Resources.NoID;
-                case "504":
+                case 504:
                     return Jvedio.Language.Resources.TimeOut;
-                case "302":
+                case 302:
                     return Jvedio.Language.Resources.TooFrequent;
                 default:
-                    return status;
+                    return status.ToString();
             }
         }
 

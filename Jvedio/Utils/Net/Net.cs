@@ -33,6 +33,8 @@ namespace Jvedio
         public const string UpdateExeUrl = "https://hitchao.github.io/jvedioupdate/JvedioUpdate.exe";
 
 
+
+
         public static void Init()
         {
             TCPTIMEOUT = Properties.Settings.Default.Timeout_tcp;
@@ -47,23 +49,147 @@ namespace Jvedio
         public enum HttpMode
         {
             Normal = 0,
-            RedirectGet = 1
+            RedirectGet = 1,
+            Stream=2
         }
 
-        public static async Task<(bool,string,string)> CheckUpdate()
+
+
+
+
+
+
+
+        public static async Task<HttpResult> Http(string Url, CrawlerHeader headers = null, HttpMode Mode = HttpMode.Normal, WebProxy Proxy = null,bool allowRedirect=true)
+        {
+            if (!Url.IsProperUrl()) return null;
+            if (headers == null) headers = new CrawlerHeader();
+            int trynum = 0;
+            HttpResult httpResult = null;
+
+            try
+            {
+                while (trynum < ATTEMPTNUM && httpResult == null)
+                {
+                    httpResult = await Task.Run(() =>
+                    {
+                        HttpWebRequest Request;
+                        HttpWebResponse Response = default;
+                        try
+                        {
+                            Request = (HttpWebRequest)HttpWebRequest.Create(Url);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogE(ex);
+                            return null;
+                        }
+                        Request.Host = headers.Host == "" ? new Uri(Url).Host : headers.Host;
+                        Request.Accept = headers.Accept;
+                        Request.Timeout = 50000;
+                        Request.Method = headers.Method;
+                        Request.KeepAlive = headers.Connection == "keep-alive";
+                        Request.AllowAutoRedirect = allowRedirect;
+                        Request.Referer = Url;
+                        Request.UserAgent = headers.UserAgent;
+                        Request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");//限定为中文，解析的时候就是中文
+                        Request.ReadWriteTimeout = READWRITETIMEOUT;
+                        if (headers.Cookies != "") Request.Headers.Add("Cookie", headers.Cookies);
+                        if (Mode == HttpMode.RedirectGet) Request.AllowAutoRedirect = false;
+                        if (Proxy != null) Request.Proxy = Proxy;
+
+                        try
+                        {
+                            Response = (HttpWebResponse)Request.GetResponse();
+                           httpResult = GetHttpResult(Response, Mode);
+
+                        }
+                        catch (WebException e)
+                        {
+                            Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{e.Message}");
+                            if (e.Status == WebExceptionStatus.Timeout)
+                                trynum++;
+                            else
+                                trynum = 2;
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{e.Message}");
+                            trynum = 2;
+                        }
+                        finally
+                        {
+                            if (Response != null) Response.Close();
+                        }
+                        return httpResult;
+                    }).TimeoutAfter(TimeSpan.FromSeconds(HTTPTIMEOUT));
+                }
+            }
+            catch(TimeoutException ex)
+            {
+                //任务超时了
+                Console.WriteLine(ex.Message);
+                Logger.LogN(ex.Message);
+            }
+            return httpResult;
+        }
+
+
+        public static HttpResult GetHttpResult(HttpWebResponse Response,HttpMode mode)
+        {
+            HttpResult httpResult = new HttpResult();
+            httpResult.StatusCode = Response.StatusCode;
+            WebHeaderCollection webHeaderCollection = Response.Headers;
+
+            //获得响应头
+            ResponseHeaders responseHeaders = new ResponseHeaders()
+            {
+                Location = webHeaderCollection.Get("Location"),
+                Date = webHeaderCollection.Get("Date"),
+                ContentType = webHeaderCollection.Get("Content-Type"),
+                Connection = webHeaderCollection.Get("Connection"),
+                CacheControl = webHeaderCollection.Get("Cache-Control"),
+                SetCookie = webHeaderCollection.Get("Set-Cookie")
+            };
+            double.TryParse(webHeaderCollection.Get("Content-Length"), out responseHeaders.ContentLength);
+            httpResult.Headers = responseHeaders;
+            if (Response.StatusCode == HttpStatusCode.OK)
+            {
+                if (mode == HttpMode.Normal)
+                {
+                    using (StreamReader sr = new StreamReader(Response.GetResponseStream()))
+                    {
+                        httpResult.SourceCode = sr.ReadToEnd();
+                    }
+                }else if (mode == HttpMode.Stream)
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        Response.GetResponseStream().CopyTo(ms);
+                        httpResult.FileByte = ms.ToArray();
+                    }
+                }
+
+            }
+            return httpResult;
+        }
+
+
+        public static async Task<(bool, string, string)> CheckUpdate()
         {
             return await Task.Run(async () =>
             {
-                string content = ""; int statusCode;
+                HttpResult httpResult=null;
                 try
                 {
-                    (content, statusCode) = await Net.Http(UpdateUrl, Proxy: null);
+                    httpResult = await Net.Http(UpdateUrl);
                 }
                 catch (TimeoutException ex) { Logger.LogN($"URL={UpdateUrl},Message-{ex.Message}"); }
-                if (string.IsNullOrEmpty(content)) return (false,"","");
 
-                string remote = content.Split('\n')[0];
-                string updateContent = content.Replace(remote + "\n", "");
+                if(httpResult==null || string.IsNullOrEmpty(httpResult.SourceCode)) return (false, "", "");
+
+                string remote = httpResult.SourceCode.Split('\n')[0];
+                string updateContent = httpResult.SourceCode.Replace(remote + "\n", "");
                 string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
                 using (StreamWriter sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "OldVersion"))
@@ -89,90 +215,10 @@ namespace Jvedio
                 }
                 else
                 {
-                    throw new TimeoutException("超时！");
+                    throw new TimeoutException(Jvedio.Language.Resources.TO);
                 }
             }
         }
-
-
-        public static async Task<(string, int)> Http(string Url, string Method = "GET", HttpMode Mode = HttpMode.Normal, WebProxy Proxy = null, string Cookie = "",bool allowRedirect=true)
-        {
-            string HtmlText = "";
-            int StatusCode = 404;
-            int num = 0;
-
-            while (num < ATTEMPTNUM & string.IsNullOrEmpty(HtmlText))
-            {
-                try
-                {
-                    HtmlText = await Task.Run(() =>
-                    {
-                        string result = "";
-                        HttpWebRequest Request;
-                        HttpWebResponse Response = default;
-                        try
-                        {
-                            Request = (HttpWebRequest)HttpWebRequest.Create(Url);
-                            if (Cookie != "") Request.Headers.Add("Cookie", Cookie);
-                            Request.Accept = "*/*";
-                            Request.Timeout = 50000;
-                            Request.Method = Method;
-                            Request.KeepAlive = false;
-                            Request.AllowAutoRedirect = allowRedirect;
-                            if (Mode == HttpMode.RedirectGet) Request.AllowAutoRedirect = false;
-                            Request.Referer = Url;
-                            Request.UserAgent = UserAgent;
-                            Request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");//限定为中文，解析的时候就是中文
-                            Request.ReadWriteTimeout = READWRITETIMEOUT;
-                            if (Proxy != null) Request.Proxy = Proxy;
-                            Response = (HttpWebResponse)Request.GetResponse();
-
-
-                            StatusCode = (int)Response.StatusCode;
-                            if (Response.StatusCode == HttpStatusCode.OK)
-                            {
-                                var SR = new StreamReader(Response.GetResponseStream());
-                                result = SR.ReadToEnd();
-                                SR.Close();
-                                StatusCode = 200;
-                            }
-                            else if (Response.StatusCode == HttpStatusCode.Redirect && Mode == HttpMode.RedirectGet)
-                            {
-                                StatusCode=(int)Response.StatusCode;
-                                result = Response.Headers["Location"];// 获得 library 影片 Code
-                            }
-                            else { num = 2; }
-                            Response.Close();
-                        }
-                        catch (WebException e)
-                        {
-                            Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{e.Message}");
-                            if (e.Status == WebExceptionStatus.Timeout)
-                                num += 1;
-                            else
-                                num = 2;
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{e.Message}");
-                            num = 2;
-                        }
-                        finally
-                        {
-                            if (Response != null) Response.Close();
-                        }
-
-                        return result;
-                    }).TimeoutAfter(TimeSpan.FromSeconds(HTTPTIMEOUT));
-
-                }
-                catch (TimeoutException ex) { Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{ex.Message}"); num = 2; }
-            }
-
-            return (HtmlText, StatusCode);
-        }
-
-
         public async static Task<WebSite> CheckUrlType(string url)
         {
             WebSite webSite = WebSite.None;
@@ -222,43 +268,41 @@ namespace Jvedio
             {
                 bool result = false;
                 string title = "";
-                string content = ""; int statusCode = 404;
+                HttpResult httpResult = null;
                 if (EnableCookie)
                 {
                     if (Label == "JavDB")
                     {
-                        title = "JavDB";
-                        (content, statusCode) = await Http(Url + "v/P2Rz9", Proxy: null, Cookie: Cookie);
-                        if (content != "")
+                        httpResult = await Http(Url + "v/P2Rz9", new CrawlerHeader() { Cookies = Cookie });
+                        if (httpResult!=null  && httpResult.SourceCode.IndexOf("FC2-659341") >= 0)
                         {
-                            if (content.IndexOf("FC2-659341") >= 0) { result = true; title = "JavDB"; }
-                            else result = false;
+                                result = true; 
+                                title = "JavDB"; 
                         }
-                    }else if (Label == "FANZA")
+                        else result = false;
+                    }
+                    else if (Label == "FANZA")
                     {
-                        (content, statusCode) = await Http($"{Url}mono/dvd/-/search/=/searchstr=APNS-006/ ", Proxy: null, Cookie: Cookie);
-                        if (statusCode == 200)
+                        httpResult = await Http($"{Url}mono/dvd/-/search/=/searchstr=APNS-006/ ", new CrawlerHeader() { Cookies = Cookie });
+                        if (httpResult != null && httpResult.SourceCode.IndexOf("里美まゆ・川") >= 0)
                         {
-                            if (content.IndexOf("里美まゆ・川") >= 0) { result = true; title = "FANZA"; }
-                            else result = false;
+                            result = true; 
+                            title = "FANZA"; 
                         }
+                        else result = false;
                     }
                 }
                 else
                 {
-                    (content, statusCode) = await Http(Url, Proxy: null);
-                    if (content != "")
+                    httpResult = await Http(Url);
+                    if (httpResult != null )
                     {
                         result = true;
                         //获得标题
                         HtmlDocument doc = new HtmlDocument();
-                        doc.LoadHtml(content);
+                        doc.LoadHtml(httpResult.SourceCode);
                         HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//title");
-                        if (titleNode != null)
-                        {
-                            title = titleNode.InnerText;
-                        }
-
+                        if (titleNode != null) title = titleNode.InnerText;
                     }
                 }
                 return (result, title);
@@ -271,23 +315,19 @@ namespace Jvedio
             return await Task.Run(async () =>
             {
                 bool result = false;
-                string content = ""; int statusCode = 404;
+                HttpResult httpResult = null;
                 if (EnableCookie)
                 {
                     if (Label == "DB")
                     {
-                        (content, statusCode) = await Http(Url + "v/P2Rz9", Proxy: null, Cookie: Cookie);
-                        if (content != "")
-                        {
-                            if (content.IndexOf("FC2-659341") >= 0) result = true;
-                            else result = false;
-                        }
+                        httpResult = await Http(Url + "v/P2Rz9", new CrawlerHeader() { Cookies=Cookie});
+                        if (httpResult!=null && httpResult.SourceCode.IndexOf("FC2-659341") >= 0) result = true;
                     }
                 }
                 else
                 {
-                    (content, statusCode) = await Http(Url, Proxy: null);
-                    if (content != "") result = true;
+                    httpResult = await Http(Url);
+                    if (httpResult != null && httpResult.SourceCode!="") result = true;
                 }
                 return result;
             });
@@ -324,82 +364,12 @@ namespace Jvedio
             }
             return false;
         }
-        public static (byte[] filebytes, string cookies, int statuscode) DownLoadFile(string Url, WebProxy Proxy = null, string SetCookie = "")
+        public static async Task<HttpResult> DownLoadFile(string Url, WebProxy Proxy = null, string SetCookie = "")
         {
-            //if (!IsDomainAlive(new Uri(Url).Host, TCPTIMEOUT)) { Logger.LogN($"地址：{Url}，失败原因：Tcp链接超时"); return (null, ""); }
             Util.SetCertificatePolicy();
-            byte[] ImageByte = null;
-            string Cookies = SetCookie;
-            int statuscode = 404;
-            int num = 0;
-            while (num < ATTEMPTNUM && ImageByte == null)
-            {
-                ServicePointManager.Expect100Continue = true;
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                HttpWebRequest Request;
-                var Response = default(HttpWebResponse);
-                try
-                {
-                    Request = (HttpWebRequest)HttpWebRequest.Create(Url);
-                    Request.Host = new Uri(Url).Host;
-                    if (Proxy != null) Request.Proxy = Proxy;
-                    if (SetCookie != "") Request.Headers.Add("Cookie", SetCookie);
-                    Request.Accept = "*/*";
-                    Request.Timeout = FILE_REQUESTTIMEOUT;
-                    Request.Method = "GET";
-                    Request.KeepAlive = false;
-                    Request.Referer = Url;
-                    Request.UserAgent = UserAgent;
-                    Request.ReadWriteTimeout = READWRITETIMEOUT;
-                    Response = (HttpWebResponse)Request.GetResponse();
-                    statuscode = (int)Response.StatusCode;
-                    if (Response.StatusCode == HttpStatusCode.OK)
-                    {
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            Response.GetResponseStream().CopyTo(ms);
-                            ImageByte = ms.ToArray();
-                        };
-                        //获得 app_uid
-                        WebHeaderCollection Headers = Response.Headers;
-                        if (Headers != null & SetCookie == "")
-                        {
-                            if (Headers["Set-Cookie"] != null) Cookies = Headers["Set-Cookie"].Split(';')[0];
-                            //Console.WriteLine(Cookies);
-                        }
-                    }
-                    else
-                    {
-                        num = 2;
-                    }
-                    Response.Close();
-                }
-                catch (WebException e)
-                {
-                    HttpWebResponse res = (HttpWebResponse)e.Response;
-                    if(res!=null) statuscode = (int)res.StatusCode;
-                    Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{e.Message}");
-                    if (e.Status == WebExceptionStatus.Timeout) { num += 1; } else { num = 2; }
-                }
-                catch (Exception e)
-                {
-                    Logger.LogE(e);
-                    num = 2;
-                }
-                finally { Response?.Close(); }
-            }
-            return (ImageByte, Cookies,statuscode);
+            HttpResult httpResult = await Net.Http(Url, new CrawlerHeader() { Cookies = SetCookie }, HttpMode.Stream);
+            return httpResult;
         }
-
-
-
-        public static async Task<(byte[] filebytes, string cookies, int statuscode)> AsyncDownLoadFile(string Url, string SetCookie = "")
-        {
-            return await Task.Run(() => {
-                return DownLoadFile(Url);
-            });
-        }
-
 
 
         /// <summary>
@@ -410,31 +380,27 @@ namespace Jvedio
         /// <param name="ID"></param>
         /// <param name="Cookie"></param>
         /// <returns></returns>
-        public static async Task<(bool, string)> DownLoadImage(string Url, ImageType imageType, string ID, string Cookie = "",Action<int> callback=null)
+        public static async Task<(bool,string)> DownLoadImage(string Url, ImageType imageType, string ID, string Cookie = "",Action<int> callback=null)
         {
-            if (!Url.IsProperUrl()) return (false, ""); 
-            bool result = false; 
-            string cookies = Cookie;
-            int statuscode = 404;
-            byte[] ImageBytes = null;
-            (ImageBytes, cookies, statuscode) = await Task.Run(() =>
-            {
-                (ImageBytes, cookies, statuscode) = DownLoadFile(Url.Replace("\"", "'"), SetCookie: cookies);
-                return (ImageBytes, cookies, statuscode);
-            });
+            if (!Url.IsProperUrl()) return (false,"");
+            HttpResult httpResult = await DownLoadFile(Url.Replace("\"", "'"), SetCookie: Cookie);
+
+            bool result = false;
+            string cookie = "";
 
 
-            if (ImageBytes == null) {
+            if (httpResult == null) {
                 Logger.LogN($" {Jvedio.Language.Resources.DownLoadImageFail}：{Url}");
-                callback?.Invoke(statuscode);
+                callback?.Invoke((int)HttpStatusCode.Forbidden);
                 result = false; 
             }
             else
             {
+                cookie = httpResult.Headers.SetCookie.Split(';')[0];
                 result = true;
-                ImageProcess.SaveImage(ID, ImageBytes, imageType, Url);
+                ImageProcess.SaveImage(ID, httpResult.FileByte, imageType, Url);
             }
-            return (result, cookies);
+            return (result, cookie);
         }
 
 
@@ -443,18 +409,18 @@ namespace Jvedio
         {
             bool result = false;
             string Url = RootUrl.Bus + $"star/{ID}";
-            string Content; int StatusCode; string ResultMessage;
-            (Content, StatusCode) = await Http(Url);
-            if (StatusCode == 200 && Content != "")
+            HttpResult httpResult = null;
+            httpResult = await Http(Url);
+            string error = "";
+            if (httpResult!=null && httpResult.StatusCode==HttpStatusCode.OK && httpResult.SourceCode!="")
             {
                 //id搜索
-                BusParse busParse = new BusParse(ID, Content, VedioType.骑兵);
+                BusParse busParse = new BusParse(ID, httpResult.SourceCode, VedioType.骑兵);
                 Actress actress = busParse.ParseActress();
                 if (actress ==null && string.IsNullOrEmpty(actress.birthday)  && actress.age == 0 && string.IsNullOrEmpty(actress.birthplace))
-                { 
-                    ResultMessage = $"{Jvedio.Language.Resources.NoActorInfo}：{Url}";
-                    callback.Invoke(ResultMessage);
-                    Logger.LogN($"URL={Url},Message-{ResultMessage}"); 
+                {
+                    error = $"{Jvedio.Language.Resources.NoActorInfo}：{Url}";
+
                 }
                 else
                 {
@@ -464,15 +430,19 @@ namespace Jvedio
                     actress.name = Name;
                     //保存信息
                     DataBase.InsertActress(actress);
-
                     result = true;
                 }
             }
-            else { 
-                Console.WriteLine($"{"404".ToStatusMessage()}：{Url}"); 
-                ResultMessage = "Bus" + "404".ToStatusMessage();
-                callback.Invoke(ResultMessage);
-                Logger.LogN($"URL={Url},Message-{ResultMessage}"); }
+            else if (httpResult != null)
+            {
+                error = httpResult.StatusCode.ToStatusMessage();
+            }
+            else {
+                error = Jvedio.Language.Resources.HttpFail;
+            }
+            Console.WriteLine(error);
+            callback.Invoke(error);
+            Logger.LogN($"URL={Url},Message-{error}");
             return result;
         }
 
@@ -508,18 +478,14 @@ namespace Jvedio
 
         public static async  Task<bool> ParseSpecifiedInfo(WebSite webSite,string id,string url)
         {
-            string content = "";
-            int StatusCode = 404;
-            if (webSite==WebSite.DB) (content, StatusCode) = await Net.Http(url, Cookie: Properties.Settings.Default.DBCookie);
-            if (webSite == WebSite.DMM) (content, StatusCode) = await Net.Http(url, Cookie: Properties.Settings.Default.DMMCookie);
-            else ( content,  StatusCode) = await Net.Http(url);
+            HttpResult httpResult = null;
+            if (webSite==WebSite.DB) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies= Properties.Settings.Default.DBCookie } );
+            if (webSite == WebSite.DMM) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = Properties.Settings.Default.DMMCookie });
+            else httpResult = await Net.Http(url);
 
-            if(StatusCode!=200 || content == "")
+            if(httpResult!=null && httpResult.StatusCode==HttpStatusCode.OK && httpResult.SourceCode!="")
             {
-                return false;
-            }
-            else
-            {
+                string content = httpResult.SourceCode;
                 Dictionary<string, string> Info = new Dictionary<string, string>();
                 
                 if (webSite == WebSite.Bus)
@@ -545,39 +511,11 @@ namespace Jvedio
                 Info.Add("sourceurl", url);
                 if (Info.Count > 2)
                 {
-                    //保存信息
-                    Info["id"] = id;
-                    DataBase.UpdateInfoFromNet(Info);
-                    DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
-
-
-                    //nfo 信息保存到视频同目录
-                    if (Properties.Settings.Default.SaveInfoToNFO)
-                    {
-                        if (Directory.Exists(Properties.Settings.Default.NFOSavePath))
-                        {
-                            //固定位置
-                            nfo.SaveToNFO(detailMovie, Path.Combine(Properties.Settings.Default.NFOSavePath, $"{id}.nfo"));
-                        }
-                        else
-                        {
-                            //与视频同路径
-                            string path = detailMovie.filepath;
-                            if (System.IO.File.Exists(path))
-                            {
-                                nfo.SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{id}.nfo"));
-                            }
-                        }
-                    }
+                    FileProcess.SaveInfo(Info, id);
                     return true;
                 }
-
             }
-
             return false;
-
-
-
         }
 
 
@@ -587,70 +525,72 @@ namespace Jvedio
         /// </summary>
         /// <param name="movie"></param>
         /// <returns></returns>
-        public static async Task<(bool, string)> DownLoadFromNet(Movie movie,bool forceToDownload=false)
+        public static async Task<HttpResult> DownLoadFromNet(Movie movie,bool forceToDownload=false)
         {
-            bool success = false;
-            string message = Jvedio.Language.Resources.UrlNotSet;
-            Movie newMovie;
+            HttpResult httpResult = null;
+            string message ="";
+            
             if (movie.vediotype == (int)VedioType.欧美)
             {
-                if (RootUrl.BusEu.IsProperUrl() && EnableUrl.BusEu) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl((statuscode)=> { message = statuscode.ToString(); } );
-                else if (RootUrl.BusEu.IsProperUrl() && !EnableUrl.BusEu) message = Jvedio.Language.Resources.UrlEuropeNotset;
+                if (RootUrl.BusEu.IsProperUrl() && EnableUrl.BusEu)
+                    httpResult=await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl();
+                else if (RootUrl.BusEu.IsProperUrl() && !EnableUrl.BusEu) 
+                    message = Jvedio.Language.Resources.UrlEuropeNotset;
             }
             else
             {
+                //FC2 影片
                 if (movie.id.ToUpper().IndexOf("FC2") >= 0)
                 {
                     //优先从 db 下载
-                    if (RootUrl.DB.IsProperUrl() && EnableUrl.DB) {  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
-                    else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB) message = Jvedio.Language.Resources.UrlDBNotset;
+                    if (RootUrl.DB.IsProperUrl() && EnableUrl.DB)
+                        httpResult = await new DBCrawler(movie.id).Crawl(); 
+                    else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB) 
+                        message = Jvedio.Language.Resources.UrlDBNotset;
 
                     //db 未下载成功则去 fc2官网
-                    newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (IsToDownLoadInfo(newMovie))
+                    if (httpResult!=null && !httpResult.Success)
                     {
-                        if (!string.IsNullOrEmpty(RootUrl.FC2) && EnableUrl.FC2) { await new FC2Crawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); }); }
+                        if (RootUrl.FC2.IsProperUrl() && EnableUrl.FC2)
+                            httpResult=await new FC2Crawler(movie.id).Crawl();
+                        else if (RootUrl.FC2.IsProperUrl() && !EnableUrl.FC2)
+                            message = Jvedio.Language.Resources.UrlFC2Notset;
                     }
                 }
                 else
                 {
+                    //非FC2 影片
                     //优先从 Bus 下载
-                    if (RootUrl.Bus.IsProperUrl() && EnableUrl.Bus) await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl((statuscode) => { message = statuscode.ToString(); });
+                    if (RootUrl.Bus.IsProperUrl() && EnableUrl.Bus)
+                        httpResult = await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl();
+                    else if (RootUrl.Bus.IsProperUrl() && !EnableUrl.Bus)
+                        message = Jvedio.Language.Resources.UrlBusNotset;
 
                     //Bus 未下载成功则去 library
-                    newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (IsToDownLoadInfo(newMovie))
+                    if (httpResult!=null && !httpResult.Success)
                     {
-                        if (RootUrl.Library.IsProperUrl() && EnableUrl.Library) { await new LibraryCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); }); }
+                        if (RootUrl.Library.IsProperUrl() && EnableUrl.Library)
+                            httpResult=await new LibraryCrawler(movie.id).Crawl();
+                        else if (RootUrl.Library.IsProperUrl() && !EnableUrl.Library)
+                            message = Jvedio.Language.Resources.UrlLibraryNotset;
                     }
-
 
                     //library 未下载成功则去 DB
-                    newMovie = DataBase.SelectMovieByID(movie.id);
-                    if (IsToDownLoadInfo(newMovie))
+                    if (httpResult != null && !httpResult.Success)
                     {
-                        if (RootUrl.DB.IsProperUrl() && EnableUrl.DB)  await new DBCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); },(statuscode) => { message = statuscode.ToString(); });
+                        if (RootUrl.DB.IsProperUrl() && EnableUrl.DB)  
+                            await new DBCrawler(movie.id).Crawl();
+                        else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB)
+                            message = Jvedio.Language.Resources.UrlDBNotset;
                     }
-
-                    //DB 未下载成功则去 FANZA
-                    //newMovie = DataBase.SelectMovieByID(movie.id);
-                    //if (StaticClass.IsToDownLoadInfo(newMovie))
-                    //{
-                    //    if (RootUrl.DMM.IsProperUrl() && EnableUrl.DMM) await new DMMCrawler(movie.id).Crawl((statuscode) => { message = statuscode.ToString(); }, (statuscode) => { message = statuscode.ToString(); });
-                    //    else if (RootUrl.DMM.IsProperUrl() && !EnableUrl.DMM) message = "未开启 FANZA 网址";
-                    //}
 
                 }
 
             }
 
-            newMovie = DataBase.SelectMovieByID(movie.id);
-            if (newMovie != null && newMovie.title != "")
-                success = true;
-            else
-                success = false;
-
-            return (success,message);
+            Movie newMovie = DataBase.SelectMovieByID(movie.id);
+            if (newMovie != null && newMovie.title != "" && httpResult!=null) httpResult.Success = true;
+            return httpResult;
         }
 
         public static bool IsToDownLoadInfo(Movie movie)
