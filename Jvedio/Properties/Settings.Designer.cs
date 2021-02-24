@@ -2290,5 +2290,17 @@ namespace Jvedio.Properties {
                 this["SkipExistGif"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FC2Cookie {
+            get {
+                return ((string)(this["FC2Cookie"]));
+            }
+            set {
+                this["FC2Cookie"] = value;
+            }
+        }
     }
 }

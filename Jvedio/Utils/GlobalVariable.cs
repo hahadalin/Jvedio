@@ -183,7 +183,7 @@ namespace Jvedio
                 Bus = "",
                 BusEu = "",
                 Library = "",
-                FC2 = "",
+                FC2 = Properties.Settings.Default.FC2Cookie,
                 Jav321 = "",
                 DMM = Properties.Settings.Default.DMMCookie,
                 DB = Properties.Settings.Default.DBCookie
@@ -229,6 +229,7 @@ namespace Jvedio
             }
             foreach (var item in content.Split(Environment.NewLine.ToCharArray()))
             {
+                if (item.IndexOf("：") < 0) continue;
                 string host = item.Split('：')[0];
                 string cookie = item.Split('：')[1];
                 if (!result.ContainsKey(host)) result.Add(host, cookie);

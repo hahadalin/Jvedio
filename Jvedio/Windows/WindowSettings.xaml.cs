@@ -1118,6 +1118,7 @@ namespace Jvedio
             {
                 Properties.Settings.Default.FC2 = server.Url;
                 Properties.Settings.Default.EnableFC2 = (bool)checkBox.IsChecked;
+                if (server.Cookie != Jvedio.Language.Resources.Nothing && server.Cookie != "") Properties.Settings.Default.FC2Cookie = server.Cookie;
                 SaveServersInfoToConfig(WebSite.FC2, new List<string>() { server.Url, "FC2", server.LastRefreshDate });
             }
             else if (server.ServerTitle == "JAV321")

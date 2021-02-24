@@ -164,10 +164,9 @@ namespace Jvedio
 
         protected override void InitHeaders()
         {
-            Uri uri = new Uri(Url);
-            string cookie = "";
-            if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
-            headers = new CrawlerHeader();
+            headers = new CrawlerHeader() {
+                Cookies = AllCookies.FC2
+                };
         }
 
         public override async Task<HttpResult> Crawl()

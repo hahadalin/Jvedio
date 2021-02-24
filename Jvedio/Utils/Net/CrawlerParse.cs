@@ -148,11 +148,11 @@ namespace Jvedio
                 {
                     if (string.IsNullOrEmpty(item)) continue;
                     if (VedioType == VedioType.骑兵)
-                        url_a.Add($"https://pics.javcdn.pw/actress/" + item + "_a.jpg");
+                        url_a.Add($"https://pics.javcdn.net/actress/" + item + "_a.jpg");
                     else if (VedioType == VedioType.欧美)
                         url_a.Add(RootUrl.BusEu.Replace("www", "images") + "actress/" + item + "_a.jpg");//https://images.javbus.one/actress/41r_a.jpg
                     else if (VedioType == VedioType.步兵)
-                        url_a.Add($"https://images.javcdn.pw/actress/" + item + ".jpg");//步兵没有 _a
+                        url_a.Add($"https://images.javcdn.net/actress/" + item + ".jpg");//步兵没有 _a
                 }
                 result.Add("actressimageurl", string.Join(";", url_a));
             }
@@ -180,9 +180,9 @@ namespace Jvedio
                 else if (!string.IsNullOrEmpty(movieid))
                 {
                     if (VedioType == VedioType.骑兵)
-                        result.Add("smallimageurl", "https://pics.javcdn.pw/thumb/" + movieid + ".jpg");
+                        result.Add("smallimageurl", "https://pics.javcdn.net/thumb/" + movieid + ".jpg");
                     else if (VedioType == VedioType.步兵)
-                        result.Add("smallimageurl", "https://images.javcdn.pw/thumbs/" + movieid + ".jpg");
+                        result.Add("smallimageurl", "https://images.javcdn.net/thumbs/" + movieid + ".jpg");
                     else if (VedioType == VedioType.欧美)
                         result.Add("smallimageurl", "https://images.javbus.one/thumb/" + movieid + ".jpg");//https://images.javbus.one/thumb/10jc.jpg
                 }
