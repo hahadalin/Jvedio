@@ -1270,7 +1270,7 @@
                                             </Border>
 
 
-                                            <Button Visibility="Collapsed" Click="Test" Content="Test" />
+                                            <Button Visibility="Visible" Click="Test" Content="Test" />
 
                                         </StackPanel>
 

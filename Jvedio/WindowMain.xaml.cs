@@ -890,6 +890,7 @@ namespace Jvedio
 
         public async void CheckUrl()
         {
+            return;
             Console.WriteLine("开始检测");
             vieModel.CheckingUrl = true;
             Dictionary<string, bool> result = new Dictionary<string, bool>();
@@ -4878,9 +4879,9 @@ namespace Jvedio
             WindowBatch.Show();
         }
 
-        private void Test(object sender, RoutedEventArgs e)
+        private async void Test(object sender, RoutedEventArgs e)
         {
-            new SampleMovies(50000).Create();
+            var r = await new LibraryCrawler("DOCP-283").Crawl();
         }
 
 

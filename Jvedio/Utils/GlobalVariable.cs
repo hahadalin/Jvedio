@@ -33,6 +33,7 @@ namespace Jvedio
         public static rootUrl RootUrl;
         public static enableUrl EnableUrl;
         public static Cookie AllCookies;
+        public static Dictionary<string, string> UrlCookies;
 
         //骑兵、步兵识别码
         public static List<string> Qibing = new List<string>();
@@ -213,9 +214,27 @@ namespace Jvedio
             GenreUncensored[5] = Resource_String.GenreUncensored.Split('|')[5];
             GenreUncensored[6] = Resource_String.GenreUncensored.Split('|')[6];
             GenreUncensored[7] = Resource_String.GenreUncensored.Split('|')[7];
-
-
+            UrlCookies = ReadCookiesFromFile();
     }
+
+
+        public static Dictionary<string,string> ReadCookiesFromFile()
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            if (!File.Exists("Cookies")) return result;
+            string content = "";
+            using(StreamReader sr=new StreamReader("Cookies"))
+            {
+                content = sr.ReadToEnd();
+            }
+            foreach (var item in content.Split(Environment.NewLine.ToCharArray()))
+            {
+                string host = item.Split('：')[0];
+                string cookie = item.Split('：')[1];
+                if (!result.ContainsKey(host)) result.Add(host, cookie);
+            }
+            return result;
+        }
 
 
         public static void FormatUrl()

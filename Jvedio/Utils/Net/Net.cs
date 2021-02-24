@@ -15,6 +15,28 @@ using static Jvedio.GlobalVariable;
 namespace Jvedio
 {
 
+    public class ResponseHeaders
+    {
+        public string Date = "";
+        public string ContentType = "";
+        public string Connection = "";
+        public string CacheControl = "";
+        public string SetCookie = "";
+        public string Location = "";
+        public double ContentLength = 0;
+    }
+
+    public class HttpResult
+    {
+        public bool Success = false;
+        public string Error = "";
+        public string SourceCode = "";
+        public byte[] FileByte = null;
+        public string MovieCode = "";
+        public HttpStatusCode StatusCode = HttpStatusCode.Forbidden;
+        public ResponseHeaders Headers = null;
+    }
+
 
     public static class Net
     {
@@ -84,15 +106,22 @@ namespace Jvedio
                             Logger.LogE(ex);
                             return null;
                         }
-                        Request.Host = headers.Host == "" ? new Uri(Url).Host : headers.Host;
+                        Uri uri = new Uri(Url);
+                        Request.Host = headers.Host == "" ? uri.Host : headers.Host;
                         Request.Accept = headers.Accept;
                         Request.Timeout = 50000;
                         Request.Method = headers.Method;
-                        Request.KeepAlive = headers.Connection == "keep-alive";
+                        //Request.Connection= headers.Connection;
+                        Request.KeepAlive = true;
                         Request.AllowAutoRedirect = allowRedirect;
-                        Request.Referer = Url;
+                        Request.Referer = uri.Scheme + "://" + uri.Host + "/";
                         Request.UserAgent = headers.UserAgent;
-                        Request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");//限定为中文，解析的时候就是中文
+                        Request.Headers.Add("Accept-Language", headers.AcceptLanguage);
+                        Request.Headers.Add("Upgrade-Insecure-Requests", headers.UpgradeInsecureRequests);
+                        Request.Headers.Add("Sec-Fetch-Site", headers.SecFetchSite);
+                        Request.Headers.Add("Sec-Fetch-Mode", headers.SecFetchMode);
+                        Request.Headers.Add("Sec-Fetch-User", headers.SecFetchUser);
+                        Request.Headers.Add("Sec-Fetch-Dest", headers.SecFetchDest);
                         Request.ReadWriteTimeout = READWRITETIMEOUT;
                         if (headers.Cookies != "") Request.Headers.Add("Cookie", headers.Cookies);
                         if (Mode == HttpMode.RedirectGet) Request.AllowAutoRedirect = false;
@@ -149,9 +178,10 @@ namespace Jvedio
                 ContentType = webHeaderCollection.Get("Content-Type"),
                 Connection = webHeaderCollection.Get("Connection"),
                 CacheControl = webHeaderCollection.Get("Cache-Control"),
-                SetCookie = webHeaderCollection.Get("Set-Cookie")
+                SetCookie = webHeaderCollection.Get("Set-Cookie"),
             };
             double.TryParse(webHeaderCollection.Get("Content-Length"), out responseHeaders.ContentLength);
+            
             httpResult.Headers = responseHeaders;
             if (Response.StatusCode == HttpStatusCode.OK)
             {
@@ -161,14 +191,19 @@ namespace Jvedio
                     {
                         httpResult.SourceCode = sr.ReadToEnd();
                     }
-                }else if (mode == HttpMode.Stream)
+                    if (responseHeaders.ContentLength == 0) responseHeaders.ContentLength = httpResult.SourceCode.Length;
+                }
+                else if (mode == HttpMode.Stream)
                 {
                     using (MemoryStream ms = new MemoryStream())
                     {
                         Response.GetResponseStream().CopyTo(ms);
                         httpResult.FileByte = ms.ToArray();
                     }
+                    if (responseHeaders.ContentLength == 0) responseHeaders.ContentLength = httpResult.FileByte.Length;
                 }
+
+
 
             }
             return httpResult;

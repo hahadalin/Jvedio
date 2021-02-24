@@ -12,52 +12,32 @@ using System.Net;
 
 namespace Jvedio
 {
+
     public class CrawlerHeader
     {
         public string Method="GET";
-        public string Host;
+        public string Host="";
         public string Connection= "keep-alive";
         public string CacheControl= "max-age=0";
         public string UpgradeInsecureRequests= "1";
         public string UserAgent= "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
         public string Accept = "*/*";
-        public string SecFetchSite;
-        public string SecFetchMode;
-        public string SecFetchUser;
-        public string SecFetchDest;
-        public string AcceptEncoding;
-        public string AcceptLanguage;
-        public string Cookies;
-    }
-
-    public class ResponseHeaders
-    {
-        public string Date;
-        public string ContentType;
-        public string Connection;
-        public string CacheControl;
-        public string SetCookie;
-        public string Location;
-        public double ContentLength;
-    }
-
-    public class HttpResult
-    {
-        public bool Success=false;
-        public string Error="";
-        public string SourceCode = "";
-        public byte[] FileByte;
-        public string MovieCode;
-        public HttpStatusCode StatusCode = HttpStatusCode.Forbidden;
-        public ResponseHeaders Headers;
+        public string SecFetchSite = "same-origin";
+        public string SecFetchMode = "navigate";
+        public string SecFetchUser = "?1";
+        public string SecFetchDest = "document";
+        public string AcceptEncoding = "";
+        public string AcceptLanguage = "zh-CN,zh;q=0.9";
+        public string Cookies = "";
+        public string Referer = "";
     }
 
 
     public abstract class Crawler
     {
-        public static int TASKDELAY_SHORT = 300;//短时间暂停
-        public static int TASKDELAY_MEDIUM = 1000;
-        public static int TASKDELAY_LONG = 2000;//长时间暂停
+        protected static int TASKDELAY_SHORT = 300;//短时间暂停
+        protected static int TASKDELAY_MEDIUM = 1000;
+        protected static int TASKDELAY_LONG = 2000;//长时间暂停
 
         protected string Url = "";//网址
         protected CrawlerHeader headers;
@@ -73,17 +53,38 @@ namespace Jvedio
         }
 
 
-        public abstract void InitHeaders();
+        protected abstract void InitHeaders();
+        protected abstract Dictionary<string, string> GetInfo();
+
+        protected abstract void ParseCookies(string SetCookie);
 
         public abstract Task<HttpResult> Crawl();
-        
 
-        public abstract Dictionary<string, string> GetInfo();
+
+        public void SaveCookies()
+        {
+            List<string> cookies = new List<string>();
+            foreach (KeyValuePair<string, string> item in UrlCookies)
+            {
+                cookies.Add(item.Key + "：" + item.Value);
+            }
+
+            using (StreamWriter sw = new StreamWriter("Cookies", false))
+            {
+                sw.Write(string.Join(Environment.NewLine, cookies));
+            }
+        }
+
+
+
+
     }
 
 
     public class BusCrawler : Crawler
     {
+
+
         public VedioType VedioType { get; set; }
         public BusCrawler(string Id, VedioType vedioType) : base(Id)
         {
@@ -104,18 +105,41 @@ namespace Jvedio
             {
                 FileProcess.SaveInfo(GetInfo(), ID);
                 httpResult.Success = true;
+                ParseCookies(httpResult.Headers.SetCookie);
             }
             return httpResult;
         }
 
-
-        public override void InitHeaders()
+        protected override void ParseCookies(string SetCookie)
         {
-            headers = new CrawlerHeader();
+            if (SetCookie == null) return;
+            List<string> Cookies = new List<string>();
+            var values = SetCookie.Split(new char[] { ',',';'}).ToList();
+            foreach (var item in values)
+            {
+                if (item.IndexOf('=') < 0) continue;
+                string key = item.Split('=')[0];
+                string value= item.Split('=')[1];
+                if (key == "__cfduid" || key == "PHPSESSID" || key == "existmag") Cookies.Add(key + "=" + value);
+            }
+            string cookie = string.Join(";", Cookies);
+            Uri uri = new Uri(Url);
+            if (!UrlCookies.ContainsKey(uri.Host)) UrlCookies.Add(uri.Host, cookie);
+            else UrlCookies[uri.Host] = cookie;
+            SaveCookies();
         }
 
 
-        public override Dictionary<string, string> GetInfo()
+        protected override void InitHeaders()
+        {
+            Uri uri = new Uri(Url);
+            string cookie = "";
+            if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
+            headers = new CrawlerHeader() { Cookies=cookie};
+        }
+
+
+        protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new BusParse(ID, httpResult.SourceCode, VedioType).Parse();
             if (Info.Count >0) 
@@ -138,8 +162,11 @@ namespace Jvedio
         }
 
 
-        public override void InitHeaders()
+        protected override void InitHeaders()
         {
+            Uri uri = new Uri(Url);
+            string cookie = "";
+            if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
             headers = new CrawlerHeader();
         }
 
@@ -169,7 +196,7 @@ namespace Jvedio
         }
 
 
-        public override Dictionary<string, string> GetInfo()
+        protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new FC2Parse(ID, httpResult.SourceCode).Parse();
             if (Info.Count <= 0)
@@ -186,6 +213,10 @@ namespace Jvedio
             return Info;
         }
 
+        protected override void ParseCookies(string SetCookie)
+        {
+            throw new NotImplementedException();
+        }
     }
     public class DBCrawler : Crawler
     {
@@ -195,7 +226,7 @@ namespace Jvedio
         {
             Url = RootUrl.DB + $"search?q={ID}&f=all";
         }
-        public override void InitHeaders()
+        protected override void InitHeaders()
         {
             headers = new CrawlerHeader() {
                 Cookies = AllCookies.DB
@@ -261,8 +292,13 @@ namespace Jvedio
 
         }
 
+        protected override void ParseCookies(string SetCookie)
+        {
+            return;
+        }
 
-        public override Dictionary<string, string> GetInfo()
+
+        protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new JavDBParse(ID, httpResult.SourceCode, MovieCode).Parse();
             if (Info.Count > 0) 
@@ -274,6 +310,8 @@ namespace Jvedio
             }
             return Info;
         }
+
+
     }
 
     public class LibraryCrawler : Crawler
@@ -291,7 +329,7 @@ namespace Jvedio
             if (string.IsNullOrEmpty(movieCode) || movieCode.IndexOf("zh-cn") >= 0)
             {
                 HttpResult result= await Net.Http(Url, Mode: HttpMode.RedirectGet);
-                if (result != null && result.StatusCode == HttpStatusCode.Redirect) movieCode = httpResult.Headers.Location;
+                if (result != null && result.StatusCode == HttpStatusCode.Redirect) movieCode = result.Headers.Location;
                 else if(result!=null) movieCode = GetMovieCodeFromSearchResult(result.SourceCode);
 
                 if (movieCode.IndexOf("=") >= 0) movieCode = movieCode.Split('=').Last();
@@ -339,9 +377,12 @@ namespace Jvedio
 
         }
 
-        public override void InitHeaders()
+        protected override void InitHeaders()
         {
-            headers = new CrawlerHeader();
+            Uri uri = new Uri(Url);
+            string cookie = "";
+            if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
+            headers = new CrawlerHeader() { Cookies = cookie };
         }
 
 
@@ -358,13 +399,33 @@ namespace Jvedio
                 {
                     FileProcess.SaveInfo(GetInfo(), ID);
                     httpResult.Success = true;
+                    ParseCookies(httpResult.Headers.SetCookie);
                 }
             }
             return httpResult;
         }
 
+        protected override void ParseCookies(string SetCookie)
+        {
+            if (SetCookie == null) return;
+            List<string> Cookies = new List<string>();
+            var values = SetCookie.Split(new char[] { ',', ';' }).ToList();
+            foreach (var item in values)
+            {
+                if (item.IndexOf('=') < 0) continue;
+                string key = item.Split('=')[0];
+                string value = item.Split('=')[1];
+                if (key == "__cfduid" || key == "__qca") Cookies.Add(key + "=" + value);
+            }
+            Cookies.Add("over18=18");
+            string cookie = string.Join(";", Cookies);
+            Uri uri = new Uri(Url);
+            if (!UrlCookies.ContainsKey(uri.Host)) UrlCookies.Add(uri.Host, cookie);
+            else UrlCookies[uri.Host] = cookie;
+            SaveCookies();
+        }
 
-        public override Dictionary<string, string> GetInfo()
+        protected override Dictionary<string, string> GetInfo()
         {
             Dictionary<string, string> Info = new LibraryParse(ID, httpResult.SourceCode).Parse();
             if (Info.Count > 0)
@@ -376,6 +437,7 @@ namespace Jvedio
             }
             return Info;
         }
+
 
     }
 
