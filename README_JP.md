@@ -56,7 +56,19 @@ Visual Studioをインストールして開き（これは2019年です）、**C
 チュートリアルを見る：[Jvedioの説明](https://github.com/hitchao/Jvedio/wiki)
 
 
+### サポートされているサーバーソース
+- 具体的なurlは自分で検索する
 
+|サーバー名| |
+|--|--|
+|BUS|√|
+|BUSEUROPE|√|
+|DB|√|
+|*.CONTENTS.FC2|√|
+|LIBRARY|√|
+|FANZA(DMM)|√|
+|321|√|
+|MOO|√|
 
 
 

@@ -56,7 +56,19 @@
 
 教程请看：[jvedio 使用说明](https://github.com/hitchao/Jvedio/wiki)
 
+### 支持的服务器源
+- 具体网址自行检索
 
+|服务器名称| |
+|--|--|
+|BUS|√|
+|BUSEUROPE|√|
+|DB|√|
+|*.CONTENTS.FC2|√|
+|LIBRARY|√|
+|FANZA(DMM)|√|
+|321|√|
+|MOO|√|
 
 
 

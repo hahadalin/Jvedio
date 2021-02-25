@@ -56,7 +56,19 @@ or use git
 Please See：[Jvedio Introduction](https://github.com/hitchao/Jvedio/wiki)
 
 
+### Support Service
+- Specific website search by themselves
 
+|Service name| |
+|--|--|
+|BUS|√|
+|BUSEUROPE|√|
+|DB|√|
+|*.CONTENTS.FC2|√|
+|LIBRARY|√|
+|FANZA(DMM)|√|
+|321|√|
+|MOO|√|
 
 
 
