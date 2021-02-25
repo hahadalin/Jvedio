@@ -215,7 +215,6 @@ namespace Jvedio
             this.ContentRendered += delegate { HideMargin(); };
 
 
-
             #region "改变窗体大小"
             //https://www.cnblogs.com/yang-fei/p/4737308.html
             Grid resizeGrid = (Grid)baseWindowTemplate.FindName("resizeGrid", this);
@@ -278,9 +277,13 @@ namespace Jvedio
         {
             if (Properties.Settings.Default.EnableWindowFade)
             {
-                var anim = new DoubleAnimation(0,1, (Duration)FadeInterval);
+                var anim = new DoubleAnimation(0,1, (Duration)FadeInterval,FillBehavior.Stop);
                 anim.Completed += (s, _) =>  this.Opacity = 1; 
                 this.BeginAnimation(UIElement.OpacityProperty, anim);
+            }
+            else
+            {
+                this.Opacity = 1;
             }
             
         }
@@ -293,25 +296,26 @@ namespace Jvedio
                 anim.Completed += (s, _) => this.Close();
                 this.BeginAnimation(UIElement.OpacityProperty, anim);
             }
+            else
+            {
+                this.Close();
+            }
         }
 
 
-        public async void MinWindow()
+        public  void MinWindow()
         {
             if (Properties.Settings.Default.EnableWindowFade)
             {
-                double opacity = this.Opacity;
-                await Task.Run(() =>
-                {
-                    while (opacity > 0.2)
-                    {
-                        this.Dispatcher.Invoke((Action)delegate { this.Opacity -= 0.1; opacity = this.Opacity; });
-                        Task.Delay(20).Wait();
-                    }
-                });
+                var anim = new DoubleAnimation(0, (Duration)FadeInterval,FillBehavior.Stop);
+                anim.Completed += (s, _) => this.WindowState = WindowState.Minimized;
+                this.BeginAnimation(UIElement.OpacityProperty, anim);
             }
-            this.WindowState = WindowState.Minimized;
-            this.Opacity = 1;
+            else
+            {
+                this.WindowState = WindowState.Minimized;
+            }
+
 
         }
 

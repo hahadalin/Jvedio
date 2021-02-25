@@ -119,6 +119,10 @@ namespace Jvedio
                 anim.Completed += (s, _) => this.Opacity = 1;
                 this.BeginAnimation(UIElement.OpacityProperty, anim);
             }
+            else
+            {
+                this.Opacity = 1;
+            }
         }
 
         public  void FadeOut()
@@ -132,7 +136,11 @@ namespace Jvedio
                     this.Close();
                 };
                 this.BeginAnimation(UIElement.OpacityProperty, anim);
-
+            }
+            else
+            {
+                this.DialogResult = false;
+                this.Close();
             }
 
         }

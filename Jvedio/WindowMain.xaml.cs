@@ -1132,15 +1132,27 @@ namespace Jvedio
 
         public  void MinWindow(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized;
+            if (Properties.Settings.Default.EnableWindowFade)
+            {
+                double opacity = Properties.Settings.Default.Opacity_Main;
+                var anim = new DoubleAnimation(0, (Duration)FadeInterval, FillBehavior.Stop);
+                anim.Completed += (s, _) => this.WindowState = WindowState.Minimized;
+                this.BeginAnimation(UIElement.OpacityProperty, anim);
+            }
+            else
+            {
+                this.WindowState = WindowState.Minimized;
+            }
         }
 
 
-        public void MaxWindow(object sender, RoutedEventArgs e)
+        public async void MaxWindow(object sender, RoutedEventArgs e)
         {
             Resizing = true;
             if (WinState == 0)
             {
+                var anim = new DoubleAnimation(0,Properties.Settings.Default.Opacity_Main, new Duration(TimeSpan.FromSeconds(0.25)),FillBehavior.Stop);
+                this.BeginAnimation(UIElement.OpacityProperty, anim);
                 //最大化
                 WinState = JvedioWindowState.Maximized;
                 WindowPoint = new Point(this.Left, this.Top);
@@ -1149,10 +1161,11 @@ namespace Jvedio
                 this.Height = SystemParameters.WorkArea.Height;
                 this.Top = SystemParameters.WorkArea.Top;
                 this.Left = SystemParameters.WorkArea.Left;
-
             }
             else
             {
+                var anim = new DoubleAnimation(0, Properties.Settings.Default.Opacity_Main, new Duration(TimeSpan.FromSeconds(0.5)), FillBehavior.Stop);
+                this.BeginAnimation(UIElement.OpacityProperty, anim);
                 WinState = JvedioWindowState.Normal;
                 this.Left = WindowPoint.X;
                 this.Width = WindowSize.Width;

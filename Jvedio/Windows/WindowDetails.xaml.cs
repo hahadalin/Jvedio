@@ -22,6 +22,7 @@ using static Jvedio.FileProcess;
 using System.Collections.ObjectModel;
 using System.Windows.Controls.Primitives;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Animation;
 
 namespace Jvedio
 {
@@ -51,9 +52,24 @@ namespace Jvedio
             this.Width = SystemParameters.PrimaryScreenHeight * 0.8 * 1230/720;
             ProgressBar.Visibility = Visibility.Collapsed;
             if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported ) taskbarInstance = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
+
+            //this.Loaded += delegate { FadeIn(); };
         }
 
+        public void FadeIn()
+        {
+            if (Properties.Settings.Default.EnableWindowFade)
+            {
+                var anim = new DoubleAnimation(0, 1, (Duration)FadeInterval, FillBehavior.Stop);
+                anim.Completed += (s, _) => this.Opacity = 1;
+                this.BeginAnimation(UIElement.OpacityProperty, anim);
+            }
+            else
+            {
+                this.Opacity = 1;
+            }
 
+        }
 
 
 

@@ -50,7 +50,7 @@ namespace Jvedio
         public Crawler(string Id)
         {
             ID = Id;
-            InitHeaders();
+            if (Url.IsProperUrl()) InitHeaders();
         }
 
 
@@ -132,6 +132,7 @@ namespace Jvedio
 
         protected override void InitHeaders()
         {
+            
             Uri uri = new Uri(Url);
             string cookie = "";
             if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
