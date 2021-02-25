@@ -2302,5 +2302,41 @@ namespace Jvedio.Properties {
                 this["FC2Cookie"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableMOO {
+            get {
+                return ((bool)(this["EnableMOO"]));
+            }
+            set {
+                this["EnableMOO"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MOO {
+            get {
+                return ((string)(this["MOO"]));
+            }
+            set {
+                this["MOO"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MOOCookie {
+            get {
+                return ((string)(this["MOOCookie"]));
+            }
+            set {
+                this["MOOCookie"] = value;
+            }
+        }
     }
 }

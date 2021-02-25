@@ -21,6 +21,7 @@ namespace Jvedio
             Text = text;
 
             TextBlock.Text = text;
+            if (window == null) return;
             this.Owner = window;
 
             if (window.Height == System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height || window.Width == System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width)
@@ -52,7 +53,7 @@ namespace Jvedio
             if (waiting)
             {
                 YesButton.Visibility = Visibility.Collapsed;
-                CancelButton.Content = "强制停止";
+                CancelButton.Content = Jvedio.Language.Resources.Stop;
                 CancelButton.Width = 125;
                 WaitingImageAwesome.Visibility = Visibility.Visible;
             }

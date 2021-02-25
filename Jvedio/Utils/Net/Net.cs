@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using static Jvedio.GlobalVariable;
@@ -82,7 +83,7 @@ namespace Jvedio
 
 
 
-        public static async Task<HttpResult> Http(string Url, CrawlerHeader headers = null, HttpMode Mode = HttpMode.Normal, WebProxy Proxy = null,bool allowRedirect=true)
+        public static async Task<HttpResult> Http(string Url, CrawlerHeader headers = null, HttpMode Mode = HttpMode.Normal, WebProxy Proxy = null,bool allowRedirect=true,string poststring="")
         {
             if (!Url.IsProperUrl()) return null;
             if (headers == null) headers = new CrawlerHeader();
@@ -111,7 +112,6 @@ namespace Jvedio
                         Request.Accept = headers.Accept;
                         Request.Timeout = 50000;
                         Request.Method = headers.Method;
-                        //Request.Connection= headers.Connection;
                         Request.KeepAlive = true;
                         Request.AllowAutoRedirect = allowRedirect;
                         Request.Referer = uri.Scheme + "://" + uri.Host + "/";
@@ -129,9 +129,21 @@ namespace Jvedio
 
                         try
                         {
-                           Response = (HttpWebResponse)Request.GetResponse();
-                           httpResult = GetHttpResult(Response, Mode);
-                           Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url} => {httpResult.StatusCode}");
+                            if (headers.Method == "POST")
+                            {
+                                Request.Method = "POST";
+                                Request.ContentType =headers.ContentType;
+                                Request.ContentLength = headers.ContentLength;
+                                Request.Headers.Add("Origin", headers.Origin);
+                                byte[] bs = Encoding.UTF8.GetBytes(poststring);
+                                using (Stream reqStream = Request.GetRequestStream())
+                                {
+                                    reqStream.Write(bs, 0, bs.Length);
+                                }
+                            }
+                            Response = (HttpWebResponse)Request.GetResponse();
+                            httpResult = GetHttpResult(Response, Mode);
+                            Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url} => {httpResult.StatusCode}");
                         }
                         catch (WebException e)
                         {
@@ -288,6 +300,11 @@ namespace Jvedio
                     webSite = WebSite.DB;
 
                 }
+                else if (title.ToLower().IndexOf("avmoo") >= 0)
+                {
+                    webSite = WebSite.MOO;
+
+                }
                 else
                 {
                     webSite = WebSite.None;
@@ -323,6 +340,16 @@ namespace Jvedio
                         {
                             result = true; 
                             title = "FANZA"; 
+                        }
+                        else result = false;
+                    }
+                    else if (Label == "AVMOO")
+                    {
+                        httpResult = await Http($"{Url}movie/655358482fd14364 ", new CrawlerHeader() { Cookies = Cookie });
+                        if (httpResult != null && httpResult.SourceCode.IndexOf("SIVR-118") >= 0)
+                        {
+                            result = true;
+                            title = "AVMOO";
                         }
                         else result = false;
                     }
@@ -514,11 +541,14 @@ namespace Jvedio
             }
         }
 
+
+        //TODO
         public static async  Task<bool> ParseSpecifiedInfo(WebSite webSite,string id,string url)
         {
             HttpResult httpResult = null;
             if (webSite==WebSite.DB) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies= Properties.Settings.Default.DBCookie } );
             if (webSite == WebSite.DMM) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = Properties.Settings.Default.DMMCookie });
+            if (webSite == WebSite.MOO) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = Properties.Settings.Default.MOOCookie });
             else httpResult = await Net.Http(url);
 
             if(httpResult!=null && httpResult.StatusCode==HttpStatusCode.OK && httpResult.SourceCode!="")
@@ -631,6 +661,15 @@ namespace Jvedio
                             message = Jvedio.Language.Resources.UrlDMMNotset;
                     }
 
+                    //FANZA 未下载成功则去 MOO
+                    if (httpResult == null)
+                    {
+                        if (RootUrl.MOO.IsProperUrl() && EnableUrl.MOO)
+                            httpResult = await new MOOCrawler(movie.id).Crawl();
+                        else if (RootUrl.MOO.IsProperUrl() && !EnableUrl.MOO)
+                            message = Jvedio.Language.Resources.UrlMOONotset;
+                    }
+
                 }
 
             }
@@ -659,8 +698,8 @@ namespace Jvedio
                                 || Properties.Settings.Default.EnableLibrary && !string.IsNullOrEmpty(Properties.Settings.Default.Library)
                                 || Properties.Settings.Default.EnableDB && !string.IsNullOrEmpty(Properties.Settings.Default.DB)
                                 || Properties.Settings.Default.EnableFC2 && !string.IsNullOrEmpty(Properties.Settings.Default.FC2)
-                                || Properties.Settings.Default.EnableDMM && !string.IsNullOrEmpty(Properties.Settings.Default.DMM);
-
+                                || Properties.Settings.Default.EnableDMM && !string.IsNullOrEmpty(Properties.Settings.Default.DMM)
+                                || Properties.Settings.Default.EnableMOO && !string.IsNullOrEmpty(Properties.Settings.Default.MOO);
             return result;
         }
 

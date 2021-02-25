@@ -136,6 +136,7 @@ namespace Jvedio
             if (string.IsNullOrEmpty(Properties.Settings.Default.DMM)) Properties.Settings.Default.EnableDMM = false;
             if (string.IsNullOrEmpty(Properties.Settings.Default.Jav321)) Properties.Settings.Default.Enable321 = false;
             if (string.IsNullOrEmpty(Properties.Settings.Default.FC2)) Properties.Settings.Default.EnableFC2 = false;
+            if (string.IsNullOrEmpty(Properties.Settings.Default.MOO)) Properties.Settings.Default.EnableMOO = false;
             Properties.Settings.Default.Save();
 
             //每页数目
@@ -164,7 +165,8 @@ namespace Jvedio
                 FC2 = Properties.Settings.Default.FC2,
                 Jav321 = Properties.Settings.Default.Jav321,
                 DMM = Properties.Settings.Default.DMM,
-                DB = Properties.Settings.Default.DB
+                DB = Properties.Settings.Default.DB,
+                MOO=Properties.Settings.Default.MOO
             };
 
             EnableUrl = new enableUrl
@@ -175,7 +177,8 @@ namespace Jvedio
                 FC2 = Properties.Settings.Default.EnableFC2,
                 Jav321 = Properties.Settings.Default.Enable321,
                 DMM = Properties.Settings.Default.EnableDMM,
-                DB = Properties.Settings.Default.EnableDB
+                DB = Properties.Settings.Default.EnableDB,
+                MOO=Properties.Settings.Default.EnableMOO
             };
 
             AllCookies = new Cookie
@@ -186,7 +189,8 @@ namespace Jvedio
                 FC2 = Properties.Settings.Default.FC2Cookie,
                 Jav321 = "",
                 DMM = Properties.Settings.Default.DMMCookie,
-                DB = Properties.Settings.Default.DBCookie
+                DB = Properties.Settings.Default.DBCookie,
+                MOO= Properties.Settings.Default.MOOCookie
             };
 
             GenreEurope[0] = Resource_String.GenreEurope.Split('|')[0];
@@ -246,6 +250,7 @@ namespace Jvedio
             Properties.Settings.Default.Jav321 = Properties.Settings.Default.Jav321.ToProperUrl();
             Properties.Settings.Default.FC2 = Properties.Settings.Default.FC2.ToProperUrl();
             Properties.Settings.Default.DMM = Properties.Settings.Default.DMM.ToProperUrl();
+            Properties.Settings.Default.MOO = Properties.Settings.Default.MOO.ToProperUrl();
         }
 
 
@@ -264,7 +269,7 @@ namespace Jvedio
 
         public enum JvedioWindowState { Normal, Minimized, Maximized, FullScreen, None }
 
-        public enum WebSite { Bus, BusEu, Library, DB, FC2, Jav321, DMM,None }
+        public enum WebSite { Bus, BusEu, Library, DB, FC2, Jav321, DMM,MOO,None }
 
         public enum Skin { 黑色,白色, 蓝色}
 
@@ -288,6 +293,7 @@ namespace Jvedio
             public string Jav321;
             public string DMM;
             public string FC2;
+            public string MOO;
         }
 
         public struct rootUrl
@@ -299,6 +305,7 @@ namespace Jvedio
             public string Jav321;
             public string DMM;
             public string FC2;
+            public string MOO;
         }
 
         public struct enableUrl
@@ -310,6 +317,7 @@ namespace Jvedio
             public bool Jav321;
             public bool DMM;
             public bool FC2;
+            public bool MOO;
         }
 
         #endregion

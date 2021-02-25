@@ -1560,4 +1560,7 @@
   <data name="UrlDMMNotset" xml:space="preserve">
     <value>DMMURLが開かれていません</value>
   </data>
+  <data name="UrlMOONotset" xml:space="preserve">
+    <value>MOOのアドレスは開いていない</value>
+  </data>
 </root>

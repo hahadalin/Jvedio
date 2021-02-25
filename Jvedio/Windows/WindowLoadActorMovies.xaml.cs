@@ -85,7 +85,11 @@ namespace Jvedio
                 List<string> infos = ReadServerInfoFromConfig(WebSite.Jav321);
                 Servers.Add(new Server() { IsEnable = Properties.Settings.Default.Enable321, Url = Properties.Settings.Default.Jav321, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
             }
-
+            if (Properties.Settings.Default.MOO != "")
+            {
+                List<string> infos = ReadServerInfoFromConfig(WebSite.MOO);
+                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableMOO, Url = Properties.Settings.Default.MOO, Cookie=Properties.Settings.Default.MOOCookie,Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -905,7 +905,8 @@ namespace Jvedio
                 Properties.Settings.Default.DB,
                 Properties.Settings.Default.FC2,
                 Properties.Settings.Default.Jav321,
-                Properties.Settings.Default.DMM
+                Properties.Settings.Default.DMM,
+                Properties.Settings.Default.MOO
             };
 
             List<bool> enableList = new List<bool>
@@ -916,7 +917,8 @@ namespace Jvedio
                 Properties.Settings.Default.EnableDB,
                 Properties.Settings.Default.EnableFC2,
                 Properties.Settings.Default.Enable321,
-                Properties.Settings.Default.EnableDMM
+                Properties.Settings.Default.EnableDMM,
+                Properties.Settings.Default.EnableMOO
             };
 
             for (int i = 0; i < urlList.Count; i++)
@@ -935,6 +937,11 @@ namespace Jvedio
                     {
                         enablecookie = true;
                         cookie = Properties.Settings.Default.DMMCookie;
+                    }
+                    else if (url == Properties.Settings.Default.MOO)
+                    {
+                        enablecookie = true;
+                        cookie = Properties.Settings.Default.MOOCookie;
                     }
                     try
                     {
@@ -962,7 +969,7 @@ namespace Jvedio
                         if (result[Properties.Settings.Default.BusEurope]) { BusEuropeStatus.Fill = Brushes.Green; }
                         if (result[Properties.Settings.Default.Jav321]) { Jav321Status.Fill = Brushes.Green; }
                         if (result[Properties.Settings.Default.DMM]) { DMMStatus.Fill = Brushes.Green; }
-
+                        if (result[Properties.Settings.Default.MOO]) { MOOStatus.Fill = Brushes.Green; }
                     }
                     catch (KeyNotFoundException ex) { Console.WriteLine(ex.Message); }
 
@@ -4894,7 +4901,11 @@ namespace Jvedio
 
         private async void Test(object sender, RoutedEventArgs e)
         {
-            var r = await new FANZACrawler("MMUS-032").Crawl();
+            using(StreamReader sr=new StreamReader(@"C:\Users\chao\Desktop\sample.html"))
+            {
+                new Jav321Parse("PPPD-094", sr.ReadToEnd()).Parse();
+            }
+             
         }
 
 

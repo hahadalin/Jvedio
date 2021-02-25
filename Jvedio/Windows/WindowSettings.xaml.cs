@@ -413,6 +413,7 @@ namespace Jvedio
                 urlList.Add(Properties.Settings.Default.FC2);
                 urlList.Add(Properties.Settings.Default.Jav321);
                 urlList.Add(Properties.Settings.Default.DMM);
+                    urlList.Add(Properties.Settings.Default.MOO);
 
                 List<bool> enableList = new List<bool>();
                 enableList.Add(Properties.Settings.Default.EnableBus);
@@ -422,6 +423,8 @@ namespace Jvedio
                 enableList.Add(Properties.Settings.Default.EnableFC2);
                 enableList.Add(Properties.Settings.Default.Enable321);
                 enableList.Add(Properties.Settings.Default.EnableDMM);
+                enableList.Add(Properties.Settings.Default.EnableMOO);
+
 
                 Properties.Settings.Default.Reset();
 
@@ -432,6 +435,7 @@ namespace Jvedio
                 Properties.Settings.Default.FC2 = urlList[4];
                 Properties.Settings.Default.Jav321 = urlList[5];
                 Properties.Settings.Default.DMM = urlList[6];
+                Properties.Settings.Default.MOO = urlList[7];
 
                 Properties.Settings.Default.EnableBus = enableList[0];
                 Properties.Settings.Default.EnableBusEu = enableList[1];
@@ -440,6 +444,9 @@ namespace Jvedio
                 Properties.Settings.Default.EnableFC2 = enableList[4];
                 Properties.Settings.Default.Enable321 = enableList[5];
                 Properties.Settings.Default.EnableDMM = enableList[6];
+                Properties.Settings.Default.EnableMOO = enableList[7];
+
+
                 Properties.Settings.Default.FirstRun = false;
                 Properties.Settings.Default.Save();
             }
@@ -965,6 +972,13 @@ namespace Jvedio
                 DeleteServerInfoFromConfig(WebSite.Jav321);
             }
 
+            else if (server.ServerTitle == "AVMOO" | server.Url.ToLower() == Properties.Settings.Default.MOO.ToLower())
+            {
+                Properties.Settings.Default.MOO = "";
+                Properties.Settings.Default.MOOCookie = "";
+                DeleteServerInfoFromConfig(WebSite.MOO);
+            }
+
             //如果本地没有，则判断 properties
 
 
@@ -1010,7 +1024,7 @@ namespace Jvedio
             if (!server.Url.EndsWith("/")) server.Url = server.Url + "/";
 
             bool enablecookie = false;
-            if (server.ServerTitle == "FANZA" || server.ServerTitle == "JavDB") enablecookie = true;
+            if (server.ServerTitle == "FANZA" || server.ServerTitle == "JavDB" || server.ServerTitle=="AVMOO") enablecookie = true;
 
             (bool result, string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.ServerTitle);
             if (!result && title.IndexOf("JavDB") >= 0)
@@ -1050,6 +1064,10 @@ namespace Jvedio
                 else if (title.IndexOf("JAV321") >= 0)
                 {
                     server.ServerTitle = "JAV321";
+                }
+                else if (title.IndexOf("AVMOO") >= 0)
+                {
+                    server.ServerTitle = "AVMOO";
                 }
                 else
                 {
@@ -1127,6 +1145,21 @@ namespace Jvedio
                 Properties.Settings.Default.Jav321 = server.Url;
                 Properties.Settings.Default.Enable321 = (bool)checkBox.IsChecked;
                 SaveServersInfoToConfig(WebSite.Jav321, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
+            }
+            else if (server.ServerTitle == "AVMOO")
+            {
+                //是否包含 cookie
+                if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
+                {
+                    new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
+                }
+                else
+                {
+                    Properties.Settings.Default.MOO = server.Url;
+                    Properties.Settings.Default.EnableMOO = (bool)checkBox.IsChecked;
+                    Properties.Settings.Default.MOOCookie = server.Cookie;
+                    SaveServersInfoToConfig(WebSite.MOO, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
+                }
             }
             Properties.Settings.Default.Save();
 

@@ -4210,6 +4210,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 未开启 MOO 网址 的本地化字符串。
+        /// </summary>
+        public static string UrlMOONotset {
+            get {
+                return ResourceManager.GetString("UrlMOONotset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 服务器名称 的本地化字符串。
         /// </summary>
         public static string UrlName {

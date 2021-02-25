@@ -30,6 +30,9 @@ namespace Jvedio
         public string AcceptLanguage = "zh-CN,zh;q=0.9";
         public string Cookies = "";
         public string Referer = "";
+        public string Origin = "";
+        public long ContentLength = 0;
+        public string ContentType = "";
     }
 
 
@@ -567,54 +570,189 @@ namespace Jvedio
         }
     }
 
-    //public class Jav321Crawler : Crawler
-    //{
-    //    public Jav321Crawler(string Id) : base(Id)
-    //    {
-    //        Url = RootUrl.Jav321 + $"video/{ID.ToJav321()}";
-    //        webSite = WebSite.Jav321;
-    //    }
+
+    public class MOOCrawler : Crawler
+    {
+
+        protected string MovieCode;
+        public MOOCrawler(string Id) : base(Id)
+        {
+            Url = RootUrl.MOO + $"search/{ID}";
+        }
+        protected override void InitHeaders()
+        {
+            headers = new CrawlerHeader() { Cookies = AllCookies.MOO };
+        }
+
+        public async Task<string> GetMovieCode(Action<string> callback = null)
+        {
+
+            //从网络获取
+            HttpResult result = await Net.Http(Url, headers, allowRedirect: false);
+            //if (result != null && result.StatusCode == HttpStatusCode.Redirect) callback?.Invoke(Jvedio.Language.Resources.SearchTooFrequent);
+            if (result != null && result.SourceCode != "")
+                return GetMovieCodeFromSearchResult(result.SourceCode);
+
+            //未找到
+
+            //搜索太频繁
+            
+            return "";
+        }
+
+        protected string GetMovieCodeFromSearchResult(string content)
+        {
+            
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(content);
+
+            HtmlNodeCollection gridNodes = doc.DocumentNode.SelectNodes("//a[@class='movie-box']");
+            if (gridNodes != null)
+            {
+                foreach (HtmlNode gridNode in gridNodes)
+                {
+                    HtmlNode htmlNode = gridNode.SelectSingleNode("div/span/date");
+                    if (htmlNode!=null && htmlNode.InnerText.ToUpper() == ID.ToUpper())
+                    {
+                        string link = gridNode.Attributes["href"]?.Value;
+                        if (!string.IsNullOrEmpty(link) && link.IndexOf("/")>0)return link.Split('/').Last();
+                        
+                    }
+                }
+            }
+            return "";
+        }
 
 
 
-    //    public override async Task<HttpResult> Crawl()
-    //    {
-    //        (Content, StatusCode) = await Net.Http(Url, Cookie: Cookies);
-    //        if (StatusCode == 200 & Content != "")
-    //        {
-    //            Dictionary<string, string> Info = GetInfo();
-    //        }
+        public override async Task<HttpResult> Crawl()
+        {
+            MovieCode = await GetMovieCode((error) => {
+                httpResult = new HttpResult() { Error = error, Success = false };
+            });
+            if (MovieCode != "")
+            {
+                Url = RootUrl.MOO + $"movie/{MovieCode}";
+                httpResult = await Net.Http(Url, headers);
+                if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
+                {
+                    FileProcess.SaveInfo(GetInfo(), ID);
+                    httpResult.Success = true;
+                }
+            }
+            return httpResult;
+
+        }
+
+        protected override void ParseCookies(string SetCookie)
+        {
+            return ;
+        }
 
 
+        protected override Dictionary<string, string> GetInfo()
+        {
+            Dictionary<string, string> Info = new MOOParse(ID, httpResult.SourceCode).Parse();
+            if (Info.Count > 0)
+            {
+                Info.Add("id", ID);
+                Info.Add("sourceurl", Url);
+                Info.Add("source", "AVMOO");
+                Task.Delay(TASKDELAY_MEDIUM).Wait();
+            }
+            return Info;
+        }
 
 
-    //        if (MovieCode != "")
-    //        {
-    //            //解析
-    //            Url = RootUrl.Library + $"?v={MovieCode}";
-    //            return await base.Crawl(callback);
-    //        }
-    //        else
-    //        {
-    //            return false;
-    //        }
-    //    }
+    }
+
+    public class Jav321Crawler : Crawler
+    {
+        protected string MovieCode = "";
+        public Jav321Crawler(string Id) : base(Id)
+        {
+            Url = RootUrl.Jav321 + $"search";
+        }
+
+        protected  void InitHeaders(string postdata)
+        {
+            //sn=pppd-093
+            if (!Url.IsProperUrl()) return;
+            Uri uri = new Uri(Url);
+            headers = new CrawlerHeader() {
+                
+                ContentLength=postdata.Length+3,
+                Origin= uri.Scheme + "://"+ uri.Host,
+                ContentType= "application/x-www-form-urlencoded",
+                Referer= uri.Scheme + "://" + uri.Host,
+                Method="POST"
+            };
+        }
+
+        protected override void InitHeaders()
+        {
+            headers = new CrawlerHeader()  ;
+        }
+
+        public async Task<string> GetMovieCode(Action<string> callback = null)
+        {
+            //从网络获取
+            InitHeaders(ID);
+            HttpResult result = await Net.Http(Url, headers, allowRedirect: false,poststring:$"sn={ID}");
+            if (result != null && result.StatusCode == HttpStatusCode.MovedPermanently && !string.IsNullOrEmpty(result.Headers.Location))
+            {
+                return result.Headers.Location;
+            }
+            //未找到
+
+            //搜索太频繁
+
+            return "";
+        }
+
+        public override async Task<HttpResult> Crawl()
+        {
+            //从网络获取
+            
+            MovieCode = await GetMovieCode((error) => {
+                httpResult = new HttpResult() { Error = error, Success = false };
+            });
+            if ( MovieCode.Length>1)
+            {
+                InitHeaders();
+                Url = RootUrl.Jav321 + MovieCode.Substring(1);
+                httpResult = await Net.Http(Url, headers);
+                if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
+                {
+                    FileProcess.SaveInfo(GetInfo(), ID);
+                    httpResult.Success = true;
+                }
+            }
+            return httpResult;
+        }
+
+        
 
 
-    //    protected override Dictionary<string, string> GetInfo()
-    //    {
-    //        Dictionary<string, string> Info = new Jav321Parse(ID, Content).Parse();
-    //        if (Info.Count <= 0) { Console.WriteLine($"{Jvedio.Language.Resources.Url}：{Url}"); resultMessage = $"{Jvedio.Language.Resources.Url}：{Url}，{Jvedio.Language.Resources.Reason}：{Jvedio.Language.Resources.ParseFail}！"; Logger.LogN(resultMessage); }
-    //        else
-    //        {
-    //            Info.Add("sourceurl", Url);
-    //            Info.Add("source", "jav321");
-    //            Task.Delay(TASKDELAY_MEDIUM).Wait();
-    //        }
-    //        return Info;
-    //    }
+        protected override Dictionary<string, string> GetInfo()
+        {
+            Dictionary<string, string> Info = new Jav321Parse(ID, httpResult.SourceCode).Parse();
+            if (Info.Count > 0)
+            {
+                Info.Add("id", ID);
+                Info.Add("sourceurl", Url);
+                Info.Add("source", "JAV321");
+                Task.Delay(TASKDELAY_MEDIUM).Wait();
+            }
+            return Info;
+        }
 
-    //}
+
+        protected override void ParseCookies(string SetCookie)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 
 

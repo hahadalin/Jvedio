@@ -1066,6 +1066,10 @@
                                                         <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="DMM" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
                                                         <Ellipse x:Name="DMMStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
                                                     </StackPanel>
+                                                    <StackPanel  Margin="5" Orientation="Horizontal"   Visibility="{Binding EnableMOO, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}" >
+                                                        <TextBlock Width="50"  Foreground="{DynamicResource ForegroundSearch}" Text="MOO" HorizontalAlignment="Left" TextAlignment="Center"   Margin="5 5"/>
+                                                        <Ellipse x:Name="MOOStatus" Width="15" Height="15" HorizontalAlignment="Right" Fill="Red" Margin="5 5"/>
+                                                    </StackPanel>
                                                 </StackPanel>
                                             </Grid>
                                         </ToolTip>
@@ -1270,7 +1274,7 @@
                                             </Border>
 
 
-                                            <Button Visibility="Collapsed" Click="Test" Content="Test" />
+                                            <Button Visibility="Visible" Click="Test" Content="Test" />
 
                                         </StackPanel>
 

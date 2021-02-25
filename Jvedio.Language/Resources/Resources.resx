@@ -1560,4 +1560,7 @@
   <data name="UrlDMMNotset" xml:space="preserve">
     <value>未开启 DMM 网址</value>
   </data>
+  <data name="UrlMOONotset" xml:space="preserve">
+    <value>未开启 MOO 网址</value>
+  </data>
 </root>
