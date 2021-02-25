@@ -1041,6 +1041,7 @@ namespace Jvedio
                 else if (title.IndexOf("FANZA") >= 0)
                 {
                     server.ServerTitle = "FANZA";
+                    if (server.Url.EndsWith("top/")) server.Url = server.Url.Replace("top/", "");
                 }
                 else if (title.IndexOf("FC2コンテンツマーケット") >= 0 || title.IndexOf("FC2电子市场") >= 0)
                 {

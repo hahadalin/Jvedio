@@ -1153,16 +1153,16 @@
     <value>该影片无演员</value>
   </data>
   <data name="DownloadSPicFailFor" xml:space="preserve">
-    <value>下载缩略图失败，原因：</value>
+    <value>下载缩略图失败，原因</value>
   </data>
   <data name="DownloadEPicFailFor" xml:space="preserve">
-    <value>下载海报图失败：</value>
+    <value>下载海报图失败</value>
   </data>
   <data name="Reason" xml:space="preserve">
     <value>原因</value>
   </data>
   <data name="DownloadBPicFailFor" xml:space="preserve">
-    <value>下载海报图失败，原因：</value>
+    <value>下载海报图失败，原因</value>
   </data>
   <data name="Management" xml:space="preserve">
     <value>管理</value>
@@ -1216,7 +1216,7 @@
     <value>成功删除</value>
   </data>
   <data name="DownloadMessageFailFor" xml:space="preserve">
-    <value>信息下载失败，原因：</value>
+    <value>信息下载失败，原因</value>
   </data>
   <data name="RebootToTakeEffect" xml:space="preserve">
     <value>重启后生效</value>
@@ -1553,5 +1553,11 @@
   </data>
   <data name="UrlLibraryNotset" xml:space="preserve">
     <value>未开启 Library 网址</value>
+  </data>
+  <data name="SearchTooFrequent" xml:space="preserve">
+    <value>搜索次数过多，DB已屏蔽，等待10分钟解禁</value>
+  </data>
+  <data name="UrlDMMNotset" xml:space="preserve">
+    <value>未开启 DMM 网址</value>
   </data>
 </root>

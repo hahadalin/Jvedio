@@ -522,7 +522,8 @@ namespace Jvedio
                 {
                     if (!httpResult.Success)
                     {
-                        MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{httpResult.StatusCode.ToStatusMessage()}"));
+                        string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
+                        MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{error}"));
                     }
 
                 }

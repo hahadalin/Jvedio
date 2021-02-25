@@ -880,7 +880,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 下载海报图失败： 的本地化字符串。
+        ///   查找类似 下载海报图失败 的本地化字符串。
         /// </summary>
         public static string DownloadEPicFailFor {
             get {
@@ -907,7 +907,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 信息下载失败，原因： 的本地化字符串。
+        ///   查找类似 信息下载失败，原因 的本地化字符串。
         /// </summary>
         public static string DownloadMessageFailFor {
             get {
@@ -916,7 +916,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 下载缩略图失败，原因： 的本地化字符串。
+        ///   查找类似 下载缩略图失败，原因 的本地化字符串。
         /// </summary>
         public static string DownloadSPicFailFor {
             get {
@@ -3256,6 +3256,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 搜索次数过多，DB已屏蔽，等待10分钟解禁 的本地化字符串。
+        /// </summary>
+        public static string SearchTooFrequent {
+            get {
+                return ResourceManager.GetString("SearchTooFrequent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 秒 的本地化字符串。
         /// </summary>
         public static string Second {
@@ -4152,6 +4161,15 @@ namespace Jvedio.Language {
         public static string UrlDBNotset {
             get {
                 return ResourceManager.GetString("UrlDBNotset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未开启 DMM 网址 的本地化字符串。
+        /// </summary>
+        public static string UrlDMMNotset {
+            get {
+                return ResourceManager.GetString("UrlDMMNotset", resourceCulture);
             }
         }
         

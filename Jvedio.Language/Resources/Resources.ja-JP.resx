@@ -1153,13 +1153,13 @@
     <value>この映画には俳優はいません</value>
   </data>
   <data name="DownloadSPicFailFor" xml:space="preserve">
-    <value>サムネイルのダウンロードに失敗しました。理由：</value>
+    <value>サムネイルのダウンロードに失敗しました。理由</value>
   </data>
   <data name="DownloadBPicFailFor" xml:space="preserve">
-    <value>ポスター画像のダウンロードに失敗しました。理由：</value>
+    <value>ポスター画像のダウンロードに失敗しました。理由</value>
   </data>
   <data name="DownloadEPicFailFor" xml:space="preserve">
-    <value>ポスター画像のダウンロードに失敗しました：</value>
+    <value>ポスター画像のダウンロードに失敗しました</value>
   </data>
   <data name="Reason" xml:space="preserve">
     <value>理由</value>
@@ -1216,7 +1216,7 @@
     <value>正常に削除されました</value>
   </data>
   <data name="DownloadMessageFailFor" xml:space="preserve">
-    <value>情報のダウンロードに失敗しました。理由：</value>
+    <value>情報のダウンロードに失敗しました。理由</value>
   </data>
   <data name="RebootToTakeEffect" xml:space="preserve">
     <value>再起動後に有効になります</value>
@@ -1553,5 +1553,11 @@
   </data>
   <data name="UrlBusNotset" xml:space="preserve">
     <value>busアドレスは開きません</value>
+  </data>
+  <data name="SearchTooFrequent" xml:space="preserve">
+    <value>検索回数が多すぎて、dbはすでに遮断して、10分解禁を待ちます</value>
+  </data>
+  <data name="UrlDMMNotset" xml:space="preserve">
+    <value>DMMURLが開かれていません</value>
   </data>
 </root>

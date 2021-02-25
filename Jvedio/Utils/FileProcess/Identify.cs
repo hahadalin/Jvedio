@@ -33,11 +33,22 @@ namespace Jvedio
         {
             string result = "";
             //https://www.dmm.co.jp/mono/dvd/-/detail/=/cid=apns006dod/?i3_ref=search&amp;i3_ord=1
-
-
+            //https://www.dmm.co.jp/mono/dvd/-/detail/=/cid=mmus032/?i3_ref=search&amp;i3_ord=1
+            var values = url.Split('/').ToList();
+            string cid = "";
+            foreach (var item in values)
+            {
+                if(!string.IsNullOrEmpty(item) && item.IndexOf("cid=") >= 0)
+                {
+                    cid = item;
+                    break;
+                }
+            }
+            if (cid.IndexOf("cid=") >= 0)
+            {
+                return Identify.GetFanhao(cid.Replace("cid=", ""));
+            }
             return result;
-
-
         }
 
         public static bool IsFlowOut(string filepath)

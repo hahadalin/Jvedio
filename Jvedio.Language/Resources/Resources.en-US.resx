@@ -1153,13 +1153,13 @@
     <value>No actors in this film</value>
   </data>
   <data name="DownloadSPicFailFor" xml:space="preserve">
-    <value>Failed to download thumbnail, reason:</value>
+    <value>Failed to download thumbnail, reason</value>
   </data>
   <data name="DownloadBPicFailFor" xml:space="preserve">
-    <value>Failed to download poster image, reason:</value>
+    <value>Failed to download poster image, reason</value>
   </data>
   <data name="DownloadEPicFailFor" xml:space="preserve">
-    <value>Failed to download poster image:</value>
+    <value>Failed to download poster image</value>
   </data>
   <data name="Reason" xml:space="preserve">
     <value>the reason</value>
@@ -1216,7 +1216,7 @@
     <value>Success Delete</value>
   </data>
   <data name="DownloadMessageFailFor" xml:space="preserve">
-    <value>Information download failed, reason:</value>
+    <value>Information download failed, reason</value>
   </data>
   <data name="RebootToTakeEffect" xml:space="preserve">
     <value>Take effect after restart</value>
@@ -1553,5 +1553,11 @@
   </data>
   <data name="UrlLibraryNotset" xml:space="preserve">
     <value>Library URL not open</value>
+  </data>
+  <data name="SearchTooFrequent" xml:space="preserve">
+    <value>Too many searches, DB has been blocked, wait 10 minutes to unban</value>
+  </data>
+  <data name="UrlDMMNotset" xml:space="preserve">
+    <value>DMM URL is not opened</value>
   </data>
 </root>

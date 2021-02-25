@@ -12,7 +12,7 @@ using static Jvedio.GlobalVariable;
 namespace Jvedio
 {
 
-    public class InfoParse
+    public abstract class InfoParse
     {
         protected string HtmlText { get; set; }
         public string ID { get; set; }
@@ -26,10 +26,7 @@ namespace Jvedio
         }
 
 
-        public virtual Dictionary<string, string> Parse()
-        {
-            return new Dictionary<string, string>();
-        }
+        public abstract Dictionary<string, string> Parse();
 
     }
 
@@ -41,8 +38,9 @@ namespace Jvedio
 
         public override Dictionary<string, string> Parse()
         {
-            if (string.IsNullOrEmpty(HtmlText)) return base.Parse();
+            
             Dictionary<string, string> result = new Dictionary<string, string>();
+            if (string.IsNullOrEmpty(HtmlText)) return result;
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(HtmlText);
             //基本信息
@@ -277,6 +275,8 @@ namespace Jvedio
         public LibraryParse(string id, string htmlText, VedioType vedioType = 0) : base(htmlText, id, vedioType) { }
 
 
+        //TODO
+        //缺少系列
         public override Dictionary<string, string> Parse()
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
@@ -875,6 +875,162 @@ namespace Jvedio
             return result.ToString();
         }
 
+    }
+
+
+    public class FanzaParse : InfoParse
+    {
+        public FanzaParse(string id, string htmlText, VedioType vedioType = 0) : base(htmlText, id, vedioType) { }
+
+        public override Dictionary<string, string> Parse()
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            if (HtmlText == "") { return result; }
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(HtmlText);
+
+            //标题
+            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//h1[@id='title']");
+            if (titleNode != null)
+                result.Add("title", titleNode.InnerText);
+
+            //摘要
+
+            HtmlNode plotNode = doc.DocumentNode.SelectSingleNode("//div[@class='mg-b20 lh4']/p");
+            if (plotNode != null)
+                result.Add("plot", plotNode.InnerText.Replace("\n",""));
+
+
+
+            //基本信息
+            HtmlNodeCollection infoNodes = doc.DocumentNode.SelectNodes("//table[@class='mg-b20']/tr");
+            if (infoNodes != null)
+            {
+                foreach (HtmlNode infoNode in infoNodes)
+                {
+                    if (infoNode == null) continue;
+                    string header = infoNode.InnerText;
+                    string content = "";
+                    HtmlNode node = null;
+                    HtmlNodeCollection nodes = null;
+                    if (header.IndexOf("貸出開始日") >= 0 || header.IndexOf("発売日")>=0)
+                    {
+                        nodes = infoNode.SelectNodes("td"); if (nodes == null || nodes.Count == 0) continue;
+                        content = nodes[1].InnerText;
+                        result.Add("releasedate", content.Replace("/","-"));
+                    }
+                    else if (header.IndexOf("収録時間") >= 0)
+                    {
+                        nodes = infoNode.SelectNodes("td"); if (nodes == null || nodes.Count == 0) continue;
+                        content = nodes[1].InnerText;
+                        result.Add("runtime", content.Replace("分",""));
+                    }
+                    else if (header.IndexOf("監督") >= 0)
+                    {
+                        node = infoNode.SelectSingleNode("td/a"); if (node == null) continue;
+                        content = node.InnerText;
+                        result.Add("director", content);
+                    }
+                    else if (header.IndexOf("メーカー") >= 0)
+                    {
+                        node = infoNode.SelectSingleNode("td/a"); if (node == null) continue;
+                        content = node.InnerText;
+                        result.Add("studio", content);
+                    }
+                    else if (header.IndexOf("シリーズ") >= 0)
+                    {
+                        node = infoNode.SelectSingleNode("td/a"); if (node == null) continue;
+                        content = node.InnerText;
+                        result.Add("tag", content);
+                    }
+                    else if (header.IndexOf("平均評価") >= 0)
+                    {
+                        ////p.dmm.co.jp/p/ms/review/3.gif
+                        node = doc.DocumentNode.SelectSingleNode("//img[@class='mg-r6 middle']");
+                        if (node != null )
+                        {
+                            string src = node.Attributes["src"]?.Value;
+                            if(!string.IsNullOrEmpty(src) && src.IndexOf(".gif") >= 0)
+                            {
+                                content = src.Split('/').Last().Split('.').First().Replace("_",".");
+                                //转为 10 分制
+                                float.TryParse(content, out float rating);
+                                result.Add("rating", (rating*2).ToString());
+                            }
+                        }
+                    }
+                    else if (header.IndexOf("ジャンル") >= 0)
+                    {
+                        HtmlNodeCollection genreNodes = infoNode.SelectNodes("td/a");
+                        if (genreNodes != null)
+                        {
+                            List<string> genres = new List<string>();
+                            foreach (HtmlNode genreNode in genreNodes)
+                            {
+                                genres.Add(genreNode.InnerText);
+                            }
+                            result.Add("genre", string.Join(" ", genres));
+                        }
+
+                    }
+                    else if (header.IndexOf("出演者") >= 0)
+                    {
+                        HtmlNodeCollection actressNodes = infoNode.SelectNodes("td/span/a");
+                        if (actressNodes != null)
+                        {
+                            List<string> actress = new List<string>();
+                            foreach (HtmlNode actressNode in actressNodes)
+                            {
+                                actress.Add(actressNode.InnerText);
+                            }
+                            result.Add("actor", string.Join("/", actress));
+                        }
+
+                    }
+                }
+            }
+
+            //小图
+            HtmlNode smallimageNode = doc.DocumentNode.SelectSingleNode("//div[@id='sample-video']/div/a/img");
+            if (smallimageNode != null)
+            {
+                string src = smallimageNode.Attributes["src"]?.Value;
+                if (!string.IsNullOrEmpty(src))
+                    result.Add("smallimageurl", src);
+            }
+            //大图
+            HtmlNode bigimageNode = doc.DocumentNode.SelectSingleNode("//div[@id='sample-video']/div/a");
+            if (bigimageNode != null)
+            {
+                string src = bigimageNode.Attributes["href"]?.Value;
+                if (!string.IsNullOrEmpty(src))
+                    result.Add("bigimageurl", src);
+            }
+
+            //预览图
+            //大：https://pics.dmm.co.jp/digital/video/mmus00032/mmus00032jp-4.jpg 
+            //小：https://pics.dmm.co.jp/digital/video/mmus00032/mmus00032-4.jpg
+            HtmlNodeCollection extraImageNodes = doc.DocumentNode.SelectNodes("//div[@id='sample-image-block']/a/img");
+            List<string> url_e = new List<string>();
+            if (extraImageNodes != null)
+            {
+                for (int i = 0; i < extraImageNodes.Count; i++)
+                {
+                    HtmlNode imgNode = extraImageNodes[i];
+                    if (imgNode != null)
+                    {
+                        string src = imgNode.Attributes["src"]?.Value;
+                        if (!string.IsNullOrEmpty(src) && src.IndexOf($"-{i+1}.jpg") > 0)
+                        {
+                            url_e.Add(src.Replace($"-{i + 1}.jpg", $"jp-{i + 1}.jpg"));
+                        }
+                    }
+                }
+                result.Add("extraimageurl", string.Join(";",url_e));
+            }
+
+            return result;
+        }
     }
 
     public class Jav321Parse : InfoParse

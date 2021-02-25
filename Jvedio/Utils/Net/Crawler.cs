@@ -50,6 +50,7 @@ namespace Jvedio
         public Crawler(string Id)
         {
             ID = Id;
+            InitHeaders();
         }
 
 
@@ -99,7 +100,6 @@ namespace Jvedio
 
         public override async Task<HttpResult> Crawl()
         {
-            InitHeaders();
             httpResult = await Net.Http(Url,headers);
             if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
             {
@@ -171,7 +171,6 @@ namespace Jvedio
 
         public override async Task<HttpResult> Crawl()
         {
-            InitHeaders();
             httpResult = await Net.Http(Url, headers);
             if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
             {
@@ -232,7 +231,7 @@ namespace Jvedio
             };
         }
 
-        public  async Task<string> GetMovieCode()
+        public  async Task<string> GetMovieCode(Action<string> callback=null)
         {
             //先从数据库获取
             string movieCode = DataBase.SelectInfoByID("code", "javdb", ID);
@@ -240,6 +239,7 @@ namespace Jvedio
             {
                 //从网络获取
                 HttpResult result = await Net.Http(Url, headers, allowRedirect: false);
+                if (result != null && result.StatusCode == HttpStatusCode.Redirect) callback?.Invoke(Jvedio.Language.Resources.SearchTooFrequent);
                 if (result!=null && result.SourceCode!="") 
                     movieCode = GetMovieCodeFromSearchResult(result.SourceCode);
 
@@ -275,8 +275,9 @@ namespace Jvedio
 
         public override async Task<HttpResult> Crawl()
         {
-            InitHeaders();
-            MovieCode = await GetMovieCode();
+            MovieCode = await GetMovieCode((error)=> {
+                httpResult = new HttpResult() { Error=error,Success=false};
+            });
             if (MovieCode != "")
             {
                 Url = RootUrl.DB + $"v/{MovieCode}";
@@ -327,7 +328,7 @@ namespace Jvedio
             //先从数据库获取
             if (string.IsNullOrEmpty(movieCode) || movieCode.IndexOf("zh-cn") >= 0)
             {
-                HttpResult result= await Net.Http(Url, Mode: HttpMode.RedirectGet);
+                HttpResult result= await Net.Http(Url,headers, Mode: HttpMode.RedirectGet);
                 if (result != null && result.StatusCode == HttpStatusCode.Redirect) movieCode = result.Headers.Location;
                 else if(result!=null) movieCode = GetMovieCodeFromSearchResult(result.SourceCode);
 
@@ -387,7 +388,6 @@ namespace Jvedio
 
         public override async Task<HttpResult> Crawl()
         {
-            InitHeaders();
             MovieCode = await GetMovieCode();
             if (MovieCode != "")
             {
@@ -440,117 +440,131 @@ namespace Jvedio
 
     }
 
-    //public class DMMCrawler : Crawler
-    //{
-    //    public DMMCrawler(string Id) : base(Id)
-    //    {
-    //        //https://www.dmm.co.jp/search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr=fsdss-026&commit.x=5&commit.y=18 
-    //        Url = $"{RootUrl.DMM}search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr={ID}&commit.x=5&commit.y=18";
-    //        webSite = WebSite.DMM;
-    //    }
+    public class FANZACrawler : Crawler
+    {
 
-    //    protected override async Task<(string, int)> GetMovieCode()
-    //    {
-    //        int StatusCode = 404;
-    //        string result="";
+        protected string MovieCode = "";
+        public FANZACrawler(string Id) : base(Id)
+        {
+            //https://www.dmm.co.jp/search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr=fsdss-026&commit.x=5&commit.y=18 
+            Url = $"{RootUrl.DMM}search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr={ID}&commit.x=5&commit.y=18";
+        }
 
-    //        //从网络获取
-    //        string Location = "";
-    //        string content = "";
-    //        (content, StatusCode) = await Net.Http(Url, Mode: HttpMode.RedirectGet);
-    //        if (StatusCode == (int)System.Net.HttpStatusCode.Redirect) Location = content;
-    //        //https://www.dmm.co.jp/mono/dvd/-/search/=/searchstr=APNS-006/
-    //        if (Location.IsProperUrl())
-    //        {
-    //            content = "";StatusCode = 404;
-    //            (content, StatusCode) = await Net.Http(Location,Cookie:Properties.Settings.Default.DMMCookie, Mode: HttpMode.RedirectGet);
-    //            if(StatusCode==200 && !string.IsNullOrEmpty(content))
-    //            {
-    //                result = GetLinkFromSearchResult(content);
-    //            }
-    //            else
-    //            {
-    //                Console.WriteLine("无资源");
-    //            }
-    //        }
-    //        else
-    //        {
-    //            Console.WriteLine("Location 不是正确的网络地址");
-    //        }
+        protected  async Task<string> GetMovieCode()
+        {
+            //从网络获取
+            string movieCode = "";
+            string link = "";
+            HttpResult result = await Net.Http(Url, headers, Mode: HttpMode.RedirectGet);
+            if (result != null && result.StatusCode == HttpStatusCode.Redirect) 
+                link = result.Headers.Location;//https://www.dmm.co.jp/mono/dvd/-/search/=/searchstr=ABP-123/
 
-    //        return (result, StatusCode);
-    //    }
+            if (link != "")
+            {
+                HttpResult newResult= await Net.Http(link, headers);
+                if (newResult != null && newResult.StatusCode == HttpStatusCode.OK)
+                {
+                    if (newResult.SourceCode.IndexOf("に一致する商品は見つかりませんでした") > 0)
+                    {
+                        //不存在
+                    }
+                    else
+                    {
+                        //存在并解析
+                        movieCode = GetLinkFromSearchResult(newResult.SourceCode);
+                    }
+                }
+                    
+            }
+            return movieCode;
+        }
 
-    //    //HACK
-    //    private string GetLinkFromSearchResult(string html)
-    //    {
-    //        string result = "";
-    //        if (string.IsNullOrEmpty(html)) return result;
-    //        HtmlDocument doc = new HtmlDocument();
-    //        doc.LoadHtml(html);
-    //        HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//p[@class='tmd']/a");
+        //HACK
+        private string GetLinkFromSearchResult(string html)
+        {
+            string result = "";
+            if (string.IsNullOrEmpty(html)) return result;
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//p[@class='tmb']/a");
 
-    //        if (nodes != null)
-    //        {
-    //            foreach (HtmlNode node in nodes)
-    //            {
-    //                if (node == null) continue;
-    //                string link = node.Attributes["href"]?.Value;
-    //                if (link.IsProperUrl())
-    //                {
-    //                    if (Identify.GetFanhaoFromDMMUrl(link) == ID)
-    //                    {
-    //                        result = link;
-    //                        break;
-    //                    }
-    //                }
-    //            }
-    //        }
+            if (nodes != null)
+            {
+                foreach (HtmlNode node in nodes)
+                {
+                    if (node == null) continue;
+                    string link = node.Attributes["href"]?.Value;
+                    if (link.IsProperUrl())
+                    {
+                        string fanhao = Identify.GetFanhaoFromDMMUrl(link);
+                        if (Identify.GetEng(fanhao).ToUpper() == Identify.GetEng(ID).ToUpper())
+                        {
+                            string str1 = Identify.GetNum(fanhao);
+                            string str2 = Identify.GetNum(ID);
+                            int num1 = 0;
+                            int num2 = 1;
+                            int.TryParse(str1, out num1);
+                            int.TryParse(str2, out num2);
+                            if (num1 == num2)
+                            {
+                                result = link;
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
 
 
-    //        return result;
+            return result;
 
-    //    }
+        }
 
 
-    //    //TODO
-    //    public override async Task<HttpResult> Crawl()
-    //    {
-    //        return false;
-    //        int statuscode = 404;
-    //        (MovieCode, statuscode) = await GetMovieCode();
-    //        if (MovieCode != "")
-    //        {
-    //            //解析
-    //            Url = RootUrl.Library + $"?v={MovieCode}";
-    //            return await base.Crawl(callback);
-    //        }
-    //        else
-    //        {
-    //            if (statuscode == 200) statuscode = 404;
-    //            callback?.Invoke(statuscode);
-    //            return false;
-    //        }
-    //    }
 
-    //    //UNDONE
-    //    protected override Dictionary<string, string> GetInfo()
-    //    {
-    //        Dictionary<string, string> Info = new Dictionary<string, string>();
-    //        return Info;
-    //        Info = new LibraryParse(ID, Content).Parse();
-    //        if (Info.Count <= 0) { Console.WriteLine($"{Jvedio.Language.Resources.Url}：{Url}"); resultMessage = $"{Jvedio.Language.Resources.Url}：{Url}，{Jvedio.Language.Resources.Reason}：{Jvedio.Language.Resources.ParseFail}！"; Logger.LogN(resultMessage); }
-    //        else
-    //        {
-    //            Info.Add("id", ID);
-    //            Info.Add("sourceurl", Url);
-    //            Info.Add("source", "dmm");
-    //            Task.Delay(TASKDELAY_MEDIUM).Wait();
-    //        }
-    //        return Info;
-    //    }
 
-    //}
+        public override async Task<HttpResult> Crawl()
+        {
+            MovieCode = await GetMovieCode();
+            if (MovieCode != "")
+            {
+                //解析
+                Url = MovieCode;
+                httpResult = await Net.Http(Url, headers);
+                if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
+                {
+                    FileProcess.SaveInfo(GetInfo(), ID);
+                    httpResult.Success = true;
+                }
+            }
+            return httpResult;
+        }
+
+        protected override Dictionary<string, string> GetInfo()
+        {
+            Dictionary<string, string> Info = new Dictionary<string, string>();
+            Info = new FanzaParse(ID, httpResult.SourceCode).Parse();
+            if (Info.Count > 0)
+            { 
+                Info.Add("id", ID);
+                Info.Add("sourceurl", Url);
+                Info.Add("source", "FANZA");
+                Task.Delay(TASKDELAY_MEDIUM).Wait();
+            }
+            return Info;
+        }
+
+        protected override void InitHeaders()
+        {
+            headers = new CrawlerHeader() { Cookies = AllCookies.DMM };
+        }
+
+        protected override void ParseCookies(string SetCookie)
+        {
+            return;
+        }
+    }
 
     //public class Jav321Crawler : Crawler
     //{
@@ -602,5 +616,5 @@ namespace Jvedio
     //}
 
 
-   
+
 }

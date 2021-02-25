@@ -1099,11 +1099,6 @@ namespace Jvedio
             windowMain = App.Current.Windows[0] as Main;
             windowMain.RefreshMovieByID(vieModel.DetailMovie.id);
             HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "DetailsGrowl");
-            if (windowMain.vieModel.CurrentMovieList.Count > 1)
-            {
-                NextMovie(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, "DetailsGrowl");
-            }
         }
 
         public void DeleteID(object sender, RoutedEventArgs e)
@@ -1192,10 +1187,6 @@ namespace Jvedio
         public async void TranslateMovie(object sender, RoutedEventArgs e)
         {
             if (!Properties.Settings.Default.Enable_TL_BAIDU & !Properties.Settings.Default.Enable_TL_YOUDAO) { HandyControl.Controls.Growl.Warning("请设置【有道翻译】并测试", "DetailsGrowl"); return; }
-            MenuItem mnu = ((MenuItem)(sender)).Parent as MenuItem;
-            if (mnu != null)
-            {
-
                 string result = "";
                 MySqlite dataBase = new MySqlite("Translate");
 
@@ -1236,10 +1227,8 @@ namespace Jvedio
                     }
 
                 }
-
-
                 dataBase.CloseDB();
-            }
+            
         }
 
 
@@ -2090,6 +2079,7 @@ if (contextMenu.Visibility != Visibility.Visible) return;
         {
             OpenFilePath(sender, new RoutedEventArgs());
         }
+
     }
 
 

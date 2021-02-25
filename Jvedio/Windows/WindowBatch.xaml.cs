@@ -234,7 +234,8 @@ namespace Jvedio
             }
             else if(httpResult!=null)
             {
-                ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{httpResult.StatusCode.ToStatusMessage()}");
+                string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
+                ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{error}");
             }
 
             if (id.ToUpper().IndexOf("FC2") >= 0)

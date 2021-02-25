@@ -129,9 +129,9 @@ namespace Jvedio
 
                         try
                         {
-                            Response = (HttpWebResponse)Request.GetResponse();
+                           Response = (HttpWebResponse)Request.GetResponse();
                            httpResult = GetHttpResult(Response, Mode);
-
+                           Logger.LogN($" {Jvedio.Language.Resources.Url}：{Url} => {httpResult.StatusCode}");
                         }
                         catch (WebException e)
                         {
@@ -431,7 +431,10 @@ namespace Jvedio
             }
             else
             {
-                cookie = httpResult.Headers.SetCookie.Split(';')[0];
+                if (httpResult.Headers.SetCookie != null)
+                    cookie = httpResult.Headers.SetCookie.Split(';')[0];
+                else
+                    cookie = Cookie;
                 result = true;
                 ImageProcess.SaveImage(ID, httpResult.FileByte, imageType, Url);
             }
@@ -584,7 +587,7 @@ namespace Jvedio
                         message = Jvedio.Language.Resources.UrlDBNotset;
 
                     //db 未下载成功则去 fc2官网
-                    if (httpResult!=null && !httpResult.Success)
+                    if (httpResult==null )
                     {
                         if (RootUrl.FC2.IsProperUrl() && EnableUrl.FC2)
                             httpResult=await new FC2Crawler(movie.id).Crawl();
@@ -602,7 +605,7 @@ namespace Jvedio
                         message = Jvedio.Language.Resources.UrlBusNotset;
 
                     //Bus 未下载成功则去 library
-                    if (httpResult!=null && !httpResult.Success)
+                    if (httpResult==null )
                     {
                         if (RootUrl.Library.IsProperUrl() && EnableUrl.Library)
                             httpResult=await new LibraryCrawler(movie.id).Crawl();
@@ -611,12 +614,21 @@ namespace Jvedio
                     }
 
                     //library 未下载成功则去 DB
-                    if (httpResult != null && !httpResult.Success)
+                    if (httpResult == null )
                     {
-                        if (RootUrl.DB.IsProperUrl() && EnableUrl.DB)  
-                            await new DBCrawler(movie.id).Crawl();
+                        if (RootUrl.DB.IsProperUrl() && EnableUrl.DB)
+                            httpResult=await new DBCrawler(movie.id).Crawl();
                         else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB)
                             message = Jvedio.Language.Resources.UrlDBNotset;
+                    }
+
+                    //DB未下载成功则去 FANZA
+                    if (httpResult == null)
+                    {
+                        if (RootUrl.DMM.IsProperUrl() && EnableUrl.DMM)
+                            httpResult = await new FANZACrawler(movie.id).Crawl();
+                        else if (RootUrl.DMM.IsProperUrl() && !EnableUrl.DMM)
+                            message = Jvedio.Language.Resources.UrlDMMNotset;
                     }
 
                 }
@@ -625,6 +637,7 @@ namespace Jvedio
 
             Movie newMovie = DataBase.SelectMovieByID(movie.id);
             if (newMovie != null && newMovie.title != "" && httpResult!=null) httpResult.Success = true;
+            if (httpResult == null && message != "") httpResult = new HttpResult() { Error = message, Success = false };
             return httpResult;
         }
 

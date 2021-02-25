@@ -639,7 +639,7 @@ namespace Jvedio
             DownLoader.MessageCallBack += (s, e) =>
             {
                 MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
-                if(eventArgs!=null) HandyControl.Controls.Growl.Error(eventArgs.Message);
+                if(eventArgs!=null) HandyControl.Controls.Growl.Error(eventArgs.Message, "Main");
             };
 
 
@@ -4881,7 +4881,7 @@ namespace Jvedio
 
         private async void Test(object sender, RoutedEventArgs e)
         {
-            var r = await new FC2Crawler("1700144").Crawl();
+            var r = await new FANZACrawler("MMUS-032").Crawl();
         }
 
 
@@ -5033,7 +5033,7 @@ namespace Jvedio
                 }
                 else
                 {
-                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_OnlySupportJPG, "DetailsGrowl");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_OnlySupportJPG, "Main");
                 }
             }
         }
@@ -5102,7 +5102,7 @@ namespace Jvedio
                 }
                 else
                 {
-                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_OnlySupportJPG, "DetailsGrowl");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_OnlySupportJPG, "Main");
                 }
             }
         }
@@ -5360,7 +5360,7 @@ namespace Jvedio
                 {
                     if (vieModel.MyList.Where(arg => arg.Name == text).Count() > 0)
                     {
-                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_AlreadyExist);
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_AlreadyExist, "Main");
                         return;
                     }
                     //重命名
@@ -5395,7 +5395,7 @@ namespace Jvedio
             }
             catch
             {
-                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotSupport);
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotSupport, "Main");
                 return false;
             }
             finally
@@ -5437,7 +5437,7 @@ namespace Jvedio
                 {
                     if (vieModel.MyList.Where(arg => arg.Name == text).Count() > 0)
                     {
-                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_AlreadyExist);
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_AlreadyExist, "Main");
                         return;
                     }
                     if (AddToMyList(text)) vieModel.MyList.Add(new MyListItem(text, 0));
@@ -5462,7 +5462,7 @@ namespace Jvedio
             }
             catch
             {
-                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotSupport);
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotSupport, "Main");
                 return false;
             }
             finally
