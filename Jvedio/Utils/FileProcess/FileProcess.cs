@@ -414,45 +414,6 @@ namespace Jvedio
             }
         }
 
-
-        /// <summary>
-        /// 加载 321 识别码与网站转换规则，多 30M 内存
-        /// </summary>
-        public static void InitJav321IDConverter()
-        {
-            //var jav321 = Resource_IDData.jav321;//来自于JavGo
-            var jav321 = 123;
-            Stream jav321_stream = new MemoryStream(jav321);
-            string str = "";
-            using (var zip = new ZipArchive(jav321_stream, ZipArchiveMode.Read))
-            {
-                ZipArchiveEntry zipArchiveEntry = zip.Entries[0];
-                using (StreamReader sr = new StreamReader(zipArchiveEntry.Open()))
-                {
-                    str = sr.ReadToEnd();
-                }
-            }
-            Jav321IDDict = new Dictionary<string, string>();
-            str = str.Replace("\r\n", "\n").ToUpper();
-            foreach (var item in str.Split('\n'))
-            {
-
-                if (item.IndexOf(",") > 0)
-                {
-                    if (Jav321IDDict.ContainsKey(item.Split(',')[1]))
-                    {
-                        Jav321IDDict[item.Split(',')[1]] = item.Split(',')[0];
-                    }
-                    else
-                    {
-                        Jav321IDDict.Add(item.Split(',')[1], item.Split(',')[0]);
-                    }
-                }
-            }
-
-
-        }
-
         public static void addTag(ref Movie movie)
         {
             //添加标签戳

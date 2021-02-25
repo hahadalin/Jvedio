@@ -1292,7 +1292,28 @@ namespace Jvedio
 
 
 
+            //演员信息及头像
+            List<string> actors = new List<string>();
+            List<string> actorImages = new List<string>();
+            HtmlNodeCollection actorNodes = doc.DocumentNode.SelectNodes("//div[@class='col-md-12']/div[@class='col-xs-6 col-md-3']/div[@class='thumbnail']/a");
+            if (actorNodes != null)
+            {
+                foreach (HtmlNode actorNode in actorNodes)
+                {
+                    string actorlink = actorNode.Attributes["href"]?.Value;
+                    if (!string.IsNullOrEmpty(actorlink) && actorlink.IndexOf("/star/") >= 0)
+                    {
+                        HtmlNode imgNode = actorNode.SelectSingleNode("img");
+                        actors.Add(actorNode.InnerText);
+                        if (imgNode != null && !string.IsNullOrEmpty(imgNode.Attributes["src"]?.Value))
+                            actorImages.Add(imgNode.Attributes["src"].Value);
+                    }
 
+                }
+            }
+
+            result.Add("actor", string.Join("/", actors));
+            result.Add("actressimageurl", string.Join(";", actorImages));
 
             //基本信息
 
@@ -1356,33 +1377,46 @@ namespace Jvedio
                                     result.Add("runtime", date.Replace(": ", "").Replace(" minutes", ""));
                                 }
                             }
+                            else if (text.IndexOf("出演者") >= 0 && actors.Count<=0)
+                            {
+                                i += 1;
+                                HtmlNode nextNode = htmlNodes[i];
+                                string actor = nextNode.InnerText;
+                                if (!string.IsNullOrEmpty(actor))
+                                {
+                                    actor= actor.Replace(" &nbsp;", "").Replace(": ", "");
+                                    foreach (var item in actor.Split(' '))
+                                    {
+                                        if(!string.IsNullOrEmpty(item) && item.Length > 0)
+                                        {
+                                            actors.Add(item);
+                                        }
+                                    }
+                                    result["actor"]= string.Join("/", actors);
+                                }
+                            }
                         }
                     }
                 }
             }
 
-            //演员信息及头像
-            List<string> actors = new List<string>();
-            List<string> actorImages = new List<string>();
-            HtmlNodeCollection actorNodes = doc.DocumentNode.SelectNodes("//div[@class='col-md-12']/div[@class='col-xs-6 col-md-3']/div[@class='thumbnail']/a");
-            if (actorNodes != null)
-            {
-                foreach (HtmlNode actorNode in actorNodes)
-                {
-                    string actorlink = actorNode.Attributes["href"]?.Value;
-                    if(!string.IsNullOrEmpty(actorlink) && actorlink.IndexOf("/star/") >= 0)
-                    {
-                        HtmlNode imgNode = actorNode.SelectSingleNode("img");
-                        actors.Add(actorNode.InnerText);
-                        if (imgNode != null && !string.IsNullOrEmpty(imgNode.Attributes["src"]?.Value))
-                            actorImages.Add(imgNode.Attributes["src"].Value);
-                    }
 
+
+            //摘要
+            HtmlNodeCollection plotNodes = doc.DocumentNode.SelectNodes("//div[@class='panel-body']/div[@class='row']/div[@class='col-md-12']");
+            if (plotNodes != null)
+            {
+                foreach (HtmlNode plotNode in plotNodes)
+                {
+                    if(!string.IsNullOrEmpty(plotNode.InnerText) )
+                    {
+                        result.Add("plot", plotNode.InnerText);
+                        break;
+                    } 
+                        
                 }
             }
-
-            result.Add("actor", string.Join("/", actors));
-            result.Add("actressimageurl", string.Join(";", actorImages));
+                
 
             //缩略图
             HtmlNode smallimageNode = doc.DocumentNode.SelectSingleNode("//div[@class='panel-body']/div/div/img");

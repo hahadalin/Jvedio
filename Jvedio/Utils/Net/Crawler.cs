@@ -679,19 +679,26 @@ namespace Jvedio
             //sn=pppd-093
             if (!Url.IsProperUrl()) return;
             Uri uri = new Uri(Url);
+            string cookie = "";
+            if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
             headers = new CrawlerHeader() {
                 
                 ContentLength=postdata.Length+3,
                 Origin= uri.Scheme + "://"+ uri.Host,
                 ContentType= "application/x-www-form-urlencoded",
                 Referer= uri.Scheme + "://" + uri.Host,
-                Method="POST"
+                Method="POST",
+                Cookies=cookie
             };
         }
 
         protected override void InitHeaders()
         {
-            headers = new CrawlerHeader()  ;
+            if (!Url.IsProperUrl()) return;
+            Uri uri = new Uri(Url);
+            string cookie = "";
+            if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
+            headers = new CrawlerHeader() { Cookies = cookie };
         }
 
         public async Task<string> GetMovieCode(Action<string> callback = null)
@@ -726,6 +733,7 @@ namespace Jvedio
                 {
                     FileProcess.SaveInfo(GetInfo(), ID);
                     httpResult.Success = true;
+                    ParseCookies(httpResult.Headers.SetCookie);
                 }
             }
             return httpResult;
@@ -750,7 +758,21 @@ namespace Jvedio
 
         protected override void ParseCookies(string SetCookie)
         {
-            throw new NotImplementedException();
+            if (SetCookie == null) return;
+            List<string> Cookies = new List<string>();
+            var values = SetCookie.Split(new char[] { ',', ';' }).ToList();
+            foreach (var item in values)
+            {
+                if (item.IndexOf('=') < 0) continue;
+                string key = item.Split('=')[0];
+                string value = item.Split('=')[1];
+                if (key == "__cfduid" || key == "is_loyal") Cookies.Add(key + "=" + value);
+            }
+            string cookie = string.Join(";", Cookies);
+            Uri uri = new Uri(Url);
+            if (!UrlCookies.ContainsKey(uri.Host)) UrlCookies.Add(uri.Host, cookie);
+            else UrlCookies[uri.Host] = cookie;
+            SaveCookies();
         }
     }
 

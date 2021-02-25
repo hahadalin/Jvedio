@@ -4192,6 +4192,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 未开启 JAV321 网址 的本地化字符串。
+        /// </summary>
+        public static string UrlJAV321Notset {
+            get {
+                return ResourceManager.GetString("UrlJAV321Notset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 未开启 Library 网址 的本地化字符串。
         /// </summary>
         public static string UrlLibraryNotset {

@@ -1563,4 +1563,7 @@
   <data name="UrlMOONotset" xml:space="preserve">
     <value>MOOのアドレスは開いていない</value>
   </data>
+  <data name="UrlJAV321Notset" xml:space="preserve">
+    <value>JAV321のアドレスは開いていない</value>
+  </data>
 </root>

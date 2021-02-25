@@ -670,6 +670,15 @@ namespace Jvedio
                             message = Jvedio.Language.Resources.UrlMOONotset;
                     }
 
+                    //MOO 未下载成功则去 JAV321
+                    if (httpResult == null)
+                    {
+                        if (RootUrl.Jav321.IsProperUrl() && EnableUrl.Jav321)
+                            httpResult = await new Jav321Crawler(movie.id).Crawl();
+                        else if (RootUrl.Jav321.IsProperUrl() && !EnableUrl.Jav321)
+                            message = Jvedio.Language.Resources.UrlJAV321Notset;
+                    }
+
                 }
 
             }

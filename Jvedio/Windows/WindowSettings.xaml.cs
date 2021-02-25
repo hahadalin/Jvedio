@@ -1280,6 +1280,8 @@ namespace Jvedio
                 Properties.Settings.Default.EnableDMM = enable;
             else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JAV321")
                 Properties.Settings.Default.Enable321 = enable;
+            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "AVMOO")
+                Properties.Settings.Default.EnableMOO = enable;
             else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "FC2官网" || vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "FC2")
                 Properties.Settings.Default.EnableFC2 = enable;
 

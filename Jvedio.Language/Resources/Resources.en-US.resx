@@ -1563,4 +1563,7 @@
   <data name="UrlMOONotset" xml:space="preserve">
     <value>MOO URL not enabled</value>
   </data>
+  <data name="UrlJAV321Notset" xml:space="preserve">
+    <value>JAV321 URL not enabled</value>
+  </data>
 </root>
