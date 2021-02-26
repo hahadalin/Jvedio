@@ -143,6 +143,8 @@ namespace Jvedio
             Process.Start("https://github.com/hitchao/Jvedio/releases");
         }
 
+
+
         private async void BaseDialog_ContentRendered(object sender, EventArgs e)
         {
             UpgradeSourceTextBlock.Text = $"{Jvedio.Language.Resources.UpgradeSource}：{Net.UpgradeSource}";
@@ -155,6 +157,7 @@ namespace Jvedio
             }
             else
             {
+
                 (bool success, string remote, string updateContent) = await Net.CheckUpdate();
                 string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 if (success )
@@ -164,6 +167,24 @@ namespace Jvedio
                 }
                 UpgradeLoadingCircle.Visibility = Visibility.Hidden;
             }
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.IsEnabled = false;
+
+            UpgradeLoadingCircle.Visibility = Visibility.Visible;
+            (bool success, string remote, string updateContent) = await Net.CheckUpdate();
+            string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            if (success)
+            {
+                RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
+                UpdateContentTextBox.Text = updateContent;
+            }
+            UpgradeLoadingCircle.Visibility = Visibility.Hidden;
+
+            button.IsEnabled = true;
         }
     }
 }

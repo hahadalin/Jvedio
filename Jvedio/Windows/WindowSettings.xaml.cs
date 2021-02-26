@@ -404,49 +404,7 @@ namespace Jvedio
         {
             if (new Msgbox(this, Jvedio.Language.Resources.Message_IsToReset).ShowDialog() == true)
             {
-                //保存网址
-                List<string> urlList = new List<string>();
-                urlList.Add(Properties.Settings.Default.Bus);
-                urlList.Add(Properties.Settings.Default.BusEurope);
-                urlList.Add(Properties.Settings.Default.Library);
-                urlList.Add(Properties.Settings.Default.DB);
-                urlList.Add(Properties.Settings.Default.FC2);
-                urlList.Add(Properties.Settings.Default.Jav321);
-                urlList.Add(Properties.Settings.Default.DMM);
-                    urlList.Add(Properties.Settings.Default.MOO);
-
-                List<bool> enableList = new List<bool>();
-                enableList.Add(Properties.Settings.Default.EnableBus);
-                enableList.Add(Properties.Settings.Default.EnableBusEu);
-                enableList.Add(Properties.Settings.Default.EnableLibrary);
-                enableList.Add(Properties.Settings.Default.EnableDB);
-                enableList.Add(Properties.Settings.Default.EnableFC2);
-                enableList.Add(Properties.Settings.Default.Enable321);
-                enableList.Add(Properties.Settings.Default.EnableDMM);
-                enableList.Add(Properties.Settings.Default.EnableMOO);
-
-
                 Properties.Settings.Default.Reset();
-
-                Properties.Settings.Default.Bus = urlList[0];
-                Properties.Settings.Default.BusEurope = urlList[1];
-                Properties.Settings.Default.Library = urlList[2];
-                Properties.Settings.Default.DB = urlList[3];
-                Properties.Settings.Default.FC2 = urlList[4];
-                Properties.Settings.Default.Jav321 = urlList[5];
-                Properties.Settings.Default.DMM = urlList[6];
-                Properties.Settings.Default.MOO = urlList[7];
-
-                Properties.Settings.Default.EnableBus = enableList[0];
-                Properties.Settings.Default.EnableBusEu = enableList[1];
-                Properties.Settings.Default.EnableLibrary = enableList[2];
-                Properties.Settings.Default.EnableDB = enableList[3];
-                Properties.Settings.Default.EnableFC2 = enableList[4];
-                Properties.Settings.Default.Enable321 = enableList[5];
-                Properties.Settings.Default.EnableDMM = enableList[6];
-                Properties.Settings.Default.EnableMOO = enableList[7];
-
-
                 Properties.Settings.Default.FirstRun = false;
                 Properties.Settings.Default.Save();
             }
@@ -884,118 +842,52 @@ namespace Jvedio
 
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
+        private void NewServer(object sender, RoutedEventArgs e)
         {
             if (vieModel_Settings.Servers.Count >= 10) return;
-
-            //ServersDataGrid.ItemsSource = null;
             vieModel_Settings.Servers.Add(new Server()
             {
                 IsEnable = true,
                 Url = "https://",
                 Cookie = Jvedio.Language.Resources.Nothing,
                 Available = 0,
-                ServerTitle = "",
+                Name = "",
                 LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             }); ;
             ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
-
-            //TextBox tb = GetVisualChild<TextBox>(GetCell(vieModel_Settings.Servers.Count-1, 1));
-            //tb.Focus();
-            //tb.SelectAll();
-
         }
 
 
         private int ServersDataGrid_RowIndex = 0;
-        private void test_Click(object sender, RoutedEventArgs e)
+        private async void TestServer(object sender, RoutedEventArgs e)
         {
             FocusTextBox.Focus();
-            //UpdateServersEnable();
-            var button = (FrameworkElement)sender;
-            var row = (DataGridRow)button.Tag;
+            Button button = (Button)sender;
+            button.IsEnabled = false;
             int rowIndex = ServersDataGrid_RowIndex;
-            Server server = vieModel_Settings.Servers[rowIndex];
-            CheckBox cb = GetVisualChild<CheckBox>(GetCell(rowIndex, 0));
-            CheckUrl(server, cb);
 
+            //Server server = vieModel_Settings.Servers[rowIndex];
+
+            vieModel_Settings.Servers[rowIndex].LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            vieModel_Settings.Servers[rowIndex].Available = 2;
+            ServersDataGrid.ItemsSource = null;
+           ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
+            ServersDataGrid.Items.Refresh();
+            await CheckUrl(vieModel_Settings.Servers[rowIndex]);
+            button.IsEnabled = true;
         }
 
         //TODO
-        private void delete_Click(object sender, RoutedEventArgs e)
+        private void DeleteServer(object sender, RoutedEventArgs e)
         {
             FocusTextBox.Focus();
 
             Server server = vieModel_Settings.Servers[ServersDataGrid_RowIndex];
-
+            ServerConfig.Instance.DeleteByName(server.Name);
             //保存到文件
-            if (server.ServerTitle == "JavBus" | server.Url.ToLower() == Properties.Settings.Default.Bus.ToLower())
-            {
-                Properties.Settings.Default.Bus = "";
-                DeleteServerInfoFromConfig(WebSite.Bus);
-            }
-            else if (server.ServerTitle == "JavBus Europe" | server.Url.ToLower() == Properties.Settings.Default.BusEurope.ToLower())
-            {
-                Properties.Settings.Default.BusEurope = "";
-                DeleteServerInfoFromConfig(WebSite.BusEu);
-            }
-
-            else if (server.ServerTitle == "JavDB" | server.Url.ToLower() == Properties.Settings.Default.DB.ToLower())
-            {
-                Properties.Settings.Default.DB = "";
-                Properties.Settings.Default.DBCookie = "";
-                DeleteServerInfoFromConfig(WebSite.DB);
-            }
-
-            else if (server.ServerTitle == "JavLibrary" | server.Url.ToLower() == Properties.Settings.Default.Library.ToLower())
-            {
-                Properties.Settings.Default.Library = "";
-                DeleteServerInfoFromConfig(WebSite.Library);
-            }
-
-            else if (server.ServerTitle == "FANZA" | server.Url.ToLower() == Properties.Settings.Default.DMM.ToLower())
-            {
-                Properties.Settings.Default.DMM = "";
-                Properties.Settings.Default.DMMCookie = "";
-                DeleteServerInfoFromConfig(WebSite.DMM);
-            }
-
-            else if (server.ServerTitle == "FC2官网" || server.ServerTitle == "FC2" | server.Url.ToLower() == Properties.Settings.Default.FC2.ToLower())
-            {
-                Properties.Settings.Default.FC2 = "";
-                DeleteServerInfoFromConfig(WebSite.FC2);
-            }
-
-            else if (server.ServerTitle == "JAV321" | server.Url.ToLower() == Properties.Settings.Default.Jav321.ToLower())
-            {
-                Properties.Settings.Default.Jav321 = "";
-                DeleteServerInfoFromConfig(WebSite.Jav321);
-            }
-
-            else if (server.ServerTitle == "AVMOO" | server.Url.ToLower() == Properties.Settings.Default.MOO.ToLower())
-            {
-                Properties.Settings.Default.MOO = "";
-                Properties.Settings.Default.MOOCookie = "";
-                DeleteServerInfoFromConfig(WebSite.MOO);
-            }
-
-            //如果本地没有，则判断 properties
-
-
-
             vieModel_Settings.Servers.RemoveAt(ServersDataGrid_RowIndex);
             ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
             ServersDataGrid.Items.Refresh();
-
-
-
-
-
-
-
-
-
-
         }
 
 
@@ -1013,156 +905,95 @@ namespace Jvedio
             ServersDataGrid_RowIndex = dgr.GetIndex();
         }
 
-        //TODO
-        private async void CheckUrl(Server server, CheckBox checkBox)
+        private async Task<bool> CheckUrl(Server server )
         {
-            ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
-            server.LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            server.Available = 2;
-            ServersDataGrid.Items.Refresh();
-            if (server.Url.IndexOf("http") < 0) server.Url = "https://" + server.Url;
-            if (!server.Url.EndsWith("/")) server.Url = server.Url + "/";
 
-            bool enablecookie = false;
-            if (server.ServerTitle == "FANZA" || server.ServerTitle == "JavDB" || server.ServerTitle=="AVMOO") enablecookie = true;
+            return await Task.Run(async() => { 
 
-            (bool result, string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.ServerTitle);
-            if (!result && title.IndexOf("JavDB") >= 0)
-            {
-                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, "SettingsGrowl");
-                return;
-            }
-            if (result && title != "")
-            {
-                server.Available = 1;
+                bool enablecookie = false;
+                if (server.Name == "DMM" || server.Name == "DB" || server.Name=="MOO") enablecookie = true;
+                (bool result, string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.Name);
 
-                if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") < 0)
+                if (!result && title.IndexOf("DB") >= 0)
                 {
-                    server.ServerTitle = "JavBus";
+                    await Dispatcher.BeginInvoke((Action)delegate {
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, "SettingsGrowl");
+                    });
+                    
+                    return false;
                 }
-                else if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") >= 0)
+                if (result && title != "")
                 {
-                    server.ServerTitle = "JavBus Europe";
-                }
-                else if (title.IndexOf("JavDB") >= 0)
-                {
-                    server.ServerTitle = "JavDB";
-                }
-                else if (title.IndexOf("JavLibrary") >= 0)
-                {
-                    server.ServerTitle = "JavLibrary";
-                }
-                else if (title.IndexOf("FANZA") >= 0)
-                {
-                    server.ServerTitle = "FANZA";
-                    if (server.Url.EndsWith("top/")) server.Url = server.Url.Replace("top/", "");
-                }
-                else if (title.IndexOf("FC2コンテンツマーケット") >= 0 || title.IndexOf("FC2电子市场") >= 0)
-                {
-                    server.ServerTitle = "FC2";
-                }
-                else if (title.IndexOf("JAV321") >= 0)
-                {
-                    server.ServerTitle = "JAV321";
-                }
-                else if (title.IndexOf("AVMOO") >= 0)
-                {
-                    server.ServerTitle = "AVMOO";
+                    server.Available = 1;
+                    if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") < 0)
+                    {
+                        server.Name = "Bus";
+                    }
+                    else if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") >= 0)
+                    {
+                        server.Name = "BusEurope";
+                    }
+                    else if (title.IndexOf("JavDB") >= 0)
+                    {
+                        server.Name = "DB";
+                    }
+                    else if (title.IndexOf("JavLibrary") >= 0)
+                    {
+                        server.Name = "Library";
+                    }
+                    else if (title.IndexOf("FANZA") >= 0)
+                    {
+                        server.Name = "DMM";
+                        if (server.Url.EndsWith("top/")) server.Url = server.Url.Replace("top/", "");
+                    }
+                    else if (title.IndexOf("FC2コンテンツマーケット") >= 0 || title.IndexOf("FC2电子市场") >= 0)
+                    {
+                        server.Name = "FC2";
+                    }
+                    else if (title.IndexOf("JAV321") >= 0)
+                    {
+                        server.Name = "Jav321";
+                    }
+                    else if (title.IndexOf("AVMOO") >= 0)
+                    {
+                        server.Name = "MOO";
+                    }
+                    else
+                    {
+                        server.Name = title;
+                    }
                 }
                 else
                 {
-                    server.ServerTitle = title;
+                    server.Available = -1;
                 }
+                await Dispatcher.BeginInvoke((Action)delegate {
+                    ServersDataGrid.Items.Refresh();
+                });
+                
 
-
-            }
-            else
-            {
-                server.Available = -1;
-            }
-            ServersDataGrid.Items.Refresh();
-
-            //保存，重复的会覆盖
-            if (server.ServerTitle == "JavBus")
-            {
-                Properties.Settings.Default.Bus = server.Url;
-                Properties.Settings.Default.EnableBus = (bool)checkBox.IsChecked;
-
-                SaveServersInfoToConfig(WebSite.Bus, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
-            }
-            else if (server.ServerTitle == "JavBus Europe")
-            {
-                Properties.Settings.Default.BusEurope = server.Url;
-                Properties.Settings.Default.EnableBusEu = (bool)checkBox.IsChecked;
-                SaveServersInfoToConfig(WebSite.BusEu, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
-            }
-            else if (server.ServerTitle == "JavDB")
-            {
-                //是否包含 cookie
-                if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
+                if (NeedCookie.Contains(server.Name))
                 {
-                    new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
+                    //是否包含 cookie
+                    if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
+                    {
+                        server.Available = -1;
+                        await Dispatcher.BeginInvoke((Action)delegate {
+                            new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
+                        });
+
+                    }
+                    else
+                    {
+                        ServerConfig.Instance.SaveServer(server);//保存覆盖
+                    }
                 }
                 else
                 {
-                    Properties.Settings.Default.DB = server.Url;
-                    Properties.Settings.Default.EnableDB = (bool)checkBox.IsChecked;
-                    Properties.Settings.Default.DBCookie = server.Cookie;
-                    SaveServersInfoToConfig(WebSite.DB, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
+                    ServerConfig.Instance.SaveServer(server);//保存覆盖
                 }
-
-            }
-            else if (server.ServerTitle == "JavLibrary")
-            {
-                Properties.Settings.Default.Library = server.Url;
-                Properties.Settings.Default.EnableLibrary = (bool)checkBox.IsChecked;
-                SaveServersInfoToConfig(WebSite.Library, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
-            }
-            else if (server.ServerTitle == "FANZA")
-            {
-                //是否包含 cookie
-                if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
-                {
-                    new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
-                }
-                else
-                {
-                    Properties.Settings.Default.DMM = server.Url;
-                    Properties.Settings.Default.EnableDMM = (bool)checkBox.IsChecked;
-                    Properties.Settings.Default.DMMCookie = server.Cookie;
-                    SaveServersInfoToConfig(WebSite.DMM, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
-                }
-            }
-            else if (server.ServerTitle == "FC2官网" || server.ServerTitle == "FC2")
-            {
-                Properties.Settings.Default.FC2 = server.Url;
-                Properties.Settings.Default.EnableFC2 = (bool)checkBox.IsChecked;
-                if (server.Cookie != Jvedio.Language.Resources.Nothing && server.Cookie != "") Properties.Settings.Default.FC2Cookie = server.Cookie;
-                SaveServersInfoToConfig(WebSite.FC2, new List<string>() { server.Url, "FC2", server.LastRefreshDate });
-            }
-            else if (server.ServerTitle == "JAV321")
-            {
-                Properties.Settings.Default.Jav321 = server.Url;
-                Properties.Settings.Default.Enable321 = (bool)checkBox.IsChecked;
-                SaveServersInfoToConfig(WebSite.Jav321, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
-            }
-            else if (server.ServerTitle == "AVMOO")
-            {
-                //是否包含 cookie
-                if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
-                {
-                    new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
-                }
-                else
-                {
-                    Properties.Settings.Default.MOO = server.Url;
-                    Properties.Settings.Default.EnableMOO = (bool)checkBox.IsChecked;
-                    Properties.Settings.Default.MOOCookie = server.Cookie;
-                    SaveServersInfoToConfig(WebSite.MOO, new List<string>() { server.Url, server.ServerTitle, server.LastRefreshDate });
-                }
-            }
-            Properties.Settings.Default.Save();
-
+                return true;
+            });
         }
 
 
@@ -1267,25 +1098,7 @@ namespace Jvedio
         {
             bool enable = !(bool)((CheckBox)sender).IsChecked;
             vieModel_Settings.Servers[ServersDataGrid_RowIndex].IsEnable = enable;
-
-            if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JavBus")
-                Properties.Settings.Default.EnableBus = enable;
-            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JavBus Europe")
-                Properties.Settings.Default.EnableBusEu = enable;
-            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JavDB")
-                Properties.Settings.Default.EnableDB = enable;
-            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JavLibrary")
-                Properties.Settings.Default.EnableLibrary = enable;
-            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "FANZA")
-                Properties.Settings.Default.EnableDMM = enable;
-            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "JAV321")
-                Properties.Settings.Default.Enable321 = enable;
-            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "AVMOO")
-                Properties.Settings.Default.EnableMOO = enable;
-            else if (vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "FC2官网" || vieModel_Settings.Servers[ServersDataGrid_RowIndex].ServerTitle == "FC2")
-                Properties.Settings.Default.EnableFC2 = enable;
-
-            Properties.Settings.Default.Save();
+            ServerConfig.Instance.SaveServer(vieModel_Settings.Servers[ServersDataGrid_RowIndex]);
             InitVariable();
         }
 
@@ -1522,6 +1335,29 @@ namespace Jvedio
             {
                 Properties.Settings.Default.Baidu_API_KEY = v.Split(' ')[0];
                 Properties.Settings.Default.Baidu_SECRET_KEY = v.Split(' ')[1];
+            }
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
+            textBox.Background = (SolidColorBrush)Application.Current.Resources["ForegroundSearch"];
+            textBox.Foreground = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
+            textBox.CaretBrush= (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
+            textBox.Background = Brushes.Transparent;
+            textBox.Foreground = (SolidColorBrush)Application.Current.Resources["ForegroundGlobal"];
+            if (textBox.Name == "url")
+            {
+                vieModel_Settings.Servers[ServersDataGrid_RowIndex].Url = textBox.Text;
+            }
+            else
+            {
+                vieModel_Settings.Servers[ServersDataGrid_RowIndex].Cookie = textBox.Text;
             }
         }
     }

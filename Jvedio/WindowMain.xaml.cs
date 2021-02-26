@@ -891,127 +891,127 @@ namespace Jvedio
         public async void CheckUrl()
         {
             return;
-            Console.WriteLine("开始检测");
-            vieModel.CheckingUrl = true;
-            Dictionary<string, bool> result = new Dictionary<string, bool>();
+            //Console.WriteLine("开始检测");
+            //vieModel.CheckingUrl = true;
+            //Dictionary<string, bool> result = new Dictionary<string, bool>();
 
-            //获取网址集合
+            ////获取网址集合
 
-            List<string> urlList = new List<string>
-            {
-                Properties.Settings.Default.Bus,
-                Properties.Settings.Default.BusEurope,
-                Properties.Settings.Default.Library,
-                Properties.Settings.Default.DB,
-                Properties.Settings.Default.FC2,
-                Properties.Settings.Default.Jav321,
-                Properties.Settings.Default.DMM,
-                Properties.Settings.Default.MOO
-            };
+            //List<string> urlList = new List<string>
+            //{
+            //    Properties.Settings.Default.Bus,
+            //    Properties.Settings.Default.BusEurope,
+            //    Properties.Settings.Default.Library,
+            //    Properties.Settings.Default.DB,
+            //    Properties.Settings.Default.FC2,
+            //    Properties.Settings.Default.Jav321,
+            //    Properties.Settings.Default.DMM,
+            //    Properties.Settings.Default.MOO
+            //};
 
-            List<bool> enableList = new List<bool>
-            {
-                Properties.Settings.Default.EnableBus,
-                Properties.Settings.Default.EnableBusEu,
-                Properties.Settings.Default.EnableLibrary,
-                Properties.Settings.Default.EnableDB,
-                Properties.Settings.Default.EnableFC2,
-                Properties.Settings.Default.Enable321,
-                Properties.Settings.Default.EnableDMM,
-                Properties.Settings.Default.EnableMOO
-            };
+            //List<bool> enableList = new List<bool>
+            //{
+            //    Properties.Settings.Default.EnableBus,
+            //    Properties.Settings.Default.EnableBusEu,
+            //    Properties.Settings.Default.EnableLibrary,
+            //    Properties.Settings.Default.EnableDB,
+            //    Properties.Settings.Default.EnableFC2,
+            //    Properties.Settings.Default.Enable321,
+            //    Properties.Settings.Default.EnableDMM,
+            //    Properties.Settings.Default.EnableMOO
+            //};
 
-            for (int i = 0; i < urlList.Count; i++)
-            {
-                bool enable = enableList[i];
-                string url = urlList[i];
-                if (enable)
-                {
-                    bool CanConnect = false; bool enablecookie = false; string cookie = "";
-                    if (url == Properties.Settings.Default.DB)
-                    {
-                        enablecookie = true;
-                        cookie = Properties.Settings.Default.DBCookie;
-                    }
-                    else if (url == Properties.Settings.Default.DMM)
-                    {
-                        enablecookie = true;
-                        cookie = Properties.Settings.Default.DMMCookie;
-                    }
-                    else if (url == Properties.Settings.Default.MOO)
-                    {
-                        enablecookie = true;
-                        cookie = Properties.Settings.Default.MOOCookie;
-                    }
-                    try
-                    {
-                        CanConnect = await Net.TestUrl(url, enablecookie, cookie, "DB");
-                    }
-                    catch (TimeoutException ex) { Logger.LogN($"地址：{url}，失败原因：{ex.Message}"); }
+            //for (int i = 0; i < urlList.Count; i++)
+            //{
+            //    bool enable = enableList[i];
+            //    string url = urlList[i];
+            //    if (enable)
+            //    {
+            //        bool CanConnect = false; bool enablecookie = false; string cookie = "";
+            //        if (url == Properties.Settings.Default.DB)
+            //        {
+            //            enablecookie = true;
+            //            cookie = Properties.Settings.Default.DBCookie;
+            //        }
+            //        else if (url == Properties.Settings.Default.DMM)
+            //        {
+            //            enablecookie = true;
+            //            cookie = Properties.Settings.Default.DMMCookie;
+            //        }
+            //        else if (url == Properties.Settings.Default.MOO)
+            //        {
+            //            enablecookie = true;
+            //            cookie = Properties.Settings.Default.MOOCookie;
+            //        }
+            //        try
+            //        {
+            //            CanConnect = await Net.TestUrl(url, enablecookie, cookie, "DB");
+            //        }
+            //        catch (TimeoutException ex) { Logger.LogN($"地址：{url}，失败原因：{ex.Message}"); }
 
-                    if (CanConnect) { if (!result.ContainsKey(url)) result.Add(url, true); } else { if (!result.ContainsKey(url)) result.Add(url, false); }
-                }
-                else
-                   if (!result.ContainsKey(url)) result.Add(url, false);
-            }
+            //        if (CanConnect) { if (!result.ContainsKey(url)) result.Add(url, true); } else { if (!result.ContainsKey(url)) result.Add(url, false); }
+            //    }
+            //    else
+            //       if (!result.ContainsKey(url)) result.Add(url, false);
+            //}
 
-            try
-            {
-                this.Dispatcher.Invoke((Action)delegate ()
-                {
-                    try
-                    {
+            //try
+            //{
+            //    this.Dispatcher.Invoke((Action)delegate ()
+            //    {
+            //        try
+            //        {
 
-                        if (result[Properties.Settings.Default.Bus]) { BusStatus.Fill = Brushes.Green; }
-                        if (result[Properties.Settings.Default.DB]) { DBStatus.Fill = Brushes.Green; }
-                        if (result[Properties.Settings.Default.Library]) { LibraryStatus.Fill = Brushes.Green; }
-                        //if (result[Properties.Settings.Default.Fc2Club]) { FC2Status.Fill = Brushes.Green; }
-                        if (result[Properties.Settings.Default.BusEurope]) { BusEuropeStatus.Fill = Brushes.Green; }
-                        if (result[Properties.Settings.Default.Jav321]) { Jav321Status.Fill = Brushes.Green; }
-                        if (result[Properties.Settings.Default.DMM]) { DMMStatus.Fill = Brushes.Green; }
-                        if (result[Properties.Settings.Default.MOO]) { MOOStatus.Fill = Brushes.Green; }
-                    }
-                    catch (KeyNotFoundException ex) { Console.WriteLine(ex.Message); }
+            //            if (result[Properties.Settings.Default.Bus]) { BusStatus.Fill = Brushes.Green; }
+            //            if (result[Properties.Settings.Default.DB]) { DBStatus.Fill = Brushes.Green; }
+            //            if (result[Properties.Settings.Default.Library]) { LibraryStatus.Fill = Brushes.Green; }
+            //            //if (result[Properties.Settings.Default.Fc2Club]) { FC2Status.Fill = Brushes.Green; }
+            //            if (result[Properties.Settings.Default.BusEurope]) { BusEuropeStatus.Fill = Brushes.Green; }
+            //            if (result[Properties.Settings.Default.Jav321]) { Jav321Status.Fill = Brushes.Green; }
+            //            if (result[Properties.Settings.Default.DMM]) { DMMStatus.Fill = Brushes.Green; }
+            //            if (result[Properties.Settings.Default.MOO]) { MOOStatus.Fill = Brushes.Green; }
+            //        }
+            //        catch (KeyNotFoundException ex) { Console.WriteLine(ex.Message); }
 
 
-                });
-            }
-            catch (TaskCanceledException ex) { Console.WriteLine(ex.Message); }
+            //    });
+            //}
+            //catch (TaskCanceledException ex) { Console.WriteLine(ex.Message); }
 
-            bool IsAllConnect = true;
-            bool IsOneConnect = false;
-            for (int i = 0; i < enableList.Count; i++)
-            {
-                if (enableList[i])
-                {
-                    if (result.ContainsKey(urlList[i]))
-                    {
-                        if (!result[urlList[i]])
-                            IsAllConnect = false;
-                        else
-                            IsOneConnect = true;
-                    }
-                }
-            }
-            try
-            {
-                this.Dispatcher.Invoke((Action)delegate ()
-                {
+            //bool IsAllConnect = true;
+            //bool IsOneConnect = false;
+            //for (int i = 0; i < enableList.Count; i++)
+            //{
+            //    if (enableList[i])
+            //    {
+            //        if (result.ContainsKey(urlList[i]))
+            //        {
+            //            if (!result[urlList[i]])
+            //                IsAllConnect = false;
+            //            else
+            //                IsOneConnect = true;
+            //        }
+            //    }
+            //}
+            //try
+            //{
+            //    this.Dispatcher.Invoke((Action)delegate ()
+            //    {
 
-                    if (IsAllConnect)
-                        vieModel.WebStatusBackground = Brushes.Green;
-                    else if (!IsAllConnect & !IsOneConnect)
-                        vieModel.WebStatusBackground = Brushes.Red;
-                    else if (IsOneConnect & !IsAllConnect)
-                        vieModel.WebStatusBackground = Brushes.Yellow;
+            //        if (IsAllConnect)
+            //            vieModel.WebStatusBackground = Brushes.Green;
+            //        else if (!IsAllConnect & !IsOneConnect)
+            //            vieModel.WebStatusBackground = Brushes.Red;
+            //        else if (IsOneConnect & !IsAllConnect)
+            //            vieModel.WebStatusBackground = Brushes.Yellow;
 
-                });
-                vieModel.CheckingUrl = false;
-            }
-            catch (System.Threading.Tasks.TaskCanceledException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            //    });
+            //    vieModel.CheckingUrl = false;
+            //}
+            //catch (System.Threading.Tasks.TaskCanceledException ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
         }
 
 
@@ -3477,19 +3477,19 @@ namespace Jvedio
                     else
                     {
                         //为空则使用 bus 打开
-                        if (!string.IsNullOrEmpty(Properties.Settings.Default.Bus) && Properties.Settings.Default.Bus.IndexOf("http") >= 0)
+                        if (!string.IsNullOrEmpty(JvedioServers.Bus.Url) && JvedioServers.Bus.Url.IsProperUrl())
                         {
                             try
                             {
-                                Process.Start(Properties.Settings.Default.Bus + arg.id);
+                                Process.Start(JvedioServers.Bus.Url + arg.id);
                             }
                             catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "Main"); }
                         }
-                        else if (arg.id.StartsWith("FC2") && Properties.Settings.Default.FC2.IsProperUrl())
+                        else if (arg.id.StartsWith("FC2") && JvedioServers.FC2.Url.IsProperUrl())
                         {
                             try
                             {
-                                Process.Start($"{Properties.Settings.Default.FC2}article/{arg.id}/");
+                                Process.Start($"{JvedioServers.FC2.Url}article/{arg.id}/");
                             }
                             catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "Main"); }
                         }
@@ -4016,7 +4016,7 @@ namespace Jvedio
         public void StartDownLoadActress(object sender, RoutedEventArgs e)
         {
             DownloadActorPopup.IsOpen = false;
-            if (!EnableUrl.Bus || !RootUrl.Bus.IsProperUrl())
+            if (!JvedioServers.Bus.IsEnable)
             {
                 HandyControl.Controls.Growl.Info($"BUS {Jvedio.Language.Resources.Message_NotOpenOrNotEnable}", "Main");
                 return;
@@ -4899,13 +4899,9 @@ namespace Jvedio
             WindowBatch.Show();
         }
 
-        private async void Test(object sender, RoutedEventArgs e)
+        private  void Test(object sender, RoutedEventArgs e)
         {
-            using(StreamReader sr=new StreamReader(@"C:\Users\chao\Desktop\sample.html"))
-            {
-                new Jav321Parse("PPPD-094", sr.ReadToEnd()).Parse();
-            }
-             
+
         }
 
 

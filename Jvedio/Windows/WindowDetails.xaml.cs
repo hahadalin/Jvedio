@@ -1158,11 +1158,11 @@ namespace Jvedio
             else
             {
                 //为空则使用 bus 打开
-                if (!string.IsNullOrEmpty(Properties.Settings.Default.Bus) && Properties.Settings.Default.Bus.IndexOf("http") >= 0)
+                if (!string.IsNullOrEmpty(JvedioServers.Bus.Url) && JvedioServers.Bus.Url.IndexOf("http") >= 0)
                 {
                     try
                     {
-                        Process.Start(Properties.Settings.Default.Bus + detailMovie.id);
+                        Process.Start(JvedioServers.Bus.Url + detailMovie.id);
                     }
                     catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl"); }
                 }

@@ -52,6 +52,9 @@
                     <StackPanel Orientation="Horizontal" Margin="20 5">
                         <Image Source="/Resources/Picture/升级.png"/>
                         <TextBlock FontSize="20"  Text="{x:Static lang:Resources.CheckUpgrade}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" FontWeight="Bold"/>
+
+                        <Button Style="{StaticResource ButtonPrimary}" Cursor="Hand" Content="{x:Static lang:Resources.CheckUpgrade}" Click="Button_Click"/>
+
                         <hc:LoadingCircle x:Name="UpgradeLoadingCircle" Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
 
                     </StackPanel>
@@ -67,7 +70,7 @@
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center"  VerticalAlignment="Center">
                     <Button  Margin="0 10"  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.BeginUpgrade}" MinWidth="120"  FontSize="15" Click="BeginUpgrade" />
-                    <Button Margin="0 10"  Style="{StaticResource ButtonPrimary}" Content="{x:Static lang:Resources.DownLoadFromUrl}" MinWidth="120"  FontSize="15" Click="GotoDownloadUrl" />
+                    <Button Margin="0 10"  Style="{StaticResource ButtonPrimary}" Content="{x:Static lang:Resources.DownLoadFromUrl}" MinWidth="120"  FontSize="15" Cursor="Hand" Click="GotoDownloadUrl" />
                 </StackPanel>
 
             </Grid>

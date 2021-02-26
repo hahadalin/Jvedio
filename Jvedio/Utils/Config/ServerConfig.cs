@@ -13,156 +13,181 @@ namespace Jvedio
     /// <summary>
     /// 保存服务器配置到XML文件
     /// </summary>
-    public class ServerConfig
+    public sealed  class ServerConfig
     {
+        private string Root = "Servers";
+        private bool CreateRoot = false;
+        private string ConfigPath = "ServersConfig";
+        private static string[] Nodes = new[] { "Url", "IsEnable", "LastRefreshDate", "Cookie" };
+        private XmlDocument XmlDoc;
 
-        public WebSite WebSite = WebSite.None;
+        private static readonly ServerConfig instance = new ServerConfig();
 
-        public string  filepath = "ServersConfig";
 
-        public ServerConfig(string website)
+        private ServerConfig()
         {
-            Enum.TryParse(website, out WebSite);
+            InitXML();
         }
 
-        public bool InitXML()
+        public static ServerConfig Instance
         {
-            try
+            get
             {
-                if (WebSite == WebSite.None) return false;
-                XmlDocument XmlDoc = new XmlDocument();
-                string Root = "Servers";
-                bool CreateRoot = false;
-                if (File.Exists(filepath))
+                return instance;
+            }
+        }
+
+
+
+
+        public void InitXML()
+        {
+            XmlDoc = new XmlDocument();
+            if (File.Exists(ConfigPath))
+            {
+                //是否是标准的 xml 格式
+                try
                 {
-                    try { XmlDoc.Load(filepath); }
-                    catch { CreateRoot = true; }
+                    XmlDoc.Load(ConfigPath);
                 }
-                else
+                catch (Exception ex)
                 {
+                    Logger.LogF(ex);
                     CreateRoot = true;
                 }
+            }
+            else
+            {
+                CreateRoot = true;
+            }
 
 
-                if (CreateRoot)
-                {
-                    try
-                    {
-                        XmlNode header = XmlDoc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
-                        XmlDoc.AppendChild(header);
-                    }
-                    catch { }
+            //根节点
+            if (CreateRoot)
+            {
+                XmlNode header = XmlDoc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+                XmlDoc.AppendChild(header);
+                var xm = XmlDoc.CreateElement(Root);
+                XmlDoc.AppendChild(xm);
+            }
 
-                    //生成根节点
-                    var xm = XmlDoc.CreateElement(Root);
-                    XmlDoc.AppendChild(xm);
-                }
+
+            //子节点
+            foreach (var item in typeof(Servers).GetProperties())
+            {
                 XmlElement rootElement = XmlDoc.DocumentElement;
-                XmlNode node = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']");
+                XmlNode node = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{item.Name}']");
                 if (node == null)
                 {
                     //不存在该节点
                     XmlElement XE = XmlDoc.CreateElement("Server");
-                    XE.SetAttribute("Name", WebSite.ToString());
-                    XmlElement x1 = XmlDoc.CreateElement("Url");
-                    x1.InnerText = "";
-                    XmlElement x2 = XmlDoc.CreateElement("ServerName");
-                    x2.InnerText = "";
-                    XmlElement x3 = XmlDoc.CreateElement("LastRefreshDate");
-                    x3.InnerText = "";
-
-                    XE.AppendChild(x1);
-                    XE.AppendChild(x2);
-                    XE.AppendChild(x3);
+                    XE.SetAttribute("Name", item.Name);
                     rootElement.AppendChild(XE);
                 }
-                else
+            }
+
+            foreach (var item in typeof(Servers).GetProperties())
+            {
+                XmlElement rootElement = XmlDoc.DocumentElement;
+                XmlNode node = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{item.Name}']");
+                //子子节点
+                foreach (var Node in Nodes)
                 {
-                    XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/Url");
-                    XmlNode x2 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/ServerName");
-                    XmlNode x3 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/LastRefreshDate");
-
-                    if (x1 == null)
+                    XmlNode xn = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{item.Name}']/{Node}");
+                    if (xn == null)
                     {
-                        XmlElement xe1 = XmlDoc.CreateElement("Url");
-                        xe1.InnerText = "";
-                        node.AppendChild(xe1);
-                    }
-
-                    if (x2 == null)
-                    {
-                        XmlElement xe2 = XmlDoc.CreateElement("ServerName");
-                        xe2.InnerText = "";
-                        node.AppendChild(xe2);
-                    }
-
-                    if (x3 == null)
-                    {
-                        XmlElement xe3 = XmlDoc.CreateElement("LastRefreshDate");
-                        xe3.InnerText = "";
-                        node.AppendChild(xe3);
+                        XmlElement xe = XmlDoc.CreateElement(Node);
+                        xe.InnerText = "";
+                        node.AppendChild(xe);
                     }
                 }
-                XmlDoc.Save(filepath);
-                return true;
             }
-            catch
+            try
             {
-                return false;
+                XmlDoc.Save(ConfigPath);
+            }catch(XmlException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 
-        public void Save(Dictionary<string, string> Infos)
+        public void SaveServer(Server server)
         {
-            if (WebSite == WebSite.None) return;
-            
-            InitXML();
-            XmlDocument XmlDoc = new XmlDocument();
-            XmlDoc.Load(filepath);
-            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/Url");
-            XmlNode x2 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/ServerName");
-            XmlNode x3 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/LastRefreshDate");
-            if (x1 != null) x1.InnerText = Infos["Url"];
-            if (x2 != null) x2.InnerText = Infos["ServerName"];
-            if (x3 != null) x3.InnerText = Infos["LastRefreshDate"];
-
-            XmlDoc.Save(filepath);
+            if (server.Name == "") return;
+            if (server.Cookie == Jvedio.Language.Resources.Nothing) server.Cookie = "";
+            Type type = server.GetType();
+            foreach (var Node in Nodes)
+            {
+                XmlNode xn = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{server.Name}']/{Node}");
+                if (xn != null)
+                {
+                    System.Reflection.PropertyInfo propertyInfo = type.GetProperty(Node);
+                    xn.InnerText = propertyInfo.GetValue(server).ToString();
+                }
+            }
+            Save();
         }
 
-       
 
 
-        public List<string>  Read()
+
+        private void Save()
         {
-            List<string> result = new List<string>();
+            XmlDoc.Save(ConfigPath);
+        }
 
-            if (!File.Exists(filepath)) InitXML();
-            XmlDocument XmlDoc = new XmlDocument();
-            XmlDoc.Load(filepath);
 
-            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/Url");
-            XmlNode x2 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/ServerName");
-            XmlNode x3 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']/LastRefreshDate");
 
-            if (x1 != null) result.Add( x1.InnerText) ;
-            if (x2 != null)  result.Add(x2.InnerText);
-            if (x3 != null)  result.Add( x3.InnerText);
+        public string ReadByName(string name,string node)
+        {
+            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{name}']/{node}");
+            if (x1 != null) return x1.InnerText;
+            return "";
+        }
+
+
+        public Servers ReadAll()
+        {
+            Servers result = new Servers();
+            Type type = result.GetType();
+            foreach (var item in type.GetProperties())
+            {
+                ServerConfig serverConfig = new ServerConfig();
+                Server server = new Server(item.Name)
+                {
+                    Cookie = serverConfig.ReadByName(item.Name,"Cookie"),
+                    LastRefreshDate = serverConfig.ReadByName(item.Name, "LastRefreshDate"),
+                    Url = serverConfig.ReadByName(item.Name, "Url"),
+
+                };
+                bool.TryParse(serverConfig.ReadByName(item.Name, "IsEnable"), out bool enable);
+                server.IsEnable = enable;
+                if (server.Cookie == Jvedio.Language.Resources.Nothing) server.Cookie = "";
+                System.Reflection.PropertyInfo propertyInfo = type.GetProperty(item.Name);
+                propertyInfo.SetValue(result, server, null);
+            }
             return result;
         }
 
 
-        public bool Delete()
+        public void  DeleteByName(string name)
         {
-
-            XmlDocument XmlDoc = new XmlDocument();
-            XmlDoc.Load(filepath);
-            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{WebSite}']");
+            XmlNode x1 = XmlDoc.SelectSingleNode($"/Servers/Server[@Name='{name}']");
             XmlElement root = XmlDoc.DocumentElement;
-            if (x1 != null) root.RemoveChild(x1);
-            XmlDoc.Save(filepath);
-            return false;
+            if (x1 != null) {
+                root.RemoveChild(x1);
+                Save();
+            }
         }
 
     }
+
+
+
+
+
+
+
+
 
 }

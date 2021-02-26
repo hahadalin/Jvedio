@@ -73,54 +73,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Bus {
-            get {
-                return ((string)(this["Bus"]));
-            }
-            set {
-                this["Bus"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DB {
-            get {
-                return ((string)(this["DB"]));
-            }
-            set {
-                this["DB"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Library {
-            get {
-                return ((string)(this["Library"]));
-            }
-            set {
-                this["Library"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string FC2 {
-            get {
-                return ((string)(this["FC2"]));
-            }
-            set {
-                this["FC2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool DisplayID {
             get {
@@ -325,18 +277,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string BusEurope {
-            get {
-                return ((string)(this["BusEurope"]));
-            }
-            set {
-                this["BusEurope"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int ScanMinFileSize {
             get {
@@ -488,66 +428,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["ShowActorWithId"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EnableBus {
-            get {
-                return ((bool)(this["EnableBus"]));
-            }
-            set {
-                this["EnableBus"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EnableBusEu {
-            get {
-                return ((bool)(this["EnableBusEu"]));
-            }
-            set {
-                this["EnableBusEu"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EnableDB {
-            get {
-                return ((bool)(this["EnableDB"]));
-            }
-            set {
-                this["EnableDB"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EnableLibrary {
-            get {
-                return ((bool)(this["EnableLibrary"]));
-            }
-            set {
-                this["EnableLibrary"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EnableFC2 {
-            get {
-                return ((bool)(this["EnableFC2"]));
-            }
-            set {
-                this["EnableFC2"] = value;
             }
         }
         
@@ -740,66 +620,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["DLLoadAll"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Enable321 {
-            get {
-                return ((bool)(this["Enable321"]));
-            }
-            set {
-                this["Enable321"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EnableDMM {
-            get {
-                return ((bool)(this["EnableDMM"]));
-            }
-            set {
-                this["EnableDMM"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Jav321 {
-            get {
-                return ((string)(this["Jav321"]));
-            }
-            set {
-                this["Jav321"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DMM {
-            get {
-                return ((string)(this["DMM"]));
-            }
-            set {
-                this["DMM"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DBCookie {
-            get {
-                return ((string)(this["DBCookie"]));
-            }
-            set {
-                this["DBCookie"] = value;
             }
         }
         
@@ -1777,42 +1597,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("UnCencored")]
-        public string TypeName1 {
-            get {
-                return ((string)(this["TypeName1"]));
-            }
-            set {
-                this["TypeName1"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Cencored")]
-        public string TypeName2 {
-            get {
-                return ((string)(this["TypeName2"]));
-            }
-            set {
-                this["TypeName2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Europe")]
-        public string TypeName3 {
-            get {
-                return ((string)(this["TypeName3"]));
-            }
-            set {
-                this["TypeName3"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int RecentDays {
             get {
@@ -2137,18 +1921,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DMMCookie {
-            get {
-                return ((string)(this["DMMCookie"]));
-            }
-            set {
-                this["DMMCookie"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ShowFileNameIfTitleEmpty {
             get {
@@ -2288,54 +2060,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["SkipExistGif"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string FC2Cookie {
-            get {
-                return ((string)(this["FC2Cookie"]));
-            }
-            set {
-                this["FC2Cookie"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EnableMOO {
-            get {
-                return ((bool)(this["EnableMOO"]));
-            }
-            set {
-                this["EnableMOO"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string MOO {
-            get {
-                return ((string)(this["MOO"]));
-            }
-            set {
-                this["MOO"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string MOOCookie {
-            get {
-                return ((string)(this["MOOCookie"]));
-            }
-            set {
-                this["MOOCookie"] = value;
             }
         }
     }

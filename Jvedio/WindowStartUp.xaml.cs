@@ -213,17 +213,7 @@ namespace Jvedio
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
-            try
-            {
-                SaveScanPathToXml();
-                SaveServersToXml();
-                SaveRecentWatchedToXml();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                Logger.LogE(ex);
-            }
+
             try
             {
                 statusText.Text = Jvedio.Language.Resources.Status_ClearRecentWatch;

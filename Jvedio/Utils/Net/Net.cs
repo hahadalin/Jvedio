@@ -323,33 +323,33 @@ namespace Jvedio
                 HttpResult httpResult = null;
                 if (EnableCookie)
                 {
-                    if (Label == "JavDB")
+                    if (Label == "DB")
                     {
                         httpResult = await Http(Url + "v/P2Rz9", new CrawlerHeader() { Cookies = Cookie });
                         if (httpResult!=null  && httpResult.SourceCode.IndexOf("FC2-659341") >= 0)
                         {
                                 result = true; 
-                                title = "JavDB"; 
+                                title = "DB"; 
                         }
                         else result = false;
                     }
-                    else if (Label == "FANZA")
+                    else if (Label == "DMM")
                     {
                         httpResult = await Http($"{Url}mono/dvd/-/search/=/searchstr=APNS-006/ ", new CrawlerHeader() { Cookies = Cookie });
                         if (httpResult != null && httpResult.SourceCode.IndexOf("里美まゆ・川") >= 0)
                         {
                             result = true; 
-                            title = "FANZA"; 
+                            title = "DMM"; 
                         }
                         else result = false;
                     }
-                    else if (Label == "AVMOO")
+                    else if (Label == "MOO")
                     {
                         httpResult = await Http($"{Url}movie/655358482fd14364 ", new CrawlerHeader() { Cookies = Cookie });
                         if (httpResult != null && httpResult.SourceCode.IndexOf("SIVR-118") >= 0)
                         {
                             result = true;
-                            title = "AVMOO";
+                            title = "MOO";
                         }
                         else result = false;
                     }
@@ -473,7 +473,7 @@ namespace Jvedio
         public static async Task<bool> DownActress(string ID, string Name,Action<string> callback)
         {
             bool result = false;
-            string Url = RootUrl.Bus + $"star/{ID}";
+            string Url = JvedioServers.Bus.Url + $"star/{ID}";
             HttpResult httpResult = null;
             httpResult = await Http(Url);
             string error = "";
@@ -546,9 +546,9 @@ namespace Jvedio
         public static async  Task<bool> ParseSpecifiedInfo(WebSite webSite,string id,string url)
         {
             HttpResult httpResult = null;
-            if (webSite==WebSite.DB) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies= Properties.Settings.Default.DBCookie } );
-            if (webSite == WebSite.DMM) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = Properties.Settings.Default.DMMCookie });
-            if (webSite == WebSite.MOO) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = Properties.Settings.Default.MOOCookie });
+            if (webSite==WebSite.DB) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies= JvedioServers.DB.Cookie } );
+            if (webSite == WebSite.DMM) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.DMM.Cookie });
+            if (webSite == WebSite.MOO) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.MOO.Cookie });
             else httpResult = await Net.Http(url);
 
             if(httpResult!=null && httpResult.StatusCode==HttpStatusCode.OK && httpResult.SourceCode!="")
@@ -600,10 +600,10 @@ namespace Jvedio
             
             if (movie.vediotype == (int)VedioType.欧美)
             {
-                if (RootUrl.BusEu.IsProperUrl() && EnableUrl.BusEu)
+                if (JvedioServers.BusEurope.IsEnable)
                     httpResult=await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl();
-                else if (RootUrl.BusEu.IsProperUrl() && !EnableUrl.BusEu) 
-                    message = Jvedio.Language.Resources.UrlEuropeNotset;
+                //else if (supportServices.BusEu.IsProperUrl() && !serviceEnables.BusEu) 
+                //    message = Jvedio.Language.Resources.UrlEuropeNotset;
             }
             else
             {
@@ -611,72 +611,72 @@ namespace Jvedio
                 if (movie.id.ToUpper().IndexOf("FC2") >= 0)
                 {
                     //优先从 db 下载
-                    if (RootUrl.DB.IsProperUrl() && EnableUrl.DB)
+                    if (JvedioServers.DB.IsEnable)
                         httpResult = await new DBCrawler(movie.id).Crawl(); 
-                    else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB) 
-                        message = Jvedio.Language.Resources.UrlDBNotset;
+                    //else if (supportServices.DB.IsProperUrl() && !serviceEnables.DB) 
+                    //    message = Jvedio.Language.Resources.UrlDBNotset;
 
                     //db 未下载成功则去 fc2官网
                     if (httpResult==null )
                     {
-                        if (RootUrl.FC2.IsProperUrl() && EnableUrl.FC2)
+                        if (JvedioServers.FC2.IsEnable)
                             httpResult=await new FC2Crawler(movie.id).Crawl();
-                        else if (RootUrl.FC2.IsProperUrl() && !EnableUrl.FC2)
-                            message = Jvedio.Language.Resources.UrlFC2Notset;
+                        //else if (supportServices.FC2.IsProperUrl() && !serviceEnables.FC2)
+                        //    message = Jvedio.Language.Resources.UrlFC2Notset;
                     }
                 }
                 else
                 {
                     //非FC2 影片
                     //优先从 Bus 下载
-                    if (RootUrl.Bus.IsProperUrl() && EnableUrl.Bus)
+                    if (JvedioServers.Bus.IsEnable)
                         httpResult = await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl();
-                    else if (RootUrl.Bus.IsProperUrl() && !EnableUrl.Bus)
-                        message = Jvedio.Language.Resources.UrlBusNotset;
+                    //else if (supportServices.Bus.IsProperUrl() && !serviceEnables.Bus)
+                    //    message = Jvedio.Language.Resources.UrlBusNotset;
 
                     //Bus 未下载成功则去 library
                     if (httpResult==null )
                     {
-                        if (RootUrl.Library.IsProperUrl() && EnableUrl.Library)
+                        if (JvedioServers.Library.IsEnable)
                             httpResult=await new LibraryCrawler(movie.id).Crawl();
-                        else if (RootUrl.Library.IsProperUrl() && !EnableUrl.Library)
-                            message = Jvedio.Language.Resources.UrlLibraryNotset;
+                        //else if (supportServices.Library.IsProperUrl() && !serviceEnables.Library)
+                        //    message = Jvedio.Language.Resources.UrlLibraryNotset;
                     }
 
                     //library 未下载成功则去 DB
                     if (httpResult == null )
                     {
-                        if (RootUrl.DB.IsProperUrl() && EnableUrl.DB)
+                        if (JvedioServers.DB.IsEnable)
                             httpResult=await new DBCrawler(movie.id).Crawl();
-                        else if (RootUrl.DB.IsProperUrl() && !EnableUrl.DB)
-                            message = Jvedio.Language.Resources.UrlDBNotset;
+                        //else if (supportServices.DB.IsProperUrl() && !serviceEnables.DB)
+                        //    message = Jvedio.Language.Resources.UrlDBNotset;
                     }
 
                     //DB未下载成功则去 FANZA
                     if (httpResult == null)
                     {
-                        if (RootUrl.DMM.IsProperUrl() && EnableUrl.DMM)
+                        if (JvedioServers.DMM.IsEnable)
                             httpResult = await new FANZACrawler(movie.id).Crawl();
-                        else if (RootUrl.DMM.IsProperUrl() && !EnableUrl.DMM)
-                            message = Jvedio.Language.Resources.UrlDMMNotset;
+                        //else if (supportServices.DMM.IsProperUrl() && !serviceEnables.DMM)
+                        //    message = Jvedio.Language.Resources.UrlDMMNotset;
                     }
 
                     //FANZA 未下载成功则去 MOO
                     if (httpResult == null)
                     {
-                        if (RootUrl.MOO.IsProperUrl() && EnableUrl.MOO)
+                        if (JvedioServers.MOO.IsEnable)
                             httpResult = await new MOOCrawler(movie.id).Crawl();
-                        else if (RootUrl.MOO.IsProperUrl() && !EnableUrl.MOO)
-                            message = Jvedio.Language.Resources.UrlMOONotset;
+                        //else if (supportServices.MOO.IsProperUrl() && !serviceEnables.MOO)
+                        //    message = Jvedio.Language.Resources.UrlMOONotset;
                     }
 
                     //MOO 未下载成功则去 JAV321
                     if (httpResult == null)
                     {
-                        if (RootUrl.Jav321.IsProperUrl() && EnableUrl.Jav321)
+                        if (JvedioServers.Jav321.IsEnable)
                             httpResult = await new Jav321Crawler(movie.id).Crawl();
-                        else if (RootUrl.Jav321.IsProperUrl() && !EnableUrl.Jav321)
-                            message = Jvedio.Language.Resources.UrlJAV321Notset;
+                        //else if (supportServices.Jav321.IsProperUrl() && !serviceEnables.Jav321)
+                        //    message = Jvedio.Language.Resources.UrlJAV321Notset;
                     }
 
                 }
@@ -701,14 +701,14 @@ namespace Jvedio
         /// <returns></returns>
         public static bool IsServersProper()
         {
-            bool result = Properties.Settings.Default.Enable321 && !string.IsNullOrEmpty(Properties.Settings.Default.Jav321)
-                                || Properties.Settings.Default.EnableBus && !string.IsNullOrEmpty(Properties.Settings.Default.Bus)
-                                || Properties.Settings.Default.EnableBusEu && !string.IsNullOrEmpty(Properties.Settings.Default.BusEurope)
-                                || Properties.Settings.Default.EnableLibrary && !string.IsNullOrEmpty(Properties.Settings.Default.Library)
-                                || Properties.Settings.Default.EnableDB && !string.IsNullOrEmpty(Properties.Settings.Default.DB)
-                                || Properties.Settings.Default.EnableFC2 && !string.IsNullOrEmpty(Properties.Settings.Default.FC2)
-                                || Properties.Settings.Default.EnableDMM && !string.IsNullOrEmpty(Properties.Settings.Default.DMM)
-                                || Properties.Settings.Default.EnableMOO && !string.IsNullOrEmpty(Properties.Settings.Default.MOO);
+            bool result = JvedioServers.Jav321.IsEnable && !string.IsNullOrEmpty(JvedioServers.Jav321.Url)
+                                || JvedioServers.Bus.IsEnable && !string.IsNullOrEmpty(JvedioServers.Bus.Url)
+                                || JvedioServers.BusEurope.IsEnable && !string.IsNullOrEmpty(JvedioServers.BusEurope.Url)
+                                || JvedioServers.Library.IsEnable && !string.IsNullOrEmpty(JvedioServers.Library.Url)
+                                || JvedioServers.DB.IsEnable && !string.IsNullOrEmpty(JvedioServers.DB.Url)
+                                || JvedioServers.FC2.IsEnable && !string.IsNullOrEmpty(JvedioServers.FC2.Url)
+                                || JvedioServers.DMM.IsEnable && !string.IsNullOrEmpty(JvedioServers.DMM.Url)
+                                || JvedioServers.MOO.IsEnable && !string.IsNullOrEmpty(JvedioServers.MOO.Url);
             return result;
         }
 

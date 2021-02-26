@@ -148,7 +148,7 @@ namespace Jvedio
                     if (VedioType == VedioType.骑兵)
                         url_a.Add($"https://pics.javcdn.net/actress/" + item + "_a.jpg");
                     else if (VedioType == VedioType.欧美)
-                        url_a.Add(RootUrl.BusEu.Replace("www", "images") + "actress/" + item + "_a.jpg");//https://images.javbus.one/actress/41r_a.jpg
+                        url_a.Add(JvedioServers.BusEurope.Url.Replace("www", "images") + "actress/" + item + "_a.jpg");//https://images.javbus.one/actress/41r_a.jpg
                     else if (VedioType == VedioType.步兵)
                         url_a.Add($"https://images.javcdn.net/actress/" + item + ".jpg");//步兵没有 _a
                 }

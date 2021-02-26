@@ -53,7 +53,7 @@ namespace Jvedio
         public Crawler(string Id)
         {
             ID = Id;
-            if (Url.IsProperUrl()) InitHeaders();
+
         }
 
 
@@ -63,24 +63,6 @@ namespace Jvedio
         protected abstract void ParseCookies(string SetCookie);
 
         public abstract Task<HttpResult> Crawl();
-
-
-        public void SaveCookies()
-        {
-            List<string> cookies = new List<string>();
-            foreach (KeyValuePair<string, string> item in UrlCookies)
-            {
-                cookies.Add(item.Key + "：" + item.Value);
-            }
-
-            using (StreamWriter sw = new StreamWriter("Cookies", false))
-            {
-                sw.Write(string.Join(Environment.NewLine, cookies));
-            }
-        }
-
-
-
 
     }
 
@@ -94,15 +76,17 @@ namespace Jvedio
         {
             VedioType = vedioType;
             if (vedioType == VedioType.欧美) { 
-                Url = RootUrl.BusEu + ID.Replace(".", "-"); 
+                Url = JvedioServers.BusEurope.Url + ID.Replace(".", "-"); 
             }
             else { 
-                Url = RootUrl.Bus + ID.ToUpper(); 
+                Url = JvedioServers.Bus.Url + ID.ToUpper(); 
             }
+
         }
 
         public override async Task<HttpResult> Crawl()
         {
+            if (Url.IsProperUrl()) InitHeaders();
             httpResult = await Net.Http(Url,headers);
             if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
             {
@@ -126,20 +110,17 @@ namespace Jvedio
                 if (key == "__cfduid" || key == "PHPSESSID" || key == "existmag") Cookies.Add(key + "=" + value);
             }
             string cookie = string.Join(";", Cookies);
-            Uri uri = new Uri(Url);
-            if (!UrlCookies.ContainsKey(uri.Host)) UrlCookies.Add(uri.Host, cookie);
-            else UrlCookies[uri.Host] = cookie;
-            SaveCookies();
+            if(VedioType==VedioType.欧美)
+                JvedioServers.BusEurope.Cookie = cookie;
+            else
+                JvedioServers.Bus.Cookie = cookie;
+            JvedioServers.Save();
         }
 
 
         protected override void InitHeaders()
         {
-            
-            Uri uri = new Uri(Url);
-            string cookie = "";
-            if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
-            headers = new CrawlerHeader() { Cookies=cookie};
+            headers = new CrawlerHeader() { Cookies=VedioType==VedioType.欧美?JvedioServers.BusEurope.Cookie: JvedioServers.Bus.Cookie };
         }
 
 
@@ -162,19 +143,20 @@ namespace Jvedio
 
         public FC2Crawler(string Id) : base(Id)
         {
-             Url =$"{RootUrl.FC2}article/{ID.ToUpper().Replace("FC2-","")}/"; 
+             Url =$"{JvedioServers.FC2.Url}article/{ID.ToUpper().Replace("FC2-","")}/"; 
         }
 
 
         protected override void InitHeaders()
         {
             headers = new CrawlerHeader() {
-                Cookies = AllCookies.FC2
+                Cookies = JvedioServers.FC2.Cookie
                 };
         }
 
         public override async Task<HttpResult> Crawl()
         {
+            if (Url.IsProperUrl()) InitHeaders();
             httpResult = await Net.Http(Url, headers);
             if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
             {
@@ -193,6 +175,7 @@ namespace Jvedio
                     httpResult.StatusCode = HttpStatusCode.NotFound;
                     httpResult.Success = false;
                 }
+                ParseCookies(httpResult.Headers.SetCookie);
             }
             return httpResult;
         }
@@ -217,7 +200,20 @@ namespace Jvedio
 
         protected override void ParseCookies(string SetCookie)
         {
-            throw new NotImplementedException();
+            if (SetCookie == null) return;
+            if (JvedioServers.FC2.Cookie != "") return;
+            List<string> Cookies = new List<string>();
+            var values = SetCookie.Split(new char[] { ',', ';' }).ToList();
+            foreach (var item in values)
+            {
+                if (item.IndexOf('=') < 0) continue;
+                string key = item.Split('=')[0];
+                string value = item.Split('=')[1];
+                if (key == "CONTENTS_FC2_PHPSESSID" || key == "contents_mode" || key == "contents_func_mode") Cookies.Add(key + "=" + value);
+            }
+            string cookie = string.Join(";", Cookies);
+            JvedioServers.FC2.Cookie = cookie;
+            JvedioServers.Save();
         }
     }
     public class DBCrawler : Crawler
@@ -226,12 +222,13 @@ namespace Jvedio
         protected string MovieCode;
         public DBCrawler(string Id) : base(Id)
         {
-            Url = RootUrl.DB + $"search?q={ID}&f=all";
+            Url = JvedioServers.DB.Url + $"search?q={ID}&f=all";
+            if (Url.IsProperUrl()) InitHeaders();
         }
         protected override void InitHeaders()
         {
             headers = new CrawlerHeader() {
-                Cookies = AllCookies.DB
+                Cookies = JvedioServers.DB.Cookie
             };
         }
 
@@ -284,7 +281,7 @@ namespace Jvedio
             });
             if (MovieCode != "")
             {
-                Url = RootUrl.DB + $"v/{MovieCode}";
+                Url = JvedioServers.DB.Url + $"v/{MovieCode}";
                 httpResult = await Net.Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
@@ -323,7 +320,8 @@ namespace Jvedio
         protected string MovieCode;
         public LibraryCrawler(string Id) : base(Id)
         {
-            Url = RootUrl.Library + $"vl_searchbyid.php?keyword={ID}";
+            Url = JvedioServers.Library.Url + $"vl_searchbyid.php?keyword={ID}";
+            if (Url.IsProperUrl()) InitHeaders();
         }
 
         protected  async Task<string> GetMovieCode()
@@ -383,10 +381,7 @@ namespace Jvedio
 
         protected override void InitHeaders()
         {
-            Uri uri = new Uri(Url);
-            string cookie = "";
-            if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
-            headers = new CrawlerHeader() { Cookies = cookie };
+            headers = new CrawlerHeader() { Cookies = JvedioServers.Library.Cookie };
         }
 
 
@@ -396,7 +391,7 @@ namespace Jvedio
             if (MovieCode != "")
             {
                 //解析
-                Url = RootUrl.Library + $"?v={MovieCode}";
+                Url = JvedioServers.Library.Url + $"?v={MovieCode}";
                 httpResult = await Net.Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
@@ -422,10 +417,8 @@ namespace Jvedio
             }
             Cookies.Add("over18=18");
             string cookie = string.Join(";", Cookies);
-            Uri uri = new Uri(Url);
-            if (!UrlCookies.ContainsKey(uri.Host)) UrlCookies.Add(uri.Host, cookie);
-            else UrlCookies[uri.Host] = cookie;
-            SaveCookies();
+            JvedioServers.Library.Cookie = cookie;
+            JvedioServers.Save();
         }
 
         protected override Dictionary<string, string> GetInfo()
@@ -450,8 +443,8 @@ namespace Jvedio
         protected string MovieCode = "";
         public FANZACrawler(string Id) : base(Id)
         {
-            //https://www.dmm.co.jp/search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr=fsdss-026&commit.x=5&commit.y=18 
-            Url = $"{RootUrl.DMM}search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr={ID}&commit.x=5&commit.y=18";
+            Url = $"{JvedioServers.DMM.Url}search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr={ID}&commit.x=5&commit.y=18";
+            if (Url.IsProperUrl()) InitHeaders();
         }
 
         protected  async Task<string> GetMovieCode()
@@ -561,7 +554,7 @@ namespace Jvedio
 
         protected override void InitHeaders()
         {
-            headers = new CrawlerHeader() { Cookies = AllCookies.DMM };
+            headers = new CrawlerHeader() { Cookies = JvedioServers.DMM.Cookie };
         }
 
         protected override void ParseCookies(string SetCookie)
@@ -577,11 +570,12 @@ namespace Jvedio
         protected string MovieCode;
         public MOOCrawler(string Id) : base(Id)
         {
-            Url = RootUrl.MOO + $"search/{ID}";
+            Url = JvedioServers.MOO.Url + $"search/{ID}";
+            if (Url.IsProperUrl()) InitHeaders();
         }
         protected override void InitHeaders()
         {
-            headers = new CrawlerHeader() { Cookies = AllCookies.MOO };
+            headers = new CrawlerHeader() { Cookies = JvedioServers.MOO.Cookie };
         }
 
         public async Task<string> GetMovieCode(Action<string> callback = null)
@@ -632,7 +626,7 @@ namespace Jvedio
             });
             if (MovieCode != "")
             {
-                Url = RootUrl.MOO + $"movie/{MovieCode}";
+                Url = JvedioServers.MOO.Url + $"movie/{MovieCode}";
                 httpResult = await Net.Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
@@ -671,7 +665,7 @@ namespace Jvedio
         protected string MovieCode = "";
         public Jav321Crawler(string Id) : base(Id)
         {
-            Url = RootUrl.Jav321 + $"search";
+            Url = JvedioServers.Jav321.Url + $"search";
         }
 
         protected  void InitHeaders(string postdata)
@@ -679,8 +673,6 @@ namespace Jvedio
             //sn=pppd-093
             if (!Url.IsProperUrl()) return;
             Uri uri = new Uri(Url);
-            string cookie = "";
-            if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
             headers = new CrawlerHeader() {
                 
                 ContentLength=postdata.Length+3,
@@ -688,17 +680,13 @@ namespace Jvedio
                 ContentType= "application/x-www-form-urlencoded",
                 Referer= uri.Scheme + "://" + uri.Host,
                 Method="POST",
-                Cookies=cookie
+                Cookies=JvedioServers.Jav321.Cookie
             };
         }
 
         protected override void InitHeaders()
         {
-            if (!Url.IsProperUrl()) return;
-            Uri uri = new Uri(Url);
-            string cookie = "";
-            if (UrlCookies.ContainsKey(uri.Host)) cookie = UrlCookies[uri.Host];
-            headers = new CrawlerHeader() { Cookies = cookie };
+            headers = new CrawlerHeader() { Cookies = JvedioServers.Jav321.Cookie };
         }
 
         public async Task<string> GetMovieCode(Action<string> callback = null)
@@ -727,7 +715,7 @@ namespace Jvedio
             if ( MovieCode.Length>1)
             {
                 InitHeaders();
-                Url = RootUrl.Jav321 + MovieCode.Substring(1);
+                Url = JvedioServers.Jav321.Url + MovieCode.Substring(1);
                 httpResult = await Net.Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
@@ -769,10 +757,8 @@ namespace Jvedio
                 if (key == "__cfduid" || key == "is_loyal") Cookies.Add(key + "=" + value);
             }
             string cookie = string.Join(";", Cookies);
-            Uri uri = new Uri(Url);
-            if (!UrlCookies.ContainsKey(uri.Host)) UrlCookies.Add(uri.Host, cookie);
-            else UrlCookies[uri.Host] = cookie;
-            SaveCookies();
+            JvedioServers.Jav321.Cookie = cookie;
+            JvedioServers.Save();
         }
     }
 

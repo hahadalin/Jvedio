@@ -20,11 +20,7 @@ namespace Jvedio.ViewModel
         public VieModel_Settings()
         {
             DataBase = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
-            DataBases = ((Main)App.Current.Windows[0]).vieModel.DataBases;
-
-
-
-
+            DataBases = ((Main)GlobalMethod.GetWindowByName("Main")).vieModel.DataBases;
         }
 
 
@@ -37,50 +33,17 @@ namespace Jvedio.ViewModel
                 ScanPath.Add(item);
             }
             if (ScanPath.Count == 0) ScanPath = null;
-
+            GlobalVariable.InitVariable();
             Servers = new ObservableCollection<Server>();
-            if (Properties.Settings.Default.Bus != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.Bus);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableBus, Url = Properties.Settings.Default.Bus, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
-            if (Properties.Settings.Default.BusEurope != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.BusEu);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableBusEu, Url = Properties.Settings.Default.BusEurope, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
-            if (Properties.Settings.Default.DB != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.DB);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableDB, Url = Properties.Settings.Default.DB, Cookie = Properties.Settings.Default.DBCookie, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
-            if (Properties.Settings.Default.FC2 != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.FC2);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableFC2, Url = Properties.Settings.Default.FC2, Cookie = Properties.Settings.Default.FC2Cookie, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
-            if (Properties.Settings.Default.Library != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.Library);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableLibrary, Url = Properties.Settings.Default.Library, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
 
-            if (Properties.Settings.Default.DMM != "")
+            Type type = JvedioServers.GetType();
+            foreach (var item in type.GetProperties())
             {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.DMM);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableDMM, Url = Properties.Settings.Default.DMM, Cookie=Properties.Settings.Default.DMMCookie,Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
+                System.Reflection.PropertyInfo propertyInfo = type.GetProperty(item.Name);
+                Server server = (Server)propertyInfo.GetValue(JvedioServers);
+                if(server.Url!="")
+                    Servers.Add(server);
             }
-            if (Properties.Settings.Default.Jav321 != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.Jav321);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.Enable321, Url = Properties.Settings.Default.Jav321, Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
-            if (Properties.Settings.Default.MOO != "")
-            {
-                List<string> infos = ReadServerInfoFromConfig(WebSite.MOO);
-                Servers.Add(new Server() { IsEnable = Properties.Settings.Default.EnableMOO, Url = Properties.Settings.Default.MOO, Cookie=Properties.Settings.Default.MOOCookie,Available = 0, ServerTitle = infos[1], LastRefreshDate = infos[2] });
-            }
-
         }
 
 

@@ -442,21 +442,35 @@ namespace Jvedio
     /// </summary>
     public class Server
     {
+        public Server(string name)
+        {
+            this.Name = name;
+        }
+
+
+        public Server()
+        {
+
+        }
+
+
         private bool isEnable;
         private string url;
         private string cookie;
-        private int available;
-        private string serverTitle;
+        private int available;//指示测试是否通过
+        private string name;
         private string lastRefreshDate;
 
         public bool IsEnable { get => isEnable; set { isEnable = value; OnPropertyChanged(); } }
 
 
-        public string Url { get => url; set { url = value; OnPropertyChanged(); } }
+        public string Url { get => url; set { url = value.ToString().ToProperUrl(); 
+                OnPropertyChanged(); 
+            } }
         public string Cookie { get => cookie; set { cookie = value; OnPropertyChanged(); } }
 
         public int Available { get => available; set { available = value; OnPropertyChanged(); } }
-        public string ServerTitle { get => serverTitle; set { serverTitle = value; OnPropertyChanged(); } }
+        public string Name { get => name; set { name = value; OnPropertyChanged(); } }
         public string LastRefreshDate { get => lastRefreshDate; set { lastRefreshDate = value; OnPropertyChanged(); } }
 
 
@@ -471,6 +485,45 @@ namespace Jvedio
 
     }
 
+
+
+    public class Servers
+    {
+
+        public Server Bus { get; set; }
+        public Server BusEurope { get; set; }
+        public Server Library { get; set; }
+        public Server FC2 { get; set; }
+        public Server Jav321 { get; set; }
+        public Server DMM { get; set; }
+        public Server DB { get; set; }
+        public Server MOO { get; set; }
+
+
+        public Servers()
+        {
+            Bus = new Server("Bus");
+            BusEurope = new Server("BusEurope");
+            Library = new Server("Library");
+            FC2 = new Server("FC2");
+            Jav321 = new Server("Jav321");
+            DMM = new Server("DMM");
+            MOO = new Server("MOO");
+        }
+
+        public void Save()
+        {
+            ServerConfig.Instance.SaveServer(Bus);
+            ServerConfig.Instance.SaveServer(BusEurope);
+            ServerConfig.Instance.SaveServer(Library);
+            ServerConfig.Instance.SaveServer(FC2);
+            ServerConfig.Instance.SaveServer(Jav321);
+            ServerConfig.Instance.SaveServer(DMM);
+            ServerConfig.Instance.SaveServer(DB);
+            ServerConfig.Instance.SaveServer(MOO);
+        }
+
+    }
 
 
     public class DetailDownLoad

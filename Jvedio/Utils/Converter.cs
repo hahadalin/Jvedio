@@ -16,7 +16,20 @@ namespace Jvedio
 
 
 
-    public class IntToVisibilityConverter : IValueConverter
+    public class CookieNothingConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null) return "";
+            if (value.ToString() == "") return Jvedio.Language.Resources.Nothing;
+            return value.ToString();
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value.ToString();
+        }
+    }
+        public class IntToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

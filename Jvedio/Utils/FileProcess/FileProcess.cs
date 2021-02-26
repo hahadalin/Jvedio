@@ -434,34 +434,6 @@ namespace Jvedio
 
         #region "配置xml"
 
-        /// <summary>
-        /// 读取原有的 config.ini到 xml
-        /// </summary>
-        public static void SaveScanPathToXml()
-        {
-            if (!File.Exists("DataBase\\Config.ini")) return;
-            Dictionary<string, StringCollection> DataBases = new Dictionary<string, StringCollection>();
-            using (StreamReader sr = new StreamReader(DataBaseConfigPath))
-            {
-                try
-                {
-                    string content = sr.ReadToEnd();
-                    List<string> info = content.Split('\n').ToList();
-                    info.ForEach(arg => {
-                        string name = arg.Split('?')[0];
-                        StringCollection stringCollection = new StringCollection();
-                        arg.Split('?')[1].Split('*').ToList().ForEach(path => { if (!string.IsNullOrEmpty(path)) stringCollection.Add(path); });
-                        if (!DataBases.ContainsKey(name)) DataBases.Add(name, stringCollection);
-                    });
-                }
-                catch { }
-            }
-            foreach (var item in DataBases)
-            {
-                SaveScanPathToConfig(item.Key, item.Value.Cast<string>().ToList());
-            }
-            File.Delete("DataBase\\Config.ini");
-        }
 
         public static StringCollection ReadScanPathFromConfig(string name)
         {
@@ -476,102 +448,9 @@ namespace Jvedio
         }
 
 
-        /// <summary>
-        /// 读取原有的 config.ini到 xml
-        /// </summary>
-        public static void SaveServersToXml()
-        {
-            if (!File.Exists("ServersConfig.ini")) return;
-            Dictionary<WebSite, Dictionary<string, string>> Servers = new Dictionary<WebSite, Dictionary<string, string>>();
-            using (StreamReader sr = new StreamReader("ServersConfig.ini"))
-            {
-                try
-                {
-                    string content = sr.ReadToEnd();
-                    List<string> rows = content.Split('\n').ToList();
-                    rows.ForEach(arg => {
-                        string name = arg.Split('?')[0];
-                        WebSite webSite = WebSite.None;
-                        Enum.TryParse<WebSite>(name, out webSite);
-                        string[] infos = arg.Split('?')[1].Split('*');
-                        Dictionary<string, string> info = new Dictionary<string, string>
-                        {
-                            { "Url", infos[0] },
-                            { "ServerName", infos[1] },
-                            { "LastRefreshDate", infos[2] }
-                        };
-                        if (!Servers.ContainsKey(webSite)) Servers.Add(webSite, info);
-                    });
-                }
-                catch { }
-            }
-            foreach (var item in Servers)
-            {
-                SaveServersInfoToConfig(item.Key, item.Value.Values.ToList<string>());
-            }
-            File.Delete("ServersConfig.ini");
-        }
-
-        public static void SaveServersInfoToConfig(WebSite webSite, List<string> infos)
-        {
-            Dictionary<string, string> info = new Dictionary<string, string>
-            {
-                { "Url", infos[0] },
-                { "ServerName", infos[1] },
-                { "LastRefreshDate", infos[2] }
-            };
-
-            ServerConfig serverConfig = new ServerConfig(webSite.ToString());
-            serverConfig.Save(info);
-        }
-
-        public static void DeleteServerInfoFromConfig(WebSite webSite)
-        {
-
-            if (!File.Exists("ServersConfig.ini")) return;
-            ServerConfig serverConfig = new ServerConfig(webSite.ToString());
-            serverConfig.Delete();
-        }
-
-        public static List<string> ReadServerInfoFromConfig(WebSite webSite)
-        {
-
-            if (!File.Exists("ServersConfig")) return new List<string>() { webSite.ToString(), "", "" };
-
-
-            List<string> result = new ServerConfig(webSite.ToString()).Read();
-            if (result.Count < 3) result = new List<string>() { webSite.ToString(), "", "" };
-            return result;
-        }
 
 
 
-        //最近观看
-
-        public static void SaveRecentWatchedToXml()
-        {
-            if (!File.Exists("RecentWatch.ini")) return;
-            Dictionary<string, List<string>> RecentWatchedes = new Dictionary<string, List<string>>();
-            using (StreamReader sr = new StreamReader("RecentWatch.ini"))
-            {
-                try
-                {
-                    string content = sr.ReadToEnd();
-                    List<string> rows = content.Split('\n').ToList();
-                    rows.ForEach(arg => {
-                        string date = arg.Split(':')[0];
-                        var IDs = arg.Split(':')[1].Split(',').ToList();
-                        if (!RecentWatchedes.ContainsKey(date)) RecentWatchedes.Add(date, IDs);
-                    });
-                }
-                catch { }
-            }
-            foreach (var item in RecentWatchedes)
-            {
-                SaveRecentWatchedToConfig(item.Key, item.Value);
-            }
-            File.Delete("RecentWatch.ini");
-        }
 
         public static void SaveRecentWatchedToConfig(string date, List<string> IDs)
         {

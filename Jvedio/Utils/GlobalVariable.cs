@@ -16,40 +16,29 @@ namespace Jvedio
 {
     public static class GlobalVariable
     {
-        public static int MaxProcessWaitingSecond = 1;
+        public static int MaxProcessWaitingSecond = 1; //ffmpeg 超时等待时间
         public static Stopwatch stopwatch = new Stopwatch();//计时
 
-        //路径
         public static string InfoDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "Info.sqlite";
-        public static string DataBaseConfigPath = "DataBase\\Config.ini";
-        public static string ServersConfigPath = "ServersConfig.ini";
 
-        //禁止的文件名
-        public static readonly char[] BANFILECHAR = { '\\', '#', '%', '&', '*', '|', ':', '"', '<', '>', '?', '/', '.' }; //https://docs.microsoft.com/zh-cn/previous-versions/s6feh8zw(v=vs.110)?redirectedfrom=MSDN
+        //禁止的文件名符号
+        //https://docs.microsoft.com/zh-cn/previous-versions/s6feh8zw(v=vs.110)?redirectedfrom=MSDN
+        public static readonly char[] BANFILECHAR = { '\\', '#', '%', '&', '*', '|', ':', '"', '<', '>', '?', '/', '.' }; 
 
-
-        //全局变量
         public static string BasePicPath;
-        public static rootUrl RootUrl;
-        public static enableUrl EnableUrl;
-        public static Cookie AllCookies;
-        public static Dictionary<string, string> UrlCookies;
+        public static Servers JvedioServers;
+        public static Dictionary<string, string> UrlCookies;// key 网址 value 对应的 cookie
 
         //骑兵、步兵识别码
         public static List<string> Qibing = new List<string>();
         public static List<string> Bubing = new List<string>();
 
-        //多少 GB 视为高清
-        public static double MinHDVFileSize = 2;
+        
+        public static double MinHDVFileSize = 2;//多少 GB 视为高清
 
         // jav321 转换规则
         public static Dictionary<string, string> Jav321IDDict = new Dictionary<string, string>();
 
-        //命令记录：前进后退
-        public const int MaxCommand = 10;
-        public static string[] SqlCommandList = new string[MaxCommand];
-        public static int CommandIndex = 0;
-        public static string CurrentCommand = "";
 
         //按类别中分类
         public static string[] GenreEurope = new string[8];
@@ -57,9 +46,9 @@ namespace Jvedio
         public static string[] GenreUncensored = new string[8];
 
         //演员分隔符
-        public static Dictionary<int, char[]> actorSplitDict = new Dictionary<int, char[]>();
+        public static Dictionary<int, char[]> actorSplitDict = new Dictionary<int, char[]>();//key 分别是 123 骑兵步兵欧美
 
-
+        //如果包含以下文本，则显示对应的标签戳
         public static string[] TagStrings_HD = new string[] {"hd","高清" };
         public static string[] TagStrings_Translated = new string[] { "中文", "日本語", "Translated","English" };
         public static string[] TagStrings_FlowOut = new string[] { "流出", "FlowOut" };
@@ -73,9 +62,13 @@ namespace Jvedio
         public static BitmapImage DefaultBigImage;
         public static BitmapImage DefaultActorImage;
 
-        public static TimeSpan FadeInterval = TimeSpan.FromMilliseconds(150);
+        
+        public static TimeSpan FadeInterval = TimeSpan.FromMilliseconds(150);//淡入淡出时间
 
+        //AES加密秘钥
         public static string[] EncryptKeys = new string[] { "ShS69pNGvLac6ZF+", "Yv4x4beWwe+vhFwg", "+C+bPEbF5W4v3/H0" };
+
+        public static string[] NeedCookie = new[] {"DB","DMM","MOO" };
 
         #region "热键"
         [DllImport("user32.dll")]
@@ -123,20 +116,13 @@ namespace Jvedio
 
         public static void InitVariable()
         {
+            JvedioServers = ServerConfig.Instance.ReadAll();
+
             if (Directory.Exists(Properties.Settings.Default.BasePicPath))
                 BasePicPath = Properties.Settings.Default.BasePicPath;
             else
                 BasePicPath = AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
 
-
-            if (string.IsNullOrEmpty(Properties.Settings.Default.Bus)) Properties.Settings.Default.EnableBus = false;
-            if (string.IsNullOrEmpty(Properties.Settings.Default.BusEurope)) Properties.Settings.Default.EnableBusEu = false;
-            if (string.IsNullOrEmpty(Properties.Settings.Default.DB)) Properties.Settings.Default.EnableDB = false;
-            if (string.IsNullOrEmpty(Properties.Settings.Default.Library)) Properties.Settings.Default.EnableLibrary = false;
-            if (string.IsNullOrEmpty(Properties.Settings.Default.DMM)) Properties.Settings.Default.EnableDMM = false;
-            if (string.IsNullOrEmpty(Properties.Settings.Default.Jav321)) Properties.Settings.Default.Enable321 = false;
-            if (string.IsNullOrEmpty(Properties.Settings.Default.FC2)) Properties.Settings.Default.EnableFC2 = false;
-            if (string.IsNullOrEmpty(Properties.Settings.Default.MOO)) Properties.Settings.Default.EnableMOO = false;
             Properties.Settings.Default.Save();
 
             //每页数目
@@ -154,44 +140,10 @@ namespace Jvedio
             if (!actorSplitDict.ContainsKey(2)) actorSplitDict.Add(2, new char[] { ' ', '/' });
             if (!actorSplitDict.ContainsKey(3)) actorSplitDict.Add(3, new char[] {'/' });//欧美
 
-            FormatUrl();//格式化网址
+            
 
 
-            RootUrl = new rootUrl
-            {
-                Bus = Properties.Settings.Default.Bus,
-                BusEu = Properties.Settings.Default.BusEurope,
-                Library = Properties.Settings.Default.Library,
-                FC2 = Properties.Settings.Default.FC2,
-                Jav321 = Properties.Settings.Default.Jav321,
-                DMM = Properties.Settings.Default.DMM,
-                DB = Properties.Settings.Default.DB,
-                MOO=Properties.Settings.Default.MOO
-            };
-
-            EnableUrl = new enableUrl
-            {
-                Bus = Properties.Settings.Default.EnableBus,
-                BusEu = Properties.Settings.Default.EnableBusEu,
-                Library = Properties.Settings.Default.EnableLibrary,
-                FC2 = Properties.Settings.Default.EnableFC2,
-                Jav321 = Properties.Settings.Default.Enable321,
-                DMM = Properties.Settings.Default.EnableDMM,
-                DB = Properties.Settings.Default.EnableDB,
-                MOO=Properties.Settings.Default.EnableMOO
-            };
-
-            AllCookies = new Cookie
-            {
-                Bus = "",
-                BusEu = "",
-                Library = "",
-                FC2 = Properties.Settings.Default.FC2Cookie,
-                Jav321 = "",
-                DMM = Properties.Settings.Default.DMMCookie,
-                DB = Properties.Settings.Default.DBCookie,
-                MOO= Properties.Settings.Default.MOOCookie
-            };
+            
 
             GenreEurope[0] = Resource_String.GenreEurope.Split('|')[0];
             GenreEurope[1] = Resource_String.GenreEurope.Split('|')[1];
@@ -218,9 +170,8 @@ namespace Jvedio
             GenreUncensored[5] = Resource_String.GenreUncensored.Split('|')[5];
             GenreUncensored[6] = Resource_String.GenreUncensored.Split('|')[6];
             GenreUncensored[7] = Resource_String.GenreUncensored.Split('|')[7];
-            UrlCookies = ReadCookiesFromFile();
-    }
 
+    }
 
         public static Dictionary<string,string> ReadCookiesFromFile()
         {
@@ -242,16 +193,6 @@ namespace Jvedio
         }
 
 
-        public static void FormatUrl()
-        {
-            Properties.Settings.Default.Bus = Properties.Settings.Default.Bus.ToProperUrl();
-            Properties.Settings.Default.DB =Properties.Settings.Default.DB.ToProperUrl();
-            Properties.Settings.Default.Library = Properties.Settings.Default.Library.ToProperUrl();
-            Properties.Settings.Default.Jav321 = Properties.Settings.Default.Jav321.ToProperUrl();
-            Properties.Settings.Default.FC2 = Properties.Settings.Default.FC2.ToProperUrl();
-            Properties.Settings.Default.DMM = Properties.Settings.Default.DMM.ToProperUrl();
-            Properties.Settings.Default.MOO = Properties.Settings.Default.MOO.ToProperUrl();
-        }
 
 
 
@@ -284,7 +225,7 @@ namespace Jvedio
 
 
 
-        public struct Cookie
+        public struct ServiceCookies
         {
             public string Bus;
             public string BusEu;
@@ -296,7 +237,7 @@ namespace Jvedio
             public string MOO;
         }
 
-        public struct rootUrl
+        public struct SupportServices
         {
             public string Bus;
             public string BusEu;
@@ -308,7 +249,7 @@ namespace Jvedio
             public string MOO;
         }
 
-        public struct enableUrl
+        public struct ServiceEnables
         {
             public bool Bus;
             public bool BusEu;
