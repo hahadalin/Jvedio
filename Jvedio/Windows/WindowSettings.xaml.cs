@@ -61,10 +61,10 @@ namespace Jvedio
             InitializeComponent();
 
             vieModel_Settings = new VieModel_Settings();
-            vieModel_Settings.Reset();
+
 
             this.DataContext = vieModel_Settings;
-
+            vieModel_Settings.Reset();
 
             //绑定中文字体
             //foreach (FontFamily _f in Fonts.SystemFontFamilies)
@@ -94,7 +94,7 @@ namespace Jvedio
             //if (!IsMatch) ComboBox_Ttile.SelectedIndex = 0;
 
 
-            ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
+            //ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
 
             //绑定事件
             foreach (var item in CheckedBoxWrapPanel.Children.OfType<ToggleButton>().ToList())
@@ -347,7 +347,7 @@ namespace Jvedio
                     string Youdao_appSecret = Properties.Settings.Default.TL_YOUDAO_SECRETKEY.Replace(" ", "");
 
                     //成功，保存在本地
-                    SaveKeyValue(Youdao_appKey, Youdao_appSecret,"youdao.key");
+                    SaveKeyValue(Youdao_appKey, Youdao_appSecret, "youdao.key");
                 }
                 else
                 {
@@ -360,19 +360,20 @@ namespace Jvedio
 
         }
 
-        public void SaveKeyValue(string key,string value,string filename)
+        public void SaveKeyValue(string key, string value, string filename)
         {
-            string v = Encrypt.AesEncrypt(key +" " + value, EncryptKeys[0]);
+            string v = Encrypt.AesEncrypt(key + " " + value, EncryptKeys[0]);
             try
             {
                 using (StreamWriter sw = new StreamWriter(filename, append: false))
                 {
                     sw.Write(v);
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.LogF(ex);
-            }      
+            }
         }
 
         public void DelPath(object sender, MouseButtonEventArgs e)
@@ -798,8 +799,8 @@ namespace Jvedio
             {
                 if (!IsFile(item))
                 {
-                    if (!vieModel_Settings.ScanPath.Contains(item) && !vieModel_Settings.ScanPath.IsIntersectWith(item)) 
-                    { 
+                    if (!vieModel_Settings.ScanPath.Contains(item) && !vieModel_Settings.ScanPath.IsIntersectWith(item))
+                    {
                         vieModel_Settings.ScanPath.Add(item);
                     }
                     else
@@ -837,10 +838,6 @@ namespace Jvedio
 
         }
 
-        private void ServersDataGrid_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
 
         private void NewServer(object sender, RoutedEventArgs e)
         {
@@ -854,44 +851,30 @@ namespace Jvedio
                 Name = "",
                 LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             }); ;
-            ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
+            //ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
         }
 
 
-        private int ServersDataGrid_RowIndex = 0;
-        private async void TestServer(object sender, RoutedEventArgs e)
+        private int CurrentRowIndex = 0;
+        private  void TestServer(object sender, RoutedEventArgs e)
         {
-            FocusTextBox.Focus();
-            Button button = (Button)sender;
-            button.IsEnabled = false;
-            int rowIndex = ServersDataGrid_RowIndex;
-
-            //Server server = vieModel_Settings.Servers[rowIndex];
-
+            int rowIndex = CurrentRowIndex;
             vieModel_Settings.Servers[rowIndex].LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             vieModel_Settings.Servers[rowIndex].Available = 2;
-            ServersDataGrid.ItemsSource = null;
-           ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
-            ServersDataGrid.Items.Refresh();
-            await CheckUrl(vieModel_Settings.Servers[rowIndex]);
-            button.IsEnabled = true;
+            ServersDataGrid.IsEnabled = false;
+            CheckUrl(vieModel_Settings.Servers[rowIndex], (s) => { ServersDataGrid.IsEnabled = true; });
         }
 
         //TODO
         private void DeleteServer(object sender, RoutedEventArgs e)
         {
-            FocusTextBox.Focus();
-
-            Server server = vieModel_Settings.Servers[ServersDataGrid_RowIndex];
+            Server server = vieModel_Settings.Servers[CurrentRowIndex];
             ServerConfig.Instance.DeleteByName(server.Name);
-            //保存到文件
-            vieModel_Settings.Servers.RemoveAt(ServersDataGrid_RowIndex);
-            ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
-            ServersDataGrid.Items.Refresh();
+            vieModel_Settings.Servers.RemoveAt(CurrentRowIndex);
         }
 
 
-        private void Previe_Mouse_LBtnDown(object sender, MouseButtonEventArgs e)
+        private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DataGridRow dgr = null;
             var visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
@@ -902,25 +885,21 @@ namespace Jvedio
             }
             if (dgr == null) { return; }
 
-            ServersDataGrid_RowIndex = dgr.GetIndex();
+            CurrentRowIndex = dgr.GetIndex();
         }
 
-        private async Task<bool> CheckUrl(Server server )
+        private async  void CheckUrl(Server server,Action<int> callback)
         {
-
-            return await Task.Run(async() => { 
-
                 bool enablecookie = false;
-                if (server.Name == "DMM" || server.Name == "DB" || server.Name=="MOO") enablecookie = true;
+                if (server.Name == "DMM" || server.Name == "DB" || server.Name == "MOO") enablecookie = true;
                 (bool result, string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.Name);
-
                 if (!result && title.IndexOf("DB") >= 0)
                 {
-                    await Dispatcher.BeginInvoke((Action)delegate {
+                    await Dispatcher.BeginInvoke((Action)delegate
+                    {
                         HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, "SettingsGrowl");
                     });
-                    
-                    return false;
+                    callback.Invoke(0);
                 }
                 if (result && title != "")
                 {
@@ -967,10 +946,11 @@ namespace Jvedio
                 {
                     server.Available = -1;
                 }
-                await Dispatcher.BeginInvoke((Action)delegate {
+                await Dispatcher.BeginInvoke((Action)delegate
+                {
                     ServersDataGrid.Items.Refresh();
                 });
-                
+
 
                 if (NeedCookie.Contains(server.Name))
                 {
@@ -978,7 +958,8 @@ namespace Jvedio
                     if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
                     {
                         server.Available = -1;
-                        await Dispatcher.BeginInvoke((Action)delegate {
+                        await Dispatcher.BeginInvoke((Action)delegate
+                        {
                             new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
                         });
 
@@ -992,8 +973,7 @@ namespace Jvedio
                 {
                     ServerConfig.Instance.SaveServer(server);//保存覆盖
                 }
-                return true;
-            });
+                callback.Invoke(0);
         }
 
 
@@ -1039,37 +1019,6 @@ namespace Jvedio
 
         }
 
-        public DataGridCell GetCell(int row, int column)
-
-        {
-
-            DataGridRow rowContainer = GetRow(row);
-
-            if (rowContainer != null)
-
-            {
-
-                DataGridCellsPresenter presenter = GetVisualChild<DataGridCellsPresenter>(rowContainer);
-
-                if (presenter == null)
-
-                {
-
-                    ServersDataGrid.ScrollIntoView(rowContainer, ServersDataGrid.Columns[column]);
-
-                    presenter = GetVisualChild<DataGridCellsPresenter>(rowContainer);
-
-                }
-
-                DataGridCell cell = (DataGridCell)presenter.ItemContainerGenerator.ContainerFromIndex(column);
-
-                return cell;
-
-            }
-
-            return null;
-
-        }
 
         public DataGridRow GetRow(int index)
 
@@ -1097,8 +1046,8 @@ namespace Jvedio
         private void CheckBox_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             bool enable = !(bool)((CheckBox)sender).IsChecked;
-            vieModel_Settings.Servers[ServersDataGrid_RowIndex].IsEnable = enable;
-            ServerConfig.Instance.SaveServer(vieModel_Settings.Servers[ServersDataGrid_RowIndex]);
+            vieModel_Settings.Servers[CurrentRowIndex].IsEnable = enable;
+            ServerConfig.Instance.SaveServer(vieModel_Settings.Servers[CurrentRowIndex]);
             InitVariable();
         }
 
@@ -1288,7 +1237,8 @@ namespace Jvedio
                 Clipboard.SetText(ffmpeg_url);
                 HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.SuccessCopyUrl, "SettingsGrowl");
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 new DialogInput(this, Jvedio.Language.Resources.CopyToDownload, ffmpeg_url).ShowDialog();
                 Console.WriteLine(ex.Message);
             }
@@ -1299,11 +1249,11 @@ namespace Jvedio
         {
             if (!File.Exists("youdao.key")) return;
             string v = GetValueKey("youdao.key");
-            if(v.Split(' ').Length == 2)
+            if (v.Split(' ').Length == 2)
             {
                 Properties.Settings.Default.TL_YOUDAO_APIKEY = v.Split(' ')[0];
                 Properties.Settings.Default.TL_YOUDAO_SECRETKEY = v.Split(' ')[1];
-            } 
+            }
         }
 
 
@@ -1343,7 +1293,7 @@ namespace Jvedio
             HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
             textBox.Background = (SolidColorBrush)Application.Current.Resources["ForegroundSearch"];
             textBox.Foreground = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
-            textBox.CaretBrush= (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
+            textBox.CaretBrush = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
         }
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -1353,11 +1303,11 @@ namespace Jvedio
             textBox.Foreground = (SolidColorBrush)Application.Current.Resources["ForegroundGlobal"];
             if (textBox.Name == "url")
             {
-                vieModel_Settings.Servers[ServersDataGrid_RowIndex].Url = textBox.Text;
+                vieModel_Settings.Servers[CurrentRowIndex].Url = textBox.Text;
             }
             else
             {
-                vieModel_Settings.Servers[ServersDataGrid_RowIndex].Cookie = textBox.Text;
+                vieModel_Settings.Servers[CurrentRowIndex].Cookie = textBox.Text;
             }
         }
     }

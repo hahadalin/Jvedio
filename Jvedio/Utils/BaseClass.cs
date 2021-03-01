@@ -440,7 +440,7 @@ namespace Jvedio
     /// <summary>
     /// 服务器源
     /// </summary>
-    public class Server
+    public class Server:INotifyPropertyChanged
     {
         public Server(string name)
         {
@@ -469,7 +469,9 @@ namespace Jvedio
             } }
         public string Cookie { get => cookie; set { cookie = value; OnPropertyChanged(); } }
 
-        public int Available { get => available; set { available = value; OnPropertyChanged(); } }
+        public int Available { get => available; set { available = value; 
+                OnPropertyChanged(); } 
+        }
         public string Name { get => name; set { name = value; OnPropertyChanged(); } }
         public string LastRefreshDate { get => lastRefreshDate; set { lastRefreshDate = value; OnPropertyChanged(); } }
 

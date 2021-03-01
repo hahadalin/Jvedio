@@ -195,10 +195,10 @@ namespace Jvedio
         public static (bool,List<string>, List<string>) IsSubSection(List<string> FilePathList)
         {
 
-            if (Identify.GetFanhao(FilePathList[0].ToUpper() ) == "FC2-1552855")
-            {
-                Console.WriteLine("123");
-            }
+            //if (Identify.GetFanhao(FilePathList[0].ToUpper() ) == "FC2-1552855")
+            //{
+            //    Console.WriteLine("123");
+            //}
 
             bool result = true;
             List<string> notSubSection = new List<string>();

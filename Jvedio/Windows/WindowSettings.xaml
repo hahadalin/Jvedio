@@ -310,7 +310,9 @@
 
 
 
-                    <DataGrid Visibility="Visible" Background="{DynamicResource BackgroundMenu}" MinHeight="200" MaxHeight="400" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"   PreviewMouseLeftButtonDown="Previe_Mouse_LBtnDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"   DataContextChanged="ServersDataGrid_DataContextChanged" Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
+                    <DataGrid Visibility="Visible" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Servers}" Background="{DynamicResource BackgroundMenu}" MinHeight="200" MaxHeight="400" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"   PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"    Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
+ 
+                        
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Enable}" Width="auto" MinWidth="40"   >
                                 <DataGridTemplateColumn.CellTemplate>
@@ -354,20 +356,20 @@
                                             <fa:ImageAwesome.Style>
                                                 <Style TargetType="fa:ImageAwesome">
                                                     <Style.Triggers>
-                                                        <DataTrigger  Binding="{Binding Available}" Value="0">
+                                                        <DataTrigger  Binding="{Binding Available,Mode=OneWay}" Value="0">
 
                                                         </DataTrigger>
-                                                        <DataTrigger  Binding="{Binding Available}" Value="-1">
+                                                        <DataTrigger  Binding="{Binding Available,Mode=OneWay}" Value="-1">
                                                             <Setter Property="Icon" Value="TimesCircle"/>
                                                             <Setter Property="Foreground" Value="Red"/>
                                                             <Setter Property="Spin" Value="False"/>
                                                         </DataTrigger>
-                                                        <DataTrigger  Binding="{Binding Available}" Value="1">
+                                                        <DataTrigger  Binding="{Binding Available,Mode=OneWay}" Value="1">
                                                             <Setter Property="Icon" Value="CheckCircle"/>
                                                             <Setter Property="Foreground" Value="#20B759"/>
                                                             <Setter Property="Spin" Value="False"/>
                                                         </DataTrigger>
-                                                        <DataTrigger  Binding="{Binding Available}" Value="2">
+                                                        <DataTrigger  Binding="{Binding Available,Mode=OneWay}" Value="2">
                                                             <Setter Property="Icon" Value="Refresh"/>
                                                             <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
                                                             <Setter Property="Spin" Value="True"/>

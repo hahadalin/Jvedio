@@ -110,33 +110,38 @@ namespace Jvedio
 
 
             //类别、演员
-            List<string> genres = new List<string>();
+
             List<string> actors = new List<string>();
             List<string> actorsid = new List<string>();
-            HtmlNodeCollection genreNodes = doc.DocumentNode.SelectNodes("//span[@class='genre']/a");
-            if (genreNodes != null)
+            HtmlNodeCollection actorsNodes = doc.DocumentNode.SelectNodes("//span[@class='genre']/a");
+            if (actorsNodes != null)
             {
-                HtmlNode node = null;
-
-                foreach (HtmlNode genreNode in genreNodes)
+                foreach (HtmlNode actorsNode in actorsNodes)
                 {
-                    if (genreNode == null) continue;
-                    node = genreNode.ParentNode; if (node == null) continue;
+                    if (actorsNode == null) continue;
+                    HtmlNode  node = actorsNode.ParentNode; if (node == null) continue;
 
                     if (node.Attributes["onmouseover"] != null)
                     {
-                        actors.Add(genreNode.InnerText);//演员
-                        string link = genreNode.Attributes["href"]?.Value;
+                        actors.Add(actorsNode.InnerText);//演员
+                        string link = actorsNode.Attributes["href"]?.Value;
                         if (!string.IsNullOrEmpty(link) && link.IndexOf("/") >= 0)
                             actorsid.Add(link.Split('/').Last());
                     }
-                    else
-                    {
-                        genres.Add(genreNode.InnerText);//类别
-                    }
                 }
-                result.Add("genre", string.Join(" ", genres));
+
             }
+            List<string> genres = new List<string>();
+            HtmlNodeCollection genreNodes = doc.DocumentNode.SelectNodes("//span[@class='genre']/label/a");
+            if (genreNodes != null)
+            {
+                foreach (HtmlNode genreNode in genreNodes)
+                {
+                    genres.Add(genreNode.InnerText);
+                }
+            }
+            result.Add("genre", string.Join(" ", genres));
+
             if (actors.Count > 0 && actorsid.Count > 0)
             {
                 result.Add("actor", string.Join("/", actors));

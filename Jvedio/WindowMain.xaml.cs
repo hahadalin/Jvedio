@@ -4192,6 +4192,8 @@ namespace Jvedio
             rbs[idx2].IsChecked = true;
 
             InitList();
+
+            //OpenSet_MouseDown(null, null);
         }
 
         public void InitList()

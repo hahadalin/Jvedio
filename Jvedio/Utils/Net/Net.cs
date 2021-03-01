@@ -316,8 +316,6 @@ namespace Jvedio
 
         public static async Task<(bool, string)> TestAndGetTitle(string Url, bool EnableCookie, string Cookie, string Label)
         {
-            return await Task.Run(async () =>
-            {
                 bool result = false;
                 string title = "";
                 HttpResult httpResult = null;
@@ -368,7 +366,6 @@ namespace Jvedio
                     }
                 }
                 return (result, title);
-            });
         }
 
 

@@ -368,12 +368,12 @@ namespace Jvedio
                     {
 
                         actress.id = db.GetInfoBySql($"select id from censored where name='{item.name}'");
-                        if (item.imageurl == null) { actress.imageurl = db.GetInfoBySql($"select smallpicurl from censored where id='{actress.id}'"); }
+                        if (item.imageurl == null) { actress.imageurl = db.GetInfoBySql($"select smallpicurl from censored where id='{actress.id}'").Replace("javcdn.pw", "javcdn.net"); }
 
                     }
                     else
                     {
-                        if (item.imageurl == null) { actress.imageurl = db.GetInfoBySql($"select smallpicurl from censored where id='{actress.id}'"); }
+                        if (item.imageurl == null) { actress.imageurl = db.GetInfoBySql($"select smallpicurl from censored where id='{actress.id}'").Replace("javcdn.pw", "javcdn.net"); }
                     }
                     db.CloseDB();
                     actresslist.Add(actress);
