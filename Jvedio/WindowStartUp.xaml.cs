@@ -474,7 +474,7 @@ namespace Jvedio
                 {
                     string name = Path.GetFileNameWithoutExtension(item);
                     if (name?.ToLower() == "info" || name == Jvedio.Language.Resources.NewLibrary) continue;
-                    if (!DataBase.IsProPerSqlite(item)) continue;
+                    if (!DataBase.IsProperSqlite(item)) continue;
                     if (File.Exists($"DataBase\\{name}.sqlite"))
                     {
                         if (new Msgbox(this, $"{Jvedio.Language.Resources.Message_AlreadyExist} {name} {Jvedio.Language.Resources.IsToOverWrite} ？").ShowDialog() == true)

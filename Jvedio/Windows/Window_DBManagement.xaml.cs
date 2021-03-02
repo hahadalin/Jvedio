@@ -255,7 +255,7 @@ namespace Jvedio
                     string name = Path.GetFileNameWithoutExtension(item).ToLower();
                     if (name == "info") continue;
 
-                    if (!DataBase.IsProPerSqlite(item)) continue;
+                    if (!DataBase.IsProperSqlite(item)) continue;
 
                     if (File.Exists($"DataBase\\{name}.sqlite"))
                     {

@@ -173,25 +173,6 @@ namespace Jvedio
 
     }
 
-        public static Dictionary<string,string> ReadCookiesFromFile()
-        {
-            Dictionary<string, string> result = new Dictionary<string, string>();
-            if (!File.Exists("Cookies")) return result;
-            string content = "";
-            using(StreamReader sr=new StreamReader("Cookies"))
-            {
-                content = sr.ReadToEnd();
-            }
-            foreach (var item in content.Split(Environment.NewLine.ToCharArray()))
-            {
-                if (item.IndexOf("：") < 0) continue;
-                string host = item.Split('：')[0];
-                string cookie = item.Split('：')[1];
-                if (!result.ContainsKey(host)) result.Add(host, cookie);
-            }
-            return result;
-        }
-
 
 
 
@@ -218,52 +199,6 @@ namespace Jvedio
 
         public enum Sort { 识别码, 文件大小, 创建时间,导入时间, 喜爱程度, 名称, 访问次数 , 发行日期 , 评分, 时长 , 演员 }
         #endregion
-
-
-
-        #region "struct"
-
-
-
-        public struct ServiceCookies
-        {
-            public string Bus;
-            public string BusEu;
-            public string Library;
-            public string DB;
-            public string Jav321;
-            public string DMM;
-            public string FC2;
-            public string MOO;
-        }
-
-        public struct SupportServices
-        {
-            public string Bus;
-            public string BusEu;
-            public string Library;
-            public string DB;
-            public string Jav321;
-            public string DMM;
-            public string FC2;
-            public string MOO;
-        }
-
-        public struct ServiceEnables
-        {
-            public bool Bus;
-            public bool BusEu;
-            public bool Library;
-            public bool DB;
-            public bool Jav321;
-            public bool DMM;
-            public bool FC2;
-            public bool MOO;
-        }
-
-        #endregion
-
-
 
 
 

@@ -48,7 +48,7 @@ namespace Jvedio
 
 
 
-        public static bool IsProPerSqlite(string path)
+        public static bool IsProperSqlite(string path)
         {
             if (!File.Exists(path)) return false;
             //是否具有表结构

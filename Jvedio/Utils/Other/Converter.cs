@@ -843,7 +843,6 @@ namespace Jvedio
         }
     }
 
-    //Detail
 
 
     public class PlotToVisibilityConverter : IValueConverter
