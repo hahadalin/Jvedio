@@ -77,12 +77,6 @@ namespace Jvedio
         }
 
 
-
-
-
-
-
-
         public static async Task<HttpResult> Http(string Url, CrawlerHeader headers = null, HttpMode Mode = HttpMode.Normal, WebProxy Proxy = null,bool allowRedirect=true,string poststring="")
         {
             if (!Url.IsProperUrl()) return null;
@@ -685,30 +679,6 @@ namespace Jvedio
             if (httpResult == null && message != "") httpResult = new HttpResult() { Error = message, Success = false };
             return httpResult;
         }
-
-        public static bool IsToDownLoadInfo(Movie movie)
-        {
-            return movie != null && (movie.title == "" || movie.sourceurl == "" || movie.smallimageurl == "" || movie.bigimageurl == "");
-        }
-
-
-        /// <summary>
-        /// 检查是否启用服务器源且地址不为空
-        /// </summary>
-        /// <returns></returns>
-        public static bool IsServersProper()
-        {
-            bool result = JvedioServers.Jav321.IsEnable && !string.IsNullOrEmpty(JvedioServers.Jav321.Url)
-                                || JvedioServers.Bus.IsEnable && !string.IsNullOrEmpty(JvedioServers.Bus.Url)
-                                || JvedioServers.BusEurope.IsEnable && !string.IsNullOrEmpty(JvedioServers.BusEurope.Url)
-                                || JvedioServers.Library.IsEnable && !string.IsNullOrEmpty(JvedioServers.Library.Url)
-                                || JvedioServers.DB.IsEnable && !string.IsNullOrEmpty(JvedioServers.DB.Url)
-                                || JvedioServers.FC2.IsEnable && !string.IsNullOrEmpty(JvedioServers.FC2.Url)
-                                || JvedioServers.DMM.IsEnable && !string.IsNullOrEmpty(JvedioServers.DMM.Url)
-                                || JvedioServers.MOO.IsEnable && !string.IsNullOrEmpty(JvedioServers.MOO.Url);
-            return result;
-        }
-
     }
 
 

@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static Jvedio.Comparer;
 using static Jvedio.GlobalVariable;
 
 namespace Jvedio

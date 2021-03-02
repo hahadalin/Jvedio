@@ -767,7 +767,7 @@
         </Rectangle>
 
 
-        <JvedioControls:WaitingPanel   ShowCancelButton="Collapsed" Visibility="{Binding IsScanning,Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"  Panel.ZIndex="5"  ></JvedioControls:WaitingPanel>
+        <JvedioControls:WaitingPanel   ShowCancelButton="Visible" Visibility="{Binding IsScanning,Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel"  ></JvedioControls:WaitingPanel>
 
 
 

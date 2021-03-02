@@ -16,14 +16,9 @@ namespace Jvedio.Utils.ImageAndVedio
         {
            if(!value.EndsWith("&exit")) Value = value + "&exit";
             if (timeoutsecond <= 0)
-            {
                 timeout = GlobalVariable.MaxProcessWaitingSecond * 1000;
-            }
             else
-            {
                 timeout = timeoutsecond * 1000;
-            }
-            
         }
 
         public async Task<string> Run()
@@ -46,24 +41,16 @@ namespace Jvedio.Utils.ImageAndVedio
                 {
                     process.OutputDataReceived += (sender, e) => {
                         if (e.Data == null)
-                        {
                             outputWaitHandle.Set();
-                        }
                         else
-                        {
                             output.AppendLine(e.Data);
-                        }
                     };
                     process.ErrorDataReceived += (sender, e) =>
                     {
                         if (e.Data == null)
-                        {
                             errorWaitHandle.Set();
-                        }
                         else
-                        {
                             error.AppendLine(e.Data);
-                        }
                     };
 
                     process.Start();

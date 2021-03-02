@@ -23,26 +23,38 @@ namespace Jvedio.Utils.ImageAndVedio
             this.gifpath = path;
         }
 
-        public  FrameMetadata GetFrameMetadata(BitmapFrame frame)
+        /// <summary>
+        /// 获得帧的元数据
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <returns></returns>
+        public FrameMetadata GetFrameMetadata(BitmapFrame frame)
         {
             var metadata = (BitmapMetadata)frame.Metadata;
             var delay = TimeSpan.FromMilliseconds(100);
             var metadataDelay = metadata.GetQueryOrDefault("/grctlext/Delay", 10);
             if (metadataDelay != 0)
                 delay = TimeSpan.FromMilliseconds(metadataDelay * 10);
-            var disposalMethod = (FrameDisposalMethod)metadata.GetQueryOrDefault("/grctlext/Disposal", 0);
             var frameMetadata = new FrameMetadata
             {
                 Left = metadata.GetQueryOrDefault("/imgdesc/Left", 0),
                 Top = metadata.GetQueryOrDefault("/imgdesc/Top", 0),
                 Width = metadata.GetQueryOrDefault("/imgdesc/Width", frame.PixelWidth),
                 Height = metadata.GetQueryOrDefault("/imgdesc/Height", frame.PixelHeight),
-                Delay = delay,
-                DisposalMethod = disposalMethod
+                Delay = delay
             };
             return frameMetadata;
         }
 
+        /// <summary>
+        /// 根据上一帧计算当前帧的图像
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="rawFrame"></param>
+        /// <param name="metadata"></param>
+        /// <param name="baseFrame"></param>
+        /// <returns></returns>
         public BitmapSource MakeFrame(int width, int height, BitmapSource rawFrame, FrameMetadata metadata, BitmapSource baseFrame)
         {
 
@@ -83,11 +95,15 @@ namespace Jvedio.Utils.ImageAndVedio
             return totalDuration;
         }
 
+        /// <summary>
+        /// 根据 GIF 的元数据信息，计算出所有帧的图像，并获得每一帧的间隔（GIF的每一帧是相对于上一帧改变的像素，是压缩过的）
+        /// </summary>
+        /// <returns></returns>
         public (List<BitmapSource> BitmapSources, List<TimeSpan> TimeSpans) GetAllFrame()
         {
             List<BitmapSource> bitmapSources = new List<BitmapSource>();
             List<TimeSpan> spans = new List<TimeSpan>();
-            if(!File.Exists(gifpath)) return (bitmapSources, spans);
+            if (!File.Exists(gifpath)) return (bitmapSources, spans);
             GifBitmapDecoder decoder = new GifBitmapDecoder(new Uri(gifpath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
             if (decoder != null && decoder.Frames.Count > 0)
             {
@@ -114,11 +130,11 @@ namespace Jvedio.Utils.ImageAndVedio
             BitmapSource result = null;
             if (decoder != null && decoder.Frames.Count > 0)
             {
-                    var frame = decoder.Frames[0];
-                    var metadata = GetFrameMetadata(frame);
-                    int width = decoder.Metadata.GetQueryOrDefault("/logscrdesc/Width", 0);
-                    int height = decoder.Metadata.GetQueryOrDefault("/logscrdesc/Height", 0);
-                    result = MakeFrame(width, height, frame, metadata, frame);
+                var frame = decoder.Frames[0];
+                var metadata = GetFrameMetadata(frame);
+                int width = decoder.Metadata.GetQueryOrDefault("/logscrdesc/Width", 0);
+                int height = decoder.Metadata.GetQueryOrDefault("/logscrdesc/Height", 0);
+                result = MakeFrame(width, height, frame, metadata, frame);
             }
             return result;
         }
@@ -136,14 +152,6 @@ namespace Jvedio.Utils.ImageAndVedio
         public int Width { get; set; }
         public int Height { get; set; }
         public TimeSpan Delay { get; set; }
-        public FrameDisposalMethod DisposalMethod { get; set; }
     }
 
-    public enum FrameDisposalMethod
-    {
-        None = 0,
-        DoNotDispose = 1,
-        RestoreBackground = 2,
-        RestorePrevious = 3
-    }
 }

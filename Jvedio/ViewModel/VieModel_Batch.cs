@@ -27,7 +27,7 @@ namespace Jvedio.ViewModel
         /// <returns></returns>
         private bool IsToDownload(Movie movie)
         {
-            if (Net.IsToDownLoadInfo(movie) || movie.extraimageurl=="")
+            if (movie.IsToDownLoadInfo() || movie.extraimageurl=="")
                 return true;
             else
             {

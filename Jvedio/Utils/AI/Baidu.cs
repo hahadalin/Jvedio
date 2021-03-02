@@ -75,6 +75,7 @@ namespace Jvedio
             request.Method = "post";
             request.KeepAlive = true;
             string base64Str =ImageProcess. ImageToBase64(bitmap);
+            if (base64Str == null) return "";
             //Console.WriteLine(base64Str);
             string str = "{\"image\":\"" + base64Str +   "\",\"image_type\":\"BASE64\",\"face_field\":\"age,beauty,expression,face_shape,gender,glasses,landmark,landmark150,race,quality,eye_status,emotion,face_type,mask,spoofing\",\"max_face_num\":1,\"face_type\":\"LIVE\",\"liveness_control\":\"NONE\"}";
             byte[] buffer = encoding.GetBytes(str);

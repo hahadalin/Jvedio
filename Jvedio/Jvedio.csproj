@@ -243,15 +243,19 @@
     <Compile Include="UserControls\OutputPanel.xaml.cs">
       <DependentUpon>OutputPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\BaseClass.cs" />
-    <Compile Include="Utils\Converter.cs" />
+    <Compile Include="Utils\Other\BaseClass.cs" />
+    <Compile Include="Utils\Other\Comparer.cs" />
+    <Compile Include="Utils\Other\Converter.cs" />
     <Compile Include="Utils\ImageAndVedio\FFmpegHelper.cs" />
     <Compile Include="Utils\ImageAndVedio\Gif.cs" />
     <Compile Include="Utils\ImageAndVedio\GifImage.cs" />
-    <Compile Include="Utils\SampleMovies.cs" />
+    <Compile Include="Utils\ImageAndVedio\ScreenShot.cs" />
+    <Compile Include="Utils\Net\DetailDownLoad.cs" />
+    <Compile Include="Utils\Net\Upgrade.cs" />
+    <Compile Include="Utils\Other\SampleMovies.cs" />
     <Compile Include="Utils\Encrypt\Encrypt.cs" />
     <Compile Include="Utils\FileProcess\FileProcess.cs" />
-    <Compile Include="Utils\GlobalMethod.cs" />
+    <Compile Include="Utils\Other\GlobalMethod.cs" />
     <Compile Include="Utils\ImageAndVedio\MediaParse.cs" />
     <Compile Include="Utils\Config\RecentWatchedConfig.cs" />
     <Compile Include="Utils\Config\ServerConfig.cs" />
@@ -259,9 +263,9 @@
     <Compile Include="UserControls\WaitingPanel.xaml.cs">
       <DependentUpon>WaitingPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\CustomExtension.cs" />
-    <Compile Include="Utils\Sqlite.cs" />
-    <Compile Include="Utils\MySqlite.cs" />
+    <Compile Include="Utils\Other\CustomExtension.cs" />
+    <Compile Include="Utils\Sqlite\Sqlite.cs" />
+    <Compile Include="Utils\Sqlite\MySqlite.cs" />
     <Compile Include="Utils\ImageAndVedio\MediaInfo.cs" />
     <Compile Include="Utils\ImageAndVedio\ImageProcess.cs" />
     <Compile Include="DialogWindows\BaseDialog.cs" />
@@ -273,7 +277,6 @@
     </Compile>
     <Compile Include="Utils\Plot\Bar\BarViewModel.cs" />
     <Compile Include="Windows\Jvedio_BaseWindow.cs" />
-    <Compile Include="Utils\Net\MultiDownLoader.cs" />
     <Compile Include="Utils\Net\Translate.cs" />
     <Compile Include="Resource_IDData.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -292,7 +295,7 @@
     <Compile Include="Utils\Net\DownLoader.cs" />
     <Compile Include="Utils\ImageAndVedio\ImageSlide.cs" />
     <Compile Include="Utils\Net\Crawler.cs" />
-    <Compile Include="Utils\DataBase.cs" />
+    <Compile Include="Utils\Sqlite\DataBase.cs" />
     <Compile Include="Utils\FileProcess\Identify.cs" />
     <Compile Include="Utils\FileProcess\Logger.cs" />
     <Compile Include="Utils\Net\Net.cs" />
@@ -303,7 +306,7 @@
     <Compile Include="Windows\Msgbox.xaml.cs">
       <DependentUpon>Msgbox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\GlobalVariable.cs" />
+    <Compile Include="Utils\Other\GlobalVariable.cs" />
     <Compile Include="ViewModel\VieModel_Details.cs" />
     <Compile Include="ViewModel\VieModel_Edit.cs" />
     <Compile Include="ViewModel\VieModel_Main.cs" />

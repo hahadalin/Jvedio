@@ -635,7 +635,12 @@ namespace Jvedio
             if (vieModel.IsScanning)
             {
                 vieModel.IsScanning = false;
-                RefreshScanCTS?.Cancel();
+                try
+                {
+                    RefreshScanCTS?.Cancel();
+                }
+                catch (ObjectDisposedException ex) { Console.WriteLine(ex.Message); }
+
             }
             else
             {
@@ -689,7 +694,7 @@ namespace Jvedio
 
 
             }, RefreshScanCTS.Token);
-
+            RefreshScanCTS.Dispose();
             return true;
         }
 
@@ -3359,7 +3364,7 @@ namespace Jvedio
             {
                 HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_WaitForDownload, "Main");
             }
-            else if (!Net.IsServersProper())
+            else if (JvedioServers.IsProper())
             {
                 HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_SetUrl, "Main");
             }
@@ -3395,7 +3400,7 @@ namespace Jvedio
             {
                 HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_WaitForDownload, "Main");
             }
-            else if (!Net.IsServersProper())
+            else if (JvedioServers.IsProper())
             {
                 HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_SetUrl, "Main");
             }
@@ -3902,11 +3907,16 @@ namespace Jvedio
 
         }
 
-
+        private CancellationToken scan_ct;
+        private CancellationTokenSource scan_cts;
         private async void Grid_Drop(object sender, DragEventArgs e)
         {
             //WaitingPanel.Visibility = Visibility.Visible;
             vieModel.IsScanning = true;
+            scan_cts = new CancellationTokenSource();
+            scan_cts.Token.Register(() => { Console.WriteLine("取消任务");});
+            scan_ct = scan_cts.Token;
+
             await Task.Run(() =>
             {
                 //分为文件夹和文件
@@ -3923,14 +3933,15 @@ namespace Jvedio
                 List<string> filepaths = new List<string>();
                 //扫描导入
                 if (stringCollection.Count > 0)
-                    filepaths = Scan.ScanPaths(stringCollection, new CancellationToken());
+                    filepaths = Scan.ScanPaths(stringCollection, scan_ct);
 
                 if (files.Count > 0) filepaths.AddRange(files);
 
-                Scan.InsertWithNfo(filepaths, new CancellationToken(), (message) => { HandyControl.Controls.Growl.Info(message, "Main"); });
+                Scan.InsertWithNfo(filepaths, scan_ct, (message) => { HandyControl.Controls.Growl.Info(message, "Main"); });
                 Task.Delay(300).Wait();
             });
             //WaitingPanel.Visibility = Visibility.Hidden;
+            scan_cts.Dispose();
             vieModel.IsScanning = false;
             vieModel.Reset();
         }
@@ -3954,7 +3965,7 @@ namespace Jvedio
         {
             DownloadPopup.IsOpen = false;
 
-            if (!Net.IsServersProper())
+            if (JvedioServers.IsProper())
             {
                 HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_SetUrl, "Main");
 
@@ -5806,6 +5817,15 @@ namespace Jvedio
             SetClassify(true);
         }
 
+        private void WaitingPanel_Cancel(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                scan_cts.Cancel();
+            }
+            catch (ObjectDisposedException ex) { Console.WriteLine(ex.Message); }
+            
+        }
     }
 
 

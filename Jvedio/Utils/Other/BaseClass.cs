@@ -47,6 +47,12 @@ namespace Jvedio
         }
 
 
+        public  bool IsToDownLoadInfo()
+        {
+            return this != null && (this.title == "" || this.sourceurl == "" || this.smallimageurl == "" || this.bigimageurl == "");
+        }
+
+
         public string id { get; set; }
         private string _title;
         public string title { get { return _title; } set { _title = value; OnPropertyChanged(); } }
@@ -182,16 +188,16 @@ namespace Jvedio
         public List<Actress> actorlist { get; set; }
         public List<string> labellist { get; set; }
 
-        public ObservableRangeCollection<BitmapSource> extraimagelist { get; set; }
-        public ObservableRangeCollection<string> extraimagePath { get; set; }
+        public ObservableCollection<BitmapSource> extraimagelist { get; set; }
+        public ObservableCollection<string> extraimagePath { get; set; }
 
         public DetailMovie()
         {
             genrelist = new List<string>();
             actorlist = new List<Actress>();
             labellist = new List<string>();
-            extraimagelist = new ObservableRangeCollection<BitmapSource>();
-            extraimagePath = new ObservableRangeCollection<string>();
+            extraimagelist = new ObservableCollection<BitmapSource>();
+            extraimagePath = new ObservableCollection<string>();
         }
 
         public override void Dispose()
@@ -573,156 +579,27 @@ namespace Jvedio
             ServerConfig.Instance.SaveServer(MOO);
         }
 
+        /// <summary>
+        /// 检查是否启用服务器源且地址不为空
+        /// </summary>
+        /// <returns></returns>
+        public  bool IsProper()
+        {
+            bool result = Jav321.IsEnable && !string.IsNullOrEmpty(Jav321.Url)
+                                || Bus.IsEnable && !string.IsNullOrEmpty(Bus.Url)
+                                || BusEurope.IsEnable && !string.IsNullOrEmpty(BusEurope.Url)
+                                || Library.IsEnable && !string.IsNullOrEmpty(Library.Url)
+                                || DB.IsEnable && !string.IsNullOrEmpty(DB.Url)
+                                || FC2.IsEnable && !string.IsNullOrEmpty(FC2.Url)
+                                || DMM.IsEnable && !string.IsNullOrEmpty(DMM.Url)
+                                || MOO.IsEnable && !string.IsNullOrEmpty(MOO.Url);
+            return result;
+        }
+
     }
 
 
-    public class DetailDownLoad
-    {
-        public event EventHandler MessageCallBack;
-        public event EventHandler SmallImageDownLoadCompleted;
-        public event EventHandler BigImageDownLoadCompleted;
-        public event EventHandler InfoDownloadCompleted;
-        public event EventHandler ExtraImageDownLoadCompleted;
-        public event EventHandler InfoUpdate;
-        public event EventHandler CancelEvent;
-        private object lockobject;
-        private double Maximum;
-        private double Value;
-        public bool IsDownLoading = false;
-        public static int DelayInterval = 1500;
 
-        //线程 Token
-        CancellationTokenSource cts;
-
-        public DetailMovie DetailMovie { get; set; }
-
-        public DetailDownLoad(DetailMovie detailMovie)
-        {
-            Value = 0;
-            Maximum = 1;
-            DetailMovie = detailMovie;
-            cts = new CancellationTokenSource();
-            cts.Token.Register(() => { Console.WriteLine("取消当前同步任务"); });
-            lockobject = new object();
-            IsDownLoading = false;
-        }
-
-        public void CancelDownload()
-        {
-            cts.Cancel();
-            IsDownLoading = false;
-        }
-
-
-        public async void DownLoad()
-        {
-            IsDownLoading = true;
-            //下载信息
-            if (Net.IsToDownLoadInfo(DetailMovie))
-            {
-                HttpResult httpResult = await Net.DownLoadFromNet(DetailMovie);
-                if (httpResult != null)
-                {
-                    if (!httpResult.Success)
-                    {
-                        string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
-                        MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{error}"));
-                    }
-
-                }
-
-            }
-            DetailMovie dm = new DetailMovie();
-            dm = DataBase.SelectDetailMovieById(DetailMovie.id);
-            if (string.IsNullOrEmpty(dm.title))
-            {
-                InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = 1, maximum = 1 });
-                return;
-            }
-            InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = Value, maximum = Maximum });
-            InfoDownloadCompleted?.Invoke(this, new MessageCallBackEventArgs(DetailMovie.id));
-
-            if (!File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg")) DownLoadBigPic(dm); //下载大图
-            if (!File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg")) DownLoadSmallPic(dm); //下载小图
-
-            List<string> urlList = new List<string>();
-            foreach (var item in dm.extraimageurl?.Split(';')) { if (!string.IsNullOrEmpty(item)) urlList.Add(item); }
-            Maximum = urlList.Count() == 0 ? 1 : urlList.Count;
-
-            DownLoadExtraPic(dm);//下载预览图
-        }
-
-        private async void DownLoadSmallPic(DetailMovie dm)
-        {
-            HttpStatusCode sc = HttpStatusCode.Forbidden;
-            if (dm.smallimageurl != "")
-            {
-                (bool success, string cookie) = await Task.Run(() => { return Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
-                if (success) SmallImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
-                else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"{Jvedio.Language.Resources.DownloadSPicFailFor} {sc.ToStatusMessage()} {Jvedio.Language.Resources.Message_ViewLog}"));
-            }
-        }
-
-
-        private async void DownLoadBigPic(DetailMovie dm)
-        {
-            HttpStatusCode sc = HttpStatusCode.Forbidden;
-            if (dm.bigimageurl != "")
-            {
-                (bool success, string cookie) = await Task.Run(() =>
-                {
-                    return Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; });
-                });
-                if (success) BigImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
-                else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"{Jvedio.Language.Resources.DownloadBPicFailFor} {sc.ToStatusMessage()} {Jvedio.Language.Resources.Message_ViewLog}"));
-
-            }
-            InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = Value, maximum = Maximum });
-        }
-
-
-
-
-        private async void DownLoadExtraPic(DetailMovie dm)
-        {
-            List<string> urlList = dm.extraimageurl?.Split(';').Where(arg => arg.IsProperUrl()).ToList();
-            bool dlimageSuccess = false; string cookies = "";
-            for (int i = 0; i < urlList.Count(); i++)
-            {
-                HttpStatusCode sc = HttpStatusCode.Forbidden;
-                if (cts.IsCancellationRequested) { CancelEvent?.Invoke(this, EventArgs.Empty); break; }
-                string filepath = "";
-                filepath = BasePicPath + "ExtraPic\\" + dm.id + "\\" + Path.GetFileName(new Uri(urlList[i]).LocalPath);
-                if (!File.Exists(filepath))
-                {
-                    (dlimageSuccess, cookies) = await Task.Run(() => { return Net.DownLoadImage(urlList[i], ImageType.ExtraImage, dm.id, Cookie: cookies, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
-                    if (dlimageSuccess)
-                    {
-                        ExtraImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(filepath));
-                        Thread.Sleep(DelayInterval);
-                    }
-                    else
-                    {
-                        Logger.LogN($" {Jvedio.Language.Resources.Preview} {i + 1} {Jvedio.Language.Resources.Message_Fail}：{urlList[i]}， {Jvedio.Language.Resources.Reason} ： {sc.ToStatusMessage()}");
-                        MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {Jvedio.Language.Resources.Preview} {i + 1} {Jvedio.Language.Resources.Message_Fail}，{Jvedio.Language.Resources.Reason} ：{sc.ToStatusMessage()} ，{Jvedio.Language.Resources.Message_ViewLog}"));
-                    }
-
-                }
-                lock (lockobject) Value += 1;
-                InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = Value, maximum = Maximum });
-            }
-            lock (lockobject) Value = Maximum;
-            InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = Value, maximum = Maximum });
-            IsDownLoading = false;
-        }
-    }
-
-    public class DetailMovieEventArgs : EventArgs
-    {
-        public DetailMovie DetailMovie;
-        public double value = 0;
-        public double maximum = 1;
-    }
 
 
 

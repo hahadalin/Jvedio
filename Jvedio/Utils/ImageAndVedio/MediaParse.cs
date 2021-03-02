@@ -70,10 +70,6 @@ namespace Jvedio
                 {
                         result[i] = SecondToDuration(Properties.Settings.Default.ScreenShotIgnoreStart * 60 + splitLength * i);//加上跳过开头的部分
                 }
-                //foreach (var item in result)
-                //{
-                //    Console.WriteLine(item);
-                //}
                 return result;
             }
 
@@ -210,27 +206,6 @@ namespace Jvedio
             }
             return vedioInfo;
         }
-
-
-
-        //public static string[] ExtractInfo(string path)
-        //{
-        //    MediaInfo MI = new MediaInfo();
-        //    MI.Open(path);
-        //    string[] returnInfo = new string[3];
-
-        //    //File name 0
-        //    returnInfo[0] = MI.Get(0, 0, "FileName");
-
-        //    //Date created 2
-        //    returnInfo[1] = MI.Get(0, 0, "File_Created_Date").Substring(
-        //        MI.Get(0, 0, "File_Created_Date").IndexOf(" ") + 1, MI.Get(0, 0, "File_Created_Date").LastIndexOf(".") - 4);
-
-        //    //Length 4
-        //    returnInfo[2] = MI.Get(0, 0, "Duration/String3").Substring(0, MI.Get(0, 0, "Duration/String3").LastIndexOf("."));
-
-        //    return returnInfo;
-        //}
 
     }
 }

@@ -242,7 +242,7 @@ namespace Jvedio
                 Task.Delay(vieModel.Timeout_Medium).Wait();
 
 
-            if (!vieModel.Info_ForceDownload && !Net.IsToDownLoadInfo(movie))
+            if (!vieModel.Info_ForceDownload && movie.IsToDownLoadInfo())
                 ShowStatus($"{id}：{Jvedio.Language.Resources.Skip} {Jvedio.Language.Resources.SyncInfo}");
 
             movie = DataBase.SelectMovieByID(id);

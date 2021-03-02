@@ -80,16 +80,7 @@ namespace Jvedio
 
         private static void VisibilityPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            //if ((Visibility)e.NewValue == Visibility.Visible)
-            //{
-            //    ((GifImage)sender).StartAnimation();
-            //}
-            //else
-            //{
-            //    ((GifImage)sender).StopAnimation();
-            //    ((GifImage)sender).bitmapImages = null;
-            //    GC.Collect();
-            //}
+
         }
 
         public static readonly DependencyProperty FrameIndexProperty =

@@ -131,7 +131,7 @@ namespace Jvedio
 
         public void DownLoad(object sender, RoutedEventArgs e)
         {
-            if (!Net.IsServersProper())
+            if (JvedioServers.IsProper())
             {
                 HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_UrlNotSet, "DetailsGrowl");
 
@@ -167,8 +167,8 @@ namespace Jvedio
 
                 ScreenShotRadioButton.IsChecked = true;
                 ExtraImageRadioButton.IsChecked = false;
-                vieModel.DetailMovie.extraimagelist = new ObservableRangeCollection<BitmapSource>();
-                vieModel.DetailMovie.extraimagePath = new ObservableRangeCollection<string>();
+                vieModel.DetailMovie.extraimagelist = new ObservableCollection<BitmapSource>();
+                vieModel.DetailMovie.extraimagePath = new ObservableCollection<string>();
                 App.Current.Dispatcher.Invoke((Action)delegate { imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist; });
 
                 ScreenShot screenShot = new ScreenShot();
@@ -376,8 +376,8 @@ namespace Jvedio
                     BigImage.Source = vieModel.DetailMovie.bigimage;
                     if (vieModel.DetailMovie.extraimagelist.Count == 0)
                     {
-                        vieModel.DetailMovie.extraimagelist = new ObservableRangeCollection<BitmapSource>();
-                        vieModel.DetailMovie.extraimagePath = new ObservableRangeCollection<string>();
+                        vieModel.DetailMovie.extraimagelist = new ObservableCollection<BitmapSource>();
+                        vieModel.DetailMovie.extraimagePath = new ObservableCollection<string>();
                     }
                     vieModel.DetailMovie.extraimagelist.Insert(0, vieModel.DetailMovie.bigimage);
                     vieModel.DetailMovie.extraimagePath.Insert(0, BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg");
@@ -1812,8 +1812,8 @@ namespace Jvedio
         {
             //加载大图到预览图
             DisposeImage();
-            vieModel.DetailMovie.extraimagelist = new ObservableRangeCollection<BitmapSource>();
-            vieModel.DetailMovie.extraimagePath = new ObservableRangeCollection<string>();
+            vieModel.DetailMovie.extraimagelist = new ObservableCollection<BitmapSource>();
+            vieModel.DetailMovie.extraimagePath = new ObservableCollection<string>();
             if (File.Exists(BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg"))
             {
                 vieModel.DetailMovie.extraimagelist.Add(vieModel.DetailMovie.bigimage);
@@ -1863,8 +1863,8 @@ namespace Jvedio
 
         private async Task<bool> LoadScreenShotImage()
         {
-            vieModel.DetailMovie.extraimagelist = new ObservableRangeCollection<BitmapSource>();
-            vieModel.DetailMovie.extraimagePath = new ObservableRangeCollection<string>();
+            vieModel.DetailMovie.extraimagelist = new ObservableCollection<BitmapSource>();
+            vieModel.DetailMovie.extraimagePath = new ObservableCollection<string>();
             await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate { 
                 imageItemsControl.ItemsSource = vieModel.DetailMovie.extraimagelist; 
             });

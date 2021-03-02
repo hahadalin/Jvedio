@@ -277,7 +277,17 @@ namespace Jvedio
         public static List<string> ScanPaths(StringCollection stringCollection, CancellationToken cancellationToken)
         {
             List<string> result = new List<string>();
-            foreach (var item in stringCollection) { result.AddRange(GetAllFilesFromFolder(item, cancellationToken)); }
+            foreach (var item in stringCollection) {
+                try
+                {
+                    result.AddRange(GetAllFilesFromFolder(item, cancellationToken));
+                }catch(OperationCanceledException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return result;
+                }
+            }
+
             var result2 = result
                 .Where(s => FilePattern.Contains(System.IO.Path.GetExtension(s).ToLower()))
                 .Where(s => !File.Exists(s) || new System.IO.FileInfo(s).Length >= MinFileSize).OrderBy(s => s).ToList();
@@ -287,7 +297,16 @@ namespace Jvedio
         public static List<string> ScanNFO(StringCollection stringCollection, CancellationToken cancellationToken, Action<string> callBack)
         {
             List<string> result = new List<string>();
-            foreach (var item in stringCollection) { result.AddRange(GetAllFilesFromFolder(item, cancellationToken, "*.*", callBack)); }
+            foreach (var item in stringCollection) {
+                try
+                {
+                    result.AddRange(GetAllFilesFromFolder(item, cancellationToken, "*.*", callBack));
+                }catch(OperationCanceledException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return result.Where(s => Path.GetExtension(s).ToLower().IndexOf("nfo") > 0).ToList();
+                }
+            }
             return result.Where(s => Path.GetExtension(s).ToLower().IndexOf("nfo") > 0).ToList();
         }
 
@@ -301,16 +320,7 @@ namespace Jvedio
             folders.Enqueue(root);
             while (folders.Count != 0)
             {
-                try
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                }
-                catch (OperationCanceledException e)
-                {
-                    Logger.LogE(e);
-                    break;
-                }
-
+                cancellationToken.ThrowIfCancellationRequested();
                 string currentFolder = folders.Dequeue();
                 try
                 {
