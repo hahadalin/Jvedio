@@ -1566,4 +1566,13 @@
   <data name="UrlJAV321Notset" xml:space="preserve">
     <value>未开启 JAV321 网址</value>
   </data>
+  <data name="exportnfo" xml:space="preserve">
+    <value>导出NFO</value>
+  </data>
+  <data name="setnfo" xml:space="preserve">
+    <value>请在【同步信息】中配置NFO</value>
+  </data>
+  <data name="overwrite" xml:space="preserve">
+    <value>覆盖已有文件</value>
+  </data>
 </root>

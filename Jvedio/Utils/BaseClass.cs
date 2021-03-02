@@ -27,7 +27,7 @@ namespace Jvedio
     /// <summary>
     /// Jvedio 影片
     /// </summary>
-    public class Movie:IDisposable
+    public class Movie : IDisposable
     {
         public Movie()
         {
@@ -136,7 +136,8 @@ namespace Jvedio
 
         private Uri _GifUri;
 
-        public Uri GifUri {
+        public Uri GifUri
+        {
             get
             {
                 return _GifUri;
@@ -148,7 +149,7 @@ namespace Jvedio
                 OnPropertyChanged();
             }
 
-            }
+        }
 
         private BitmapSource _smallimage;
         public BitmapSource smallimage { get { return _smallimage; } set { _smallimage = value; OnPropertyChanged(); } }
@@ -238,7 +239,7 @@ namespace Jvedio
 
         public VedioInfo()
         {
-            Format = ""; BitRate = ""; Duration = ""; FileSize = ""; Width = ""; Height = ""; Resolution = ""; DisplayAspectRatio = ""; FrameRate = ""; BitDepth = ""; PixelAspectRatio = ""; Encoded_Library = ""; FrameCount = ""; AudioFormat = ""; AudioBitRate = ""; AudioSamplingRate = ""; Channel = "";Extension = ""; FileName = "";
+            Format = ""; BitRate = ""; Duration = ""; FileSize = ""; Width = ""; Height = ""; Resolution = ""; DisplayAspectRatio = ""; FrameRate = ""; BitDepth = ""; PixelAspectRatio = ""; Encoded_Library = ""; FrameCount = ""; AudioFormat = ""; AudioBitRate = ""; AudioSamplingRate = ""; Channel = ""; Extension = ""; FileName = "";
         }
 
     }
@@ -276,7 +277,7 @@ namespace Jvedio
     /// <summary>
     /// 主界面演员
     /// </summary>
-    public class Actress : INotifyPropertyChanged,IDisposable
+    public class Actress : INotifyPropertyChanged, IDisposable
     {
 
         public Actress(string name = "")
@@ -337,13 +338,17 @@ namespace Jvedio
         }
 
         private string _cup;
-        public string cup { get { return _cup; } set { 
-                if (string.IsNullOrEmpty( value )) 
-                    _cup = ""; 
-                else 
-                    _cup = value[0].ToString().ToUpper(); 
+        public string cup
+        {
+            get { return _cup; }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                    _cup = "";
+                else
+                    _cup = value[0].ToString().ToUpper();
                 OnPropertyChanged();
-            } 
+            }
         }
 
 
@@ -404,7 +409,8 @@ namespace Jvedio
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
             smallimage = null;
             bigimage = null;
         }
@@ -421,17 +427,49 @@ namespace Jvedio
     }
 
 
-    public class MyListItem
+    public class MyListItem : INotifyPropertyChanged
     {
         private long number = 0;
+        private string name = "";
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                OnPropertyChanged();
+            }
+        }
+        public long Number
+        {
+            get
+            {
+                return number;
+            }
 
-        public string Name { get; set; }
-        public long Number { get => number; set => number = value; }
+            set
+            {
+                number = value;
+                OnPropertyChanged();
+            }
 
-        public MyListItem(string name,long number)
+        }
+
+        public MyListItem(string name, long number)
         {
             this.Name = name;
             this.Number = number;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
     }
@@ -440,7 +478,7 @@ namespace Jvedio
     /// <summary>
     /// 服务器源
     /// </summary>
-    public class Server:INotifyPropertyChanged
+    public class Server : INotifyPropertyChanged
     {
         public Server(string name)
         {
@@ -464,13 +502,23 @@ namespace Jvedio
         public bool IsEnable { get => isEnable; set { isEnable = value; OnPropertyChanged(); } }
 
 
-        public string Url { get => url; set { url = value.ToString().ToProperUrl(); 
-                OnPropertyChanged(); 
-            } }
+        public string Url
+        {
+            get => url; set
+            {
+                url = value.ToString().ToProperUrl();
+                OnPropertyChanged();
+            }
+        }
         public string Cookie { get => cookie; set { cookie = value; OnPropertyChanged(); } }
 
-        public int Available { get => available; set { available = value; 
-                OnPropertyChanged(); } 
+        public int Available
+        {
+            get => available; set
+            {
+                available = value;
+                OnPropertyChanged();
+            }
         }
         public string Name { get => name; set { name = value; OnPropertyChanged(); } }
         public string LastRefreshDate { get => lastRefreshDate; set { lastRefreshDate = value; OnPropertyChanged(); } }
@@ -606,10 +654,10 @@ namespace Jvedio
 
         private async void DownLoadSmallPic(DetailMovie dm)
         {
-            HttpStatusCode  sc = HttpStatusCode.Forbidden;
+            HttpStatusCode sc = HttpStatusCode.Forbidden;
             if (dm.smallimageurl != "")
             {
-                (bool success, string cookie) = await Task.Run(() => { return Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id, callback: (statuscode) => { sc =(HttpStatusCode)statuscode; }); });
+                (bool success, string cookie) = await Task.Run(() => { return Net.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
                 if (success) SmallImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
                 else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"{Jvedio.Language.Resources.DownloadSPicFailFor} {sc.ToStatusMessage()} {Jvedio.Language.Resources.Message_ViewLog}"));
             }
@@ -621,7 +669,8 @@ namespace Jvedio
             HttpStatusCode sc = HttpStatusCode.Forbidden;
             if (dm.bigimageurl != "")
             {
-                (bool success, string cookie) = await Task.Run(() => {
+                (bool success, string cookie) = await Task.Run(() =>
+                {
                     return Net.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; });
                 });
                 if (success) BigImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));

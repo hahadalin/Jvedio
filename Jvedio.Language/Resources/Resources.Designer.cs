@@ -1024,6 +1024,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 导出NFO 的本地化字符串。
+        /// </summary>
+        public static string exportnfo {
+            get {
+                return ResourceManager.GetString("exportnfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 窗体淡入淡出 的本地化字符串。
         /// </summary>
         public static string FadeInOut {
@@ -2707,6 +2716,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 覆盖已有文件 的本地化字符串。
+        /// </summary>
+        public static string overwrite {
+            get {
+                return ResourceManager.GetString("overwrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 解析失败 的本地化字符串。
         /// </summary>
         public static string ParseFail {
@@ -3297,6 +3315,15 @@ namespace Jvedio.Language {
         public static string SetDefaultToOpen {
             get {
                 return ResourceManager.GetString("SetDefaultToOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请在【同步信息】中配置NFO 的本地化字符串。
+        /// </summary>
+        public static string setnfo {
+            get {
+                return ResourceManager.GetString("setnfo", resourceCulture);
             }
         }
         

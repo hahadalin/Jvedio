@@ -49,8 +49,6 @@ namespace Jvedio
 
         public const string NoticeUrl = "https://hitchao.github.io/JvedioWebPage/notice";
 
-        public DispatcherTimer CheckurlTimer = new DispatcherTimer();
-        public int CheckurlInterval = 10;//每5分钟检测一次网址
 
         public bool Resizing = false;
         public DispatcherTimer ResizingTimer = new DispatcherTimer();
@@ -401,10 +399,6 @@ namespace Jvedio
             }
 
 
-
-            CheckurlTimer.Interval = TimeSpan.FromMinutes(CheckurlInterval);
-            CheckurlTimer.Tick += new EventHandler(CheckurlTimer_Tick);
-
             ResizingTimer.Interval = TimeSpan.FromSeconds(0.5);
             ResizingTimer.Tick += new EventHandler(ResizingTimer_Tick);
         }
@@ -416,14 +410,12 @@ namespace Jvedio
             return await Task.Run(() => {
             vieModel = new VieModel_Main();
             if (Properties.Settings.Default.RandomDisplay)
-            {
                 vieModel.RandomDisplay();
-            }
             else
-            {
                 vieModel.Reset();
-            }
-             Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate { this.DataContext = vieModel; });
+
+
+                Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate { this.DataContext = vieModel; });
             
             vieModel.CurrentMovieListHideOrChanged += (s, ev) => { StopDownLoad(); };
             vieModel.MovieFlipOverCompleted += (s, ev) =>
@@ -517,21 +509,6 @@ namespace Jvedio
             return true;
         }
 
-
-
-
-        public void BeginCheckurlThread()
-        {
-            Thread threadObject = new Thread(CheckUrl);
-            threadObject.Start();
-        }
-
-
-
-        private void CheckurlTimer_Tick(object sender, EventArgs e)
-        {
-            BeginCheckurlThread();
-        }
 
 
 
@@ -888,131 +865,6 @@ namespace Jvedio
                 HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_WatchFail} {failwatcherMessage}", "Main");
         }
 
-        public async void CheckUrl()
-        {
-            return;
-            //Console.WriteLine("开始检测");
-            //vieModel.CheckingUrl = true;
-            //Dictionary<string, bool> result = new Dictionary<string, bool>();
-
-            ////获取网址集合
-
-            //List<string> urlList = new List<string>
-            //{
-            //    Properties.Settings.Default.Bus,
-            //    Properties.Settings.Default.BusEurope,
-            //    Properties.Settings.Default.Library,
-            //    Properties.Settings.Default.DB,
-            //    Properties.Settings.Default.FC2,
-            //    Properties.Settings.Default.Jav321,
-            //    Properties.Settings.Default.DMM,
-            //    Properties.Settings.Default.MOO
-            //};
-
-            //List<bool> enableList = new List<bool>
-            //{
-            //    Properties.Settings.Default.EnableBus,
-            //    Properties.Settings.Default.EnableBusEu,
-            //    Properties.Settings.Default.EnableLibrary,
-            //    Properties.Settings.Default.EnableDB,
-            //    Properties.Settings.Default.EnableFC2,
-            //    Properties.Settings.Default.Enable321,
-            //    Properties.Settings.Default.EnableDMM,
-            //    Properties.Settings.Default.EnableMOO
-            //};
-
-            //for (int i = 0; i < urlList.Count; i++)
-            //{
-            //    bool enable = enableList[i];
-            //    string url = urlList[i];
-            //    if (enable)
-            //    {
-            //        bool CanConnect = false; bool enablecookie = false; string cookie = "";
-            //        if (url == Properties.Settings.Default.DB)
-            //        {
-            //            enablecookie = true;
-            //            cookie = Properties.Settings.Default.DBCookie;
-            //        }
-            //        else if (url == Properties.Settings.Default.DMM)
-            //        {
-            //            enablecookie = true;
-            //            cookie = Properties.Settings.Default.DMMCookie;
-            //        }
-            //        else if (url == Properties.Settings.Default.MOO)
-            //        {
-            //            enablecookie = true;
-            //            cookie = Properties.Settings.Default.MOOCookie;
-            //        }
-            //        try
-            //        {
-            //            CanConnect = await Net.TestUrl(url, enablecookie, cookie, "DB");
-            //        }
-            //        catch (TimeoutException ex) { Logger.LogN($"地址：{url}，失败原因：{ex.Message}"); }
-
-            //        if (CanConnect) { if (!result.ContainsKey(url)) result.Add(url, true); } else { if (!result.ContainsKey(url)) result.Add(url, false); }
-            //    }
-            //    else
-            //       if (!result.ContainsKey(url)) result.Add(url, false);
-            //}
-
-            //try
-            //{
-            //    this.Dispatcher.Invoke((Action)delegate ()
-            //    {
-            //        try
-            //        {
-
-            //            if (result[Properties.Settings.Default.Bus]) { BusStatus.Fill = Brushes.Green; }
-            //            if (result[Properties.Settings.Default.DB]) { DBStatus.Fill = Brushes.Green; }
-            //            if (result[Properties.Settings.Default.Library]) { LibraryStatus.Fill = Brushes.Green; }
-            //            //if (result[Properties.Settings.Default.Fc2Club]) { FC2Status.Fill = Brushes.Green; }
-            //            if (result[Properties.Settings.Default.BusEurope]) { BusEuropeStatus.Fill = Brushes.Green; }
-            //            if (result[Properties.Settings.Default.Jav321]) { Jav321Status.Fill = Brushes.Green; }
-            //            if (result[Properties.Settings.Default.DMM]) { DMMStatus.Fill = Brushes.Green; }
-            //            if (result[Properties.Settings.Default.MOO]) { MOOStatus.Fill = Brushes.Green; }
-            //        }
-            //        catch (KeyNotFoundException ex) { Console.WriteLine(ex.Message); }
-
-
-            //    });
-            //}
-            //catch (TaskCanceledException ex) { Console.WriteLine(ex.Message); }
-
-            //bool IsAllConnect = true;
-            //bool IsOneConnect = false;
-            //for (int i = 0; i < enableList.Count; i++)
-            //{
-            //    if (enableList[i])
-            //    {
-            //        if (result.ContainsKey(urlList[i]))
-            //        {
-            //            if (!result[urlList[i]])
-            //                IsAllConnect = false;
-            //            else
-            //                IsOneConnect = true;
-            //        }
-            //    }
-            //}
-            //try
-            //{
-            //    this.Dispatcher.Invoke((Action)delegate ()
-            //    {
-
-            //        if (IsAllConnect)
-            //            vieModel.WebStatusBackground = Brushes.Green;
-            //        else if (!IsAllConnect & !IsOneConnect)
-            //            vieModel.WebStatusBackground = Brushes.Red;
-            //        else if (IsOneConnect & !IsAllConnect)
-            //            vieModel.WebStatusBackground = Brushes.Yellow;
-
-            //    });
-            //    vieModel.CheckingUrl = false;
-            //}
-            //catch (System.Threading.Tasks.TaskCanceledException ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //}
-        }
 
 
         public void AdjustWindow()
@@ -1436,21 +1288,15 @@ namespace Jvedio
         }
 
 
-        private void HideListScrollViewer(object sender, EventArgs e)
+        private void HideListScrollViewer(object sender, RoutedEventArgs e)
         {
             ToggleButton button = sender as ToggleButton;
             string name = button.Content.ToString();
-
             if (name == Jvedio.Language.Resources.Hide)
-            {
                 button.Content = Jvedio.Language.Resources.Show;
-                //ListScrollViewer.Visibility = Visibility.Collapsed;
-            }
             else
-            {
                 button.Content = Jvedio.Language.Resources.Hide;
-                //ListScrollViewer.Visibility = Visibility.Visible;
-            }
+            
 
 
 
@@ -4161,7 +4007,7 @@ namespace Jvedio
             SetSkin();
             //显示公告
             ShowNotice();
-
+            InitList();
             //检查更新
             CheckUpgrade(null,null);
 
@@ -4175,8 +4021,6 @@ namespace Jvedio
                     break;
                 }
             }
-            CheckurlTimer.Start();
-            BeginCheckurlThread();
             ReadRecentWatchedFromConfig();//显示最近播放
             vieModel.AddToRecentWatch("");
             //vieModel.GetFilterInfo();
@@ -4206,8 +4050,8 @@ namespace Jvedio
                 vieModel.MyList.Add(new MyListItem(table, (long)dB.SelectCountByTable(table)));
             }
             dB.Close();
-
-
+            ListItemsControl.ItemsSource = null;
+            ListItemsControl.ItemsSource = vieModel.MyList;//以前直接在 xaml 中绑定即可，现在不知为啥必须写代码绑定
         }
 
 
@@ -5463,7 +5307,8 @@ namespace Jvedio
                         return;
                     }
                     if (AddToMyList(text)) vieModel.MyList.Add(new MyListItem(text, 0));
-
+                    ListItemsControl.ItemsSource = null;
+                    ListItemsControl.ItemsSource = vieModel.MyList;
                 }
 
             }
@@ -5775,9 +5620,10 @@ namespace Jvedio
                     vieModel.TotalCount -= vieModel.SelectedMovie.Count;
 
                     vieModel.SelectedMovie.Clear();
-                    InitList();
-                    await Task.Run(() => { Task.Delay(100).Wait(); });
 
+                    await Task.Run(() => { Task.Delay(100).Wait(); });
+                    //ListItemsControl.ItemsSource = null;
+                    //ListItemsControl.ItemsSource = vieModel.MyList;
 
                     //侧边栏选项选中
                     for (int i = 0; i < ListItemsControl.Items.Count; i++)
@@ -5959,7 +5805,6 @@ namespace Jvedio
         {
             SetClassify(true);
         }
-
 
     }
 

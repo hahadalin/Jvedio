@@ -1049,6 +1049,7 @@ namespace Jvedio
             vieModel_Settings.Servers[CurrentRowIndex].IsEnable = enable;
             ServerConfig.Instance.SaveServer(vieModel_Settings.Servers[CurrentRowIndex]);
             InitVariable();
+            ServersDataGrid.Items.Refresh();
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)

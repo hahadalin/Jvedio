@@ -1566,4 +1566,13 @@
   <data name="UrlJAV321Notset" xml:space="preserve">
     <value>JAV321のアドレスは開いていない</value>
   </data>
+  <data name="exportnfo" xml:space="preserve">
+    <value>NFOの導出</value>
+  </data>
+  <data name="setnfo" xml:space="preserve">
+    <value>[同期メッセージ]にnfoを配置してください</value>
+  </data>
+  <data name="overwrite" xml:space="preserve">
+    <value>既存のファイルを上書きする</value>
+  </data>
 </root>

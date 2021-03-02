@@ -179,6 +179,29 @@ namespace Jvedio
             return result;
         }
 
+        public List<DetailMovie> SelectDetailMoviesBySql(string sqltext)
+        {
+            List<DetailMovie> result = new List<DetailMovie>();
+            if (string.IsNullOrEmpty(sqltext)) return result;
+            else cmd.CommandText = sqltext;
+
+            using (SQLiteDataReader sr = cmd.ExecuteReader())
+            {
+                try
+                {
+                    while (sr.Read())
+                    {
+
+                        DetailMovie detailMovie = GetDetailMovieFromSQLiteDataReader(sr);
+                        if (detailMovie != null) result.Add(detailMovie);
+                    }
+
+                }
+                catch (Exception e) { Logger.LogD(e); }
+            }
+            return result;
+        }
+
 
 
         /// <summary>

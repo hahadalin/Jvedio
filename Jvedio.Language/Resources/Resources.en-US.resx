@@ -1566,4 +1566,13 @@
   <data name="UrlJAV321Notset" xml:space="preserve">
     <value>JAV321 URL not enabled</value>
   </data>
+  <data name="exportnfo" xml:space="preserve">
+    <value>export NFO</value>
+  </data>
+  <data name="setnfo" xml:space="preserve">
+    <value>Please configure the NFO in Synchronization Information</value>
+  </data>
+  <data name="overwrite" xml:space="preserve">
+    <value>Overwrite existing files</value>
+  </data>
 </root>

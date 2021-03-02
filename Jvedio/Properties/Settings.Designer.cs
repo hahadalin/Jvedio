@@ -2062,5 +2062,17 @@ namespace Jvedio.Properties {
                 this["SkipExistGif"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OverriteNFO {
+            get {
+                return ((bool)(this["OverriteNFO"]));
+            }
+            set {
+                this["OverriteNFO"] = value;
+            }
+        }
     }
 }

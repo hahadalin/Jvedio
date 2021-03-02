@@ -29,7 +29,7 @@ namespace Jvedio
         public CancellationToken ct;
 
         public VieModel_DBManagement vieModel_DBManagement;
-
+        Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager taskbarInstance = null;
         public Window_DBManagement()
         {
             InitializeComponent();
@@ -62,7 +62,7 @@ namespace Jvedio
             TextBlock textBlock = grid1.Children[1] as TextBlock;
             name = textBlock.Text.ToLower();
 
-            Main main =GetWindowByName("Main") as Main;
+            Main main = GetWindowByName("Main") as Main;
             main.vieModel.DatabaseSelectedIndex = main.vieModel.DataBases.IndexOf(name);
 
         }
@@ -70,7 +70,7 @@ namespace Jvedio
         public void RefreshMain()
         {
             //刷新主界面
-            string name= Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
+            string name = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
             Main main = GetWindowByName("Main") as Main;
             main.vieModel.LoadDataBaseList();
             main.vieModel.DatabaseSelectedIndex = main.vieModel.DataBases.IndexOf(name);
@@ -316,8 +316,8 @@ namespace Jvedio
 
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
-
-
+            Button button = (Button)sender;
+            button.IsEnabled = false;
             cts = new CancellationTokenSource();
             cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Cancel, "DBManageGrowl"); });
             ct = cts.Token;
@@ -331,9 +331,6 @@ namespace Jvedio
                 path = $"DataBase\\{vieModel_DBManagement.CurrentDataBase}";
             MySqlite db = new MySqlite(path);
 
-
-            if ((bool)cb[1].IsChecked || (bool)cb[2].IsChecked) WaitingPanel.Visibility = Visibility.Visible;
-
             if ((bool)cb[0].IsChecked)
             {
                 //重置信息
@@ -341,9 +338,7 @@ namespace Jvedio
                 db.CreateTable(DataBase.SQLITETABLE_MOVIE);
                 //清空最近播放和最近创建
                 ClearDateBefore(DateTime.Now);
-
-
-
+                db.Vacuum();
                 HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "DBManageGrowl");
             }
 
@@ -357,24 +352,24 @@ namespace Jvedio
                     var movies = db.SelectMoviesBySql("select * from movie");
                     try
                     {
-                        movies.ForEach(movie =>
-                            {
-                        ct.ThrowIfCancellationRequested();
-                        if (!File.Exists(movie.filepath))
-                        {
-                            db.DeleteByField("movie", "id", movie.id);
-                            num++;
-                        }
+                        vieModel_DBManagement.ProgressBarValue = 0;
 
-                    });
+                        for (int i = 0; i < movies.Count; i++)
+                        {
+                            ct.ThrowIfCancellationRequested();
+                            if (!File.Exists(movies[i].filepath))
+                            {
+                                db.DeleteByField("movie", "id", movies[i].id);
+                                num++;
+                            }
+                            if (movies.Count > 0) vieModel_DBManagement.ProgressBarValue = (int)((double)(i + 1) / (double)movies.Count * 100);
+                        }
+                        db.Vacuum();
                     }
                     catch (OperationCanceledException ex)
                     {
                         Console.WriteLine($"{nameof(OperationCanceledException)} thrown with message: {ex.Message}");
-                        return false;
-
                     }
-                    return true;
                 }, ct);
 
                 HandyControl.Controls.Growl.Success($"{ Jvedio.Language.Resources.SuccessDelete} {num}", "DBManageGrowl");
@@ -386,48 +381,73 @@ namespace Jvedio
                 StringCollection ScanPath = ReadScanPathFromConfig(vieModel_DBManagement.CurrentDataBase);
 
                 long num = 0;
-
                 await Task.Run(() =>
                 {
                     try
                     {
-                        movies.ForEach(movie =>
+                        vieModel_DBManagement.ProgressBarValue = 0;
+
+                        for (int i = 0; i < movies.Count; i++)
                         {
                             ct.ThrowIfCancellationRequested();
-                            if (!IsPathIn(movie.filepath, ScanPath))
+                            if (!IsPathIn(movies[i].filepath, ScanPath))
                             {
-                                db.DeleteByField("movie", "id", movie.id);
+                                db.DeleteByField("movie", "id", movies[i].id);
                                 num++;
                             }
-                        });
+                            if (movies.Count > 0) vieModel_DBManagement.ProgressBarValue = (int)((double)(i+1) / (double)movies.Count * 100);
+                        }
+
+                        db.Vacuum();
                     }
                     catch (OperationCanceledException ex)
                     {
                         Console.WriteLine($"{nameof(OperationCanceledException)} thrown with message: {ex.Message}");
-                        return false;
                     }
-                    
-                    return true;
                 }, ct);
 
 
                 HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.SuccessDelete} {num}", "DBManageGrowl");
             }
 
-            db.Vacuum();
+            if ((bool)cb[3].IsChecked)
+            {
+                if (Properties.Settings.Default.SaveInfoToNFO)
+                {
+                    var detailMovies = db.SelectDetailMoviesBySql("select * from movie");
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            vieModel_DBManagement.ProgressBarValue = 0;
+
+                            for (int i = 0; i < detailMovies.Count; i++)
+                            {
+                                ct.ThrowIfCancellationRequested();
+                                FileProcess.SaveNfo(detailMovies[i]);
+                                if (detailMovies.Count > 0) vieModel_DBManagement.ProgressBarValue = (int)((double)(i + 1) / (double)detailMovies.Count * 100);
+                            }
+                        }
+                        catch (OperationCanceledException ex)
+                        {
+                            Console.WriteLine($"{nameof(OperationCanceledException)} thrown with message: {ex.Message}");
+                        }
+                    }, ct);
+
+                    HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.Message_Success}", "DBManageGrowl");
+                }
+                else
+                {
+                    HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.setnfo}", "DBManageGrowl");
+                }
+
+            }
             db.CloseDB();
             cts.Dispose();
-            WaitingPanel.Visibility = Visibility.Hidden;
-
             await Task.Run(() => { Task.Delay(500).Wait(); });
-
-            Main main = null;
-            Window window = GetWindowByName("Main");
-            if (window != null) main = (Main)window;
+            Main main = (Main)GetWindowByName("Main");
             main?.vieModel.Reset();
-
-
-
+            button.IsEnabled = true;
         }
 
         public bool IsPathIn(string path, StringCollection paths)
@@ -447,7 +467,7 @@ namespace Jvedio
             WaitingPanel.Visibility = Visibility.Hidden;
         }
 
-        private  void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ShowStatistic();
         }
@@ -457,7 +477,8 @@ namespace Jvedio
         {
             if (TabControl.SelectedIndex == 1)
             {
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     vieModel_DBManagement.Statistic();
                     IDBarView.Datas = vieModel_DBManagement.LoadID();
                     IDBarView.Title = Jvedio.Language.Resources.ID;
@@ -476,6 +497,43 @@ namespace Jvedio
                     TagBarView.Refresh();
                 });
             }
+        }
+
+        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported && taskbarInstance != null)
+            {
+                taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal, this);
+                taskbarInstance.SetProgressValue((int)e.NewValue, 100, this);
+                if (e.NewValue == 100) taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress, this);
+            }
+        }
+
+        private void ProgressBar_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (vieModel_DBManagement.ProgressBarValue == 0 && Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported && taskbarInstance != null)
+            {
+                taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress, this);
+            }
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            cts?.Cancel();
+            vieModel_DBManagement.ProgressBarValue = 0;
+            RunButton.IsEnabled = true;
+        }
+
+        private void Jvedio_BaseWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                if (cts != null && !cts.IsCancellationRequested) cts.Cancel();
+            }catch(ObjectDisposedException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
         }
     }
 

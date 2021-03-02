@@ -407,10 +407,14 @@
                         <CheckBox IsChecked="{Binding SaveInfoToNFO, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.SaveToNFO}" />
 
 
+
+
                         <StackPanel Orientation="Horizontal" Visibility="{Binding SaveInfoToNFO, Converter={StaticResource BoolToVis}, Mode=OneWay, Source={x:Static p:Settings.Default}}">
-                            <!--<StackPanel Orientation="Horizontal" Visibility="Visible">-->
-                            <hc:TextBox ToolTip="{x:Static lang:Resources.ToolTip_SameAsVedio}" Style="{StaticResource BaseHcTextBox}" Text="{Binding NFOSavePath, Source={x:Static p:Settings.Default}}" Margin="10 0"/>
+                        <!--<StackPanel Orientation="Horizontal" Visibility="Visible">-->
+                            <TextBox FontSize="15" Foreground="{DynamicResource ForegroundSearch}" Background="{DynamicResource BackgroundTitle}" BorderThickness="0" MinWidth="400" CaretBrush="{DynamicResource ForegroundSearch}" Width="380" Text="{Binding NFOSavePath, Source={x:Static p:Settings.Default}}" hc:InfoElement.TitleWidth="140" hc:InfoElement.Placeholder="{x:Static lang:Resources.ToolTip_SameAsVedio}"  hc:InfoElement.Title="" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" Margin="10 0"/>
+
                             <Button Content="{x:Static lang:Resources.ChooseDir}" Style="{StaticResource ButtonStyleFill}" HorizontalAlignment="Left"  Click="Button_Click_3" />
+                            <CheckBox IsChecked="{Binding OverriteNFO, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.overwrite}" />
 
                         </StackPanel>
 

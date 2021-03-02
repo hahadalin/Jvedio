@@ -29,19 +29,38 @@ namespace Jvedio
         public static void SaveNfo(DetailMovie detailMovie)
         {
             if (!Properties.Settings.Default.SaveInfoToNFO) return;
-
+           
             if (Directory.Exists(Properties.Settings.Default.NFOSavePath))
             {
                 //固定位置
-                nfo.SaveToNFO(detailMovie, Path.Combine(Properties.Settings.Default.NFOSavePath, $"{detailMovie.id}.nfo"));
+                string savepath = Path.Combine(Properties.Settings.Default.NFOSavePath, $"{detailMovie.id}.nfo");
+                if (!File.Exists(savepath))
+                {
+                    nfo.SaveToNFO(detailMovie, savepath);
+                }
+                else if (Properties.Settings.Default.OverriteNFO)
+                {
+                    nfo.SaveToNFO(detailMovie, savepath);
+                }
+
+
             }
             else
             {
-                //与视频同路径
+                //与视频同路径，视频存在才行
                 string path = detailMovie.filepath;
                 if (File.Exists(path))
                 {
-                    nfo.SaveToNFO(detailMovie, Path.Combine(new FileInfo(path).DirectoryName, $"{detailMovie.id}.nfo"));
+                    string savepath = Path.Combine(new FileInfo(path).DirectoryName, $"{detailMovie.id}.nfo");
+                    if(!File.Exists(savepath))
+                    {
+                        nfo.SaveToNFO(detailMovie, savepath);
+                    }
+                    else if (Properties.Settings.Default.OverriteNFO)
+                    {
+                        nfo.SaveToNFO(detailMovie, savepath);
+                    }
+
                 }
             }
 

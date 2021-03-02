@@ -32,6 +32,19 @@ namespace Jvedio.ViewModel
 
 
 
+        private int _ProgressBarValue = 0;
+
+        public int ProgressBarValue
+        {
+            get { return _ProgressBarValue; }
+            set
+            {
+                _ProgressBarValue = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         public void ListDatabase()
         {
