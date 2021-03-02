@@ -13,6 +13,9 @@ using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
+    /// <summary>
+    /// IO、文件处理
+    /// </summary>
     public static class FileProcess
     {
 
@@ -29,21 +32,14 @@ namespace Jvedio
         public static void SaveNfo(DetailMovie detailMovie)
         {
             if (!Properties.Settings.Default.SaveInfoToNFO) return;
-           
             if (Directory.Exists(Properties.Settings.Default.NFOSavePath))
             {
                 //固定位置
                 string savepath = Path.Combine(Properties.Settings.Default.NFOSavePath, $"{detailMovie.id}.nfo");
                 if (!File.Exists(savepath))
-                {
-                    nfo.SaveToNFO(detailMovie, savepath);
-                }
+                    NFOHelper.SaveToNFO(detailMovie, savepath);
                 else if (Properties.Settings.Default.OverriteNFO)
-                {
-                    nfo.SaveToNFO(detailMovie, savepath);
-                }
-
-
+                    NFOHelper.SaveToNFO(detailMovie, savepath);
             }
             else
             {
@@ -53,20 +49,19 @@ namespace Jvedio
                 {
                     string savepath = Path.Combine(new FileInfo(path).DirectoryName, $"{detailMovie.id}.nfo");
                     if(!File.Exists(savepath))
-                    {
-                        nfo.SaveToNFO(detailMovie, savepath);
-                    }
+                        NFOHelper.SaveToNFO(detailMovie, savepath);
                     else if (Properties.Settings.Default.OverriteNFO)
-                    {
-                        nfo.SaveToNFO(detailMovie, savepath);
-                    }
-
+                        NFOHelper.SaveToNFO(detailMovie, savepath);
                 }
             }
 
         }
 
 
+        /// <summary>
+        /// 清除最近的观看记录
+        /// </summary>
+        /// <param name="dateTime"></param>
         public static void ClearDateBefore(DateTime dateTime)
         {
             if (!File.Exists("RecentWatch")) return;
@@ -78,10 +73,17 @@ namespace Jvedio
             }
 
         }
+
+        /// <summary>
+        /// 按照指定的条件筛选影片
+        /// </summary>
+        /// <param name="movies"></param>
+        /// <returns></returns>
         public static List<Movie> FilterMovie(List<Movie> movies )
         {
             List<Movie> result = new List<Movie>();
             result.AddRange(movies);
+
             //可播放|不可播放
             if (Properties.Settings.Default.OnlyShowPlay)
             {
@@ -107,9 +109,15 @@ namespace Jvedio
                 result = result.Where(arg => arg.vediotype == vt).ToList();
             }
 
-            result = FilterImage(result);//有图|无图
+            result = FilterImage(result);
             return result;
         }
+
+        /// <summary>
+        /// 筛选有图、无图
+        /// </summary>
+        /// <param name="originMovies"></param>
+        /// <returns></returns>
 
         private static List<Movie> FilterImage(List<Movie> originMovies)
         {
@@ -154,8 +162,6 @@ namespace Jvedio
                         }
                     }
                 }
-
-
             }
             else if (ShowViewMode == ViewType.无图)
             {
@@ -212,14 +218,6 @@ namespace Jvedio
             {
                 return true;
             }
-
-        }
-
-
-        public static bool IsLetter(char c)
-        {
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) return true;
-            else return false;
         }
 
 
@@ -230,7 +228,11 @@ namespace Jvedio
             {
                 doc.Load(path);
             }
-            catch { return null; }
+            catch(Exception ex) {
+                Logger.LogE(ex);
+                Console.WriteLine(ex.Message);
+                return null; 
+            }
             XmlNode rootNode = doc.SelectSingleNode("movie");
             if (rootNode == null) return null;
             Movie movie = new Movie();
@@ -265,9 +267,9 @@ namespace Jvedio
                     continue;
                 }
             }
-            if (movie.id == "") { return null; }
-            //视频类型
+            if (string.IsNullOrEmpty( movie.id )) return null; 
 
+            //视频类型
             movie.vediotype = (int)Identify.GetVedioType(movie.id);
 
             //扫描视频获得文件大小
@@ -275,10 +277,7 @@ namespace Jvedio
             {
                 string fatherpath = new FileInfo(path).DirectoryName;
                 string[] files = null;
-                try
-                {
-                    files = Directory.GetFiles(fatherpath, "*.*", SearchOption.TopDirectoryOnly);
-                }
+                try { files = Directory.GetFiles(fatherpath, "*.*", SearchOption.TopDirectoryOnly); }
                 catch (Exception e)
                 {
                     Logger.LogE(e);
@@ -286,7 +285,6 @@ namespace Jvedio
 
                 if (files != null)
                 {
-
                     var movielist = Scan.FirstFilter(files.ToList(), movie.id);
                     if (movielist.Count == 1 && !movielist[0].ToLower().EndsWith(".nfo"))
                     {
@@ -308,68 +306,55 @@ namespace Jvedio
 
             //tag
             XmlNodeList tagNodes = doc.SelectNodes("/movie/tag");
+            List<string> tags = new List<string>();
             if (tagNodes != null)
             {
-                string tags = "";
                 foreach (XmlNode item in tagNodes)
                 {
-                    if (item.InnerText != "") { tags += item.InnerText + " "; }
-
+                    if (item.InnerText != "") { tags .Add( item.InnerText.Replace(" ","")); }
                 }
-                if (tags.Length > 0)
-                {
-
                     if (movie.id.IndexOf("FC2") >= 0)
-                    {
-                        movie.genre = tags.Substring(0, tags.Length - 1);
-                    }
+                        movie.genre = string.Join(" ", tags);
                     else
-                    {
-                        movie.tag = tags.Substring(0, tags.Length - 1);
-                    }
-
-
-                }
+                        movie.tag = string.Join(" ", tags);
             }
 
             //genre
             XmlNodeList genreNodes = doc.SelectNodes("/movie/genre");
+            List<string> genres = new List<string>();
             if (genreNodes != null)
             {
-                string genres = "";
                 foreach (XmlNode item in genreNodes)
                 {
-                    if (item.InnerText != "") { genres += item.InnerText + " "; }
+                    if (item.InnerText != "") { genres.Add( item.InnerText ); }
 
                 }
-                if (genres.Length > 0) { movie.genre = genres.Substring(0, genres.Length - 1); }
+                movie.genre = string.Join(" ", genres);
             }
 
             //actor
             XmlNodeList actorNodes = doc.SelectNodes("/movie/actor/name");
+            List<string> actors = new List<string>();
             if (actorNodes != null)
             {
-                string actors = "";
                 foreach (XmlNode item in actorNodes)
                 {
-                    if (item.InnerText != "") { actors += item.InnerText + " "; }
+                    if (item.InnerText != "") { actors.Add( item.InnerText ); }
                 }
-                if (actors.Length > 0) { movie.actor = actors.Substring(0, actors.Length - 1); }
-            }
+                 movie.actor = string.Join(" ", actors);
+                }
 
             //fanart
             XmlNodeList fanartNodes = doc.SelectNodes("/movie/fanart/thumb");
+            List<string> extraimageurls = new List<string>();
             if (fanartNodes != null)
             {
-                string extraimageurl = "";
                 foreach (XmlNode item in fanartNodes)
                 {
-                    if (item.InnerText != "") { extraimageurl += item.InnerText + ";"; }
+                    if (item.InnerText != "") { extraimageurls.Add( item.InnerText ); }
                 }
-                if (extraimageurl.Length > 0) { movie.extraimageurl = extraimageurl.Substring(0, extraimageurl.Length - 1); }
-            }
-
-
+                 movie.extraimageurl = string.Join(" ", extraimageurls);
+                }
             return movie;
         }
 
@@ -405,33 +390,6 @@ namespace Jvedio
             }
         }
 
-
-        public static string CalculateMD5Hash(string input)
-        {
-            // step 1, calculate MD5 hash from input
-            MD5 md5 = System.Security.Cryptography.MD5.Create();
-            byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
-            byte[] hash = md5.ComputeHash(inputBytes);
-
-            // step 2, convert byte array to hex string
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hash.Length; i++)
-            {
-                sb.Append(hash[i].ToString("X2"));
-            }
-            return sb.ToString().ToLower();
-        }
-
-        public static string GetFileMD5(string filename)
-        {
-            using (var md5 = MD5.Create())
-            {
-                using (var stream = File.OpenRead(filename))
-                {
-                    return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
-                }
-            }
-        }
 
         public static void addTag(ref Movie movie)
         {
@@ -469,14 +427,6 @@ namespace Jvedio
 
 
 
-
-
-        public static void SaveRecentWatchedToConfig(string date, List<string> IDs)
-        {
-            RecentWatchedConfig recentWatchedConfig = new RecentWatchedConfig(date);
-            recentWatchedConfig.Save(IDs);
-        }
-
         public static void ReadRecentWatchedFromConfig()
         {
             if (!File.Exists("RecentWatch")) return;
@@ -493,19 +443,12 @@ namespace Jvedio
                     if (keyValuePair.Value.Count > 0)
                     {
                         List<string> IDs = keyValuePair.Value.Where(arg => !string.IsNullOrEmpty(arg)).ToList();
-
                         string date = keyValuePair.Key.Date.ToString("yyyy-MM-dd");
                         RecentWatchedConfig recentWatchedConfig = new RecentWatchedConfig(date);
                         recentWatchedConfig.Save(IDs);
                     }
                 }
             }
-
-
-
-
-
-
         }
 
 

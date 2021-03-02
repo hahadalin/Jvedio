@@ -59,7 +59,7 @@ namespace Jvedio
                 if (File.Exists(localfilepath))
                 {
                     //存在 => 校验
-                    if (Encrypt.GetMD5(localfilepath) != filemd5[arg])
+                    if (Encrypt.GetFileMD5(localfilepath) != filemd5[arg])
                     {
                         DownLoadList.Add(arg);//md5 不一致 ，下载
                     }

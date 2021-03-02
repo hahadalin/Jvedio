@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace Jvedio.Library.Encrypt
 {
+
+
+    /// <summary>
+    /// AES 加密，加密有道、百度AI的 key 到本地
+    /// </summary>
     public static class Encrypt
     {
         /// <summary>
@@ -57,7 +62,24 @@ namespace Jvedio.Library.Encrypt
             return Encoding.UTF8.GetString(resultArray);
         }
 
-        public static string GetMD5(string filename)
+
+        public static string CalculateMD5Hash(string input)
+        {
+            // step 1, calculate MD5 hash from input
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
+            byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
+            byte[] hash = md5.ComputeHash(inputBytes);
+
+            // step 2, convert byte array to hex string
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("X2"));
+            }
+            return sb.ToString().ToLower();
+        }
+
+        public static string GetFileMD5(string filename)
         {
             using (var md5 = MD5.Create())
             {

@@ -16,6 +16,7 @@ using System.Xml;
 using static Jvedio.GlobalVariable;
 using static Jvedio.GlobalMethod;
 using System.Windows.Documents;
+using Jvedio.Library.Encrypt;
 
 namespace Jvedio
 {
@@ -106,7 +107,7 @@ namespace Jvedio
                         if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe")) { IsToDownLoadUpdate = true; }
                         else
                         {
-                            string md5 = FileProcess.GetFileMD5(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
+                            string md5 = Encrypt.GetFileMD5(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
                             if (md5 != httpResult.SourceCode) { IsToDownLoadUpdate = true; }
                         }
                     }

@@ -1575,4 +1575,7 @@
   <data name="overwrite" xml:space="preserve">
     <value>Overwrite existing files</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
 </root>

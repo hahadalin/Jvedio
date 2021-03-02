@@ -1575,4 +1575,7 @@
   <data name="overwrite" xml:space="preserve">
     <value>覆盖已有文件</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
 </root>

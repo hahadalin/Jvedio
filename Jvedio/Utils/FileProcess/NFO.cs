@@ -103,13 +103,9 @@ namespace Jvedio
                 XmlDoc.Load(FilePath);
                 var XN = XmlDoc.GetElementsByTagName(NodeName)[0];
                 if (XN is object)
-                {
                     return XN.InnerText;
-                }
                 else
-                {
                     return "";
-                }
             }
             else
             {
@@ -132,7 +128,7 @@ namespace Jvedio
         }
     }
 
-    public static class nfo
+    public static class NFOHelper
     {
         /// <summary>
         /// 保存信息到 NFO 文件
@@ -201,10 +197,4 @@ namespace Jvedio
 
         }
     }
-
-
-
-
-
-
 }

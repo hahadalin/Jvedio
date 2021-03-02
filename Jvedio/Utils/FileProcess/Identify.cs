@@ -14,19 +14,12 @@ namespace Jvedio
         public static string[] CHS = new string[] {  "中字", "中文字幕", "字幕","中文","translated" , "translate" };
         public static string[] HDV = new string[] { "hd", "high_definition", "high definition","高清" };
 
-
-
-
-
-
-
         public static void InitFanhaoList()
         {
             Qibing = new List<string>();
             Bubing = new List<string>();
             Qibing.AddRange(Resource_String.Qibing.Split(',').Where(arg => !string.IsNullOrEmpty(arg) && arg.Length > 0).ToList());
             Bubing.AddRange(Resource_String.Bubing.Split(',').Where(arg => !string.IsNullOrEmpty(arg) && arg.Length > 0).ToList());
-
         }
 
         public static string GetFanhaoFromDMMUrl(string url)
@@ -56,7 +49,6 @@ namespace Jvedio
             if (string.IsNullOrEmpty(filepath)) return false;
             string name = new FileInfo(filepath).Name.ToLower();
             return FLOWOUT.Any(arg => name.IndexOf(arg) >= 0);
-
         }
 
         public static bool IsCHS(string filepath)
@@ -68,11 +60,11 @@ namespace Jvedio
             {
                 int idx = name.LastIndexOf("-c");
                 if (idx > 0 && idx == name.Length - 2) return true;
-                else if (idx > 0 && idx < name.Length - 2 && !FileProcess.IsLetter(name[idx + 2])) return true;
+                else if (idx > 0 && idx < name.Length - 2 && !name[idx + 2].IsLetter()) return true;
 
                 idx = name.LastIndexOf("_c");
                 if (idx > 0 && idx == name.Length - 2) return true;
-                else if (idx > 0 && idx < name.Length - 2 && !FileProcess.IsLetter(name[idx + 2])) return true;
+                else if (idx > 0 && idx < name.Length - 2 && !name[idx + 2].IsLetter()) return true;
                 return CHS.Any(arg => name.IndexOf(arg) >= 0);
             }
             else
@@ -85,61 +77,14 @@ namespace Jvedio
             
         }
 
-
-
         public static bool IsHDV(string filepath)
         {
             if (string.IsNullOrEmpty(filepath)) return false;
             FileInfo fileInfo = new FileInfo(filepath);
             string name = fileInfo.Name.ToLower();
-
             if (!File.Exists(filepath)) return HDV.Any(arg => name.IndexOf(arg) >= 0);
-
             long filesize = fileInfo.Length;
             return filesize > 0 && filesize / 1024 / 1024 / 1024 >= MinHDVFileSize;
-        }
-
-
-        public static string SearchSimilarityAnalysis(string content,List<string> AnalysisList)
-        {
-            //提取英文
-            string eng = GetEng(content);
-            //提取数字
-            string num = GetNum(content);
-
-            string result = "";
-
-            foreach (var item in AnalysisList)
-            {
-                string _eng = GetEng(item);
-                string _num = GetNum(item);
-
-                if(eng!="" & num != "")
-                {
-                    if (_eng.ToUpper().IndexOf(eng.ToUpper()) >= 0 & _num.IndexOf(num) >= 0)
-                    {
-                        result = item;
-                        break;
-                    }
-                }
-                else if (eng != "" & num == "")
-                {
-                    if (_eng.ToUpper().IndexOf(eng.ToUpper()) >= 0)
-                    {
-                        result = item;
-                        break;
-                    }
-                }
-                else if (eng == "" & num != "")
-                {
-                    if ( _num.IndexOf(num) >= 0)
-                    {
-                        result = item;
-                        break;
-                    }
-                }
-            }
-            return result;
         }
 
 
@@ -162,10 +107,6 @@ namespace Jvedio
         }
 
 
-
-
-
-
         /// <summary>
         /// 获得视频类型
         /// </summary>
@@ -179,8 +120,6 @@ namespace Jvedio
             if (FileName.ToLower().IndexOf("CW3D2DBD".ToLower()) >= 0) return VedioType.步兵;
             if (FileName.ToLower().IndexOf("t28") >= 0) return VedioType.骑兵;
             
-
-
             // 一本道、メス豚、天然むすめ
             if (FileName.IndexOf("_") > 0) { return VedioType.步兵; }
             else
@@ -206,7 +145,7 @@ namespace Jvedio
 
                             // 剩下的如果还没匹配到，看看是否为 XXXX-000格式
 
-                           if(GetEng(fanhao1) !="" & GetNum(fanhao2) != "")
+                           if(GetEng(fanhao1) !="" && GetNum(fanhao2) != "")
                                 return VedioType.骑兵;
                             else
                                 return 0;
@@ -217,26 +156,19 @@ namespace Jvedio
                 {
                     if (!string.IsNullOrEmpty(FileName))
                     {
-                        if ((FileName.StartsWith("N") & FileName.Replace("N", "").All(char.IsDigit)) | (FileName.StartsWith("K") & FileName.Replace("K", "").All(char.IsDigit)))
+                        if ((FileName.StartsWith("N") && FileName.Replace("N", "").All(char.IsDigit)) || (FileName.StartsWith("K") && FileName.Replace("K", "").All(char.IsDigit)))
                         {
                             return VedioType.步兵; //Tokyo
                         }
                         else
                         {
-
                             FileName = GetFanhaoByRegExp(FileName, "[A-Z][A-Z]+");//至少两个英文字母
                             if (!string.IsNullOrEmpty(FileName))
                             {
                                 if (Bubing.Contains(FileName))
-                                {
                                     return VedioType.步兵;
-                                }
                                 else
-                                {
-
                                     return 0;
-
-                                }
                             }
                             else { return 0; }
                         }
@@ -249,7 +181,10 @@ namespace Jvedio
         public static string GetFanhaoByRegExp(string FileName, string myPattern)
         {
             MatchCollection mc = Regex.Matches(FileName, myPattern,RegexOptions.IgnoreCase);
-            if (mc.Count > 0) { return mc[0].Value.ToUpper(); } else { return ""; }
+            if (mc.Count > 0) 
+                return mc[0].Value.ToUpper(); 
+            else
+                return "";
         }
 
 
@@ -258,14 +193,13 @@ namespace Jvedio
         public static string GetEuFanhao(string str)
         {
             string pattern = @"[A-Za-z]+\.[0-9]{2}\.[0-9]{2}\.[0-9]{2}";
-
-            string result ;
             string FileName = File.Exists(str) ? new FileInfo(str).Name : str;
-
             //BigWetButts.20.06.16
             MatchCollection mc = Regex.Matches(FileName, pattern,RegexOptions.IgnoreCase);
-            if (mc.Count > 0) { result= mc[0].Value; } else { result= ""; }
-            return result;
+            if (mc.Count > 0)
+                return mc[0].Value; 
+            else
+                return ""; 
         }
 
 
@@ -276,7 +210,7 @@ namespace Jvedio
         {
             // 未解决
             // dioguitar23.net_SMD-124.mp4
-            // xiaose9831@第一会所@SKY-227.avi
+            // xiaose9831@第第第第@SKY-227.avi
 
             string FileName = File.Exists(str) ? new FileInfo(str).Name : str; ;
             FileName = FileName.ToLower();
@@ -351,14 +285,17 @@ namespace Jvedio
             if (index <= 0)
                 return false;
             else
-                return FileProcess.IsLetter(str1[index - 1]);
+                return str1[index - 1].IsLetter();
         }
 
+        /// <summary>
+        /// 添加连接符 -
+        /// </summary>
+        /// <param name="Fanhao"></param>
+        /// <returns></returns>
         public static string AddGang(string Fanhao)
         {
             if (string.IsNullOrEmpty(Fanhao)) return "";
-            
-           
             MatchCollection mc = Regex.Matches(Fanhao, @"\d+");
             string[] paras = new string[mc.Count+1];
             paras[0] = GetFanhaoByRegExp(Fanhao, "[A-Za-z]+");
@@ -368,7 +305,6 @@ namespace Jvedio
             } else { 
                 return ""; 
             }
-
         }
     }
 }

@@ -610,6 +610,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 关闭 的本地化字符串。
+        /// </summary>
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 关闭后最小化 的本地化字符串。
         /// </summary>
         public static string CloseToBar {

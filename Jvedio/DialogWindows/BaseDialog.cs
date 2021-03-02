@@ -19,8 +19,8 @@ namespace Jvedio
     public  class BaseDialog : Window
     {
 
-        public bool showbutton = true;
-
+        public bool showbutton = true;//是否显示取消按钮
+        bool IsFlashing = false;//是否因失去焦点而闪烁
         public BaseDialog(Window owner)
         {
             this.Style = (Style)App.Current.Resources["BaseDialogStyle"];
@@ -84,7 +84,7 @@ namespace Jvedio
         }
 
 
-        bool IsFlashing = false;
+
 
         protected async override void OnDeactivated(EventArgs e)
         {

@@ -23,6 +23,12 @@ namespace Jvedio
 {
     public static class CustomExtension
     {
+
+        public static bool IsLetter(this char c)
+        {
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) return true;
+            else return false;
+        }
         public static T GetQueryOrDefault<T>(this BitmapMetadata metadata, string query, T defaultValue)
         {
             if (metadata.ContainsQuery(query))

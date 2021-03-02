@@ -264,7 +264,6 @@
     <Compile Include="Utils\MySqlite.cs" />
     <Compile Include="Utils\ImageAndVedio\MediaInfo.cs" />
     <Compile Include="Utils\ImageAndVedio\ImageProcess.cs" />
-    <Compile Include="Utils\FileProcess\XML.cs" />
     <Compile Include="DialogWindows\BaseDialog.cs" />
     <Compile Include="DialogWindows\Dialog_Thanks.xaml.cs">
       <DependentUpon>Dialog_Thanks.xaml</DependentUpon>

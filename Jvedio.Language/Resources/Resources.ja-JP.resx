@@ -1575,4 +1575,7 @@
   <data name="overwrite" xml:space="preserve">
     <value>既存のファイルを上書きする</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>閉鎖</value>
+  </data>
 </root>

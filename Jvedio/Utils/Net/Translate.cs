@@ -1,4 +1,5 @@
 ﻿
+using Jvedio.Library.Encrypt;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -196,7 +197,7 @@ namespace Jvedio
             //http://api.fanyi.baidu.com/doc/21
             //appid+q+salt+密钥 
             string r = appid + query + salt + pwd;
-            return FileProcess.CalculateMD5Hash(r);
+            return Encrypt.CalculateMD5Hash(r);
         }
 
 

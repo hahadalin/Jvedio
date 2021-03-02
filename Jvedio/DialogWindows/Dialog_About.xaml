@@ -55,6 +55,7 @@
                 </StackPanel>
 
             </StackPanel>
+
         </StackPanel>
     </Grid>
 </local:BaseDialog>

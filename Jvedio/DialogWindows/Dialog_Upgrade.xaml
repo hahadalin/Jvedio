@@ -53,7 +53,7 @@
                         <Image Source="/Resources/Picture/升级.png"/>
                         <TextBlock FontSize="20"  Text="{x:Static lang:Resources.CheckUpgrade}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" FontWeight="Bold"/>
 
-                        <Button Style="{StaticResource ButtonPrimary}" Cursor="Hand" Content="{x:Static lang:Resources.CheckUpgrade}" Click="Button_Click"/>
+                        <Button Style="{StaticResource FlatButton}" Cursor="Hand" Content="{x:Static lang:Resources.CheckUpgrade}" Click="Button_Click"/>
 
                         <hc:LoadingCircle x:Name="UpgradeLoadingCircle" Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
 

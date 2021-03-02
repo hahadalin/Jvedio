@@ -25,16 +25,19 @@ namespace Jvedio
             Console.WriteLine(e.Message);
             string path = AppDomain.CurrentDomain.BaseDirectory + "Log";
             if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
-            string filepath = path + "/" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";
-            lock(ExceptionLock)
+            string filepath =Path.Combine( path , DateTime.Now.ToString("yyyy-MM-dd") , ".log");
+
+            string content;
+            content = Environment.NewLine + "-----【" + DateTime.Now.ToString() + "】-----";
+            content += Environment.NewLine + $"Message=>{ e.Message}";
+            content += Environment.NewLine + $"StackTrace=>{Environment.NewLine }{ GetAllFootprints(e)}";
+
+            lock (ExceptionLock)
             {
-                StreamWriter sr = new StreamWriter(filepath, true);
-                string content ;
-                content =Environment.NewLine + "-----【" + DateTime.Now.ToString() + "】-----";
-                content += Environment.NewLine + $"Message=>{ e.Message}";
-                content += Environment.NewLine + $"StackTrace=>{Environment.NewLine }{ GetAllFootprints(e)}";
-                try { sr.Write(content); } catch { }
-                sr.Close();
+                using(StreamWriter sr = new StreamWriter(filepath, true))
+                {
+                    try { sr.Write(content); } catch { }
+                }
             }
         }
 
@@ -46,15 +49,17 @@ namespace Jvedio
             string path = AppDomain.CurrentDomain.BaseDirectory + "Log\\File";
             if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
             string filepath = path + "/" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";
+            string content;
+            content = Environment.NewLine + "-----【" + DateTime.Now.ToString() + "】-----";
+            content += $"{Environment.NewLine }Message=>{ e.Message}";
+            content += $"{Environment.NewLine }StackTrace=>{Environment.NewLine }{ GetAllFootprints(e)}";
+
             lock (ExceptionLock)
             {
-                StreamWriter sr = new StreamWriter(filepath, true);
-                string content;
-                content = Environment.NewLine + "-----【" + DateTime.Now.ToString() + "】-----";
-                content += $"{Environment.NewLine }Message=>{ e.Message}";
-                content += $"{Environment.NewLine }StackTrace=>{Environment.NewLine }{ GetAllFootprints(e)}";
-                try { sr.Write(content); } catch { }
-                sr.Close();
+                using (StreamWriter sr = new StreamWriter(filepath, true))
+                {
+                    try { sr.Write(content); } catch { }
+                }
             }
         }
 
@@ -65,13 +70,13 @@ namespace Jvedio
             string path = AppDomain.CurrentDomain.BaseDirectory + "Log\\NetWork";
             if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
             string filepath = path + "/" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";
+            string content = Environment.NewLine + "【" + DateTime.Now.ToString() + $"】=>{NetWorkStatus}";
             lock (NetWorkLock)
             {
-                StreamWriter sr = new StreamWriter(filepath, true);
-                string content;
-                content = Environment.NewLine +"【" + DateTime.Now.ToString() + $"】=>{NetWorkStatus}";
-                try { sr.Write(content); } catch { }
-                sr.Close();
+                using (StreamWriter sr = new StreamWriter(filepath, true))
+                {
+                    try { sr.Write(content); } catch { }
+                }
             }
 
         }
@@ -84,27 +89,27 @@ namespace Jvedio
             string path = AppDomain.CurrentDomain.BaseDirectory + "Log\\DataBase";
             if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
             string filepath = path + "/" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";
+            string content;
+            content = Environment.NewLine + "-----【" + DateTime.Now.ToString() + "】-----";
+            content += $"{Environment.NewLine}Message=>{ e.Message}";
+            content += $"{Environment.NewLine}StackTrace=>{Environment.NewLine}{ GetAllFootprints(e)}";
             lock (DataBaseLock)
             {
-                StreamWriter sr = new StreamWriter(filepath, true);
-                string content;
-
-                content = Environment.NewLine+"-----【" + DateTime.Now.ToString() + "】-----";
-                content += $"{Environment.NewLine}Message=>{ e.Message}";
-                content += $"{Environment.NewLine}StackTrace=>{Environment.NewLine}{ GetAllFootprints(e)}";
-                try { sr.Write(content); } catch { }
-                sr.Close();
+                using (StreamWriter sr = new StreamWriter(filepath, true))
+                {
+                    try { sr.Write(content); } catch { }
+                }
             }
 
         }
 
         public static string GetAllFootprints(Exception x)
         {
-            var st = new StackTrace(x, true);
-            var frames = st.GetFrames();
-            var traceString = new StringBuilder();
             try
             {
+                var st = new StackTrace(x, true);
+                var frames = st.GetFrames();
+                var traceString = new StringBuilder();
                 foreach (var frame in new StackTrace(x, true).GetFrames())
                 {
                     if (frame.GetFileLineNumber() < 1)
@@ -113,17 +118,13 @@ namespace Jvedio
                     traceString.Append($" 方法: {frame.GetMethod().Name}");
                     traceString.Append($" 行数: {frame.GetFileLineNumber()}{Environment.NewLine}");
                 }
+                return traceString.ToString();
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
-
-            return traceString.ToString();
-            
-
-
-
+            return "";
         }
 
 
@@ -134,9 +135,10 @@ namespace Jvedio
             string filepath = path + "/" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";
             lock (ScanLogLock)
             {
-                StreamWriter sr = new StreamWriter(filepath, true);
-                try { sr.Write(content); } catch { }
-                sr.Close();
+                using (StreamWriter sr = new StreamWriter(filepath, true))
+                {
+                    try { sr.Write(content); } catch { }
+                }
             }
         }
 
