@@ -1251,8 +1251,6 @@ namespace Jvedio.ViewModel
                 fiels.ForEach(arg => DataBases.Add(Path.GetFileNameWithoutExtension(arg).ToLower()));
             }
             catch { }
-
-            if (!DataBases.Contains("info")) DataBases.Add("info");
         }
 
 

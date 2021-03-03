@@ -61,7 +61,6 @@ namespace Jvedio.ViewModel
                 }
             }
             catch { }
-            if (!DataBases.Contains("info")) DataBases.Add("info");
 
         }
 
@@ -74,7 +73,7 @@ namespace Jvedio.ViewModel
         {
             Movies = new List<Movie>();
             string name = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower();
-            if (name != "info") name = "DataBase\\" + name;
+            name = "DataBase\\" + name;
             MySqlite db = new MySqlite(name);
             Movies =  db.SelectMoviesBySql("SELECT * FROM movie");
             db.CloseDB();

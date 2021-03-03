@@ -51,12 +51,6 @@ namespace Jvedio
 
         }
 
-
-
-
-
-
-        public static string InfoDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "Info.sqlite";
         public static string AIDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "AI.sqlite";
         public static string TranslateDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "Translate.sqlite";
 
@@ -68,9 +62,7 @@ namespace Jvedio
             TextBox TextBox = stackPanel.Children[1] as TextBox;
 
             string name = TextBox.Text;
-            if (name?.ToLower() == "info")
-                Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + "info.sqlite";
-            else if (name == Jvedio.Language.Resources.NewLibrary)
+           if (name == Jvedio.Language.Resources.NewLibrary)
             {
                 //重命名
                 TextBox.IsReadOnly = false;
@@ -168,6 +160,19 @@ namespace Jvedio
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
+
+            //复制原有的 info.sqlite
+            try
+            {
+                if (!Directory.Exists("DataBase")) Directory.CreateDirectory("DataBase");
+                if (File.Exists("info.sqlite"))
+                {
+                    File.Copy("info.sqlite", "DataBase\\info.sqlite");
+                    File.Delete("info.sqlite");
+                }
+            }
+            catch (Exception ex) { }
+
             statusText.Text = Jvedio.Language.Resources.Status_RepairConfig;
             try
             {
@@ -284,6 +289,7 @@ namespace Jvedio
             }
 
 
+
         }
 
         public async void OpenDefaultDatabase()
@@ -334,32 +340,6 @@ namespace Jvedio
         }
         private void InitDataBase()
         {
-
-            if (!File.Exists(InfoDataBasePath))
-            {
-                MySqlite db = new MySqlite("Info");
-                db.CreateTable(DataBase.SQLITETABLE_MOVIE);
-                db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
-                db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
-                db.CreateTable(DataBase.SQLITETABLE_JAVDB);
-                db.CloseDB();
-            }
-            else
-            {
-                //是否具有表结构
-                MySqlite db = new MySqlite("Info");
-                if (!db.IsTableExist("movie") || !db.IsTableExist("actress") || !db.IsTableExist("library") || !db.IsTableExist("javdb"))
-                {
-                    db.CreateTable(DataBase.SQLITETABLE_MOVIE);
-                    db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
-                    db.CreateTable(DataBase.SQLITETABLE_LIBRARY);
-                    db.CreateTable(DataBase.SQLITETABLE_JAVDB);
-                }
-                db.CloseDB();
-
-            }
-
-
             if (!File.Exists(AIDataBasePath))
             {
                 MySqlite db = new MySqlite("AI");
@@ -473,7 +453,7 @@ namespace Jvedio
                 foreach (var item in names)
                 {
                     string name = Path.GetFileNameWithoutExtension(item);
-                    if (name?.ToLower() == "info" || name == Jvedio.Language.Resources.NewLibrary) continue;
+                    if (name == Jvedio.Language.Resources.NewLibrary) continue;
                     if (!DataBase.IsProperSqlite(item)) continue;
                     if (File.Exists($"DataBase\\{name}.sqlite"))
                     {
@@ -514,7 +494,7 @@ namespace Jvedio
             TextBox TextBox = stackPanel.Children[1] as TextBox;
             string name = TextBox.Text;
 
-            if (name?.ToLower() == "info" || name == Jvedio.Language.Resources.NewLibrary) return;
+            if (name == Jvedio.Language.Resources.NewLibrary) return;
 
 
             if (new Msgbox(this, $"{Jvedio.Language.Resources.IsToDelete} {name}?").ShowDialog() == true)
@@ -553,8 +533,6 @@ namespace Jvedio
             StackPanel stackPanel = grid.Children.OfType<StackPanel>().First();
             TextBox TextBox = stackPanel.Children[1] as TextBox;
             string name = TextBox.Text;
-
-            if (name?.ToLower() == "info") return;
 
             //重命名
             OptionPopup.IsOpen = false;
@@ -694,7 +672,6 @@ namespace Jvedio
             TextBox TextBox = stackPanel.Children[1] as TextBox;
             string name = TextBox.Text;
             string path= AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
-            if (name.ToLower()=="info") path= AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
             if (File.Exists(path)) { Process.Start("explorer.exe", "/select, \"" + path + "\""); }
         }
     }

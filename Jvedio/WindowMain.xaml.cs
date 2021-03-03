@@ -4215,10 +4215,7 @@ namespace Jvedio
             string name = e.AddedItems[0].ToString().ToLower();
             if (name != System.IO.Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
             {
-                if (name == "info")
-                    Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"{name}.sqlite";
-                else
-                    Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
+                Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
                 //切换数据库
                 vieModel.IsRefresh = true;
                 vieModel.Reset();

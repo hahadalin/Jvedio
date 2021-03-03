@@ -49,11 +49,7 @@ namespace Jvedio.ViewModel
                 }
             }
             catch { }
-            
-            
 
-
-            if (!DataBases.Contains("info")) DataBases.Add("info");
             if (!DataBases.Contains(Jvedio.Language.Resources.NewLibrary)) DataBases.Add(Jvedio.Language.Resources.NewLibrary);
 
 

@@ -29,7 +29,7 @@ namespace Jvedio
 
         public static void Init()
         {
-            SqlitePath = File.Exists(Properties.Settings.Default.DataBasePath) ? Properties.Settings.Default.DataBasePath : $"info.sqlite";
+            SqlitePath = Properties.Settings.Default.DataBasePath;
         }
 
         public static string Unicode2String(string unicode)

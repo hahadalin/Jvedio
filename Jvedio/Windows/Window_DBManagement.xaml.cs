@@ -106,8 +106,6 @@ namespace Jvedio
             TextBlock textBlock = grid1.Children[1] as TextBlock;
             name = textBlock.Text.ToLower();
 
-            if (name == "info") return;
-
 
             if (new Msgbox(this, $"{Jvedio.Language.Resources.IsToDelete} {name}?").ShowDialog() == true)
             {
@@ -253,7 +251,6 @@ namespace Jvedio
                 foreach (var item in names)
                 {
                     string name = Path.GetFileNameWithoutExtension(item).ToLower();
-                    if (name == "info") continue;
 
                     if (!DataBase.IsProperSqlite(item)) continue;
 
@@ -305,10 +302,7 @@ namespace Jvedio
             if (e.AddedItems.Count == 0) return;
             if (e.AddedItems[0].ToString().ToLower() != Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
             {
-                if (e.AddedItems[0].ToString() == "info")
-                    Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"{e.AddedItems[0].ToString()}.sqlite";
-                else
-                    Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{e.AddedItems[0].ToString()}.sqlite";
+                Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{e.AddedItems[0].ToString()}.sqlite";
                 //切换数据库
                 ShowStatistic();
             }
@@ -324,11 +318,7 @@ namespace Jvedio
 
             //数据库管理
             var cb = CheckBoxWrapPanel.Children.OfType<CheckBox>().ToList();
-            string path = "";
-            if (vieModel_DBManagement.CurrentDataBase.ToLower() == "info")
-                path = $"{vieModel_DBManagement.CurrentDataBase}";
-            else
-                path = $"DataBase\\{vieModel_DBManagement.CurrentDataBase}";
+            string path = $"DataBase\\{vieModel_DBManagement.CurrentDataBase}";
             MySqlite db = new MySqlite(path);
 
             if ((bool)cb[0].IsChecked)
