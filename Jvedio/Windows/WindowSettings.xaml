@@ -540,26 +540,6 @@
 
             <TabItem FontSize="15" Background="Transparent" Header="代理" Visibility="Collapsed" >
                 <StackPanel >
-                    <StackPanel Orientation="Horizontal">
-
-                        <CheckBox Margin="20 5"  IsChecked="{Binding ProxyActivation, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="代理服务器"  VerticalContentAlignment="Center" HorizontalAlignment="Left"/>
-
-                        <Button  Content="{x:Static lang:Resources.Test}"  Style="{StaticResource ButtonStyleFill}" HorizontalAlignment="Center"/>
-
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="20 5"  >
-                        <Label   Content="服务器地址" Style="{StaticResource InfoLabel}"   />
-                        <hc:TextBox Style="{StaticResource BaseHcTextBox}"   Text="{Binding Address, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  />
-                    </StackPanel>
-                    <StackPanel  Orientation="Horizontal"    Margin="20 5" >
-                        <Label   Content="用户名" Style="{StaticResource InfoLabel}"   />
-                        <hc:TextBox Style="{StaticResource BaseHcTextBox}"    Text="{Binding Username, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   />
-                    </StackPanel>
-                    <StackPanel  Orientation="Horizontal"    Margin="20 5" >
-                        <Label   Content="密码" Style="{StaticResource InfoLabel}"   />
-                        <PasswordBox Foreground="{DynamicResource ForegroundSearch}" CaretBrush="{DynamicResource ForegroundSearch}" Password="123456"   BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Background="Transparent"   Margin="5"  FontSize="15"   />
-                    </StackPanel>
-
                 </StackPanel>
             </TabItem>
 
@@ -607,14 +587,6 @@
 
 
 
-
-
-                    <StackPanel  Orientation="Horizontal" IsEnabled="False" Visibility="Collapsed" >
-                        <CheckBox IsChecked="{Binding Enable321, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Margin="20 10" Content="语音播放" />
-                        <hc:TextBox IsEnabled="False" Style="{StaticResource BaseHcTextBox}"   Text="Default"  />
-                        <Button    Content="{x:Static lang:Resources.Test}"  Style="{StaticResource ButtonStyleFill}"/>
-                        <Image Margin="20 5" Width="32" Height="32"  />
-                    </StackPanel>
                 </StackPanel>
             </TabItem>
 

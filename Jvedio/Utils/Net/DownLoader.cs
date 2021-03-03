@@ -282,7 +282,6 @@ namespace Jvedio
             }
 
             ProgressBarUpdate.maximum = actresslist.Count;
-            //TODO
             for (int i = 0; i < actresslist.Count; i++)
             {
                 Console.WriteLine("开始进程 " + i);

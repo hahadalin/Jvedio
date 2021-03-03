@@ -50,7 +50,7 @@ namespace Jvedio.Plot.Bar
         }
 
 
-        private double _Total;
+        private double _Total=0;
         public double Total
         {
             get { return _Total; }
@@ -62,7 +62,7 @@ namespace Jvedio.Plot.Bar
         }
 
 
-        private double _Current;
+        private double _Current=0;
         public double Current
         {
             get { return _Current; }
