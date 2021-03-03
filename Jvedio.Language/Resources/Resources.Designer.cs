@@ -259,6 +259,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 将原数据库的信息同步复制到目标数据库 的本地化字符串。
+        /// </summary>
+        public static string Attention_CopyDataBase {
+            get {
+                return ResourceManager.GetString("Attention_CopyDataBase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 注：文件名必须包含形如 BrazzersExxtra.20.07.22，下载信息仅支持 Bus 站点 的本地化字符串。
         /// </summary>
         public static string Attention_EuropeScan {
@@ -3013,6 +3022,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 路径相同！ 的本地化字符串。
+        /// </summary>
+        public static string SamePathError {
+            get {
+                return ResourceManager.GetString("SamePathError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 小罗伯特·唐尼/格温妮斯·帕特洛/泰伦斯·霍华德/杰夫·布里吉斯 的本地化字符串。
         /// </summary>
         public static string SampleMovie_Actor {
@@ -3589,11 +3607,29 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 源 的本地化字符串。
+        /// </summary>
+        public static string Source {
+            get {
+                return ResourceManager.GetString("Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 原文件 的本地化字符串。
         /// </summary>
         public static string SourceFile {
             get {
                 return ResourceManager.GetString("SourceFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 内容复制 的本地化字符串。
+        /// </summary>
+        public static string sqlitecopy {
+            get {
+                return ResourceManager.GetString("sqlitecopy", resourceCulture);
             }
         }
         
@@ -3846,6 +3882,15 @@ namespace Jvedio.Language {
         public static string Tag {
             get {
                 return ResourceManager.GetString("Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 目标 的本地化字符串。
+        /// </summary>
+        public static string Target {
+            get {
+                return ResourceManager.GetString("Target", resourceCulture);
             }
         }
         

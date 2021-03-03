@@ -1581,4 +1581,19 @@
   <data name="Navigation" xml:space="preserve">
     <value>导航栏</value>
   </data>
+  <data name="sqlitecopy" xml:space="preserve">
+    <value>内容复制</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>源</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>目标</value>
+  </data>
+  <data name="SamePathError" xml:space="preserve">
+    <value>路径相同！</value>
+  </data>
+  <data name="Attention_CopyDataBase" xml:space="preserve">
+    <value>将原数据库的信息同步复制到目标数据库</value>
+  </data>
 </root>

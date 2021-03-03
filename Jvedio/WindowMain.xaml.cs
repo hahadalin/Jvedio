@@ -4021,7 +4021,7 @@ namespace Jvedio
 
             InitList();
             vieModel.InitLettersNavigation();
-            //OpenSet_MouseDown(null, null);
+            OpenDataBase(null, null);
         }
 
         public void InitList()

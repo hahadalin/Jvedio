@@ -1581,4 +1581,19 @@
   <data name="Navigation" xml:space="preserve">
     <value>The navigation bar</value>
   </data>
+  <data name="sqlitecopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="SamePathError" xml:space="preserve">
+    <value>SamePathError</value>
+  </data>
+  <data name="Attention_CopyDataBase" xml:space="preserve">
+    <value>Synchronously copies information from the original database to the target database</value>
+  </data>
 </root>

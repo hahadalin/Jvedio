@@ -7,6 +7,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using static Jvedio.Comparer;
 using static Jvedio.GlobalVariable;
@@ -60,7 +61,7 @@ namespace Jvedio
         }
 
 
-        public static void CopyDatabaseInfo(string src, string dst)
+        public static void CopyDatabaseInfo(string src, string dst, CancellationToken ct,Action<int> callback=null,bool skipnulltitle=true)
         {
             DataTable dataTable = new DataTable();
             using (SQLiteConnection conn = new SQLiteConnection("data source=" + src))
@@ -75,22 +76,10 @@ namespace Jvedio
                 }
             }
 
-            //获取新数据库需要更新的值
-            DataTable newdataTable = new DataTable();
-            using (SQLiteConnection conn = new SQLiteConnection("data source=" + dst))
-            {
-                using (SQLiteCommand cmd = new SQLiteCommand())
-                {
-                    cmd.Connection = conn;
-                    conn.Open();
-                    cmd.CommandText = "SELECT id FROM movie";
-                    SQLiteDataReader sQLiteDataReader = cmd.ExecuteReader();
-                    newdataTable.Load(sQLiteDataReader);
-                }
-            }
 
-            string sqltext = "UPDATE movie SET title=@title,releasedate=@releasedate,visits=@visits,director=@director,genre=@genre,tag=@tag," +
-                "actor=@actor,studio=@studio,rating=@rating,chinesetitle=@chinesetitle,favorites=@favorites,label=@label,plot=@plot,outline=@outline,year=@year,runtime=@runtime,country=@country,countrycode=@countrycode,otherinfo=@otherinfo,extraimageurl=@extraimageurl where id=@id";
+            string sqltext = $"INSERT INTO movie(id  , title  , filesize  , filepath  , subsection  , vediotype  , scandate  , releasedate , visits , director  , genre  , tag  , actor  , actorid  ,studio  , rating , chinesetitle  , favorites  , label  , plot  , outline  , year   , runtime , country  , countrycode ,otherinfo , sourceurl , source ,actressimageurl ,smallimageurl ,bigimageurl ,extraimageurl ) " +
+                "values(@id  , @title  , @filesize  , @filepath  , @subsection  , @vediotype  , @scandate  , @releasedate , @visits , @director  , @genre  , @tag  , @actor  , @actorid  ,@studio  , @rating , @chinesetitle  , @favorites  ,@label  , @plot  , @outline  , @year   , @runtime , @country  , @countrycode ,@otherinfo , @sourceurl , @source ,@actressimageurl ,@smallimageurl ,@bigimageurl ,@extraimageurl) " +
+                "ON CONFLICT(id) DO UPDATE SET title=@title  , filesize=@filesize  , filepath=@filepath  , subsection=@subsection  , vediotype=@vediotype  , scandate=@scandate  , releasedate=@releasedate , visits=@visits , director=@director  , genre=@genre  , tag=@tag  , actor=@actor  , actorid=@actorid  ,studio=@studio  , rating=@rating , chinesetitle=@chinesetitle  ,favorites=@favorites  ,label=@label  , plot=@plot  , outline=@outline  , year=@year   , runtime=@runtime , country=@country  , countrycode=@countrycode ,otherinfo=@otherinfo , sourceurl=@sourceurl , source=@source ,actressimageurl=@actressimageurl ,smallimageurl=@smallimageurl ,bigimageurl=@bigimageurl ,extraimageurl=@extraimageurl";
 
 
 
@@ -101,16 +90,35 @@ namespace Jvedio
                     cmd.Connection = conn;
                     conn.Open();
 
-                    foreach (DataRow row in newdataTable.Rows)
+                    double idx=0;
+                    double total = dataTable.Rows.Count>0? dataTable.Rows.Count:1;
+                    foreach (DataRow row in dataTable.Rows)
                     {
+                        idx++;
+                        int progress = (int)(idx / total * 100);
+                        Console.WriteLine(progress);
+                        callback?.Invoke(progress);
+
+                       
+
+                        ct.ThrowIfCancellationRequested();
                         EnumerableRowCollection<DataRow> dataRows = dataTable.AsEnumerable().Where(myRow => myRow.Field<string>("id") == row["id"].ToString());
                         DataRow dataRow = null;
                         if (dataRows != null && dataRows.Count() > 0)
                             dataRow = dataRows.First();
                         else continue;
+
+                        if (skipnulltitle && string.IsNullOrEmpty(dataRow["title"].ToString())) continue;
+
                         cmd.CommandText = sqltext;
+
                         cmd.Parameters.Add("id", DbType.String).Value = dataRow["id"];
                         cmd.Parameters.Add("title", DbType.String).Value = dataRow["title"];
+                        cmd.Parameters.Add("filesize", DbType.Double).Value = dataRow["filesize"];
+                        cmd.Parameters.Add("filepath", DbType.String).Value = dataRow["filepath"];
+                        cmd.Parameters.Add("subsection", DbType.String).Value = dataRow["subsection"];
+                        cmd.Parameters.Add("vediotype", DbType.Int16).Value = dataRow["vediotype"];
+                        cmd.Parameters.Add("scandate", DbType.String).Value = dataRow["scandate"];
                         cmd.Parameters.Add("releasedate", DbType.String).Value = dataRow["releasedate"];
                         cmd.Parameters.Add("visits", DbType.Int16).Value = dataRow["visits"];
                         cmd.Parameters.Add("director", DbType.String).Value = dataRow["director"];
@@ -132,8 +140,14 @@ namespace Jvedio
                         cmd.Parameters.Add("otherinfo", DbType.String).Value = dataRow["otherinfo"];
                         cmd.Parameters.Add("sourceurl", DbType.String).Value = dataRow["sourceurl"];
                         cmd.Parameters.Add("source", DbType.String).Value = dataRow["source"];
+                        cmd.Parameters.Add("smallimageurl", DbType.String).Value = dataRow["smallimageurl"];
+                        cmd.Parameters.Add("bigimageurl", DbType.String).Value = dataRow["bigimageurl"];
                         cmd.Parameters.Add("extraimageurl", DbType.String).Value = dataRow["extraimageurl"];
+                        cmd.Parameters.Add("actressimageurl", DbType.String).Value = dataRow["actressimageurl"];
+
+
                         cmd.ExecuteNonQuery();
+
                     }
                 }
             }

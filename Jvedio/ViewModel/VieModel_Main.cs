@@ -2032,7 +2032,7 @@ namespace Jvedio.ViewModel
                 Statistic();
                 FlipOver();
             });
-
+            InitLettersNavigation();
 
         }
 
@@ -2102,6 +2102,7 @@ namespace Jvedio.ViewModel
         {
             SideIdx = 0;
             ExecutiveSqlCommand(0, "所有视频", "SELECT * FROM movie");
+            
         }
 
         public void GetFavoritesMovie()

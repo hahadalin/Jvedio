@@ -1581,4 +1581,19 @@
   <data name="Navigation" xml:space="preserve">
     <value>ナビゲーションバー</value>
   </data>
+  <data name="sqlitecopy" xml:space="preserve">
+    <value>コンテンツ複製</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>源</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>ターゲットファイル</value>
+  </data>
+  <data name="SamePathError" xml:space="preserve">
+    <value>パスは同じ!</value>
+  </data>
+  <data name="Attention_CopyDataBase" xml:space="preserve">
+    <value>元のデータベースの情報をターゲットデータベースに同期コピーする</value>
+  </data>
 </root>

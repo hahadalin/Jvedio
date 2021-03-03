@@ -23,7 +23,16 @@ namespace Jvedio
 {
     public static class CustomExtension
     {
+        public static string ToProperFileSize(this long filesize)
+        {
+            double result = (double)filesize / 1024/1024   ;//MB
+            if (filesize >= 0.9)
+                return $"{Math.Round(result, 2)} MB";
+            else
+                return $"{Math.Ceiling(result * 1024)} KB";//KB
 
+            return "";
+        }
 
         public static bool IsLetter(this char c)
         {

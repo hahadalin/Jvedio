@@ -5,6 +5,7 @@ using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -30,6 +31,9 @@ namespace Jvedio
 
         public VieModel_DBManagement vieModel_DBManagement;
         Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager taskbarInstance = null;
+
+        private string src = "";
+        private string dst = "";
         public Window_DBManagement()
         {
             InitializeComponent();
@@ -294,6 +298,7 @@ namespace Jvedio
             }
 
             if (vieModel_DBManagement.DataBases.Count == 1) DatabaseComboBox.Visibility = Visibility.Hidden;
+            TabControl.SelectedIndex=2;
 
         }
 
@@ -518,10 +523,101 @@ namespace Jvedio
         {
             try
             {
-                if (cts != null && !cts.IsCancellationRequested) cts.Cancel();
-            }catch(ObjectDisposedException ex)
+                cts?.Cancel();
+                cts_copy?.Cancel();
+            }
+            catch(ObjectDisposedException ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+            
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+            StackPanel sp = comboBox.Parent as StackPanel;
+            TextBlock tb = sp.Children.OfType<TextBlock>().First();
+            StackPanel topsp = sp.Parent as StackPanel;
+            TextBlock textBlock = topsp.Children.OfType<TextBlock>().First();
+            string path =Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataBase" ,e.AddedItems[0].ToString() + ".sqlite");
+            double count = 0;
+            long length = 0;
+            if (File.Exists(path))
+            {
+                using (MySqlite sqlite = new MySqlite(path,true))
+                {
+                    count= sqlite.SelectCountByTable("movie");
+                }
+                length = new FileInfo(path).Length;
+            }
+            textBlock.Text = $"{Jvedio.Language.Resources.Number}：{count}\n{Jvedio.Language.Resources.FileSize}：{length.ToProperFileSize()}";
+
+            if (tb.Text == Jvedio.Language.Resources.Source)
+                src = path;
+            else
+                dst = path;        }
+
+
+
+        CancellationToken ct_copy;
+        CancellationTokenSource cts_copy;
+        private void CopyButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (src == "" || dst == "") return;
+            if (!File.Exists(src) || !File.Exists(dst)) return;
+            if (src == dst)
+            {
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.SamePathError, "DBManageGrowl");
+                return;
+            }
+            cts_copy = new CancellationTokenSource();
+            ct_copy = cts_copy.Token;
+            CopyButton.IsEnabled = false;
+            bool skipnulltitle = (bool)SkipNullTitle.IsChecked;
+            Task.Run(() => {
+                try
+                {
+                    DataBase.CopyDatabaseInfo(src, dst, ct_copy, (value) => {
+                        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (Action)delegate {
+                            CopyProgressBar.Value = value;
+                            if (value == 100)
+                            {
+                                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "DBManageGrowl");
+                                cts_copy.Dispose();
+                                CopyButton.IsEnabled = true;
+                            }
+                        });
+                    }, skipnulltitle);
+                }catch(OperationCanceledException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            });
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                cts_copy?.Cancel();
+                CopyButton.IsEnabled = true;
+            }
+            catch (ObjectDisposedException ex) { Console.WriteLine(ex.Message); }
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            Button button  = (Button)sender;
+            StackPanel sp = button.Parent as StackPanel;
+            ComboBox comboBox = sp.Children.OfType<ComboBox>().First();
+            string path =Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataBase" , comboBox.Text + ".sqlite");
+
+            if (File.Exists(path)) { Process.Start("explorer.exe", "/select, \"" + path + "\""); }
+            else
+            {
+                HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NotExists}  {path}", "DBManageGrowl");
             }
             
         }
