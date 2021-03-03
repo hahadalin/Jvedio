@@ -279,9 +279,6 @@ namespace Jvedio
     {
         public LibraryParse(string id, string htmlText, VedioType vedioType = 0) : base(htmlText, id, vedioType) { }
 
-
-        //TODO
-        //缺少系列
         public override Dictionary<string, string> Parse()
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
@@ -1074,7 +1071,7 @@ namespace Jvedio
                             node = headerNode.ParentNode; if (node == null) break;
                             content = node.InnerText;
                             result.Add("releasedate", Regex.Match(content, "[0-9]{4}-[0-9]{2}-[0-9]{2}").Value);
-                            result.Add("year", Regex.Match(content, "[0-9]{4}").Value);//TODO
+                            result.Add("year", Regex.Match(content, "[0-9]{4}").Value);
                             break;
                         case "长度:":
                             node = headerNode.ParentNode; if (node == null) break;

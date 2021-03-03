@@ -12,7 +12,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="DisplayNumber" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">100</Value>
+      <Value Profile="(Default)">50</Value>
     </Setting>
     <Setting Name="DisplayID" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -32,15 +32,6 @@
     <Setting Name="ProxyActivation" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="Address" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://hitchao.github.io/JvedioWebPage/</Value>
-    </Setting>
-    <Setting Name="Username" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Chao</Value>
-    </Setting>
-    <Setting Name="Password" Type="System.String" Scope="User">
-      <Value Profile="(Default)">123456</Value>
-    </Setting>
     <Setting Name="SortType" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
@@ -54,7 +45,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ShowViewMode" Type="System.String" Scope="User">
-      <Value Profile="(Default)">默认</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ScanGivenPath" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -69,7 +60,7 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="VedioType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Censored</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="SubSectionFeature" Type="System.String" Scope="User">
       <Value Profile="(Default)">-,_,cd,fhd,-fhd,_fhd</Value>
@@ -156,7 +147,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="FlowNum" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
+      <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="Baidu_API_KEY" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -203,14 +194,8 @@
     <Setting Name="Search_MatchAllWord" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="Search_Type" Type="System.String" Scope="User">
-      <Value Profile="(Default)">识别码</Value>
-    </Setting>
     <Setting Name="Search_Content" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="Search_Pattern" Type="System.String" Scope="User">
-      <Value Profile="(Default)">普通</Value>
     </Setting>
     <Setting Name="Opacity_Main" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>
@@ -230,12 +215,6 @@
     <Setting Name="Language" Type="System.String" Scope="User">
       <Value Profile="(Default)">中文</Value>
     </Setting>
-    <Setting Name="MovieStyle_InMargin_UD" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
-    </Setting>
-    <Setting Name="MovieStyle_InMargin_LR" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
-    </Setting>
     <Setting Name="DisPlayNoStamp" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -248,68 +227,11 @@
     <Setting Name="DisPlayHDV" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="MovieStyle_OutMargin_UD" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
-    </Setting>
-    <Setting Name="MovieStyle_OutMargin_LR" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
-    </Setting>
     <Setting Name="Selected_BorderBrush" Type="System.String" Scope="User">
       <Value Profile="(Default)">#FFD700</Value>
     </Setting>
     <Setting Name="Selected_Background" Type="System.String" Scope="User">
       <Value Profile="(Default)">#90EE90</Value>
-    </Setting>
-    <Setting Name="MovieStyle_WordMargin_UD" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
-    </Setting>
-    <Setting Name="MovieStyle_WordMargin_LR" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
-    </Setting>
-    <Setting Name="Font_ID_Bold" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Font_ID_Italic" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Font_ID_UnderLine" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Font_ID_Size" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">15</Value>
-    </Setting>
-    <Setting Name="Font_ID_Family" Type="System.String" Scope="User">
-      <Value Profile="(Default)">宋体</Value>
-    </Setting>
-    <Setting Name="Font_Date_Bold" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Font_Date_Italic" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Font_Date_UnderLine" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Font_Date_Size" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">15</Value>
-    </Setting>
-    <Setting Name="Font_Date_Family" Type="System.String" Scope="User">
-      <Value Profile="(Default)">宋体</Value>
-    </Setting>
-    <Setting Name="Font_Title_Bold" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Font_Title_Italic" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Font_Title_UnderLine" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Font_Title_Size" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">15</Value>
-    </Setting>
-    <Setting Name="Font_Title_Family" Type="System.String" Scope="User">
-      <Value Profile="(Default)">宋体</Value>
     </Setting>
     <Setting Name="SmallImage_Height" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">150</Value>
@@ -417,7 +339,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="SearchCandidateMaxCount" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="FilePathClassificationMaxDepth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
@@ -514,6 +436,9 @@
     </Setting>
     <Setting Name="OverriteNFO" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DisplayNavigation" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

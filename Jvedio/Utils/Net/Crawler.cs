@@ -476,7 +476,6 @@ namespace Jvedio
             return movieCode;
         }
 
-        //HACK
         private string GetLinkFromSearchResult(string html)
         {
             string result = "";

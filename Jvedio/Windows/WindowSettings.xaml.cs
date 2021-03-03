@@ -865,7 +865,6 @@ namespace Jvedio
             CheckUrl(vieModel_Settings.Servers[rowIndex], (s) => { ServersDataGrid.IsEnabled = true; });
         }
 
-        //TODO
         private void DeleteServer(object sender, RoutedEventArgs e)
         {
             Server server = vieModel_Settings.Servers[CurrentRowIndex];
@@ -1042,7 +1041,6 @@ namespace Jvedio
 
         }
 
-        //TODO
         private void CheckBox_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             bool enable = !(bool)((CheckBox)sender).IsChecked;

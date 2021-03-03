@@ -1578,4 +1578,7 @@
   <data name="Close" xml:space="preserve">
     <value>閉鎖</value>
   </data>
+  <data name="Navigation" xml:space="preserve">
+    <value>ナビゲーションバー</value>
+  </data>
 </root>

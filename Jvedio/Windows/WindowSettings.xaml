@@ -494,6 +494,8 @@
                         <CheckBox IsChecked="{Binding MainImageAutoMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.ImageStretch}"  />
                         <CheckBox IsChecked="{Binding DisplayStatusBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.StatusBar}"  />
                         <CheckBox IsChecked="{Binding DisplayFunBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.FunctionBar}"  />
+                        <CheckBox IsChecked="{Binding DisplayNavigation, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.Navigation}"  />
+
                         <CheckBox IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.ShowExists}"  />
                         <CheckBox IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.ShowSubSection}"  />
                         <CheckBox IsChecked="{Binding ShowFileNameIfTitleEmpty, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.ShowFIlename}"  />

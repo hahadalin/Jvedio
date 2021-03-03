@@ -61,7 +61,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public int DisplayNumber {
             get {
                 return ((int)(this["DisplayNumber"]));
@@ -145,42 +145,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://hitchao.github.io/JvedioWebPage/")]
-        public string Address {
-            get {
-                return ((string)(this["Address"]));
-            }
-            set {
-                this["Address"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Chao")]
-        public string Username {
-            get {
-                return ((string)(this["Username"]));
-            }
-            set {
-                this["Username"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("123456")]
-        public string Password {
-            get {
-                return ((string)(this["Password"]));
-            }
-            set {
-                this["Password"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string SortType {
             get {
@@ -229,7 +193,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("默认")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string ShowViewMode {
             get {
                 return ((string)(this["ShowViewMode"]));
@@ -289,7 +253,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Censored")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string VedioType {
             get {
                 return ((string)(this["VedioType"]));
@@ -637,7 +601,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public int FlowNum {
             get {
                 return ((int)(this["FlowNum"]));
@@ -829,18 +793,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("识别码")]
-        public string Search_Type {
-            get {
-                return ((string)(this["Search_Type"]));
-            }
-            set {
-                this["Search_Type"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Search_Content {
             get {
@@ -848,18 +800,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["Search_Content"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("普通")]
-        public string Search_Pattern {
-            get {
-                return ((string)(this["Search_Pattern"]));
-            }
-            set {
-                this["Search_Pattern"] = value;
             }
         }
         
@@ -937,30 +877,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int MovieStyle_InMargin_UD {
-            get {
-                return ((int)(this["MovieStyle_InMargin_UD"]));
-            }
-            set {
-                this["MovieStyle_InMargin_UD"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int MovieStyle_InMargin_LR {
-            get {
-                return ((int)(this["MovieStyle_InMargin_LR"]));
-            }
-            set {
-                this["MovieStyle_InMargin_LR"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool DisPlayNoStamp {
             get {
@@ -1009,30 +925,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int MovieStyle_OutMargin_UD {
-            get {
-                return ((int)(this["MovieStyle_OutMargin_UD"]));
-            }
-            set {
-                this["MovieStyle_OutMargin_UD"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int MovieStyle_OutMargin_LR {
-            get {
-                return ((int)(this["MovieStyle_OutMargin_LR"]));
-            }
-            set {
-                this["MovieStyle_OutMargin_LR"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFD700")]
         public string Selected_BorderBrush {
             get {
@@ -1052,210 +944,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["Selected_Background"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int MovieStyle_WordMargin_UD {
-            get {
-                return ((int)(this["MovieStyle_WordMargin_UD"]));
-            }
-            set {
-                this["MovieStyle_WordMargin_UD"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int MovieStyle_WordMargin_LR {
-            get {
-                return ((int)(this["MovieStyle_WordMargin_LR"]));
-            }
-            set {
-                this["MovieStyle_WordMargin_LR"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Font_ID_Bold {
-            get {
-                return ((bool)(this["Font_ID_Bold"]));
-            }
-            set {
-                this["Font_ID_Bold"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Font_ID_Italic {
-            get {
-                return ((bool)(this["Font_ID_Italic"]));
-            }
-            set {
-                this["Font_ID_Italic"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Font_ID_UnderLine {
-            get {
-                return ((bool)(this["Font_ID_UnderLine"]));
-            }
-            set {
-                this["Font_ID_UnderLine"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("15")]
-        public int Font_ID_Size {
-            get {
-                return ((int)(this["Font_ID_Size"]));
-            }
-            set {
-                this["Font_ID_Size"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("宋体")]
-        public string Font_ID_Family {
-            get {
-                return ((string)(this["Font_ID_Family"]));
-            }
-            set {
-                this["Font_ID_Family"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Font_Date_Bold {
-            get {
-                return ((bool)(this["Font_Date_Bold"]));
-            }
-            set {
-                this["Font_Date_Bold"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Font_Date_Italic {
-            get {
-                return ((bool)(this["Font_Date_Italic"]));
-            }
-            set {
-                this["Font_Date_Italic"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Font_Date_UnderLine {
-            get {
-                return ((bool)(this["Font_Date_UnderLine"]));
-            }
-            set {
-                this["Font_Date_UnderLine"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("15")]
-        public int Font_Date_Size {
-            get {
-                return ((int)(this["Font_Date_Size"]));
-            }
-            set {
-                this["Font_Date_Size"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("宋体")]
-        public string Font_Date_Family {
-            get {
-                return ((string)(this["Font_Date_Family"]));
-            }
-            set {
-                this["Font_Date_Family"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Font_Title_Bold {
-            get {
-                return ((bool)(this["Font_Title_Bold"]));
-            }
-            set {
-                this["Font_Title_Bold"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Font_Title_Italic {
-            get {
-                return ((bool)(this["Font_Title_Italic"]));
-            }
-            set {
-                this["Font_Title_Italic"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Font_Title_UnderLine {
-            get {
-                return ((bool)(this["Font_Title_UnderLine"]));
-            }
-            set {
-                this["Font_Title_UnderLine"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("15")]
-        public int Font_Title_Size {
-            get {
-                return ((int)(this["Font_Title_Size"]));
-            }
-            set {
-                this["Font_Title_Size"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("宋体")]
-        public string Font_Title_Family {
-            get {
-                return ((string)(this["Font_Title_Family"]));
-            }
-            set {
-                this["Font_Title_Family"] = value;
             }
         }
         
@@ -1681,7 +1369,7 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public int SearchCandidateMaxCount {
             get {
                 return ((int)(this["SearchCandidateMaxCount"]));
@@ -2072,6 +1760,18 @@ namespace Jvedio.Properties {
             }
             set {
                 this["OverriteNFO"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayNavigation {
+            get {
+                return ((bool)(this["DisplayNavigation"]));
+            }
+            set {
+                this["DisplayNavigation"] = value;
             }
         }
     }

@@ -424,7 +424,16 @@ namespace Jvedio.ViewModel
 
 
         #region "ObservableCollection"
-
+        private ObservableCollection<char> _LettersNavigation;
+        public ObservableCollection<char> LettersNavigation
+        {
+            get { return _LettersNavigation; }
+            set
+            {
+                _LettersNavigation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private ObservableCollection<MyListItem> _MyList;
 
@@ -1000,6 +1009,19 @@ namespace Jvedio.ViewModel
 
         public int ClickGridType { get; set; }
 
+        private bool _SearchFirstLetter = false;
+
+
+        public bool SearchFirstLetter
+        {
+            get { return _SearchFirstLetter; }
+            set
+            {
+                _SearchFirstLetter = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private string search = string.Empty;
 
 
@@ -1234,6 +1256,29 @@ namespace Jvedio.ViewModel
         #endregion
 
 
+        public async Task<bool> InitLettersNavigation()
+        {
+            LettersNavigation = new ObservableCollection<char>();
+            List<char> _temp = new List<char>();
+            var movies = DataBase.SelectAllID();
+            if (movies == null || movies.Count == 0) return false;
+            foreach (var item in movies)
+            {
+
+                if (item.Length >= 1)
+                {
+                    char firstchar = item.ToUpper()[0];
+                    if (!_temp.Contains(firstchar)) _temp.Add(firstchar);
+                }
+            }
+
+            foreach (var item in _temp.OrderBy(arg => arg))
+            {
+                LettersNavigation.Add(item);
+            }
+            return true;
+        }
+
 
         public async void BeginSearch()
         {
@@ -1326,8 +1371,6 @@ namespace Jvedio.ViewModel
 
 
 
-
-        //TODO
         public async Task<bool> GetSearchCandidate(string Search)
         {
             return await Task.Run(async () =>
@@ -1908,7 +1951,13 @@ namespace Jvedio.ViewModel
                 if (SearchInCurrent)
                     MovieList = oldMovieList.Where(arg => arg.id.IndexOf(searchContent) >= 0).ToList();
                 else
-                    MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where id like '%{searchContent}%'");
+                {
+                    if(SearchFirstLetter)
+                        MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where id like '%{searchContent}%'").Where(arg=>arg.id.ToUpper()[0]==searchContent.ToUpper()[0]).ToList();
+                    else
+                        MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where id like '%{searchContent}%'");
+                }
+                    
 
 
             }
@@ -2106,7 +2155,6 @@ namespace Jvedio.ViewModel
             MovieList = new List<Movie>();
             MovieList.AddRange(movies);
             CurrentPage = 1;
-
             FlipOver();
         }
 
@@ -2158,7 +2206,6 @@ namespace Jvedio.ViewModel
             {
                 if (arg.actor.Split(actorSplitDict[arg.vediotype]).Any(m => m.ToUpper() == actress.name.ToUpper())) MovieList.Add(arg);
             });
-
 
             CurrentPage = 1;
             FlipOver();

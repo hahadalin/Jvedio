@@ -1232,6 +1232,7 @@ namespace Jvedio
         {
             if (e.Key == Key.Enter)
             {
+                vieModel.SearchFirstLetter = false;
                 if (vieModel.CurrentSearchCandidate !=null && (SearchSelectIdex >= 0 & SearchSelectIdex < vieModel.CurrentSearchCandidate.Count))
                     SearchBar.Text = vieModel.CurrentSearchCandidate[SearchSelectIdex];
                 if (SearchBar.Text == "") return;
@@ -1569,9 +1570,7 @@ namespace Jvedio
 
         public int idx1;
         public int idx2;
-
         WindowDetails wd;
-        //TODO
         private void ShowDetails(object sender, MouseButtonEventArgs e)
         {
             if (Resizing || !canShowDetails) return;
@@ -1582,27 +1581,18 @@ namespace Jvedio
             {
                 (Movie movie, int selectIdx) = GetMovieFromCurrentMovie(id);
                 if (vieModel.SelectedMovie.Contains(movie))
-                {
                     vieModel.SelectedMovie.Remove(movie);
-                }
                 else
-                {
                     vieModel.SelectedMovie.Add(movie);
-                }
-
-
-
                 SetSelected();
             }
             else
             {
                 StopDownLoad();
-
-                if (wd != null)  wd.Close(); 
+                wd?.Close(); 
                 wd = new WindowDetails(TB.Text);
                 wd.Show();
             }
-
             canShowDetails = false;
         }
 
@@ -1669,7 +1659,6 @@ namespace Jvedio
 
 
 
-        //TODO
         /// <summary>
         /// 演员里的视频类型分类
         /// </summary>
@@ -1809,7 +1798,6 @@ namespace Jvedio
             vieModel.SearchHint = Jvedio.Language.Resources.Search + radioButton.Content.ToString();
             Properties.Settings.Default.Save();
             vieModel.AllSearchType = Properties.Settings.Default.AllSearchType.Length == 1 ? (MySearchType)int.Parse(Properties.Settings.Default.AllSearchType) : 0;
-
         }
 
 
@@ -3683,21 +3671,6 @@ namespace Jvedio
 
 
 
-        //TODO
-
-
-        private async Task<bool> WaitUntilStopLoad()
-        {
-            return await Task.Run(() => {
-                while (vieModel.IsFlipOvering)
-                {
-                    Task.Delay(100).Wait();
-                }
-                return false;
-            });
-
-        }
-
         private  void NextPage(object sender, MouseButtonEventArgs e)
         {
             if (vieModel.TotalPage <= 1) return;
@@ -4047,7 +4020,7 @@ namespace Jvedio
             rbs[idx2].IsChecked = true;
 
             InitList();
-
+            vieModel.InitLettersNavigation();
             //OpenSet_MouseDown(null, null);
         }
 
@@ -4220,6 +4193,7 @@ namespace Jvedio
                 vieModel.IsRefresh = true;
                 vieModel.Reset();
                 //vieModel.GetFilterInfo();
+                vieModel.InitLettersNavigation();
             }
         }
 
@@ -5822,6 +5796,13 @@ namespace Jvedio
             }
             catch (ObjectDisposedException ex) { Console.WriteLine(ex.Message); }
             
+        }
+
+        private void NavigationToLetter(object sender, RoutedEventArgs e)
+        {
+            vieModel.SearchFirstLetter = true;
+            vieModel.Search = ((Button)sender).Content.ToString();
+           
         }
     }
 

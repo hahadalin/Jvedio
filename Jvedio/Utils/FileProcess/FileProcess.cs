@@ -124,8 +124,9 @@ namespace Jvedio
             List<Movie> result = new List<Movie>();
             result.AddRange(originMovies);
 
-            ViewType ShowViewMode = ViewType.默认;
-            Enum.TryParse(Properties.Settings.Default.ShowViewMode, out ShowViewMode);
+            
+            int.TryParse(Properties.Settings.Default.ShowViewMode, out int idx);
+            ViewType ShowViewMode = (ViewType)idx;
             MyImageType ShowImageMode = MyImageType.缩略图;
             if (Properties.Settings.Default.ShowImageMode.Length == 1)
             {

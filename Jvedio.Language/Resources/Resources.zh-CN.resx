@@ -1578,4 +1578,7 @@
   <data name="Close" xml:space="preserve">
     <value>关闭</value>
   </data>
+  <data name="Navigation" xml:space="preserve">
+    <value>导航栏</value>
+  </data>
 </root>

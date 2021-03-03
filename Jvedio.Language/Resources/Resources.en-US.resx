@@ -1578,4 +1578,7 @@
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="Navigation" xml:space="preserve">
+    <value>The navigation bar</value>
+  </data>
 </root>

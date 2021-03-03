@@ -524,17 +524,16 @@ namespace Jvedio
 
 
             //从 主数据库中 复制信息
-            if (Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower() != "info")
-            {
-                try
-                {
-                    //TODO
-                    string src = AppDomain.CurrentDomain.BaseDirectory + "info.sqlite";
-                    string dst = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower()}.sqlite"; ;
-                    DataBase.CopyDatabaseInfo(src, dst);
-                }
-                catch { }
-            }
+            //if (Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower() != "info")
+            //{
+            //    try
+            //    {
+            //        string src = AppDomain.CurrentDomain.BaseDirectory + "DataBase\\info.sqlite";
+            //        string dst = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower()}.sqlite"; ;
+            //        DataBase.CopyDatabaseInfo(src, dst);
+            //    }
+            //    catch { }
+            //}
             return totalinsertnum;
         }
 

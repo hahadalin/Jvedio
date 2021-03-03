@@ -2410,6 +2410,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 导航栏 的本地化字符串。
+        /// </summary>
+        public static string Navigation {
+            get {
+                return ResourceManager.GetString("Navigation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 新文件已存在 的本地化字符串。
         /// </summary>
         public static string NewFileExists {

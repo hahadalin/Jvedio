@@ -60,8 +60,6 @@ namespace Jvedio
         }
 
 
-
-        //TODO
         public static void CopyDatabaseInfo(string src, string dst)
         {
             DataTable dataTable = new DataTable();
@@ -212,7 +210,30 @@ namespace Jvedio
 
 
 
+        public static List<string> SelectAllID()
+        {
+            Init();
+            string order = GenerateSort();
+            using (SQLiteConnection cn = new SQLiteConnection("data source=" + SqlitePath))
+            {
+                cn.Open();
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = cn;
+                    List<string> result = new List<string>();
 
+                    cmd.CommandText = "select id from movie";
+                    using (SQLiteDataReader sr = cmd.ExecuteReader())
+                    {
+                        while (sr.Read())
+                        {
+                            result.Add(sr[0].ToString());
+                        }
+                    }
+                    return result;
+                }
+            }
+        }
 
 
 

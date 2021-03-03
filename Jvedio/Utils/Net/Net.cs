@@ -532,14 +532,18 @@ namespace Jvedio
             }
         }
 
-
-        //TODO
         public static async  Task<bool> ParseSpecifiedInfo(WebSite webSite,string id,string url)
         {
             HttpResult httpResult = null;
-            if (webSite==WebSite.DB) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies= JvedioServers.DB.Cookie } );
-            if (webSite == WebSite.DMM) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.DMM.Cookie });
-            if (webSite == WebSite.MOO) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.MOO.Cookie });
+
+            if (webSite == WebSite.Bus) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
+            else if (webSite == WebSite.BusEu) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.BusEurope.Cookie });
+            else if (webSite == WebSite.Library) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Library.Cookie });
+            else if (webSite == WebSite.Jav321) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Jav321.Cookie });
+            else if (webSite == WebSite.FC2) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.FC2.Cookie });
+            else if (webSite==WebSite.DB) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies= JvedioServers.DB.Cookie } );
+            else if (webSite == WebSite.DMM) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.DMM.Cookie });
+            else if (webSite == WebSite.MOO) httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.MOO.Cookie });
             else httpResult = await Net.Http(url);
 
             if(httpResult!=null && httpResult.StatusCode==HttpStatusCode.OK && httpResult.SourceCode!="")
@@ -566,6 +570,26 @@ namespace Jvedio
                 {
                     Info = new LibraryParse(id, content).Parse();
                     Info.Add("source", "javlibrary");
+                }
+                else if (webSite == WebSite.Jav321)
+                {
+                    Info = new LibraryParse(id, content).Parse();
+                    Info.Add("source", "Jav321");
+                }
+                else if (webSite == WebSite.DMM)
+                {
+                    Info = new LibraryParse(id, content).Parse();
+                    Info.Add("source", "DMM");
+                }
+                else if (webSite == WebSite.MOO)
+                {
+                    Info = new LibraryParse(id, content).Parse();
+                    Info.Add("source", "MOO");
+                }
+                else if (webSite == WebSite.FC2)
+                {
+                    Info = new LibraryParse(id, content).Parse();
+                    Info.Add("source", "FC2");
                 }
                 Info.Add("sourceurl", url);
                 if (Info.Count > 2)
