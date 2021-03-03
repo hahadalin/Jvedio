@@ -1514,7 +1514,7 @@
                                 </Grid>
 
                                 <!--导航栏-->
-                                <Grid Visibility="{Binding DisplayNavigation,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}" Grid.Row="1"   Panel.ZIndex="4"  VerticalAlignment="Center" HorizontalAlignment="Right" MinWidth="40" Margin="5 20" MinHeight="50">
+                                <Grid Visibility="{Binding DisplayNavigation,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}" Grid.Row="1"   Panel.ZIndex="4"  VerticalAlignment="Center" HorizontalAlignment="Right" MinWidth="40" Margin="10 20" MinHeight="50">
                                     <Rectangle Opacity="0.5"  RadiusX="5" RadiusY="5"  Fill="{DynamicResource BackgroundTitle}"  Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}"  >
                                         <Rectangle.Effect>
                                             <DropShadowEffect BlurRadius="20" Direction="-90"   RenderingBias="Quality" ShadowDepth="0"/>
