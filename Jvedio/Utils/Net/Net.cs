@@ -435,6 +435,18 @@ namespace Jvedio
         /// <returns></returns>
         public static async Task<(bool,string)> DownLoadImage(string Url, ImageType imageType, string ID, string Cookie = "",Action<int> callback=null)
         {
+            //如果文件存在则不下载
+            string filepath = BasePicPath;
+            if(imageType == ImageType.SmallImage)
+            {
+                filepath = Path.Combine(filepath, "SmallPic", ID + ".jpg");
+            }
+            else if (imageType == ImageType.BigImage)
+            {
+                filepath = Path.Combine(filepath, "BigPic", ID + ".jpg");
+            }
+            if (File.Exists(filepath)) return (true, "");
+
             if (!Url.IsProperUrl()) return (false,"");
             HttpResult httpResult = await DownLoadFile(Url.Replace("\"", "'"), SetCookie: Cookie);
 
@@ -608,7 +620,7 @@ namespace Jvedio
         /// </summary>
         /// <param name="movie"></param>
         /// <returns></returns>
-        public static async Task<HttpResult> DownLoadFromNet(Movie movie,bool forceToDownload=false)
+        public static async Task<HttpResult> DownLoadFromNet(Movie movie)
         {
             HttpResult httpResult = null;
             string message ="";

@@ -31,6 +31,9 @@ namespace Jvedio
     {
         public Movie()
         {
+            smallimage = DefaultSmallImage;
+            bigimage = DefaultBigImage;
+            tagstamps = "";
             subsectionlist = new List<string>();
         }
         public Movie(string id)

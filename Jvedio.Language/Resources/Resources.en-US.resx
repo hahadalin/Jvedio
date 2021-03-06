@@ -1596,4 +1596,7 @@
   <data name="Attention_CopyDataBase" xml:space="preserve">
     <value>Synchronously copies information from the original database to the target database</value>
   </data>
+  <data name="EasyMode" xml:space="preserve">
+    <value>EasyMode</value>
+  </data>
 </root>

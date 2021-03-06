@@ -211,7 +211,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        private int _Timeout_Short = 300;
+        private int _Timeout_Short = 1000;
 
         public int Timeout_Short
         {
@@ -223,7 +223,7 @@ namespace Jvedio.ViewModel
             }
         }
 
-        private int _Timeout_Medium = 1000;
+        private int _Timeout_Medium = 2000;
 
         public int Timeout_Medium
         {
@@ -236,7 +236,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        private int _Timeout_Long = 2000;
+        private int _Timeout_Long = 4000;
 
         public int Timeout_Long
         {

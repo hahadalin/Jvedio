@@ -244,20 +244,14 @@
 
 
         <Style x:Key="ViewImage" TargetType="{x:Type Image}">
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Visibility" Value="Visible"/>
             <Style.Triggers>
-
-
-                <!--有图-->
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="0"/>
                     </MultiDataTrigger.Conditions>
-                    <Setter Property="Source" Value="{Binding smallimage}" />
-                    <Setter Property="Width" Value="{Binding SmallImage_Width,Source={x:Static p:Settings.Default}}"/>
-                    <Setter Property="Height" Value="{Binding SmallImage_Height,Source={x:Static p:Settings.Default}}"/>
+                    <Setter Property="Source" Value="{Binding smallimage,Mode=OneWay}" />
+                    <Setter Property="Width" Value="{Binding SmallImage_Width,Source={x:Static p:Settings.Default},Mode=OneWay}"/>
+                    <Setter Property="Height" Value="{Binding SmallImage_Height,Source={x:Static p:Settings.Default},Mode=OneWay}"/>
 
                 </MultiDataTrigger>
 
@@ -266,56 +260,10 @@
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="1"/>
                     </MultiDataTrigger.Conditions>
-                    <Setter Property="Source" Value="{Binding bigimage}" />
-                    <Setter Property="Width" Value="{Binding BigImage_Width,Source={x:Static p:Settings.Default}}"/>
-                    <Setter Property="Height" Value="{Binding BigImage_Height,Source={x:Static p:Settings.Default}}"/>
+                    <Setter Property="Source" Value="{Binding bigimage,Mode=OneWay}" />
+                    <Setter Property="Width" Value="{Binding BigImage_Width,Source={x:Static p:Settings.Default},Mode=OneWay}"/>
+                    <Setter Property="Height" Value="{Binding BigImage_Height,Source={x:Static p:Settings.Default},Mode=OneWay}"/>
                 </MultiDataTrigger>
-
-
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="0"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Source" Value="{Binding smallimage}" />
-                    <Setter Property="Width" Value="{Binding SmallImage_Width,Source={x:Static p:Settings.Default}}"/>
-                    <Setter Property="Height" Value="{Binding SmallImage_Height,Source={x:Static p:Settings.Default}}"/>
-                </MultiDataTrigger>
-
-
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="1"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Source" Value="{Binding bigimage}" />
-                    <Setter Property="Width" Value="{Binding BigImage_Width,Source={x:Static p:Settings.Default}}"/>
-                    <Setter Property="Height" Value="{Binding BigImage_Height,Source={x:Static p:Settings.Default}}"/>
-                </MultiDataTrigger>
-
-
-
-
-                <!--无图-->
-
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="1"/>
-                        <Condition Binding="{Binding bigimage}" Value="{x:Null}"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Source" Value="Resources/Picture/NoPrinting_B.png" />
-                    <Setter Property="Width" Value="{Binding BigImage_Width,Source={x:Static p:Settings.Default}}"/>
-                    <Setter Property="Height" Value="{Binding BigImage_Height,Source={x:Static p:Settings.Default}}"/>
-                </MultiDataTrigger>
-
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="0"/>
-                        <Condition Binding="{Binding smallimage}" Value="{x:Null}"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Source" Value="Resources/Picture/NoPrinting_S.png" />
-                    <Setter Property="Width" Value="{Binding SmallImage_Width,Source={x:Static p:Settings.Default}}"/>
-                    <Setter Property="Height" Value="{Binding SmallImage_Height,Source={x:Static p:Settings.Default}}"/>
-                </MultiDataTrigger>
-
             </Style.Triggers>
         </Style>
 
@@ -862,6 +810,7 @@
                                             <MenuItem   Header="{x:Static lang:Resources.Tools}"  Click="OpenTools"    />
                                             <MenuItem   Header="{x:Static lang:Resources.MovieManagement}"  Click="OpenDataBase"    />
                                             <MenuItem    Header="{x:Static lang:Resources.BatchProcessing}"  Click="OpenBatching"    />
+                                            <MenuItem Click="MenuItem_Click"    Header="{x:Static lang:Resources.EasyMode}"  IsCheckable="True" IsChecked="{Binding EasyMode,Source={x:Static p:Settings.Default},Mode=TwoWay}"    />
                                             <MenuItem   Header="Jvedio" >
                                                 <MenuItem  Header="{x:Static lang:Resources.About}" Click="ShowAbout"     />
                                                 <MenuItem  Header="{x:Static lang:Resources.Help}" Click="OpenHelp"   />
@@ -940,7 +889,7 @@
                                 </Grid>
 
                                 <ScrollViewer Visibility="{Binding ElementName=HideListToggleButton,Path=IsChecked,Converter={StaticResource BoolToOppositeVisibilityConverter},FallbackValue=Visible}">
-                                <!--<ScrollViewer Visibility="Visible">-->
+                                    <!--<ScrollViewer Visibility="Visible">-->
 
                                     <ItemsControl Background="Transparent" x:Name="ListItemsControl"    ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
                                         <ItemsControl.ItemsPanel>
@@ -1514,7 +1463,7 @@
                                 </Grid>
 
                                 <!--导航栏-->
-                                <Grid Visibility="{Binding DisplayNavigation,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}" Grid.Row="1"   Panel.ZIndex="4"  VerticalAlignment="Center" HorizontalAlignment="Right" MinWidth="40" Margin="10 20" MinHeight="50">
+                                <Grid Visibility="{Binding DisplayNavigation,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}" Grid.Row="1"   Panel.ZIndex="4"  VerticalAlignment="Center" HorizontalAlignment="Right" MinWidth="40" Margin="20" MinHeight="50">
                                     <Rectangle Opacity="0.5"  RadiusX="5" RadiusY="5"  Fill="{DynamicResource BackgroundTitle}"  Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}"  >
                                         <Rectangle.Effect>
                                             <DropShadowEffect BlurRadius="20" Direction="-90"   RenderingBias="Quality" ShadowDepth="0"/>
@@ -1522,17 +1471,17 @@
                                     </Rectangle>
                                     <ScrollViewer VerticalScrollBarVisibility="Hidden"  Margin="0 10">
                                         <ItemsControl ItemsSource="{Binding LettersNavigation}" HorizontalAlignment="Center">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel/>
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Button Click="NavigationToLetter" Content="{Binding }" Style="{StaticResource NavigateButton}"/>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Click="NavigationToLetter" Content="{Binding }" Style="{StaticResource NavigateButton}"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
 
                                     </ScrollViewer>
 
@@ -1661,40 +1610,39 @@
 
                                     <!--影片-->
                                     <Grid  Grid.Column="1" FocusVisualStyle="{x:Null}" Panel.ZIndex="2"  PreviewKeyDown="Grid_PreviewKeyDown"  PreviewKeyUp="Grid_PreviewKeyUp"    AllowDrop="True" Drop="Grid_Drop" DragOver="Grid_DragOver"    >
-                                        <!--影片展示 Grid-->
-                                        <Grid  FocusVisualStyle="{x:Null}"  >
-                                            <ScrollViewer IsDeferredScrollingEnabled="False"  FocusVisualStyle="{x:Null}"   CanContentScroll="True"  x:Name="MovieScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
-                                                <ScrollViewer.ContextMenu>
-                                                    <ContextMenu  IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}">
-                                                        <MenuItem Header="{x:Static lang:Resources.Refresh}" Click="RefreshCurrentPage" />
-                                                        <MenuItem Header="{x:Static lang:Resources.SelectAll}" Click="SelectAll" />
-                                                        <MenuItem Header="{x:Static lang:Resources.ShowExists}" IsCheckable="True"  IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding FlipOverCommand}"  />
-                                                        <MenuItem Header="{x:Static lang:Resources.ShowSubSection}" IsCheckable="True"  IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding FlipOverCommand}" />
-                                                        <MenuItem Header="{x:Static lang:Resources.ShowStamp}" Visibility="Collapsed">
-                                                            <MenuItem  Command="{Binding ResetCommand}"    IsCheckable="True"  IsChecked="{Binding ShowHDV, Mode=TwoWay}" Header="高清"    />
-                                                            <MenuItem  Command="{Binding ResetCommand}"    IsCheckable="True"    IsChecked="{Binding ShowCHS, Mode=TwoWay}"   Header="中文" />
-                                                            <MenuItem   Command="{Binding ResetCommand}"    IsCheckable="True"   IsChecked="{Binding ShowFlowOut, Mode=TwoWay}"   Header="流出" />
-                                                        </MenuItem>
-                                                        <MenuItem Header="{x:Static lang:Resources.ShowImageType}" >
-                                                            <MenuItem  Click="SaveShowViewMode" IsCheckable="True"   IsChecked="True" Header="{x:Static lang:Resources.Default}"    />
-                                                            <MenuItem  Click="SaveShowViewMode" IsCheckable="True"      Header="{x:Static lang:Resources.WithImage}" />
-                                                            <MenuItem  Click="SaveShowViewMode"  IsCheckable="True"     Header="{x:Static lang:Resources.NoImage}" />
-                                                        </MenuItem>
-                                                        <MenuItem Header="{x:Static lang:Resources.VedioType}" >
-                                                            <MenuItem   Click="SaveVedioType"      IsCheckable="True"   IsChecked="True" Header="{x:Static lang:Resources.Default}"    />
-                                                            <MenuItem   Click="SaveVedioType"     IsCheckable="True"    Header="{x:Static lang:Resources.Uncensored}"    />
-                                                            <MenuItem   Click="SaveVedioType"     IsCheckable="True"      Header="{x:Static lang:Resources.Censored}" />
-                                                            <MenuItem   Click="SaveVedioType"      IsCheckable="True"     Header="{x:Static lang:Resources.Europe}" />
-                                                        </MenuItem>
-                                                        <MenuItem Header="{x:Static lang:Resources.ShowRest}" Click="ShowRestMovie" />
-                                                    </ContextMenu>
-                                                </ScrollViewer.ContextMenu>
+                                        <Grid.ContextMenu>
+                                            <ContextMenu  IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}">
+                                                <MenuItem Header="{x:Static lang:Resources.Refresh}" Click="RefreshCurrentPage" />
+                                                <MenuItem Header="{x:Static lang:Resources.SelectAll}" Click="SelectAll" />
+                                                <MenuItem Header="{x:Static lang:Resources.ShowExists}" IsCheckable="True"  IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding FlipOverCommand}"  />
+                                                <MenuItem Header="{x:Static lang:Resources.ShowSubSection}" IsCheckable="True"  IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Command="{Binding FlipOverCommand}" />
+                                                <MenuItem Header="{x:Static lang:Resources.ShowStamp}" Visibility="Visible">
+                                                    <MenuItem Click="SaveStampsType"   IsCheckable="True" IsChecked="True"   Header="{x:Static lang:Resources.All}"    />
+                                                    <MenuItem Click="SaveStampsType"    IsCheckable="True"  IsChecked="{Binding ShowHDV, Mode=TwoWay}" Header="{x:Static lang:Resources.HD}"    />
+                                                    <MenuItem Click="SaveStampsType"    IsCheckable="True"    IsChecked="{Binding ShowCHS, Mode=TwoWay}"   Header="{x:Static lang:Resources.Translated}" />
+                                                    <MenuItem   Click="SaveStampsType"   IsCheckable="True"   IsChecked="{Binding ShowFlowOut, Mode=TwoWay}"   Header="{x:Static lang:Resources.FlowOut}" />
+                                                </MenuItem>
+                                                <MenuItem Header="{x:Static lang:Resources.ShowImageType}" >
+                                                    <MenuItem  Click="SaveShowViewMode" IsCheckable="True"   IsChecked="True" Header="{x:Static lang:Resources.Default}"    />
+                                                    <MenuItem  Click="SaveShowViewMode" IsCheckable="True"      Header="{x:Static lang:Resources.WithImage}" />
+                                                    <MenuItem  Click="SaveShowViewMode"  IsCheckable="True"     Header="{x:Static lang:Resources.NoImage}" />
+                                                </MenuItem>
+                                                <MenuItem Header="{x:Static lang:Resources.VedioType}" >
+                                                    <MenuItem   Click="SaveVedioType"      IsCheckable="True"   IsChecked="True" Header="{x:Static lang:Resources.Default}"    />
+                                                    <MenuItem   Click="SaveVedioType"     IsCheckable="True"    Header="{x:Static lang:Resources.Uncensored}"    />
+                                                    <MenuItem   Click="SaveVedioType"     IsCheckable="True"      Header="{x:Static lang:Resources.Censored}" />
+                                                    <MenuItem   Click="SaveVedioType"      IsCheckable="True"     Header="{x:Static lang:Resources.Europe}" />
+                                                </MenuItem>
+                                                <MenuItem Header="{x:Static lang:Resources.ShowRest}" Click="ShowRestMovie" />
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
 
 
-
-
-                                                <!--影片-->
-                                                <ItemsControl   FocusVisualStyle="{x:Null}"    x:Name="MovieItemsControl" AlternationCount="999"  ItemsSource="{Binding CurrentMovieList}" ScrollViewer.VerticalScrollBarVisibility="Auto" >
+                                        <!--简单影片展示-->
+                                        <Grid  FocusVisualStyle="{x:Null}"   >
+                                            <ScrollViewer IsDeferredScrollingEnabled="False"  FocusVisualStyle="{x:Null}"   CanContentScroll="True"  x:Name="SimpleMovieScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
+                                                <!--精简模式-->
+                                                <ItemsControl   FocusVisualStyle="{x:Null}"    x:Name="SimpleMovieItemsControl"     >
                                                     <ItemsControl.ItemsPanel>
                                                         <ItemsPanelTemplate>
                                                             <WrapPanel   />
@@ -1715,14 +1663,14 @@
                                                             </DataTemplate.Triggers>
 
                                                             <!--自定义影片展示格式-->
-                                                            <WrapPanel Name="MovieWrapPanel"    >
-                                                                <Grid Margin="5" Name="MovieGrid">
+                                                            <WrapPanel Name="MovieWrapPanel"  >
+                                                                <Grid Margin="5">
                                                                     <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"   >
                                                                         <Border.Effect>
                                                                             <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                         </Border.Effect>
                                                                     </Border>
-                                                                    <StackPanel     ContextMenuOpening="ContextMenu_ContextMenuOpening"   >
+                                                                    <StackPanel     ContextMenuOpening="ContextMenu_ContextMenuOpening"   Tag="{Binding id,Mode=OneWay}" >
                                                                         <!--影片右键菜单-->
                                                                         <StackPanel.ContextMenu  >
                                                                             <ContextMenu Opacity="0.9"  PreviewKeyUp="ContextMenu_PreviewKeyUp" >
@@ -1746,7 +1694,7 @@
                                                                                 <MenuItem Visibility="Collapsed" Header="{x:Static lang:Resources.Menu_RemoveFromList}" Click="RemoveFromList"      />
 
                                                                                 <MenuItem Header="{x:Static lang:Resources.Menu_LabelManagement}"   Click="ShowLabelEditGrid" >
-                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}" Click="MenuItem_Click_1"  ></MenuItem>
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}" Click="ManageLabel"  ></MenuItem>
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage2}" Click="DelSingleLabel"  ></MenuItem>
                                                                                     <MenuItem  Header="{x:Static lang:Resources.Menu_LabelManage3}" Click="AddLabel"  ></MenuItem>
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage4}" Click="DelLabel"  ></MenuItem>
@@ -1775,124 +1723,37 @@
                                                                         <!--图片-->
                                                                         <Grid  >
                                                                             <!--大小图-->
-                                                                            <Image MouseEnter="BorderMouseEnter" MouseLeave="BorderMouseLeave"   Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}" ToolTip="{Binding id}"  Style="{StaticResource ViewImage}" MouseLeftButtonDown="CanShowDetails" MouseLeftButtonUp="ShowDetails"  HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                                                            <Image Name="Image" MouseEnter="BorderMouseEnter" MouseLeave="BorderMouseLeave"   
+                                                                                   Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}" 
+                                                                                   ToolTip="{Binding id,Mode=OneWay}" Cursor="Hand" Margin="2"  
+                                                                                   Style="{StaticResource ViewImage}" MouseLeftButtonDown="CanShowDetails" MouseLeftButtonUp="ShowDetails"  
+                                                                                   HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                                                             <!--预览图-->
-                                                                            <Canvas Margin="2"  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=2,Source={x:Static p:Settings.Default}}">
+                                                                            <Canvas Margin="2" ToolTip="{Binding id,Mode=OneWay}" Cursor="Hand"  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=2,Source={x:Static p:Settings.Default},Mode=OneWay}">
                                                                                 <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16" Foreground="{DynamicResource ForegroundSearch}" Height="20"  ></TextBlock>
-                                                                                <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}" Tag="{Binding id}"  Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
-                                                                                <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}"   Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
+                                                                                <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}" Tag="{Binding id,Mode=OneWay}"  Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
+                                                                                <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}"   Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
                                                                             </Canvas>
                                                                             <!--GIF图-->
-                                                                            <local:GifImage Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter}}" Margin="2" x:Name="GifImage"  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Tag="{Binding id}"    GifSource="{Binding GifUri}" Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=3,Source={x:Static p:Settings.Default}}"    Height="{Binding Path=GifImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=GifImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" />
+                                                                            <local:GifImage Cursor="Hand" ToolTip="{Binding id,Mode=OneWay}" Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}" Margin="2" x:Name="GifImage"  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Tag="{Binding id,Mode=OneWay}"    GifSource="{Binding GifUri,Mode=OneWay}" Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=3,Source={x:Static p:Settings.Default},Mode=OneWay}"    Height="{Binding Path=GifImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=GifImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" />
+
                                                                             <!--分段视频-->
-                                                                            <Grid  Panel.ZIndex="3" Visibility="{Binding hassubsection,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}"  >
-                                                                                <Image  ToolTip="分段视频"  Cursor="Hand"  Panel.ZIndex="3" Height="24" MouseLeftButtonUp="ShowSubsection"  HorizontalAlignment="Right"  VerticalAlignment="Bottom"  Margin="5"  >
-                                                                                    <Image.Style>
-                                                                                        <Style TargetType="Image">
-                                                                                            <Style.Triggers>
-                                                                                                <Trigger Property="IsMouseOver" Value="True">
-                                                                                                    <Setter Property="Source" Value="Resources/Picture/subsection2.png"/>
-                                                                                                </Trigger>
-                                                                                                <Trigger Property="IsMouseOver" Value="False">
-                                                                                                    <Setter Property="Source" Value="Resources/Picture/subsection1.png"/>
-                                                                                                </Trigger>
-                                                                                            </Style.Triggers>
-                                                                                        </Style>
-                                                                                    </Image.Style>
-                                                                                </Image>
-
-                                                                                <Popup  VerticalOffset="0" HorizontalOffset="0"    PopupAnimation="Fade" Placement="MousePoint"    AllowsTransparency="True" StaysOpen="False" IsOpen="False">
-                                                                                    <Grid    Margin="5"   >
-                                                                                        <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                                                                            <Border.Effect>
-                                                                                                <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                                                            </Border.Effect>
-                                                                                        </Border>
-                                                                                        <ItemsControl Margin="5 10 " AlternationCount="99"    ItemsSource="{Binding subsectionlist}" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent"  >
-                                                                                            <ItemsControl.ItemsPanel>
-                                                                                                <ItemsPanelTemplate>
-                                                                                                    <StackPanel Orientation="Vertical" Panel.ZIndex="4"  />
-                                                                                                </ItemsPanelTemplate>
-                                                                                            </ItemsControl.ItemsPanel>
-
-                                                                                            <ItemsControl.ItemTemplate>
-                                                                                                <DataTemplate>
-
-                                                                                                    <StackPanel Width="auto">
+                                                                            <Button  Panel.ZIndex="3"     Style="{StaticResource TitleButton}" Visibility="{Binding hassubsection,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}" Tag="{Binding id,Mode=OneWay}"  Cursor="Hand"    Height="24" Click="ShowSubSection"  HorizontalAlignment="Right"  VerticalAlignment="Bottom"  Margin="5">
+                                                                                <Button.ContextMenu >
+                                                                                    <ContextMenu HorizontalOffset="-50" Width="100" VerticalOffset="10">
+                                                                                    </ContextMenu>
+                                                                                </Button.ContextMenu>
+                                                                                <Image Source="/Resources/Picture/subsection1.png" Height="20" Width="20"  />
+                                                                            </Button>
 
 
-                                                                                                        <Button  HorizontalAlignment="Center" Click="OpenSubSuctionVedio" Height="20" Width="50" Content="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" >
-                                                                                                            <Button.Style>
-                                                                                                                <Style  TargetType="Button">
-                                                                                                                    <Setter Property="Cursor" Value="Hand"/>
-                                                                                                                    <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-                                                                                                                    <Setter Property="Background" Value="#1A97ED"/>
-                                                                                                                    <Setter Property="Margin" Value="10 2"/>
-                                                                                                                    <Setter Property="BorderThickness" Value="0"/>
-                                                                                                                    <Style.Triggers>
-                                                                                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                                                                                            <Setter Property="Background" Value="#467AF3"/>
-                                                                                                                        </Trigger>
-                                                                                                                    </Style.Triggers>
-                                                                                                                </Style>
-                                                                                                            </Button.Style>
-                                                                                                        </Button>
-                                                                                                        <TextBlock Text="{Binding }" Visibility="Collapsed"   />
-                                                                                                    </StackPanel>
-                                                                                                </DataTemplate>
-                                                                                            </ItemsControl.ItemTemplate>
-                                                                                        </ItemsControl>
-                                                                                    </Grid>
-                                                                                </Popup>
-
-
-                                                                            </Grid>
 
                                                                             <!--播放按钮-->
-                                                                            <Canvas Margin="10 0 10 0" Opacity="0.5"  Style="{StaticResource PlayButton}" MouseLeftButtonUp="PlayVedio"  Cursor="Hand" Width="40" Height="40"  VerticalAlignment="Center" HorizontalAlignment="Center"  >
+                                                                            <Canvas ToolTip="{Binding id,Mode=OneWay}" Margin="10 0 10 0" Opacity="0.5"  Style="{StaticResource PlayButton}" MouseLeftButtonUp="PlayVedio"  Cursor="Hand" Width="40" Height="40"  VerticalAlignment="Center" HorizontalAlignment="Center"  >
                                                                                 <Ellipse Fill="#DD744C"  Width="40" Height="40" Canvas.Left="3" Canvas.Top="3"  />
                                                                                 <Polygon Points="15,38 35,25 15,10" Stroke="{DynamicResource BackgroundMenu}" Fill="#F6F7F7"  Cursor="Hand" />
                                                                             </Canvas>
                                                                         </Grid>
-
-
-                                                                        <TextBox Name="IDTextBox"  Text="{Binding id}" Visibility="Collapsed"/>
-
-                                                                        <!--标签戳-->
-                                                                        <Grid HorizontalAlignment="Stretch" Width="auto"   Margin="5 0"  >
-                                                                            <Grid.ColumnDefinitions>
-                                                                                <ColumnDefinition Width="auto"/>
-                                                                                <ColumnDefinition Width="*"/>
-                                                                            </Grid.ColumnDefinitions>
-                                                                            <TextBox   HorizontalContentAlignment="Left" TextAlignment="Left"  Visibility="{Binding Path=DisplayID,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}" Width="auto" HorizontalAlignment="Left" Grid.Column="0" FontSize="18" FontFamily="Times New Roman"      Text="{Binding id}"    Foreground="{DynamicResource ForegroundSearch}"  Style="{StaticResource InfoTextBox}"  />
-                                                                            <StackPanel    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Right" Margin="0 0 10 0" >
-                                                                                <Label Margin="2 0"  BorderThickness="0" Visibility="{Binding tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=0,Mode=OneWay}" Background="#9A58B7" Content="{x:Static lang:Resources.HD}" Foreground="{DynamicResource ForegroundSearch}"/>
-                                                                                <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=1,Mode=OneWay}"  Background="YellowGreen"   Content="{x:Static lang:Resources.Translated}" Foreground="{DynamicResource ForegroundSearch}" />
-                                                                                <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=2,Mode=OneWay}" Background="#00B0F0" Content="{x:Static lang:Resources.FlowOut}" Foreground="{DynamicResource ForegroundSearch}" />
-                                                                            </StackPanel>
-                                                                        </Grid>
-
-
-                                                                        <TextBox HorizontalContentAlignment="Left" TextAlignment="Left" Visibility="{Binding Path=DisplayDate,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}" Margin="5" FontSize="14"  FontFamily="Times New Roman"      Opacity="0.5"      Text="{Binding releasedate}"    Foreground="{DynamicResource ForegroundSearch}"  Background="Transparent" BorderThickness="0"  />
-                                                                        <StackPanel PreviewMouseLeftButtonDown="StackPanel_PreviewMouseLeftButtonDown"  Visibility="{Binding Path=DisplayFavorites,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}" Width="auto" HorizontalAlignment="Left"  Margin="10 2" Cursor="Hand">
-                                                                            <hc:Rate ValueChanged="Rate_ValueChanged" ItemHeight="15"   AllowClear="True" Value="{Binding favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   DefaultValue="0"/>
-                                                                        </StackPanel>
-                                                                        <TextBox HorizontalAlignment="Left"  
-                                                                     HorizontalContentAlignment="Left" 
-                                                                     TextAlignment="Left" 
-                                                                     Width="{Binding Path=GlobalImageWidth,Source={x:Static p:Settings.Default},Converter={StaticResource BiggerWidthConverter}}"   
-                                                                     Visibility="{Binding Path=DisplayTitle,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default}}"  
-                                                                     Height="50" 
-                                                                     FontSize="14" 
-                                                                     Margin="0 10" 
-                                                                     TextWrapping="Wrap"  
-                                                                     Opacity="0.5" 
-                                                                     Text="{Binding title}"      
-                                                                     Foreground="{DynamicResource ForegroundSearch}"   
-                                                                     Background="Transparent" 
-                                                                     BorderThickness="0" 
-                                                                     ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"/>
-                                                                        <TextBox Text="{Binding filepath}"  Visibility="Collapsed"/>
                                                                     </StackPanel>
 
                                                                 </Grid>
@@ -1900,6 +1761,204 @@
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
+
+
+
+                                            </ScrollViewer>
+                                        </Grid>
+
+                                        <!--详细影片展示-->
+                                        <Grid  FocusVisualStyle="{x:Null}" Visibility="{Binding EasyMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToOppositeVisibilityConverter},FallbackValue=Collapsed,Mode=OneWay}"  >
+                                            <ScrollViewer IsDeferredScrollingEnabled="False"  FocusVisualStyle="{x:Null}"   CanContentScroll="True"  x:Name="MovieScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
+                                                <!--影片-->
+                                                <ItemsControl   FocusVisualStyle="{x:Null}"    x:Name="MovieItemsControl"      >
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel   />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate  >
+                                                            <!--影片加载动画-->
+                                                            <DataTemplate.Triggers >
+                                                                <EventTrigger   RoutedEvent="FrameworkElement.Loaded">
+                                                                    <BeginStoryboard  >
+                                                                        <Storyboard    >
+                                                                            <DoubleAnimation FillBehavior="Stop" From="0" To="1" Duration="0:0:0.3"    Storyboard.TargetName="MovieWrapPanel" Storyboard.TargetProperty="(UIElement.Opacity)" />
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+                                                            </DataTemplate.Triggers>
+
+                                                            <!--自定义影片展示格式-->
+                                                            <WrapPanel  Name="MovieWrapPanel">
+                                                                <Grid Margin="5" >
+                                                                    <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"   >
+                                                                        <Border.Effect>
+                                                                            <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                                                        </Border.Effect>
+                                                                    </Border>
+                                                                    <StackPanel Tag="{Binding id,Mode=OneWay}"    ContextMenuOpening="ContextMenu_ContextMenuOpening"   >
+                                                                        <!--影片右键菜单-->
+                                                                        <StackPanel.ContextMenu  >
+                                                                            <ContextMenu Opacity="0.9"  PreviewKeyUp="ContextMenu_PreviewKeyUp" >
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoadSelectMovie"   ></MenuItem>
+                                                                                <MenuItem  Header="{x:Static lang:Resources.Menu_SyncExtra}" Visibility="Visible"  >
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_CustomUrl}" Click="DownLoadWithUrl"   ></MenuItem>
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_EnforceSync}" Click="ForceToDownLoad"   ></MenuItem>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_EditInfo}" Click="EditInfo"  />
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_Advance}"   >
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_Translate}" Click="TranslateMovie"  />
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_GenerateThumbnail}" Click="GenerateSmallImage" />
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_GenerateActressImage}" Click="GenerateActor" />
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" Click="GenerateScreenShot" />
+                                                                                    <MenuItem  Header="{x:Static lang:Resources.Menu_GenerateGif}" Click="GenerateGif" />
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_RenameFile}" Click="RenameFile" />
+                                                                                    <MenuItem  Header="{x:Static lang:Resources.Menu_RemoveZero}" Click="ReMoveZero" />
+                                                                                </MenuItem>
+
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_AddToList}"   Name="ListMenuItem"   />
+                                                                                <MenuItem Visibility="Collapsed" Header="{x:Static lang:Resources.Menu_RemoveFromList}" Click="RemoveFromList"      />
+
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_LabelManagement}"   Click="ShowLabelEditGrid" >
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}" Click="ManageLabel"  ></MenuItem>
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage2}" Click="DelSingleLabel"  ></MenuItem>
+                                                                                    <MenuItem  Header="{x:Static lang:Resources.Menu_LabelManage3}" Click="AddLabel"  ></MenuItem>
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage4}" Click="DelLabel"  ></MenuItem>
+                                                                                    <MenuItem   Header="{x:Static lang:Resources.Menu_LabelManage5}" Click="ClearLabel"   ></MenuItem>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.OpenPath}"   >
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Movie}" Click="OpenFilePath"   ></MenuItem>
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Poster}" Click="OpenImagePath"  ></MenuItem>
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Thumbnail}" Click="OpenImagePath"   ></MenuItem>
+                                                                                    <MenuItem Header="Gif" Click="OpenImagePath"   ></MenuItem>
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Preview}" Click="OpenImagePath"   ></MenuItem>
+                                                                                    <MenuItem Header="{x:Static lang:Resources.ScreenShot}" Click="OpenImagePath"   ></MenuItem>
+                                                                                    <MenuItem Header="{x:Static lang:Resources.ActressImage}" Click="OpenImagePath"   ></MenuItem>
+                                                                                </MenuItem>
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
+                                                                                <MenuItem Header="{x:Static lang:Resources.Menu_CopyFile}" Click="CopyFile" />
+                                                                                <MenuItem ToolTip="{x:Static lang:Resources.ToolTip_ClearInfo}" Header="{x:Static lang:Resources.Menu_ClearInfo}"  Click="DeleteInfo"   />
+                                                                                <MenuItem ToolTip="{x:Static lang:Resources.ToolTip_DeleteInfo}" Header="{x:Static lang:Resources.Menu_DeleteInfo}"  Click="DeleteID"   />
+                                                                                <MenuItem ToolTip="{x:Static lang:Resources.ToolTip_DeleteFile}" Header="{x:Static lang:Resources.Menu_DeleteFile}" Click="DeleteFile" Icon="pack://application:,,,/Resources/menuitem/clear.png" />
+
+
+
+                                                                            </ContextMenu>
+                                                                        </StackPanel.ContextMenu>
+
+                                                                        <!--图片-->
+                                                                        <Grid  >
+                                                                            <!--大小图-->
+                                                                            <Image Name="Image" MouseEnter="BorderMouseEnter" MouseLeave="BorderMouseLeave"   
+                                                                                   Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}" 
+                                                                                   ToolTip="{Binding id,Mode=OneWay}" Cursor="Hand" Margin="2"  
+                                                                                   Style="{StaticResource ViewImage}" MouseLeftButtonDown="CanShowDetails" MouseLeftButtonUp="ShowDetails"  
+                                                                                   HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                                                                            <!--预览图-->
+                                                                            <Canvas ToolTip="{Binding id,Mode=OneWay}" Cursor="Hand" Margin="2"    MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=2,Source={x:Static p:Settings.Default},Mode=OneWay}">
+                                                                                <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16" Foreground="{DynamicResource ForegroundSearch}" Height="20"  ></TextBlock>
+                                                                                <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}" Tag="{Binding id,Mode=OneWay}"  Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
+                                                                                <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}"   Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
+                                                                            </Canvas>
+                                                                            <!--GIF图-->
+                                                                            <local:GifImage ToolTip="{Binding id,Mode=OneWay}" Cursor="Hand" Margin="2"   Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}"   x:Name="GifImage"  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Tag="{Binding id,Mode=OneWay}"    GifSource="{Binding GifUri,Mode=OneWay}" Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=3,Source={x:Static p:Settings.Default},Mode=OneWay}"    Height="{Binding Path=GifImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=GifImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" />
+                                                                            <!--分段视频-->
+                                                                            <Button  Panel.ZIndex="3"     Style="{StaticResource TitleButton}" Visibility="{Binding hassubsection,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}" Tag="{Binding id,Mode=OneWay}"  Cursor="Hand"    Height="24" Click="ShowSubSection"  HorizontalAlignment="Right"  VerticalAlignment="Bottom"  Margin="5">
+                                                                                <Button.ContextMenu >
+                                                                                    <ContextMenu HorizontalOffset="-50" Width="100" VerticalOffset="10">
+                                                                                    </ContextMenu>
+                                                                                </Button.ContextMenu>
+                                                                                <Image Source="/Resources/Picture/subsection1.png" Height="20" Width="20"  />
+                                                                            </Button>
+                                                                            <!--播放按钮-->
+                                                                            <Canvas ToolTip="{Binding id,Mode=OneWay}"     Margin="10 0 10 0" Opacity="0.5"  Style="{StaticResource PlayButton}" MouseLeftButtonUp="PlayVedio"  Cursor="Hand" Width="40" Height="40"  VerticalAlignment="Center" HorizontalAlignment="Center"  >
+                                                                                <Ellipse Fill="#DD744C"  Width="40" Height="40" Canvas.Left="3" Canvas.Top="3"  />
+                                                                                <Polygon Points="15,38 35,25 15,10" Stroke="{DynamicResource BackgroundMenu}" Fill="#F6F7F7"  Cursor="Hand" />
+                                                                            </Canvas>
+                                                                        </Grid>
+
+
+                                                                        <!--标签戳+ID-->
+                                                                        <Grid HorizontalAlignment="Stretch" Width="auto"   Margin="0"  >
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition Width="auto"/>
+                                                                                <ColumnDefinition Width="*"/>
+                                                                            </Grid.ColumnDefinitions>
+
+                                                                            <TextBlock   
+                                                                                MouseLeftButtonDown="CopyText"
+                                                                                 Cursor="IBeam"
+                                                                                Padding="10 0"
+                                                                                Margin="0 5"
+                                                                                TextAlignment="Left"  
+                                                                                       Visibility="{Binding Path=DisplayID,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default},Mode=OneWay}" 
+                                                                                       Width="auto" HorizontalAlignment="Left" 
+                                                                                       Grid.Column="0" FontSize="18" 
+                                                                                       FontFamily="Times New Roman"      
+                                                                                       Text="{Binding id,Mode=OneWay}"    
+                                                                                       
+                                                                                       Foreground="{DynamicResource ForegroundSearch}"  
+                                                                                       Style="{StaticResource BaseTextBlock}"  />
+
+                                                                            <!--标签戳-->
+                                                                            <StackPanel  Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default},Mode=OneWay}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Right" Margin="5" >
+                                                                                <Label Margin="2 0"  BorderThickness="0" Visibility="{Binding tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=1,Mode=OneWay}" Background="#9A58B7" Content="{x:Static lang:Resources.HD}" Foreground="{DynamicResource ForegroundSearch}"/>
+                                                                                <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=2,Mode=OneWay}"  Background="YellowGreen"   Content="{x:Static lang:Resources.Translated}" Foreground="{DynamicResource ForegroundSearch}" />
+                                                                                <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=3,Mode=OneWay}" Background="#00B0F0" Content="{x:Static lang:Resources.FlowOut}" Foreground="{DynamicResource ForegroundSearch}" />
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                        
+                                                                        <TextBlock 
+                                                                            MouseLeftButtonDown="CopyText"
+                                                                             Cursor="IBeam"
+                                                                            Padding="10 0"
+                                                                            Margin="0 5" 
+                                                                            TextAlignment="Left" 
+                                                                                 Visibility="{Binding Path=DisplayDate,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default},Mode=OneWay}" 
+      
+                                                                                 FontSize="15"  
+                                                                                 FontFamily="Times New Roman"      
+                                                                                 Opacity="0.5"      
+                                                                                 Text="{Binding releasedate,Mode=OneWay}"    
+                                                                                 Foreground="{DynamicResource ForegroundSearch}"  
+                                                                                 Background="Transparent" 
+                                                                                    />
+
+                                                                        <StackPanel PreviewMouseLeftButtonDown="StackPanel_PreviewMouseLeftButtonDown"  Visibility="{Binding Path=DisplayFavorites,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default},Mode=OneWay}" Width="auto" HorizontalAlignment="Left"  Margin="10 5" Cursor="Hand">
+                                                                            <hc:Rate ValueChanged="Rate_ValueChanged" ItemHeight="15"   AllowClear="True" Value="{Binding favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   DefaultValue="0"/>
+                                                                        </StackPanel>
+
+                                                                        <TextBlock 
+                                                                            MouseLeftButtonDown="CopyText"
+                                                                            Cursor="IBeam"
+                                                                            Padding="5 0"
+                                                                            HorizontalAlignment="Center"  
+                                                                     TextAlignment="Left" 
+                                                                     Width="{Binding Path=GlobalImageWidth,Source={x:Static p:Settings.Default},Converter={StaticResource BiggerWidthConverter},Mode=OneWay}"   
+                                                                     Visibility="{Binding Path=DisplayTitle,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default},Mode=OneWay}"  
+                                                                     Height="35" 
+                                                                     FontSize="14" 
+                                                                     Margin="0 15" 
+                                                                     TextWrapping="Wrap"  
+                                                                     Text="{Binding title,Mode=OneWay}"      
+                                                                     Foreground="{DynamicResource ForegroundSearch}"   
+                                                                     Background="Transparent" 
+                                                                    Opacity="0.5"
+                                                                     ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"/>
+                                                                    </StackPanel>
+
+                                                                </Grid>
+                                                            </WrapPanel>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+
+
+
+
                                             </ScrollViewer>
                                         </Grid>
 

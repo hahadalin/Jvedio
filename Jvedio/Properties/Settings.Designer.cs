@@ -1774,5 +1774,17 @@ namespace Jvedio.Properties {
                 this["DisplayNavigation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EasyMode {
+            get {
+                return ((bool)(this["EasyMode"]));
+            }
+            set {
+                this["EasyMode"] = value;
+            }
+        }
     }
 }

@@ -70,9 +70,9 @@ namespace Jvedio
         public static string ToTagString(this string str)
         {
             if (str.Length != 1) return "";
-            if (str == "0" ) return  Jvedio.Language.Resources.HD ;
-            if (str == "1" ) return Jvedio.Language.Resources.Translated;
-            if (str == "2"  ) return Jvedio.Language.Resources.FlowOut;
+            if (str == "1" ) return  Jvedio.Language.Resources.HD ;
+            if (str == "2" ) return Jvedio.Language.Resources.Translated;
+            if (str == "3"  ) return Jvedio.Language.Resources.FlowOut;
             return str;
         }
 

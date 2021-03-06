@@ -38,7 +38,7 @@
                         <TextBox Background="Transparent" Margin="20 5" BorderThickness="0" MaxHeight="300" Grid.Row="0"  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Wait}" />
 
                     </StackPanel >
-                    <Button  Visibility="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=ShowCancelButton}"  Style="{StaticResource FlatRedButton}" Grid.Row="1"  x:Name="CancelButton" Margin="10 20"   FontSize="18"     Content="{x:Static lang:Resources.Cancel}" MinWidth="120" Height="auto"   Click="onButtonClick" />
+                    <Button Foreground="{DynamicResource ForegroundSearch}"  Visibility="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=ShowCancelButton}"  Style="{StaticResource FlatRedButton}" Grid.Row="1"  x:Name="CancelButton" Margin="10 20"   FontSize="18"     Content="{x:Static lang:Resources.Cancel}" MinWidth="120" Height="auto"   Click="onButtonClick" />
 
 
                 </Grid>

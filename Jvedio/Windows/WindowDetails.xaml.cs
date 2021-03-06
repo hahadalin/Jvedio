@@ -131,7 +131,7 @@ namespace Jvedio
 
         public void DownLoad(object sender, RoutedEventArgs e)
         {
-            if (JvedioServers.IsProper())
+            if (!JvedioServers.IsProper())
             {
                 HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_UrlNotSet, "DetailsGrowl");
 

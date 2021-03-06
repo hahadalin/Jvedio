@@ -979,6 +979,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 精简模式 的本地化字符串。
+        /// </summary>
+        public static string EasyMode {
+            get {
+                return ResourceManager.GetString("EasyMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 编辑 的本地化字符串。
         /// </summary>
         public static string Edit {

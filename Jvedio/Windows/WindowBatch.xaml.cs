@@ -37,6 +37,8 @@ namespace Jvedio
         public CancellationTokenSource cts;
         public CancellationToken ct;
 
+        //TODO
+        //修复批量错误
 
         private bool running = false;
         public bool Running
@@ -226,25 +228,38 @@ namespace Jvedio
         private async Task<bool> DownLoad(string id)
         {
             Movie movie = DataBase.SelectMovieByID(id);
-            HttpResult httpResult = await  Net.DownLoadFromNet(movie, vieModel.Info_ForceDownload);
-            if (httpResult !=null && httpResult. Success)
-            {
-                ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo} {Jvedio.Language.Resources.Message_Success}");
-                Task.Delay(vieModel.Timeout_Short).Wait();
-            }
-            else if(httpResult!=null)
-            {
-                string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
-                ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{error}");
-            }
-
-            if (id.ToUpper().IndexOf("FC2") >= 0)
-                Task.Delay(vieModel.Timeout_Medium).Wait();
-
-
-            if (!vieModel.Info_ForceDownload && movie.IsToDownLoadInfo())
+            bool downloadinfo = vieModel.Info_ForceDownload || movie.IsToDownLoadInfo();
+            if (!downloadinfo)
                 ShowStatus($"{id}：{Jvedio.Language.Resources.Skip} {Jvedio.Language.Resources.SyncInfo}");
 
+
+
+            //下载信息
+            if (downloadinfo)
+            {
+                HttpResult httpResult = await Net.DownLoadFromNet(movie);
+                if (httpResult != null && httpResult.Success)
+                {
+                    ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo} {Jvedio.Language.Resources.Message_Success}");
+                }
+                else if (httpResult != null)
+                {
+                    string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
+                    ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{error}");
+                }
+                else
+                {
+                    ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{Jvedio.Language.Resources.HttpFail}");
+                }
+                Task.Delay(vieModel.Timeout_Medium).Wait();
+            }
+
+
+
+
+
+
+            //加载预览图
             movie = DataBase.SelectMovieByID(id);
             List<string> extraImageList = new List<string>();
             if (!string.IsNullOrEmpty(movie.extraimageurl) && movie.extraimageurl.IndexOf(";") > 0)
@@ -259,18 +274,35 @@ namespace Jvedio
             //同步缩略图
             if (vieModel.DownloadSmallPic)
             {
-                (success, resultMessage) = await Net.DownLoadImage(movie.smallimageurl, ImageType.SmallImage, movie.id);
-                ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Thumbnail}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}，{resultMessage}");
-                if (success) Task.Delay(vieModel.Timeout_Short).Wait();
+                string path = Path.Combine(BasePicPath, "SmallPic", movie.id + ".jpg");
+                if (!File.Exists(path))
+                {
+                    (success, resultMessage) = await Net.DownLoadImage(movie.smallimageurl, ImageType.SmallImage, movie.id);
+                    ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Thumbnail}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}");
+                    if (success) Task.Delay(vieModel.Timeout_Medium).Wait();
+                }
+                else
+                {
+                    ShowStatus($"{Jvedio.Language.Resources.Thumbnail} {Jvedio.Language.Resources.Message_AlreadyExist} {Jvedio.Language.Resources.Skip}");
+                }
             }
             if (CheckPause()) return false;
 
             //同步海报图
             if (vieModel.DownloadBigPic)
             {
-                (success, resultMessage) = await Net.DownLoadImage(movie.bigimageurl, ImageType.BigImage, movie.id);
-                ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Thumbnail}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}，{resultMessage}");
-                if (success) Task.Delay(vieModel.Timeout_Medium).Wait();
+                string path = Path.Combine(BasePicPath, "SmallPic", movie.id + ".jpg");
+                if (!File.Exists(path))
+                {
+
+                    (success, resultMessage) = await Net.DownLoadImage(movie.bigimageurl, ImageType.BigImage, movie.id);
+                    ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Poster}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}");
+                    if (success) Task.Delay(vieModel.Timeout_Medium).Wait();
+                }
+                else
+                {
+                    ShowStatus($"{Jvedio.Language.Resources.Poster} {Jvedio.Language.Resources.Message_AlreadyExist} {Jvedio.Language.Resources.Skip}");
+                }
             }
             if (CheckPause()) return false;
 
@@ -291,14 +323,14 @@ namespace Jvedio
                         {
                             (extraImageSuccess, cookies) = await Task.Run(() => { return Net.DownLoadImage(extraImageList[i], ImageType.ExtraImage, movie.id, Cookie: cookies); });
                             if (extraImageSuccess)
-                            {
-                                Task.Delay(vieModel.Timeout_Medium).Wait();
                                 ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Preview} {Jvedio.Language.Resources.Message_Success} {i + 1}/{extraImageList.Count}");
-                            }
                             else
-                            {
                                 ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Preview} {Jvedio.Language.Resources.Message_Fail} {i + 1}/{extraImageList.Count}");
-                            }
+                            Task.Delay(vieModel.Timeout_Medium).Wait();
+                        }
+                        else
+                        {
+                            ShowStatus($"{Jvedio.Language.Resources.Message_AlreadyExist} {Jvedio.Language.Resources.Skip}  {i + 1}/{extraImageList.Count}");
                         }
                     }
                 }
@@ -348,7 +380,7 @@ namespace Jvedio
             catch (OperationCanceledException ex)
             {
                 Console.WriteLine(ex.Message);
-                ShowStatus($"------------{Jvedio.Language.Resources.Cancel}------------");
+                //ShowStatus($"------------{Jvedio.Language.Resources.Cancel}------------");
                 App.Current.Dispatcher.Invoke((Action)delegate { WaitingPanel.Visibility = Visibility.Collapsed; });
                 return true;
             }
@@ -363,10 +395,12 @@ namespace Jvedio
             ShowStatus($"------------{Jvedio.Language.Resources.BeginAsync}------------");
             await Task.Run(async () =>
            {
+               //单个单个下载
                for (int i = 0; i < vieModel.TotalNum; i++)
                {
                    if (CheckPause()) break;
-                   bool result = await DownLoad(vieModel.Movies[i]);
+                    await DownLoad(vieModel.Movies[i]);
+
                }
            }, ct);
             ShowStatus($"------------{Jvedio.Language.Resources.Complete}------------");

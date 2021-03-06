@@ -1596,4 +1596,7 @@
   <data name="Attention_CopyDataBase" xml:space="preserve">
     <value>将原数据库的信息同步复制到目标数据库</value>
   </data>
+  <data name="EasyMode" xml:space="preserve">
+    <value>精简模式</value>
+  </data>
 </root>

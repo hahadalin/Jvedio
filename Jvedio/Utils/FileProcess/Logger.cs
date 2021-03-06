@@ -105,6 +105,7 @@ namespace Jvedio
 
         public static string GetAllFootprints(Exception x)
         {
+            if (x == null) return "";
             try
             {
                 var st = new StackTrace(x, true);

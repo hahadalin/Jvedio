@@ -298,7 +298,7 @@ namespace Jvedio
             }
 
             if (vieModel_DBManagement.DataBases.Count == 1) DatabaseComboBox.Visibility = Visibility.Hidden;
-            TabControl.SelectedIndex=2;
+            //TabControl.SelectedIndex=2;
 
         }
 

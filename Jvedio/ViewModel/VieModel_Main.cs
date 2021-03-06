@@ -27,6 +27,7 @@ using System.Xml;
 using HandyControl.Tools.Extension;
 using DynamicData.Annotations;
 using System.Windows.Media;
+using System.ComponentModel;
 
 namespace Jvedio.ViewModel
 {
@@ -77,6 +78,10 @@ namespace Jvedio.ViewModel
             //获得所有数据库
             LoadDataBaseList();
             LoadSearchHistory();
+            CurrentMovieList = new ObservableCollection<Movie>();
+            //CurrentMovieList.AllowEdit = true;
+            //CurrentMovieList.AllowNew = true;
+            //CurrentMovieList.AllowRemove = true;
         }
 
 
@@ -696,42 +701,19 @@ namespace Jvedio.ViewModel
         }
 
 
+        private int _ShowStampType = 0;
 
-
-        private bool _ShowHDV = true;
-        public bool ShowHDV
+        public int ShowStampType
         {
-            get { return _ShowHDV; }
+            get { return _ShowStampType; }
             set
             {
-                _ShowHDV = value;
+                _ShowStampType = value;
                 RaisePropertyChanged();
             }
         }
 
-        private bool _ShowCHS = true;
-        public bool ShowCHS
-        {
-            get { return _ShowCHS; }
-            set
-            {
-                _ShowCHS = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private bool _ShowFlowOut = true;
-        public bool ShowFlowOut
-        {
-            get { return _ShowFlowOut; }
-            set
-            {
-                _ShowFlowOut = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
+        
 
 
         private Sort _SortType = 0;
@@ -1446,6 +1428,7 @@ namespace Jvedio.ViewModel
 
         public void SaveSearchHistory()
         {
+            if (SearchFirstLetter) return;
             try
             {
                 if (SearchHistory.Count <= 0)
@@ -1535,7 +1518,7 @@ namespace Jvedio.ViewModel
             foreach (Movie item in Movies)
             {
                 Movie movie = item;
-                SetImage(ref movie);
+                if (!Properties.Settings.Default.EasyMode) SetImage(ref movie);
                 App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
             }
 
@@ -1554,14 +1537,35 @@ namespace Jvedio.ViewModel
 
         public async Task<bool> ClearCurrentMovieList()
         {
-            if (CurrentMovieList == null) CurrentMovieList = new ObservableCollection<Movie>();
-            for (int i = CurrentMovieList.Count - 1; i >= 0; i--)
-            {
-                await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new RemoveItemDelegate(RemoveMovie), CurrentMovieList[i]);
-            }
+            //if (CurrentMovieList == null) CurrentMovieList = new BindingList<Movie>();
+
+            //await Task.Run(() => {
+            //    App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate {
+            //        Main main = (Main)GetWindowByName("Main");
+            //        //main.MovieItemsControl.ItemsSource = null;
+            //    });
+            //});
+
+            
+
+            await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate {
+                //CurrentMovieList.RaiseListChangedEvents = false;
+                for (int i = CurrentMovieList.Count - 1; i >= 0; i--)
+                {
+                    CurrentMovieList[i].bigimage = null;
+                    CurrentMovieList[i].smallimage = null;
+                }
+            });
+
+
+
+
 
             await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate {
                 Main main = (Main)GetWindowByName("Main");
+                CurrentMovieList.Clear();
+                CurrentMovieList = new ObservableCollection<Movie>();
+                GC.Collect();
                 if (main.ImageSlides != null)
                 {
                     for (int i = 0; i < main.ImageSlides.Count; i++)
@@ -1570,8 +1574,12 @@ namespace Jvedio.ViewModel
                     }
                     main.ImageSlides.Clear();
                 }
+                if(Properties.Settings.Default.EasyMode)
+                    main.SimpleMovieItemsControl.ItemsSource = CurrentMovieList;
+                else
+                    main.MovieItemsControl.ItemsSource = CurrentMovieList;
             });
-           
+            
             return true;
         }
 
@@ -1694,7 +1702,7 @@ namespace Jvedio.ViewModel
                 ((Main)GetWindowByName("Main")).MovieScrollViewer.ScrollToTop();//滚到顶部
             });
 
-            Sort(); //排序
+            if(!Properties.Settings.Default.RandomDisplay) Sort(); //随机展示不排序，否则排序
 
             int number = 0;
             if (FilterMovieList != null) number = FilterMovieList.Count;
@@ -1731,12 +1739,17 @@ namespace Jvedio.ViewModel
                    if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.FlowOut;
                }
 
+               //根据标签戳筛选
+               if (ShowStampType>=1)
+                   Movies=Movies.Where(arg => arg.tagstamps.IndexOf(ShowStampType.ToString().ToTagString()) >= 0).ToList();
+
+               
 
 
-                   foreach (Movie item in Movies)
+               foreach (Movie item in Movies)
                {
                    Movie movie = item;
-                   SetImage(ref movie);
+                   if(!Properties.Settings.Default.EasyMode) SetImage(ref movie);
                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
                }
 
@@ -1762,13 +1775,6 @@ namespace Jvedio.ViewModel
             CurrentMovieList.Add(movie);
         }
 
-        private delegate void RemoveItemDelegate(Movie movie);
-        private void RemoveMovie(Movie movie)
-        {
-            OnCurrentMovieListRemove?.Invoke(movie.id, null);
-            DisposeMovie(movie.id);
-            CurrentMovieList.Remove(movie);
-        }
 
 
         private delegate void LoadLabelDelegate(string str);
