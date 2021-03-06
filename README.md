@@ -9,7 +9,7 @@
 
 
 
-<h3 align="center">Local video management</h3>
+<h3 align="center">Local Video Management</h3>
 
 
 
