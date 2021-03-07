@@ -3589,6 +3589,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 原数据库影片名称为空则跳过 的本地化字符串。
+        /// </summary>
+        public static string SkipIfTitleEmpty {
+            get {
+                return ResourceManager.GetString("SkipIfTitleEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 升序 的本地化字符串。
         /// </summary>
         public static string SmallToBig {

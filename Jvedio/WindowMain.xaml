@@ -86,10 +86,10 @@
         <Style x:Key="ActorImage" TargetType="{x:Type Image}">
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="AllowDrop" Value="True"/>
-            <Setter Property="Height" Value="100"/>
-            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="125"/>
+            <Setter Property="Width" Value="125"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Margin" Value="10 20"/>
+            <Setter Property="Margin" Value="0 0 0 10"/>
             <Setter Property="Source" Value="{Binding smallimage}" />
             <Style.Triggers>
                 <DataTrigger  Binding="{Binding smallimage}"  Value="{x:Null}">
@@ -104,6 +104,7 @@
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="5"/>
         </Style>
 
 
@@ -346,7 +347,7 @@
         </Style>
 
         <Style x:Key="ActorBorder" TargetType="{x:Type Border}">
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="0"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
 
@@ -2155,15 +2156,15 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <WrapPanel  Name="ActorWrapPanel" Orientation="Horizontal">
-                                                            <Grid Margin="5" Width="150">
+                                                            <Grid Margin="5" >
                                                                 <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="5"  >
                                                                     <Border.Effect>
                                                                         <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                     </Border.Effect>
                                                                 </Border>
-                                                                <StackPanel Orientation="Vertical" Margin="10">
-                                                                    <Image MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave"  Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver"  Drop="ActorImage_Drop"  />
-                                                                    <TextBox Name="ActorNameTextBox" TextWrapping="Wrap" TextAlignment="Center" MaxHeight="80" Margin="10 5" Foreground="{DynamicResource ForegroundGlobal}" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
+                                                                <StackPanel Orientation="Vertical" Margin="2">
+                                                                    <Image Stretch="UniformToFill" MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave"  Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver"  Drop="ActorImage_Drop"  />
+                                                                    <TextBox Name="ActorNameTextBox" Width="125" TextWrapping="Wrap" TextAlignment="Center" MaxHeight="80" Margin="0" Foreground="{DynamicResource ForegroundSearch}" Opacity="0.7" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
                                                                         <TextBox.Text>
                                                                             <MultiBinding StringFormat="{}{0}({1})">
                                                                                 <Binding Path="name" />

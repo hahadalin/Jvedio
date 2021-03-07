@@ -302,7 +302,7 @@
                 <StackPanel >
 
 
-                        <Button Margin="20 10" HorizontalAlignment="Left"  Content="{x:Static lang:Resources.Add}" MinWidth="100" Style="{DynamicResource ButtonPrimary}"  Click="NewServer" />
+                        <Button Margin="20 10" HorizontalAlignment="Left"  Content="{x:Static lang:Resources.Add}" MinWidth="100" Style="{DynamicResource FlatButton}"  Click="NewServer" />
 
                     <Border Margin="20 5" Style="{StaticResource BorderTipInfo}" Background="{DynamicResource BackgroundMenu}">
                         <TextBlock Text="{x:Static lang:Resources.Attention_UrlTest}" TextWrapping="Wrap" Foreground="{DynamicResource ForegroundGlobal}"/>
@@ -310,7 +310,7 @@
 
 
 
-                    <DataGrid Visibility="Visible" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Servers}" Background="{DynamicResource BackgroundMenu}" MinHeight="200" MaxHeight="400" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"   PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"    Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
+                    <DataGrid Visibility="Visible" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Servers}" Background="{DynamicResource BackgroundMenu}" MinHeight="200"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"   PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"    Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
  
                         
                         <DataGrid.Columns>
@@ -505,11 +505,11 @@
                     </StackPanel>
                     <WrapPanel Visibility="Visible" Orientation="Horizontal" Margin="20 0">
                         <TextBlock Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="0 2 20 0" Text="{x:Static lang:Resources.MoviePerPage}" />
-                        <hc:NumericUpDown  ToolTip="5-200"  Maximum="200" Minimum="4" Increment="10"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"   BorderThickness="0" Value="{Binding DisplayNumber, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"    />
+                        <hc:NumericUpDown  Margin="0 5"   ToolTip="5-200"  Maximum="200" Minimum="4" Increment="10"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"   BorderThickness="0" Value="{Binding DisplayNumber, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"    />
                         <TextBlock   Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="{x:Static lang:Resources.NumherEachFlow}"/>
-                        <hc:NumericUpDown ToolTip="5-50" Maximum="50" Minimum="1" Increment="5"   Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"     BorderThickness="0" Value="{Binding FlowNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"       />
+                        <hc:NumericUpDown  Margin="0 5"  ToolTip="5-50" Maximum="50" Minimum="1" Increment="5"   Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"     BorderThickness="0" Value="{Binding FlowNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"       />
                         <TextBlock  Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="{x:Static lang:Resources.ActorNumberPerPage}"/>
-                        <hc:NumericUpDown ToolTip="5-100" Maximum="100" Minimum="5" Increment="5"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"      BorderThickness="0" Value="{Binding ActorDisplayNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Width="100"       />
+                        <hc:NumericUpDown Margin="0 5" ToolTip="5-100" Maximum="100" Minimum="5" Increment="5"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"      BorderThickness="0" Value="{Binding ActorDisplayNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Width="100"       />
                     </WrapPanel>
 
 

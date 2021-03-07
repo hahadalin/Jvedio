@@ -379,7 +379,7 @@
     <value>Generate Actress Image</value>
   </data>
   <data name="Menu_GenerateScreenShot" xml:space="preserve">
-    <value>enerate ScreenShot</value>
+    <value>Generate ScreenShot</value>
   </data>
   <data name="Menu_GenerateGif" xml:space="preserve">
     <value>Generate Gif</value>
@@ -1598,5 +1598,8 @@
   </data>
   <data name="EasyMode" xml:space="preserve">
     <value>EasyMode</value>
+  </data>
+  <data name="SkipIfTitleEmpty" xml:space="preserve">
+    <value>The original database movie name is empty and skipped</value>
   </data>
 </root>

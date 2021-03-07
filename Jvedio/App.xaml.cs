@@ -67,18 +67,23 @@ namespace Jvedio
                     if(name== "ja-JP".ToUpper())
                     {
                         Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("ja-JP");
+                        Jvedio.Properties.Settings.Default.Language = "日本語";
                     }else if (name == "zh-CN".ToUpper())
                     {
                         Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("zh-CN");
+                        Jvedio.Properties.Settings.Default.Language = "中文";
                     }
                     else if (name == "en-US".ToUpper())
                     {
                         Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                        Jvedio.Properties.Settings.Default.Language = "English";
                     }
                     else 
                     {
                         Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                        Jvedio.Properties.Settings.Default.Language = "English";
                     }
+                    Jvedio.Properties.Settings.Default.Save();
                     break;
             }
         }

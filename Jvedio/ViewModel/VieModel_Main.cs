@@ -2107,14 +2107,14 @@ namespace Jvedio.ViewModel
         public void Reset()
         {
             SideIdx = 0;
-            ExecutiveSqlCommand(0, "所有视频", "SELECT * FROM movie");
+            ExecutiveSqlCommand(0, Jvedio.Language.Resources.AllVideo, "SELECT * FROM movie");
             
         }
 
         public void GetFavoritesMovie()
         {
             SideIdx = 1;
-            ExecutiveSqlCommand(1, "我的喜爱", "SELECT * from movie where favorites>0 and favorites<=5");
+            ExecutiveSqlCommand(1, Jvedio.Language.Resources.Favorites, "SELECT * from movie where favorites>0 and favorites<=5");
         }
 
         public void GetRecentMovie()
@@ -2122,7 +2122,7 @@ namespace Jvedio.ViewModel
             SideIdx = 2;
             string date1 = DateTime.Now.AddDays(-1 * Properties.Settings.Default.RecentDays).Date.ToString("yyyy-MM-dd");
             string date2 = DateTime.Now.ToString("yyyy-MM-dd");
-            ExecutiveSqlCommand(2, $"{Properties.Settings.Default.RecentDays} 天内的最近创建", $"SELECT * from movie WHERE scandate BETWEEN '{date1}' AND '{date2}'");
+            ExecutiveSqlCommand(2, $"{Jvedio.Language.Resources.RecentCreate} ({Properties.Settings.Default.RecentDays})", $"SELECT * from movie WHERE scandate BETWEEN '{date1}' AND '{date2}'");
         }
 
         public void GetRecentWatch(bool add = true)

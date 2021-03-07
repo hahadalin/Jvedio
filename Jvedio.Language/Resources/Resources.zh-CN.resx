@@ -1599,4 +1599,7 @@
   <data name="EasyMode" xml:space="preserve">
     <value>精简模式</value>
   </data>
+  <data name="SkipIfTitleEmpty" xml:space="preserve">
+    <value>原数据库影片名称为空则跳过</value>
+  </data>
 </root>
