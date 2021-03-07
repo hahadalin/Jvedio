@@ -68,6 +68,8 @@ namespace Jvedio
         public CancellationTokenSource RefreshScanCTS;
         public CancellationToken RefreshScanCT;
 
+        public CancellationTokenSource LoadActorCTS;
+        public CancellationToken LoadActorCT;
 
         public Settings WindowSet = null;
         public VieModel_Main vieModel;
@@ -4375,8 +4377,7 @@ namespace Jvedio
             if (!CanRateChange) return;
             HandyControl.Controls.Rate rate = (HandyControl.Controls.Rate)sender;
             StackPanel stackPanel = rate.Parent as StackPanel;
-            StackPanel sp = stackPanel.Parent as StackPanel;
-            TextBox textBox = sp.Children.OfType<TextBox>().First();
+            string id = stackPanel.Tag.ToString();
 
             if (vieModel.CurrentMovieList != null && vieModel.CurrentMovieList.Count > 0)
             {
@@ -4384,7 +4385,7 @@ namespace Jvedio
                 {
                     if (item != null)
                     {
-                        if (item.id.ToUpper() == textBox.Text.ToUpper())
+                        if (item.id.ToUpper() == id.ToUpper())
                         {
                             string table = GetCurrentList();
                             if (!string.IsNullOrEmpty(table))
@@ -5534,13 +5535,7 @@ namespace Jvedio
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
         }
 
-        LoadActorMovies loadActorMovies;
-        private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (loadActorMovies != null) loadActorMovies.Close();
-            loadActorMovies = new LoadActorMovies();
-            loadActorMovies.Show();
-        }
+
 
 
 
@@ -5716,6 +5711,44 @@ namespace Jvedio
             TextBlock textBlock = sender as TextBlock;
             Clipboard.SetText(textBlock.Text);
             HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.HasCopy, "Main");
+        }
+
+
+
+
+        private async void LoadActorOtherMovie(object sender, MouseButtonEventArgs e)
+        {
+            LoadActorWaitingPanel.Visibility = Visibility.Visible;
+            LoadActorCTS = new CancellationTokenSource();
+            LoadActorCTS.Token.Register(() => { Console.WriteLine("取消任务"); this.Cursor = Cursors.Arrow; });
+            LoadActorCT = LoadActorCTS.Token;
+
+            await Task.Run(async () => {
+                while (true)
+                {
+
+                }
+            });
+
+
+
+
+            LoadActorCTS.Dispose();
+
+        }
+
+        private void CancelLoadActor(object sender, RoutedEventArgs e)
+        {
+            LoadActorWaitingPanel.Visibility = Visibility.Hidden;
+
+            try
+            {
+                LoadActorCTS?.Dispose();
+            }
+            catch(ObjectDisposedException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 

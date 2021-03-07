@@ -715,6 +715,104 @@ namespace Jvedio
             if (httpResult == null && message != "") httpResult = new HttpResult() { Error = message, Success = false };
             return httpResult;
         }
+
+
+
+        //public static async Task<HttpResult> DownActorFromNet(string name)
+        //{
+        //    HttpResult httpResult = null;
+        //    string message = "";
+
+        //    if (movie.vediotype == (int)VedioType.欧美)
+        //    {
+        //        if (JvedioServers.BusEurope.IsEnable)
+        //            httpResult = await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl();
+        //        //else if (supportServices.BusEu.IsProperUrl() && !serviceEnables.BusEu) 
+        //        //    message = Jvedio.Language.Resources.UrlEuropeNotset;
+        //    }
+        //    else
+        //    {
+        //        //FC2 影片
+        //        if (movie.id.ToUpper().IndexOf("FC2") >= 0)
+        //        {
+        //            //优先从 db 下载
+        //            if (JvedioServers.DB.IsEnable)
+        //                httpResult = await new DBCrawler(movie.id).Crawl();
+        //            //else if (supportServices.DB.IsProperUrl() && !serviceEnables.DB) 
+        //            //    message = Jvedio.Language.Resources.UrlDBNotset;
+
+        //            //db 未下载成功则去 fc2官网
+        //            if (httpResult == null)
+        //            {
+        //                if (JvedioServers.FC2.IsEnable)
+        //                    httpResult = await new FC2Crawler(movie.id).Crawl();
+        //                //else if (supportServices.FC2.IsProperUrl() && !serviceEnables.FC2)
+        //                //    message = Jvedio.Language.Resources.UrlFC2Notset;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            //非FC2 影片
+        //            //优先从 Bus 下载
+        //            if (JvedioServers.Bus.IsEnable)
+        //                httpResult = await new BusCrawler(movie.id, (VedioType)movie.vediotype).Crawl();
+        //            //else if (supportServices.Bus.IsProperUrl() && !serviceEnables.Bus)
+        //            //    message = Jvedio.Language.Resources.UrlBusNotset;
+
+        //            //Bus 未下载成功则去 library
+        //            if (httpResult == null)
+        //            {
+        //                if (JvedioServers.Library.IsEnable)
+        //                    httpResult = await new LibraryCrawler(movie.id).Crawl();
+        //                //else if (supportServices.Library.IsProperUrl() && !serviceEnables.Library)
+        //                //    message = Jvedio.Language.Resources.UrlLibraryNotset;
+        //            }
+
+        //            //library 未下载成功则去 DB
+        //            if (httpResult == null)
+        //            {
+        //                if (JvedioServers.DB.IsEnable)
+        //                    httpResult = await new DBCrawler(movie.id).Crawl();
+        //                //else if (supportServices.DB.IsProperUrl() && !serviceEnables.DB)
+        //                //    message = Jvedio.Language.Resources.UrlDBNotset;
+        //            }
+
+        //            //DB未下载成功则去 FANZA
+        //            if (httpResult == null)
+        //            {
+        //                if (JvedioServers.DMM.IsEnable)
+        //                    httpResult = await new FANZACrawler(movie.id).Crawl();
+        //                //else if (supportServices.DMM.IsProperUrl() && !serviceEnables.DMM)
+        //                //    message = Jvedio.Language.Resources.UrlDMMNotset;
+        //            }
+
+        //            //FANZA 未下载成功则去 MOO
+        //            if (httpResult == null)
+        //            {
+        //                if (JvedioServers.MOO.IsEnable)
+        //                    httpResult = await new MOOCrawler(movie.id).Crawl();
+        //                //else if (supportServices.MOO.IsProperUrl() && !serviceEnables.MOO)
+        //                //    message = Jvedio.Language.Resources.UrlMOONotset;
+        //            }
+
+        //            //MOO 未下载成功则去 JAV321
+        //            if (httpResult == null)
+        //            {
+        //                if (JvedioServers.Jav321.IsEnable)
+        //                    httpResult = await new Jav321Crawler(movie.id).Crawl();
+        //                //else if (supportServices.Jav321.IsProperUrl() && !serviceEnables.Jav321)
+        //                //    message = Jvedio.Language.Resources.UrlJAV321Notset;
+        //            }
+
+        //        }
+
+        //    }
+
+        //    Movie newMovie = DataBase.SelectMovieByID(movie.id);
+        //    if (newMovie != null && newMovie.title != "" && httpResult != null) httpResult.Success = true;
+        //    if (httpResult == null && message != "") httpResult = new HttpResult() { Error = message, Success = false };
+        //    return httpResult;
+        //}
     }
 
 

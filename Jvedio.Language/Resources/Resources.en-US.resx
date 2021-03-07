@@ -1429,7 +1429,7 @@
     <value>download file</value>
   </data>
   <data name="CheckUpgrade" xml:space="preserve">
-    <value>Check for updates</value>
+    <value>Updates</value>
   </data>
   <data name="LoadActorOtherMovie" xml:space="preserve">
     <value>Load other works of this actor</value>

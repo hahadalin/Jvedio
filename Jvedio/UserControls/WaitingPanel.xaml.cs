@@ -33,17 +33,29 @@ namespace Jvedio.Controls
             }
         }
 
-    //    public static new readonly DependencyProperty VisibilityProperty = DependencyProperty.Register(
-    //"Visibility", typeof(Visibility), typeof(WaitingPanel), new PropertyMetadata(Visibility.Visible));
+        public static readonly DependencyProperty ShowProgressBarProperty = DependencyProperty.Register(
+    "ShowProgressBar", typeof(Visibility), typeof(WaitingPanel), new PropertyMetadata(Visibility.Collapsed));
 
-    //    public new Visibility Visibility
-    //    {
-    //        get { return (Visibility)GetValue(VisibilityProperty); }
-    //        set
-    //        {
-    //            SetValue(VisibilityProperty, value);
-    //        }
-    //    }
+        public Visibility ShowProgressBar
+        {
+            get { return (Visibility)GetValue(ShowProgressBarProperty); }
+            set
+            {
+                SetValue(ShowProgressBarProperty, value);
+            }
+        }
+
+        //    public static new readonly DependencyProperty VisibilityProperty = DependencyProperty.Register(
+        //"Visibility", typeof(Visibility), typeof(WaitingPanel), new PropertyMetadata(Visibility.Visible));
+
+        //    public new Visibility Visibility
+        //    {
+        //        get { return (Visibility)GetValue(VisibilityProperty); }
+        //        set
+        //        {
+        //            SetValue(VisibilityProperty, value);
+        //        }
+        //    }
 
 
         public WaitingPanel()

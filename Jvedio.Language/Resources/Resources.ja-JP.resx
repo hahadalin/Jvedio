@@ -1414,7 +1414,7 @@
     <value>ダウンロードファイル</value>
   </data>
   <data name="CheckUpgrade" xml:space="preserve">
-    <value>アップデートを確認</value>
+    <value>Updates</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>検索する</value>

@@ -707,8 +707,9 @@
         </Rectangle>
 
 
-        <JvedioControls:WaitingPanel   ShowCancelButton="Visible" Visibility="{Binding IsScanning,Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel"  ></JvedioControls:WaitingPanel>
+        <JvedioControls:WaitingPanel   ShowCancelButton="Visible" ShowProgressBar="Collapsed" Visibility="{Binding IsScanning,Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel"  ></JvedioControls:WaitingPanel>
 
+        <JvedioControls:WaitingPanel  x:Name="LoadActorWaitingPanel"  ShowCancelButton="Visible" ShowProgressBar="Visible" Visibility="Hidden"  Panel.ZIndex="5" Cancel="CancelLoadActor"  ></JvedioControls:WaitingPanel>
 
 
         <!--消息提示框-->
@@ -1500,7 +1501,7 @@
 
 
                                     <!--演员-->
-                                    <Grid Grid.Column="0" Visibility="{Binding ActorInfoGrid,FallbackValue=Collapsed}"    Margin="10">
+                                    <Grid Grid.Column="0" Visibility="{Binding ActorInfoGrid,FallbackValue=visible}"    Margin="10">
                                         <Border   Background="{DynamicResource BackgroundTitle}" CornerRadius="5" Margin="5"  >
                                             <Border.Effect>
                                                 <DropShadowEffect BlurRadius="20" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
@@ -1544,7 +1545,7 @@
                                                 <Border MouseLeftButtonUp="BeginDownLoadActress"  Style="{StaticResource ActorInfoBorderStyle}" >
                                                     <Image Source="pack://application:,,,/Resources/Picture/download.png" Margin="5"  Height="20"  />
                                                 </Border>
-                                                <Border  ToolTip="{x:Static lang:Resources.LoadActorOtherMovie}" Visibility="Collapsed"  PreviewMouseLeftButtonUp="Border_PreviewMouseLeftButtonUp" Style="{StaticResource ActorInfoBorderStyle}" >
+                                                <Border  ToolTip="{x:Static lang:Resources.LoadActorOtherMovie}" Visibility="Collapsed"  PreviewMouseLeftButtonUp="LoadActorOtherMovie" Style="{StaticResource ActorInfoBorderStyle}" >
                                                     <Image Source="pack://application:,,,/Resources/Picture/其他.png" Margin="5"  Height="17"  />
                                                 </Border>
                                                 <hc:Rate ToolTip="{x:Static lang:Resources.DoubleClickToCancel}" Visibility="Visible" AllowClear="True" Margin="10 0" Value="{Binding Actress.like,Mode=TwoWay}" Count="1" VerticalAlignment="Center" Background="{DynamicResource BackgroundSide}" Foreground="#FF7B3B" ValueChanged="Rate_ValueChanged_1"   />
@@ -1928,7 +1929,7 @@
                                                                                  Background="Transparent" 
                                                                                     />
 
-                                                                        <StackPanel PreviewMouseLeftButtonDown="StackPanel_PreviewMouseLeftButtonDown"  Visibility="{Binding Path=DisplayFavorites,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default},Mode=OneWay}" Width="auto" HorizontalAlignment="Left"  Margin="10 5" Cursor="Hand">
+                                                                        <StackPanel Tag="{Binding id,Mode=OneWay}"  PreviewMouseLeftButtonDown="StackPanel_PreviewMouseLeftButtonDown"  Visibility="{Binding Path=DisplayFavorites,Converter={StaticResource BoolToVis}, Source={x:Static p:Settings.Default},Mode=OneWay}" Width="auto" HorizontalAlignment="Left"  Margin="10 5" Cursor="Hand">
                                                                             <hc:Rate ValueChanged="Rate_ValueChanged" ItemHeight="15"   AllowClear="True" Value="{Binding favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   DefaultValue="0"/>
                                                                         </StackPanel>
 
