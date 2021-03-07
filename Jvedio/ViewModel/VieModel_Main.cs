@@ -1428,7 +1428,7 @@ namespace Jvedio.ViewModel
 
         public void SaveSearchHistory()
         {
-            if (SearchFirstLetter) return;
+            
             try
             {
                 if (SearchHistory.Count <= 0)
@@ -1985,7 +1985,7 @@ namespace Jvedio.ViewModel
                 else
                     MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where actor like '%{searchContent}%'");
             }
-            if (!SearchHistory.Contains(searchContent))
+            if (!SearchHistory.Contains(searchContent) && !SearchFirstLetter)
             {
                 SearchHistory.Add(searchContent);
                 SaveSearchHistory();

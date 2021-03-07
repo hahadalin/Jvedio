@@ -35,12 +35,12 @@ namespace Jvedio
             }
 
 
-            //UI线程未捕获异常处理事件
-            this.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);
-            //Task线程内未捕获异常处理事件　　　　　
-            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
-            //非UI线程未捕获异常处理事件
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            ////UI线程未捕获异常处理事件
+            //this.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);
+            ////Task线程内未捕获异常处理事件　　　　　
+            //TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            ////非UI线程未捕获异常处理事件
+            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             SetLanguageDictionary();
             base.OnStartup(e);
         }
@@ -49,6 +49,7 @@ namespace Jvedio
         {
             //设置语言
             string language=Jvedio.Properties.Settings.Default.Language;
+            
             switch (language)
             {
                 case "日本語":
@@ -61,7 +62,23 @@ namespace Jvedio
                     Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
                     break;
                 default:
-                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                    //根据地区获取语言
+                    string name = System.Globalization.CultureInfo.CurrentCulture.Name.ToUpper();
+                    if(name== "ja-JP".ToUpper())
+                    {
+                        Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("ja-JP");
+                    }else if (name == "zh-CN".ToUpper())
+                    {
+                        Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("zh-CN");
+                    }
+                    else if (name == "en-US".ToUpper())
+                    {
+                        Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                    }
+                    else 
+                    {
+                        Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                    }
                     break;
             }
         }

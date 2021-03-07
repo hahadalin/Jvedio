@@ -674,5 +674,10 @@ namespace Jvedio
             string path= AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
             if (File.Exists(path)) { Process.Start("explorer.exe", "/select, \"" + path + "\""); }
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Console.WriteLine(e.AddedItems[0].ToString());
+        }
     }
 }
