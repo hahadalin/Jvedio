@@ -568,30 +568,60 @@ namespace Jvedio
         {
             Task.Run(async () =>
             {
+                //获取本地的公告
                 string notices = "";
                 string path = AppDomain.CurrentDomain.BaseDirectory + "Notice.txt";
                 if (File.Exists(path))
                 {
-                    StreamReader sr = new StreamReader(path);
-                    notices = sr.ReadToEnd();
-                    sr.Close();
+                    using(StreamReader sr = new StreamReader(path))
+                    {
+                        notices = sr.ReadToEnd();
+                    }
                 }
-
                 HttpResult httpResult = await Net.Http(NoticeUrl);
-
+                //判断公告是否内容不同
                 if (httpResult != null && httpResult.SourceCode != "" && httpResult.SourceCode != notices)
                 {
-                    StreamWriter sw = new StreamWriter(path, false);
-                    sw.Write(httpResult.SourceCode);
-                    sw.Close();
+                    //覆盖原有公告
+                    using (StreamWriter sw = new StreamWriter(path, false))
+                    {
+                        sw.Write(httpResult.SourceCode);
+                    }
+                    //提示用户
                     this.Dispatcher.Invoke((Action)delegate ()
                     {
-                        new Dialog_Notice(this, false, httpResult.SourceCode).ShowDialog();
+                        new Dialog_Notice(this, false,GetNoticeByLanguage(httpResult.SourceCode,Properties.Settings.Default.Language)).ShowDialog();
                     });
-
-
                 }
             });
+        }
+
+        private  string GetNoticeByLanguage(string notice,string language)
+        {
+            int start = -1;
+            int end = -1;
+            switch (language)
+            {
+
+                case "中文":
+                    end = notice.IndexOf("--English--");
+                    if (end == -1) return notice;
+                    else return notice.Substring(0, end).Replace("--中文--", "");
+
+                case "English":
+                    start = notice.IndexOf("--English--");
+                    end = notice.IndexOf("--日本語--");
+                    if (end == -1 || start==-1) return notice;
+                    else return notice.Substring(start, end-start).Replace("--English--", "");
+
+                case "日本語":
+                    start = notice.IndexOf("--日本語--");
+                    if (start == -1) return notice;
+                    else return notice.Substring(start).Replace("--日本語--", "");
+
+                default:
+                    return notice;
+            }
         }
 
 
@@ -1172,15 +1202,11 @@ namespace Jvedio
             {
                 (bool success, string remote, string updateContent) = await Net.CheckUpdate();
                 string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                if (success && local.CompareTo(remote) > 0)
+                if (success && local.CompareTo(remote) < 0)
                 {
                     new Dialog_Upgrade(this, false, remote, updateContent).ShowDialog();
                 }
             }
-
-
-
-
         }
 
 
@@ -3954,7 +3980,6 @@ namespace Jvedio
             InitList();
             //检查更新
             CheckUpgrade(null, null);
-
             this.Cursor = Cursors.Arrow;
             //设置当前数据库
             for (int i = 0; i < vieModel.DataBases.Count; i++)

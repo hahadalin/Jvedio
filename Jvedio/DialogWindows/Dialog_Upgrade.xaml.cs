@@ -153,7 +153,7 @@ namespace Jvedio
             if (remote != "")
             {
                 RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
-                UpdateContentTextBox.Text = log;
+                UpdateContentTextBox.Text = GetContentByLanguage(log);
                 UpgradeLoadingCircle.Visibility = Visibility.Hidden;
             }
             else
@@ -164,7 +164,7 @@ namespace Jvedio
                 if (success )
                 {
                     RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
-                    UpdateContentTextBox.Text = updateContent;
+                    UpdateContentTextBox.Text = GetContentByLanguage(updateContent);
                 }
                 UpgradeLoadingCircle.Visibility = Visibility.Hidden;
             }
@@ -181,11 +181,39 @@ namespace Jvedio
             if (success)
             {
                 RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
-                UpdateContentTextBox.Text = updateContent;
+                UpdateContentTextBox.Text = GetContentByLanguage(updateContent);
             }
             UpgradeLoadingCircle.Visibility = Visibility.Hidden;
 
             button.IsEnabled = true;
+        }
+
+        private string GetContentByLanguage(string content)
+        {
+            int start = -1;
+            int end = -1;
+            switch (Properties.Settings.Default.Language)
+            {
+
+                case "中文":
+                    end = content.IndexOf("--English--");
+                    if (end == -1) return content;
+                    else return content.Substring(0, end).Replace("--中文--", "");
+
+                case "English":
+                    start = content.IndexOf("--English--");
+                    end = content.IndexOf("--日本語--");
+                    if (end == -1 || start == -1) return content;
+                    else return content.Substring(start, end - start).Replace("--English--", "");
+
+                case "日本語":
+                    start = content.IndexOf("--日本語--");
+                    if (start == -1) return content;
+                    else return content.Substring(start).Replace("--日本語--", "");
+
+                default:
+                    return content;
+            }
         }
     }
 }

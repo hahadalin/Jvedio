@@ -52,14 +52,15 @@ namespace Jvedio
             
             switch (language)
             {
-                case "日本語":
-                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("ja-JP");
-                    break;
+
                 case "中文":
                     Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("zh-CN");
                     break;
                 case "English":
                     Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                    break;
+                case "日本語":
+                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("ja-JP");
                     break;
                 default:
                     //根据地区获取语言
