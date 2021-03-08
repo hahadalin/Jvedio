@@ -216,6 +216,7 @@ namespace Jvedio
                "values(@id  , @title  , @filesize  , @filepath  , @subsection  , @vediotype  , @scandate  , @releasedate , @visits , @director  , @genre  , @tag  , @actor  , @actorid  ,@studio  , @rating , @chinesetitle  , @favorites  ,@label  , @plot  , @outline  , @year   , @runtime , @country  , @countrycode ,@otherinfo , @sourceurl , @source ,@actressimageurl ,@smallimageurl ,@bigimageurl ,@extraimageurl) " +
                "ON CONFLICT(id) DO UPDATE SET title=@title  , filesize=@filesize  , filepath=@filepath  , subsection=@subsection  , vediotype=@vediotype  , scandate=@scandate  , releasedate=@releasedate , visits=@visits , director=@director  , genre=@genre  , tag=@tag  , actor=@actor  , actorid=@actorid  ,studio=@studio  , rating=@rating , chinesetitle=@chinesetitle  ,favorites=@favorites  ,label=@label  , plot=@plot  , outline=@outline  , year=@year   , runtime=@runtime , country=@country  , countrycode=@countrycode ,otherinfo=@otherinfo , sourceurl=@sourceurl , source=@source ,actressimageurl=@actressimageurl ,smallimageurl=@smallimageurl ,bigimageurl=@bigimageurl ,extraimageurl=@extraimageurl";
 
+            if (movie.vediotype != 3) movie.id = movie.id.ToUpper();//除了 欧美影片之外，其他影片必须大写
             cmd.CommandText = sqltext;
             cmd.Parameters.Add("id", DbType.String).Value = movie.id;
             cmd.Parameters.Add("title", DbType.String).Value = movie.title;
@@ -260,6 +261,7 @@ namespace Jvedio
             string sqltext = $"INSERT INTO {table}(id  , title    , releasedate  , director  , genre  , tag  , actor  , actorid  ,studio  , rating       , plot  , outline  , year   , runtime     , sourceurl , source ,actressimageurl ,smallimageurl ,bigimageurl ,extraimageurl ) " +
                "values(@id  , @title    , @releasedate ,  @director  , @genre  , @tag  , @actor  , @actorid  ,@studio  , @rating    , @plot  , @outline  , @year   , @runtime  , @sourceurl , @source ,@actressimageurl ,@smallimageurl ,@bigimageurl ,@extraimageurl) " +
                "ON CONFLICT(id) DO UPDATE SET title=@title    , releasedate=@releasedate  , director=@director  , genre=@genre  , tag=@tag  , actor=@actor  , actorid=@actorid  ,studio=@studio  , rating=@rating   , plot=@plot  , outline=@outline  , year=@year   , runtime=@runtime  , sourceurl=@sourceurl , source=@source ,actressimageurl=@actressimageurl ,smallimageurl=@smallimageurl ,bigimageurl=@bigimageurl ,extraimageurl=@extraimageurl";
+            if (movie.vediotype != 3) movie.id = movie.id.ToUpper();//除了 欧美影片之外，其他影片必须大写
             cmd.CommandText = sqltext;
             cmd.Parameters.Add("id", DbType.String).Value = movie.id;
             cmd.Parameters.Add("title", DbType.String).Value = movie.title;
@@ -285,11 +287,27 @@ namespace Jvedio
         }
 
 
+        public void InsertSearchMovie(Movie movie, string table)
+        {
+            //20个数据
+            if (movie.vediotype != 3) movie.id = movie.id.ToUpper();//除了 欧美影片之外，其他影片必须大写
+            string sqltext = $"INSERT OR IGNORE INTO {table}(id  , title    , releasedate,vediotype,actor)  values(@id  , @title    , @releasedate,@vediotype,@actor) ";
+            cmd.CommandText = sqltext;
+            cmd.Parameters.Add("id", DbType.String).Value = movie.id;
+            cmd.Parameters.Add("title", DbType.String).Value = movie.title;
+            cmd.Parameters.Add("releasedate", DbType.String).Value = movie.releasedate;
+            cmd.Parameters.Add("vediotype", DbType.Int16).Value = movie.vediotype;
+            cmd.Parameters.Add("actor", DbType.String).Value = movie.actor;
+            cmd.ExecuteNonQuery();
+        }
+
+
         public void InsertScanedMovie(Movie movie)
         {
             string sqltext = "INSERT INTO movie(id , filesize ,filepath  , vediotype  ,scandate,subsection,otherinfo) values(@id , @filesize ,@filepath  , @vediotype  ,@scandate,@subsection,@otherinfo) ON CONFLICT(id) DO UPDATE SET filesize=@filesize,filepath=@filepath,scandate=@scandate,otherinfo=@otherinfo,vediotype=@vediotype,subsection=@subsection";
             cmd.CommandText = sqltext;
-            cmd.Parameters.Add("id", DbType.String).Value = movie.vediotype==3? movie.id:movie.id.ToUpper();
+            if (movie.vediotype != 3) movie.id = movie.id.ToUpper();//除了 欧美影片之外，其他影片必须大写
+            cmd.Parameters.Add("id", DbType.String).Value =movie.id;
             cmd.Parameters.Add("filesize", DbType.Double).Value = movie.filesize;
             cmd.Parameters.Add("filepath", DbType.String).Value = movie.filepath;
             cmd.Parameters.Add("vediotype", DbType.Int16).Value = movie.vediotype;

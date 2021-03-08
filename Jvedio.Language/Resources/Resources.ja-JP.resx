@@ -1602,4 +1602,25 @@
   <data name="SkipIfTitleEmpty" xml:space="preserve">
     <value>元のデータベースの映画の名前が空ならスキップします</value>
   </data>
+  <data name="SearchActor" xml:space="preserve">
+    <value>俳優の中から</value>
+  </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>結果がない</value>
+  </data>
+  <data name="ChooseActor" xml:space="preserve">
+    <value>俳優を選ぶ</value>
+  </data>
+  <data name="MoreThanThree" xml:space="preserve">
+    <value>3つを超えてはいけません</value>
+  </data>
+  <data name="SearchVideoType" xml:space="preserve">
+    <value>検索されたすべての動画はとみなします</value>
+  </data>
+  <data name="CurrentPage" xml:space="preserve">
+    <value>現在のページ番号</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>スタートページ</value>
+  </data>
 </root>

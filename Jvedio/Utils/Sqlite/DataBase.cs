@@ -828,6 +828,15 @@ namespace Jvedio
             }
         }
 
+        public static void InsertSearchMovie(Movie movie)
+        {
+            Init();
+            using (MySqlite mySqlite = new MySqlite(SqlitePath, true))
+            {
+                mySqlite.InsertSearchMovie(movie,"movie");
+            }
+        }
+
         public static void SaveMovieCodeByID(string id, string table, string code)
         {
             using (MySqlite mySqlite=new MySqlite(SqlitePath, true))

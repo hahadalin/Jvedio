@@ -574,6 +574,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 选择演员 的本地化字符串。
+        /// </summary>
+        public static string ChooseActor {
+            get {
+                return ResourceManager.GetString("ChooseActor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 选择视频库 的本地化字符串。
         /// </summary>
         public static string ChooseDataBase {
@@ -714,6 +723,15 @@ namespace Jvedio.Language {
         public static string CurrentAndTotal {
             get {
                 return ResourceManager.GetString("CurrentAndTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 当前页码 的本地化字符串。
+        /// </summary>
+        public static string CurrentPage {
+            get {
+                return ResourceManager.GetString("CurrentPage", resourceCulture);
             }
         }
         
@@ -2311,6 +2329,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 不可超过 3 个 的本地化字符串。
+        /// </summary>
+        public static string MoreThanThree {
+            get {
+                return ResourceManager.GetString("MoreThanThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 影片 的本地化字符串。
         /// </summary>
         public static string Movie {
@@ -2514,6 +2541,15 @@ namespace Jvedio.Language {
         public static string NoPermissionToListen {
             get {
                 return ResourceManager.GetString("NoPermissionToListen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 无结果 的本地化字符串。
+        /// </summary>
+        public static string NoResult {
+            get {
+                return ResourceManager.GetString("NoResult", resourceCulture);
             }
         }
         
@@ -3274,6 +3310,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 搜索演员中 的本地化字符串。
+        /// </summary>
+        public static string SearchActor {
+            get {
+                return ResourceManager.GetString("SearchActor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 搜索候选词数目（个） 的本地化字符串。
         /// </summary>
         public static string SearchCandidateNumber {
@@ -3324,6 +3369,15 @@ namespace Jvedio.Language {
         public static string SearchTooFrequent {
             get {
                 return ResourceManager.GetString("SearchTooFrequent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 搜索出的所有视频视为 的本地化字符串。
+        /// </summary>
+        public static string SearchVideoType {
+            get {
+                return ResourceManager.GetString("SearchVideoType", resourceCulture);
             }
         }
         
@@ -3657,6 +3711,15 @@ namespace Jvedio.Language {
         public static string Stamp {
             get {
                 return ResourceManager.GetString("Stamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 起始页 的本地化字符串。
+        /// </summary>
+        public static string StartPage {
+            get {
+                return ResourceManager.GetString("StartPage", resourceCulture);
             }
         }
         

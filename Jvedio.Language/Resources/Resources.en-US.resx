@@ -1602,4 +1602,25 @@
   <data name="SkipIfTitleEmpty" xml:space="preserve">
     <value>The original database movie name is empty and skipped</value>
   </data>
+  <data name="SearchActor" xml:space="preserve">
+    <value>Search Actor</value>
+  </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>There is no result</value>
+  </data>
+  <data name="ChooseActor" xml:space="preserve">
+    <value>Choose Actor</value>
+  </data>
+  <data name="MoreThanThree" xml:space="preserve">
+    <value>No more than three</value>
+  </data>
+  <data name="SearchVideoType" xml:space="preserve">
+    <value>Search out all videos as</value>
+  </data>
+  <data name="CurrentPage" xml:space="preserve">
+    <value>CurrentPage</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Start Page</value>
+  </data>
 </root>

@@ -1602,4 +1602,25 @@
   <data name="SkipIfTitleEmpty" xml:space="preserve">
     <value>原数据库影片名称为空则跳过</value>
   </data>
+  <data name="SearchActor" xml:space="preserve">
+    <value>搜索演员中</value>
+  </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>无结果</value>
+  </data>
+  <data name="ChooseActor" xml:space="preserve">
+    <value>选择演员</value>
+  </data>
+  <data name="MoreThanThree" xml:space="preserve">
+    <value>不可超过 3 个</value>
+  </data>
+  <data name="SearchVideoType" xml:space="preserve">
+    <value>搜索出的所有视频视为</value>
+  </data>
+  <data name="CurrentPage" xml:space="preserve">
+    <value>当前页码</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>起始页</value>
+  </data>
 </root>

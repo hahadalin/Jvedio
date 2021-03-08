@@ -36,14 +36,19 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
                         <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}"/>
-                        <TextBox Background="Transparent" Margin="20 5" BorderThickness="0" MaxHeight="300" Grid.Row="0"  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Wait}" />
+                        <TextBox Background="Transparent" Margin="20 5" BorderThickness="0" MaxHeight="300" Grid.Row="0"  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=NoticeText}" />
 
                     </StackPanel>
-                    <StackPanel Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=ShowProgressBar}"   >
+                    <StackPanel Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=ShowProgressBar,FallbackValue=Collapsed}"   >
 
 
                         <ProgressBar Margin="0 10" x:Name="ProgressBar" Style="{StaticResource ProgressBarSuccessStripe}" Width="150" Maximum="100" Value="50"/>
                         <TextBlock  Text="{Binding ElementName=ProgressBar,Path=Value,StringFormat={}{0}%}" Foreground="{DynamicResource ForegroundSearch}" VerticalAlignment="Center" Margin="5" TextAlignment="Center" HorizontalAlignment="Center" />
+
+                    </StackPanel >
+
+                    <StackPanel Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=ShowExtraText,FallbackValue=collapsed}"   >
+                        <TextBox Background="Transparent" Margin="20 5" BorderThickness="0" MaxHeight="300" Grid.Row="0"   HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=NoticeExtraText}" />
 
                     </StackPanel >
                     <Button Foreground="{DynamicResource ForegroundSearch}"  Visibility="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=ShowCancelButton}"  Style="{StaticResource FlatRedButton}" Grid.Row="2"  x:Name="CancelButton" Margin="10 20"   FontSize="18"     Content="{x:Static lang:Resources.Cancel}" MinWidth="120" Height="auto"   Click="onButtonClick" />

@@ -33,9 +33,50 @@ namespace Jvedio.Controls
             }
         }
 
-        public static readonly DependencyProperty ShowProgressBarProperty = DependencyProperty.Register(
-    "ShowProgressBar", typeof(Visibility), typeof(WaitingPanel), new PropertyMetadata(Visibility.Collapsed));
 
+
+
+        public static readonly DependencyProperty NoticeTextProperty = DependencyProperty.Register(
+    "NoticeText", typeof(string), typeof(WaitingPanel), new PropertyMetadata(Jvedio.Language.Resources.Wait));
+
+        public string NoticeText
+        {
+            get { return GetValue(NoticeTextProperty).ToString(); }
+            set
+            {
+                SetValue(NoticeTextProperty, value);
+            }
+        }
+
+
+        public static readonly DependencyProperty NoticeExtraTextProperty = DependencyProperty.Register(
+"NoticeExtraText", typeof(string), typeof(WaitingPanel), new PropertyMetadata(""));
+
+        public string NoticeExtraText
+        {
+            get { return GetValue(NoticeExtraTextProperty).ToString(); }
+            set
+            {
+                SetValue(NoticeExtraTextProperty, value);
+            }
+        }
+
+
+        public static readonly DependencyProperty ShowExtraTextProperty = DependencyProperty.Register(
+            "ShowExtraText", typeof(Visibility), typeof(WaitingPanel), new PropertyMetadata(Visibility.Collapsed));
+
+        public Visibility ShowExtraText
+        {
+            get { return (Visibility)GetValue(ShowExtraTextProperty); }
+            set
+            {
+                SetValue(ShowExtraTextProperty, value);
+            }
+        }
+
+
+        public static readonly DependencyProperty ShowProgressBarProperty = DependencyProperty.Register(
+"ShowProgressBar", typeof(Visibility), typeof(WaitingPanel), new PropertyMetadata(Visibility.Collapsed));
         public Visibility ShowProgressBar
         {
             get { return (Visibility)GetValue(ShowProgressBarProperty); }
