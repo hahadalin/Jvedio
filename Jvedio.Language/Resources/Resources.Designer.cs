@@ -682,6 +682,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 复制 的本地化字符串。
+        /// </summary>
+        public static string Copy {
+            get {
+                return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 复制视频同文件下的 poster 与 fanart 到 Jvedio 的图片目录 的本地化字符串。
         /// </summary>
         public static string CopyNFOImage {
@@ -750,6 +759,15 @@ namespace Jvedio.Language {
         public static string CustomAppearance {
             get {
                 return ResourceManager.GetString("CustomAppearance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 剪切 的本地化字符串。
+        /// </summary>
+        public static string Cut {
+            get {
+                return ResourceManager.GetString("Cut", resourceCulture);
             }
         }
         
@@ -1020,6 +1038,15 @@ namespace Jvedio.Language {
         public static string Enable {
             get {
                 return ResourceManager.GetString("Enable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 终止页 的本地化字符串。
+        /// </summary>
+        public static string EndPage {
+            get {
+                return ResourceManager.GetString("EndPage", resourceCulture);
             }
         }
         
@@ -2806,6 +2833,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 粘贴 的本地化字符串。
+        /// </summary>
+        public static string Paste {
+            get {
+                return ResourceManager.GetString("Paste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 暂停 的本地化字符串。
         /// </summary>
         public static string Pause {
@@ -3396,6 +3432,15 @@ namespace Jvedio.Language {
         public static string SelectAll {
             get {
                 return ResourceManager.GetString("SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 全选 的本地化字符串。
+        /// </summary>
+        public static string SelectAllText {
+            get {
+                return ResourceManager.GetString("SelectAllText", resourceCulture);
             }
         }
         
@@ -4287,6 +4332,15 @@ namespace Jvedio.Language {
         public static string UNCScan {
             get {
                 return ResourceManager.GetString("UNCScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 撤销 的本地化字符串。
+        /// </summary>
+        public static string Undo {
+            get {
+                return ResourceManager.GetString("Undo", resourceCulture);
             }
         }
         

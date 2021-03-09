@@ -13,9 +13,6 @@
              d:DesignHeight="400" 
              d:DesignWidth="500"
              >
-    <UserControl.Resources>
-
-    </UserControl.Resources>
 
 
     <Grid x:Name="MainGrid"  AllowDrop="True" Margin="10"   >
@@ -45,7 +42,7 @@
                 </Grid>
                 
             </Border>
-            <TextBox FontSize="20" Grid.Row="1"  x:Name="StatusTextBox" IsReadOnly="True"   Text="test" Padding="5" VerticalContentAlignment="Top" TextWrapping="WrapWithOverflow" Background="{DynamicResource BackgroundMenu}" Opacity="0.8" Foreground="{DynamicResource ForegroundSearch}" Height="auto" Margin="5" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <TextBox ContextMenu="{StaticResource CopyContextMenu}" FontSize="20" Grid.Row="1"  x:Name="StatusTextBox" IsReadOnly="True"   Text="test" Padding="5" VerticalContentAlignment="Top" TextWrapping="WrapWithOverflow" Background="{DynamicResource BackgroundMenu}" Opacity="0.8" Foreground="{DynamicResource ForegroundSearch}" Height="auto" Margin="5" Width="auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
 
         </Grid>

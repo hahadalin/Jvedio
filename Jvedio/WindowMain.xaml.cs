@@ -3508,7 +3508,7 @@ namespace Jvedio
 
         }
 
-        private void ActorTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void GoToActorPage(object sender, KeyEventArgs e)
         {
             if (vieModel.TotalActorPage <= 1) return;
             if (e.Key == Key.Enter)
@@ -3526,7 +3526,7 @@ namespace Jvedio
             }
         }
 
-        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void GoToPage(object sender, KeyEventArgs e)
         {
             if (vieModel.TotalPage <= 1) return;
             if (e.Key == Key.Enter)
@@ -3716,8 +3716,7 @@ namespace Jvedio
             if (sender is MenuItem mnu)
             {
                 sp = ((ContextMenu)mnu.Parent).PlacementTarget as StackPanel;
-                var TB = sp.Children.OfType<TextBox>().First();
-                string name = TB.Text.Split('(')[0];
+                string name = sp.Tag.ToString();
                 Actress CurrentActress = GetActressFromVieModel(name);
                 if (!SelectedActress.Select(g => g.name).ToList().Contains(CurrentActress.name)) SelectedActress.Add(CurrentActress);
                 StartDownLoadActor(SelectedActress);
@@ -3734,8 +3733,7 @@ namespace Jvedio
             if (sender is MenuItem mnu)
             {
                 sp = ((ContextMenu)mnu.Parent).PlacementTarget as StackPanel;
-                var TB = sp.Children.OfType<TextBox>().First();
-                string name = TB.Text.Split('(')[0];
+                string name = sp.Tag.ToString();
                 Actress CurrentActress = GetActressFromVieModel(name);
                 if (!SelectedActress.Select(g => g.name).ToList().Contains(CurrentActress.name)) SelectedActress.Add(CurrentActress);
                 DataBase.CreateTable(DataBase.SQLITETABLE_ACTRESS_LOVE);
@@ -5453,7 +5451,12 @@ namespace Jvedio
 
         private void HideActressGrid(object sender, MouseButtonEventArgs e)
         {
-            vieModel.ActorInfoGrid = Visibility.Collapsed;
+            Border border = (Border)sender;
+            Grid grid = border.Parent as Grid;
+            var anim = new DoubleAnimation(1, 0, (Duration)FadeInterval, FillBehavior.Stop);
+            anim.Completed += (s, _) => vieModel.ActorInfoGrid = Visibility.Collapsed; ;
+            grid.BeginAnimation(UIElement.OpacityProperty, anim);
+            
         }
 
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -5468,7 +5471,11 @@ namespace Jvedio
 
         private void ActorProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            vieModel.ActorProgressBarVisibility = Visibility.Visible;
+            if (vieModel == null) return;
+            if(vieModel.ActorProgressBarValue==100)
+                vieModel.ActorProgressBarVisibility = Visibility.Hidden;
+            else
+                vieModel.ActorProgressBarVisibility = Visibility.Visible;
         }
 
 
@@ -5688,7 +5695,7 @@ namespace Jvedio
                     HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.CannotOpen + $" {vieModel.Actress.sourceurl}", "Main");
                 }
             }
-                
+
 
         }
 
@@ -5870,103 +5877,107 @@ namespace Jvedio
                     }
                     else
                     {
-                            int vt = 1;
-                            int page = 1;
-                            //让用户选择
-                            Dispatcher.Invoke((Action)delegate
-                            {
-                                Dialog_SelectActor dialog = new Dialog_SelectActor(this, true, actorSearches);
+                        int vt = 1;
+                        int startpage = 1;
+                        int endpage = 500;
+                        //让用户选择
+                        Dispatcher.Invoke((Action)delegate
+                        {
+                            Dialog_SelectActor dialog = new Dialog_SelectActor(this, true, actorSearches);
 
-                                if (dialog.ShowDialog() == true)
+                            if (dialog.ShowDialog() == true)
+                            {
+                                for (int i = 0; i < dialog.SelectedActor.Count; i++)
                                 {
-                                    for (int i = 0; i < dialog.SelectedActor.Count; i++)
-                                    {
-                                        toDownload.Add(actorSearches.Where(arg => arg.ID == dialog.SelectedActor[i]).First());
-                                    }
-                                    vt = dialog.VedioType;
-                                    page = dialog.StartPage;
+                                    toDownload.Add(actorSearches.Where(arg => arg.ID == dialog.SelectedActor[i]).First());
                                 }
-                            });
-
-
-                            if (toDownload.Count > 3)
-                            {
-                                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.MoreThanThree, "Main");
+                                vt = dialog.VedioType;
+                                startpage = dialog.StartPage;
+                                endpage = dialog.EndPage;
                             }
-                            else
+                        });
+
+
+                        if (toDownload.Count > 3)
+                        {
+                            HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.MoreThanThree, "Main");
+                        }
+                        else
+                        {
+                            long total = 0;
+                            //遍历要下载的演员
+                            for (int i = 0; i < toDownload.Count; i++)
                             {
-                                long total = 0;
-                                //遍历要下载的演员
-                                for (int i = 0; i < toDownload.Count; i++)
+                                int page = startpage;
+                                if (CheckLoadActorCancel()) break;
+                                ActorSearch actorSearch = toDownload[i];
+                                while (true)
                                 {
                                     if (CheckLoadActorCancel()) break;
-                                    ActorSearch actorSearch = toDownload[i];
-                                    while (true  )
+                                    url = actorSearch.Link;
+                                    if (page > 1) url += $"/{page}";
+                                    Dispatcher.Invoke((Action)delegate
                                     {
-                                        if (CheckLoadActorCancel()) break;
-                                        url = actorSearch.Link;
-                                        if (page > 1) url += $"/{page}";
-                                        Dispatcher.Invoke((Action)delegate
-                                        {
-                                            LoadActorWaitingPanel.ShowCancelButton = Visibility.Visible;
-                                            LoadActorWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n"+ Jvedio.Language.Resources.CurrentPage + "：" + page;
-                                            LoadActorWaitingPanel.ShowExtraText = Visibility.Visible;
-                                        });
+                                        LoadActorWaitingPanel.ShowCancelButton = Visibility.Visible;
+                                        LoadActorWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + page;
+                                        LoadActorWaitingPanel.ShowExtraText = Visibility.Visible;
+                                    });
 
-                                        HttpResult newResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
-                                        page++;
-                                        if (newResult != null && newResult.SourceCode != "" && newResult.StatusCode == HttpStatusCode.OK)
+                                    HttpResult newResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
+                                    page++;
+                                    if (newResult != null && newResult.SourceCode != "" && newResult.StatusCode == HttpStatusCode.OK)
+                                    {
+                                        //解析演员
+                                        List<Movie> movies = GetMoviesFromPage(newResult.SourceCode);
+                                        List<string> idlist = DataBase.SelectAllID();
+                                        foreach (Movie movie in movies)
                                         {
-                                            //解析演员
-                                            List<Movie> movies = GetMoviesFromPage(newResult.SourceCode);
-                                            List<string> idlist = DataBase.SelectAllID();
-                                            foreach (Movie movie in movies)
-                                            {
-                                                if (idlist.Contains(movie.id)) continue;//如果数据库存在则跳过，不会更新信息
-                                                movie.vediotype = vt;
-                                                movie.actor = name;
-                                                if (vt != 3) movie.id = movie.id.ToUpper();
-                                                DataBase.InsertSearchMovie(movie);
-                                                total += 1;
-                                            }
-
-                                            if (page == 2)
-                                            {
-                                                Actress actress = DataBase.SelectInfoFromActress(new Actress() { name = actorSearch.Name });
-                                                if (string.IsNullOrEmpty(actress.birthday))
-                                                {
-                                                    BusParse busParse = new BusParse("", newResult.SourceCode, VedioType.所有);
-                                                    Actress saveActress = busParse.ParseActress();
-                                                    saveActress.sourceurl = url;
-                                                    saveActress.source = "javbus";
-                                                    saveActress.id = "";
-                                                    saveActress.name = actorSearch.Name;
-                                                    if (saveActress != null && !string.IsNullOrEmpty(saveActress.birthday))
-                                                        DataBase.InsertActress(saveActress);//保存演员的信息到数据库
-                                                }
-                                            }
-
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine(Jvedio.Language.Resources.HttpFail);
-                                            break;
-                                            //HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.HttpFail, "Main");
+                                            if (idlist.Contains(movie.id)) continue;//如果数据库存在则跳过，不会更新信息
+                                            movie.vediotype = vt;
+                                            movie.actor = name;
+                                            if (vt != 3) movie.id = movie.id.ToUpper();
+                                            DataBase.InsertSearchMovie(movie);
+                                            total += 1;
                                         }
 
-                                        await Task.Delay(5000);
+                                        if (page == 2)
+                                        {
+                                            Actress actress = DataBase.SelectInfoFromActress(new Actress() { name = actorSearch.Name });
+                                            if (string.IsNullOrEmpty(actress.birthday))
+                                            {
+                                                BusParse busParse = new BusParse("", newResult.SourceCode, VedioType.所有);
+                                                Actress saveActress = busParse.ParseActress();
+                                                saveActress.sourceurl = url;
+                                                saveActress.source = "javbus";
+                                                saveActress.id = "";
+                                                saveActress.name = actorSearch.Name;
+                                                if (saveActress != null && !string.IsNullOrEmpty(saveActress.birthday))
+                                                    DataBase.InsertActress(saveActress);//保存演员的信息到数据库
+                                            }
+                                        }
+                                        if (page > endpage) break;//达到末页
+                                        if (movies.Count < 30) break;//小于每页的最大数目
                                     }
+                                    else
+                                    {
+                                        Console.WriteLine(Jvedio.Language.Resources.HttpFail);
+                                        break;
+                                        //HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.HttpFail, "Main");
+                                    }
+
                                     await Task.Delay(5000);
                                 }
-                                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Complete, "Main");
+                                await Task.Delay(5000);
                             }
-
-
+                            HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Complete, "Main");
                         }
 
 
+                    }
 
-                    
+
+
+
 
 
 
@@ -5976,7 +5987,7 @@ namespace Jvedio
                 {
                     HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.HttpFail, "Main");
                 }
-            },LoadActorCT);
+            }, LoadActorCT);
             LoadActorWaitingPanel.Visibility = Visibility.Collapsed;
             LoadActorCTS?.Dispose();
             Console.WriteLine("结束");

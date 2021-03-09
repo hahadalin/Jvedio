@@ -36,7 +36,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
                         <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}"/>
-                        <TextBox Background="Transparent" Margin="20 5" BorderThickness="0" MaxHeight="300" Grid.Row="0"  x:Name="TextBlock" HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=NoticeText}" />
+                        <TextBlock Background="Transparent" Margin="20 5"   MaxHeight="300" Grid.Row="0"  x:Name="TextBlock"   Style="{StaticResource BaseTextBlock}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=NoticeText,FallbackValue=请稍等}" />
 
                     </StackPanel>
                     <StackPanel Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=ShowProgressBar,FallbackValue=Collapsed}"   >

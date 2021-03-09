@@ -28,6 +28,7 @@
             <Setter Property="FontFamily" Value="Times New Romans"/>
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
+            <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="5"/>
@@ -52,6 +53,1525 @@
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="2"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
+        </Style>
+        <Style x:Key="DatePickerStyle1" TargetType="{x:Type hc:DatePicker}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type hc:DatePicker}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="StoryboardHidden">
+                                <ThicknessAnimation Duration="0" To="9,0,0,4" Storyboard.TargetProperty="Margin" Storyboard.TargetName="TextBlockError"/>
+                            </Storyboard>
+                            <Storyboard x:Key="StoryboardShow">
+                                <ThicknessAnimation Duration="0:0:0.2" To="9,0,0,-18" Storyboard.TargetProperty="Margin" Storyboard.TargetName="TextBlockError"/>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition MinHeight="{Binding (hc:InfoElement.MinContentHeight), RelativeSource={RelativeSource TemplatedParent}}">
+                                    <RowDefinition.Height>
+                                        <Binding Path="(hc:InfoElement.ContentHeight)" RelativeSource="{RelativeSource TemplatedParent}">
+                                            <Binding.Converter>
+                                                <hc:Double2GridLengthConverter/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </RowDefinition.Height>
+                                </RowDefinition>
+                            </Grid.RowDefinitions>
+                            <StackPanel Margin="{TemplateBinding Padding}" Orientation="Horizontal">
+                                <StackPanel.Visibility>
+                                    <Binding Path="(hc:TitleElement.Title)" RelativeSource="{RelativeSource TemplatedParent}">
+                                        <Binding.Converter>
+                                            <hc:String2VisibilityConverter/>
+                                        </Binding.Converter>
+                                    </Binding>
+                                </StackPanel.Visibility>
+                                <TextBlock Margin="1,0,0,0" Text="{Binding (hc:TitleElement.Title), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <ContentPresenter Content="{Binding (hc:InfoElement.Symbol), RelativeSource={RelativeSource TemplatedParent}}" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0">
+                                    <ContentPresenter.Visibility>
+                                        <Binding Path="(hc:InfoElement.Necessary)" RelativeSource="{RelativeSource TemplatedParent}">
+                                            <Binding.Converter>
+                                                <BooleanToVisibilityConverter/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </ContentPresenter.Visibility>
+                                </ContentPresenter>
+                            </StackPanel>
+                            <TextBlock x:Name="TextBlockError" Foreground="{DynamicResource DangerBrush}" FontSize="12" Margin="9,0,0,4" Grid.Row="1" Text="{TemplateBinding ErrorStr}" VerticalAlignment="Bottom"/>
+                            <Border x:Name="templateRoot" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" Grid.Row="1">
+                                <Grid x:Name="PART_Root" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="25"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="ButtonClear" Grid.Column="1" Command="hc:ControlCommands.Clear" Foreground="{Binding BorderBrush, ElementName=templateRoot}" hc:IconElement.Geometry="M7.4038057,6.4038057C7.1478834,6.4038057 6.8919611,6.5014372 6.6966991,6.6966991 6.3061748,7.0872235 6.3061748,7.7203884 6.6966991,8.1109123L10.585787,12 6.6966991,15.889088C6.3061748,16.279612 6.3061748,16.912777 6.6966991,17.303301 7.0872235,17.693825 7.7203879,17.693825 8.1109123,17.303301L12,13.414213 15.889088,17.303301C16.279612,17.693825 16.912777,17.693825 17.303301,17.303301 17.693825,16.912777 17.693825,16.279612 17.303301,15.889088L13.414213,12 17.303301,8.1109123C17.693825,7.7203884 17.693825,7.0872235 17.303301,6.6966991 16.912777,6.3061748 16.279612,6.3061748 15.889088,6.6966991L12,10.585787 8.1109123,6.6966991C7.9156504,6.5014372,7.6597281,6.4038057,7.4038057,6.4038057z M12,0C18.627417,0 24,5.3725829 24,12 24,18.627417 18.627417,24 12,24 5.3725829,24 0,18.627417 0,12 0,5.3725829 5.3725829,0 12,0z" Height="Auto" Padding="0,6" Visibility="Collapsed" Width="16">
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Setter Property="hc:BorderElement.CornerRadius" Value="0"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                <ContentControl HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                    <Path Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                </ContentControl>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.BasedOn>
+                                                    <Style TargetType="{x:Type Button}">
+                                                        <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+                                                        <Setter Property="hc:BorderElement.CornerRadius" Value="4"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                                    <hc:SimplePanel>
+                                                                        <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                            <StackPanel HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Orientation="Horizontal" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                <Path x:Name="PathMain" Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                                <ContentPresenter x:Name="ContentPresenterMain" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="6,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                    </hc:SimplePanel>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="Content" Value="{x:Null}">
+                                                                            <Setter Property="Visibility" TargetName="ContentPresenterMain" Value="Collapsed"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="hc:IconElement.Geometry" Value="{x:Null}">
+                                                                            <Setter Property="Visibility" TargetName="PathMain" Value="Collapsed"/>
+                                                                            <Setter Property="Margin" TargetName="ContentPresenterMain" Value="0"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.BasedOn>
+                                                            <Style TargetType="{x:Type ButtonBase}">
+                                                                <Setter Property="Height" Value="30"/>
+                                                                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                                                                <Setter Property="Padding" Value="10,6"/>
+                                                                <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}"/>
+                                                                <Setter Property="BorderThickness" Value="0"/>
+                                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                                <Style.BasedOn>
+                                                                    <Style TargetType="{x:Type Control}">
+                                                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                                                        <Setter Property="FontSize" Value="12"/>
+                                                                        <Setter Property="FocusVisualStyle">
+                                                                            <Setter.Value>
+                                                                                <Style>
+                                                                                    <Setter Property="Control.Template">
+                                                                                        <Setter.Value>
+                                                                                            <ControlTemplate>
+                                                                                                <Rectangle RadiusY="4" RadiusX="4">
+                                                                                                    <Rectangle.Style>
+                                                                                                        <Style TargetType="{x:Type Rectangle}">
+                                                                                                            <Setter Property="Margin" Value="-2"/>
+                                                                                                            <Setter Property="Opacity" Value="0.6"/>
+                                                                                                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                                                                                            <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                                                                                            <Setter Property="StrokeThickness" Value="2"/>
+                                                                                                            <Setter Property="StrokeDashArray" Value="1 1"/>
+                                                                                                        </Style>
+                                                                                                    </Rectangle.Style>
+                                                                                                </Rectangle>
+                                                                                            </ControlTemplate>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                </Style>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </Style>
+                                                                </Style.BasedOn>
+                                                            </Style>
+                                                        </Style.BasedOn>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Opacity" Value="0.9"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Setter Property="Opacity" Value="0.6"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                <Setter Property="Opacity" Value="0.4"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Style.BasedOn>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button x:Name="PART_Button" Grid.Column="2" Foreground="{Binding BorderBrush, ElementName=templateRoot}" Focusable="False" hc:IconElement.Geometry="M377.897477,116.291025L643.196195,116.291025 643.196195,163.75015 377.897477,163.75015 377.897477,116.291025z M888.317416,116.291025L748.229288,116.291025 748.229288,163.75015 871.777948,163.75015C889.945574,163.75015,904.67268,178.477256,904.67268,196.644882L904.67268,289.574752 115.42936,289.574752 115.42936,196.644882C115.42936,178.477256,130.156466,163.75015,148.324092,163.75015L271.872752,163.75015 271.872752,116.291025 131.776437,116.291025C96.532081,116.291025,67.962048,144.862081,67.962048,180.106437L67.966141,894.072766C67.966141,929.316099,96.537197,957.887155,131.78053,957.887155L888.321509,957.887155C923.565865,957.887155,952.135898,929.316099,952.135898,894.071743L952.131805,180.105414C952.131805,144.861058,923.560749,116.291025,888.317416,116.291025z M904.67268,337.033877L904.67268,877.532275C904.67268,895.699901,889.945574,910.427007,871.777948,910.427007L148.324092,910.427007C130.156466,910.427007,115.42936,895.699901,115.42936,877.532275L115.42936,337.033877 904.67268,337.033877z M300.659736,64.801927L348.118861,64.801927 348.118861,235.043219 300.659736,235.043219 300.659736,64.801927z M672.97481,64.801927L720.425748,64.801927 720.425748,235.043219 672.97481,235.043219 672.97481,64.801927z M358.384138,547.939214L358.384138,778.960646 411.247602,778.960646 411.247602,459.226591 376.667404,459.226591 374.01589,463.031426C356.015071,488.927432,332.566931,511.790212,304.334605,530.987334L300.447902,533.630661 300.447902,587.373187 313.889674,579.304031C330.690097,569.215794,345.588103,558.712075,358.384138,547.939214z M618.031888,726.552576C607.744097,732.948547 593.59621,734.621732 575.971986,731.501522 559.877677,728.658641 548.073274,713.128201 540.88932,685.342058L538.627705,676.588277 490.315102,690.012652 492.004662,698.142186C498.27476,728.3107 510.352399,750.195153 527.889638,763.160041 545.010372,775.86602 563.43179,782.937405 582.620725,784.203296 585.979377,784.428434 589.276628,784.541003 592.518617,784.541003 607.377736,784.541003 620.949474,782.166819 632.970828,777.468595 647.387857,771.826837 659.859488,764.130182 670.04699,754.605815 680.412556,744.881893 688.277041,732.462453 693.425542,717.685203 698.343788,703.514802 701.165178,689.388406 701.810915,675.660095 702.417765,662.001372 701.143687,649.009877 698.019384,637.040713L698.011197,637.023316C694.900197,625.24552 689.877569,613.284543 683.065093,601.471953 675.711262,588.792581 664.036825,578.721742 648.354928,571.519367 633.317745,564.646513 617.427085,560.833491 601.107638,560.191847 589.693133,559.776365 577.620611,561.578493 565.063018,565.625864 568.87604,551.057378 572.711575,533.741183 576.528691,513.850227L690.405621,513.850227 690.405621,464.492778 535.645647,464.492778 534.150525,471.521182C509.528597,587.292342,502.560571,617.018767,501.048052,621.560417L497.615718,631.899375 543.445661,637.290411 546.500377,633.087491C554.647308,621.87254 564.747825,614.947495 577.380123,611.92348 590.384922,608.785873 602.12383,608.742892 612.259141,611.793514 622.117122,614.748964 630.081897,620.564692 636.586343,629.551798 643.098976,638.582908 646.670486,649.944199 647.203654,663.309219 647.723518,677.158286 645.600056,689.751696 640.889552,700.749695 636.315153,711.429431 628.843637,719.871089 618.031888,726.552576z" Height="Auto" Padding="2,6,7,6" Grid.Row="0">
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Setter Property="hc:BorderElement.CornerRadius" Value="0"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                <ContentControl HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                    <Path Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                </ContentControl>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.BasedOn>
+                                                    <Style TargetType="{x:Type Button}">
+                                                        <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+                                                        <Setter Property="hc:BorderElement.CornerRadius" Value="4"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                                    <hc:SimplePanel>
+                                                                        <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                            <StackPanel HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Orientation="Horizontal" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                <Path x:Name="PathMain" Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                                <ContentPresenter x:Name="ContentPresenterMain" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="6,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                    </hc:SimplePanel>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="Content" Value="{x:Null}">
+                                                                            <Setter Property="Visibility" TargetName="ContentPresenterMain" Value="Collapsed"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="hc:IconElement.Geometry" Value="{x:Null}">
+                                                                            <Setter Property="Visibility" TargetName="PathMain" Value="Collapsed"/>
+                                                                            <Setter Property="Margin" TargetName="ContentPresenterMain" Value="0"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.BasedOn>
+                                                            <Style TargetType="{x:Type ButtonBase}">
+                                                                <Setter Property="Height" Value="30"/>
+                                                                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                                                                <Setter Property="Padding" Value="10,6"/>
+                                                                <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}"/>
+                                                                <Setter Property="BorderThickness" Value="0"/>
+                                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                                <Style.BasedOn>
+                                                                    <Style TargetType="{x:Type Control}">
+                                                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                                                        <Setter Property="FontSize" Value="12"/>
+                                                                        <Setter Property="FocusVisualStyle">
+                                                                            <Setter.Value>
+                                                                                <Style>
+                                                                                    <Setter Property="Control.Template">
+                                                                                        <Setter.Value>
+                                                                                            <ControlTemplate>
+                                                                                                <Rectangle RadiusY="4" RadiusX="4">
+                                                                                                    <Rectangle.Style>
+                                                                                                        <Style TargetType="{x:Type Rectangle}">
+                                                                                                            <Setter Property="Margin" Value="-2"/>
+                                                                                                            <Setter Property="Opacity" Value="0.6"/>
+                                                                                                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                                                                                            <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                                                                                            <Setter Property="StrokeThickness" Value="2"/>
+                                                                                                            <Setter Property="StrokeDashArray" Value="1 1"/>
+                                                                                                        </Style>
+                                                                                                    </Rectangle.Style>
+                                                                                                </Rectangle>
+                                                                                            </ControlTemplate>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                </Style>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </Style>
+                                                                </Style.BasedOn>
+                                                            </Style>
+                                                        </Style.BasedOn>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Opacity" Value="0.9"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Setter Property="Opacity" Value="0.6"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                <Setter Property="Opacity" Value="0.4"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Style.BasedOn>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <DatePickerTextBox x:Name="PART_TextBox" ContextMenu="{StaticResource CopyContextMenu}" Grid.Column="0" Focusable="{TemplateBinding Focusable}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" Grid.Row="0" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                        <DatePickerTextBox.Style>
+                                            <Style TargetType="{x:Type DatePickerTextBox}">
+                                                <Setter Property="Foreground"   Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DatePicker}}}"/>
+                                                <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+                                                <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+                                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
+                                                            <hc:SimplePanel>
+                                                                <TextBlock Foreground="{DynamicResource ThirdlyTextBrush}" Margin="{TemplateBinding Padding}" Text="{Binding (hc:InfoElement.Placeholder), RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DatePicker}}}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                    <TextBlock.Visibility>
+                                                                        <TemplateBinding Property="Text">
+                                                                            <TemplateBinding.Converter>
+                                                                                <hc:String2VisibilityReConverter/>
+                                                                            </TemplateBinding.Converter>
+                                                                        </TemplateBinding>
+                                                                    </TextBlock.Visibility>
+                                                                </TextBlock>
+                                                                <ScrollViewer x:Name="PART_ContentHost" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="-2,0" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                            </hc:SimplePanel>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </DatePickerTextBox.Style>
+                                    </DatePickerTextBox>
+                                    <Popup x:Name="PART_Popup" AllowsTransparency="True" Grid.Column="0" PopupAnimation="Fade" Placement="Bottom" StaysOpen="False" VerticalOffset="1"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="templateRoot" Value="0.4"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" SourceName="templateRoot" Value="True"/>
+                                    <Condition Property="IsOpen" SourceName="PART_Popup" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource SecondaryBorderBrush}"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" SourceName="templateRoot" Value="True"/>
+                                    <Condition Property="IsOpen" SourceName="PART_Popup" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" SourceName="templateRoot" Value="True"/>
+                                    <Condition Property="ShowClearButton" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Visibility" TargetName="ButtonClear" Value="Visible"/>
+                            </MultiTrigger>
+                            <Trigger Property="IsFocused" SourceName="PART_TextBox" Value="True">
+                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsOpen" SourceName="PART_Popup" Value="True">
+                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsError" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ThicknessAnimation Duration="0:0:0.2" To="9,0,0,-18" Storyboard.TargetProperty="Margin" Storyboard.TargetName="TextBlockError"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ThicknessAnimation Duration="0" To="9,0,0,4" Storyboard.TargetProperty="Margin" Storyboard.TargetName="TextBlockError"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource DangerBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.BasedOn>
+                <Style TargetType="{x:Type DatePicker}">
+                    <Setter Property="Height" Value="Auto"/>
+                    <Setter Property="hc:InfoElement.Symbol" Value="●"/>
+                    <Setter Property="hc:InfoElement.ContentHeight" Value="NaN"/>
+                    <Setter Property="hc:InfoElement.MinContentHeight" Value="30"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DatePicker}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition MinHeight="{Binding (hc:InfoElement.MinContentHeight), RelativeSource={RelativeSource TemplatedParent}}">
+                                            <RowDefinition.Height>
+                                                <Binding Path="(hc:InfoElement.ContentHeight)" RelativeSource="{RelativeSource TemplatedParent}">
+                                                    <Binding.Converter>
+                                                        <hc:Double2GridLengthConverter/>
+                                                    </Binding.Converter>
+                                                </Binding>
+                                            </RowDefinition.Height>
+                                        </RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Margin="{TemplateBinding Padding}" Orientation="Horizontal">
+                                        <StackPanel.Visibility>
+                                            <Binding Path="(hc:TitleElement.Title)" RelativeSource="{RelativeSource TemplatedParent}">
+                                                <Binding.Converter>
+                                                    <hc:String2VisibilityConverter/>
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </StackPanel.Visibility>
+                                        <TextBlock Margin="1,0,0,0" Text="{Binding (hc:TitleElement.Title), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                        <ContentPresenter Content="{Binding (hc:InfoElement.Symbol), RelativeSource={RelativeSource TemplatedParent}}" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0">
+                                            <ContentPresenter.Visibility>
+                                                <Binding Path="(hc:InfoElement.Necessary)" RelativeSource="{RelativeSource TemplatedParent}">
+                                                    <Binding.Converter>
+                                                        <BooleanToVisibilityConverter/>
+                                                    </Binding.Converter>
+                                                </Binding>
+                                            </ContentPresenter.Visibility>
+                                        </ContentPresenter>
+                                    </StackPanel>
+                                    <Border x:Name="templateRoot" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" Grid.Row="1">
+                                        <Grid x:Name="PART_Root" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="30"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button x:Name="PART_Button" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=templateRoot}" Focusable="False" hc:IconElement.Geometry="M377.897477,116.291025L643.196195,116.291025 643.196195,163.75015 377.897477,163.75015 377.897477,116.291025z M888.317416,116.291025L748.229288,116.291025 748.229288,163.75015 871.777948,163.75015C889.945574,163.75015,904.67268,178.477256,904.67268,196.644882L904.67268,289.574752 115.42936,289.574752 115.42936,196.644882C115.42936,178.477256,130.156466,163.75015,148.324092,163.75015L271.872752,163.75015 271.872752,116.291025 131.776437,116.291025C96.532081,116.291025,67.962048,144.862081,67.962048,180.106437L67.966141,894.072766C67.966141,929.316099,96.537197,957.887155,131.78053,957.887155L888.321509,957.887155C923.565865,957.887155,952.135898,929.316099,952.135898,894.071743L952.131805,180.105414C952.131805,144.861058,923.560749,116.291025,888.317416,116.291025z M904.67268,337.033877L904.67268,877.532275C904.67268,895.699901,889.945574,910.427007,871.777948,910.427007L148.324092,910.427007C130.156466,910.427007,115.42936,895.699901,115.42936,877.532275L115.42936,337.033877 904.67268,337.033877z M300.659736,64.801927L348.118861,64.801927 348.118861,235.043219 300.659736,235.043219 300.659736,64.801927z M672.97481,64.801927L720.425748,64.801927 720.425748,235.043219 672.97481,235.043219 672.97481,64.801927z M358.384138,547.939214L358.384138,778.960646 411.247602,778.960646 411.247602,459.226591 376.667404,459.226591 374.01589,463.031426C356.015071,488.927432,332.566931,511.790212,304.334605,530.987334L300.447902,533.630661 300.447902,587.373187 313.889674,579.304031C330.690097,569.215794,345.588103,558.712075,358.384138,547.939214z M618.031888,726.552576C607.744097,732.948547 593.59621,734.621732 575.971986,731.501522 559.877677,728.658641 548.073274,713.128201 540.88932,685.342058L538.627705,676.588277 490.315102,690.012652 492.004662,698.142186C498.27476,728.3107 510.352399,750.195153 527.889638,763.160041 545.010372,775.86602 563.43179,782.937405 582.620725,784.203296 585.979377,784.428434 589.276628,784.541003 592.518617,784.541003 607.377736,784.541003 620.949474,782.166819 632.970828,777.468595 647.387857,771.826837 659.859488,764.130182 670.04699,754.605815 680.412556,744.881893 688.277041,732.462453 693.425542,717.685203 698.343788,703.514802 701.165178,689.388406 701.810915,675.660095 702.417765,662.001372 701.143687,649.009877 698.019384,637.040713L698.011197,637.023316C694.900197,625.24552 689.877569,613.284543 683.065093,601.471953 675.711262,588.792581 664.036825,578.721742 648.354928,571.519367 633.317745,564.646513 617.427085,560.833491 601.107638,560.191847 589.693133,559.776365 577.620611,561.578493 565.063018,565.625864 568.87604,551.057378 572.711575,533.741183 576.528691,513.850227L690.405621,513.850227 690.405621,464.492778 535.645647,464.492778 534.150525,471.521182C509.528597,587.292342,502.560571,617.018767,501.048052,621.560417L497.615718,631.899375 543.445661,637.290411 546.500377,633.087491C554.647308,621.87254 564.747825,614.947495 577.380123,611.92348 590.384922,608.785873 602.12383,608.742892 612.259141,611.793514 622.117122,614.748964 630.081897,620.564692 636.586343,629.551798 643.098976,638.582908 646.670486,649.944199 647.203654,663.309219 647.723518,677.158286 645.600056,689.751696 640.889552,700.749695 636.315153,711.429431 628.843637,719.871089 618.031888,726.552576z" Height="Auto" Padding="7,6" Grid.Row="0">
+                                                <Button.Style>
+                                                    <Style TargetType="{x:Type Button}">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                                        <Setter Property="hc:BorderElement.CornerRadius" Value="0"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                        <ContentControl HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                            <Path Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                        </ContentControl>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.BasedOn>
+                                                            <Style TargetType="{x:Type Button}">
+                                                                <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+                                                                <Setter Property="hc:BorderElement.CornerRadius" Value="4"/>
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                                            <hc:SimplePanel>
+                                                                                <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                                    <StackPanel HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Orientation="Horizontal" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                        <Path x:Name="PathMain" Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                                        <ContentPresenter x:Name="ContentPresenterMain" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="6,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                                                    </StackPanel>
+                                                                                </Border>
+                                                                            </hc:SimplePanel>
+                                                                            <ControlTemplate.Triggers>
+                                                                                <Trigger Property="Content" Value="{x:Null}">
+                                                                                    <Setter Property="Visibility" TargetName="ContentPresenterMain" Value="Collapsed"/>
+                                                                                </Trigger>
+                                                                                <Trigger Property="hc:IconElement.Geometry" Value="{x:Null}">
+                                                                                    <Setter Property="Visibility" TargetName="PathMain" Value="Collapsed"/>
+                                                                                    <Setter Property="Margin" TargetName="ContentPresenterMain" Value="0"/>
+                                                                                </Trigger>
+                                                                            </ControlTemplate.Triggers>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <Style.BasedOn>
+                                                                    <Style TargetType="{x:Type ButtonBase}">
+                                                                        <Setter Property="Height" Value="30"/>
+                                                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                                                                        <Setter Property="Padding" Value="10,6"/>
+                                                                        <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}"/>
+                                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                                        <Style.BasedOn>
+                                                                            <Style TargetType="{x:Type Control}">
+                                                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                                                                <Setter Property="FontSize" Value="12"/>
+                                                                                <Setter Property="FocusVisualStyle">
+                                                                                    <Setter.Value>
+                                                                                        <Style>
+                                                                                            <Setter Property="Control.Template">
+                                                                                                <Setter.Value>
+                                                                                                    <ControlTemplate>
+                                                                                                        <Rectangle RadiusY="4" RadiusX="4">
+                                                                                                            <Rectangle.Style>
+                                                                                                                <Style TargetType="{x:Type Rectangle}">
+                                                                                                                    <Setter Property="Margin" Value="-2"/>
+                                                                                                                    <Setter Property="Opacity" Value="0.6"/>
+                                                                                                                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                                                                                                    <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                                                                                                    <Setter Property="StrokeThickness" Value="2"/>
+                                                                                                                    <Setter Property="StrokeDashArray" Value="1 1"/>
+                                                                                                                </Style>
+                                                                                                            </Rectangle.Style>
+                                                                                                        </Rectangle>
+                                                                                                    </ControlTemplate>
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+                                                                                        </Style>
+                                                                                    </Setter.Value>
+                                                                                </Setter>
+                                                                            </Style>
+                                                                        </Style.BasedOn>
+                                                                    </Style>
+                                                                </Style.BasedOn>
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Opacity" Value="0.9"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsPressed" Value="True">
+                                                                        <Setter Property="Opacity" Value="0.6"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsEnabled" Value="False">
+                                                                        <Setter Property="Opacity" Value="0.4"/>
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Style.BasedOn>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                            <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" Grid.Row="0" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                <DatePickerTextBox.Style>
+                                                    <Style TargetType="{x:Type DatePickerTextBox}">
+                                                        <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DatePicker}}}"/>
+                                                        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+                                                        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+                                                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
+                                                                    <hc:SimplePanel>
+                                                                        <TextBlock Foreground="{DynamicResource ThirdlyTextBrush}" Margin="{TemplateBinding Padding}" Text="{Binding (hc:InfoElement.Placeholder), RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DatePicker}}}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                            <TextBlock.Visibility>
+                                                                                <TemplateBinding Property="Text">
+                                                                                    <TemplateBinding.Converter>
+                                                                                        <hc:String2VisibilityReConverter/>
+                                                                                    </TemplateBinding.Converter>
+                                                                                </TemplateBinding>
+                                                                            </TextBlock.Visibility>
+                                                                        </TextBlock>
+                                                                        <ScrollViewer x:Name="PART_ContentHost" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="-2,0" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                                    </hc:SimplePanel>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </DatePickerTextBox.Style>
+                                            </DatePickerTextBox>
+                                            <Popup x:Name="PART_Popup" AllowsTransparency="True" Grid.Column="0" PopupAnimation="Fade" Placement="Bottom" StaysOpen="False" VerticalOffset="1"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Opacity" TargetName="templateRoot" Value="0.4"/>
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsMouseOver" SourceName="templateRoot" Value="True"/>
+                                            <Condition Property="IsOpen" SourceName="PART_Popup" Value="False"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsMouseOver" SourceName="templateRoot" Value="True"/>
+                                            <Condition Property="IsOpen" SourceName="PART_Popup" Value="True"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                    </MultiTrigger>
+                                    <Trigger Property="IsFocused" SourceName="PART_TextBox" Value="True">
+                                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsOpen" SourceName="PART_Popup" Value="True">
+                                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.BasedOn>
+                        <Style TargetType="{x:Type DatePicker}">
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                            <Setter Property="CalendarStyle">
+                                <Setter.Value>
+                                    <Style TargetType="{x:Type Calendar}">
+                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                                        <Setter Property="Language" Value="{Binding Lang}"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Setter Property="CalendarDayButtonStyle">
+                                            <Setter.Value>
+                                                <Style TargetType="{x:Type CalendarDayButton}">
+                                                    <Setter Property="MinWidth" Value="10"/>
+                                                    <Setter Property="MinHeight" Value="10"/>
+                                                    <Setter Property="Width" Value="32"/>
+                                                    <Setter Property="Height" Value="32"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FocusVisualStyle">
+                                                        <Setter.Value>
+                                                            <Style>
+                                                                <Setter Property="Control.Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate>
+                                                                            <Rectangle>
+                                                                                <Rectangle.RadiusY>
+                                                                                    <MultiBinding UpdateSourceTrigger="Default">
+                                                                                        <MultiBinding.Converter>
+                                                                                            <hc:RectangleCircularConverter/>
+                                                                                        </MultiBinding.Converter>
+                                                                                        <Binding Path="ActualWidth"/>
+                                                                                        <Binding Path="ActualHeight"/>
+                                                                                    </MultiBinding>
+                                                                                </Rectangle.RadiusY>
+                                                                                <Rectangle.RadiusX>
+                                                                                    <MultiBinding UpdateSourceTrigger="Default">
+                                                                                        <MultiBinding.Converter>
+                                                                                            <hc:RectangleCircularConverter/>
+                                                                                        </MultiBinding.Converter>
+                                                                                        <Binding Path="ActualWidth"/>
+                                                                                        <Binding Path="ActualHeight"/>
+                                                                                    </MultiBinding>
+                                                                                </Rectangle.RadiusX>
+                                                                                <Rectangle.Style>
+                                                                                    <Style TargetType="{x:Type Rectangle}">
+                                                                                        <Setter Property="hc:RectangleAttach.Circular" Value="True"/>
+                                                                                        <Style.BasedOn>
+                                                                                            <Style TargetType="{x:Type Rectangle}">
+                                                                                                <Setter Property="Margin" Value="-2"/>
+                                                                                                <Setter Property="Opacity" Value="0.6"/>
+                                                                                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                                                                                <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                                                                                <Setter Property="StrokeThickness" Value="2"/>
+                                                                                                <Setter Property="StrokeDashArray" Value="1 1"/>
+                                                                                            </Style>
+                                                                                        </Style.BasedOn>
+                                                                                    </Style>
+                                                                                </Rectangle.Style>
+                                                                            </Rectangle>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type CalendarDayButton}">
+                                                                <hc:SimplePanel>
+                                                                    <VisualStateManager.VisualStateGroups>
+                                                                        <VisualStateGroup x:Name="CommonStates">
+                                                                            <VisualStateGroup.Transitions>
+                                                                                <VisualTransition From="{x:Null}" GeneratedDuration="0:0:0.1" GeneratedEasingFunction="{x:Null}" Storyboard="{x:Null}" To="{x:Null}"/>
+                                                                            </VisualStateGroup.Transitions>
+                                                                            <VisualState x:Name="Normal"/>
+                                                                            <VisualState x:Name="Disabled">
+                                                                                <Storyboard>
+                                                                                    <DoubleAnimation Duration="0" To="0.35" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="NormalText"/>
+                                                                                </Storyboard>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                        <VisualStateGroup x:Name="SelectionStates">
+                                                                            <VisualStateGroup.Transitions>
+                                                                                <VisualTransition From="{x:Null}" GeneratedDuration="0" GeneratedEasingFunction="{x:Null}" Storyboard="{x:Null}" To="{x:Null}"/>
+                                                                            </VisualStateGroup.Transitions>
+                                                                            <VisualState x:Name="Unselected"/>
+                                                                            <VisualState x:Name="Selected">
+                                                                                <Storyboard>
+                                                                                    <DoubleAnimation Duration="0:0:0.2" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SelectedBackground"/>
+                                                                                    <ColorAnimation Duration="0" To="White" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="NormalText"/>
+                                                                                </Storyboard>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                        <VisualStateGroup x:Name="ActiveStates">
+                                                                            <VisualStateGroup.Transitions>
+                                                                                <VisualTransition From="{x:Null}" GeneratedDuration="0" GeneratedEasingFunction="{x:Null}" Storyboard="{x:Null}" To="{x:Null}"/>
+                                                                            </VisualStateGroup.Transitions>
+                                                                            <VisualState x:Name="Active"/>
+                                                                            <VisualState x:Name="Inactive">
+                                                                                <Storyboard>
+                                                                                    <ColorAnimation Duration="0" To="{DynamicResource ThirdlyTextColor}" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="NormalText"/>
+                                                                                </Storyboard>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                        <VisualStateGroup x:Name="DayStates">
+                                                                            <VisualStateGroup.Transitions>
+                                                                                <VisualTransition From="{x:Null}" GeneratedDuration="0" GeneratedEasingFunction="{x:Null}" Storyboard="{x:Null}" To="{x:Null}"/>
+                                                                            </VisualStateGroup.Transitions>
+                                                                            <VisualState x:Name="RegularDay"/>
+                                                                            <VisualState x:Name="Today">
+                                                                                <Storyboard>
+                                                                                    <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="TodayBackground"/>
+                                                                                    <ColorAnimation Duration="0" To="White" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="NormalText"/>
+                                                                                </Storyboard>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                    </VisualStateManager.VisualStateGroups>
+                                                                    <Rectangle x:Name="TodayBackground" Fill="{DynamicResource DangerBrush}" Opacity="0" RadiusY="16" RadiusX="16"/>
+                                                                    <Rectangle x:Name="SelectedBackground" Fill="{DynamicResource PrimaryBrush}" Opacity="0" RadiusY="16" RadiusX="16"/>
+                                                                    <ContentPresenter x:Name="NormalText" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                        <TextElement.Foreground>
+                                                                            <SolidColorBrush Color="{DynamicResource PrimaryTextColor}"/>
+                                                                        </TextElement.Foreground>
+                                                                    </ContentPresenter>
+                                                                </hc:SimplePanel>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.BasedOn>
+                                                        <Style TargetType="{x:Type Control}">
+                                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                                            <Setter Property="FontSize" Value="12"/>
+                                                            <Setter Property="FocusVisualStyle">
+                                                                <Setter.Value>
+                                                                    <Style>
+                                                                        <Setter Property="Control.Template">
+                                                                            <Setter.Value>
+                                                                                <ControlTemplate>
+                                                                                    <Rectangle RadiusY="4" RadiusX="4">
+                                                                                        <Rectangle.Style>
+                                                                                            <Style TargetType="{x:Type Rectangle}">
+                                                                                                <Setter Property="Margin" Value="-2"/>
+                                                                                                <Setter Property="Opacity" Value="0.6"/>
+                                                                                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                                                                                <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                                                                                <Setter Property="StrokeThickness" Value="2"/>
+                                                                                                <Setter Property="StrokeDashArray" Value="1 1"/>
+                                                                                            </Style>
+                                                                                        </Rectangle.Style>
+                                                                                    </Rectangle>
+                                                                                </ControlTemplate>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </Style>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Style.BasedOn>
+                                                </Style>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="CalendarButtonStyle">
+                                            <Setter.Value>
+                                                <Style TargetType="{x:Type CalendarButton}">
+                                                    <Setter Property="MinWidth" Value="10"/>
+                                                    <Setter Property="MinHeight" Value="10"/>
+                                                    <Setter Property="FontSize" Value="12"/>
+                                                    <Setter Property="Width" Value="40"/>
+                                                    <Setter Property="Height" Value="32"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type CalendarButton}">
+                                                                <hc:SimplePanel>
+                                                                    <VisualStateManager.VisualStateGroups>
+                                                                        <VisualStateGroup x:Name="SelectionStates">
+                                                                            <VisualStateGroup.Transitions>
+                                                                                <VisualTransition From="{x:Null}" GeneratedDuration="0" GeneratedEasingFunction="{x:Null}" Storyboard="{x:Null}" To="{x:Null}"/>
+                                                                            </VisualStateGroup.Transitions>
+                                                                            <VisualState x:Name="Unselected"/>
+                                                                            <VisualState x:Name="Selected">
+                                                                                <Storyboard>
+                                                                                    <DoubleAnimation Duration="0:0:0.2" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SelectedBackground"/>
+                                                                                    <ColorAnimation Duration="0" To="White" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="NormalText"/>
+                                                                                </Storyboard>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                        <VisualStateGroup x:Name="ActiveStates">
+                                                                            <VisualStateGroup.Transitions>
+                                                                                <VisualTransition From="{x:Null}" GeneratedDuration="0" GeneratedEasingFunction="{x:Null}" Storyboard="{x:Null}" To="{x:Null}"/>
+                                                                            </VisualStateGroup.Transitions>
+                                                                            <VisualState x:Name="Active"/>
+                                                                            <VisualState x:Name="Inactive">
+                                                                                <Storyboard>
+                                                                                    <ColorAnimation Duration="0" To="{DynamicResource ThirdlyTextColor}" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="NormalText"/>
+                                                                                </Storyboard>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                    </VisualStateManager.VisualStateGroups>
+                                                                    <Rectangle x:Name="SelectedBackground" Fill="{DynamicResource DangerBrush}" Opacity="0" RadiusY="16" RadiusX="16"/>
+                                                                    <Rectangle x:Name="Background" Fill="{TemplateBinding Background}" Opacity="0" RadiusY="16" RadiusX="16"/>
+                                                                    <ContentPresenter x:Name="NormalText" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                        <TextElement.Foreground>
+                                                                            <SolidColorBrush Color="{DynamicResource PrimaryTextColor}"/>
+                                                                        </TextElement.Foreground>
+                                                                    </ContentPresenter>
+                                                                    <Rectangle x:Name="CalendarButtonFocusVisual" IsHitTestVisible="False" RadiusY="16" RadiusX="16" Stroke="{DynamicResource PrimaryBrush}" Visibility="Collapsed"/>
+                                                                </hc:SimplePanel>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsFocused" Value="True">
+                                                                        <Setter Property="Visibility" TargetName="CalendarButtonFocusVisual" Value="Visible"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="hc:TitleElement.Background" Value="{DynamicResource TitleBrush}"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Calendar}">
+                                                    <StackPanel x:Name="PART_Root" HorizontalAlignment="Center">
+                                                        <CalendarItem x:Name="PART_CalendarItem" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"/>
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="hc:BorderElement.CornerRadius" Value="4"/>
+                            <Setter Property="IsTodayHighlighted" Value="True"/>
+                            <Setter Property="SelectedDateFormat" Value="Short"/>
+                            <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                            <Setter Property="MinHeight" Value="30"/>
+                            <Setter Property="Padding" Value="8,6"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DatePicker}">
+                                        <Border x:Name="templateRoot" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                            <Grid x:Name="PART_Root" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="30"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Button x:Name="PART_Button" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=templateRoot}" Focusable="False" hc:IconElement.Geometry="M377.897477,116.291025L643.196195,116.291025 643.196195,163.75015 377.897477,163.75015 377.897477,116.291025z M888.317416,116.291025L748.229288,116.291025 748.229288,163.75015 871.777948,163.75015C889.945574,163.75015,904.67268,178.477256,904.67268,196.644882L904.67268,289.574752 115.42936,289.574752 115.42936,196.644882C115.42936,178.477256,130.156466,163.75015,148.324092,163.75015L271.872752,163.75015 271.872752,116.291025 131.776437,116.291025C96.532081,116.291025,67.962048,144.862081,67.962048,180.106437L67.966141,894.072766C67.966141,929.316099,96.537197,957.887155,131.78053,957.887155L888.321509,957.887155C923.565865,957.887155,952.135898,929.316099,952.135898,894.071743L952.131805,180.105414C952.131805,144.861058,923.560749,116.291025,888.317416,116.291025z M904.67268,337.033877L904.67268,877.532275C904.67268,895.699901,889.945574,910.427007,871.777948,910.427007L148.324092,910.427007C130.156466,910.427007,115.42936,895.699901,115.42936,877.532275L115.42936,337.033877 904.67268,337.033877z M300.659736,64.801927L348.118861,64.801927 348.118861,235.043219 300.659736,235.043219 300.659736,64.801927z M672.97481,64.801927L720.425748,64.801927 720.425748,235.043219 672.97481,235.043219 672.97481,64.801927z M358.384138,547.939214L358.384138,778.960646 411.247602,778.960646 411.247602,459.226591 376.667404,459.226591 374.01589,463.031426C356.015071,488.927432,332.566931,511.790212,304.334605,530.987334L300.447902,533.630661 300.447902,587.373187 313.889674,579.304031C330.690097,569.215794,345.588103,558.712075,358.384138,547.939214z M618.031888,726.552576C607.744097,732.948547 593.59621,734.621732 575.971986,731.501522 559.877677,728.658641 548.073274,713.128201 540.88932,685.342058L538.627705,676.588277 490.315102,690.012652 492.004662,698.142186C498.27476,728.3107 510.352399,750.195153 527.889638,763.160041 545.010372,775.86602 563.43179,782.937405 582.620725,784.203296 585.979377,784.428434 589.276628,784.541003 592.518617,784.541003 607.377736,784.541003 620.949474,782.166819 632.970828,777.468595 647.387857,771.826837 659.859488,764.130182 670.04699,754.605815 680.412556,744.881893 688.277041,732.462453 693.425542,717.685203 698.343788,703.514802 701.165178,689.388406 701.810915,675.660095 702.417765,662.001372 701.143687,649.009877 698.019384,637.040713L698.011197,637.023316C694.900197,625.24552 689.877569,613.284543 683.065093,601.471953 675.711262,588.792581 664.036825,578.721742 648.354928,571.519367 633.317745,564.646513 617.427085,560.833491 601.107638,560.191847 589.693133,559.776365 577.620611,561.578493 565.063018,565.625864 568.87604,551.057378 572.711575,533.741183 576.528691,513.850227L690.405621,513.850227 690.405621,464.492778 535.645647,464.492778 534.150525,471.521182C509.528597,587.292342,502.560571,617.018767,501.048052,621.560417L497.615718,631.899375 543.445661,637.290411 546.500377,633.087491C554.647308,621.87254 564.747825,614.947495 577.380123,611.92348 590.384922,608.785873 602.12383,608.742892 612.259141,611.793514 622.117122,614.748964 630.081897,620.564692 636.586343,629.551798 643.098976,638.582908 646.670486,649.944199 647.203654,663.309219 647.723518,677.158286 645.600056,689.751696 640.889552,700.749695 636.315153,711.429431 628.843637,719.871089 618.031888,726.552576z" Height="Auto" Padding="7,6" Grid.Row="0">
+                                                    <Button.Style>
+                                                        <Style TargetType="{x:Type Button}">
+                                                            <Setter Property="Background" Value="Transparent"/>
+                                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                                            <Setter Property="hc:BorderElement.CornerRadius" Value="0"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="{x:Type Button}">
+                                                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                            <ContentControl HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                <Path Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                            </ContentControl>
+                                                                        </Border>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.BasedOn>
+                                                                <Style TargetType="{x:Type Button}">
+                                                                    <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+                                                                    <Setter Property="hc:BorderElement.CornerRadius" Value="4"/>
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                                                <hc:SimplePanel>
+                                                                                    <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                                        <StackPanel HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Orientation="Horizontal" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                            <Path x:Name="PathMain" Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                                            <ContentPresenter x:Name="ContentPresenterMain" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="6,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                                                        </StackPanel>
+                                                                                    </Border>
+                                                                                </hc:SimplePanel>
+                                                                                <ControlTemplate.Triggers>
+                                                                                    <Trigger Property="Content" Value="{x:Null}">
+                                                                                        <Setter Property="Visibility" TargetName="ContentPresenterMain" Value="Collapsed"/>
+                                                                                    </Trigger>
+                                                                                    <Trigger Property="hc:IconElement.Geometry" Value="{x:Null}">
+                                                                                        <Setter Property="Visibility" TargetName="PathMain" Value="Collapsed"/>
+                                                                                        <Setter Property="Margin" TargetName="ContentPresenterMain" Value="0"/>
+                                                                                    </Trigger>
+                                                                                </ControlTemplate.Triggers>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                    <Style.BasedOn>
+                                                                        <Style TargetType="{x:Type ButtonBase}">
+                                                                            <Setter Property="Height" Value="30"/>
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                                                                            <Setter Property="Padding" Value="10,6"/>
+                                                                            <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}"/>
+                                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                                            <Style.BasedOn>
+                                                                                <Style TargetType="{x:Type Control}">
+                                                                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                                                                    <Setter Property="FontSize" Value="12"/>
+                                                                                    <Setter Property="FocusVisualStyle">
+                                                                                        <Setter.Value>
+                                                                                            <Style>
+                                                                                                <Setter Property="Control.Template">
+                                                                                                    <Setter.Value>
+                                                                                                        <ControlTemplate>
+                                                                                                            <Rectangle RadiusY="4" RadiusX="4">
+                                                                                                                <Rectangle.Style>
+                                                                                                                    <Style TargetType="{x:Type Rectangle}">
+                                                                                                                        <Setter Property="Margin" Value="-2"/>
+                                                                                                                        <Setter Property="Opacity" Value="0.6"/>
+                                                                                                                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                                                                                                        <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                                                                                                        <Setter Property="StrokeThickness" Value="2"/>
+                                                                                                                        <Setter Property="StrokeDashArray" Value="1 1"/>
+                                                                                                                    </Style>
+                                                                                                                </Rectangle.Style>
+                                                                                                            </Rectangle>
+                                                                                                        </ControlTemplate>
+                                                                                                    </Setter.Value>
+                                                                                                </Setter>
+                                                                                            </Style>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                </Style>
+                                                                            </Style.BasedOn>
+                                                                        </Style>
+                                                                    </Style.BasedOn>
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Opacity" Value="0.9"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsPressed" Value="True">
+                                                                            <Setter Property="Opacity" Value="0.6"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsEnabled" Value="False">
+                                                                            <Setter Property="Opacity" Value="0.4"/>
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Style.BasedOn>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                                <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" Grid.Row="0" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                    <DatePickerTextBox.Style>
+                                                        <Style TargetType="{x:Type DatePickerTextBox}">
+                                                            <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DatePicker}}}"/>
+                                                            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+                                                            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+                                                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
+                                                                        <hc:SimplePanel>
+                                                                            <TextBlock Foreground="{DynamicResource ThirdlyTextBrush}" Margin="{TemplateBinding Padding}" Text="{Binding (hc:InfoElement.Placeholder), RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DatePicker}}}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                <TextBlock.Visibility>
+                                                                                    <TemplateBinding Property="Text">
+                                                                                        <TemplateBinding.Converter>
+                                                                                            <hc:String2VisibilityReConverter/>
+                                                                                        </TemplateBinding.Converter>
+                                                                                    </TemplateBinding>
+                                                                                </TextBlock.Visibility>
+                                                                            </TextBlock>
+                                                                            <ScrollViewer x:Name="PART_ContentHost" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="-2,0" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                                        </hc:SimplePanel>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </DatePickerTextBox.Style>
+                                                </DatePickerTextBox>
+                                                <Popup x:Name="PART_Popup" AllowsTransparency="True" Grid.Column="0" PopupAnimation="Fade" Placement="Bottom" StaysOpen="False" VerticalOffset="1"/>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Opacity" TargetName="templateRoot" Value="0.4"/>
+                                            </Trigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="True"/>
+                                                    <Condition Property="IsOpen" SourceName="PART_Popup" Value="False"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                            </MultiTrigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="True"/>
+                                                    <Condition Property="IsOpen" SourceName="PART_Popup" Value="True"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                            </MultiTrigger>
+                                            <Trigger Property="IsFocused" SourceName="PART_TextBox" Value="True">
+                                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsOpen" SourceName="PART_Popup" Value="True">
+                                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Style.BasedOn>
+                    <Style.Triggers>
+                        <Trigger Property="hc:TitleElement.TitleAlignment" Value="Left">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DatePicker}">
+                                        <Grid Height="{Binding (hc:InfoElement.ContentHeight), RelativeSource={RelativeSource TemplatedParent}}" MinHeight="{Binding (hc:InfoElement.MinContentHeight), RelativeSource={RelativeSource TemplatedParent}}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="{Binding (hc:TitleElement.TitleWidth), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Margin="0,7,6,7" Orientation="Horizontal" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                <StackPanel.Visibility>
+                                                    <Binding Path="(hc:TitleElement.Title)" RelativeSource="{RelativeSource TemplatedParent}">
+                                                        <Binding.Converter>
+                                                            <hc:String2VisibilityConverter/>
+                                                        </Binding.Converter>
+                                                    </Binding>
+                                                </StackPanel.Visibility>
+                                                <TextBlock Text="{Binding (hc:TitleElement.Title), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                <ContentPresenter Content="{Binding (hc:InfoElement.Symbol), RelativeSource={RelativeSource TemplatedParent}}" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0">
+                                                    <ContentPresenter.Visibility>
+                                                        <Binding Path="(hc:InfoElement.Necessary)" RelativeSource="{RelativeSource TemplatedParent}">
+                                                            <Binding.Converter>
+                                                                <BooleanToVisibilityConverter/>
+                                                            </Binding.Converter>
+                                                        </Binding>
+                                                    </ContentPresenter.Visibility>
+                                                </ContentPresenter>
+                                            </StackPanel>
+                                            <Border x:Name="templateRoot" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="1" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                <Grid x:Name="PART_Root" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="30"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button x:Name="PART_Button" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=templateRoot}" Focusable="False" hc:IconElement.Geometry="M377.897477,116.291025L643.196195,116.291025 643.196195,163.75015 377.897477,163.75015 377.897477,116.291025z M888.317416,116.291025L748.229288,116.291025 748.229288,163.75015 871.777948,163.75015C889.945574,163.75015,904.67268,178.477256,904.67268,196.644882L904.67268,289.574752 115.42936,289.574752 115.42936,196.644882C115.42936,178.477256,130.156466,163.75015,148.324092,163.75015L271.872752,163.75015 271.872752,116.291025 131.776437,116.291025C96.532081,116.291025,67.962048,144.862081,67.962048,180.106437L67.966141,894.072766C67.966141,929.316099,96.537197,957.887155,131.78053,957.887155L888.321509,957.887155C923.565865,957.887155,952.135898,929.316099,952.135898,894.071743L952.131805,180.105414C952.131805,144.861058,923.560749,116.291025,888.317416,116.291025z M904.67268,337.033877L904.67268,877.532275C904.67268,895.699901,889.945574,910.427007,871.777948,910.427007L148.324092,910.427007C130.156466,910.427007,115.42936,895.699901,115.42936,877.532275L115.42936,337.033877 904.67268,337.033877z M300.659736,64.801927L348.118861,64.801927 348.118861,235.043219 300.659736,235.043219 300.659736,64.801927z M672.97481,64.801927L720.425748,64.801927 720.425748,235.043219 672.97481,235.043219 672.97481,64.801927z M358.384138,547.939214L358.384138,778.960646 411.247602,778.960646 411.247602,459.226591 376.667404,459.226591 374.01589,463.031426C356.015071,488.927432,332.566931,511.790212,304.334605,530.987334L300.447902,533.630661 300.447902,587.373187 313.889674,579.304031C330.690097,569.215794,345.588103,558.712075,358.384138,547.939214z M618.031888,726.552576C607.744097,732.948547 593.59621,734.621732 575.971986,731.501522 559.877677,728.658641 548.073274,713.128201 540.88932,685.342058L538.627705,676.588277 490.315102,690.012652 492.004662,698.142186C498.27476,728.3107 510.352399,750.195153 527.889638,763.160041 545.010372,775.86602 563.43179,782.937405 582.620725,784.203296 585.979377,784.428434 589.276628,784.541003 592.518617,784.541003 607.377736,784.541003 620.949474,782.166819 632.970828,777.468595 647.387857,771.826837 659.859488,764.130182 670.04699,754.605815 680.412556,744.881893 688.277041,732.462453 693.425542,717.685203 698.343788,703.514802 701.165178,689.388406 701.810915,675.660095 702.417765,662.001372 701.143687,649.009877 698.019384,637.040713L698.011197,637.023316C694.900197,625.24552 689.877569,613.284543 683.065093,601.471953 675.711262,588.792581 664.036825,578.721742 648.354928,571.519367 633.317745,564.646513 617.427085,560.833491 601.107638,560.191847 589.693133,559.776365 577.620611,561.578493 565.063018,565.625864 568.87604,551.057378 572.711575,533.741183 576.528691,513.850227L690.405621,513.850227 690.405621,464.492778 535.645647,464.492778 534.150525,471.521182C509.528597,587.292342,502.560571,617.018767,501.048052,621.560417L497.615718,631.899375 543.445661,637.290411 546.500377,633.087491C554.647308,621.87254 564.747825,614.947495 577.380123,611.92348 590.384922,608.785873 602.12383,608.742892 612.259141,611.793514 622.117122,614.748964 630.081897,620.564692 636.586343,629.551798 643.098976,638.582908 646.670486,649.944199 647.203654,663.309219 647.723518,677.158286 645.600056,689.751696 640.889552,700.749695 636.315153,711.429431 628.843637,719.871089 618.031888,726.552576z" Height="Auto" Padding="7,6" Grid.Row="0">
+                                                        <Button.Style>
+                                                            <Style TargetType="{x:Type Button}">
+                                                                <Setter Property="Background" Value="Transparent"/>
+                                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                                <Setter Property="hc:BorderElement.CornerRadius" Value="0"/>
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                                <ContentControl HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                    <Path Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                                </ContentControl>
+                                                                            </Border>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <Style.BasedOn>
+                                                                    <Style TargetType="{x:Type Button}">
+                                                                        <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+                                                                        <Setter Property="hc:BorderElement.CornerRadius" Value="4"/>
+                                                                        <Setter Property="Template">
+                                                                            <Setter.Value>
+                                                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                                                    <hc:SimplePanel>
+                                                                                        <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                                            <StackPanel HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Orientation="Horizontal" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                                <Path x:Name="PathMain" Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                                                <ContentPresenter x:Name="ContentPresenterMain" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="6,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                                                            </StackPanel>
+                                                                                        </Border>
+                                                                                    </hc:SimplePanel>
+                                                                                    <ControlTemplate.Triggers>
+                                                                                        <Trigger Property="Content" Value="{x:Null}">
+                                                                                            <Setter Property="Visibility" TargetName="ContentPresenterMain" Value="Collapsed"/>
+                                                                                        </Trigger>
+                                                                                        <Trigger Property="hc:IconElement.Geometry" Value="{x:Null}">
+                                                                                            <Setter Property="Visibility" TargetName="PathMain" Value="Collapsed"/>
+                                                                                            <Setter Property="Margin" TargetName="ContentPresenterMain" Value="0"/>
+                                                                                        </Trigger>
+                                                                                    </ControlTemplate.Triggers>
+                                                                                </ControlTemplate>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                        <Style.BasedOn>
+                                                                            <Style TargetType="{x:Type ButtonBase}">
+                                                                                <Setter Property="Height" Value="30"/>
+                                                                                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                                                                                <Setter Property="Padding" Value="10,6"/>
+                                                                                <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}"/>
+                                                                                <Setter Property="BorderThickness" Value="0"/>
+                                                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                                                <Style.BasedOn>
+                                                                                    <Style TargetType="{x:Type Control}">
+                                                                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                                                                        <Setter Property="FontSize" Value="12"/>
+                                                                                        <Setter Property="FocusVisualStyle">
+                                                                                            <Setter.Value>
+                                                                                                <Style>
+                                                                                                    <Setter Property="Control.Template">
+                                                                                                        <Setter.Value>
+                                                                                                            <ControlTemplate>
+                                                                                                                <Rectangle RadiusY="4" RadiusX="4">
+                                                                                                                    <Rectangle.Style>
+                                                                                                                        <Style TargetType="{x:Type Rectangle}">
+                                                                                                                            <Setter Property="Margin" Value="-2"/>
+                                                                                                                            <Setter Property="Opacity" Value="0.6"/>
+                                                                                                                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                                                                                                            <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                                                                                                            <Setter Property="StrokeThickness" Value="2"/>
+                                                                                                                            <Setter Property="StrokeDashArray" Value="1 1"/>
+                                                                                                                        </Style>
+                                                                                                                    </Rectangle.Style>
+                                                                                                                </Rectangle>
+                                                                                                            </ControlTemplate>
+                                                                                                        </Setter.Value>
+                                                                                                    </Setter>
+                                                                                                </Style>
+                                                                                            </Setter.Value>
+                                                                                        </Setter>
+                                                                                    </Style>
+                                                                                </Style.BasedOn>
+                                                                            </Style>
+                                                                        </Style.BasedOn>
+                                                                        <Style.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Opacity" Value="0.9"/>
+                                                                            </Trigger>
+                                                                            <Trigger Property="IsPressed" Value="True">
+                                                                                <Setter Property="Opacity" Value="0.6"/>
+                                                                            </Trigger>
+                                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                                <Setter Property="Opacity" Value="0.4"/>
+                                                                            </Trigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Style.BasedOn>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                    <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" Grid.Row="0" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                        <DatePickerTextBox.Style>
+                                                            <Style TargetType="{x:Type DatePickerTextBox}">
+                                                                <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DatePicker}}}"/>
+                                                                <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+                                                                <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+                                                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
+                                                                            <hc:SimplePanel>
+                                                                                <TextBlock Foreground="{DynamicResource ThirdlyTextBrush}" Margin="{TemplateBinding Padding}" Text="{Binding (hc:InfoElement.Placeholder), RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DatePicker}}}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                    <TextBlock.Visibility>
+                                                                                        <TemplateBinding Property="Text">
+                                                                                            <TemplateBinding.Converter>
+                                                                                                <hc:String2VisibilityReConverter/>
+                                                                                            </TemplateBinding.Converter>
+                                                                                        </TemplateBinding>
+                                                                                    </TextBlock.Visibility>
+                                                                                </TextBlock>
+                                                                                <ScrollViewer x:Name="PART_ContentHost" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="-2,0" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                                            </hc:SimplePanel>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </DatePickerTextBox.Style>
+                                                    </DatePickerTextBox>
+                                                    <Popup x:Name="PART_Popup" AllowsTransparency="True" Grid.Column="0" PopupAnimation="Fade" Placement="Bottom" StaysOpen="False" VerticalOffset="1"/>
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Opacity" TargetName="templateRoot" Value="0.4"/>
+                                            </Trigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" SourceName="templateRoot" Value="True"/>
+                                                    <Condition Property="IsOpen" SourceName="PART_Popup" Value="False"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                            </MultiTrigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" SourceName="templateRoot" Value="True"/>
+                                                    <Condition Property="IsOpen" SourceName="PART_Popup" Value="True"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                            </MultiTrigger>
+                                            <Trigger Property="IsFocused" SourceName="PART_TextBox" Value="True">
+                                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsOpen" SourceName="PART_Popup" Value="True">
+                                                <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Width" Value="Auto"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Style.BasedOn>
+            <Style.Triggers>
+                <Trigger Property="hc:TitleElement.TitleAlignment" Value="Left">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type hc:DatePicker}">
+                                <ControlTemplate.Resources>
+                                    <Storyboard x:Key="StoryboardHidden">
+                                        <ThicknessAnimation Duration="0" To="9,0,0,4" Storyboard.TargetProperty="Margin" Storyboard.TargetName="TextBlockError"/>
+                                    </Storyboard>
+                                    <Storyboard x:Key="StoryboardShow">
+                                        <ThicknessAnimation Duration="0:0:0.2" To="9,0,0,-18" Storyboard.TargetProperty="Margin" Storyboard.TargetName="TextBlockError"/>
+                                    </Storyboard>
+                                </ControlTemplate.Resources>
+                                <Grid Height="{Binding (hc:InfoElement.ContentHeight), RelativeSource={RelativeSource TemplatedParent}}" MinHeight="{Binding (hc:InfoElement.MinContentHeight), RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="{Binding (hc:TitleElement.TitleWidth), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Margin="0,7,6,7" Orientation="Horizontal" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                        <StackPanel.Visibility>
+                                            <Binding Path="(hc:TitleElement.Title)" RelativeSource="{RelativeSource TemplatedParent}">
+                                                <Binding.Converter>
+                                                    <hc:String2VisibilityConverter/>
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </StackPanel.Visibility>
+                                        <TextBlock Text="{Binding (hc:TitleElement.Title), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                        <ContentPresenter Content="{Binding (hc:InfoElement.Symbol), RelativeSource={RelativeSource TemplatedParent}}" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0">
+                                            <ContentPresenter.Visibility>
+                                                <Binding Path="(hc:InfoElement.Necessary)" RelativeSource="{RelativeSource TemplatedParent}">
+                                                    <Binding.Converter>
+                                                        <BooleanToVisibilityConverter/>
+                                                    </Binding.Converter>
+                                                </Binding>
+                                            </ContentPresenter.Visibility>
+                                        </ContentPresenter>
+                                    </StackPanel>
+                                    <TextBlock x:Name="TextBlockError" Grid.Column="1" Foreground="{DynamicResource DangerBrush}" FontSize="12" Margin="9,0,0,4" Text="{TemplateBinding ErrorStr}" VerticalAlignment="Bottom"/>
+                                    <Border x:Name="templateRoot" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="1" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Grid x:Name="PART_Root" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="25"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button x:Name="ButtonClear" Grid.Column="1" Command="hc:ControlCommands.Clear" Foreground="{Binding BorderBrush, ElementName=templateRoot}" hc:IconElement.Geometry="M7.4038057,6.4038057C7.1478834,6.4038057 6.8919611,6.5014372 6.6966991,6.6966991 6.3061748,7.0872235 6.3061748,7.7203884 6.6966991,8.1109123L10.585787,12 6.6966991,15.889088C6.3061748,16.279612 6.3061748,16.912777 6.6966991,17.303301 7.0872235,17.693825 7.7203879,17.693825 8.1109123,17.303301L12,13.414213 15.889088,17.303301C16.279612,17.693825 16.912777,17.693825 17.303301,17.303301 17.693825,16.912777 17.693825,16.279612 17.303301,15.889088L13.414213,12 17.303301,8.1109123C17.693825,7.7203884 17.693825,7.0872235 17.303301,6.6966991 16.912777,6.3061748 16.279612,6.3061748 15.889088,6.6966991L12,10.585787 8.1109123,6.6966991C7.9156504,6.5014372,7.6597281,6.4038057,7.4038057,6.4038057z M12,0C18.627417,0 24,5.3725829 24,12 24,18.627417 18.627417,24 12,24 5.3725829,24 0,18.627417 0,12 0,5.3725829 5.3725829,0 12,0z" Height="Auto" Padding="0,6" Visibility="Collapsed" Width="16">
+                                                <Button.Style>
+                                                    <Style TargetType="{x:Type Button}">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                                        <Setter Property="hc:BorderElement.CornerRadius" Value="0"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                        <ContentControl HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                            <Path Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                        </ContentControl>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.BasedOn>
+                                                            <Style TargetType="{x:Type Button}">
+                                                                <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+                                                                <Setter Property="hc:BorderElement.CornerRadius" Value="4"/>
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                                            <hc:SimplePanel>
+                                                                                <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                                    <StackPanel HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Orientation="Horizontal" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                        <Path x:Name="PathMain" Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                                        <ContentPresenter x:Name="ContentPresenterMain" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="6,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                                                    </StackPanel>
+                                                                                </Border>
+                                                                            </hc:SimplePanel>
+                                                                            <ControlTemplate.Triggers>
+                                                                                <Trigger Property="Content" Value="{x:Null}">
+                                                                                    <Setter Property="Visibility" TargetName="ContentPresenterMain" Value="Collapsed"/>
+                                                                                </Trigger>
+                                                                                <Trigger Property="hc:IconElement.Geometry" Value="{x:Null}">
+                                                                                    <Setter Property="Visibility" TargetName="PathMain" Value="Collapsed"/>
+                                                                                    <Setter Property="Margin" TargetName="ContentPresenterMain" Value="0"/>
+                                                                                </Trigger>
+                                                                            </ControlTemplate.Triggers>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <Style.BasedOn>
+                                                                    <Style TargetType="{x:Type ButtonBase}">
+                                                                        <Setter Property="Height" Value="30"/>
+                                                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                                                                        <Setter Property="Padding" Value="10,6"/>
+                                                                        <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}"/>
+                                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                                        <Style.BasedOn>
+                                                                            <Style TargetType="{x:Type Control}">
+                                                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                                                                <Setter Property="FontSize" Value="12"/>
+                                                                                <Setter Property="FocusVisualStyle">
+                                                                                    <Setter.Value>
+                                                                                        <Style>
+                                                                                            <Setter Property="Control.Template">
+                                                                                                <Setter.Value>
+                                                                                                    <ControlTemplate>
+                                                                                                        <Rectangle RadiusY="4" RadiusX="4">
+                                                                                                            <Rectangle.Style>
+                                                                                                                <Style TargetType="{x:Type Rectangle}">
+                                                                                                                    <Setter Property="Margin" Value="-2"/>
+                                                                                                                    <Setter Property="Opacity" Value="0.6"/>
+                                                                                                                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                                                                                                    <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                                                                                                    <Setter Property="StrokeThickness" Value="2"/>
+                                                                                                                    <Setter Property="StrokeDashArray" Value="1 1"/>
+                                                                                                                </Style>
+                                                                                                            </Rectangle.Style>
+                                                                                                        </Rectangle>
+                                                                                                    </ControlTemplate>
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+                                                                                        </Style>
+                                                                                    </Setter.Value>
+                                                                                </Setter>
+                                                                            </Style>
+                                                                        </Style.BasedOn>
+                                                                    </Style>
+                                                                </Style.BasedOn>
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Opacity" Value="0.9"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsPressed" Value="True">
+                                                                        <Setter Property="Opacity" Value="0.6"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsEnabled" Value="False">
+                                                                        <Setter Property="Opacity" Value="0.4"/>
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Style.BasedOn>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                            <Button x:Name="PART_Button" Grid.Column="2" Foreground="{Binding BorderBrush, ElementName=templateRoot}" Focusable="False" hc:IconElement.Geometry="M377.897477,116.291025L643.196195,116.291025 643.196195,163.75015 377.897477,163.75015 377.897477,116.291025z M888.317416,116.291025L748.229288,116.291025 748.229288,163.75015 871.777948,163.75015C889.945574,163.75015,904.67268,178.477256,904.67268,196.644882L904.67268,289.574752 115.42936,289.574752 115.42936,196.644882C115.42936,178.477256,130.156466,163.75015,148.324092,163.75015L271.872752,163.75015 271.872752,116.291025 131.776437,116.291025C96.532081,116.291025,67.962048,144.862081,67.962048,180.106437L67.966141,894.072766C67.966141,929.316099,96.537197,957.887155,131.78053,957.887155L888.321509,957.887155C923.565865,957.887155,952.135898,929.316099,952.135898,894.071743L952.131805,180.105414C952.131805,144.861058,923.560749,116.291025,888.317416,116.291025z M904.67268,337.033877L904.67268,877.532275C904.67268,895.699901,889.945574,910.427007,871.777948,910.427007L148.324092,910.427007C130.156466,910.427007,115.42936,895.699901,115.42936,877.532275L115.42936,337.033877 904.67268,337.033877z M300.659736,64.801927L348.118861,64.801927 348.118861,235.043219 300.659736,235.043219 300.659736,64.801927z M672.97481,64.801927L720.425748,64.801927 720.425748,235.043219 672.97481,235.043219 672.97481,64.801927z M358.384138,547.939214L358.384138,778.960646 411.247602,778.960646 411.247602,459.226591 376.667404,459.226591 374.01589,463.031426C356.015071,488.927432,332.566931,511.790212,304.334605,530.987334L300.447902,533.630661 300.447902,587.373187 313.889674,579.304031C330.690097,569.215794,345.588103,558.712075,358.384138,547.939214z M618.031888,726.552576C607.744097,732.948547 593.59621,734.621732 575.971986,731.501522 559.877677,728.658641 548.073274,713.128201 540.88932,685.342058L538.627705,676.588277 490.315102,690.012652 492.004662,698.142186C498.27476,728.3107 510.352399,750.195153 527.889638,763.160041 545.010372,775.86602 563.43179,782.937405 582.620725,784.203296 585.979377,784.428434 589.276628,784.541003 592.518617,784.541003 607.377736,784.541003 620.949474,782.166819 632.970828,777.468595 647.387857,771.826837 659.859488,764.130182 670.04699,754.605815 680.412556,744.881893 688.277041,732.462453 693.425542,717.685203 698.343788,703.514802 701.165178,689.388406 701.810915,675.660095 702.417765,662.001372 701.143687,649.009877 698.019384,637.040713L698.011197,637.023316C694.900197,625.24552 689.877569,613.284543 683.065093,601.471953 675.711262,588.792581 664.036825,578.721742 648.354928,571.519367 633.317745,564.646513 617.427085,560.833491 601.107638,560.191847 589.693133,559.776365 577.620611,561.578493 565.063018,565.625864 568.87604,551.057378 572.711575,533.741183 576.528691,513.850227L690.405621,513.850227 690.405621,464.492778 535.645647,464.492778 534.150525,471.521182C509.528597,587.292342,502.560571,617.018767,501.048052,621.560417L497.615718,631.899375 543.445661,637.290411 546.500377,633.087491C554.647308,621.87254 564.747825,614.947495 577.380123,611.92348 590.384922,608.785873 602.12383,608.742892 612.259141,611.793514 622.117122,614.748964 630.081897,620.564692 636.586343,629.551798 643.098976,638.582908 646.670486,649.944199 647.203654,663.309219 647.723518,677.158286 645.600056,689.751696 640.889552,700.749695 636.315153,711.429431 628.843637,719.871089 618.031888,726.552576z" Height="Auto" Padding="2,6,7,6">
+                                                <Button.Style>
+                                                    <Style TargetType="{x:Type Button}">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                                        <Setter Property="hc:BorderElement.CornerRadius" Value="0"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                        <ContentControl HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                            <Path Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                        </ContentControl>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.BasedOn>
+                                                            <Style TargetType="{x:Type Button}">
+                                                                <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+                                                                <Setter Property="hc:BorderElement.CornerRadius" Value="4"/>
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                                            <hc:SimplePanel>
+                                                                                <Border Background="{TemplateBinding Background}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding (hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                                                                    <StackPanel HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Orientation="Horizontal" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                                        <Path x:Name="PathMain" Data="{TemplateBinding hc:IconElement.Geometry}" Fill="{TemplateBinding Foreground}" Height="{TemplateBinding hc:IconElement.Height}" Stretch="Uniform" SnapsToDevicePixels="True" Width="{TemplateBinding hc:IconElement.Width}"/>
+                                                                                        <ContentPresenter x:Name="ContentPresenterMain" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="6,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                                                    </StackPanel>
+                                                                                </Border>
+                                                                            </hc:SimplePanel>
+                                                                            <ControlTemplate.Triggers>
+                                                                                <Trigger Property="Content" Value="{x:Null}">
+                                                                                    <Setter Property="Visibility" TargetName="ContentPresenterMain" Value="Collapsed"/>
+                                                                                </Trigger>
+                                                                                <Trigger Property="hc:IconElement.Geometry" Value="{x:Null}">
+                                                                                    <Setter Property="Visibility" TargetName="PathMain" Value="Collapsed"/>
+                                                                                    <Setter Property="Margin" TargetName="ContentPresenterMain" Value="0"/>
+                                                                                </Trigger>
+                                                                            </ControlTemplate.Triggers>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <Style.BasedOn>
+                                                                    <Style TargetType="{x:Type ButtonBase}">
+                                                                        <Setter Property="Height" Value="30"/>
+                                                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                                                                        <Setter Property="Padding" Value="10,6"/>
+                                                                        <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}"/>
+                                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                                        <Style.BasedOn>
+                                                                            <Style TargetType="{x:Type Control}">
+                                                                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                                                                <Setter Property="FontSize" Value="12"/>
+                                                                                <Setter Property="FocusVisualStyle">
+                                                                                    <Setter.Value>
+                                                                                        <Style>
+                                                                                            <Setter Property="Control.Template">
+                                                                                                <Setter.Value>
+                                                                                                    <ControlTemplate>
+                                                                                                        <Rectangle RadiusY="4" RadiusX="4">
+                                                                                                            <Rectangle.Style>
+                                                                                                                <Style TargetType="{x:Type Rectangle}">
+                                                                                                                    <Setter Property="Margin" Value="-2"/>
+                                                                                                                    <Setter Property="Opacity" Value="0.6"/>
+                                                                                                                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                                                                                                    <Setter Property="Stroke" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                                                                                                    <Setter Property="StrokeThickness" Value="2"/>
+                                                                                                                    <Setter Property="StrokeDashArray" Value="1 1"/>
+                                                                                                                </Style>
+                                                                                                            </Rectangle.Style>
+                                                                                                        </Rectangle>
+                                                                                                    </ControlTemplate>
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+                                                                                        </Style>
+                                                                                    </Setter.Value>
+                                                                                </Setter>
+                                                                            </Style>
+                                                                        </Style.BasedOn>
+                                                                    </Style>
+                                                                </Style.BasedOn>
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Opacity" Value="0.9"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsPressed" Value="True">
+                                                                        <Setter Property="Opacity" Value="0.6"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsEnabled" Value="False">
+                                                                        <Setter Property="Opacity" Value="0.4"/>
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Style.BasedOn>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                            <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                <DatePickerTextBox.Style>
+                                                    <Style TargetType="{x:Type DatePickerTextBox}">
+                                                        <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DatePicker}}}"/>
+                                                        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+                                                        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+                                                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
+                                                                    <hc:SimplePanel>
+                                                                        <TextBlock Foreground="{DynamicResource ThirdlyTextBrush}" Margin="{TemplateBinding Padding}" Text="{Binding (hc:InfoElement.Placeholder), RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type DatePicker}}}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                                            <TextBlock.Visibility>
+                                                                                <TemplateBinding Property="Text">
+                                                                                    <TemplateBinding.Converter>
+                                                                                        <hc:String2VisibilityReConverter/>
+                                                                                    </TemplateBinding.Converter>
+                                                                                </TemplateBinding>
+                                                                            </TextBlock.Visibility>
+                                                                        </TextBlock>
+                                                                        <ScrollViewer x:Name="PART_ContentHost" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="-2,0" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                                    </hc:SimplePanel>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </DatePickerTextBox.Style>
+                                            </DatePickerTextBox>
+                                            <Popup x:Name="PART_Popup" AllowsTransparency="True" Grid.Column="0" PopupAnimation="Fade" Placement="Bottom" StaysOpen="False" VerticalOffset="1"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Opacity" TargetName="templateRoot" Value="0.4"/>
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsMouseOver" SourceName="templateRoot" Value="True"/>
+                                            <Condition Property="IsOpen" SourceName="PART_Popup" Value="False"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource SecondaryBorderBrush}"/>
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsMouseOver" SourceName="templateRoot" Value="True"/>
+                                            <Condition Property="IsOpen" SourceName="PART_Popup" Value="True"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsMouseOver" SourceName="templateRoot" Value="True"/>
+                                            <Condition Property="ShowClearButton" Value="True"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Visibility" TargetName="ButtonClear" Value="Visible"/>
+                                    </MultiTrigger>
+                                    <Trigger Property="IsFocused" SourceName="PART_TextBox" Value="True">
+                                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsOpen" SourceName="PART_Popup" Value="True">
+                                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource PrimaryBrush}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsError" Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ThicknessAnimation Duration="0:0:0.2" To="9,0,0,-18" Storyboard.TargetProperty="Margin" Storyboard.TargetName="TextBlockError"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ThicknessAnimation Duration="0" To="9,0,0,4" Storyboard.TargetProperty="Margin" Storyboard.TargetName="TextBlockError"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
+                                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{DynamicResource DangerBrush}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Width" Value="Auto"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
 
@@ -134,12 +1654,12 @@
                         <DockPanel >
                             <Label  Content="{x:Static lang:Resources.FileSize}"  Style="{StaticResource BaseInfoLabel}"/>
 
-                            <hc:TextBox IsReadOnly="True"  Text="{Binding DetailMovie.filesize,Converter={StaticResource BitToGBConverter},Mode=OneWay}"     Style="{StaticResource BaseHCTextBox}"/>
+                            <hc:TextBox IsReadOnly="True"  Text="{Binding DetailMovie.filesize,Converter={StaticResource BitToGBConverter},Mode=OneWay}"     Style="{StaticResource BaseHCTextBox}" ContextMenu="{StaticResource CopyContextMenu}"/>
                         </DockPanel>
 
 
-                        <CheckBox IsChecked="{Binding EditWindow_ShowMore,Mode=TwoWay,Source={x:Static p:Settings.Default}}"  x:Name="ExtraInfoCheckBox"  Content="{x:Static lang:Resources.ShowOtherOptions}"  HorizontalAlignment="Left" Margin="25 5"/>
-                        <!--<CheckBox IsChecked="True"  x:Name="ExtraInfoCheckBox"  Content="{x:Static lang:Resources.ShowOtherOptions}"  HorizontalAlignment="Left" Margin="25 5"/>-->
+                        <!--<CheckBox IsChecked="{Binding EditWindow_ShowMore,Mode=TwoWay,Source={x:Static p:Settings.Default}}"  x:Name="ExtraInfoCheckBox"  Content="{x:Static lang:Resources.ShowOtherOptions}"  HorizontalAlignment="Left" Margin="25 5"/>-->
+                        <CheckBox IsChecked="True"  x:Name="ExtraInfoCheckBox"  Content="{x:Static lang:Resources.ShowOtherOptions}"  HorizontalAlignment="Left" Margin="25 5"/>
 
                         <StackPanel x:Name="ExtraInfoStackPanel" Orientation="Vertical" >
                             <StackPanel.Style>
@@ -175,7 +1695,9 @@
                             </DockPanel>
                             <DockPanel Panel.ZIndex="5" >
                                 <Label  Content="{x:Static lang:Resources.ReleaseDate}"  Style="{StaticResource BaseInfoLabel}"   />
-                                <hc:DatePicker x:Name="DatePicker" Margin="5" SelectedDateChanged="DatePicker_SelectedDateChanged"  BorderThickness="1" BorderBrush="{DynamicResource BackgroundMenu}" Background="Transparent" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" Text="{Binding DetailMovie.releasedate}"  MinWidth="200" HorizontalAlignment="Left"></hc:DatePicker>
+                                <hc:DatePicker x:Name="DatePicker" Margin="5" SelectedDateChanged="DatePicker_SelectedDateChanged"  BorderThickness="1" BorderBrush="{DynamicResource BackgroundMenu}" Background="Transparent" Foreground="{DynamicResource ForegroundSearch}" FontSize="15" Text="{Binding DetailMovie.releasedate}"  MinWidth="200" HorizontalAlignment="Left" ContextMenu="{StaticResource CopyContextMenu}" Style="{DynamicResource DatePickerStyle1}">
+
+                                </hc:DatePicker>
                             </DockPanel>
                             <DockPanel >
                                 <Label  Content="{x:Static lang:Resources.Rating}"  Style="{StaticResource BaseInfoLabel}"/>

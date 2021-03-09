@@ -62,6 +62,7 @@
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
+            <Setter Property="ContextMenu" Value="{StaticResource CopyContextMenu}"/>
             <Setter Property="Margin" Value="0 5"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
@@ -236,7 +237,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Grid x:Name="MouseMoveGrid" MouseMove="MoveWindow"  Grid.Column="0" Background="{DynamicResource BackgroundMain}"/>
-                        <TextBox x:Name="TitleTextBox" Grid.Column="0" Background="{DynamicResource BackgroundMain}"   Style="{StaticResource ViewTextBox}" VerticalAlignment="Center" HorizontalAlignment="Left"   TextAlignment="Left"  FontWeight="Bold"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 50 0" ></TextBox>
+                        <TextBox x:Name="TitleTextBox" Grid.Column="0" Background="{DynamicResource BackgroundMain}"   Style="{StaticResource ViewTextBox}" VerticalAlignment="Center" HorizontalAlignment="Left"   TextAlignment="Left"  FontWeight="Bold"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 50 0"  />
 
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
                             <Border  Height="auto" Width="auto" CornerRadius="3" Margin="10 5" Padding="5" Cursor="Hand"    Style="{StaticResource BorderStyle}">
@@ -445,8 +446,13 @@
 
 
                                             <StackPanel Grid.Row="0">
-                                                <TextBox Margin="-1 20 0 5" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"/>
-                                                <StackPanel  x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 5 0 10" >
+                                                <StackPanel Orientation="Horizontal" Margin="-1 20 0 5" HorizontalAlignment="Left">
+                                                    <TextBox  FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}" HorizontalAlignment="Left"/>
+
+                                                    <Button Click="CopyID" Cursor="Hand" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type StackPanel}},Path=IsMouseOver,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}" Content="{x:Static lang:Resources.Copy}" Style="{StaticResource ButtonPrimary}"/>
+
+                                                </StackPanel>
+                                               <StackPanel  x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 5 0 10" >
                                                     <Label Margin="0 0 5 0"  BorderThickness="0" Visibility="{Binding DetailMovie.tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=0,Mode=OneWay}" Background="#9A58B7" Content="{x:Static lang:Resources.HD}" Foreground="{DynamicResource ForegroundSearch}"/>
                                                     <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=1,Mode=OneWay}"  Background="YellowGreen"   Content="{x:Static lang:Resources.Translated}" Foreground="{DynamicResource ForegroundSearch}" />
                                                     <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=2,Mode=OneWay}" Background="#00B0F0" Content="{x:Static lang:Resources.FlowOut}" Foreground="{DynamicResource ForegroundSearch}" />
@@ -612,7 +618,7 @@
                                                         <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource BaseTextBlock}"  VerticalAlignment="Top"  />
 
                                                         <StackPanel Grid.Column="2">
-                                                            <Button Margin="5,0,0,0"    Content="{x:Static lang:Resources.Translate}" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}" Click="TranslateMovie" VerticalAlignment="Top"  />
+                                                            <Button Cursor="Hand" Margin="5,0,0,0"    Content="{x:Static lang:Resources.Translate}" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}" Click="TranslateMovie" VerticalAlignment="Top"  />
                                                             <TextBox Margin="5 0"  Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.plot}"  Height="auto" TextWrapping="Wrap"  ></TextBox>
                                                         </StackPanel>
                                                         

@@ -39,11 +39,13 @@
 
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" x:Name="TitleTextBlock" FontSize="20" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" HorizontalAlignment="Left" Text="请输入内容请输入内容请输入内容请输入内容请输入内容请输入内容" TextWrapping="Wrap"  Margin="20" Height="auto" Width="auto" VerticalAlignment="Top"></TextBlock>
-                    <TextBox Height="auto" Grid.Row="1" PreviewKeyUp="ContentTextBox_PreviewKeyUp" x:Name="ContentTextBox" FontSize="25" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" Background="{DynamicResource BackgroundTitle}" BorderThickness="0" Text="内容" Margin="20 0 10 0"   ></TextBox>
+                    
+                    <!--如果设置这个 contextmenu 则搜索框的 contextmenu 会被改变，不知道为啥-->
+                    <TextBox Height="auto" Grid.Row="1" PreviewKeyUp="ContentTextBox_PreviewKeyUp" x:Name="ContentTextBox" FontSize="25" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" Background="{DynamicResource BackgroundTitle}" BorderThickness="0" Text="内容" Margin="20 0 10 0"    />
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                        <Button Padding="5" Style="{StaticResource ButtonTrigger_No}" FontSize="20" Margin="10 0"  Background="Transparent"  BorderThickness="0" Content="{x:Static lang:Resources.Cancel}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
-                        <Button  Padding="5"  Style="{StaticResource ButtonTrigger_Yes}" FontSize="20" Margin="10 0"  Background="Transparent"  BorderThickness="0" Content="{x:Static lang:Resources.Confirm}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>
+                        <Button   Style="{StaticResource FlatRedButton}"        Content="{x:Static lang:Resources.Cancel}"         Click="Button_Click_1"/>
+                        <Button     Style="{StaticResource FlatButton}"        Content="{x:Static lang:Resources.Confirm}"     Click="Button_Click"/>
 
                     </StackPanel>
 

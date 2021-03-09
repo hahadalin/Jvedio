@@ -148,6 +148,7 @@ namespace Jvedio
 
         private async void BaseDialog_ContentRendered(object sender, EventArgs e)
         {
+            UpgradeProgressStackPanel.Visibility = Visibility.Collapsed;
             UpgradeSourceTextBlock.Text = $"{Jvedio.Language.Resources.UpgradeSource}：{Net.UpgradeSource}";
             LocalVersionTextBlock.Text = $"{Jvedio.Language.Resources.CurrentVersion}：{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
             if (remote != "")

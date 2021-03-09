@@ -81,6 +81,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel x:Name="VedioTypeStackPanel" Grid.Row="0" Orientation="Horizontal">
@@ -90,15 +91,19 @@
             <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"    Click="SaveVedioType"      Content="{x:Static lang:Resources.Europe}"  Style="{StaticResource FlatRadioButton}"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" >
+        <DockPanel LastChildFill="True" Grid.Row="1" >
             <Label  Content="{x:Static lang:Resources.StartPage}"     Style="{StaticResource LabelPrimary}" Margin="20 10" />
-            <Slider Name="Slider" ValueChanged="Slider_ValueChanged"   Value="1" Minimum="1" Maximum="500" SmallChange="1" LargeChange="2" TickFrequency="1" Width="330" VerticalAlignment="Center"  />
             <TextBlock  Width="30"   Style="{StaticResource BaseTextBlock}"   Text="{Binding Value, ElementName=Slider, Mode=OneWay,Converter={StaticResource IntConverter}}"  VerticalAlignment="Center" />
-            
+            <Slider Name="Slider" ValueChanged="Slider_ValueChanged"   Value="1" Minimum="1" Maximum="500" Margin="20 0" SmallChange="1" LargeChange="2" TickFrequency="1" Width="auto" VerticalAlignment="Center"    />
+        </DockPanel>
 
-        </StackPanel>
+        <DockPanel LastChildFill="True" Grid.Row="2" >
+            <Label  Content="{x:Static lang:Resources.EndPage}"     Style="{StaticResource LabelPrimary}" Margin="20 10" />
+            <TextBlock  Width="30"   Style="{StaticResource BaseTextBlock}"   Text="{Binding Value, ElementName=SliderEnd, Mode=OneWay,Converter={StaticResource IntConverter}}"  VerticalAlignment="Center" />
+            <Slider Name="SliderEnd" ValueChanged="SliderEnd_ValueChanged"   Value="{Binding RelativeSource={RelativeSource Mode=Self},Path=Maximum}" Minimum="1" Maximum="500"  Margin="20 0"  SmallChange="1" LargeChange="2" TickFrequency="1"   VerticalAlignment="Center"  />
+        </DockPanel>
 
-        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
 
             <ItemsControl x:Name="ActorItemsControl"     Margin="5" Background="Transparent">
                 <ItemsControl.ItemsPanel>

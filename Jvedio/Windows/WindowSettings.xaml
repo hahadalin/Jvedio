@@ -98,6 +98,7 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Width" Value="auto"/>
             <Setter Property="Height" Value="auto"/>
+            <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="MinWidth" Value="400"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -142,7 +143,7 @@
 
                     <StackPanel Orientation="Horizontal" Margin="5 0" >
                         <CheckBox Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked" IsChecked="{Binding HotKey_Enable, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.BossKey}"  VerticalContentAlignment="Center"/>
-                        <hc:TextBox x:Name="hotkeyTextBox" Text="{Binding HotKey_String,Mode=OneWay,Source={x:Static p:Settings.Default}}" IsReadOnly="True" PreviewKeyUp="hotkeyTextBox_PreviewKeyUp" PreviewKeyDown="hotkeyTextBox_PreviewKeyDown" Style="{StaticResource BaseHcTextBox}"  />
+                        <hc:TextBox x:Name="hotkeyTextBox" Text="{Binding HotKey_String,Mode=OneWay,Source={x:Static p:Settings.Default}}" IsReadOnly="True" ContextMenu="{x:Null}" PreviewKeyUp="hotkeyTextBox_PreviewKeyUp" PreviewKeyDown="hotkeyTextBox_PreviewKeyDown" Style="{StaticResource BaseHcTextBox}"  />
                         <Button Style="{StaticResource ButtonStyleFill}" Click="ApplyHotKey" Content="{x:Static lang:Resources.Apply}"   />
                     </StackPanel>
 
@@ -333,7 +334,7 @@
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Url}" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <hc:TextBox Text="{Binding Url}" Name="url" HorizontalAlignment="Left" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" Background="Transparent" Focusable="True"  GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"  BorderThickness="0" >
+                                        <hc:TextBox Text="{Binding Url}" ContextMenu="{StaticResource TextBoxContextMenu}" Name="url" HorizontalAlignment="Left" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" Background="Transparent" Focusable="True"  GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"  BorderThickness="0" >
                                         </hc:TextBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -343,7 +344,7 @@
                             <DataGridTemplateColumn Header="Cookie" Width="150">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <hc:TextBox ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Text="{Binding Cookie,Converter={StaticResource CookieNothingConverter},Mode=TwoWay}" HorizontalAlignment="Left" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" Background="Transparent" Focusable="True" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"  BorderThickness="0" >
+                                        <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Text="{Binding Cookie,Converter={StaticResource CookieNothingConverter},Mode=TwoWay}" HorizontalAlignment="Left" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" Background="Transparent" Focusable="True" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"  BorderThickness="0" >
                                         </hc:TextBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -503,13 +504,16 @@
                         <CheckBox IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.ShowTranslate2}"  />
                         <CheckBox IsChecked="{Binding DetialWindowShowAllMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.DetailViewAll}"  />
                     </StackPanel>
+                    
+                    <!--TODO-->
+                    <!--ContextMenu-->
                     <WrapPanel Visibility="Visible" Orientation="Horizontal" Margin="20 0">
                         <TextBlock Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="0 2 20 0" Text="{x:Static lang:Resources.MoviePerPage}" />
-                        <hc:NumericUpDown  Margin="0 5"   ToolTip="5-200"  Maximum="200" Minimum="4" Increment="10"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"   BorderThickness="0" Value="{Binding DisplayNumber, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"    />
+                        <hc:NumericUpDown   Margin="0 5"   ToolTip="5-200"  Maximum="200" Minimum="4" Increment="10"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"   BorderThickness="0" Value="{Binding DisplayNumber, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"    />
                         <TextBlock   Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="{x:Static lang:Resources.NumherEachFlow}"/>
-                        <hc:NumericUpDown  Margin="0 5"  ToolTip="5-50" Maximum="50" Minimum="1" Increment="5"   Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"     BorderThickness="0" Value="{Binding FlowNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"       />
+                        <hc:NumericUpDown   Margin="0 5"  ToolTip="5-50" Maximum="50" Minimum="1" Increment="5"   Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"     BorderThickness="0" Value="{Binding FlowNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"       />
                         <TextBlock  Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="{x:Static lang:Resources.ActorNumberPerPage}"/>
-                        <hc:NumericUpDown Margin="0 5" ToolTip="5-100" Maximum="100" Minimum="5" Increment="5"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"      BorderThickness="0" Value="{Binding ActorDisplayNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Width="100"       />
+                        <hc:NumericUpDown    Margin="0 5" ToolTip="5-100" Maximum="100" Minimum="5" Increment="5"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"      BorderThickness="0" Value="{Binding ActorDisplayNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Width="100"       />
                     </WrapPanel>
 
 

@@ -31,6 +31,7 @@ namespace Jvedio
         public List<int> SelectedActor;
         public int VedioType = 1;
         public int StartPage = 1;
+        public int EndPage = 500;
 
         public Dialog_SelectActor(Window owner,bool showbutton, List<ActorSearch> actorSearches) : base(owner, showbutton)
         {
@@ -97,6 +98,11 @@ namespace Jvedio
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             StartPage =(int)e.NewValue;
+        }
+
+        private void SliderEnd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            EndPage = (int)e.NewValue;
         }
     }
 }

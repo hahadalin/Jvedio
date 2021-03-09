@@ -77,6 +77,7 @@
 
 
 
+
         <Style x:Key="ActorInfoTextBlock" TargetType="{x:Type TextBlock}">
             <Setter Property="Margin" Value="10 10"/>
             <Setter Property="FontSize" Value="15"/>
@@ -105,6 +106,7 @@
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="Padding" Value="5"/>
+            <Setter Property="ContextMenu" Value="{StaticResource CopyContextMenu}"/>
         </Style>
 
 
@@ -125,22 +127,6 @@
 
 
 
-        <Style x:Key="BaseTextBox" TargetType="{x:Type TextBox}">
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="FontFamily" Value="Times New Romans"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Margin" Value="10 5 100 5"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="CaretBrush" Value="{DynamicResource ForegroundSearch}"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
 
 
         <Style x:Key="BaseFilterTextBlock" TargetType="{x:Type TextBlock}">
@@ -157,14 +143,7 @@
 
 
 
-        <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Margin" Value="0,5,0,5"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-        </Style>
+
 
         <Style x:Key="SearchCandidateTextBlock" TargetType="{x:Type TextBlock}">
             <Setter Property="TextWrapping" Value="Wrap"/>
@@ -182,9 +161,10 @@
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="TextWrapping" Value="NoWrap"/>
             <Setter Property="TextAlignment" Value="Left"/>
+            <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}"/>
         </Style>
 
-        <Style x:Key="ActorTextBlock" TargetType="{x:Type TextBox}">
+        <Style x:Key="ActorTextBox" TargetType="{x:Type TextBox}">
             <Setter Property="Width" Value="100"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -194,6 +174,7 @@
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
+            <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}"/>
 
             <Style.Triggers>
                 <DataTrigger Binding="{Binding EnableEditActress}" Value="True">
@@ -731,7 +712,7 @@
 
 
         <Grid  Visibility="{Binding CmdVisibility,FallbackValue=Hidden}" Panel.ZIndex="5">
-            <TextBox    Text="{Binding CmdText}" TextChanged="CmdTextChanged" Padding="10" TextWrapping="WrapWithOverflow"  DockPanel.Dock="Top" Background="{DynamicResource BackgroundMenu}" Opacity="0.8" Foreground="{DynamicResource ForegroundSearch}" Height="auto" Margin="50 100" Width="auto" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+            <TextBox ContextMenu="{StaticResource TextBoxContextMenu}"    Text="{Binding CmdText}" TextChanged="CmdTextChanged" Padding="10" TextWrapping="WrapWithOverflow"  DockPanel.Dock="Top" Background="{DynamicResource BackgroundMenu}" Opacity="0.8" Foreground="{DynamicResource ForegroundSearch}" Height="auto" Margin="50 100" Width="auto" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
             <Border     Height="27" Width="27" Margin="20 100" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="Border_MouseLeftButtonUp" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
             </Border>
@@ -997,17 +978,7 @@
                                                 </Popup>
                                             </Grid>
 
-                                            <hc:SearchBar x:Name="SearchBar"  Focusable="True" LostFocus="SearchBar_LostFocus" GotFocus="SearchBar_GotFocus"  PreviewKeyUp="SearchBar_PreviewKeyUp"    TextChanged="RefreshCandiadte" PreviewMouseLeftButtonDown="ShowSearchPopup" BorderThickness="0" Padding="35 0" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{Binding SearchHint}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  >
-                                                <hc:SearchBar.ContextMenu>
-                                                    <ContextMenu>
-                                                        <MenuItem Command="ApplicationCommands.Copy" />
-                                                        <MenuItem Command="ApplicationCommands.Cut" />
-                                                        <MenuItem Command="ApplicationCommands.Paste" />
-                                                        <MenuItem Command="ApplicationCommands.SelectAll" />
-                                                        <MenuItem Command="ApplicationCommands.Undo" />
-                                                    </ContextMenu>
-                                                </hc:SearchBar.ContextMenu>
-                                            </hc:SearchBar>
+                                            <hc:SearchBar x:Name="SearchBar" ContextMenu="{StaticResource TextBoxContextMenu}"  Focusable="True" LostFocus="SearchBar_LostFocus" GotFocus="SearchBar_GotFocus"  PreviewKeyUp="SearchBar_PreviewKeyUp"    TextChanged="RefreshCandiadte" PreviewMouseLeftButtonDown="ShowSearchPopup" BorderThickness="0" Padding="35 0" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{Binding SearchHint}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  />
 
                                             <Popup  Focusable="True" IsOpen="{Binding ShowSearchPopup,FallbackValue=False}"  VerticalOffset="2"  HorizontalOffset="0"      Width="{Binding  RelativeSource={RelativeSource AncestorType={x:Type Grid},Mode=FindAncestor},Path=ActualWidth}" Visibility="Visible"  AllowsTransparency="True" Placement="Bottom"  StaysOpen="True" >
                                                 <Grid    Margin="5"   >
@@ -1214,7 +1185,7 @@
                                                         </Grid.RowDefinitions>
                                                         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"  >
                                                             <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
-                                                            <TextBox Background="Transparent" Margin="5" BorderThickness="0" MaxHeight="300" Grid.Row="0"  HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Loading}" />
+                                                            <TextBlock Background="Transparent" Margin="5"   MaxHeight="300" Grid.Row="0"    Style="{StaticResource BaseTextBlock}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Loading}" />
 
                                                         </StackPanel >
 
@@ -1451,7 +1422,7 @@
                                                 </Grid.RowDefinitions>
                                                 <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"  >
                                                     <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
-                                                    <TextBox Background="Transparent" Margin="5" BorderThickness="0" MaxHeight="300" Grid.Row="0"  HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Loading}" />
+                                                    <TextBlock Background="Transparent" Margin="10"   MaxHeight="300" Grid.Row="0"    Style="{StaticResource BaseTextBlock}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Loading}" />
 
                                                 </StackPanel >
 
@@ -1533,7 +1504,7 @@
                                                         </ContextMenu>
                                                     </Image.ContextMenu>
                                                 </Image>
-                                                <TextBox Background="Transparent" IsReadOnly="True" Width="auto" MaxWidth="200" Text="{Binding Actress.name,Mode=OneWay}"  FontSize="20" HorizontalAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" FontWeight="Bold" Style="{StaticResource ActorTextBlock}" />
+                                                <TextBox Background="Transparent" TextAlignment="Center" IsReadOnly="True" ContextMenu="{StaticResource CopyContextMenu}" Width="auto" MaxWidth="200" Text="{Binding Actress.name,Mode=OneWay}"  FontSize="20" HorizontalAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" FontWeight="Normal" Style="{StaticResource ActorTextBox}" />
 
 
                                             </StackPanel>
@@ -1562,48 +1533,48 @@
                                                     <TextBox Text="{Binding Actress.id}" Style="{StaticResource InfoTextBox}" Visibility="Collapsed"  />
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Birthday}"  Style="{StaticResource ActorInfoTextBlock}" />
-                                                        <TextBox Text="{Binding Actress.birthday,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"   ToolTip="【0000-00-00】" />
+                                                        <TextBox Text="{Binding Actress.birthday,Mode=TwoWay}" Style="{StaticResource ActorTextBox}"   ToolTip="【0000-00-00】" />
                                                     </StackPanel>
 
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Age}"  Style="{StaticResource ActorInfoTextBlock}"  />
-                                                        <TextBox Text="{Binding Actress.age,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"    />
+                                                        <TextBox Text="{Binding Actress.age,Mode=TwoWay}" Style="{StaticResource ActorTextBox}"    />
                                                     </StackPanel>
 
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Birthplace}"  Style="{StaticResource ActorInfoTextBlock}"  />
-                                                        <TextBox Text="{Binding Actress.birthplace,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"      />
+                                                        <TextBox Text="{Binding Actress.birthplace,Mode=TwoWay}" Style="{StaticResource ActorTextBox}"      />
                                                     </StackPanel>
 
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Height}"  Style="{StaticResource ActorInfoTextBlock}"   />
-                                                        <TextBox Text="{Binding Actress.height,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"      />
+                                                        <TextBox Text="{Binding Actress.height,Mode=TwoWay}" Style="{StaticResource ActorTextBox}"      />
                                                     </StackPanel>
 
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Cup}"  Style="{StaticResource ActorInfoTextBlock}"    />
-                                                        <TextBox Text="{Binding Actress.cup,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"      />
+                                                        <TextBox Text="{Binding Actress.cup,Mode=TwoWay}" Style="{StaticResource ActorTextBox}"      />
                                                     </StackPanel>
 
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Chest}"  Style="{StaticResource ActorInfoTextBlock}"  />
-                                                        <TextBox Text="{Binding Actress.chest,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"      />
+                                                        <TextBox Text="{Binding Actress.chest,Mode=TwoWay}" Style="{StaticResource ActorTextBox}"      />
                                                     </StackPanel>
 
 
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Waist}"  Style="{StaticResource ActorInfoTextBlock}" />
-                                                        <TextBox Text="{Binding Actress.waist,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"      />
+                                                        <TextBox Text="{Binding Actress.waist,Mode=TwoWay}" Style="{StaticResource ActorTextBox}"      />
                                                     </StackPanel>
 
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Hipline}"  Style="{StaticResource ActorInfoTextBlock}"   />
-                                                        <TextBox Text="{Binding Actress.hipline,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"     />
+                                                        <TextBox Text="{Binding Actress.hipline,Mode=TwoWay}" Style="{StaticResource ActorTextBox}"     />
                                                     </StackPanel>
 
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Hobby}"  Style="{StaticResource ActorInfoTextBlock}"   />
-                                                        <TextBox Text="{Binding Actress.hobby,Mode=TwoWay}" Style="{StaticResource ActorTextBlock}"      />
+                                                        <TextBox Text="{Binding Actress.hobby,Mode=TwoWay}" Style="{StaticResource ActorTextBox}"      />
                                                     </StackPanel>
 
                                                 </StackPanel>
@@ -2000,8 +1971,8 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <ProgressBar Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"  Visibility="{Binding ProgressBarVisibility}"  Value="{Binding ProgressBarValue}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
-                                        <TextBox Text="{Binding ProgressBarValue,StringFormat={}{0}%}"  Grid.Column="1"  Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBox}" Margin="5 0"/>
+                                        <ProgressBar Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"  Visibility="{Binding ProgressBarVisibility}"  Value="{Binding ProgressBarValue,FallbackValue=20}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
+                                        <TextBlock Text="{Binding ProgressBarValue,StringFormat={}{0}%,FallbackValue=20%}" VerticalAlignment="Center"  Grid.Column="1"  Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBlock}" Margin="5 0"/>
                                     </Grid>
 
 
@@ -2030,7 +2001,7 @@
 
 
                                         <StackPanel  Orientation="Horizontal" Height="40" Width="auto">
-                                            <TextBox GotFocus="TextBox_GotFocus" PreviewKeyDown="TextBox_PreviewKeyDown"  Style="{StaticResource BaseTextBox}"  Padding="10 0"   BorderThickness="0"  Text="{Binding CurrentPage}"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10 1 10 1"/>
+                                            <TextBox GotFocus="TextBox_GotFocus" PreviewKeyDown="GoToPage"  Style="{StaticResource BaseTextBox}"  Padding="10 0"   BorderThickness="0"  Text="{Binding CurrentPage}"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10 1 10 1"/>
                                             <TextBlock Foreground="{DynamicResource ForegroundSearch}" Padding="10 0"  Text="{Binding TotalPage, StringFormat=/\{0\}}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 1 10 1"/>
                                         </StackPanel>
 
@@ -2074,7 +2045,7 @@
                                                 </Grid.RowDefinitions>
                                                 <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"  >
                                                     <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
-                                                    <TextBox Background="Transparent" Margin="5" BorderThickness="0" MaxHeight="300" Grid.Row="0"   HorizontalScrollBarVisibility="auto" Style="{StaticResource TextBoxBaseStyle}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Loading}" />
+                                                    <TextBlock Background="Transparent" Margin="10"   MaxHeight="300" Grid.Row="0"     Style="{StaticResource BaseTextBlock}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Loading}" />
 
                                                 </StackPanel >
 
@@ -2158,15 +2129,21 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <WrapPanel  Name="ActorWrapPanel" Orientation="Horizontal">
-                                                            <Grid Margin="5" >
+                                                            <Grid Margin="5" Height="200" >
                                                                 <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="5"  >
                                                                     <Border.Effect>
                                                                         <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                     </Border.Effect>
                                                                 </Border>
-                                                                <StackPanel Orientation="Vertical" Margin="2">
+                                                                <StackPanel Tag="{Binding name,Mode=OneWay}" Orientation="Vertical" Margin="2">
+                                                                    <StackPanel.ContextMenu>
+                                                                        <ContextMenu>
+                                                                            <MenuItem Header="{x:Static lang:Resources.SyncInfo}" Icon="pack://application:,,,/Resources/menuitem/download.png" Click="DownLoadSelectedActor" />
+                                                                            <MenuItem Header="{x:Static lang:Resources.AddToFavorites}" Icon="pack://application:,,,/Resources/menuitem/like.png" Click="LikeSelectedActor" />
+                                                                        </ContextMenu>
+                                                                    </StackPanel.ContextMenu>
                                                                     <Image Stretch="UniformToFill" MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave"  Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver"  Drop="ActorImage_Drop"  />
-                                                                    <TextBox Name="ActorNameTextBox" Width="125" TextWrapping="Wrap" TextAlignment="Center" MaxHeight="80" Margin="0" Foreground="{DynamicResource ForegroundSearch}" Opacity="0.7" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
+                                                                    <TextBox  Name="ActorNameTextBox" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" MaxHeight="60"  Width="125" TextWrapping="Wrap" TextAlignment="Center"  Margin="0" Foreground="{DynamicResource ForegroundSearch}" Opacity="0.7" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
                                                                         <TextBox.Text>
                                                                             <MultiBinding StringFormat="{}{0}({1})">
                                                                                 <Binding Path="name" />
@@ -2175,13 +2152,7 @@
                                                                             </MultiBinding>
                                                                         </TextBox.Text>
                                                                     </TextBox>
-                                                                    <TextBlock Text="{Binding id}" Visibility="Collapsed"/>
-                                                                    <StackPanel.ContextMenu>
-                                                                        <ContextMenu>
-                                                                            <MenuItem Header="{x:Static lang:Resources.SyncInfo}" Icon="pack://application:,,,/Resources/menuitem/download.png" Click="DownLoadSelectedActor" />
-                                                                            <MenuItem Header="{x:Static lang:Resources.AddToFavorites}" Icon="pack://application:,,,/Resources/menuitem/like.png" Click="LikeSelectedActor" />
-                                                                        </ContextMenu>
-                                                                    </StackPanel.ContextMenu>
+
                                                                 </StackPanel>
                                                             </Grid>
                                                         </WrapPanel>
@@ -2451,8 +2422,8 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <ProgressBar  Grid.Column="0" Background="{DynamicResource BackgroundSide}" ValueChanged="ActorProgressBar_ValueChanged"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"    Visibility="{Binding ActorProgressBarVisibility}"  Value="{Binding ActorProgressBarValue}"    Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"    Maximum="100" Minimum="0"  />
-                                        <TextBox     Grid.Column="1" Text="{Binding ActorProgressBarValue,StringFormat={}{0}%}" Visibility="{Binding ActorProgressBarVisibility}" Style="{StaticResource BaseTextBox}" Margin="5 0"/>
+                                        <ProgressBar  Grid.Column="0" Background="{DynamicResource BackgroundSide}" ValueChanged="ActorProgressBar_ValueChanged"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"    Visibility="{Binding ActorProgressBarVisibility}"  Value="{Binding ActorProgressBarValue,FallbackValue=20}"    Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"    Maximum="100" Minimum="0"  />
+                                        <TextBlock     Grid.Column="1" Text="{Binding ActorProgressBarValue,StringFormat={}{0}%,FallbackValue=20%}" Visibility="{Binding ActorProgressBarVisibility}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Margin="5 0"/>
                                     </Grid>
 
 
@@ -2476,7 +2447,7 @@
                                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                         </Border>
                                         <StackPanel  Orientation="Horizontal" Height="40" Width="auto">
-                                            <TextBox GotFocus="TextBox_GotFocus" PreviewKeyDown="ActorTextBox_PreviewKeyDown"  Style="{StaticResource BaseTextBox}"  Padding="10 0"   BorderThickness="0"  Text="{Binding CurrentActorPage}"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10 1 10 1"/>
+                                            <TextBox ContextMenu="{StaticResource TextBoxContextMenu}" GotFocus="TextBox_GotFocus" PreviewKeyDown="GoToActorPage"  Style="{StaticResource BaseTextBox}"  Padding="10 0"   BorderThickness="0"  Text="{Binding CurrentActorPage}"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10 1 10 1"/>
                                             <TextBlock Foreground="{DynamicResource ForegroundSearch}" Padding="10 0"  Text="{Binding TotalActorPage, StringFormat=/\{0\}}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 1 10 1"/>
                                         </StackPanel>
 

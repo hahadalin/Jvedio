@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using HandyControl.Tools;
 using Jvedio;
 
 namespace Jvedio
@@ -49,44 +50,46 @@ namespace Jvedio
         {
             //设置语言
             string language=Jvedio.Properties.Settings.Default.Language;
-            
+            string lang = "en-US";
             switch (language)
             {
 
                 case "中文":
-                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("zh-CN");
+                    lang = "zh-CN";
                     break;
                 case "English":
-                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                    lang = "en-US";
                     break;
                 case "日本語":
-                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("ja-JP");
+                    lang = "ja-JP";
                     break;
                 default:
                     //根据地区获取语言
                     string name = System.Globalization.CultureInfo.CurrentCulture.Name.ToUpper();
                     if(name== "ja-JP".ToUpper())
                     {
-                        Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("ja-JP");
+                        lang = "ja-JP";
                         Jvedio.Properties.Settings.Default.Language = "日本語";
                     }else if (name == "zh-CN".ToUpper())
                     {
-                        Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("zh-CN");
+                        lang = "zh-CN";
                         Jvedio.Properties.Settings.Default.Language = "中文";
                     }
                     else if (name == "en-US".ToUpper())
                     {
-                        Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                        lang = "en-US";
                         Jvedio.Properties.Settings.Default.Language = "English";
                     }
                     else 
                     {
-                        Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                        lang="en-US";
                         Jvedio.Properties.Settings.Default.Language = "English";
                     }
-                    Jvedio.Properties.Settings.Default.Save();
                     break;
             }
+            Jvedio.Properties.Settings.Default.Save();
+            Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo(lang);
+            ConfigHelper.Instance.SetLang(lang);//设置 handycontrol 的语言
         }
 
 

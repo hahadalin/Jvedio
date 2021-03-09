@@ -17,9 +17,6 @@
 
     <Window.Resources>
         <Style x:Key="BaseTextBox" TargetType="{x:Type TextBox}">
-
-
-            <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
@@ -44,6 +41,6 @@
     <Grid  Background="{DynamicResource BackgroundMain}"  Height="auto"   VerticalAlignment="Top" >
         <Image Source="/Resources/Picture/hankuke.jpg" Stretch="Fill" Margin="2"/>
         <Border Background="{DynamicResource BackgroundTitle}" CornerRadius="5" Opacity="0.9"></Border>
-        <TextBox  Style="{StaticResource BaseTextBox}" x:Name="NoticeTextBlock" Text="{x:Static lang:Resources.Notice}"/>
+        <TextBox  Style="{StaticResource BaseTextBox}" x:Name="NoticeTextBlock" Text="{x:Static lang:Resources.Notice}" ContextMenu="{StaticResource CopyContextMenu}"/>
     </Grid>
 </local:BaseDialog>

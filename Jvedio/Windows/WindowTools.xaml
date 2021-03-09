@@ -108,7 +108,7 @@
                                 </Grid.ColumnDefinitions>
                                 
                                 
-                                <hc:TextBox  CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" ShowClearButton="True" Grid.Column="0"  x:Name="AccessPathTextBox"  Text="" Margin="20 20 0 20"  HorizontalAlignment="Stretch" BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="10"/>
+                                <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" ShowClearButton="True" Grid.Column="0"  x:Name="AccessPathTextBox"  Text="" Margin="20 20 0 20"  HorizontalAlignment="Stretch" BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="10"/>
 
                                 <Button  Grid.Column="1"  Content="{x:Static lang:Resources.ChooseFile}"  Width="auto"  Style="{StaticResource ButtonStyleFill}" Margin="20" Click="ShowAccessPath"></Button>
 
@@ -188,7 +188,7 @@
 
 
 
-                                            <hc:TextBox CaretBrush="{DynamicResource ForegroundSearch}" Grid.Column="0" ShowClearButton="True"  Padding="10" x:Name="NFOPathTextBox"  Text="" Margin="20 20 0 20"    TextAlignment="Left" Foreground="{DynamicResource ForegroundSearch}" BorderThickness="0" Background="{DynamicResource BackgroundSide}" />
+                                            <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}"  CaretBrush="{DynamicResource ForegroundSearch}" Grid.Column="0" ShowClearButton="True"  Padding="10" x:Name="NFOPathTextBox"  Text="" Margin="20 20 0 20"    TextAlignment="Left" Foreground="{DynamicResource ForegroundSearch}" BorderThickness="0" Background="{DynamicResource BackgroundSide}" />
                                             <Button Grid.Column="1" HorizontalAlignment="Left" Margin="20"  Content="{x:Static lang:Resources.ChooseFile}" Height="auto" Width="100"  Style="{StaticResource ButtonStyleFill}" Click="ShowNFOPath"/>
 
 
@@ -274,7 +274,7 @@
                                 </Grid.ColumnDefinitions>
 
 
-                                <hc:TextBox CaretBrush="{DynamicResource ForegroundSearch}"  Grid.Column="0"  x:Name="UNCPathTextBox" ShowClearButton="True"   Text="" Margin="20 20 0 20"  BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="10" ToolTip="\\用户名\\文件夹" />
+                                <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}"  CaretBrush="{DynamicResource ForegroundSearch}"  Grid.Column="0"  x:Name="UNCPathTextBox" ShowClearButton="True"   Text="" Margin="20 20 0 20"  BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="10" ToolTip="\\用户名\\文件夹" />
 
                                 <Button  Grid.Column="1"  Content="{x:Static lang:Resources.ChooseDir}"  Width="auto"  Style="{StaticResource ButtonStyleFill}" Margin="20" Click="ShowUNCPath"/>
 

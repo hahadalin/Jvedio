@@ -79,30 +79,6 @@
 
 
 
-        <Style x:Key="BaseTextBox" TargetType="TextBox">
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Margin" Value="10 5 100 5"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Cursor" Value="Arrow"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="CaretBrush" Value="{DynamicResource ForegroundSearch}"/>
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="true"></Condition>
-                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsReadOnly}" Value="false"></Condition>
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Background" Value="{DynamicResource BackgroundSide}"></Setter>
-                </MultiDataTrigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="Transparent"></Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
 
 
 
@@ -217,7 +193,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <StackPanel Grid.Column="0"  Orientation="Horizontal" Margin="5 5" PreviewMouseLeftButtonUp="LoadDataBase" Cursor="Hand">
                                                     <Image Style="{StaticResource ImageStyle}" Margin="10 2"  />
-                                                    <TextBox Cursor="Hand" TextAlignment="Left" Width="180" Height="auto"  KeyUp="TextBox_KeyUp" LostFocus="TextBox_LostFocus"  IsReadOnly="True" Text="{Binding .,Mode=TwoWay}" Margin="5" Grid.Row="1" Style="{StaticResource BaseTextBox}" VerticalAlignment="Center" FontSize="20" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
+                                                    <TextBox ContextMenu="{StaticResource TextBoxContextMenu}" Cursor="Hand" TextAlignment="Left" Width="180" Height="auto"  KeyUp="TextBox_KeyUp" LostFocus="TextBox_LostFocus"  IsReadOnly="True" Text="{Binding .,Mode=TwoWay}" Margin="5" Grid.Row="1" Style="{StaticResource BaseTextBox}" VerticalAlignment="Center" FontSize="20" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
                                                 </StackPanel>
                                                 <Border  Grid.Column="1"  Style="{StaticResource OptionBorderStyle}" Background="{DynamicResource BackgroundSide}"  Height="20"  Width="auto" Margin="4 0"  VerticalAlignment="Top" Cursor="Hand" MouseLeftButtonUp="Image_MouseLeftButtonUp">
                                                     <Image x:Name="optionImage" Source="pack://application:,,,/Resources/Image/StartUp/选项.png" Width="15" Margin="2"  />
