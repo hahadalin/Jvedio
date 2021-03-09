@@ -925,7 +925,8 @@ namespace Jvedio
                     {
                         nodes = infoNode.SelectNodes("td"); if (nodes == null || nodes.Count == 0) continue;
                         content = nodes[1].InnerText;
-                        result.Add("runtime", content.Replace("分",""));
+                        int.TryParse(content.Replace("分", ""), out int runtime);
+                        result.Add("runtime", runtime.ToString());
                     }
                     else if (header.IndexOf("監督") >= 0)
                     {
