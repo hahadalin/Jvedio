@@ -11,6 +11,7 @@
         Title="{x:Static lang:Resources.ChooseActor}" 
         Width="500"
         Height="500"
+     MaxHeight="500"  
     SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
     
@@ -76,7 +77,7 @@
     </Window.Resources>
 
 
-    <Grid  Background="{DynamicResource BackgroundMain}"  Width="auto" Height="auto"   >
+    <Grid  Background="{DynamicResource BackgroundMain}"  Width="auto" Height="auto"  MaxHeight="500"  >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
