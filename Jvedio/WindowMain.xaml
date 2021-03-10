@@ -30,10 +30,7 @@
     PreviewKeyUp="Window_PreviewKeyUp"
     SizeChanged="Window_SizeChanged"
     PreviewKeyDown="Window_PreviewKeyDown"
-    
     Deactivated="Window_Deactivated"
-
-
     >
 
 
@@ -1053,6 +1050,7 @@
 
 
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <Button x:Name="HideButton" VerticalAlignment="Center" Style="{StaticResource FlatButton}"  Content="{x:Static lang:Resources.LoadFromNet}" Margin="5 0" Click="LoadFromPage"   HorizontalAlignment="Stretch" Visibility="Visible"   />
 
                                             <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}"  Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch"   />
 

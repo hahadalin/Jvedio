@@ -291,13 +291,14 @@ namespace Jvedio
         {
             //20个数据
             if (movie.vediotype != 3) movie.id = movie.id.ToUpper();//除了 欧美影片之外，其他影片必须大写
-            string sqltext = $"INSERT OR IGNORE INTO {table}(id  , title    , releasedate,vediotype,actor)  values(@id  , @title    , @releasedate,@vediotype,@actor) ";
+            string sqltext = $"INSERT OR IGNORE INTO {table}(id  , title    , releasedate,vediotype,actor,otherinfo)  values(@id  , @title    , @releasedate,@vediotype,@actor,@otherinfo) ";
             cmd.CommandText = sqltext;
             cmd.Parameters.Add("id", DbType.String).Value = movie.id;
             cmd.Parameters.Add("title", DbType.String).Value = movie.title;
             cmd.Parameters.Add("releasedate", DbType.String).Value = movie.releasedate;
             cmd.Parameters.Add("vediotype", DbType.Int16).Value = movie.vediotype;
             cmd.Parameters.Add("actor", DbType.String).Value = movie.actor;
+            cmd.Parameters.Add("otherinfo", DbType.String).Value = movie.otherinfo;
             cmd.ExecuteNonQuery();
         }
 

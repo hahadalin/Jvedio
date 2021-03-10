@@ -1274,6 +1274,11 @@ namespace Jvedio
 
         }
 
+        private void ShowHideContent()
+        {
+            HideButton.Visibility = Visibility.Visible;
+        }
+
 
         private int SearchSelectIdex = -1;
 
@@ -1285,8 +1290,16 @@ namespace Jvedio
                 if (vieModel.CurrentSearchCandidate != null && (SearchSelectIdex >= 0 & SearchSelectIdex < vieModel.CurrentSearchCandidate.Count))
                     SearchBar.Text = vieModel.CurrentSearchCandidate[SearchSelectIdex];
                 if (SearchBar.Text == "") return;
-                vieModel.Search = SearchBar.Text;
-                vieModel.ShowSearchPopup = false;
+                if (SearchBar.Text.ToUpper() == "JVEDIO")
+                {
+                    ShowHideContent();
+                }
+                else
+                {
+                    vieModel.Search = SearchBar.Text;
+                    vieModel.ShowSearchPopup = false;
+                }
+
 
             }
             else if (e.Key == Key.Down)
@@ -5456,7 +5469,7 @@ namespace Jvedio
             var anim = new DoubleAnimation(1, 0, (Duration)FadeInterval, FillBehavior.Stop);
             anim.Completed += (s, _) => vieModel.ActorInfoGrid = Visibility.Collapsed; ;
             grid.BeginAnimation(UIElement.OpacityProperty, anim);
-            
+
         }
 
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -5472,7 +5485,7 @@ namespace Jvedio
         private void ActorProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (vieModel == null) return;
-            if(vieModel.ActorProgressBarValue==100)
+            if (vieModel.ActorProgressBarValue == 100)
                 vieModel.ActorProgressBarVisibility = Visibility.Hidden;
             else
                 vieModel.ActorProgressBarVisibility = Visibility.Visible;
@@ -5935,6 +5948,7 @@ namespace Jvedio
                                             if (idlist.Contains(movie.id)) continue;//如果数据库存在则跳过，不会更新信息
                                             movie.vediotype = vt;
                                             movie.actor = name;
+                                            movie.otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                             if (vt != 3) movie.id = movie.id.ToUpper();
                                             DataBase.InsertSearchMovie(movie);
                                             total += 1;
@@ -6011,19 +6025,24 @@ namespace Jvedio
         }
 
 
-        private void LoadActorOtherMovie(object sender, MouseButtonEventArgs e)
+        private void InitLoadActor(string notice)
         {
-            Border border = sender as Border;
-            string name = border.Tag.ToString();
             LoadActorWaitingPanel.Visibility = Visibility.Visible;
             LoadActorWaitingPanel.ShowProgressBar = Visibility.Collapsed;
-            LoadActorWaitingPanel.NoticeText = Jvedio.Language.Resources.SearchActor;
+            LoadActorWaitingPanel.NoticeText = notice;
             LoadActorWaitingPanel.ShowCancelButton = Visibility.Collapsed;
             LoadActorWaitingPanel.NoticeExtraText = "";
             LoadActorWaitingPanel.ShowExtraText = Visibility.Collapsed;
             LoadActorCTS = new CancellationTokenSource();
             LoadActorCTS.Token.Register(() => { Console.WriteLine("取消任务"); this.Cursor = Cursors.Arrow; });
             LoadActorCT = LoadActorCTS.Token;
+        }
+
+        private void LoadActorOtherMovie(object sender, MouseButtonEventArgs e)
+        {
+            Border border = sender as Border;
+            string name = border.Tag.ToString();
+            InitLoadActor(Jvedio.Language.Resources.SearchActor);
             LoadActor(name);
         }
 
@@ -6058,6 +6077,75 @@ namespace Jvedio
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private async void LoadFromPage(object sender, RoutedEventArgs e)
+        {
+            Dialog_LoadPage dialog_LoadPage = new Dialog_LoadPage(this, true);
+            if (dialog_LoadPage.ShowDialog() == true)
+            {
+                int start = dialog_LoadPage.StartPage;
+                int end = dialog_LoadPage.EndPage;
+                int vt = dialog_LoadPage.VedioType;
+                string url = dialog_LoadPage.url;
+                
+                if (url.IsProperUrl())
+                {
+                    if (!url.EndsWith("/")) url += "/";
+                    //遍历要下载的页码
+                    int total = 0;
+                    InitLoadActor(Jvedio.Language.Resources.LoadFromNet);
+                    await Task.Run(async () => { 
+                    for (int i = start; i <= end; i++)
+                    {
+                        if (CheckLoadActorCancel()) break;
+                        string Url = url + i;
+                            Dispatcher.Invoke((Action)delegate
+                            {
+                                LoadActorWaitingPanel.NoticeText = Jvedio.Language.Resources.LoadFromNet;
+                                LoadActorWaitingPanel.ShowCancelButton = Visibility.Visible;
+                                LoadActorWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + i;
+                                LoadActorWaitingPanel.ShowExtraText = Visibility.Visible;
+                            });
+
+                            HttpResult newResult = await Net.Http(Url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
+                            if (newResult != null && newResult.SourceCode != "" && newResult.StatusCode == HttpStatusCode.OK)
+                            {
+                                //解析影片
+                                List<Movie> movies = GetMoviesFromPage(newResult.SourceCode);
+                                List<string> idlist = DataBase.SelectAllID();
+                                foreach (Movie movie in movies)
+                                {
+                                    if (idlist.Contains(movie.id)) continue;//如果数据库存在则跳过，不会更新信息
+                                    movie.vediotype = vt;
+                                    movie.otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                    if (vt != 3) movie.id = movie.id.ToUpper();
+                                    DataBase.InsertSearchMovie(movie);
+                                    total += 1;
+                                }
+                                if (movies.Count < 30) break;//小于每页的最大数目
+                            }
+                            else
+                            {
+                                Console.WriteLine(Jvedio.Language.Resources.HttpFail);
+                                break;
+                                //HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.HttpFail, "Main");
+                            }
+                            await Task.Delay(1000);
+
+                    }
+                    });
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Complete, "Main");
+                    LoadActorWaitingPanel.Visibility = Visibility.Collapsed;
+                    LoadActorCTS?.Dispose();
+                }
+                else
+                {
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.ErrorUrl, "Main");
+                } 
+            }
+
+
         }
     }
 

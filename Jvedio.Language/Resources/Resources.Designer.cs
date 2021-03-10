@@ -1069,6 +1069,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 网址错误 的本地化字符串。
+        /// </summary>
+        public static string ErrorUrl {
+            get {
+                return ResourceManager.GetString("ErrorUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 欧美 的本地化字符串。
         /// </summary>
         public static string Europe {
@@ -1209,6 +1218,15 @@ namespace Jvedio.Language {
         public static string FileSize {
             get {
                 return ResourceManager.GetString("FileSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 网址的第一页 的本地化字符串。
+        /// </summary>
+        public static string FirstPageOfUrl {
+            get {
+                return ResourceManager.GetString("FirstPageOfUrl", resourceCulture);
             }
         }
         
@@ -1722,6 +1740,15 @@ namespace Jvedio.Language {
         public static string LoadActorOtherMovie {
             get {
                 return ResourceManager.GetString("LoadActorOtherMovie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 根据网址加载 的本地化字符串。
+        /// </summary>
+        public static string LoadFromNet {
+            get {
+                return ResourceManager.GetString("LoadFromNet", resourceCulture);
             }
         }
         
@@ -3585,6 +3612,15 @@ namespace Jvedio.Language {
         public static string ShowRest {
             get {
                 return ResourceManager.GetString("ShowRest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 根据页码加载影片 的本地化字符串。
+        /// </summary>
+        public static string ShowSameSeries {
+            get {
+                return ResourceManager.GetString("ShowSameSeries", resourceCulture);
             }
         }
         

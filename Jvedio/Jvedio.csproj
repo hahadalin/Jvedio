@@ -223,6 +223,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DialogWindows\Dialog_LoadPage.xaml.cs">
+      <DependentUpon>Dialog_LoadPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DialogWindows\Dialog_SelectActor.xaml.cs">
       <DependentUpon>Dialog_SelectActor.xaml</DependentUpon>
     </Compile>
@@ -342,6 +345,10 @@
     <Compile Include="Windows\Window_ImageViewer.xaml.cs">
       <DependentUpon>Window_ImageViewer.xaml</DependentUpon>
     </Compile>
+    <Page Include="DialogWindows\Dialog_LoadPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DialogWindows\Dialog_SelectActor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

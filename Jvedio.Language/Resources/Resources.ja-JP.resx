@@ -1638,4 +1638,16 @@
   <data name="Undo" xml:space="preserve">
     <value>撤回</value>
   </data>
+  <data name="ShowSameSeries" xml:space="preserve">
+    <value>ページ番号に従って映画をロードする</value>
+  </data>
+  <data name="LoadFromNet" xml:space="preserve">
+    <value>urlに従ってロードする</value>
+  </data>
+  <data name="ErrorUrl" xml:space="preserve">
+    <value>urlエラー</value>
+  </data>
+  <data name="FirstPageOfUrl" xml:space="preserve">
+    <value>urlの最初のページ</value>
+  </data>
 </root>

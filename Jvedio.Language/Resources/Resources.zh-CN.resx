@@ -1641,4 +1641,16 @@
   <data name="Undo" xml:space="preserve">
     <value>撤销</value>
   </data>
+  <data name="ShowSameSeries" xml:space="preserve">
+    <value>根据页码加载影片</value>
+  </data>
+  <data name="LoadFromNet" xml:space="preserve">
+    <value>根据网址加载</value>
+  </data>
+  <data name="ErrorUrl" xml:space="preserve">
+    <value>urlエラー</value>
+  </data>
+  <data name="FirstPageOfUrl" xml:space="preserve">
+    <value>网址的第一页</value>
+  </data>
 </root>
