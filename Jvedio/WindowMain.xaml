@@ -685,10 +685,6 @@
         </Rectangle>
 
 
-        <JvedioControls:WaitingPanel NoticeText="{x:Static lang:Resources.Wait}"   ShowCancelButton="Visible" ShowProgressBar="Collapsed" Visibility="{Binding IsScanning,Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel"  ></JvedioControls:WaitingPanel>
-
-        <JvedioControls:WaitingPanel  x:Name="LoadActorWaitingPanel"  NoticeText="{x:Static lang:Resources.Wait}"     ShowCancelButton="Visible" ShowProgressBar="Visible" Visibility="Hidden"  Panel.ZIndex="5" Cancel="CancelLoadActor"  ></JvedioControls:WaitingPanel>
-
 
         <!--消息提示框-->
         <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="10 120 30 80">
@@ -755,6 +751,12 @@
             </Border>
 
             <Grid Grid.Row="1"   >
+
+
+                <JvedioControls:WaitingPanel NoticeText="{x:Static lang:Resources.Wait}"   ShowCancelButton="Visible" ShowProgressBar="Collapsed" Visibility="{Binding IsScanning,Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"      Panel.ZIndex="5" Cancel="WaitingPanel_Cancel"  ></JvedioControls:WaitingPanel>
+
+                <JvedioControls:WaitingPanel  x:Name="LoadActorWaitingPanel"  NoticeText="{x:Static lang:Resources.Wait}"     ShowCancelButton="Visible" ShowProgressBar="Visible" Visibility="Hidden"  Panel.ZIndex="5" Cancel="CancelLoadActor"    ></JvedioControls:WaitingPanel>
+
 
                 <!--主界面-->
 
@@ -1050,7 +1052,7 @@
 
 
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <Button x:Name="HideButton" VerticalAlignment="Center" Style="{StaticResource FlatButton}"  Content="{x:Static lang:Resources.LoadFromNet}" Margin="5 0" Click="LoadFromPage"   HorizontalAlignment="Stretch" Visibility="Visible"   />
+                                            <Button x:Name="HideButton" VerticalAlignment="Center" Style="{StaticResource FlatButton}"  Content="{x:Static lang:Resources.LoadFromNet}" Margin="5 0" Click="LoadFromPage"   HorizontalAlignment="Stretch" Visibility="Collapsed"   />
 
                                             <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}"  Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch"   />
 

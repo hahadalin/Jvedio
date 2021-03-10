@@ -1648,9 +1648,15 @@
     <value>根据网址加载</value>
   </data>
   <data name="ErrorUrl" xml:space="preserve">
-    <value>urlエラー</value>
+    <value>网址错误</value>
   </data>
   <data name="FirstPageOfUrl" xml:space="preserve">
     <value>网址的第一页</value>
+  </data>
+  <data name="OpenOtherUrl" xml:space="preserve">
+    <value>打开其他网址</value>
+  </data>
+  <data name="GetPlot" xml:space="preserve">
+    <value>获取摘要</value>
   </data>
 </root>

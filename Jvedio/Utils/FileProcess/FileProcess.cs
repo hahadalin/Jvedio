@@ -29,6 +29,19 @@ namespace Jvedio
             FileProcess.SaveNfo(detailMovie);
         }
 
+        public static void SavePartialInfo(Dictionary<string, string> Info,string key, string id)
+        {
+            //保存信息
+            if (!Info.ContainsKey("id")) Info.Add("id", id);
+            if (!Info.ContainsKey(key)) return;
+            DataBase.UpdateMovieByID(id, key, Info[key], "String");
+            DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
+            FileProcess.SaveNfo(detailMovie);
+        }
+
+
+        
+
         public static void SaveNfo(DetailMovie detailMovie)
         {
             if (!Properties.Settings.Default.SaveInfoToNFO) return;

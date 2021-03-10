@@ -986,14 +986,31 @@ namespace Jvedio
             }
             else
             {
+                //结束程序
                 StopDownLoad();
                 SaveRecentWatched();
                 vieModel.ProgressBarVisibility = Visibility.Hidden;
+                //停止所有任务
+                try
+                {
+                    RefreshScanCTS?.Cancel();
+                    LoadActorCTS?.Cancel();
+                    scan_cts?.Cancel();
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+
+
                 WindowTools windowTools = null;
                 foreach (Window item in App.Current.Windows)
                 {
                     if (item.GetType().Name == "WindowTools") windowTools = item as WindowTools;
                 }
+
+
 
                 if (windowTools?.IsVisible == true)
                 {

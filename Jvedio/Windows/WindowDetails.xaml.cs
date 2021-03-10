@@ -1120,7 +1120,13 @@ namespace Jvedio
             DataBase.ClearInfoByID(vieModel.DetailMovie.id);
             windowMain = App.Current.Windows[0] as Main;
             windowMain.RefreshMovieByID(vieModel.DetailMovie.id);
+            RefreshCurrent();
 
+        }
+
+        private void RefreshCurrent()
+        {
+            if (this == null) return;
             //刷新界面显示
             DetailMovie detailMovie = DataBase.SelectDetailMovieById(vieModel.DetailMovie.id);
             if (detailMovie != null)
@@ -1823,6 +1829,22 @@ namespace Jvedio
             FatherGrid.Focus();
 
             InitList();
+
+            //设置右键菜单
+            OpenOtherUrlMenuItem.Items.Clear();
+            if (JvedioServers.Bus.Url.IsProperUrl())
+            {
+                MenuItem menuItem = new MenuItem() { Header = "BUS" };
+                menuItem.Click += (s, ev) =>
+                {
+                    try
+                    {
+                        Process.Start(JvedioServers.Bus.Url + vieModel.DetailMovie.id);
+                    }
+                    catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl"); }
+                };
+                OpenOtherUrlMenuItem.Items.Add(menuItem);
+            }
         }
 
         private void InitList()
@@ -2161,6 +2183,23 @@ namespace Jvedio
             catch(Exception ex)
             {
                 HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl");
+            }
+        }
+
+        private  void GetPlot(object sender, RoutedEventArgs e)
+        {
+            if (JvedioServers.DMM.Url.IsProperUrl())
+            {
+                Task.Run(async () => {
+                    HttpResult httpResult = await new FANZACrawler(vieModel.DetailMovie.id,true).Crawl();
+                    if (this.Dispatcher != null)
+                    {
+                        Dispatcher.Invoke((Action)delegate {
+                            RefreshCurrent();
+                        });
+                    }
+                });
+                
             }
         }
     }

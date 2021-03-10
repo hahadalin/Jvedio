@@ -441,10 +441,12 @@ namespace Jvedio
     {
 
         protected string MovieCode = "";
-        public FANZACrawler(string Id) : base(Id)
+        protected bool OnlyPlot;
+        public FANZACrawler(string Id, bool onlyPlot = false) : base(Id)
         {
             Url = $"{JvedioServers.DMM.Url}search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr={ID}&commit.x=5&commit.y=18";
             if (Url.IsProperUrl()) InitHeaders();
+            OnlyPlot = onlyPlot;
         }
 
         protected  async Task<string> GetMovieCode()
@@ -530,7 +532,10 @@ namespace Jvedio
                 httpResult = await Net.Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
-                    FileProcess.SaveInfo(GetInfo(), ID);
+                    if (!this.OnlyPlot)
+                        FileProcess.SaveInfo(GetInfo(), ID);
+                    else
+                        FileProcess.SavePartialInfo(GetInfo(),"plot", ID);
                     httpResult.Success = true;
                 }
             }

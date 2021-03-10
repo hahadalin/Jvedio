@@ -354,7 +354,10 @@
 
                                         <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}"   Click="AddNewLabel" />
 
-                                        <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" ></MenuItem>
+                                        <MenuItem x:Name="OpenOtherUrlMenuItem"  Header="{x:Static lang:Resources.OpenOtherUrl}"  Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" >
+                                            
+                                        </MenuItem>
                                         <MenuItem Header="{x:Static lang:Resources.Menu_CopyFile}" Click="CopyFile" />
                                         <MenuItem Header="{x:Static lang:Resources.Menu_ClearInfo}"  Click="DeleteInfo"   />
                                         <MenuItem Header="{x:Static lang:Resources.Menu_DeleteInfo}"  Click="DeleteID"   />
@@ -435,6 +438,12 @@
 
 
                             <Border x:Name="InfoBorder"  Grid.Column="0"  CornerRadius="5" VerticalAlignment="Top" Margin="10" >
+
+                                <Border.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{x:Static lang:Resources.GetPlot}" Click="GetPlot"/>
+                                    </ContextMenu>
+                                </Border.ContextMenu>
                                 <TabControl Style="{DynamicResource TapControlStyle}"  Background="Transparent"  Margin="10 5"  >
                                     <TabItem   Margin="5" Padding="5"  Header="{x:Static lang:Resources.MovieInfo}" Style="{DynamicResource TopTabItemStyle}"  >
 

@@ -45,7 +45,15 @@ namespace Jvedio
                 dic.Add("appKey", Youdao_appKey);
                 dic.Add("salt", salt);
                 dic.Add("sign", sign);
-                return GetYoudaoResult(Post(url, dic));
+                try
+                {
+                    return GetYoudaoResult(Post(url, dic));
+                }catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return "";
+                }
+                
             });
 
         }

@@ -1303,6 +1303,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 获取摘要 的本地化字符串。
+        /// </summary>
+        public static string GetPlot {
+            get {
+                return ResourceManager.GetString("GetPlot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 获取网页源码失败 的本地化字符串。
         /// </summary>
         public static string GetSourceCodeFail {
@@ -2775,6 +2784,15 @@ namespace Jvedio.Language {
         public static string OpenJvedio {
             get {
                 return ResourceManager.GetString("OpenJvedio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开其他网址 的本地化字符串。
+        /// </summary>
+        public static string OpenOtherUrl {
+            get {
+                return ResourceManager.GetString("OpenOtherUrl", resourceCulture);
             }
         }
         

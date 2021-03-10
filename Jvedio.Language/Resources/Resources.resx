@@ -1653,4 +1653,10 @@
   <data name="FirstPageOfUrl" xml:space="preserve">
     <value>网址的第一页</value>
   </data>
+  <data name="OpenOtherUrl" xml:space="preserve">
+    <value>打开其他网址</value>
+  </data>
+  <data name="GetPlot" xml:space="preserve">
+    <value>获取摘要</value>
+  </data>
 </root>

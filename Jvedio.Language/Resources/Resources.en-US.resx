@@ -1653,4 +1653,10 @@
   <data name="FirstPageOfUrl" xml:space="preserve">
     <value>First Page Of Url</value>
   </data>
+  <data name="OpenOtherUrl" xml:space="preserve">
+    <value>Open Other Url</value>
+  </data>
+  <data name="GetPlot" xml:space="preserve">
+    <value>Get Plot</value>
+  </data>
 </root>

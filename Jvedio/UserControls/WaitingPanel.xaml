@@ -18,8 +18,8 @@
 
 
     <Grid Visibility="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type Jc:WaitingPanel}}, Path=Visibility}">
-        <Border CornerRadius="0" Background="Black" Opacity="0.5" Margin="5"/>
-        <Grid Width="250" Height="250"  >
+        <Border CornerRadius="0" Background="Black" Opacity="0.5"  />
+        <Grid  HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="250" MinHeight="250"  >
             <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
                 <Border.Effect>
                     <BlurEffect Radius="4" KernelType="Box"  RenderingBias="Quality"/>

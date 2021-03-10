@@ -1650,4 +1650,10 @@
   <data name="FirstPageOfUrl" xml:space="preserve">
     <value>urlの最初のページ</value>
   </data>
+  <data name="OpenOtherUrl" xml:space="preserve">
+    <value>他のurlを開く</value>
+  </data>
+  <data name="GetPlot" xml:space="preserve">
+    <value>要約を取る</value>
+  </data>
 </root>
