@@ -1293,6 +1293,7 @@ namespace Jvedio
 
         private void ShowHideContent()
         {
+            showSecret = true;
             HideButton.Visibility = Visibility.Visible;
         }
 
@@ -2547,9 +2548,16 @@ namespace Jvedio
             this.Cursor = Cursors.Arrow;
         }
 
-        private void ScreenShot(object sender, MouseButtonEventArgs e)
+        private async void ScreenShot(object sender, MouseButtonEventArgs e)
         {
-            new HandyControl.Controls.Screenshot().Start();
+            MenuItem menuItem = sender as MenuItem;
+            ContextMenu contextMenu = menuItem.Parent as ContextMenu;
+            contextMenu.IsOpen = false;
+            await Task.Run(async () => {
+                await Task.Delay(300);
+            });
+            Window_ScreenShot window_ScreenShot = new Window_ScreenShot(this,ImageProcess.GetScreenShot());
+            window_ScreenShot.ShowDialog();
         }
 
         public async void GenerateScreenShot(object sender, RoutedEventArgs e)
@@ -3795,7 +3803,15 @@ namespace Jvedio
         public void RefreshCurrentActressPage(object sender, RoutedEventArgs e)
         {
             ActorCancelSelect();
-            vieModel.RefreshActor();
+            if ((bool)LoveCheckBox.IsChecked)
+            {
+                ShowLoveActors(null, null);
+            }
+            else
+            {
+                vieModel.RefreshActor();
+            }
+            
         }
 
         public void StartDownLoadActor(List<Actress> actresses)
@@ -4037,6 +4053,8 @@ namespace Jvedio
             InitList();
             vieModel.InitLettersNavigation();
             //OpenDataBase(null, null);
+            //Window_ScreenShot window_ScreenShot = new Window_ScreenShot(this, ImageProcess.GetScreenShot());
+            //window_ScreenShot.ShowDialog();
 
         }
 
@@ -4707,15 +4725,17 @@ namespace Jvedio
             WindowBatch.Show();
         }
 
-        private void Test(object sender, RoutedEventArgs e)
+        private async void Test(object sender, RoutedEventArgs e)
         {
-
-            using (StreamReader sr = new StreamReader(@"D:\s.txt"))
+            using(StreamReader sr=new StreamReader(@"D:\1.txt"))
             {
-                string content = sr.ReadToEnd();
-                var result = GetMoviesFromPage(content);
-                Console.WriteLine(result.ToString());
+                string sourceCode = sr.ReadToEnd();
+
+                var r=await new BusParse("", sourceCode, 0).ParseMagnet("https://pics.javcdn.net/cover/8110_b.jpg");
+
+                Console.WriteLine(r.ToString());
             }
+
         }
 
 
@@ -5429,7 +5449,7 @@ namespace Jvedio
             }
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        private void ShowLoveActors(object sender, RoutedEventArgs e)
         {
 
             vieModel.CurrentActorPage = 1;

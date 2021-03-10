@@ -106,6 +106,34 @@ namespace Jvedio
         }
 
 
+        private Magnet GetMagnetFromSQLiteDataReader(SQLiteDataReader sr)
+        {
+            if (sr["id"] == null || string.IsNullOrEmpty(sr["id"].ToString())) return null;
+            Magnet result = new Magnet()
+            {
+                id = sr["id"].ToString(),
+                title = sr["title"].ToString(),
+                size = double.Parse(sr["size"].ToString()),
+                link = sr["link"].ToString(),
+                releasedate = sr["releasedate"].ToString()
+            };
+
+            string tag = sr["tag"].ToString();
+            if(tag.IndexOf(' ') > 0)
+            {
+                foreach (var item in tag.Split(' '))
+                {
+                    if (item.Length > 0) result.tag.Add(item);
+                }
+            }else if (tag.Length > 0)
+            {
+                result.tag.Add(tag);
+            }
+            
+            return result;
+        }
+
+
         /// <summary>
         /// 通过 sql 获得影片列表
         /// </summary>
@@ -134,7 +162,28 @@ namespace Jvedio
             return result;
         }
 
+        public List<Magnet> SelectMagnetsBySql(string sqltext)
+        {
+            List<Magnet> result = new List<Magnet>();
+            if (string.IsNullOrEmpty(sqltext)) return result;
+            else cmd.CommandText = sqltext;
 
+            using (SQLiteDataReader sr = cmd.ExecuteReader())
+            {
+                try
+                {
+                    while (sr.Read())
+                    {
+
+                        Magnet magnet = GetMagnetFromSQLiteDataReader(sr);
+                        result.Add(magnet);
+                    }
+
+                }
+                catch (Exception e) { Logger.LogD(e); }
+            }
+            return result;
+        }
 
         public Movie SelectMovieBySql(string sqltext)
         {
@@ -315,6 +364,20 @@ namespace Jvedio
             cmd.Parameters.Add("scandate", DbType.String).Value = movie.scandate;
             cmd.Parameters.Add("otherinfo", DbType.String).Value = movie.otherinfo;
             cmd.Parameters.Add("subsection", DbType.String).Value = movie.subsection;
+            cmd.ExecuteNonQuery();
+        }
+
+
+        public void InsertMagnet(Magnet magnet)
+        {
+             string sqltext = "INSERT OR IGNORE INTO magnets(link , id ,title  , size  ,releasedate,tag) values(@link , @id ,@title  , @size  ,@releasedate,@tag)";
+            cmd.CommandText = sqltext;
+            cmd.Parameters.Add("link", DbType.String).Value = magnet.link;
+            cmd.Parameters.Add("id", DbType.String).Value = magnet.id;
+            cmd.Parameters.Add("title", DbType.String).Value = magnet.title;
+            cmd.Parameters.Add("size", DbType.Double).Value = magnet.size;
+            cmd.Parameters.Add("releasedate", DbType.String).Value = magnet.releasedate;
+            cmd.Parameters.Add("tag", DbType.String).Value =string.Join(" ", magnet.tag);
             cmd.ExecuteNonQuery();
         }
 

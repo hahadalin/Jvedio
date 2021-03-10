@@ -70,6 +70,8 @@ namespace Jvedio
 
         public static string[] NeedCookie = new[] {"DB","DMM","MOO" };
 
+        public static bool showSecret = false;
+
         #region "热键"
         [DllImport("user32.dll")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);

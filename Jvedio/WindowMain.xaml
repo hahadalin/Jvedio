@@ -805,7 +805,7 @@
                                                 <MenuItem  Header="{x:Static lang:Resources.Picture}" Click="OpenImageSavePath"   />
                                                 <MenuItem  Header="{x:Static lang:Resources.SoftWare}" Click="OpenApplicationPath"  />
                                             </MenuItem>
-                                            <MenuItem Visibility="Collapsed"  Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="ScreenShot"   />
+                                            <MenuItem Visibility="Visible"  Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="ScreenShot"   />
                                             <MenuItem Header="{x:Static lang:Resources.Upgrade}" Click="CheckUpgrade"   />
                                         </ContextMenu>
                                     </Border.ContextMenu>
@@ -2077,7 +2077,7 @@
                                                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=download,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                             </Border>
                                             <CheckBox Click="ActorCheckBox_Click" Foreground="{DynamicResource ForegroundGlobal}"  IsChecked="{Binding ActorEditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Height="30" Content="{x:Static lang:Resources.MultiSelect}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5 0" HorizontalAlignment="Left" />
-                                            <CheckBox   Content="{x:Static lang:Resources.ShowFavoriteActor}" IsChecked="False" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                            <CheckBox x:Name="LoveCheckBox"   Content="{x:Static lang:Resources.ShowFavoriteActor}" IsChecked="False" Checked="ShowLoveActors" Unchecked="CheckBox_Unchecked"/>
 
                                             <Popup   HorizontalOffset="-50" x:Name="DownloadActorPopup" Placement="Mouse" PopupAnimation="Fade"   AllowsTransparency="True" StaysOpen="False" IsOpen="False">
                                                 <Grid    Margin="5"   >

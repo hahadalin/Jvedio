@@ -1659,4 +1659,7 @@
   <data name="GetPlot" xml:space="preserve">
     <value>获取摘要</value>
   </data>
+  <data name="CopyMagnets" xml:space="preserve">
+    <value>复制磁力</value>
+  </data>
 </root>

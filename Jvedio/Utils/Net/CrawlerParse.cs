@@ -273,6 +273,89 @@ namespace Jvedio
         }
 
 
+
+        public async Task<List<Magnet>> ParseMagnet(string bigimage)
+        {
+
+            /*
+             * 
+             * <script>
+	                var gid = 45244082959;
+	                var uc = 0;
+	                var img = 'https://pics.javcdn.net/cover/8110_b.jpg';
+                </script>
+
+
+            */
+            List<Magnet> result = new List<Magnet>();
+            if (string.IsNullOrEmpty(HtmlText)) return result;
+
+
+            //通过正则获得 gid
+            Regex gidRex = new Regex(@"var gid = \d+");
+            Regex ucRex = new Regex(@"var uc = \d+");
+            var gidMatch=gidRex.Match(HtmlText);
+            var ucMatch= ucRex.Match(HtmlText);
+            if(gidMatch != null && gidMatch.Length > 0 && ucMatch != null && ucMatch.Length>0)
+            {
+                string gid = gidMatch.Value.Replace("var gid = ", "");
+                string uc = ucMatch.Value.Replace("var uc = ", "");
+                string url = $"https://www.fanbus.cam/ajax/uncledatoolsbyajax.php?gid={gid}&lang=zh&img={bigimage}&uc={uc}";
+
+                HttpResult httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
+                if(httpResult!=null && httpResult.SourceCode != "")
+                {
+                    HtmlDocument doc = new HtmlDocument();
+                    doc.LoadHtml(httpResult.SourceCode);
+
+                    //基本信息
+                    HtmlNodeCollection magnetNodes = doc.DocumentNode.SelectNodes("//tr");
+                    foreach (var magnetNode in magnetNodes)
+                    {
+
+                        HtmlNodeCollection tdNodes = magnetNode.SelectNodes("td");
+
+                        if (tdNodes != null && tdNodes.Count == 3)
+                        {
+                            Magnet magnet = new Magnet(ID);
+                            //名称和 tag
+                            HtmlNodeCollection linkNodes = tdNodes[0].SelectNodes("a");
+                            magnet.title = linkNodes[0].InnerText.CleanString();
+                            magnet.link = linkNodes[0].Attributes["href"]?.Value;
+
+                            for (int i = 1; i < linkNodes.Count; i++)
+                            {
+                                magnet.tag.Add(linkNodes[i].InnerText);
+                            }
+
+                            //大小
+                            string size = tdNodes[1].SelectSingleNode("a").InnerText.CleanString();
+                            double filesize = 0;
+                            if (size.EndsWith("GB"))
+                            {
+                                size = size.Replace("GB", "");
+                                double.TryParse(size, out filesize);
+                                filesize = filesize * 1024;//转为 MB
+                            }
+                            else if (size.EndsWith("MB"))
+                            {
+                                size = size.Replace("MB", "");
+                                double.TryParse(size, out filesize);
+                            }
+                            magnet.size = filesize;
+                            //发行日期
+                            magnet.releasedate = tdNodes[2].SelectSingleNode("a").InnerText.CleanString();
+                            if (magnet.link.IndexOf("&") > 0) magnet.link = magnet.link.Split('&')[0]; 
+                            result.Add(magnet);
+                        }
+                    }
+                }
+            }
+            return result;
+
+        }
+
+
     }
 
     public class LibraryParse : InfoParse

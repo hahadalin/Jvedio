@@ -39,6 +39,21 @@ namespace Jvedio
         }
 
 
+        public static BitmapImage GetScreenShot()
+        {
+            System.Drawing.Rectangle bounds = System.Windows.Forms.Screen.GetBounds(System.Drawing.Point.Empty);
+            using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(bounds.Width, bounds.Height))
+            {
+                using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bitmap))
+                {
+                    g.CopyFromScreen(System.Drawing.Point.Empty, System.Drawing.Point.Empty, bounds.Size);
+                }
+                //bitmap.Save("test.png", System.Drawing.Imaging.ImageFormat.Png);
+                return BitmapToBitmapImage(bitmap,true);
+            }
+        }
+
+
 
         public static string ImageToBase64(Bitmap bitmap, string fileFullName = "")
         {
@@ -147,11 +162,14 @@ namespace Jvedio
             return bmp;
         }
 
-        public static BitmapImage BitmapToBitmapImage(Bitmap bitmap)
+        public static BitmapImage BitmapToBitmapImage(Bitmap bitmap, bool isPng = false)
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                bitmap.Save(stream, ImageFormat.Jpeg);
+                if(isPng)
+                    bitmap.Save(stream, ImageFormat.Png);
+                else
+                    bitmap.Save(stream, ImageFormat.Jpeg);
                 stream.Position = 0;
                 BitmapImage result = new BitmapImage();
                 result.BeginInit();

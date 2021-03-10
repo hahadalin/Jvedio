@@ -23,6 +23,13 @@ namespace Jvedio
 {
     public static class CustomExtension
     {
+
+        public static string CleanString(this string str)
+        {
+            return str.Replace("\r", "").Replace("\n", "").Replace("\t", "").Replace(" ", "").Replace("'","");
+        }
+
+
         public static string ToProperFileSize(this long filesize)
         {
             double result = (double)filesize / 1024/1024   ;//MB

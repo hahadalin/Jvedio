@@ -23,6 +23,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls.Primitives;
 using System.Text.RegularExpressions;
 using System.Windows.Media.Animation;
+using HandyControl.Data;
 
 namespace Jvedio
 {
@@ -42,7 +43,7 @@ namespace Jvedio
         public List<string> MovieIDs = new List<string>();
         public string MovieID = "";
         Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager taskbarInstance = null;
-
+        HandyControl.Controls.Screenshot Screenshot;
         public WindowDetails(string movieid = "")
         {
             //movieid = "IPX-163";
@@ -53,7 +54,14 @@ namespace Jvedio
             ProgressBar.Visibility = Visibility.Collapsed;
             if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported) taskbarInstance = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
 
-            //this.Loaded += delegate { FadeIn(); };
+            HandyControl.Controls.Screenshot.Snapped += Screenshot_Snapped;
+            Screenshot = new HandyControl.Controls.Screenshot();
+        }
+
+
+        private void Screenshot_Snapped(object sender, FunctionEventArgs<ImageSource> e)
+        {
+            Console.WriteLine("完成截图");
         }
 
         public void FadeIn()
@@ -693,7 +701,10 @@ namespace Jvedio
                 vieModel.SelectImageIndex = 0;
             }
 
-
+            if (showSecret)
+                CopyMagnetsMenuItem.Visibility = Visibility.Visible;
+            else
+                CopyMagnetsMenuItem.Visibility = Visibility.Collapsed;
         }
 
         public void NextMovie(object sender, MouseButtonEventArgs e)
@@ -743,7 +754,10 @@ namespace Jvedio
                 vieModel.SelectImageIndex = 0;
             }
 
-
+            if (showSecret)
+                CopyMagnetsMenuItem.Visibility = Visibility.Visible;
+            else
+                CopyMagnetsMenuItem.Visibility = Visibility.Collapsed;
 
         }
 
@@ -1722,10 +1736,6 @@ namespace Jvedio
         {
             if (e.ClickCount == 2)
             {
-                //Main main = App.Current.Windows[0] as Main;
-                //main.Resizing = true;
-                //main.ResizingTimer.Start();
-                //this.Close();
                 Window_ImageViewer window_ImageViewer = new Window_ImageViewer(BigImage.Source);
                 window_ImageViewer.ShowDialog();
             }
@@ -1844,6 +1854,39 @@ namespace Jvedio
                     catch (Exception ex) { HandyControl.Controls.Growl.Error(ex.Message, "DetailsGrowl"); }
                 };
                 OpenOtherUrlMenuItem.Items.Add(menuItem);
+            }
+            //设置截图
+
+
+                
+
+        }
+
+        private void ShowMagnets()
+        {
+            if (showSecret)
+            {
+                CopyMagnetsMenuItem.Visibility = Visibility.Visible;
+                CopyMagnetsMenuItem.Items.Clear();
+                var magnets = DataBase.SelectMagnetsByID(vieModel.DetailMovie.id);
+                magnets = magnets.OrderByDescending(arg => arg.size).ToList();
+                foreach (var magnet in magnets)
+                {
+                    MenuItem menuItem = new MenuItem();
+                    string tag = "";
+                    if (magnet.tag.Count > 0) tag ="（" + string.Join(" ", magnet.tag) + "）";
+                 
+                    menuItem.Header = $"{magnet.releasedate} {tag} {magnet.size} {magnet.title}";
+                    menuItem.Tag = magnet.link;
+                    menuItem.Click += (s, ev) =>
+                    {
+                        Clipboard.SetText(magnet.link);
+                    };
+                    CopyMagnetsMenuItem.Items.Add(menuItem);
+                }
+            }
+            else{
+                CopyMagnetsMenuItem.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -2046,6 +2089,7 @@ namespace Jvedio
                 });
             });
 
+            ShowMagnets();
         }
 
         private void MyListItemClick(object sender, EventArgs e)
@@ -2202,6 +2246,19 @@ namespace Jvedio
                 
             }
         }
+
+        private async void StartScreenShot(object sender, MouseButtonEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            ContextMenu contextMenu = menuItem.Parent as ContextMenu;
+            contextMenu.IsOpen = false;
+            await Task.Run(async () => {
+                await Task.Delay(300) ;
+            });
+            Window_ScreenShot window_ScreenShot = new Window_ScreenShot(this,ImageProcess.GetScreenShot());
+            window_ScreenShot.ShowDialog();
+        }
+
     }
 
 

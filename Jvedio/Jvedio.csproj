@@ -342,6 +342,9 @@
     <Compile Include="Windows\Window_DBManagement.xaml.cs">
       <DependentUpon>Window_DBManagement.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Window_ScreenShot.xaml.cs">
+      <DependentUpon>Window_ScreenShot.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Window_ImageViewer.xaml.cs">
       <DependentUpon>Window_ImageViewer.xaml</DependentUpon>
     </Compile>
@@ -396,6 +399,10 @@
     <Page Include="Windows\Window_DBManagement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Window_ScreenShot.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\Window_ImageViewer.xaml">
       <SubType>Designer</SubType>

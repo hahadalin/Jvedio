@@ -176,6 +176,8 @@
             </Border.Effect>
             <Image Grid.Row="1" x:Name="BackGroundImage"  Stretch="UniformToFill"></Image>
         </Border>
+        
+
 
 
 
@@ -332,7 +334,7 @@
                             <!--大图-->
                             <Grid x:Name="ImageGrid" Background="{DynamicResource BackgroundMain}" HorizontalAlignment="Stretch"   ContextMenuOpening="BigImage_ContextMenuOpening"  Grid.Row="0" PreviewMouseWheel="Grid_PreviewMouseWheel" MouseMove="MoveWindow"   MouseLeftButtonDown="Grid_MouseLeftButtonDown"   AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"  >
                                 <Grid.ContextMenu>
-                                    <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp">
+                                    <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp" >
                                         <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoad"/>
                                         <MenuItem Header="{x:Static lang:Resources.Menu_Advance}"   >
                                             <MenuItem Header="{x:Static lang:Resources.Menu_Translate}" Click="TranslateMovie"  />
@@ -350,6 +352,9 @@
                                             <MenuItem Header="{x:Static lang:Resources.ScreenShot}" Click="OpenImagePath"   ></MenuItem>
                                         </MenuItem>
 
+                                        <MenuItem   Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="StartScreenShot"   />
+
+
                                         <MenuItem Header="{x:Static lang:Resources.Menu_AddToList}"   Name="ListMenuItem"   />
 
                                         <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}"   Click="AddNewLabel" />
@@ -358,6 +363,11 @@
                                         <MenuItem x:Name="OpenOtherUrlMenuItem"  Header="{x:Static lang:Resources.OpenOtherUrl}"  Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" >
                                             
                                         </MenuItem>
+
+                                        <MenuItem  x:Name="CopyMagnetsMenuItem"  Visibility="Collapsed" Header="{x:Static lang:Resources.CopyMagnets}"   >
+                                            
+                                        </MenuItem>
+
                                         <MenuItem Header="{x:Static lang:Resources.Menu_CopyFile}" Click="CopyFile" />
                                         <MenuItem Header="{x:Static lang:Resources.Menu_ClearInfo}"  Click="DeleteInfo"   />
                                         <MenuItem Header="{x:Static lang:Resources.Menu_DeleteInfo}"  Click="DeleteID"   />

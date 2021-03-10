@@ -371,6 +371,15 @@ namespace Jvedio
                 db.CloseDB();
             }
 
+            if (!File.Exists("Magnets.sqlite"))
+            {
+                MySqlite db = new MySqlite("Magnets");
+                db.CreateTable(DataBase.SQLITETABLE_MAGNETS);
+                db.CloseDB();
+            }
+
+
+
 
         }
 

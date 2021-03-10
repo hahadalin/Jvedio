@@ -1659,4 +1659,7 @@
   <data name="GetPlot" xml:space="preserve">
     <value>Get Plot</value>
   </data>
+  <data name="CopyMagnets" xml:space="preserve">
+    <value>Copy Magnets</value>
+  </data>
 </root>

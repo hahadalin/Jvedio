@@ -1656,4 +1656,10 @@
   <data name="GetPlot" xml:space="preserve">
     <value>要約を取る</value>
   </data>
+  <data name="CopyMagnets" xml:space="preserve">
+    <value>磁気を複製する</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>コピー</value>
+  </data>
 </root>

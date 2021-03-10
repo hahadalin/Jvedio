@@ -93,6 +93,11 @@ namespace Jvedio
                 FileProcess.SaveInfo(GetInfo(), ID);
                 httpResult.Success = true;
                 ParseCookies(httpResult.Headers.SetCookie);
+                Movie movie = DataBase.SelectMovieByID(ID);
+                //保存磁力
+                List<Magnet> magnets = await new BusParse(ID, httpResult.SourceCode, VedioType).ParseMagnet(movie.bigimageurl);
+                if (magnets.Count > 0)
+                    DataBase.SaveMagnets(magnets);
             }
             return httpResult;
         }

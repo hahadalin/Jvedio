@@ -691,6 +691,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 复制磁力 的本地化字符串。
+        /// </summary>
+        public static string CopyMagnets {
+            get {
+                return ResourceManager.GetString("CopyMagnets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 复制视频同文件下的 poster 与 fanart 到 Jvedio 的图片目录 的本地化字符串。
         /// </summary>
         public static string CopyNFOImage {
