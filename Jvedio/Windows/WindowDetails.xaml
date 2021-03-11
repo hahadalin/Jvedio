@@ -360,11 +360,11 @@
                                         <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}"   Click="AddNewLabel" />
 
                                         <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" ></MenuItem>
-                                        <MenuItem x:Name="OpenOtherUrlMenuItem"  Header="{x:Static lang:Resources.OpenOtherUrl}"  Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" >
+                                        <MenuItem x:Name="OpenOtherUrlMenuItem"  Header="{x:Static lang:Resources.OpenOtherUrl}"  >
                                             
                                         </MenuItem>
 
-                                        <MenuItem  x:Name="CopyMagnetsMenuItem"  Visibility="Collapsed" Header="{x:Static lang:Resources.CopyMagnets}"   >
+                                        <MenuItem  x:Name="CopyMagnetsMenuItem"  Visibility="Collapsed" Header="{x:Static lang:Resources.CopyMagnets}"  Icon="pack://application:,,,/Resources/menuitem/magnet.png"    >
                                             
                                         </MenuItem>
 
@@ -494,8 +494,8 @@
 
 
                                             <!--可滚动-->
-                                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
-                                                <StackPanel  >
+                                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" FocusVisualStyle="{x:Null}">
+                                                <StackPanel  FocusVisualStyle="{x:Null}" >
                                                     <!--演员-->
                                                     <Grid  >
                                                         <Grid.ColumnDefinitions>
@@ -537,7 +537,17 @@
                                                     <StackPanel   Margin="0 5 0 5"     Tag="{Binding DetailMovie.vediotype}" Style="{StaticResource InfoStackPanel}" >
                                                         <TextBlock Text="{x:Static lang:Resources.VedioType}"  Style="{StaticResource BaseTextBlock}"></TextBlock>
                                                         <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                        <TextBox Margin="0"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.vediotype,Converter={StaticResource IntToVedioTypeConverter}}" ></TextBox>
+                                                        <TextBox Margin="0"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.vediotype,Converter={StaticResource IntToVedioTypeConverter}}" >
+                                                            <TextBox.ContextMenu>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="{x:Static lang:Resources.VedioType}" >
+                                                                        <MenuItem Header="{x:Static lang:Resources.Uncensored}" Click="ChangeVedioType"  />
+                                                                        <MenuItem Header="{x:Static lang:Resources.Censored}" Click="ChangeVedioType"  />
+                                                                        <MenuItem Header="{x:Static lang:Resources.Europe}" Click="ChangeVedioType"  />
+                                                                    </MenuItem>
+                                                                </ContextMenu>
+                                                            </TextBox.ContextMenu>
+                                                        </TextBox>
                                                     </StackPanel>
 
                                                     <StackPanel Margin="0 5 0 0"   Tag="{Binding DetailMovie.rating}" Style="{StaticResource InfoStackPanel}" >
@@ -582,6 +592,8 @@
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
                                                     </Grid>
+                                                    
+                                                    <Button Click="AddNewLabel" Grid.Column="2" Cursor="Hand" Margin="5 5 0 0"    Content="{x:Static lang:Resources.Menu_LabelManage1}" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}"  VerticalAlignment="Top"  />
 
                                                     <!--标签-->
                                                     <Grid  >
@@ -592,7 +604,8 @@
                                                         </Grid.ColumnDefinitions>
                                                         <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Label}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Top" Margin="0 10 0 0" />
                                                         <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource BaseTextBlock}"  VerticalAlignment="Top" Margin="0 10 0 0" />
-                                                        <ItemsControl  Grid.Column="2" ItemsSource="{Binding DetailMovie.labellist}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
+
+                                                        <ItemsControl  x:Name="LabelListItemsControl" Grid.Column="2" ItemsSource="{Binding DetailMovie.labellist,Mode=OneWay}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <hc:TagPanel  ShowAddButton="True"    TagMargin="20"    Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
@@ -637,7 +650,7 @@
                                                         <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource BaseTextBlock}"  VerticalAlignment="Top"  />
 
                                                         <StackPanel Grid.Column="2">
-                                                            <Button Cursor="Hand" Margin="5,0,0,0"    Content="{x:Static lang:Resources.Translate}" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}" Click="TranslateMovie" VerticalAlignment="Top"  />
+                                                            <Button Cursor="Hand" Margin="5 10"    Content="{x:Static lang:Resources.Translate}" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}" Click="TranslateMovie" VerticalAlignment="Top"  />
                                                             <TextBox Margin="5 0"  Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.plot}"  Height="auto" TextWrapping="Wrap"  ></TextBox>
                                                         </StackPanel>
                                                         
@@ -822,8 +835,8 @@
                 </ItemsControl>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-                    <Button  Style="{StaticResource ButtonStyleFill}" Content="确定"  Click="Button_Click"/>
-                    <Button  Style="{StaticResource ButtonStyleFill}" Content="取消"  Click="Button_Click_1"/>
+                    <Button  Style="{StaticResource FlatButton}" Content="确定"  Click="LabelConfirm"/>
+                    <Button  Style="{StaticResource FlatRedButton}" Content="取消"  Click="LabelCancel"/>
                 </StackPanel>
 
 

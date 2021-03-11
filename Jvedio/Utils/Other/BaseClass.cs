@@ -226,7 +226,16 @@ namespace Jvedio
     {
         public List<string> genrelist { get; set; }
         public List<Actress> actorlist { get; set; }
-        public List<string> labellist { get; set; }
+
+        public List<string> _labellist;
+        public List<string> labellist { get {
+
+                return _labellist;
+            
+            } set {
+                _labellist = value;
+                OnPropertyChanged();
+            } }
 
         public ObservableCollection<BitmapSource> extraimagelist { get; set; }
         public ObservableCollection<string> extraimagePath { get; set; }

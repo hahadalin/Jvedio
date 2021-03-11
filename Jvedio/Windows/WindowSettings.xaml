@@ -247,7 +247,7 @@
                         <hc:TextBox Style="{StaticResource BaseHcTextBox}"  TextChanged="ScanMinFileSizeTextBox_TextChanged"  Text="{Binding ScanMinFileSize, Mode=OneWay, Source={x:Static p:Settings.Default}}"   ToolTip="[0-2000]"/>
                         <Label  Style="{StaticResource InfoLabel}"   Content="MB"  />
                     </StackPanel>
-                    <StackPanel  Orientation="Horizontal"  Margin="20 5">
+                    <StackPanel  Orientation="Horizontal"  Margin="20 5" Visibility="Collapsed">
                         <Label Style="{StaticResource InfoLabel}" Content="{x:Static lang:Resources.SubsectionSpiltChar}"   />
                         <hc:TextBox   Style="{StaticResource BaseHcTextBox}"  Text="{Binding SubSectionFeature, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
                     </StackPanel>
@@ -318,12 +318,12 @@
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Enable}" Width="auto" MinWidth="40"   >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox PreviewMouseUp="CheckBox_PreviewMouseUp" HorizontalAlignment="Center" IsChecked="{Binding IsEnable}" Style="{StaticResource CheckBoxStyle1}"/>
+                                        <CheckBox PreviewMouseUp="SetServerEnable" HorizontalAlignment="Center" IsChecked="{Binding IsEnable,Mode=OneWay}" Style="{StaticResource CheckBoxStyle1}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTextColumn IsReadOnly="True"    Header="{x:Static lang:Resources.UrlName}" Width="auto" MinWidth="100" Binding="{Binding Name}" >
+                            <DataGridTextColumn IsReadOnly="True"    Header="{x:Static lang:Resources.UrlName}" Width="auto" MinWidth="100" Binding="{Binding Name,Mode=OneWay}" >
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="TextAlignment" Value="Left"></Setter>
@@ -334,7 +334,7 @@
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Url}" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <hc:TextBox Text="{Binding Url}" ContextMenu="{StaticResource TextBoxContextMenu}" Name="url" HorizontalAlignment="Left" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" Background="Transparent" Focusable="True"  GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"  BorderThickness="0" >
+                                        <hc:TextBox Text="{Binding Url,Mode=TwoWay}" ContextMenu="{StaticResource TextBoxContextMenu}" Name="url" HorizontalAlignment="Left" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" Background="Transparent" Focusable="True"  GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"  BorderThickness="0" >
                                         </hc:TextBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -383,7 +383,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTextColumn  IsReadOnly="True"   Header="{x:Static lang:Resources.LatestUpdateDate}" Width="auto" Binding="{Binding LastRefreshDate}" />
+                            <DataGridTextColumn  IsReadOnly="True"   Header="{x:Static lang:Resources.LatestUpdateDate}" Width="auto" Binding="{Binding LastRefreshDate,Mode=OneWay}" />
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Options}" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>

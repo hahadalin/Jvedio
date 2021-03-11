@@ -129,13 +129,18 @@ namespace Jvedio.ViewModel
 
         public void SaveLabel()
         {
-            List<string> labels = DetailMovie.labellist;
+            List<string> labels = new List<string>();
+            labels.AddRange(DetailMovie.labellist);
             labels.Remove("+");
-
             DataBase.UpdateMovieByID(DetailMovie.id, "label", string.Join(" ", labels), "string");
-
+            
         }
 
+
+        public void onLabelChanged()
+        {
+            RaisePropertyChanged("DetailMovie");
+        }
 
 
 

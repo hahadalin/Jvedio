@@ -16,6 +16,7 @@ namespace Jvedio
     {
         public static double MinFileSize = Properties.Settings.Default.ScanMinFileSize * 1024 * 1024;//最小文件大小
         public static List<string> FilePattern = new List<string>();//文件格式
+        public static List<string> ImagePattern = new List<string>() { ".jpg",".png",".jpeg",".bmp" };
 
         public static void InitSearchPattern()
         {

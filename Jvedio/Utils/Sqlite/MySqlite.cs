@@ -26,12 +26,12 @@ namespace Jvedio
         /// </summary>
         /// <param name="path"></param>
         /// <param name="DatabaseName"></param>
-        public MySqlite(string path,bool absolute=false) : base(path)
+        public MySqlite(string path, bool absolute = false) : base(path)
         {
             if (path == "")
                 SqlitePath = Properties.Settings.Default.DataBasePath;
             else
-                SqlitePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path.EndsWith(".sqlite")?path:path + ".sqlite");
+                SqlitePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path.EndsWith(".sqlite") ? path : path + ".sqlite");
             if (absolute && path != "") SqlitePath = path;
             cn = new SQLiteConnection("data source=" + SqlitePath);
             cn.Open();
@@ -65,29 +65,21 @@ namespace Jvedio
             {
                 id = sr["id"].ToString(),
                 title = sr["title"].ToString(),
-                filesize = double.Parse(sr["filesize"].ToString()),
                 filepath = sr["filepath"].ToString(),
                 subsection = sr["subsection"].ToString(),
-                vediotype = int.Parse(sr["vediotype"].ToString()),
                 scandate = sr["scandate"].ToString(),
                 releasedate = sr["releasedate"].ToString(),
-                visits = int.Parse(sr["visits"].ToString()),
                 director = sr["director"].ToString(),
                 genre = sr["genre"].ToString(),
                 tag = sr["tag"].ToString(),
                 actor = sr["actor"].ToString(),
                 actorid = sr["actorid"].ToString(),
                 studio = sr["studio"].ToString(),
-                rating = float.Parse(sr["rating"].ToString()),
                 chinesetitle = sr["chinesetitle"].ToString(),
-                favorites = int.Parse(sr["favorites"].ToString()),
                 label = sr["label"].ToString(),
                 plot = sr["plot"].ToString(),
                 outline = sr["outline"].ToString(),
-                year = int.Parse(sr["year"].ToString()),
-                runtime = int.Parse(sr["runtime"].ToString()),
                 country = sr["country"].ToString(),
-                countrycode = int.Parse(sr["countrycode"].ToString()),
                 otherinfo = sr["otherinfo"].ToString(),
                 actressimageurl = sr["actressimageurl"].ToString(),
                 smallimageurl = sr["smallimageurl"].ToString(),
@@ -96,12 +88,30 @@ namespace Jvedio
                 sourceurl = sr["sourceurl"].ToString(),
                 source = sr["source"].ToString()
             };
+
+            double.TryParse(sr["filesize"].ToString(), out double filesize);
+            int.TryParse(sr["vediotype"].ToString(), out int vediotype);
+            int.TryParse(sr["visits"].ToString(), out int visits);
+            int.TryParse(sr["favorites"].ToString(), out int favorites);
+            int.TryParse(sr["year"].ToString(), out int year);
+            int.TryParse(sr["countrycode"].ToString(), out int countrycode);
+            int.TryParse(sr["runtime"].ToString(), out int runtime);
+            float.TryParse(sr["rating"].ToString(), out float rating);
+            detailMovie.filesize = filesize;
+            detailMovie.vediotype = vediotype;
+            detailMovie.visits = visits;
+            detailMovie.rating = rating;
+            detailMovie.favorites = favorites;
+            detailMovie.year = year;
+            detailMovie.countrycode = countrycode;
+            detailMovie.runtime = runtime;
+
             if (Properties.Settings.Default.ShowFileNameIfTitleEmpty &&
                 string.IsNullOrEmpty(detailMovie.title) &&
                 !string.IsNullOrEmpty(detailMovie.filepath))
             {
                 detailMovie.title = Path.GetFileNameWithoutExtension(detailMovie.filepath);
-            } 
+            }
             return detailMovie;
         }
 
@@ -119,17 +129,18 @@ namespace Jvedio
             };
 
             string tag = sr["tag"].ToString();
-            if(tag.IndexOf(' ') > 0)
+            if (tag.IndexOf(' ') > 0)
             {
                 foreach (var item in tag.Split(' '))
                 {
                     if (item.Length > 0) result.tag.Add(item);
                 }
-            }else if (tag.Length > 0)
+            }
+            else if (tag.Length > 0)
             {
                 result.tag.Add(tag);
             }
-            
+
             return result;
         }
 
@@ -357,7 +368,7 @@ namespace Jvedio
             string sqltext = "INSERT INTO movie(id , filesize ,filepath  , vediotype  ,scandate,subsection,otherinfo) values(@id , @filesize ,@filepath  , @vediotype  ,@scandate,@subsection,@otherinfo) ON CONFLICT(id) DO UPDATE SET filesize=@filesize,filepath=@filepath,scandate=@scandate,otherinfo=@otherinfo,vediotype=@vediotype,subsection=@subsection";
             cmd.CommandText = sqltext;
             if (movie.vediotype != 3) movie.id = movie.id.ToUpper();//除了 欧美影片之外，其他影片必须大写
-            cmd.Parameters.Add("id", DbType.String).Value =movie.id;
+            cmd.Parameters.Add("id", DbType.String).Value = movie.id;
             cmd.Parameters.Add("filesize", DbType.Double).Value = movie.filesize;
             cmd.Parameters.Add("filepath", DbType.String).Value = movie.filepath;
             cmd.Parameters.Add("vediotype", DbType.Int16).Value = movie.vediotype;
@@ -370,24 +381,24 @@ namespace Jvedio
 
         public void InsertMagnet(Magnet magnet)
         {
-             string sqltext = "INSERT OR IGNORE INTO magnets(link , id ,title  , size  ,releasedate,tag) values(@link , @id ,@title  , @size  ,@releasedate,@tag)";
+            string sqltext = "INSERT OR IGNORE INTO magnets(link , id ,title  , size  ,releasedate,tag) values(@link , @id ,@title  , @size  ,@releasedate,@tag)";
             cmd.CommandText = sqltext;
             cmd.Parameters.Add("link", DbType.String).Value = magnet.link;
             cmd.Parameters.Add("id", DbType.String).Value = magnet.id;
             cmd.Parameters.Add("title", DbType.String).Value = magnet.title;
             cmd.Parameters.Add("size", DbType.Double).Value = magnet.size;
             cmd.Parameters.Add("releasedate", DbType.String).Value = magnet.releasedate;
-            cmd.Parameters.Add("tag", DbType.String).Value =string.Join(" ", magnet.tag);
+            cmd.Parameters.Add("tag", DbType.String).Value = string.Join(" ", magnet.tag);
             cmd.ExecuteNonQuery();
         }
 
 
-        public void InsertByField(string table,string field,string value,string id)
+        public void InsertByField(string table, string field, string value, string id)
         {
-                cmd.CommandText = $"insert into  {table}(id,{field}) values(@id,@{field}) ON CONFLICT(id) DO UPDATE SET {field}=@{field}";
-                cmd.Parameters.Add("id", DbType.String).Value = id;
-                cmd.Parameters.Add(field, DbType.String).Value = value;
-                cmd.ExecuteNonQuery();
+            cmd.CommandText = $"insert into  {table}(id,{field}) values(@id,@{field}) ON CONFLICT(id) DO UPDATE SET {field}=@{field}";
+            cmd.Parameters.Add("id", DbType.String).Value = id;
+            cmd.Parameters.Add(field, DbType.String).Value = value;
+            cmd.ExecuteNonQuery();
         }
 
         public void SaveBaiduAIByID(string id, Dictionary<string, string> dic)

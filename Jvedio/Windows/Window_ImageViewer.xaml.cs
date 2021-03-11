@@ -29,7 +29,7 @@ namespace Jvedio
             ImageViewer.ImageSource= BitmapFrame.Create((BitmapSource)source);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CloseWindow(object sender, RoutedEventArgs e)
         {
             if (Properties.Settings.Default.EnableWindowFade)
             {
@@ -55,6 +55,12 @@ namespace Jvedio
             {
                 this.DragMove();
             }
+        }
+
+        private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+                CloseWindow(null, null);
         }
     }
 }

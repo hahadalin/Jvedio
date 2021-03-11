@@ -1474,6 +1474,9 @@ namespace Jvedio.ViewModel
                 {
                     if (!SearchHistory.Contains(item) && !string.IsNullOrEmpty(item)) SearchHistory.Add(item);
                 }
+            }else if (content.Length > 0)
+            {
+                SearchHistory.Add(content);
             }
 
         }

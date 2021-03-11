@@ -5908,12 +5908,13 @@ namespace Jvedio
 
         private async void LoadActor(string name)
         {
+            string log = "";
             //先搜索出演员
             await Task.Run(async () =>
             {
                 Console.WriteLine(name);
                 string url = $"{JvedioServers.Bus.Url}searchstar/{System.Web.HttpUtility.UrlEncode(name)}&type=&parent=ce";
-
+                
                 HttpResult httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
                 if (httpResult != null && httpResult.SourceCode != "")
                 {
@@ -5971,6 +5972,7 @@ namespace Jvedio
                                         LoadActorWaitingPanel.ShowCancelButton = Visibility.Visible;
                                         LoadActorWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + page;
                                         LoadActorWaitingPanel.ShowExtraText = Visibility.Visible;
+                                        log = LoadActorWaitingPanel.NoticeExtraText;
                                     });
 
                                     HttpResult newResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
@@ -6041,7 +6043,8 @@ namespace Jvedio
             }, LoadActorCT);
             LoadActorWaitingPanel.Visibility = Visibility.Collapsed;
             LoadActorCTS?.Dispose();
-            Console.WriteLine("结束");
+            //显示加载的信息
+            new Msgbox(this, log).ShowDialog();
 
             ShowSameActors(name);
         }
@@ -6125,7 +6128,7 @@ namespace Jvedio
                 int end = dialog_LoadPage.EndPage;
                 int vt = dialog_LoadPage.VedioType;
                 string url = dialog_LoadPage.url;
-                
+                string log = "";
                 if (url.IsProperUrl())
                 {
                     if (!url.EndsWith("/")) url += "/";
@@ -6143,6 +6146,7 @@ namespace Jvedio
                                 LoadActorWaitingPanel.ShowCancelButton = Visibility.Visible;
                                 LoadActorWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + i;
                                 LoadActorWaitingPanel.ShowExtraText = Visibility.Visible;
+                                log = LoadActorWaitingPanel.NoticeExtraText;
                             });
 
                             HttpResult newResult = await Net.Http(Url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
@@ -6175,6 +6179,11 @@ namespace Jvedio
                     HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Complete, "Main");
                     LoadActorWaitingPanel.Visibility = Visibility.Collapsed;
                     LoadActorCTS?.Dispose();
+
+                    //显示加载的信息
+                    new Msgbox(this, log).ShowDialog();
+
+
                 }
                 else
                 {

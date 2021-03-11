@@ -100,7 +100,7 @@
         <DockPanel LastChildFill="True" Grid.Row="2" >
             <Label  Content="{x:Static lang:Resources.EndPage}"     Style="{StaticResource LabelPrimary}" Margin="20 10" />
             <TextBlock  Width="30"   Style="{StaticResource BaseTextBlock}"   Text="{Binding Value, ElementName=SliderEnd, Mode=OneWay,Converter={StaticResource IntConverter}}"  VerticalAlignment="Center" />
-            <Slider Name="SliderEnd" ValueChanged="SliderEnd_ValueChanged"   Value="{Binding RelativeSource={RelativeSource Mode=Self},Path=Maximum}" Minimum="1" Maximum="500"  Margin="20 0"  SmallChange="1" LargeChange="2" TickFrequency="1"   VerticalAlignment="Center"  />
+            <Slider Name="SliderEnd" ValueChanged="SliderEnd_ValueChanged"   Value="{Binding RelativeSource={RelativeSource Mode=Self},Path=Maximum,Mode=OneTime}" Minimum="1" Maximum="500"  Margin="20 0"  SmallChange="1" LargeChange="2" TickFrequency="1"   VerticalAlignment="Center"  />
         </DockPanel>
 
         <ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">

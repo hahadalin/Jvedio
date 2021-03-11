@@ -998,7 +998,7 @@
                                                                     </Border>
                                                                 </StackPanel>
 
-                                                                <ItemsControl Margin="5 0" Width="{Binding ElementName=SearchBorder,Path=ActualWidth,Converter={StaticResource WidthConverter},ConverterParameter=-20,Mode=OneWay}" HorizontalAlignment="Left"  Background="Transparent"   ItemsSource="{Binding SearchHistory}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
+                                                                <ItemsControl Margin="5 0" Width="{Binding ElementName=SearchBorder,Path=ActualWidth,Converter={StaticResource WidthConverter},ConverterParameter=-20,Mode=OneWay}" HorizontalAlignment="Left"  Background="Transparent"   ItemsSource="{Binding SearchHistory,Mode=OneWay}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
                                                                     <ItemsControl.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <WrapPanel   Orientation="Horizontal" >

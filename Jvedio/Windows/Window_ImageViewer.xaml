@@ -14,12 +14,13 @@
         WindowStartupLocation="CenterScreen"
         Title="Window_ImageViewer" Height="450" Width="800"
         Background="Transparent"
+        PreviewKeyUp="Window_PreviewKeyUp"
         >
     <Grid  MouseMove="Grid_MouseMove">
         <Border BorderThickness="0" CornerRadius="10" Background="Black" Opacity="0.5">
 
         </Border>
-        <Button Panel.ZIndex="5" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"  Click="Button_Click"  Style="{StaticResource CloseButton}" >
+        <Button Panel.ZIndex="5" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"  Click="CloseWindow"  Style="{StaticResource CloseButton}" >
             <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
         </Button>
 

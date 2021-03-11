@@ -66,42 +66,15 @@ namespace Jvedio
             this.DataContext = vieModel_Settings;
             vieModel_Settings.Reset();
 
-            //绑定中文字体
-            //foreach (FontFamily _f in Fonts.SystemFontFamilies)
-            //{
-            //    LanguageSpecificStringDictionary _font = _f.FamilyNames;
-            //    if (_font.ContainsKey(System.Windows.Markup.XmlLanguage.GetLanguage("zh-cn")))
-            //    {
-            //        string _fontName = null;
-            //        if (_font.TryGetValue(System.Windows.Markup.XmlLanguage.GetLanguage("zh-cn"), out _fontName))
-            //        {
-            //            ComboBox_Ttile.Items.Add(_fontName);
-            //        }
-            //    }
-            //}
-
-            //bool IsMatch = false;
-            //foreach (var item in ComboBox_Ttile.Items)
-            //{
-            //    if (Properties.Settings.Default.Font_Title_Family == item.ToString())
-            //    {
-            //        ComboBox_Ttile.SelectedItem = item;
-            //        IsMatch = true;
-            //        break;
-            //    }
-            //}
-
-            //if (!IsMatch) ComboBox_Ttile.SelectedIndex = 0;
-
-
-            //ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
-
             //绑定事件
             foreach (var item in CheckedBoxWrapPanel.Children.OfType<ToggleButton>().ToList())
             {
                 item.Click += AddToRename;
             }
-            TabControl.SelectedIndex = Properties.Settings.Default.SettingsIndex;
+            if(Properties.Settings.Default.SettingsIndex==2)
+                TabControl.SelectedIndex = 0;
+            else
+                TabControl.SelectedIndex = Properties.Settings.Default.SettingsIndex;
 
         }
 
@@ -851,7 +824,6 @@ namespace Jvedio
                 Name = "",
                 LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             }); ;
-            //ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
         }
 
 
@@ -862,7 +834,9 @@ namespace Jvedio
             vieModel_Settings.Servers[rowIndex].LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             vieModel_Settings.Servers[rowIndex].Available = 2;
             ServersDataGrid.IsEnabled = false;
-            CheckUrl(vieModel_Settings.Servers[rowIndex], (s) => { ServersDataGrid.IsEnabled = true; });
+            CheckUrl(vieModel_Settings.Servers[rowIndex], (s) => { 
+                ServersDataGrid.IsEnabled = true; 
+            });
         }
 
         private void DeleteServer(object sender, RoutedEventArgs e)
@@ -945,13 +919,13 @@ namespace Jvedio
                 {
                     server.Available = -1;
                 }
-                await Dispatcher.BeginInvoke((Action)delegate
-                {
-                    ServersDataGrid.Items.Refresh();
-                });
+            await Dispatcher.BeginInvoke((Action)delegate
+            {
+                ServersDataGrid.Items.Refresh();
+            });
 
 
-                if (NeedCookie.Contains(server.Name))
+            if (NeedCookie.Contains(server.Name))
                 {
                     //是否包含 cookie
                     if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
@@ -1019,29 +993,7 @@ namespace Jvedio
         }
 
 
-        public DataGridRow GetRow(int index)
-
-        {
-
-            DataGridRow row = (DataGridRow)ServersDataGrid.ItemContainerGenerator.ContainerFromIndex(index);
-
-            if (row == null)
-
-            {
-
-                ServersDataGrid.UpdateLayout();
-
-                ServersDataGrid.ScrollIntoView(ServersDataGrid.Items[index]);
-
-                row = (DataGridRow)ServersDataGrid.ItemContainerGenerator.ContainerFromIndex(index);
-
-            }
-
-            return row;
-
-        }
-
-        private void CheckBox_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void SetServerEnable(object sender, MouseButtonEventArgs e)
         {
             bool enable = !(bool)((CheckBox)sender).IsChecked;
             vieModel_Settings.Servers[CurrentRowIndex].IsEnable = enable;
