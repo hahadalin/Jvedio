@@ -36,7 +36,7 @@ namespace Jvedio
     {
 
         public const string ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z";
-
+        public static string GrowlToken = "SettingsGrowl";
         public DetailMovie SampleMovie = new DetailMovie()
         {
             id = "AAA-001",
@@ -171,7 +171,7 @@ namespace Jvedio
 
             if (!containsFunKey | _key == Key.None)
             {
-                HandyControl.Controls.Growl.Error("必须为 功能键 + 数字/字母", "SettingsGrowl");
+                HandyControl.Controls.Growl.Error("必须为 功能键 + 数字/字母", GrowlToken);
             }
             else
             {
@@ -198,7 +198,7 @@ namespace Jvedio
                         Properties.Settings.Default.HotKey_Enable = true;
                         Properties.Settings.Default.HotKey_String = hotkeyTextBox.Text;
                         Properties.Settings.Default.Save();
-                        HandyControl.Controls.Growl.Success("设置热键成功", "SettingsGrowl");
+                        HandyControl.Controls.Growl.Success("设置热键成功", GrowlToken);
                     }
 
                 }
@@ -232,7 +232,7 @@ namespace Jvedio
                 }
                 else
                 {
-                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "SettingsGrowl");
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, GrowlToken);
                 }
 
 
@@ -485,7 +485,7 @@ namespace Jvedio
                 if (!TestListen())
                     checkBox.IsChecked = false;
                 else
-                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.RebootToTakeEffect, "SettingsGrowl");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.RebootToTakeEffect, GrowlToken);
             }
         }
 
@@ -513,7 +513,7 @@ namespace Jvedio
                 }
                 catch
                 {
-                    HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NoPermissionToListen} {drives[i]}", "SettingsGrowl");
+                    HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NoPermissionToListen} {drives[i]}", GrowlToken);
                     return false;
                 }
             }
@@ -572,7 +572,7 @@ namespace Jvedio
             GlobalVariable.InitVariable();
             Scan.InitSearchPattern();
             Net.Init();
-            HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "SettingsGrowl");
+            HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, GrowlToken);
         }
 
         private void SetFFMPEGPath(object sender, RoutedEventArgs e)
@@ -620,7 +620,7 @@ namespace Jvedio
                 hint = "再起動後に有効になります";
             else
                 hint = "重启后生效";
-            HandyControl.Controls.Growl.Success(hint, "SettingsGrowl");
+            HandyControl.Controls.Growl.Success(hint, GrowlToken);
 
 
             //SetLanguageDictionary();
@@ -750,12 +750,12 @@ namespace Jvedio
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://github.com/hitchao/Jvedio/wiki/HowToSetYoudaoTranslation");
+            FileHelper.TryOpenUrl(YoudaoUrl);
         }
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://github.com/hitchao/Jvedio/wiki/HowToSetBaiduAI");
+            FileHelper.TryOpenUrl(BaiduUrl);
         }
 
         private void PathListBox_DragOver(object sender, DragEventArgs e)
@@ -778,7 +778,7 @@ namespace Jvedio
                     }
                     else
                     {
-                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "SettingsGrowl");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, GrowlToken);
                     }
                 }
 
@@ -870,7 +870,7 @@ namespace Jvedio
                 {
                     await Dispatcher.BeginInvoke((Action)delegate
                     {
-                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, "SettingsGrowl");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, GrowlToken);
                     });
                     callback.Invoke(0);
                 }
@@ -1180,20 +1180,9 @@ namespace Jvedio
             Properties.Settings.Default.Save();
         }
 
-        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void CopyFFmpegUrl(object sender, MouseButtonEventArgs e)
         {
-
-            try
-            {
-                Clipboard.SetText(ffmpeg_url);
-                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.SuccessCopyUrl, "SettingsGrowl");
-            }
-            catch (Exception ex)
-            {
-                new DialogInput(this, Jvedio.Language.Resources.CopyToDownload, ffmpeg_url).ShowDialog();
-                Console.WriteLine(ex.Message);
-            }
-
+            FileHelper.TryOpenUrl(ffmpeg_url,GrowlToken);
         }
 
         private void LoadTranslate(object sender, RoutedEventArgs e)

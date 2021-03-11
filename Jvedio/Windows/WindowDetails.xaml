@@ -382,9 +382,9 @@
                             <Grid Grid.Row="1" x:Name="ThumbGrid"      >
                                 <ProgressBar Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" IsVisibleChanged="ProgressBar_IsVisibleChanged"  x:Name="ProgressBar" ValueChanged="ProgressBar_ValueChanged" Visibility="Visible"    Height="10" Margin="10 -6"  Value="20"  VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
 
-                                <Border x:Name="ExtraImageBorder" Visibility="Visible" Margin="0 10 0 10" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
+                                <Border x:Name="ExtraImageBorder" Visibility="Visible" Margin="0 10" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
                                     <ScrollViewer Margin="5" VerticalContentAlignment="Center"   PreviewMouseWheel="scrollViewer_PreviewMouseWheel"   x:Name="scrollViewer"      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
-                                        <ItemsControl x:Name="imageItemsControl" VerticalContentAlignment="Center"   AlternationCount="99" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent">
+                                        <ItemsControl x:Name="imageItemsControl" VerticalContentAlignment="Center"   AlternationCount="999" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel    Orientation="Horizontal"  />
@@ -395,9 +395,8 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel    Orientation="Horizontal" x:Name="ImageStackPanel" >
-
                                                         <Grid Margin="10 0" >
-                                                            <Border  Opacity="0.5" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" Cursor="Hand" Panel.ZIndex="5"  Background="Black"  MouseLeftButtonUp="ShowExtraImage">
+                                                            <Border   Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}"  Opacity="0.5" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" Cursor="Hand" Panel.ZIndex="5"  Background="Black"  MouseLeftButtonUp="ShowExtraImage">
                                                                 <Border.ContextMenu>
                                                                     <ContextMenu>
                                                                         <MenuItem Header="{x:Static lang:Resources.OpenPath}" Click="OpenExtraImagePath" ></MenuItem>
@@ -410,8 +409,7 @@
                                                                     </ContextMenu>
                                                                 </Border.ContextMenu>
                                                             </Border>
-                                                            <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16"  Height="20"  ></TextBlock>
-                                                            <Image VerticalAlignment="Center"   Height="{Binding ElementName=scrollViewer,Path=ActualHeight,Converter={StaticResource SmallerValueConverter},ConverterParameter=20}" Width="auto" Style="{StaticResource ExtraPic}"  />
+                                                             <Image VerticalAlignment="Center"   Height="{Binding ElementName=scrollViewer,Path=ActualHeight,Converter={StaticResource SmallerValueConverter},ConverterParameter=20,Mode=OneWay}" Width="auto" Style="{StaticResource ExtraPic}"  />
                                                         </Grid>
                                                     </StackPanel>
                                                 </DataTemplate>
@@ -466,7 +464,7 @@
 
                                             <StackPanel Grid.Row="0">
                                                 <StackPanel Orientation="Horizontal" Margin="-1 20 0 5" HorizontalAlignment="Left">
-                                                    <TextBox  FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}" HorizontalAlignment="Left"/>
+                                                    <TextBox  FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id,Mode=OneWay}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}" HorizontalAlignment="Left"/>
 
                                                     <Button Click="CopyID" Cursor="Hand" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type StackPanel}},Path=IsMouseOver,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}" Content="{x:Static lang:Resources.Copy}" Style="{StaticResource ButtonPrimary}"/>
 

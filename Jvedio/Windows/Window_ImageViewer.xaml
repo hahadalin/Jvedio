@@ -16,7 +16,7 @@
         Background="Transparent"
         PreviewKeyUp="Window_PreviewKeyUp"
         >
-    <Grid  MouseMove="Grid_MouseMove">
+    <Grid  >
         <Border BorderThickness="0" CornerRadius="10" Background="Black" Opacity="0.5">
 
         </Border>

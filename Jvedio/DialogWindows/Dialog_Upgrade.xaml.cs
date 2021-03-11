@@ -55,7 +55,7 @@ namespace Jvedio
                     {
                         sw.Write(arg);
                     }
-                    System.Diagnostics.Process.Start("upgrade.bat");
+                    FileHelper.TryOpenFile("upgrade.bat");
                     Application.Current.Shutdown();
                 };
 
@@ -90,58 +90,9 @@ namespace Jvedio
 
         }
 
-        private async void OpenUpdate(object sender, RoutedEventArgs e)
-        {
-            if (new Msgbox(this, Jvedio.Language.Resources.IsToUpdate).ShowDialog() == true)
-            {
-                try
-                {
-                    //检查升级程序是否是最新的
-                    
-                    bool IsToDownLoadUpdate = false;
-                    HttpResult httpResult = await Net.Http(Net.UpdateExeVersionUrl); 
-
-                    if (httpResult != null && httpResult.SourceCode!="")
-                    {
-                        //跟本地的 md5 对比
-                        if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe")) { IsToDownLoadUpdate = true; }
-                        else
-                        {
-                            string md5 = Encrypt.GetFileMD5(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
-                            if (md5 != httpResult.SourceCode) { IsToDownLoadUpdate = true; }
-                        }
-                    }
-                    if (IsToDownLoadUpdate)
-                    {
-                        HttpResult streamResult = await Net.DownLoadFile(Net.UpdateExeUrl);
-                        try
-                        {
-                            using (var fs = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe", FileMode.Create, FileAccess.Write))
-                            {
-                                fs.Write(streamResult.FileByte, 0, streamResult.FileByte.Length);
-                            }
-                        }
-                        catch { }
-                    }
-                    try
-                    {
-                        Process.Start(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
-                    }
-                    catch (Exception ex)
-                    {
-                        HandyControl.Controls.Growl.Error(ex.Message, "Main");
-                    }
-
-                    //IsToUpdate = true;
-                    Application.Current.Shutdown();//直接关闭
-                }
-                catch { MessageBox.Show($"{Jvedio.Language.Resources.CannotOpen} JvedioUpdate.exe"); }
-
-            }
-        }
         private void GotoDownloadUrl(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://github.com/hitchao/Jvedio/releases");
+            FileHelper.TryOpenUrl(ReleaseUrl);
         }
 
 

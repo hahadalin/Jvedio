@@ -34,7 +34,7 @@ namespace Jvedio
         private void OpenUrl(object sender, RoutedEventArgs e)
         {
             Hyperlink hyperlink = sender as Hyperlink;
-            Process.Start(hyperlink.NavigateUri.ToString());
+            FileHelper.TryOpenUrl(hyperlink.NavigateUri.ToString());
         }
 
         private void BaseDialog_ContentRendered(object sender, EventArgs e)

@@ -16,6 +16,11 @@ namespace Jvedio
 {
     public static class GlobalVariable
     {
+        public static string ReleaseUrl = "https://github.com/hitchao/Jvedio/releases";
+
+        public static string YoudaoUrl = "https://github.com/hitchao/Jvedio/wiki/HowToSetYoudaoTranslation";
+        public static string BaiduUrl= "https://github.com/hitchao/Jvedio/wiki/HowToSetBaiduAI";
+
         public static int MaxProcessWaitingSecond = 1; //ffmpeg 超时等待时间
         public static Stopwatch stopwatch = new Stopwatch();//计时
 

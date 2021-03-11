@@ -631,7 +631,7 @@
                         <TextBlock Text="{x:Static lang:Resources.FFmpegPath}" Style="{StaticResource BaseTextBlock}"   />
                         <hc:TextBox    Style="{StaticResource BaseHcTextBox}"  Text="{Binding FFMPEG_Path, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  />
                         <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.ChooseFFmpeg}"  Click="SetFFMPEGPath" />
-                        <Border MouseLeftButtonUp="Border_MouseLeftButtonUp" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="0" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
+                        <Border MouseLeftButtonUp="CopyFFmpegUrl" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="0" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
                             <Image Source="pack://application:,,,/Resources/Picture/download.png" Margin="5"  Height="20"  />
                         </Border>
 

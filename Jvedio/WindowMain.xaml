@@ -1054,6 +1054,8 @@
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                             <Button x:Name="HideButton" VerticalAlignment="Center" Style="{StaticResource FlatButton}"  Content="{x:Static lang:Resources.LoadFromNet}" Margin="5 0" Click="LoadFromPage"   HorizontalAlignment="Stretch" Visibility="Collapsed"   />
 
+                                            <CheckBox Content="{x:Static lang:Resources.MultiSelect}" IsChecked="{Binding EditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Click="SetSelectMode"/>
+
                                             <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}"  Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch"   />
 
                                             <Border   ToolTip="{x:Static lang:Resources.ImageType}" Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowImagePopup">
@@ -1078,11 +1080,7 @@
                                             <Border  ToolTip="{x:Static lang:Resources.SyncInfo}"     Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowDownloadPopup">
                                                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=download,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                             </Border>
-                                            <Border  ToolTip="{x:Static lang:Resources.MultiSelect}"      Style="{StaticResource ToolsBarBorderStyle}" >
-                                                <ToggleButton  IsChecked="{Binding EditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Background="Transparent" BorderThickness="0" Click="CheckMode_Click"  Style="{DynamicResource ToggleButtonStyle1}">
-                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=selectmode,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   RenderTransformOrigin="0.5,0.65" />
-                                                </ToggleButton>
-                                            </Border>
+
 
                                             <Border  ToolTip="{x:Static lang:Resources.ToolTip_RandomShow}"  Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="RandomDisplay" >
                                                 <Image Source="Resources/Picture/随机.png" Height="20" Width="20"   />
@@ -1616,7 +1614,7 @@
                                         <Grid  FocusVisualStyle="{x:Null}"   >
                                             <ScrollViewer IsDeferredScrollingEnabled="False"  FocusVisualStyle="{x:Null}"   CanContentScroll="True"  x:Name="SimpleMovieScrollViewer" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  ScrollChanged="ScrollViewer_ScrollChanged"    >
                                                 <!--精简模式-->
-                                                <ItemsControl   FocusVisualStyle="{x:Null}"    x:Name="SimpleMovieItemsControl"     >
+                                                <ItemsControl   FocusVisualStyle="{x:Null}"    x:Name="SimpleMovieItemsControl"  AlternationCount="999"    >
                                                     <ItemsControl.ItemsPanel>
                                                         <ItemsPanelTemplate>
                                                             <WrapPanel   />
@@ -1703,8 +1701,7 @@
                                                                                    Style="{StaticResource ViewImage}" MouseLeftButtonDown="CanShowDetails" MouseLeftButtonUp="ShowDetails"  
                                                                                    HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                                                             <!--预览图-->
-                                                                            <Canvas Margin="2" ToolTip="{Binding id,Mode=OneWay}" Cursor="Hand"  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=2,Source={x:Static p:Settings.Default},Mode=OneWay}">
-                                                                                <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16" Foreground="{DynamicResource ForegroundSearch}" Height="20"  ></TextBlock>
+                                                                            <Canvas Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" Margin="2" ToolTip="{Binding id,Mode=OneWay}" Cursor="Hand"  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=2,Source={x:Static p:Settings.Default},Mode=OneWay}">
                                                                                 <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}" Tag="{Binding id,Mode=OneWay}"  Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
                                                                                 <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}"   Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
                                                                             </Canvas>
@@ -1864,7 +1861,7 @@
 
                                                                             <TextBlock   
                                                                                 MouseLeftButtonDown="CopyText"
-                                                                                 Cursor="IBeam"
+                                                                                 Cursor="Hand"
                                                                                 Padding="10 0"
                                                                                 Margin="0 5"
                                                                                 TextAlignment="Left"  
@@ -1887,7 +1884,7 @@
                                                                         
                                                                         <TextBlock 
                                                                             MouseLeftButtonDown="CopyText"
-                                                                             Cursor="IBeam"
+                                                                             Cursor="Hand"
                                                                             Padding="10 0"
                                                                             Margin="0 5" 
                                                                             TextAlignment="Left" 
@@ -1907,7 +1904,7 @@
 
                                                                         <TextBlock 
                                                                             MouseLeftButtonDown="CopyText"
-                                                                            Cursor="IBeam"
+                                                                            Cursor="Hand"
                                                                             Padding="5 0"
                                                                             HorizontalAlignment="Center"  
                                                                      TextAlignment="Left" 

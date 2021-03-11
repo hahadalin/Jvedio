@@ -42,10 +42,6 @@ namespace Jvedio
         }
 
 
-        private void OpenUrl(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void ActorBorderMouseEnter(object sender, MouseEventArgs e)
         {

@@ -326,7 +326,7 @@
                             <StackPanel   Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Visible" Margin="5 10" >
                                 <TextBlock Text="{x:Static lang:Resources.Source}" Style="{StaticResource BaseTextBlock}"/>
                                 <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="ComboBox_SelectionChanged"   ItemsSource="{Binding DataBases}"   MinWidth="150" MaxWidth="300" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
-                                <Button Content="{x:Static lang:Resources.OpenPath}" Style="{StaticResource ButtonPrimary}" Click="Button_Click_5"/>
+                                <Button Content="{x:Static lang:Resources.OpenPath}" Style="{StaticResource ButtonPrimary}" Click="OpenPath"/>
                             </StackPanel>
 
                             <TextBlock Text="{x:Static lang:Resources.Number}" TextAlignment="Left" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
@@ -337,7 +337,7 @@
                             <StackPanel    Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Visible" Margin="5 10" >
                                 <TextBlock Text="{x:Static lang:Resources.Target}" Style="{StaticResource BaseTextBlock}"/>
                                 <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="ComboBox_SelectionChanged"   ItemsSource="{Binding DataBases}"   MinWidth="150" MaxWidth="300" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
-                                <Button Content="{x:Static lang:Resources.OpenPath}" Style="{StaticResource ButtonPrimary}" Click="Button_Click_5"/>
+                                <Button Content="{x:Static lang:Resources.OpenPath}" Style="{StaticResource ButtonPrimary}" Click="OpenPath"/>
                             </StackPanel>
                             <TextBlock Text="{x:Static lang:Resources.Number}" TextAlignment="Left" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
                         </StackPanel>

@@ -49,13 +49,13 @@ namespace Jvedio
             base.OnClosed(e);
         }
 
-        private void Grid_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed )
-            {
-                this.DragMove();
-            }
-        }
+        //private void Grid_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    if (e.LeftButton == MouseButtonState.Pressed )
+        //    {
+        //        this.DragMove();
+        //    }
+        //}
 
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
