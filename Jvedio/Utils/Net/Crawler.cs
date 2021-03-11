@@ -252,6 +252,9 @@ namespace Jvedio
                 //存入数据库
                 if (movieCode != "")
                     DataBase.SaveMovieCodeByID(ID, "javdb", movieCode);
+
+
+
             }
             return movieCode;
         }
@@ -292,6 +295,14 @@ namespace Jvedio
                 {
                     FileProcess.SaveInfo(GetInfo(), ID);
                     httpResult.Success = true;
+
+                    Movie movie = DataBase.SelectMovieByID(ID);
+                    //保存磁力
+                    List<Magnet> magnets =  new JavDBParse(ID, httpResult.SourceCode, MovieCode).ParseMagnet();
+                    if (magnets.Count > 0)
+                        DataBase.SaveMagnets(magnets);
+
+
                 }
             }
             return httpResult;

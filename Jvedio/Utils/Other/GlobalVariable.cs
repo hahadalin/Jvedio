@@ -75,7 +75,7 @@ namespace Jvedio
 
         public static string[] NeedCookie = new[] {"DB","DMM","MOO" };
 
-        public static bool showSecret = false;
+        public static bool showSecret = true;
 
         #region "热键"
         [DllImport("user32.dll")]

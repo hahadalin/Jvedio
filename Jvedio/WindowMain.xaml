@@ -755,7 +755,7 @@
 
                 <JvedioControls:WaitingPanel NoticeText="{x:Static lang:Resources.Wait}"   ShowCancelButton="Visible" ShowProgressBar="Collapsed" Visibility="{Binding IsScanning,Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"      Panel.ZIndex="5" Cancel="WaitingPanel_Cancel"  ></JvedioControls:WaitingPanel>
 
-                <JvedioControls:WaitingPanel  x:Name="LoadActorWaitingPanel"  NoticeText="{x:Static lang:Resources.Wait}"     ShowCancelButton="Visible" ShowProgressBar="Visible" Visibility="Hidden"  Panel.ZIndex="5" Cancel="CancelLoadActor"    ></JvedioControls:WaitingPanel>
+                <JvedioControls:WaitingPanel  x:Name="LoadSearchWaitingPanel"  NoticeText="{x:Static lang:Resources.Wait}"     ShowCancelButton="Visible" ShowProgressBar="Visible" Visibility="Hidden"  Panel.ZIndex="5" Cancel="CancelLoadActor"    ></JvedioControls:WaitingPanel>
 
 
                 <!--主界面-->
@@ -1091,7 +1091,7 @@
                                             </Border>
 
 
-                                            <Button Visibility="Collapsed" Click="Test" Content="Test" />
+                                            <Button Visibility="Visible" Click="Test" Content="Test" Style="{StaticResource FlatButton}" />
 
                                         </StackPanel>
 
