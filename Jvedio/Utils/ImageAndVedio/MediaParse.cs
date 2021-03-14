@@ -27,7 +27,10 @@ namespace Jvedio
                 string Duration = mediaInfo.Get(0, 0, "Duration/String3");
                 result = Duration.Substring(0, Duration.LastIndexOf("."));
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Logger.LogF(ex);
+            }
 
             return result;
         }
@@ -45,7 +48,8 @@ namespace Jvedio
             string Duration = GetVedioDuration(path);
             double Second = DurationToSecond(Duration);
             Second = GetProperSecond(Second);
-            if (Second <result.Length ) {
+            if (Second < result.Length)
+            {
                 if (Second > 0)
                 {
                     result = new string[(int)Second];
@@ -65,15 +69,15 @@ namespace Jvedio
             else
             {
                 // 按照秒 n 等分
-                uint splitLength =(uint)( Second / Properties.Settings.Default.ScreenShotNum);
+                uint splitLength = (uint)(Second / Properties.Settings.Default.ScreenShotNum);
                 for (int i = 0; i < result.Length; i++)
                 {
-                        result[i] = SecondToDuration(Properties.Settings.Default.ScreenShotIgnoreStart * 60 + splitLength * i);//加上跳过开头的部分
+                    result[i] = SecondToDuration(Properties.Settings.Default.ScreenShotIgnoreStart * 60 + splitLength * i);//加上跳过开头的部分
                 }
                 return result;
             }
 
-            
+
         }
 
         /// <summary>
@@ -84,13 +88,13 @@ namespace Jvedio
         public static double GetProperSecond(double second)
         {
             double Second = second;
-            if (Properties.Settings.Default.ScreenShotIgnoreStart > 0) { 
-                Second -= Properties.Settings.Default.ScreenShotIgnoreStart * 60; 
-                //if(Second <= 0) Second += Properties.Settings.Default.ScreenShotIgnoreStart * 60;
+            if (Properties.Settings.Default.ScreenShotIgnoreStart > 0)
+            {
+                Second -= Properties.Settings.Default.ScreenShotIgnoreStart * 60;
             }
-            if (Properties.Settings.Default.ScreenShotIgnoreEnd > 0) { 
+            if (Properties.Settings.Default.ScreenShotIgnoreEnd > 0)
+            {
                 Second -= Properties.Settings.Default.ScreenShotIgnoreEnd * 60;
-                //if (Second <= 0) Second += Properties.Settings.Default.ScreenShotIgnoreEnd * 60;
             }
             return Second;
         }
@@ -98,7 +102,7 @@ namespace Jvedio
         public static double DurationToSecond(string Duration)
         {
             if (string.IsNullOrEmpty(Duration) || Duration.Split(':').Count() < 3) return 0;
-            double Hour = double.Parse( Duration.Split(':')[0]);
+            double Hour = double.Parse(Duration.Split(':')[0]);
             double Minutes = double.Parse(Duration.Split(':')[1]);
             double Seconds = double.Parse(Duration.Split(':')[2]);
             return Hour * 3600 + Minutes * 60 + Seconds;
@@ -107,28 +111,28 @@ namespace Jvedio
         public static string SecondToDuration(double Second)
         {
             // 36000 10h
-            if (Second ==0 ) return "00:00:00";
+            if (Second == 0) return "00:00:00";
             TimeSpan timeSpan = TimeSpan.FromSeconds(Second);
-            return $"{timeSpan.Hours.ToString().PadLeft(2,'0')}:{timeSpan.Minutes.ToString().PadLeft(2, '0')}:{timeSpan.Seconds.ToString().PadLeft(2, '0')}";
+            return $"{timeSpan.Hours.ToString().PadLeft(2, '0')}:{timeSpan.Minutes.ToString().PadLeft(2, '0')}:{timeSpan.Seconds.ToString().PadLeft(2, '0')}";
         }
 
 
         public static (double, double) GetWidthHeight(string vediopath)
         {
 
-                if (!File.Exists(vediopath)) return (0, 0);
-            
-                MediaInfo MI = new MediaInfo();
-                MI.Open(vediopath);
-                string width = MI.Get(StreamKind.Video, 0, "Width");
-                string height = MI.Get(StreamKind.Video, 0, "Height");
+            if (!File.Exists(vediopath)) return (0, 0);
+
+            MediaInfo MI = new MediaInfo();
+            MI.Open(vediopath);
+            string width = MI.Get(StreamKind.Video, 0, "Width");
+            string height = MI.Get(StreamKind.Video, 0, "Height");
 
             int.TryParse(width, out int Width);
             int.TryParse(height, out int Height);
 
             return (Width, Height);
 
-        } 
+        }
 
 
         /// <summary>
@@ -136,9 +140,9 @@ namespace Jvedio
         /// </summary>
         /// <param name="VideoName"></param>
         /// <returns></returns>
-        public static VedioInfo GetMediaInfo(string vediopath)
+        public static VideoInfo GetMediaInfo(string vediopath)
         {
-            VedioInfo vedioInfo = new VedioInfo() ;
+            VideoInfo videoInfo = new VideoInfo();
             if (File.Exists(vediopath))
             {
                 MediaInfo MI = new MediaInfo();
@@ -174,10 +178,10 @@ namespace Jvedio
                 string aSize = MI.Get(StreamKind.Audio, 0, "StreamSize/String");
 
                 string audioInfo = MI.Get(StreamKind.Audio, 0, "Inform") + MI.Get(StreamKind.Audio, 1, "Inform") + MI.Get(StreamKind.Audio, 2, "Inform") + MI.Get(StreamKind.Audio, 3, "Inform");
-                string videoInfo = MI.Get(StreamKind.Video, 0, "Inform");
+                string vi = MI.Get(StreamKind.Video, 0, "Inform");
                 MI.Close();
 
-                vedioInfo = new VedioInfo()
+                videoInfo = new VideoInfo()
                 {
                     Format = format,
                     BitRate = vBitRate,
@@ -185,7 +189,7 @@ namespace Jvedio
                     FileSize = fileSize,
                     Width = width,
                     Height = height,
-                    
+
                     DisplayAspectRatio = risplayAspectRatio,
                     FrameRate = frameRate,
                     BitDepth = bitDepth,
@@ -198,13 +202,13 @@ namespace Jvedio
                     Channel = channel
                 };
             }
-            if (!string.IsNullOrEmpty(vedioInfo.Width) && !string.IsNullOrEmpty(vedioInfo.Height)) vedioInfo.Resolution = vedioInfo.Width + "x" + vedioInfo.Height;
+            if (!string.IsNullOrEmpty(videoInfo.Width) && !string.IsNullOrEmpty(videoInfo.Height)) videoInfo.Resolution = videoInfo.Width + "x" + videoInfo.Height;
             if (!string.IsNullOrEmpty(vediopath))
             {
-                vedioInfo.Extension = Path.GetExtension(vediopath)?.ToUpper().Replace(".", "");
-                vedioInfo.FileName = Path.GetFileNameWithoutExtension(vediopath);
+                videoInfo.Extension = Path.GetExtension(vediopath)?.ToUpper().Replace(".", "");
+                videoInfo.FileName = Path.GetFileNameWithoutExtension(vediopath);
             }
-            return vedioInfo;
+            return videoInfo;
         }
 
     }

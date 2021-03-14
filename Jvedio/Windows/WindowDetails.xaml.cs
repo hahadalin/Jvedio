@@ -336,7 +336,7 @@ namespace Jvedio
                         detailMovie.bigimage = vieModel.DetailMovie.bigimage;
 
                         vieModel.DetailMovie = detailMovie;
-                        vieModel.VedioInfo = MediaParse.GetMediaInfo(detailMovie.filepath);
+                        vieModel.VideoInfo = MediaParse.GetMediaInfo(detailMovie.filepath);
                     }
 
                     //显示到主界面
@@ -1058,7 +1058,7 @@ namespace Jvedio
                 detailMovie.bigimage = vieModel.DetailMovie.bigimage;
 
                 vieModel.DetailMovie = detailMovie;
-                vieModel.VedioInfo = MediaParse.GetMediaInfo(detailMovie.filepath);
+                vieModel.VideoInfo = MediaParse.GetMediaInfo(detailMovie.filepath);
             }
         }
 
@@ -1686,7 +1686,7 @@ namespace Jvedio
                     ShowTagStamps();//显示标签戳
                     SetStatus(true);//设置状态
                     //加载信息在所有
-                    await Task.Run(() => vieModel.VedioInfo = MediaParse.GetMediaInfo(vieModel.DetailMovie.filepath)  );
+                    await Task.Run(() => vieModel.VideoInfo = MediaParse.GetMediaInfo(vieModel.DetailMovie.filepath)  );
                     //加载图片
                     if ((bool)ExtraImageRadioButton.IsChecked) await LoadImage();
                     else await LoadScreenShotImage();

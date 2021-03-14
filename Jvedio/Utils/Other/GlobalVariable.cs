@@ -16,10 +16,18 @@ namespace Jvedio
 {
     public static class GlobalVariable
     {
-        public static string ReleaseUrl = "https://github.com/hitchao/Jvedio/releases";
+        public static readonly string ReleaseUrl = "https://github.com/hitchao/Jvedio/releases";
+        public static readonly string YoudaoUrl = "https://github.com/hitchao/Jvedio/wiki/HowToSetYoudaoTranslation";
+        public static readonly string BaiduUrl= "https://github.com/hitchao/Jvedio/wiki/HowToSetBaiduAI";
+        public static readonly string UpgradeSource = "https://hitchao.github.io";
+        public static readonly string UpdateUrl = "https://hitchao.github.io/jvedioupdate/Version";
+        public static readonly string UpdateExeVersionUrl = "https://hitchao.github.io/jvedioupdate/update";
+        public static readonly string UpdateExeUrl = "https://hitchao.github.io/jvedioupdate/JvedioUpdate.exe";
 
-        public static string YoudaoUrl = "https://github.com/hitchao/Jvedio/wiki/HowToSetYoudaoTranslation";
-        public static string BaiduUrl= "https://github.com/hitchao/Jvedio/wiki/HowToSetBaiduAI";
+
+
+
+
 
         public static int MaxProcessWaitingSecond = 1; //ffmpeg 超时等待时间
         public static Stopwatch stopwatch = new Stopwatch();//计时

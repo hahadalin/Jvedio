@@ -17,13 +17,14 @@ namespace Jvedio
     {
         public event EventHandler UpgradeCompleted;
         public event EventHandler onProgressChanged;
+        private ProgressBUpdateEventArgs DownLoadProgress;
         public bool StopUpgrade = false;
 
         public List<string> DownLoadList;
-        public string list_url = "https://hitchao.github.io/jvedioupdate/list";
-        public string file_url = "https://hitchao.github.io/jvedioupdate/File/";
+        public static string list_url = "https://hitchao.github.io/jvedioupdate/list";
+        public static string file_url = "https://hitchao.github.io/jvedioupdate/File/";
 
-        private ProgressBUpdateEventArgs DownLoadProgress;
+        
         public void Start()
         {
             StopUpgrade = false;
@@ -74,14 +75,7 @@ namespace Jvedio
 
         private void WriteFile(byte[] filebyte, string savepath)
         {
-
             FileInfo fileInfo = new FileInfo(savepath);
-
-            if (fileInfo.Directory.FullName.IndexOf("en") >= 0)
-            {
-                Console.WriteLine(123);
-            }
-
             if (!Directory.Exists(fileInfo.Directory.FullName)) Directory.CreateDirectory(fileInfo.Directory.FullName);//创建文件夹
             try
             {
@@ -90,8 +84,9 @@ namespace Jvedio
                     fs.Write(filebyte, 0, filebyte.Length);
                 }
             }
-            catch { }
-
+            catch(Exception ex) {
+                Logger.LogF(ex);
+            }
         }
 
 

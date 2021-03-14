@@ -15,10 +15,7 @@ namespace Jvedio
     /// </summary>
     public class WindowConfig
     {
-
-        private string windowName;
-
-        public string WindowName { get => windowName; set => windowName = value; }
+        private string WindowName = "";
 
         public WindowConfig(string windowname)
         {

@@ -49,14 +49,14 @@ namespace Jvedio.ViewModel
             }
         }
 
-        private VedioInfo _VedioInfo;
+        private VideoInfo _VideoInfo;
 
-        public VedioInfo VedioInfo
+        public VideoInfo VideoInfo
         {
-            get { return _VedioInfo; }
+            get { return _VideoInfo; }
             set
             {
-                _VedioInfo = value;
+                _VideoInfo = value;
                 RaisePropertyChanged();
             }
         }

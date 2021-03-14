@@ -17,11 +17,8 @@ namespace Jvedio
     /// </summary>
     public class RecentWatchedConfig
     {
-
-        private string _Date;
-
-        public string Date { get => _Date; set => _Date = value; }
-        public string  filepath= "RecentWatch";
+        private string Date = "";
+        private string  filepath= "RecentWatch";
 
         public RecentWatchedConfig(string date="")
         {

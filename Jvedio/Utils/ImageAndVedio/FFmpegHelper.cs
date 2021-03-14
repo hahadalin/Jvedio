@@ -10,15 +10,15 @@ namespace Jvedio.Utils.ImageAndVedio
 {
     public class FFmpegHelper
     {
-        public string Value { get; set; }
-        private int timeout;
-        public FFmpegHelper(string value, int timeoutsecond = 0)
+        private string ProcessParameters = "";
+        private int Timeout=0;
+        public FFmpegHelper(string processParameters, int timeoutsecond = 0)
         {
-            if (!value.EndsWith("&exit")) Value = value + "&exit";
+            if (!processParameters.EndsWith("&exit")) ProcessParameters = processParameters + "&exit";
             if (timeoutsecond <= 0)
-                timeout = GlobalVariable.MaxProcessWaitingSecond * 1000;
+                Timeout = GlobalVariable.MaxProcessWaitingSecond * 1000;
             else
-                timeout = timeoutsecond * 1000;
+                Timeout = timeoutsecond * 1000;
         }
 
 
@@ -77,12 +77,12 @@ namespace Jvedio.Utils.ImageAndVedio
                             };
 
                             process.Start();
-                            process.StandardInput.WriteLine(Value);
+                            process.StandardInput.WriteLine(ProcessParameters);
                             process.StandardInput.AutoFlush = true;
                             process.BeginOutputReadLine();
                             process.BeginErrorReadLine();
 
-                            if (process.WaitForExit(timeout) && outputWaitHandle.WaitOne(timeout) && errorWaitHandle.WaitOne(timeout))
+                            if (process.WaitForExit(Timeout) && outputWaitHandle.WaitOne(Timeout) && errorWaitHandle.WaitOne(Timeout))
                             {
                                 // Process completed. Check process.ExitCode here.
                                 process.Close();

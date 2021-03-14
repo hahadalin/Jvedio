@@ -1083,7 +1083,7 @@
   <data name="MovieInfo" xml:space="preserve">
     <value>Movie information</value>
   </data>
-  <data name="VedioInfo" xml:space="preserve">
+  <data name="VideoInfo" xml:space="preserve">
     <value>Video information</value>
   </data>
   <data name="HD" xml:space="preserve">
@@ -1664,5 +1664,11 @@
   </data>
   <data name="ImageViewer" xml:space="preserve">
     <value>ImageViewer</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="RowNumber" xml:space="preserve">
+    <value>RowNumber</value>
   </data>
 </root>

@@ -2401,6 +2401,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 方法 的本地化字符串。
+        /// </summary>
+        public static string Method {
+            get {
+                return ResourceManager.GetString("Method", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 缺失 的本地化字符串。
         /// </summary>
         public static string Missing {
@@ -3153,6 +3162,15 @@ namespace Jvedio.Language {
         public static string Role {
             get {
                 return ResourceManager.GetString("Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 行数 的本地化字符串。
+        /// </summary>
+        public static string RowNumber {
+            get {
+                return ResourceManager.GetString("RowNumber", resourceCulture);
             }
         }
         
@@ -4552,15 +4570,6 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 视频信息 的本地化字符串。
-        /// </summary>
-        public static string VedioInfo {
-            get {
-                return ResourceManager.GetString("VedioInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 视频处理 的本地化字符串。
         /// </summary>
         public static string VedioProcessing {
@@ -4593,6 +4602,15 @@ namespace Jvedio.Language {
         public static string Version {
             get {
                 return ResourceManager.GetString("Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 视频信息 的本地化字符串。
+        /// </summary>
+        public static string VideoInfo {
+            get {
+                return ResourceManager.GetString("VideoInfo", resourceCulture);
             }
         }
         

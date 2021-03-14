@@ -1077,7 +1077,7 @@
   <data name="MovieInfo" xml:space="preserve">
     <value>影片信息</value>
   </data>
-  <data name="VedioInfo" xml:space="preserve">
+  <data name="VideoInfo" xml:space="preserve">
     <value>视频信息</value>
   </data>
   <data name="HD" xml:space="preserve">
@@ -1664,5 +1664,11 @@
   </data>
   <data name="ImageViewer" xml:space="preserve">
     <value>图片浏览</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>方法</value>
+  </data>
+  <data name="RowNumber" xml:space="preserve">
+    <value>行数</value>
   </data>
 </root>

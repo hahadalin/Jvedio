@@ -659,31 +659,31 @@
                                         </Grid>
 
                                     </TabItem>
-                                    <TabItem  Margin="5" Padding="10 5"   Header="{x:Static lang:Resources.VedioInfo}" Style="{DynamicResource TopTabItemStyle}" >
+                                    <TabItem  Margin="5" Padding="10 5"   Header="{x:Static lang:Resources.VideoInfo}" Style="{DynamicResource TopTabItemStyle}" >
                                         <StackPanel  >
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock Width="auto" Text="{x:Static lang:Resources.Format}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Format}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.Format}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.Duration}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Duration}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.Duration}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.FrameRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameRate}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.FrameRate}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.BitRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.BitRate}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.BitRate}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
 
@@ -693,13 +693,13 @@
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.Resolution}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Resolution}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.Resolution}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.DisplayAspectRatio}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.DisplayAspectRatio}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.DisplayAspectRatio}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
 
@@ -707,13 +707,13 @@
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.BitDepth}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.BitDepth}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.BitDepth}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.FrameCount}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameCount}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.FrameCount}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <Rectangle Fill="{DynamicResource ForegroundGlobal}" Height="2" Width="auto" Margin="0 5"/>
@@ -721,24 +721,24 @@
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.AudioFormat}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioFormat}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.AudioFormat}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.AudioBitRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioBitRate}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.AudioBitRate}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.AudioSamplingRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioSamplingRate}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.AudioSamplingRate}" Margin="0"   ></TextBox>
                                             </StackPanel>
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.Channel}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Channel}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.Channel}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <Rectangle Fill="{DynamicResource ForegroundGlobal}" Height="2" Width="auto" Margin="0 5"/>
@@ -749,16 +749,16 @@
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.FileExtension}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Extension}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.Extension}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock   Text="{x:Static lang:Resources.FileSize}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FileSize}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.FileSize}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
-                                            <TextBlock TextWrapping="Wrap" Cursor="Hand" Foreground="SkyBlue" MouseEnter="TextBox_MouseEnter" MouseLeave="TextBox_MouseLeave" PreviewMouseLeftButtonUp="TextBox_PreviewMouseLeftButtonUp"  Style="{StaticResource  BaseTextBlock}" Text="{Binding VedioInfo.FileName}" Margin="0"   ></TextBlock>
+                                            <TextBlock TextWrapping="Wrap" Cursor="Hand" Foreground="SkyBlue" MouseEnter="TextBox_MouseEnter" MouseLeave="TextBox_MouseLeave" PreviewMouseLeftButtonUp="TextBox_PreviewMouseLeftButtonUp"  Style="{StaticResource  BaseTextBlock}" Text="{Binding VideoInfo.FileName}" Margin="0"   ></TextBlock>
 
                                         </StackPanel>
 

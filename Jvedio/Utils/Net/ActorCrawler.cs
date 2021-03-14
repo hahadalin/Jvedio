@@ -22,18 +22,25 @@ namespace Jvedio
         public string Img { get; set; }
         public string Tag { get; set; }
 
+        public ActorSearch(string name)
+        {
+            Name = name;
+            ID = 0;
+            Link = "";
+            Img = "";
+            Tag = "";
+        }
 
+        public ActorSearch() : this("") { }
 
 
     }
 
     public abstract class ActorCrawler
     {
-        protected static int TASKDELAY_SHORT = 300;//短时间暂停
-        protected static int TASKDELAY_MEDIUM = 1000;
-        protected static int TASKDELAY_LONG = 2000;//长时间暂停
 
-        protected string Url = "";//网址
+
+        protected string Url ;//网址
         protected CrawlerHeader headers;
         protected HttpResult httpResult;
         
@@ -44,8 +51,12 @@ namespace Jvedio
         public ActorCrawler(string name)
         {
             Name = name;
-
+            Url = "";
+            headers = new CrawlerHeader();
+            httpResult = null;
         }
+
+        public ActorCrawler() : this("") { }
 
 
         protected abstract void InitHeaders();

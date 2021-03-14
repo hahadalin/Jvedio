@@ -20,9 +20,9 @@ namespace Jvedio
     {
         public event EventHandler SingleScreenShotCompleted;
 
-        public Semaphore SemaphoreScreenShot;
-        public int ScreenShotCurrent = 0;
-        public object ScreenShotLockObject = 0;
+        private Semaphore SemaphoreScreenShot;
+        private int ScreenShotCurrent = 0;
+        private object ScreenShotLockObject = 0;
         public async void BeginScreenShot(object o)
         {
             List<object> list = o as List<object>;
@@ -39,7 +39,6 @@ namespace Jvedio
             string error = await new FFmpegHelper(str).Run();
             SemaphoreScreenShot.Release();
             SingleScreenShotCompleted?.Invoke(this, new ScreenShotEventArgs(str, output, error));
-            //App.Current.Dispatcher.Invoke((Action)delegate { cmdTextBox.AppendText(str + "\n"); cmdTextBox.ScrollToEnd(); });
             lock (ScreenShotLockObject) { ScreenShotCurrent += 1; }
         }
 
@@ -118,7 +117,6 @@ namespace Jvedio
                 {
                     Task.Delay(100).Wait();
                 }
-                //cmdTextBox.AppendText($"已启用 {cutoffArray.Count()} 个线程， 3-10S 后即可截图成功\n");
             });
             foreach (var item in outputPath)
             {
@@ -161,9 +159,9 @@ namespace Jvedio
 
     public class ScreenShotEventArgs : EventArgs
     {
-        public string FFmpegCommand;
-        public string FilePath;
-        public string Error;
+        public string FFmpegCommand="";
+        public string FilePath="";
+        public string Error="";
 
         public ScreenShotEventArgs(string _FFmpegCommand, string filepath, string error = "")
         {

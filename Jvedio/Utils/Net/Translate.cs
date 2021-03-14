@@ -14,8 +14,10 @@ namespace Jvedio
 {
     public static class Translate
     {
-        public static string Youdao_appKey ;
-        public static string Youdao_appSecret ;
+        public static string Youdao_appKey;
+        public static string Youdao_appSecret;
+
+
 
         public static void InitYoudao()
         {
@@ -156,24 +158,6 @@ namespace Jvedio
         }
 
 
-    //public static async  Task<string> Baidu(string query)
-    //    {
-    //        string appid = "20200812000541310";
-    //        string pwd = "zIxOVdtdAPXkJFyLg4Bf";
-    //        string salt = GetRandomString(10);
-    //        string sign = GenerateSign(query, appid, pwd, salt);
-    //        var client = new RestClient("http://api.fanyi.baidu.com");
-    //        var request = new RestRequest("/api/trans/vip/translate", Method.GET);
-    //        request.AddParameter("q", query);
-    //        request.AddParameter("from", "auto");
-    //        request.AddParameter("to", "zh");
-    //        request.AddParameter("appid", appid);
-    //        request.AddParameter("salt", salt);
-    //        request.AddParameter("sign", sign);
-    //        IRestResponse response = client.Execute(request);
-    //        return GetResult(response.Content);
-    //    }
-
 
         public static string GetResult(string content)
         {
@@ -212,23 +196,4 @@ namespace Jvedio
 
     }
 
-    public class Youdao
-    {
-
-        public string tSpeakUrl { get; set; }
-
-        public string requestId { get; set; }
-        public string query { get; set; }
-
-        public string translation { get; set; }
-
-        public string errorCode { get; set; }
-        public string dict { get; set; }
-        public string webdict { get; set; }
-        public string l { get; set; }
-
-        public bool isWord { get; set; }
-        public string speakUrl { get; set; }
-
-    }
 }

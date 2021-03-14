@@ -295,7 +295,7 @@ namespace Jvedio
     /// <summary>
     /// 视频信息
     /// </summary>
-    public class VedioInfo
+    public class VideoInfo
     {
         public string Format { get; set; }//视频格式
         public string BitRate { get; set; }//总码率
@@ -320,7 +320,7 @@ namespace Jvedio
 
         public string FileName { get; set; }
 
-        public VedioInfo()
+        public VideoInfo()
         {
             Format = ""; 
             BitRate = ""; 

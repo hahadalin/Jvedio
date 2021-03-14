@@ -22,8 +22,8 @@ namespace Jvedio
         public static void SetImage(ref Movie movie)
         {
             //加载图片
-            BitmapImage smallimage = ImageProcess.GetBitmapImage(movie.id, "SmallPic");
-            BitmapImage bigimage = ImageProcess.GetBitmapImage(movie.id, "BigPic");
+            BitmapImage smallimage = GetBitmapImage(movie.id, "SmallPic");
+            BitmapImage bigimage =GetBitmapImage(movie.id, "BigPic");
             if (smallimage == null) smallimage = DefaultSmallImage;
             if (bigimage == null) bigimage = DefaultBigImage;
             movie.smallimage = smallimage;
@@ -33,22 +33,26 @@ namespace Jvedio
         public static BitmapImage GetActorImage( string name)
         {
             //加载图片
-            BitmapImage image = ImageProcess.GetBitmapImage(name, "Actresses");
+            BitmapImage image = GetBitmapImage(name, "Actresses");
             if (image == null) image = DefaultActorImage;
             return image;
         }
 
 
+
+        /// <summary>
+        /// 获得屏幕额截图
+        /// </summary>
+        /// <returns></returns>
         public static BitmapImage GetScreenShot()
         {
-            System.Drawing.Rectangle bounds = System.Windows.Forms.Screen.GetBounds(System.Drawing.Point.Empty);
-            using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(bounds.Width, bounds.Height))
+            Rectangle bounds = System.Windows.Forms.Screen.GetBounds(System.Drawing.Point.Empty);
+            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
             {
-                using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bitmap))
+                using (Graphics g = Graphics.FromImage(bitmap))
                 {
                     g.CopyFromScreen(System.Drawing.Point.Empty, System.Drawing.Point.Empty, bounds.Size);
                 }
-                //bitmap.Save("test.png", System.Drawing.Imaging.ImageFormat.Png);
                 return BitmapToBitmapImage(bitmap,true);
             }
         }
@@ -213,7 +217,7 @@ namespace Jvedio
         }
 
 
-
+        //TODO
         /// <summary>
         /// 防止图片被占用
         /// </summary>
@@ -231,8 +235,9 @@ namespace Jvedio
                     BitmapImage bitmap = new BitmapImage();
                     bitmap.BeginInit();
                     bitmap.StreamSource = ms;
+                    //ms.Close();
                     if (DecodePixelWidth!=0) bitmap.DecodePixelWidth = (int)DecodePixelWidth;
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;//加载时才会将图像载入内存，因此不需要 ms.Close();
                     bitmap.EndInit();
                     bitmap.Freeze();
                     return bitmap;
