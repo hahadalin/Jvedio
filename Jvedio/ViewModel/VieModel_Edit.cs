@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 using System.IO;
@@ -58,7 +58,7 @@ namespace Jvedio.ViewModel
             if (createDate == "") createDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             models.id = Identify.GetFanhao(fileInfo.Name);
-            models.vediotype =(int) Identify.GetVedioType(models.id);
+            models.vediotype =(int) Identify.GetVideoType(models.id);
             models.otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             models.scandate= createDate ;
             models.filesize = fileInfo.Length;

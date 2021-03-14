@@ -28,7 +28,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
 using static Jvedio.ImageProcess;
@@ -868,7 +868,7 @@ namespace Jvedio
                     filepath = e.FullPath,
                     id = Identify.GetFanhao(fileinfo.Name),
                     filesize = fileinfo.Length,
-                    vediotype = (int)Identify.GetVedioType(Identify.GetFanhao(fileinfo.Name)),
+                    vediotype = (int)Identify.GetVideoType(Identify.GetFanhao(fileinfo.Name)),
                     otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     scandate = createDate
                 };
@@ -1457,7 +1457,7 @@ namespace Jvedio
         public void ShowActorMovieFromDetailWindow(Actress actress)
         {
             vieModel.GetMoviebyActress(actress);
-            actress = DataBase.SelectInfoFromActress(actress);
+            actress = DataBase.SelectInfoByActress(actress);
             actress.smallimage = GetActorImage(actress.name);
             vieModel.Actress = actress;
             vieModel.ActorInfoGrid = Visibility.Visible;
@@ -1600,7 +1600,7 @@ namespace Jvedio
                 vieModel.IsLoadingMovie = true;
                 vieModel.TabSelectedIndex = 0;
                 var currentActress = vieModel.ActorList.Where(arg => arg.name == name).First();
-                Actress actress = DataBase.SelectInfoFromActress(currentActress);
+                Actress actress = DataBase.SelectInfoByActress(currentActress);
                 actress.id = "";//不按照 id 选取演员
                 await vieModel.AsyncGetMoviebyActress(actress);
                 vieModel.Actress = actress;
@@ -5865,7 +5865,7 @@ namespace Jvedio
 
                                         if (page == 2 )
                                         {
-                                            Actress actress = DataBase.SelectInfoFromActress(new Actress() { name = actorSearch.Name });
+                                            Actress actress = DataBase.SelectInfoByActress(new Actress() { name = actorSearch.Name });
                                             if (string.IsNullOrEmpty(actress.birthday))
                                             {
                                                 BusParse busParse = new BusParse("", newResult.SourceCode, VedioType.所有);
@@ -5926,7 +5926,7 @@ namespace Jvedio
             vieModel.IsLoadingMovie = true;
             vieModel.TabSelectedIndex = 0;
             var currentActress = vieModel.ActorList.Where(arg => arg.name == name).First();
-            Actress actress = DataBase.SelectInfoFromActress(currentActress);
+            Actress actress = DataBase.SelectInfoByActress(currentActress);
             actress.id = "";//不按照 id 选取演员
             await vieModel.AsyncGetMoviebyActress(actress);
             vieModel.Actress = actress;
@@ -6012,14 +6012,19 @@ namespace Jvedio
                     InitLoadSearch(Jvedio.Language.Resources.LoadFromNet);
                     await Task.Run(async () =>
                     {
-
-
+                        List<string> allMovies = new List<string>();
                         for (int i = start; i <= end; i++)
                         {
                             if (CheckLoadActorCancel()) break;
                             string Url;
-                            if (webSite==WebSite.DB)
-                                Url = url + "?page=" +i;
+                            if (webSite == WebSite.DB)
+                            {
+                                if(url.IndexOf("?")>0)
+                                    Url = url + "&page=" + i;
+                                else
+                                    Url = url + "?page=" + i;
+                            }
+                                
                             else
                                 Url = url + i;
                             Dispatcher.Invoke((Action)delegate
@@ -6053,8 +6058,18 @@ namespace Jvedio
                                     DataBase.InsertSearchMovie(movie);
                                     total += 1;
                                 }
+                                Dispatcher.Invoke((Action)delegate
+                                {
+                                    LoadSearchWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + i;
+                                    log = LoadSearchWaitingPanel.NoticeExtraText;
+                                });
+
+
                                 if (webSite==WebSite.Bus &&  movies.Count < 30) break;//小于 bus 每页的最大数目
                                 if (webSite == WebSite.DB && movies.Count < 40) break;//小于 db 每页的最大数目
+                                if (webSite == WebSite.DB && allMovies.Intersect(movies.Select(arg=>arg.id)).Count() >= 30) break;// 如果新添加的影片未变化，则说明到了末页
+                                allMovies.AddRange(movies.Select(arg => arg.id));
+
                             }
                             else
                             {

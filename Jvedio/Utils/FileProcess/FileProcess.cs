@@ -6,7 +6,9 @@ using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using static Jvedio.GlobalVariable;
@@ -19,6 +21,15 @@ namespace Jvedio
     public static class FileProcess
     {
 
+        public static Window GetWindowByName(string name)
+        {
+            foreach (Window window in App.Current.Windows)
+            {
+                if (window.GetType().Name == name) return window;
+            }
+            return null;
+        }
+
 
         public static void SaveInfo(Dictionary<string, string> Info,string id)
         {
@@ -26,7 +37,7 @@ namespace Jvedio
             if (!Info.ContainsKey("id")) Info.Add("id", id);
             DataBase.UpdateInfoFromNet(Info);
             DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
-            FileProcess.SaveNfo(detailMovie);
+            SaveNfo(detailMovie);
         }
 
         public static void SavePartialInfo(Dictionary<string, string> Info,string key, string id)
@@ -36,11 +47,15 @@ namespace Jvedio
             if (!Info.ContainsKey(key)) return;
             DataBase.UpdateMovieByID(id, key, Info[key], "String");
             DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
-            FileProcess.SaveNfo(detailMovie);
+            SaveNfo(detailMovie);
         }
 
+        public static string Unicode2String(string unicode)
+        {
+            return new Regex(@"\\u([0-9A-F]{4})", RegexOptions.IgnoreCase | RegexOptions.Compiled).Replace(
+                         unicode, x => string.Empty + Convert.ToChar(Convert.ToUInt16(x.Result("$1"), 16)));
+        }
 
-        
 
         public static void SaveNfo(DetailMovie detailMovie)
         {
@@ -284,7 +299,7 @@ namespace Jvedio
             if (string.IsNullOrEmpty( movie.id )) return null; 
 
             //视频类型
-            movie.vediotype = (int)Identify.GetVedioType(movie.id);
+            movie.vediotype = (int)Identify.GetVideoType(movie.id);
 
             //扫描视频获得文件大小
             if (File.Exists(path))

@@ -241,6 +241,7 @@
     <Compile Include="DialogWindows\Dialog_About.xaml.cs">
       <DependentUpon>Dialog_About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Utils\AI\Baidu.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -249,6 +250,8 @@
     <Compile Include="UserControls\OutputPanel.xaml.cs">
       <DependentUpon>OutputPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\FileProcess\ClipBoard.cs" />
+    <Compile Include="Utils\FileProcess\FileHelper.cs" />
     <Compile Include="Utils\Net\ActorCrawler.cs" />
     <Compile Include="Utils\Other\BaseClass.cs" />
     <Compile Include="Utils\Other\Comparer.cs" />
@@ -262,7 +265,6 @@
     <Compile Include="Utils\Other\SampleMovies.cs" />
     <Compile Include="Utils\Encrypt\Encrypt.cs" />
     <Compile Include="Utils\FileProcess\FileProcess.cs" />
-    <Compile Include="Utils\Other\GlobalMethod.cs" />
     <Compile Include="Utils\ImageAndVedio\MediaParse.cs" />
     <Compile Include="Utils\Config\RecentWatchedConfig.cs" />
     <Compile Include="Utils\Config\ServerConfig.cs" />

@@ -14,7 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
 using static Jvedio.FileProcess;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 
 namespace Jvedio
 {

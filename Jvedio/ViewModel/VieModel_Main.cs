@@ -16,7 +16,7 @@ using System.Threading;
 using System.IO;
 using System.Windows.Threading;
 using System.Diagnostics;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 using static Jvedio.GlobalVariable;
 using static Jvedio.ImageProcess;
 using System.Windows.Input;

@@ -21,9 +21,10 @@ namespace Jvedio
     /// </summary>
     public partial class Window_ImageViewer : Window
     {
-        public Window_ImageViewer(ImageSource source)
+        public Window_ImageViewer(Window owner, ImageSource source)
         {
             InitializeComponent();
+            this.Owner = owner;
             this.Height = SystemParameters.PrimaryScreenHeight * 0.8;
             this.Width = SystemParameters.PrimaryScreenHeight * 0.8 * 1230 / 720;
             ImageViewer.ImageSource= BitmapFrame.Create((BitmapSource)source);

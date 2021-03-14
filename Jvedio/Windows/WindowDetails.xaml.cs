@@ -16,7 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using static Jvedio.GlobalVariable;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 using static Jvedio.ImageProcess;
 using static Jvedio.FileProcess;
 using System.Collections.ObjectModel;
@@ -1597,7 +1597,7 @@ namespace Jvedio
         {
             if (e.ClickCount == 2)
             {
-                Window_ImageViewer window_ImageViewer = new Window_ImageViewer(BigImage.Source);
+                Window_ImageViewer window_ImageViewer = new Window_ImageViewer(this,BigImage.Source);
                 window_ImageViewer.ShowDialog();
             }
         }
@@ -1723,7 +1723,7 @@ namespace Jvedio
                 CopyMagnetsMenuItem.Visibility = Visibility.Visible;
                 CopyMagnetsMenuItem.Items.Clear();
                 var magnets = DataBase.SelectMagnetsByID(vieModel.DetailMovie.id);
-                magnets = magnets.OrderByDescending(arg => arg.size).ThenByDescending(arg=>arg.releasedate).ThenBy(arg=>arg.tag).ToList();
+                magnets = magnets.OrderByDescending(arg => arg.size).ThenByDescending(arg=>arg.releasedate).ThenByDescending(arg=>string.Join(" ", arg.tag).Length).ToList();
                 foreach (var magnet in magnets)
                 {
                     MenuItem menuItem = new MenuItem();

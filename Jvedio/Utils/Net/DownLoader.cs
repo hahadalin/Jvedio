@@ -324,7 +324,7 @@ namespace Jvedio
                     return Net.DownActress(actress.id, actress.name, callback: (message) => { MessageCallBack?.Invoke(this, new MessageCallBackEventArgs(message)); });
                 });
 
-                if (success) actress = DataBase.SelectInfoFromActress(actress);
+                if (success) actress = DataBase.SelectInfoByActress(actress);
                 ProgressBarUpdate.value += 1;
                 InfoUpdate?.Invoke(this, new ActressUpdateEventArgs() { Actress = actress, progressBarUpdate = ProgressBarUpdate, state = State });
             }

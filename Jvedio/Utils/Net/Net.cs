@@ -565,7 +565,7 @@ namespace Jvedio
                 
                 if (webSite == WebSite.Bus)
                 {
-                    Info = new BusParse(id, content,Identify.GetVedioType(id)).Parse();
+                    Info = new BusParse(id, content,Identify.GetVideoType(id)).Parse();
                     Info.Add("source", "javbus");
                 }
                 else if (webSite == WebSite.BusEu)

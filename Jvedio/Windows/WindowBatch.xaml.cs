@@ -669,7 +669,7 @@ namespace Jvedio
 
         private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Settings settings = (Settings)Jvedio.GlobalMethod.GetWindowByName("Settings");
+            Settings settings = (Settings)Jvedio.FileProcess.GetWindowByName("Settings");
             if (settings == null) settings = new Settings();
             settings.Show();
             settings.Activate();

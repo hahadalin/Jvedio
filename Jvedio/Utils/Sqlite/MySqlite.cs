@@ -28,7 +28,7 @@ namespace Jvedio
         /// <param name="DatabaseName"></param>
         public MySqlite(string path, bool absolute = false) : base(path)
         {
-            if (path == "")
+            if (string.IsNullOrEmpty(path))
                 SqlitePath = Properties.Settings.Default.DataBasePath;
             else
                 SqlitePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path.EndsWith(".sqlite") ? path : path + ".sqlite");

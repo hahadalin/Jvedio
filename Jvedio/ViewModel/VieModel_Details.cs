@@ -146,7 +146,7 @@ namespace Jvedio.ViewModel
 
         public void Query(string movieid)
         {
-            ((WindowDetails)GlobalMethod.GetWindowByName("WindowDetails")).SetStatus(false);
+            ((WindowDetails)FileProcess.GetWindowByName("WindowDetails")).SetStatus(false);
             DetailMovie detailMovie = null;
                 detailMovie = DataBase.SelectDetailMovieById(movieid);
                 //访问次数+1

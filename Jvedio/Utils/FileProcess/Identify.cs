@@ -16,10 +16,10 @@ namespace Jvedio
 
         public static void InitFanhaoList()
         {
-            Qibing = new List<string>();
-            Bubing = new List<string>();
-            Qibing.AddRange(Resource_String.Qibing.Split(',').Where(arg => !string.IsNullOrEmpty(arg) && arg.Length > 0).ToList());
-            Bubing.AddRange(Resource_String.Bubing.Split(',').Where(arg => !string.IsNullOrEmpty(arg) && arg.Length > 0).ToList());
+            Censored = new List<string>();
+            Uncensored = new List<string>();
+            Censored.AddRange(Resource_String.Censored.Split(',').Where(arg => !string.IsNullOrEmpty(arg) && arg.Length > 0).ToList());
+            Uncensored.AddRange(Resource_String.Uncensored.Split(',').Where(arg => !string.IsNullOrEmpty(arg) && arg.Length > 0).ToList());
         }
 
         public static string GetFanhaoFromDMMUrl(string url)
@@ -113,7 +113,7 @@ namespace Jvedio
         /// <param name="FileName">文件名</param>
         /// <returns></returns>
 
-        public static VedioType GetVedioType(string FileName)
+        public static VedioType GetVideoType(string FileName)
         {
             if (string.IsNullOrEmpty(FileName)) return VedioType.所有;
             if (FileName.ToLower().IndexOf("s2m") >= 0) return VedioType.步兵;
@@ -138,8 +138,8 @@ namespace Jvedio
                     else
                     {
                         //优先匹配步兵
-                        if (Bubing.Contains(fanhao1)) { return VedioType.步兵; }
-                        else if (Qibing.Contains(fanhao1)) { return VedioType.骑兵; }
+                        if (Uncensored.Contains(fanhao1)) { return VedioType.步兵; }
+                        else if (Censored.Contains(fanhao1)) { return VedioType.骑兵; }
                         
                         else {
 
@@ -165,7 +165,7 @@ namespace Jvedio
                             FileName = GetFanhaoByRegExp(FileName, "[A-Z][A-Z]+");//至少两个英文字母
                             if (!string.IsNullOrEmpty(FileName))
                             {
-                                if (Bubing.Contains(FileName))
+                                if (Uncensored.Contains(FileName))
                                     return VedioType.步兵;
                                 else
                                     return 0;

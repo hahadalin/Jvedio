@@ -20,7 +20,7 @@ namespace Jvedio.ViewModel
         public VieModel_Settings()
         {
             DataBase = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
-            DataBases = ((Main)GlobalMethod.GetWindowByName("Main")).vieModel.DataBases;
+            DataBases = ((Main)FileProcess.GetWindowByName("Main")).vieModel.DataBases;
         }
 
 

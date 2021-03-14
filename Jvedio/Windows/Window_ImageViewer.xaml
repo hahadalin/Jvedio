@@ -12,8 +12,9 @@
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        Title="Window_ImageViewer" Height="450" Width="800"
+        Title="{x:Static lang:Resources.ImageViewer}" Height="450" Width="800"
         Background="Transparent"
+        ShowInTaskbar="False"
         PreviewKeyUp="Window_PreviewKeyUp"
         >
     <Grid  >

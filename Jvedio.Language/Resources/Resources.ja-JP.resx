@@ -1662,4 +1662,7 @@
   <data name="Copy" xml:space="preserve">
     <value>コピー</value>
   </data>
+  <data name="ImageViewer" xml:space="preserve">
+    <value>写真閲覧</value>
+  </data>
 </root>

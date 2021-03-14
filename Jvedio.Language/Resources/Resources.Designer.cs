@@ -1465,6 +1465,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 图片浏览 的本地化字符串。
+        /// </summary>
+        public static string ImageViewer {
+            get {
+                return ResourceManager.GetString("ImageViewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 导入 的本地化字符串。
         /// </summary>
         public static string Import {

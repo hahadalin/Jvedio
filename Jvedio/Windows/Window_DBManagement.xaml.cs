@@ -16,7 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using static Jvedio.FileProcess;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 namespace Jvedio
 {
     /// <summary>

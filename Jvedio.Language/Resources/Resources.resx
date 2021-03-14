@@ -1662,4 +1662,7 @@
   <data name="CopyMagnets" xml:space="preserve">
     <value>复制磁力</value>
   </data>
+  <data name="ImageViewer" xml:space="preserve">
+    <value>图片浏览</value>
+  </data>
 </root>

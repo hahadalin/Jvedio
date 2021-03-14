@@ -14,6 +14,9 @@ using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
+    /// <summary>
+    /// SqliteHelper
+    /// </summary>
     public static class DataBase
     {
         public static string SQLITETABLE_MOVIE = "create table if not exists movie (id VARCHAR(50) PRIMARY KEY , title TEXT , filesize DOUBLE DEFAULT 0 , filepath TEXT , subsection TEXT , vediotype INT , scandate VARCHAR(30) , releasedate VARCHAR(10) DEFAULT '1900-01-01', visits INT  DEFAULT 0, director VARCHAR(50) , genre TEXT , tag TEXT , actor TEXT , actorid TEXT ,studio VARCHAR(50) , rating FLOAT  DEFAULT 0, chinesetitle TEXT , favorites INT  DEFAULT 0, label TEXT , plot TEXT , outline TEXT , year INT  DEFAULT 1900, runtime INT  DEFAULT 0, country VARCHAR(50) , countrycode INT DEFAULT 0 ,otherinfo TEXT, sourceurl TEXT, source VARCHAR(10),actressimageurl TEXT,smallimageurl TEXT,bigimageurl TEXT,extraimageurl TEXT)";
@@ -36,11 +39,7 @@ namespace Jvedio
             SqlitePath = Properties.Settings.Default.DataBasePath;
         }
 
-        public static string Unicode2String(string unicode)
-        {
-            return new Regex(@"\\u([0-9A-F]{4})", RegexOptions.IgnoreCase | RegexOptions.Compiled).Replace(
-                         unicode, x => string.Empty + Convert.ToChar(Convert.ToUInt16(x.Result("$1"), 16)));
-        }
+
 
 
         public static void CreateTable(string sqltext)
@@ -64,6 +63,14 @@ namespace Jvedio
         }
 
 
+        /// <summary>
+        /// 数据库之间复制数据
+        /// </summary>
+        /// <param name="src">原数据库</param>
+        /// <param name="dst">目标数据库</param>
+        /// <param name="ct"></param>
+        /// <param name="callback"></param>
+        /// <param name="skipnulltitle"></param>
         public static void CopyDatabaseInfo(string src, string dst, CancellationToken ct, Action<int> callback = null, bool skipnulltitle = true)
         {
             DataTable dataTable = new DataTable();
@@ -175,8 +182,8 @@ namespace Jvedio
 
         public static string GenerateSort()
         {
-            Sort SortType = Sort.识别码;
-            Enum.TryParse(Properties.Settings.Default.SortType, out SortType);
+            int.TryParse(Properties.Settings.Default.SortType, out int st);
+            Sort SortType = (Sort)st;
             bool SortDescending = Properties.Settings.Default.SortDescending;
             return $"ORDER BY {SortType.ToSqlString()} {(SortDescending ? "DESC" : "ASC")}";
         }
@@ -219,7 +226,6 @@ namespace Jvedio
 
                     List<Movie> movies = new List<Movie>();
                     movies.AddRange(result);
-                    //FilterMovie(movies, ref result);
                     return result;
                 }
             }
@@ -230,7 +236,6 @@ namespace Jvedio
         public static List<string> SelectAllID()
         {
             Init();
-            string order = GenerateSort();
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + SqlitePath))
             {
                 cn.Open();
@@ -271,7 +276,6 @@ namespace Jvedio
                     else
                         cmd.CommandText = $"SELECT {field} FROM movie where vediotype={vediotype}";
 
-                    //Console.WriteLine(cmd.CommandText);
 
                     char[] splitChar = { ' ' };
                     if (splitChar != null) splitChar = (char[])splitchar;
@@ -416,45 +420,6 @@ namespace Jvedio
         }
 
 
-        public static DetailMovie GetDetailMovieFromSQLiteDataReader(SQLiteDataReader sr)
-        {
-            DetailMovie detailMovie = new DetailMovie()
-            {
-                id = sr["id"].ToString(),
-                title = sr["title"].ToString(),
-                filesize = double.Parse(sr["filesize"].ToString()),
-                filepath = sr["filepath"].ToString(),
-                subsection = sr["subsection"].ToString(),
-                vediotype = int.Parse(sr["vediotype"].ToString()),
-                scandate = sr["scandate"].ToString(),
-                releasedate = sr["releasedate"].ToString(),
-                visits = int.Parse(sr["visits"].ToString()),
-                director = sr["director"].ToString(),
-                genre = sr["genre"].ToString(),
-                tag = sr["tag"].ToString(),
-                actor = sr["actor"].ToString(),
-                actorid = sr["actorid"].ToString(),
-                studio = sr["studio"].ToString(),
-                rating = float.Parse(sr["rating"].ToString()),
-                chinesetitle = sr["chinesetitle"].ToString(),
-                favorites = int.Parse(sr["favorites"].ToString()),
-                label = sr["label"].ToString(),
-                plot = sr["plot"].ToString(),
-                outline = sr["outline"].ToString(),
-                year = int.Parse(sr["year"].ToString()),
-                runtime = int.Parse(sr["runtime"].ToString()),
-                country = sr["country"].ToString(),
-                countrycode = int.Parse(sr["countrycode"].ToString()),
-                otherinfo = sr["otherinfo"].ToString(),
-                actressimageurl = sr["actressimageurl"].ToString(),
-                smallimageurl = sr["smallimageurl"].ToString(),
-                bigimageurl = sr["bigimageurl"].ToString(),
-                extraimageurl = sr["extraimageurl"].ToString(),
-                sourceurl = sr["sourceurl"].ToString(),
-                source = sr["source"].ToString()
-            };
-            return detailMovie;
-        }
 
 
         /// <summary>
@@ -464,8 +429,7 @@ namespace Jvedio
         /// <returns></returns>
         public static List<Movie> SelectMoviesBySql(string sqltext, string dbName = "")
         {
-            if (dbName == "")
-                Init();
+            if (dbName == "") Init();
             else
                 SqlitePath = dbName.EndsWith(".sqlite") ? dbName : $"{dbName}.sqlite";
 
@@ -476,7 +440,6 @@ namespace Jvedio
             }
             List<Movie> movies = new List<Movie>();
             movies.AddRange(result);
-            //FilterMovie(movies, ref result);
             return result;
         }
 
@@ -552,7 +515,7 @@ namespace Jvedio
         /// <param name="actress"></param>
         /// <returns></returns>
 
-        public static Actress SelectInfoFromActress(Actress actress)
+        public static Actress SelectInfoByActress(Actress actress)
         {
             if (string.IsNullOrEmpty(actress.name)) { return actress; }
             Init();
@@ -600,6 +563,7 @@ namespace Jvedio
                     }
                     catch (Exception e)
                     {
+                        Console.WriteLine(e.Message);
                         actress.like = 0;
                     }
                     return actress;
@@ -661,7 +625,6 @@ namespace Jvedio
             {
                 result = mySqlite.SelectMagnetsBySql($"select * from magnets where id='{ID}'");
             }
-            //FilterMovie(movies, ref result);
             return result;
         }
 
@@ -699,7 +662,7 @@ namespace Jvedio
         public static void UpdateMovieByID(string id, string content, object value, string savetype = "Int")
         {
             Init();
-            value = value.ToString().Replace("%", "").Replace("'", "");
+            value = value.ToString().ToProperSql(false);
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + SqlitePath))
             {
                 cn.Open();
@@ -767,9 +730,34 @@ namespace Jvedio
         public static Movie DicToMovie(Dictionary<string, string> info)
         {
 
-            Movie movie = new Movie();
-            movie.id = info["id"];
-            if (info.ContainsKey("vediotype")) movie.vediotype = int.Parse(info["vediotype"]);
+            Movie movie = new Movie(info["id"]);
+            if (info.ContainsKey("vediotype"))
+            {
+                int vt = 1;
+                int.TryParse(info["vediotype"],out  vt);
+                movie.vediotype = vt;
+            }
+
+            if (info.ContainsKey("year"))
+            {
+                int year = 1970;
+                int.TryParse(info["year"], out  year);
+                movie.year = year;
+            }
+
+            if (info.ContainsKey("rating"))
+            {
+                float.TryParse(info["rating"], out float rating);
+                movie.rating = rating;
+            }
+
+            if (info.ContainsKey("runtime"))
+            {
+                int.TryParse(info["runtime"], out int runtime);
+                movie.runtime = runtime;
+            }
+
+
             movie.title = info.ContainsKey("title") ? info["title"] : "";
             movie.plot = info.ContainsKey("plot") ? info["plot"] : "";
             movie.outline = info.ContainsKey("outline") ? info["outline"] : "";
@@ -780,15 +768,12 @@ namespace Jvedio
             movie.actor = info.ContainsKey("actor") ? info["actor"] : "";
             movie.actorid = info.ContainsKey("actorid") ? info["actorid"] : "";
             movie.studio = info.ContainsKey("studio") ? info["studio"] : "";
-            movie.year = int.Parse(info.ContainsKey("year") ? info["year"] : "1970");
             movie.sourceurl = info.ContainsKey("sourceurl") ? info["sourceurl"] : "";
             movie.source = info.ContainsKey("source") ? info["source"] : "";
             movie.bigimageurl = info.ContainsKey("bigimageurl") ? info["bigimageurl"] : "";
             movie.smallimageurl = info.ContainsKey("smallimageurl") ? info["smallimageurl"] : "";
             movie.extraimageurl = info.ContainsKey("extraimageurl") ? info["extraimageurl"] : "";
             movie.actressimageurl = info.ContainsKey("actressimageurl") ? info["actressimageurl"] : "";
-            movie.rating = info.ContainsKey("rating") ? float.Parse(info["rating"]) : 0;
-            movie.runtime = info.ContainsKey("runtime") ? int.Parse(info["runtime"]) : 0;
             return movie;
 
         }
@@ -1181,23 +1166,23 @@ namespace Jvedio
                                 Movie AccessMovie = new Movie()
                                 {
                                     id = sr["fanhao"].ToString(),
-                                    title = Unicode2String(sr["mingcheng"].ToString()),
+                                    title =FileProcess.Unicode2String(sr["mingcheng"].ToString()),
                                     filesize = string.IsNullOrEmpty(sr["wenjiandaxiao"].ToString()) ? 0 : double.Parse(sr["wenjiandaxiao"].ToString()),
                                     filepath = sr["weizhi"].ToString(),
                                     vediotype = string.IsNullOrEmpty(sr["shipinleixing"].ToString()) ? 0 : int.Parse(sr["shipinleixing"].ToString()),
                                     scandate = scandate.ToString("yyyy-MM-dd HH:mm:ss"),//导入时间
                                     releasedate = string.IsNullOrEmpty(sr["faxingriqi"].ToString()) ? "1900-01-01" : sr["faxingriqi"].ToString(),
                                     visits = string.IsNullOrEmpty(sr["fangwencishu"].ToString()) ? 0 : int.Parse(sr["fangwencishu"].ToString()),
-                                    director = Unicode2String(sr["daoyan"].ToString()),
-                                    genre = Unicode2String(sr["leibie"].ToString()),
-                                    tag = Unicode2String(sr["xilie"].ToString()),
-                                    actor = Unicode2String(sr["yanyuan"].ToString()),
+                                    director = FileProcess.Unicode2String(sr["daoyan"].ToString()),
+                                    genre = FileProcess.Unicode2String(sr["leibie"].ToString()),
+                                    tag = FileProcess.Unicode2String(sr["xilie"].ToString()),
+                                    actor = FileProcess.Unicode2String(sr["yanyuan"].ToString()),
                                     actorid = "",
                                     sourceurl = "",
                                     source = "",
-                                    studio = Unicode2String(sr["faxingshang"].ToString()),
+                                    studio = FileProcess.Unicode2String(sr["faxingshang"].ToString()),
                                     favorites = string.IsNullOrEmpty(sr["love"].ToString()) ? 0 : int.Parse(sr["love"].ToString()),
-                                    label = Unicode2String(sr["biaoqian"].ToString()),
+                                    label = FileProcess.Unicode2String(sr["biaoqian"].ToString()),
                                     runtime = string.IsNullOrEmpty(sr["changdu"].ToString()) ? 0 : int.Parse(sr["changdu"].ToString()),
                                     rating = 0,
                                     year = string.IsNullOrEmpty(sr["faxingriqi"].ToString()) ? 1900 : int.Parse(sr["faxingriqi"].ToString().Split('-')[0]),

@@ -35,8 +35,8 @@ namespace Jvedio
         public static Dictionary<string, string> UrlCookies;// key 网址 value 对应的 cookie
 
         //骑兵、步兵识别码
-        public static List<string> Qibing = new List<string>();
-        public static List<string> Bubing = new List<string>();
+        public static List<string> Censored = new List<string>();
+        public static List<string> Uncensored = new List<string>();
 
         
         public static double MinHDVFileSize = 2;//多少 GB 视为高清

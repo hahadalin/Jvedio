@@ -284,9 +284,21 @@ namespace Jvedio
 
         public override async Task<HttpResult> Crawl()
         {
-            MovieCode = await GetMovieCode((error)=> {
-                httpResult = new HttpResult() { Error=error,Success=false};
-            });
+            Movie movie= DataBase.SelectMovieByID(ID);
+
+            if (!string.IsNullOrEmpty(movie.sourceurl) && movie.sourceurl.IsProperUrl())
+            {
+                //如果有原网址，则不用搜索了
+                MovieCode = movie.sourceurl.Split('/').Last();
+            }
+            else
+            {
+                MovieCode = await GetMovieCode((error) => {
+                    httpResult = new HttpResult() { Error = error, Success = false };
+                });
+            }
+
+
             if (MovieCode != "")
             {
                 Url = JvedioServers.DB.Url + $"v/{MovieCode}";
@@ -295,8 +307,6 @@ namespace Jvedio
                 {
                     FileProcess.SaveInfo(GetInfo(), ID);
                     httpResult.Success = true;
-
-                    Movie movie = DataBase.SelectMovieByID(ID);
                     //保存磁力
                     List<Magnet> magnets =  new JavDBParse(ID, httpResult.SourceCode, MovieCode).ParseMagnet();
                     if (magnets.Count > 0)

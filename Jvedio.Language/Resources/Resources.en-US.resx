@@ -1662,4 +1662,7 @@
   <data name="CopyMagnets" xml:space="preserve">
     <value>Copy Magnets</value>
   </data>
+  <data name="ImageViewer" xml:space="preserve">
+    <value>ImageViewer</value>
+  </data>
 </root>

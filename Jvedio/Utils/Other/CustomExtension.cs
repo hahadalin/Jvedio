@@ -24,6 +24,42 @@ namespace Jvedio
     public static class CustomExtension
     {
 
+
+        public static string ReplaceUrl(this string str,string source)
+        {
+            Uri uri1 = new Uri(str);
+            // 需要替换网址的有 ： bus db library
+            source = source.ToUpper();
+
+            if (source == "JAVBUS")
+            {
+                if (JvedioServers.Bus.Url.IsProperUrl())
+                {
+                    Uri uri = new Uri(JvedioServers.Bus.Url);
+                    return uri1.OriginalString.Replace(uri1.Host, uri.Host);
+                }
+            }
+            else if (source == "JAVDB")
+            {
+                if (JvedioServers.DB.Url.IsProperUrl())
+                {
+                    Uri uri = new Uri(JvedioServers.DB.Url);
+                    return uri1.OriginalString.Replace(uri1.Host, uri.Host);
+                }
+            }
+            else if (source == "javlibrary".ToUpper())
+            {
+                if (JvedioServers.Library.Url.IsProperUrl())
+                {
+                    Uri uri = new Uri(JvedioServers.Library.Url);
+                    return uri1.OriginalString.Replace(uri1.Host, uri.Host);
+                }
+            }
+
+            return str;
+
+
+        }
         public static string CleanString(this string str)
         {
             return str.Replace("\r", "").Replace("\n", "").Replace("\t", "").Replace(" ", "").Replace("'","");
@@ -205,9 +241,12 @@ namespace Jvedio
         }
 
 
-        public static string ToProperSql(this string sql)
+        public static string ToProperSql(this string sql,bool toUpper = true)
         {
-            return sql.Replace("%", "").Replace("'", "").ToUpper();
+            if(toUpper)
+                return sql.Replace("%", "").Replace("'", "").ToUpper();
+            else
+                return sql.Replace("%", "").Replace("'", "");
         }
 
         public static string ToProperUrl(this string url)
