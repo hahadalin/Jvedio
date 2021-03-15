@@ -213,7 +213,7 @@
       <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="Language" Type="System.String" Scope="User">
-      <Value Profile="(Default)">中文</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DisPlayNoStamp" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

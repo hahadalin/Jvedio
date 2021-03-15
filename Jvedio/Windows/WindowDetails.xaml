@@ -62,6 +62,7 @@
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
+            <Setter Property="ContextMenu" Value="{StaticResource CopyContextMenu}"/>
             <Setter Property="Margin" Value="0 5"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
@@ -175,6 +176,8 @@
             </Border.Effect>
             <Image Grid.Row="1" x:Name="BackGroundImage"  Stretch="UniformToFill"></Image>
         </Border>
+        
+
 
 
 
@@ -236,7 +239,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Grid x:Name="MouseMoveGrid" MouseMove="MoveWindow"  Grid.Column="0" Background="{DynamicResource BackgroundMain}"/>
-                        <TextBox x:Name="TitleTextBox" Grid.Column="0" Background="{DynamicResource BackgroundMain}"   Style="{StaticResource ViewTextBox}" VerticalAlignment="Center" HorizontalAlignment="Left"   TextAlignment="Left"  FontWeight="Bold"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 50 0" ></TextBox>
+                        <TextBox x:Name="TitleTextBox" Grid.Column="0" Background="{DynamicResource BackgroundMain}"   Style="{StaticResource ViewTextBox}" VerticalAlignment="Center" HorizontalAlignment="Left"   TextAlignment="Left"  FontWeight="Bold"  TextWrapping="NoWrap" Text="{Binding DetailMovie.title}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}"  FontSize="16" Foreground="{DynamicResource ForegroundGlobal}" Margin="0 0 50 0"  />
 
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
                             <Border  Height="auto" Width="auto" CornerRadius="3" Margin="10 5" Padding="5" Cursor="Hand"    Style="{StaticResource BorderStyle}">
@@ -331,7 +334,7 @@
                             <!--大图-->
                             <Grid x:Name="ImageGrid" Background="{DynamicResource BackgroundMain}" HorizontalAlignment="Stretch"   ContextMenuOpening="BigImage_ContextMenuOpening"  Grid.Row="0" PreviewMouseWheel="Grid_PreviewMouseWheel" MouseMove="MoveWindow"   MouseLeftButtonDown="Grid_MouseLeftButtonDown"   AllowDrop="True" DragOver="BigImage_DragOver" Drop="BigImage_Drop"  >
                                 <Grid.ContextMenu>
-                                    <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp">
+                                    <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp" >
                                         <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoad"/>
                                         <MenuItem Header="{x:Static lang:Resources.Menu_Advance}"   >
                                             <MenuItem Header="{x:Static lang:Resources.Menu_Translate}" Click="TranslateMovie"  />
@@ -349,11 +352,22 @@
                                             <MenuItem Header="{x:Static lang:Resources.ScreenShot}" Click="OpenImagePath"   ></MenuItem>
                                         </MenuItem>
 
+                                        <MenuItem   Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="StartScreenShot"   />
+
+
                                         <MenuItem Header="{x:Static lang:Resources.Menu_AddToList}"   Name="ListMenuItem"   />
 
                                         <MenuItem Header="{x:Static lang:Resources.Menu_LabelManage1}"   Click="AddNewLabel" />
 
-                                        <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
+                                        <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" ></MenuItem>
+                                        <MenuItem x:Name="OpenOtherUrlMenuItem"  Header="{x:Static lang:Resources.OpenOtherUrl}"  >
+                                            
+                                        </MenuItem>
+
+                                        <MenuItem  x:Name="CopyMagnetsMenuItem"  Visibility="Collapsed" Header="{x:Static lang:Resources.CopyMagnets}"  Icon="pack://application:,,,/Resources/menuitem/magnet.png"    >
+                                            
+                                        </MenuItem>
+
                                         <MenuItem Header="{x:Static lang:Resources.Menu_CopyFile}" Click="CopyFile" />
                                         <MenuItem Header="{x:Static lang:Resources.Menu_ClearInfo}"  Click="DeleteInfo"   />
                                         <MenuItem Header="{x:Static lang:Resources.Menu_DeleteInfo}"  Click="DeleteID"   />
@@ -368,9 +382,9 @@
                             <Grid Grid.Row="1" x:Name="ThumbGrid"      >
                                 <ProgressBar Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" IsVisibleChanged="ProgressBar_IsVisibleChanged"  x:Name="ProgressBar" ValueChanged="ProgressBar_ValueChanged" Visibility="Visible"    Height="10" Margin="10 -6"  Value="20"  VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
 
-                                <Border x:Name="ExtraImageBorder" Visibility="Visible" Margin="0 10 0 10" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
+                                <Border x:Name="ExtraImageBorder" Visibility="Visible" Margin="0 10" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
                                     <ScrollViewer Margin="5" VerticalContentAlignment="Center"   PreviewMouseWheel="scrollViewer_PreviewMouseWheel"   x:Name="scrollViewer"      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
-                                        <ItemsControl x:Name="imageItemsControl" VerticalContentAlignment="Center"   AlternationCount="99" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent">
+                                        <ItemsControl x:Name="imageItemsControl" VerticalContentAlignment="Center"   AlternationCount="999" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel    Orientation="Horizontal"  />
@@ -381,9 +395,8 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel    Orientation="Horizontal" x:Name="ImageStackPanel" >
-
                                                         <Grid Margin="10 0" >
-                                                            <Border  Opacity="0.5" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" Cursor="Hand" Panel.ZIndex="5"  Background="Black"  MouseLeftButtonUp="ShowExtraImage">
+                                                            <Border   Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}"  Opacity="0.5" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" Cursor="Hand" Panel.ZIndex="5"  Background="Black"  MouseLeftButtonUp="ShowExtraImage">
                                                                 <Border.ContextMenu>
                                                                     <ContextMenu>
                                                                         <MenuItem Header="{x:Static lang:Resources.OpenPath}" Click="OpenExtraImagePath" ></MenuItem>
@@ -396,8 +409,7 @@
                                                                     </ContextMenu>
                                                                 </Border.ContextMenu>
                                                             </Border>
-                                                            <TextBlock Visibility="Collapsed" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" FontSize="16"  Height="20"  ></TextBlock>
-                                                            <Image VerticalAlignment="Center"   Height="{Binding ElementName=scrollViewer,Path=ActualHeight,Converter={StaticResource SmallerValueConverter},ConverterParameter=20}" Width="auto" Style="{StaticResource ExtraPic}"  />
+                                                             <Image VerticalAlignment="Center"   Height="{Binding ElementName=scrollViewer,Path=ActualHeight,Converter={StaticResource SmallerValueConverter},ConverterParameter=20,Mode=OneWay}" Width="auto" Style="{StaticResource ExtraPic}"  />
                                                         </Grid>
                                                     </StackPanel>
                                                 </DataTemplate>
@@ -434,6 +446,12 @@
 
 
                             <Border x:Name="InfoBorder"  Grid.Column="0"  CornerRadius="5" VerticalAlignment="Top" Margin="10" >
+
+                                <Border.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{x:Static lang:Resources.GetPlot}" Click="GetPlot"/>
+                                    </ContextMenu>
+                                </Border.ContextMenu>
                                 <TabControl Style="{DynamicResource TapControlStyle}"  Background="Transparent"  Margin="10 5"  >
                                     <TabItem   Margin="5" Padding="5"  Header="{x:Static lang:Resources.MovieInfo}" Style="{DynamicResource TopTabItemStyle}"  >
 
@@ -445,8 +463,13 @@
 
 
                                             <StackPanel Grid.Row="0">
-                                                <TextBox Margin="-1 20 0 5" FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}"/>
-                                                <StackPanel  x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 5 0 10" >
+                                                <StackPanel Orientation="Horizontal" Margin="-1 20 0 5" HorizontalAlignment="Left">
+                                                    <TextBox  FontFamily="Times New Roman"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.id,Mode=OneWay}" FontSize="24" Foreground="{DynamicResource ForegroundSearch}" HorizontalAlignment="Left"/>
+
+                                                    <Button Click="CopyID" Cursor="Hand" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type StackPanel}},Path=IsMouseOver,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}" Content="{x:Static lang:Resources.Copy}" Style="{StaticResource ButtonPrimary}"/>
+
+                                                </StackPanel>
+                                               <StackPanel  x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 5 0 10" >
                                                     <Label Margin="0 0 5 0"  BorderThickness="0" Visibility="{Binding DetailMovie.tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=0,Mode=OneWay}" Background="#9A58B7" Content="{x:Static lang:Resources.HD}" Foreground="{DynamicResource ForegroundSearch}"/>
                                                     <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=1,Mode=OneWay}"  Background="YellowGreen"   Content="{x:Static lang:Resources.Translated}" Foreground="{DynamicResource ForegroundSearch}" />
                                                     <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=2,Mode=OneWay}" Background="#00B0F0" Content="{x:Static lang:Resources.FlowOut}" Foreground="{DynamicResource ForegroundSearch}" />
@@ -469,8 +492,8 @@
 
 
                                             <!--可滚动-->
-                                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
-                                                <StackPanel  >
+                                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" FocusVisualStyle="{x:Null}">
+                                                <StackPanel  FocusVisualStyle="{x:Null}" >
                                                     <!--演员-->
                                                     <Grid  >
                                                         <Grid.ColumnDefinitions>
@@ -512,7 +535,17 @@
                                                     <StackPanel   Margin="0 5 0 5"     Tag="{Binding DetailMovie.vediotype}" Style="{StaticResource InfoStackPanel}" >
                                                         <TextBlock Text="{x:Static lang:Resources.VedioType}"  Style="{StaticResource BaseTextBlock}"></TextBlock>
                                                         <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                        <TextBox Margin="0"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.vediotype,Converter={StaticResource IntToVedioTypeConverter}}" ></TextBox>
+                                                        <TextBox Margin="0"   Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.vediotype,Converter={StaticResource IntToVedioTypeConverter}}" >
+                                                            <TextBox.ContextMenu>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="{x:Static lang:Resources.VedioType}" >
+                                                                        <MenuItem Header="{x:Static lang:Resources.Uncensored}" Click="ChangeVedioType"  />
+                                                                        <MenuItem Header="{x:Static lang:Resources.Censored}" Click="ChangeVedioType"  />
+                                                                        <MenuItem Header="{x:Static lang:Resources.Europe}" Click="ChangeVedioType"  />
+                                                                    </MenuItem>
+                                                                </ContextMenu>
+                                                            </TextBox.ContextMenu>
+                                                        </TextBox>
                                                     </StackPanel>
 
                                                     <StackPanel Margin="0 5 0 0"   Tag="{Binding DetailMovie.rating}" Style="{StaticResource InfoStackPanel}" >
@@ -557,6 +590,8 @@
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
                                                     </Grid>
+                                                    
+                                                    <Button Click="AddNewLabel" Grid.Column="2" Cursor="Hand" Margin="5 5 0 0"    Content="{x:Static lang:Resources.Menu_LabelManage1}" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}"  VerticalAlignment="Top"  />
 
                                                     <!--标签-->
                                                     <Grid  >
@@ -567,7 +602,8 @@
                                                         </Grid.ColumnDefinitions>
                                                         <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Label}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Top" Margin="0 10 0 0" />
                                                         <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource BaseTextBlock}"  VerticalAlignment="Top" Margin="0 10 0 0" />
-                                                        <ItemsControl  Grid.Column="2" ItemsSource="{Binding DetailMovie.labellist}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
+
+                                                        <ItemsControl  x:Name="LabelListItemsControl" Grid.Column="2" ItemsSource="{Binding DetailMovie.labellist,Mode=OneWay}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <hc:TagPanel  ShowAddButton="True"    TagMargin="20"    Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
@@ -612,7 +648,7 @@
                                                         <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource BaseTextBlock}"  VerticalAlignment="Top"  />
 
                                                         <StackPanel Grid.Column="2">
-                                                            <Button Margin="5,0,0,0"    Content="{x:Static lang:Resources.Translate}" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}" Click="TranslateMovie" VerticalAlignment="Top"  />
+                                                            <Button Cursor="Hand" Margin="5 10"    Content="{x:Static lang:Resources.Translate}" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}" Click="TranslateMovie" VerticalAlignment="Top"  />
                                                             <TextBox Margin="5 0"  Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.plot}"  Height="auto" TextWrapping="Wrap"  ></TextBox>
                                                         </StackPanel>
                                                         
@@ -623,31 +659,31 @@
                                         </Grid>
 
                                     </TabItem>
-                                    <TabItem  Margin="5" Padding="10 5"   Header="{x:Static lang:Resources.VedioInfo}" Style="{DynamicResource TopTabItemStyle}" >
+                                    <TabItem  Margin="5" Padding="10 5"   Header="{x:Static lang:Resources.VideoInfo}" Style="{DynamicResource TopTabItemStyle}" >
                                         <StackPanel  >
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock Width="auto" Text="{x:Static lang:Resources.Format}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Format}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.Format}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.Duration}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Duration}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.Duration}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.FrameRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameRate}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.FrameRate}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.BitRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.BitRate}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.BitRate}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
 
@@ -657,13 +693,13 @@
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.Resolution}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Resolution}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.Resolution}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.DisplayAspectRatio}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.DisplayAspectRatio}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.DisplayAspectRatio}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
 
@@ -671,13 +707,13 @@
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.BitDepth}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.BitDepth}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.BitDepth}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.FrameCount}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FrameCount}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.FrameCount}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <Rectangle Fill="{DynamicResource ForegroundGlobal}" Height="2" Width="auto" Margin="0 5"/>
@@ -685,24 +721,24 @@
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.AudioFormat}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioFormat}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.AudioFormat}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.AudioBitRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioBitRate}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.AudioBitRate}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.AudioSamplingRate}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.AudioSamplingRate}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.AudioSamplingRate}" Margin="0"   ></TextBox>
                                             </StackPanel>
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.Channel}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Channel}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.Channel}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <Rectangle Fill="{DynamicResource ForegroundGlobal}" Height="2" Width="auto" Margin="0 5"/>
@@ -713,16 +749,16 @@
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock  Text="{x:Static lang:Resources.FileExtension}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.Extension}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.Extension}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
                                             <StackPanel Margin="0 5" Orientation="Horizontal" >
                                                 <TextBlock   Text="{x:Static lang:Resources.FileSize}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                 <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VedioInfo.FileSize}" Margin="0"   ></TextBox>
+                                                <TextBox  Style="{StaticResource  ViewTextBox}" Text="{Binding VideoInfo.FileSize}" Margin="0"   ></TextBox>
                                             </StackPanel>
 
-                                            <TextBlock TextWrapping="Wrap" Cursor="Hand" Foreground="SkyBlue" MouseEnter="TextBox_MouseEnter" MouseLeave="TextBox_MouseLeave" PreviewMouseLeftButtonUp="TextBox_PreviewMouseLeftButtonUp"  Style="{StaticResource  BaseTextBlock}" Text="{Binding VedioInfo.FileName}" Margin="0"   ></TextBlock>
+                                            <TextBlock TextWrapping="Wrap" Cursor="Hand" Foreground="SkyBlue" MouseEnter="TextBox_MouseEnter" MouseLeave="TextBox_MouseLeave" PreviewMouseLeftButtonUp="TextBox_PreviewMouseLeftButtonUp"  Style="{StaticResource  BaseTextBlock}" Text="{Binding VideoInfo.FileName}" Margin="0"   ></TextBlock>
 
                                         </StackPanel>
 
@@ -797,8 +833,8 @@
                 </ItemsControl>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-                    <Button  Style="{StaticResource ButtonStyleFill}" Content="确定"  Click="Button_Click"/>
-                    <Button  Style="{StaticResource ButtonStyleFill}" Content="取消"  Click="Button_Click_1"/>
+                    <Button  Style="{StaticResource FlatButton}" Content="确定"  Click="LabelConfirm"/>
+                    <Button  Style="{StaticResource FlatRedButton}" Content="取消"  Click="LabelCancel"/>
                 </StackPanel>
 
 

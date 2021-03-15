@@ -21,6 +21,34 @@ namespace Jvedio
 
 
 
+    public class Magnet
+    {
+        //  (id VARCHAR(50) PRIMARY KEY, link TEXT , title TEXT , size TEXT, releasedate VARCHAR(10) DEFAULT '1900-01-01', tag TEXT)";
+
+        public Magnet():this("") { }
+
+
+        public Magnet(string id)
+        {
+            this.id = id;
+            link = "";
+            title = "";
+            size = 0;
+            releasedate = "1970-01-01";
+            tag = new List<string>();
+        }
+
+
+
+        public string id { get; set; }
+        public string link { get; set; }
+        public string title { get; set; }
+        public double size { get; set; }
+        public string releasedate { get; set; }
+        public List<string> tag { get; set; }
+
+    }
+
 
 
 
@@ -29,18 +57,49 @@ namespace Jvedio
     /// </summary>
     public class Movie : IDisposable
     {
-        public Movie()
-        {
-            smallimage = DefaultSmallImage;
-            bigimage = DefaultBigImage;
-            tagstamps = "";
-            subsectionlist = new List<string>();
-        }
         public Movie(string id)
         {
             this.id = id;
+            title = "";
+            filesize = 0;
+            filepath = "";
+            hassubsection = false;
+            subsection = "";
             subsectionlist = new List<string>();
+            tagstamps = "";
+            vediotype = 1;
+            scandate = "";
+            visits = 0;
+            releasedate = "";
+            director = "";
+            tag = "";
+            runtime = 0;
+            genre = "";
+            actor = "";
+            actorid = "";
+            studio = "";
+            rating = 0;
+            chinesetitle = "";
+            favorites = 0;
+            label = "";
+            plot = "";
+            outline = "";
+            year = 1970;
+            runtime = 0;
+            country = "";
+            countrycode = 0;
+            otherinfo = "";
+            sourceurl = "";
+            source = "";
+            actressimageurl = "";
+            smallimageurl = "";
+            bigimageurl = "";
+            extraimageurl = "";
+            smallimage = DefaultSmallImage;
+            bigimage = DefaultBigImage;
+            GifUri = new Uri("pack://application:,,,/Resources/Picture/NoPrinting_G.gif");
         }
+        public Movie():this("") {  }
 
         public virtual void Dispose()
         {
@@ -50,7 +109,7 @@ namespace Jvedio
         }
 
 
-        public  bool IsToDownLoadInfo()
+        public bool IsToDownLoadInfo()
         {
             return this != null && (this.title == "" || this.sourceurl == "" || this.smallimageurl == "" || this.bigimageurl == "");
         }
@@ -174,9 +233,6 @@ namespace Jvedio
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
-
     }
 
 
@@ -187,14 +243,7 @@ namespace Jvedio
     /// </summary>
     public class DetailMovie : Movie
     {
-        public List<string> genrelist { get; set; }
-        public List<Actress> actorlist { get; set; }
-        public List<string> labellist { get; set; }
-
-        public ObservableCollection<BitmapSource> extraimagelist { get; set; }
-        public ObservableCollection<string> extraimagePath { get; set; }
-
-        public DetailMovie()
+        public DetailMovie() : base()
         {
             genrelist = new List<string>();
             actorlist = new List<Actress>();
@@ -214,6 +263,31 @@ namespace Jvedio
         }
 
 
+        public List<string> genrelist { get; set; }
+        public List<Actress> actorlist { get; set; }
+
+        public List<string> _labellist;
+        public List<string> labellist
+        {
+            get
+            {
+
+                return _labellist;
+
+            }
+            set
+            {
+                _labellist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<BitmapSource> extraimagelist { get; set; }
+        public ObservableCollection<string> extraimagePath { get; set; }
+
+
+
+
     }
 
 
@@ -221,7 +295,7 @@ namespace Jvedio
     /// <summary>
     /// 视频信息
     /// </summary>
-    public class VedioInfo
+    public class VideoInfo
     {
         public string Format { get; set; }//视频格式
         public string BitRate { get; set; }//总码率
@@ -246,9 +320,27 @@ namespace Jvedio
 
         public string FileName { get; set; }
 
-        public VedioInfo()
+        public VideoInfo()
         {
-            Format = ""; BitRate = ""; Duration = ""; FileSize = ""; Width = ""; Height = ""; Resolution = ""; DisplayAspectRatio = ""; FrameRate = ""; BitDepth = ""; PixelAspectRatio = ""; Encoded_Library = ""; FrameCount = ""; AudioFormat = ""; AudioBitRate = ""; AudioSamplingRate = ""; Channel = ""; Extension = ""; FileName = "";
+            Format = ""; 
+            BitRate = ""; 
+            Duration = ""; 
+            FileSize = ""; 
+            Width = ""; 
+            Height = ""; 
+            Resolution = ""; 
+            DisplayAspectRatio = ""; 
+            FrameRate = ""; 
+            BitDepth = ""; 
+            PixelAspectRatio = ""; 
+            Encoded_Library = ""; 
+            FrameCount = ""; 
+            AudioFormat = ""; 
+            AudioBitRate = ""; 
+            AudioSamplingRate = ""; 
+            Channel = ""; 
+            Extension = ""; 
+            FileName = "";
         }
 
     }
@@ -289,14 +381,36 @@ namespace Jvedio
     public class Actress : INotifyPropertyChanged, IDisposable
     {
 
+        public Actress():this("") {  }
+
         public Actress(string name = "")
         {
+            id = "";
             this.name = name;
+            actressimageurl = "";
+            smallimage = DefaultActorImage;
+            bigimage = null;
             birthday = "";
+            age = 0;
+            height = 0;
             cup = "";
+            hipline = 0;
+            waist = 0;
+            chest = 0;
             birthplace = "";
+            hobby = "";
+            sourceurl = "";
+            source = "";
+            imageurl = "";
+            like = 0;
 
         }
+        public void Dispose()
+        {
+            smallimage = null;
+            bigimage = null;
+        }
+
         public int num { get; set; }//仅仅用于计数
         public string id { get; set; }
         public string name { get; set; }
@@ -418,17 +532,19 @@ namespace Jvedio
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void Dispose()
-        {
-            smallimage = null;
-            bigimage = null;
-        }
+
 
     }
 
 
     public class WindowProperty
     {
+        public WindowProperty()
+        {
+            Location = new Point(0, 0);
+            Size = new Size(0, 0);
+            WinState = JvedioWindowState.Normal;
+        }
         public Point Location { get; set; }
         public Size Size { get; set; }
 
@@ -501,12 +617,12 @@ namespace Jvedio
         }
 
 
-        private bool isEnable;
-        private string url;
-        private string cookie;
-        private int available;//指示测试是否通过
-        private string name;
-        private string lastRefreshDate;
+        private bool isEnable=false;
+        private string url="";
+        private string cookie = "";
+        private int available=0;//指示测试是否通过
+        private string name = "";
+        private string lastRefreshDate = "";
 
         public bool IsEnable { get => isEnable; set { isEnable = value; OnPropertyChanged(); } }
 
@@ -586,7 +702,7 @@ namespace Jvedio
         /// 检查是否启用服务器源且地址不为空
         /// </summary>
         /// <returns></returns>
-        public  bool IsProper()
+        public bool IsProper()
         {
             bool result = Jav321.IsEnable && !string.IsNullOrEmpty(Jav321.Url)
                                 || Bus.IsEnable && !string.IsNullOrEmpty(Bus.Url)

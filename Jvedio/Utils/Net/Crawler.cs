@@ -38,9 +38,6 @@ namespace Jvedio
 
     public abstract class Crawler
     {
-        protected static int TASKDELAY_SHORT = 300;//短时间暂停
-        protected static int TASKDELAY_MEDIUM = 1000;
-        protected static int TASKDELAY_LONG = 2000;//长时间暂停
 
         protected string Url = "";//网址
         protected CrawlerHeader headers;
@@ -57,11 +54,27 @@ namespace Jvedio
         }
 
 
+        /// <summary>
+        /// 初始化请求头
+        /// </summary>
         protected abstract void InitHeaders();
+
+        /// <summary>
+        /// 表示如何解析 html 文件或者从网络传输中获取信息
+        /// </summary>
+        /// <returns>键值对</returns>
         protected abstract Dictionary<string, string> GetInfo();
 
+        /// <summary>
+        /// 持久化保存 Cookies
+        /// </summary>
+        /// <param name="SetCookie"></param>
         protected abstract void ParseCookies(string SetCookie);
 
+        /// <summary>
+        /// 爬取逻辑
+        /// </summary>
+        /// <returns>Http 结果</returns>
         public abstract Task<HttpResult> Crawl();
 
     }
@@ -93,6 +106,11 @@ namespace Jvedio
                 FileProcess.SaveInfo(GetInfo(), ID);
                 httpResult.Success = true;
                 ParseCookies(httpResult.Headers.SetCookie);
+                Movie movie = DataBase.SelectMovieByID(ID);
+                //保存磁力
+                List<Magnet> magnets = await new BusParse(ID, httpResult.SourceCode, VedioType).ParseMagnet(movie.bigimageurl);
+                if (magnets.Count > 0)
+                    DataBase.SaveMagnets(magnets);
             }
             return httpResult;
         }
@@ -131,7 +149,7 @@ namespace Jvedio
             { 
                 Info.Add("sourceurl", Url);
                 Info.Add("source", "javbus");
-                Task.Delay(TASKDELAY_SHORT).Wait();
+                Task.Delay(Delay.SHORT_3).Wait();
             }
             return Info;
         }
@@ -193,7 +211,7 @@ namespace Jvedio
                 Info.Add("id", ID);
                 Info.Add("sourceurl", Url);
                 Info.Add("source", "fc2adult");
-                Task.Delay(TASKDELAY_SHORT).Wait();
+                Task.Delay(Delay.SHORT_3).Wait();
             }
             return Info;
         }
@@ -247,6 +265,9 @@ namespace Jvedio
                 //存入数据库
                 if (movieCode != "")
                     DataBase.SaveMovieCodeByID(ID, "javdb", movieCode);
+
+
+
             }
             return movieCode;
         }
@@ -276,9 +297,21 @@ namespace Jvedio
 
         public override async Task<HttpResult> Crawl()
         {
-            MovieCode = await GetMovieCode((error)=> {
-                httpResult = new HttpResult() { Error=error,Success=false};
-            });
+            Movie movie= DataBase.SelectMovieByID(ID);
+
+            if (!string.IsNullOrEmpty(movie.sourceurl) && movie.sourceurl.IsProperUrl())
+            {
+                //如果有原网址，则不用搜索了
+                MovieCode = movie.sourceurl.Split('/').Last();
+            }
+            else
+            {
+                MovieCode = await GetMovieCode((error) => {
+                    httpResult = new HttpResult() { Error = error, Success = false };
+                });
+            }
+
+
             if (MovieCode != "")
             {
                 Url = JvedioServers.DB.Url + $"v/{MovieCode}";
@@ -287,6 +320,12 @@ namespace Jvedio
                 {
                     FileProcess.SaveInfo(GetInfo(), ID);
                     httpResult.Success = true;
+                    //保存磁力
+                    List<Magnet> magnets =  new JavDBParse(ID, httpResult.SourceCode, MovieCode).ParseMagnet();
+                    if (magnets.Count > 0)
+                        DataBase.SaveMagnets(magnets);
+
+
                 }
             }
             return httpResult;
@@ -307,7 +346,7 @@ namespace Jvedio
                 Info.Add("id", ID);
                 Info.Add("sourceurl", Url);
                 Info.Add("source", "javdb");
-                Task.Delay(TASKDELAY_MEDIUM).Wait();
+                Task.Delay(Delay.MEDIUM).Wait();
             }
             return Info;
         }
@@ -429,7 +468,7 @@ namespace Jvedio
                 Info.Add("id", ID);
                 Info.Add("sourceurl", Url);
                 Info.Add("source", "javlibrary");
-                Task.Delay(TASKDELAY_MEDIUM).Wait();
+                Task.Delay(Delay.MEDIUM).Wait();
             }
             return Info;
         }
@@ -441,10 +480,12 @@ namespace Jvedio
     {
 
         protected string MovieCode = "";
-        public FANZACrawler(string Id) : base(Id)
+        protected bool OnlyPlot;
+        public FANZACrawler(string Id, bool onlyPlot = false) : base(Id)
         {
             Url = $"{JvedioServers.DMM.Url}search/?redirect=1&enc=UTF-8&category=mono_dvd&searchstr={ID}&commit.x=5&commit.y=18";
             if (Url.IsProperUrl()) InitHeaders();
+            OnlyPlot = onlyPlot;
         }
 
         protected  async Task<string> GetMovieCode()
@@ -530,7 +571,10 @@ namespace Jvedio
                 httpResult = await Net.Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
-                    FileProcess.SaveInfo(GetInfo(), ID);
+                    if (!this.OnlyPlot)
+                        FileProcess.SaveInfo(GetInfo(), ID);
+                    else
+                        FileProcess.SavePartialInfo(GetInfo(),"plot", ID);
                     httpResult.Success = true;
                 }
             }
@@ -546,7 +590,7 @@ namespace Jvedio
                 Info.Add("id", ID);
                 Info.Add("sourceurl", Url);
                 Info.Add("source", "FANZA");
-                Task.Delay(TASKDELAY_MEDIUM).Wait();
+                Task.Delay(Delay.MEDIUM).Wait();
             }
             return Info;
         }
@@ -651,7 +695,7 @@ namespace Jvedio
                 Info.Add("id", ID);
                 Info.Add("sourceurl", Url);
                 Info.Add("source", "AVMOO");
-                Task.Delay(TASKDELAY_MEDIUM).Wait();
+                Task.Delay(Delay.MEDIUM).Wait();
             }
             return Info;
         }
@@ -688,11 +732,13 @@ namespace Jvedio
             headers = new CrawlerHeader() { Cookies = JvedioServers.Jav321.Cookie };
         }
 
+
+        //TODO
         public async Task<string> GetMovieCode(Action<string> callback = null)
         {
             //从网络获取
             InitHeaders(ID);
-            HttpResult result = await Net.Http(Url, headers, allowRedirect: false,poststring:$"sn={ID}");
+            HttpResult result = await Net.Http(Url, headers, allowRedirect: false,postString:$"sn={ID}");
             if (result != null && result.StatusCode == HttpStatusCode.MovedPermanently && !string.IsNullOrEmpty(result.Headers.Location))
             {
                 return result.Headers.Location;
@@ -737,7 +783,7 @@ namespace Jvedio
                 Info.Add("id", ID);
                 Info.Add("sourceurl", Url);
                 Info.Add("source", "JAV321");
-                Task.Delay(TASKDELAY_MEDIUM).Wait();
+                Task.Delay(Delay.MEDIUM).Wait();
             }
             return Info;
         }

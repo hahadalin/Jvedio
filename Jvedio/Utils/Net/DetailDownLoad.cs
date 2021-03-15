@@ -18,6 +18,10 @@ using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
+
+    /// <summary>
+    /// 详情信息的下载
+    /// </summary>
     public class DetailDownLoad
     {
         public event EventHandler MessageCallBack;
@@ -27,16 +31,15 @@ namespace Jvedio
         public event EventHandler ExtraImageDownLoadCompleted;
         public event EventHandler InfoUpdate;
         public event EventHandler CancelEvent;
+        private CancellationTokenSource cts; //线程 Token
         private object lockobject;
         private double Maximum;
         private double Value;
+        private DetailMovie DetailMovie;
         public bool IsDownLoading = false;
-        public static int DelayInterval = 1500;
 
-        //线程 Token
-        CancellationTokenSource cts;
 
-        public DetailMovie DetailMovie { get; set; }
+
 
         public DetailDownLoad(DetailMovie detailMovie)
         {
@@ -63,19 +66,15 @@ namespace Jvedio
             if (DetailMovie.IsToDownLoadInfo())
             {
                 HttpResult httpResult = await Net.DownLoadFromNet(DetailMovie);
-                if (httpResult != null)
+                if (httpResult != null && !httpResult.Success)
                 {
-                    if (!httpResult.Success)
-                    {
                         string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
                         MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{error}"));
-                    }
-
+                    
                 }
 
             }
-            DetailMovie dm = new DetailMovie();
-            dm = DataBase.SelectDetailMovieById(DetailMovie.id);
+            DetailMovie dm = DataBase.SelectDetailMovieById(DetailMovie.id);
             if (string.IsNullOrEmpty(dm.title))
             {
                 InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = 1, maximum = 1 });
@@ -141,7 +140,7 @@ namespace Jvedio
                     if (dlimageSuccess)
                     {
                         ExtraImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(filepath));
-                        Thread.Sleep(DelayInterval);
+                        Thread.Sleep(Delay.MEDIUM);
                     }
                     else
                     {

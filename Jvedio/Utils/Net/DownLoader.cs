@@ -321,10 +321,10 @@ namespace Jvedio
                 success = await Task.Run(() =>
                 {
                     Task.Delay(300).Wait();
-                    return Net.DownActress(actress.id, actress.name, callback: (message) => { MessageCallBack?.Invoke(this, new MessageCallBackEventArgs(message)); });
+                    return Net.DownLoadActress(actress.id, actress.name, callback: (message) => { MessageCallBack?.Invoke(this, new MessageCallBackEventArgs(message)); });
                 });
 
-                if (success) actress = DataBase.SelectInfoFromActress(actress);
+                if (success) actress = DataBase.SelectInfoByActress(actress);
                 ProgressBarUpdate.value += 1;
                 InfoUpdate?.Invoke(this, new ActressUpdateEventArgs() { Actress = actress, progressBarUpdate = ProgressBarUpdate, state = State });
             }

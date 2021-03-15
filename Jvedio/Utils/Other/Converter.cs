@@ -13,8 +13,19 @@ using static Jvedio.GlobalVariable;
 namespace Jvedio
 {
 
-
-
+    
+    public class IntConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double.TryParse(value.ToString(), out double result);
+            return (int)result;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
 
     public class CookieNothingConverter : IValueConverter
     {

@@ -223,6 +223,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DialogWindows\Dialog_LoadPage.xaml.cs">
+      <DependentUpon>Dialog_LoadPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DialogWindows\Dialog_SelectActor.xaml.cs">
+      <DependentUpon>Dialog_SelectActor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DialogWindows\Dialog_Upgrade.xaml.cs">
       <DependentUpon>Dialog_Upgrade.xaml</DependentUpon>
     </Compile>
@@ -243,6 +249,10 @@
     <Compile Include="UserControls\OutputPanel.xaml.cs">
       <DependentUpon>OutputPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\FileProcess\ClipBoard.cs" />
+    <Compile Include="Utils\FileProcess\FileHelper.cs" />
+    <Compile Include="Utils\Net\ActorCrawler.cs" />
+    <Compile Include="Utils\Net\Delay.cs" />
     <Compile Include="Utils\Other\BaseClass.cs" />
     <Compile Include="Utils\Other\Comparer.cs" />
     <Compile Include="Utils\Other\Converter.cs" />
@@ -255,7 +265,6 @@
     <Compile Include="Utils\Other\SampleMovies.cs" />
     <Compile Include="Utils\Encrypt\Encrypt.cs" />
     <Compile Include="Utils\FileProcess\FileProcess.cs" />
-    <Compile Include="Utils\Other\GlobalMethod.cs" />
     <Compile Include="Utils\ImageAndVedio\MediaParse.cs" />
     <Compile Include="Utils\Config\RecentWatchedConfig.cs" />
     <Compile Include="Utils\Config\ServerConfig.cs" />
@@ -323,9 +332,6 @@
     <Compile Include="Windows\WindowBatch.xaml.cs">
       <DependentUpon>WindowBatch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\WindowLoadActorMovies.xaml.cs">
-      <DependentUpon>WindowLoadActorMovies.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\WindowTools.xaml.cs">
       <DependentUpon>WindowTools.xaml</DependentUpon>
     </Compile>
@@ -338,9 +344,20 @@
     <Compile Include="Windows\Window_DBManagement.xaml.cs">
       <DependentUpon>Window_DBManagement.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Window_ScreenShot.xaml.cs">
+      <DependentUpon>Window_ScreenShot.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Window_ImageViewer.xaml.cs">
       <DependentUpon>Window_ImageViewer.xaml</DependentUpon>
     </Compile>
+    <Page Include="DialogWindows\Dialog_LoadPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DialogWindows\Dialog_SelectActor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DialogWindows\Dialog_Upgrade.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -381,17 +398,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\WindowLoadActorMovies.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\Window_DBManagement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\Window_ScreenShot.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\Window_ImageViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAML\TextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="XAML\Color.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -511,6 +532,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\menuitem\magnet.png" />
     <Resource Include="Resources\Picture\NoPrinting_G.gif" />
     <Resource Include="Data\github.txt" />
     <Content Include="Data\x64\SQLite.Interop.dll" />

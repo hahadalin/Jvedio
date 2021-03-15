@@ -14,7 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
 using static Jvedio.GlobalVariable;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 namespace Jvedio
 {
     /// <summary>
@@ -39,7 +39,7 @@ namespace Jvedio
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            WindowTools windowTools = (WindowTools)GetWindowByName("WindowTools");
+            WindowTools windowTools = (WindowTools)FileProcess.GetWindowByName("WindowTools");
             if (windowTools == null) windowTools = new WindowTools();
             windowTools.Show();
             windowTools.Activate();

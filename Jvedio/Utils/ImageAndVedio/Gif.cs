@@ -17,10 +17,10 @@ namespace Jvedio.Utils.ImageAndVedio
 {
     public class Gif
     {
-        string gifpath { get; set; }
+        private string GifPath = "";
         public Gif(string path)
         {
-            this.gifpath = path;
+            this.GifPath = path;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Jvedio.Utils.ImageAndVedio
 
         public TimeSpan GetTotalDuration()
         {
-            GifBitmapDecoder decoder = new GifBitmapDecoder(new Uri(gifpath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            GifBitmapDecoder decoder = new GifBitmapDecoder(new Uri(GifPath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
             var totalDuration = TimeSpan.Zero;
             if (decoder != null && decoder.Frames.Count > 0)
             {
@@ -103,8 +103,8 @@ namespace Jvedio.Utils.ImageAndVedio
         {
             List<BitmapSource> bitmapSources = new List<BitmapSource>();
             List<TimeSpan> spans = new List<TimeSpan>();
-            if (!File.Exists(gifpath)) return (bitmapSources, spans);
-            GifBitmapDecoder decoder = new GifBitmapDecoder(new Uri(gifpath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            if (!File.Exists(GifPath)) return (bitmapSources, spans);
+            GifBitmapDecoder decoder = new GifBitmapDecoder(new Uri(GifPath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
             if (decoder != null && decoder.Frames.Count > 0)
             {
                 int index = 0;
@@ -126,7 +126,7 @@ namespace Jvedio.Utils.ImageAndVedio
 
         public BitmapSource GetFirstFrame()
         {
-            GifBitmapDecoder decoder = new GifBitmapDecoder(new Uri(gifpath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            GifBitmapDecoder decoder = new GifBitmapDecoder(new Uri(GifPath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
             BitmapSource result = null;
             if (decoder != null && decoder.Frames.Count > 0)
             {
@@ -141,7 +141,7 @@ namespace Jvedio.Utils.ImageAndVedio
 
         public GifBitmapDecoder GetDecoder()
         {
-            return new GifBitmapDecoder(new Uri(gifpath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            return new GifBitmapDecoder(new Uri(GifPath), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
         }
     }
 

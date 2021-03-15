@@ -135,8 +135,8 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="0" >
 
-                            <Button Margin="20" Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.NewLibrary}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click"/>
-                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Import}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click_1"/>
+                            <Button Margin="20" Style="{StaticResource FlatButton}" Content="{x:Static lang:Resources.NewLibrary}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click"/>
+                            <Button Style="{StaticResource FlatButton}" Content="{x:Static lang:Resources.Import}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click_1"/>
 
 
                         </StackPanel>
@@ -314,7 +314,7 @@
                         <Border Margin="20 5" Style="{StaticResource BorderTipInfo}" Background="{DynamicResource BackgroundMenu}">
                             <TextBlock Text="{x:Static lang:Resources.Attention_CopyDataBase}" TextWrapping="Wrap" Foreground="{DynamicResource ForegroundGlobal}"/>
                         </Border>
-                        <CheckBox x:Name="SkipNullTitle" Content="原数据库影片名称为空则跳过" IsChecked="True" Margin="20 0"/>
+                        <CheckBox x:Name="SkipNullTitle" Content="{x:Static lang:Resources.SkipIfTitleEmpty}" IsChecked="True" Margin="20 0"/>
                     </StackPanel>
 
                     <Grid  Grid.Row="1">
@@ -326,10 +326,10 @@
                             <StackPanel   Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Visible" Margin="5 10" >
                                 <TextBlock Text="{x:Static lang:Resources.Source}" Style="{StaticResource BaseTextBlock}"/>
                                 <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="ComboBox_SelectionChanged"   ItemsSource="{Binding DataBases}"   MinWidth="150" MaxWidth="300" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
-                                <Button Content="{x:Static lang:Resources.OpenPath}" Style="{StaticResource ButtonPrimary}" Click="Button_Click_5"/>
+                                <Button Content="{x:Static lang:Resources.OpenPath}" Style="{StaticResource ButtonPrimary}" Click="OpenPath"/>
                             </StackPanel>
 
-                            <TextBlock Text="数目：111" TextAlignment="Left" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
+                            <TextBlock Text="{x:Static lang:Resources.Number}" TextAlignment="Left" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
                             
                         </StackPanel>
 
@@ -337,9 +337,9 @@
                             <StackPanel    Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Visible" Margin="5 10" >
                                 <TextBlock Text="{x:Static lang:Resources.Target}" Style="{StaticResource BaseTextBlock}"/>
                                 <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="ComboBox_SelectionChanged"   ItemsSource="{Binding DataBases}"   MinWidth="150" MaxWidth="300" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
-                                <Button Content="{x:Static lang:Resources.OpenPath}" Style="{StaticResource ButtonPrimary}" Click="Button_Click_5"/>
+                                <Button Content="{x:Static lang:Resources.OpenPath}" Style="{StaticResource ButtonPrimary}" Click="OpenPath"/>
                             </StackPanel>
-                            <TextBlock Text="数目：111" TextAlignment="Left" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
+                            <TextBlock Text="{x:Static lang:Resources.Number}" TextAlignment="Left" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
                         </StackPanel>
 
                     </Grid>

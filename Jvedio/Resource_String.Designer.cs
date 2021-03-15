@@ -47,8 +47,8 @@ namespace Jvedio {
         }
         
         /// <summary>
-        ///   重写当前线程的 CurrentUICulture 属性
-        ///   重写当前线程的 CurrentUICulture 属性。
+        ///   重写当前线程的 CurrentUICulture 属性，对
+        ///   使用此强类型资源类的所有资源查找执行重写。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Globalization.CultureInfo Culture {
@@ -72,9 +72,9 @@ namespace Jvedio {
         /// <summary>
         ///   查找类似 SMBD,SMDV,BT,CCDV,CWDV,CWP,CWPBD,CWPD,CYC,DRC,DRG,DRGBD,DSAM,DSAMBD,DSAMD,HEY,HEYDOUGA,HEYZO,KP,KSC,LAF,LAFBD,LLDV,MCBD,MKBD,MKD,MXX,NIP,PT,RED,RHJ,S2M,S2MBD,S2MCR,SKY,SKYHD,SMD,SSDV,SSKP,FC2PPV,FC2,GACHI,GACHIG,NALGASCLUB,LL,KG,HAMESAMURAI,GACHIP 的本地化字符串。
         /// </summary>
-        internal static string Bubing {
+        internal static string Uncensored {
             get {
-                return ResourceManager.GetString("Bubing", resourceCulture);
+                return ResourceManager.GetString("Uncensored", resourceCulture);
             }
         }
         
@@ -118,9 +118,9 @@ namespace Jvedio {
         /// <summary>
         ///   查找类似 ABBA,ABP,ABS,AD,ADN,ADV,ADVF,ADVO,ADZ,AED,AEDVD,AGEMIX,AJVR,AKHO,ALB,ALD,AMBI,AMD,ANB,AND,ANND,ANX,ANZI,AOZ,AP,APAA,APAK,APKH,APNS,ARA,ARATHD,ARD,ARM,ARMD,ARMG,ARN,ARSO,ASFB,AST,ASW,ATAD,ATFB,ATID,ATKD,ATOM,AUKG,AUKS,AV,AVD,AVGP,AVKH,AVOP,AVOPVR,AVSA,AVVR,AW,AWD,AWT,BAGBD,BAZX,BBAN,BBBN,BBI,BC,BCDP,BCPV,BDA,BDMILD,BDSR,BEB,BF,BGSD,BIB,BIG,BIJN,BIKMVR,BKD,BKSP,BLK,BLOR,BMD,BMVR,BMW,BNDV,BNSPS,BOB,BOBB,BOIN,BOKD,BOMN,BRD,BTD,BTR,BTYD,BUR,C,CABD,CABE,CACA,CADV,CAFR,CAMI,CAND,CAPI,CB,CC,CCX,CEAD,CESD,CETD,CHN,C [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
-        internal static string Qibing {
+        internal static string Censored {
             get {
-                return ResourceManager.GetString("Qibing", resourceCulture);
+                return ResourceManager.GetString("Censored", resourceCulture);
             }
         }
         
@@ -134,7 +134,7 @@ namespace Jvedio {
         }
         
         /// <summary>
-        ///   查找类似 -,_,cd 的本地化字符串。
+        ///   查找类似 -,_,cd,hd,whole 的本地化字符串。
         /// </summary>
         internal static string SubSectionFeature {
             get {

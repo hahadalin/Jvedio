@@ -1077,7 +1077,7 @@
   <data name="MovieInfo" xml:space="preserve">
     <value>映画情報</value>
   </data>
-  <data name="VedioInfo" xml:space="preserve">
+  <data name="VideoInfo" xml:space="preserve">
     <value>ビデオ情報</value>
   </data>
   <data name="HD" xml:space="preserve">
@@ -1414,7 +1414,7 @@
     <value>ダウンロードファイル</value>
   </data>
   <data name="CheckUpgrade" xml:space="preserve">
-    <value>アップデートを確認</value>
+    <value>更新をチェックする</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>検索する</value>
@@ -1598,5 +1598,77 @@
   </data>
   <data name="EasyMode" xml:space="preserve">
     <value>简化模型</value>
+  </data>
+  <data name="SkipIfTitleEmpty" xml:space="preserve">
+    <value>元のデータベースの映画の名前が空ならスキップします</value>
+  </data>
+  <data name="SearchActor" xml:space="preserve">
+    <value>俳優の中から</value>
+  </data>
+  <data name="NoResult" xml:space="preserve">
+    <value>結果がない</value>
+  </data>
+  <data name="ChooseActor" xml:space="preserve">
+    <value>俳優を選ぶ</value>
+  </data>
+  <data name="MoreThanThree" xml:space="preserve">
+    <value>3つを超えてはいけません</value>
+  </data>
+  <data name="SearchVideoType" xml:space="preserve">
+    <value>検索されたすべての動画はとみなします</value>
+  </data>
+  <data name="CurrentPage" xml:space="preserve">
+    <value>現在のページ番号</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>スタートページ</value>
+  </data>
+  <data name="EndPage" xml:space="preserve">
+    <value>ページを閉じる</value>
+  </data>
+  <data name="Cut" xml:space="preserve">
+    <value>カット</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>ステッカー</value>
+  </data>
+  <data name="SelectAllText" xml:space="preserve">
+    <value>全テーマ検索</value>
+  </data>
+  <data name="Undo" xml:space="preserve">
+    <value>撤回</value>
+  </data>
+  <data name="ShowSameSeries" xml:space="preserve">
+    <value>ページ番号に従って映画をロードする</value>
+  </data>
+  <data name="LoadFromNet" xml:space="preserve">
+    <value>urlに従ってロードする</value>
+  </data>
+  <data name="ErrorUrl" xml:space="preserve">
+    <value>urlエラー</value>
+  </data>
+  <data name="FirstPageOfUrl" xml:space="preserve">
+    <value>urlの最初のページ</value>
+  </data>
+  <data name="OpenOtherUrl" xml:space="preserve">
+    <value>他のurlを開く</value>
+  </data>
+  <data name="GetPlot" xml:space="preserve">
+    <value>要約を取る</value>
+  </data>
+  <data name="CopyMagnets" xml:space="preserve">
+    <value>磁気を複製する</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="ImageViewer" xml:space="preserve">
+    <value>写真閲覧</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>方法</value>
+  </data>
+  <data name="RowNumber" xml:space="preserve">
+    <value>行数</value>
   </data>
 </root>

@@ -14,7 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
 using static Jvedio.GlobalVariable;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 using System.Windows.Documents;
 using Jvedio.Library.Encrypt;
 
@@ -55,7 +55,7 @@ namespace Jvedio
                     {
                         sw.Write(arg);
                     }
-                    System.Diagnostics.Process.Start("upgrade.bat");
+                    FileHelper.TryOpenFile("upgrade.bat");
                     Application.Current.Shutdown();
                 };
 
@@ -90,70 +90,22 @@ namespace Jvedio
 
         }
 
-        private async void OpenUpdate(object sender, RoutedEventArgs e)
-        {
-            if (new Msgbox(this, Jvedio.Language.Resources.IsToUpdate).ShowDialog() == true)
-            {
-                try
-                {
-                    //检查升级程序是否是最新的
-                    
-                    bool IsToDownLoadUpdate = false;
-                    HttpResult httpResult = await Net.Http(Net.UpdateExeVersionUrl); 
-
-                    if (httpResult != null && httpResult.SourceCode!="")
-                    {
-                        //跟本地的 md5 对比
-                        if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe")) { IsToDownLoadUpdate = true; }
-                        else
-                        {
-                            string md5 = Encrypt.GetFileMD5(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
-                            if (md5 != httpResult.SourceCode) { IsToDownLoadUpdate = true; }
-                        }
-                    }
-                    if (IsToDownLoadUpdate)
-                    {
-                        HttpResult streamResult = await Net.DownLoadFile(Net.UpdateExeUrl);
-                        try
-                        {
-                            using (var fs = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe", FileMode.Create, FileAccess.Write))
-                            {
-                                fs.Write(streamResult.FileByte, 0, streamResult.FileByte.Length);
-                            }
-                        }
-                        catch { }
-                    }
-                    try
-                    {
-                        Process.Start(AppDomain.CurrentDomain.BaseDirectory + "JvedioUpdate.exe");
-                    }
-                    catch (Exception ex)
-                    {
-                        HandyControl.Controls.Growl.Error(ex.Message, "Main");
-                    }
-
-                    //IsToUpdate = true;
-                    Application.Current.Shutdown();//直接关闭
-                }
-                catch { MessageBox.Show($"{Jvedio.Language.Resources.CannotOpen} JvedioUpdate.exe"); }
-
-            }
-        }
         private void GotoDownloadUrl(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://github.com/hitchao/Jvedio/releases");
+            FileHelper.TryOpenUrl(ReleaseUrl);
         }
 
 
 
         private async void BaseDialog_ContentRendered(object sender, EventArgs e)
         {
-            UpgradeSourceTextBlock.Text = $"{Jvedio.Language.Resources.UpgradeSource}：{Net.UpgradeSource}";
+            UpgradeProgressStackPanel.Visibility = Visibility.Collapsed;
+            UpgradeSourceTextBlock.Text = $"{Jvedio.Language.Resources.UpgradeSource}：{GlobalVariable.UpgradeSource}";
             LocalVersionTextBlock.Text = $"{Jvedio.Language.Resources.CurrentVersion}：{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
             if (remote != "")
             {
                 RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
-                UpdateContentTextBox.Text = log;
+                UpdateContentTextBox.Text = GetContentByLanguage(log);
                 UpgradeLoadingCircle.Visibility = Visibility.Hidden;
             }
             else
@@ -164,7 +116,7 @@ namespace Jvedio
                 if (success )
                 {
                     RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
-                    UpdateContentTextBox.Text = updateContent;
+                    UpdateContentTextBox.Text = GetContentByLanguage(updateContent);
                 }
                 UpgradeLoadingCircle.Visibility = Visibility.Hidden;
             }
@@ -181,11 +133,39 @@ namespace Jvedio
             if (success)
             {
                 RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
-                UpdateContentTextBox.Text = updateContent;
+                UpdateContentTextBox.Text = GetContentByLanguage(updateContent);
             }
             UpgradeLoadingCircle.Visibility = Visibility.Hidden;
 
             button.IsEnabled = true;
+        }
+
+        private string GetContentByLanguage(string content)
+        {
+            int start = -1;
+            int end = -1;
+            switch (Properties.Settings.Default.Language)
+            {
+
+                case "中文":
+                    end = content.IndexOf("--English--");
+                    if (end == -1) return content;
+                    else return content.Substring(0, end).Replace("--中文--", "");
+
+                case "English":
+                    start = content.IndexOf("--English--");
+                    end = content.IndexOf("--日本語--");
+                    if (end == -1 || start == -1) return content;
+                    else return content.Substring(start, end - start).Replace("--English--", "");
+
+                case "日本語":
+                    start = content.IndexOf("--日本語--");
+                    if (start == -1) return content;
+                    else return content.Substring(start).Replace("--日本語--", "");
+
+                default:
+                    return content;
+            }
         }
     }
 }

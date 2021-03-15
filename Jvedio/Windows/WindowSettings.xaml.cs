@@ -13,7 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
 using System.Windows.Controls.Primitives;
@@ -36,7 +36,7 @@ namespace Jvedio
     {
 
         public const string ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z";
-
+        public static string GrowlToken = "SettingsGrowl";
         public DetailMovie SampleMovie = new DetailMovie()
         {
             id = "AAA-001",
@@ -66,42 +66,15 @@ namespace Jvedio
             this.DataContext = vieModel_Settings;
             vieModel_Settings.Reset();
 
-            //绑定中文字体
-            //foreach (FontFamily _f in Fonts.SystemFontFamilies)
-            //{
-            //    LanguageSpecificStringDictionary _font = _f.FamilyNames;
-            //    if (_font.ContainsKey(System.Windows.Markup.XmlLanguage.GetLanguage("zh-cn")))
-            //    {
-            //        string _fontName = null;
-            //        if (_font.TryGetValue(System.Windows.Markup.XmlLanguage.GetLanguage("zh-cn"), out _fontName))
-            //        {
-            //            ComboBox_Ttile.Items.Add(_fontName);
-            //        }
-            //    }
-            //}
-
-            //bool IsMatch = false;
-            //foreach (var item in ComboBox_Ttile.Items)
-            //{
-            //    if (Properties.Settings.Default.Font_Title_Family == item.ToString())
-            //    {
-            //        ComboBox_Ttile.SelectedItem = item;
-            //        IsMatch = true;
-            //        break;
-            //    }
-            //}
-
-            //if (!IsMatch) ComboBox_Ttile.SelectedIndex = 0;
-
-
-            //ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
-
             //绑定事件
             foreach (var item in CheckedBoxWrapPanel.Children.OfType<ToggleButton>().ToList())
             {
                 item.Click += AddToRename;
             }
-            TabControl.SelectedIndex = Properties.Settings.Default.SettingsIndex;
+            if(Properties.Settings.Default.SettingsIndex==2)
+                TabControl.SelectedIndex = 0;
+            else
+                TabControl.SelectedIndex = Properties.Settings.Default.SettingsIndex;
 
         }
 
@@ -198,7 +171,7 @@ namespace Jvedio
 
             if (!containsFunKey | _key == Key.None)
             {
-                HandyControl.Controls.Growl.Error("必须为 功能键 + 数字/字母", "SettingsGrowl");
+                HandyControl.Controls.Growl.Error("必须为 功能键 + 数字/字母", GrowlToken);
             }
             else
             {
@@ -225,7 +198,7 @@ namespace Jvedio
                         Properties.Settings.Default.HotKey_Enable = true;
                         Properties.Settings.Default.HotKey_String = hotkeyTextBox.Text;
                         Properties.Settings.Default.Save();
-                        HandyControl.Controls.Growl.Success("设置热键成功", "SettingsGrowl");
+                        HandyControl.Controls.Growl.Success("设置热键成功", GrowlToken);
                     }
 
                 }
@@ -259,7 +232,7 @@ namespace Jvedio
                 }
                 else
                 {
-                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "SettingsGrowl");
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, GrowlToken);
                 }
 
 
@@ -512,7 +485,7 @@ namespace Jvedio
                 if (!TestListen())
                     checkBox.IsChecked = false;
                 else
-                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.RebootToTakeEffect, "SettingsGrowl");
+                    HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.RebootToTakeEffect, GrowlToken);
             }
         }
 
@@ -540,7 +513,7 @@ namespace Jvedio
                 }
                 catch
                 {
-                    HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NoPermissionToListen} {drives[i]}", "SettingsGrowl");
+                    HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NoPermissionToListen} {drives[i]}", GrowlToken);
                     return false;
                 }
             }
@@ -599,7 +572,7 @@ namespace Jvedio
             GlobalVariable.InitVariable();
             Scan.InitSearchPattern();
             Net.Init();
-            HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "SettingsGrowl");
+            HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, GrowlToken);
         }
 
         private void SetFFMPEGPath(object sender, RoutedEventArgs e)
@@ -647,7 +620,7 @@ namespace Jvedio
                 hint = "再起動後に有効になります";
             else
                 hint = "重启后生效";
-            HandyControl.Controls.Growl.Success(hint, "SettingsGrowl");
+            HandyControl.Controls.Growl.Success(hint, GrowlToken);
 
 
             //SetLanguageDictionary();
@@ -777,12 +750,12 @@ namespace Jvedio
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://github.com/hitchao/Jvedio/wiki/HowToSetYoudaoTranslation");
+            FileHelper.TryOpenUrl(YoudaoUrl);
         }
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://github.com/hitchao/Jvedio/wiki/HowToSetBaiduAI");
+            FileHelper.TryOpenUrl(BaiduUrl);
         }
 
         private void PathListBox_DragOver(object sender, DragEventArgs e)
@@ -805,7 +778,7 @@ namespace Jvedio
                     }
                     else
                     {
-                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "SettingsGrowl");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, GrowlToken);
                     }
                 }
 
@@ -851,7 +824,6 @@ namespace Jvedio
                 Name = "",
                 LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             }); ;
-            //ServersDataGrid.ItemsSource = vieModel_Settings.Servers;
         }
 
 
@@ -862,7 +834,9 @@ namespace Jvedio
             vieModel_Settings.Servers[rowIndex].LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             vieModel_Settings.Servers[rowIndex].Available = 2;
             ServersDataGrid.IsEnabled = false;
-            CheckUrl(vieModel_Settings.Servers[rowIndex], (s) => { ServersDataGrid.IsEnabled = true; });
+            CheckUrl(vieModel_Settings.Servers[rowIndex], (s) => { 
+                ServersDataGrid.IsEnabled = true; 
+            });
         }
 
         private void DeleteServer(object sender, RoutedEventArgs e)
@@ -896,7 +870,7 @@ namespace Jvedio
                 {
                     await Dispatcher.BeginInvoke((Action)delegate
                     {
-                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, "SettingsGrowl");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, GrowlToken);
                     });
                     callback.Invoke(0);
                 }
@@ -945,13 +919,13 @@ namespace Jvedio
                 {
                     server.Available = -1;
                 }
-                await Dispatcher.BeginInvoke((Action)delegate
-                {
-                    ServersDataGrid.Items.Refresh();
-                });
+            await Dispatcher.BeginInvoke((Action)delegate
+            {
+                ServersDataGrid.Items.Refresh();
+            });
 
 
-                if (NeedCookie.Contains(server.Name))
+            if (NeedCookie.Contains(server.Name))
                 {
                     //是否包含 cookie
                     if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
@@ -1019,29 +993,7 @@ namespace Jvedio
         }
 
 
-        public DataGridRow GetRow(int index)
-
-        {
-
-            DataGridRow row = (DataGridRow)ServersDataGrid.ItemContainerGenerator.ContainerFromIndex(index);
-
-            if (row == null)
-
-            {
-
-                ServersDataGrid.UpdateLayout();
-
-                ServersDataGrid.ScrollIntoView(ServersDataGrid.Items[index]);
-
-                row = (DataGridRow)ServersDataGrid.ItemContainerGenerator.ContainerFromIndex(index);
-
-            }
-
-            return row;
-
-        }
-
-        private void CheckBox_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void SetServerEnable(object sender, MouseButtonEventArgs e)
         {
             bool enable = !(bool)((CheckBox)sender).IsChecked;
             vieModel_Settings.Servers[CurrentRowIndex].IsEnable = enable;
@@ -1228,20 +1180,9 @@ namespace Jvedio
             Properties.Settings.Default.Save();
         }
 
-        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void CopyFFmpegUrl(object sender, MouseButtonEventArgs e)
         {
-
-            try
-            {
-                Clipboard.SetText(ffmpeg_url);
-                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.SuccessCopyUrl, "SettingsGrowl");
-            }
-            catch (Exception ex)
-            {
-                new DialogInput(this, Jvedio.Language.Resources.CopyToDownload, ffmpeg_url).ShowDialog();
-                Console.WriteLine(ex.Message);
-            }
-
+            FileHelper.TryOpenUrl(ffmpeg_url,GrowlToken);
         }
 
         private void LoadTranslate(object sender, RoutedEventArgs e)

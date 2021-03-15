@@ -16,6 +16,19 @@ namespace Jvedio
 {
     public static class GlobalVariable
     {
+        public static readonly string ReleaseUrl = "https://github.com/hitchao/Jvedio/releases";
+        public static readonly string YoudaoUrl = "https://github.com/hitchao/Jvedio/wiki/HowToSetYoudaoTranslation";
+        public static readonly string BaiduUrl= "https://github.com/hitchao/Jvedio/wiki/HowToSetBaiduAI";
+        public static readonly string UpgradeSource = "https://hitchao.github.io";
+        public static readonly string UpdateUrl = "https://hitchao.github.io/jvedioupdate/Version";
+        public static readonly string UpdateExeVersionUrl = "https://hitchao.github.io/jvedioupdate/update";
+        public static readonly string UpdateExeUrl = "https://hitchao.github.io/jvedioupdate/JvedioUpdate.exe";
+
+
+
+
+
+
         public static int MaxProcessWaitingSecond = 1; //ffmpeg 超时等待时间
         public static Stopwatch stopwatch = new Stopwatch();//计时
 
@@ -30,8 +43,8 @@ namespace Jvedio
         public static Dictionary<string, string> UrlCookies;// key 网址 value 对应的 cookie
 
         //骑兵、步兵识别码
-        public static List<string> Qibing = new List<string>();
-        public static List<string> Bubing = new List<string>();
+        public static List<string> Censored = new List<string>();
+        public static List<string> Uncensored = new List<string>();
 
         
         public static double MinHDVFileSize = 2;//多少 GB 视为高清
@@ -69,6 +82,8 @@ namespace Jvedio
         public static string[] EncryptKeys = new string[] { "ShS69pNGvLac6ZF+", "Yv4x4beWwe+vhFwg", "+C+bPEbF5W4v3/H0" };
 
         public static string[] NeedCookie = new[] {"DB","DMM","MOO" };
+
+        public static bool showSecret = true;
 
         #region "热键"
         [DllImport("user32.dll")]

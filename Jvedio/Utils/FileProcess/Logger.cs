@@ -14,10 +14,10 @@ namespace Jvedio
     /// </summary>
     public static class Logger
     {
-        private static object NetWorkLock = new object();
-        private static object DataBaseLock = new object();
-        private static object ExceptionLock = new object();
-        private static object ScanLogLock = new object();
+        private static readonly object NetWorkLock = new object();
+        private static readonly object DataBaseLock = new object();
+        private static readonly object ExceptionLock = new object();
+        private static readonly object ScanLogLock = new object();
 
         public static void LogE(Exception e)
         {
@@ -115,9 +115,9 @@ namespace Jvedio
                 {
                     if (frame.GetFileLineNumber() < 1)
                         continue;
-                    traceString.Append($"    文件: {frame.GetFileName()}");
-                    traceString.Append($" 方法: {frame.GetMethod().Name}");
-                    traceString.Append($" 行数: {frame.GetFileLineNumber()}{Environment.NewLine}");
+                    traceString.Append($"    {Jvedio.Language.Resources.File}: {frame.GetFileName()}");
+                    traceString.Append($" {Jvedio.Language.Resources.Method}: {frame.GetMethod().Name}");
+                    traceString.Append($" {Jvedio.Language.Resources.RowNumber}: {frame.GetFileLineNumber()}{Environment.NewLine}");
                 }
                 return traceString.ToString();
             }

@@ -14,7 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
 using static Jvedio.GlobalVariable;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 using System.Windows.Documents;
 
 namespace Jvedio
@@ -34,7 +34,7 @@ namespace Jvedio
         private void OpenUrl(object sender, RoutedEventArgs e)
         {
             Hyperlink hyperlink = sender as Hyperlink;
-            Process.Start(hyperlink.NavigateUri.ToString());
+            FileHelper.TryOpenUrl(hyperlink.NavigateUri.ToString());
         }
 
         private void BaseDialog_ContentRendered(object sender, EventArgs e)

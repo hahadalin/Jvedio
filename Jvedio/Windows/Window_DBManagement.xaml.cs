@@ -16,7 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using static Jvedio.FileProcess;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 namespace Jvedio
 {
     /// <summary>
@@ -25,7 +25,7 @@ namespace Jvedio
     public partial class Window_DBManagement : Jvedio_BaseWindow
     {
 
-
+        public static string GrowlToken = "DBManageGrowl";
         public CancellationTokenSource cts;
         public CancellationToken ct;
 
@@ -318,7 +318,7 @@ namespace Jvedio
             Button button = (Button)sender;
             button.IsEnabled = false;
             cts = new CancellationTokenSource();
-            cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Cancel, "DBManageGrowl"); });
+            cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Cancel, GrowlToken); });
             ct = cts.Token;
 
             //数据库管理
@@ -334,7 +334,7 @@ namespace Jvedio
                 //清空最近播放和最近创建
                 ClearDateBefore(DateTime.Now);
                 db.Vacuum();
-                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "DBManageGrowl");
+                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, GrowlToken);
             }
 
             if ((bool)cb[1].IsChecked)
@@ -367,7 +367,7 @@ namespace Jvedio
                     }
                 }, ct);
 
-                HandyControl.Controls.Growl.Success($"{ Jvedio.Language.Resources.SuccessDelete} {num}", "DBManageGrowl");
+                HandyControl.Controls.Growl.Success($"{ Jvedio.Language.Resources.SuccessDelete} {num}", GrowlToken);
             }
 
             if ((bool)cb[2].IsChecked)
@@ -402,7 +402,7 @@ namespace Jvedio
                 }, ct);
 
 
-                HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.SuccessDelete} {num}", "DBManageGrowl");
+                HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.SuccessDelete} {num}", GrowlToken);
             }
 
             if ((bool)cb[3].IsChecked)
@@ -429,11 +429,11 @@ namespace Jvedio
                         }
                     }, ct);
 
-                    HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.Message_Success}", "DBManageGrowl");
+                    HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.Message_Success}", GrowlToken);
                 }
                 else
                 {
-                    HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.setnfo}", "DBManageGrowl");
+                    HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.setnfo}", GrowlToken);
                 }
 
             }
@@ -568,7 +568,7 @@ namespace Jvedio
             if (!File.Exists(src) || !File.Exists(dst)) return;
             if (src == dst)
             {
-                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.SamePathError, "DBManageGrowl");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.SamePathError, GrowlToken);
                 return;
             }
             cts_copy = new CancellationTokenSource();
@@ -583,7 +583,7 @@ namespace Jvedio
                             CopyProgressBar.Value = value;
                             if (value == 100)
                             {
-                                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "DBManageGrowl");
+                                HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, GrowlToken);
                                 cts_copy.Dispose();
                                 CopyButton.IsEnabled = true;
                             }
@@ -607,19 +607,13 @@ namespace Jvedio
             catch (ObjectDisposedException ex) { Console.WriteLine(ex.Message); }
         }
 
-        private void Button_Click_5(object sender, RoutedEventArgs e)
+        private void OpenPath(object sender, RoutedEventArgs e)
         {
             Button button  = (Button)sender;
             StackPanel sp = button.Parent as StackPanel;
             ComboBox comboBox = sp.Children.OfType<ComboBox>().First();
             string path =Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataBase" , comboBox.Text + ".sqlite");
-
-            if (File.Exists(path)) { Process.Start("explorer.exe", "/select, \"" + path + "\""); }
-            else
-            {
-                HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NotExists}  {path}", "DBManageGrowl");
-            }
-            
+            FileHelper.TryOpenSelectPath(path, GrowlToken);
         }
     }
 

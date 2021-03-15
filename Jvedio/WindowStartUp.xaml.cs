@@ -371,6 +371,15 @@ namespace Jvedio
                 db.CloseDB();
             }
 
+            if (!File.Exists("Magnets.sqlite"))
+            {
+                MySqlite db = new MySqlite("Magnets");
+                db.CreateTable(DataBase.SQLITETABLE_MAGNETS);
+                db.CloseDB();
+            }
+
+
+
 
         }
 
@@ -672,7 +681,12 @@ namespace Jvedio
             TextBox TextBox = stackPanel.Children[1] as TextBox;
             string name = TextBox.Text;
             string path= AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
-            if (File.Exists(path)) { Process.Start("explorer.exe", "/select, \"" + path + "\""); }
+            FileHelper.TryOpenSelectPath(path);
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Console.WriteLine(e.AddedItems[0].ToString());
         }
     }
 }

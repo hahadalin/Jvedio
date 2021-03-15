@@ -98,6 +98,7 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Width" Value="auto"/>
             <Setter Property="Height" Value="auto"/>
+            <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="MinWidth" Value="400"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -142,7 +143,7 @@
 
                     <StackPanel Orientation="Horizontal" Margin="5 0" >
                         <CheckBox Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked" IsChecked="{Binding HotKey_Enable, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.BossKey}"  VerticalContentAlignment="Center"/>
-                        <hc:TextBox x:Name="hotkeyTextBox" Text="{Binding HotKey_String,Mode=OneWay,Source={x:Static p:Settings.Default}}" IsReadOnly="True" PreviewKeyUp="hotkeyTextBox_PreviewKeyUp" PreviewKeyDown="hotkeyTextBox_PreviewKeyDown" Style="{StaticResource BaseHcTextBox}"  />
+                        <hc:TextBox x:Name="hotkeyTextBox" Text="{Binding HotKey_String,Mode=OneWay,Source={x:Static p:Settings.Default}}" IsReadOnly="True" ContextMenu="{x:Null}" PreviewKeyUp="hotkeyTextBox_PreviewKeyUp" PreviewKeyDown="hotkeyTextBox_PreviewKeyDown" Style="{StaticResource BaseHcTextBox}"  />
                         <Button Style="{StaticResource ButtonStyleFill}" Click="ApplyHotKey" Content="{x:Static lang:Resources.Apply}"   />
                     </StackPanel>
 
@@ -246,7 +247,7 @@
                         <hc:TextBox Style="{StaticResource BaseHcTextBox}"  TextChanged="ScanMinFileSizeTextBox_TextChanged"  Text="{Binding ScanMinFileSize, Mode=OneWay, Source={x:Static p:Settings.Default}}"   ToolTip="[0-2000]"/>
                         <Label  Style="{StaticResource InfoLabel}"   Content="MB"  />
                     </StackPanel>
-                    <StackPanel  Orientation="Horizontal"  Margin="20 5">
+                    <StackPanel  Orientation="Horizontal"  Margin="20 5" Visibility="Collapsed">
                         <Label Style="{StaticResource InfoLabel}" Content="{x:Static lang:Resources.SubsectionSpiltChar}"   />
                         <hc:TextBox   Style="{StaticResource BaseHcTextBox}"  Text="{Binding SubSectionFeature, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
                     </StackPanel>
@@ -302,7 +303,7 @@
                 <StackPanel >
 
 
-                        <Button Margin="20 10" HorizontalAlignment="Left"  Content="{x:Static lang:Resources.Add}" MinWidth="100" Style="{DynamicResource ButtonPrimary}"  Click="NewServer" />
+                        <Button Margin="20 10" HorizontalAlignment="Left"  Content="{x:Static lang:Resources.Add}" MinWidth="100" Style="{DynamicResource FlatButton}"  Click="NewServer" />
 
                     <Border Margin="20 5" Style="{StaticResource BorderTipInfo}" Background="{DynamicResource BackgroundMenu}">
                         <TextBlock Text="{x:Static lang:Resources.Attention_UrlTest}" TextWrapping="Wrap" Foreground="{DynamicResource ForegroundGlobal}"/>
@@ -310,19 +311,19 @@
 
 
 
-                    <DataGrid Visibility="Visible" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Servers}" Background="{DynamicResource BackgroundMenu}" MinHeight="200" MaxHeight="400" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"   PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"    Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
+                    <DataGrid Visibility="Visible" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Servers}" Background="{DynamicResource BackgroundMenu}" MinHeight="200"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"   PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"    Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
  
                         
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Enable}" Width="auto" MinWidth="40"   >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox PreviewMouseUp="CheckBox_PreviewMouseUp" HorizontalAlignment="Center" IsChecked="{Binding IsEnable}" Style="{StaticResource CheckBoxStyle1}"/>
+                                        <CheckBox PreviewMouseUp="SetServerEnable" HorizontalAlignment="Center" IsChecked="{Binding IsEnable,Mode=OneWay}" Style="{StaticResource CheckBoxStyle1}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTextColumn IsReadOnly="True"    Header="{x:Static lang:Resources.UrlName}" Width="auto" MinWidth="100" Binding="{Binding Name}" >
+                            <DataGridTextColumn IsReadOnly="True"    Header="{x:Static lang:Resources.UrlName}" Width="auto" MinWidth="100" Binding="{Binding Name,Mode=OneWay}" >
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="TextAlignment" Value="Left"></Setter>
@@ -333,7 +334,7 @@
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Url}" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <hc:TextBox Text="{Binding Url}" Name="url" HorizontalAlignment="Left" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" Background="Transparent" Focusable="True"  GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"  BorderThickness="0" >
+                                        <hc:TextBox Text="{Binding Url,Mode=TwoWay}" ContextMenu="{StaticResource TextBoxContextMenu}" Name="url" HorizontalAlignment="Left" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" Background="Transparent" Focusable="True"  GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"  BorderThickness="0" >
                                         </hc:TextBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -343,7 +344,7 @@
                             <DataGridTemplateColumn Header="Cookie" Width="150">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <hc:TextBox ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Text="{Binding Cookie,Converter={StaticResource CookieNothingConverter},Mode=TwoWay}" HorizontalAlignment="Left" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" Background="Transparent" Focusable="True" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"  BorderThickness="0" >
+                                        <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Text="{Binding Cookie,Converter={StaticResource CookieNothingConverter},Mode=TwoWay}" HorizontalAlignment="Left" Foreground="{DynamicResource ForegroundGlobal}" TextAlignment="Left" Background="Transparent" Focusable="True" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"  BorderThickness="0" >
                                         </hc:TextBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -382,7 +383,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTextColumn  IsReadOnly="True"   Header="{x:Static lang:Resources.LatestUpdateDate}" Width="auto" Binding="{Binding LastRefreshDate}" />
+                            <DataGridTextColumn  IsReadOnly="True"   Header="{x:Static lang:Resources.LatestUpdateDate}" Width="auto" Binding="{Binding LastRefreshDate,Mode=OneWay}" />
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Options}" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -503,13 +504,16 @@
                         <CheckBox IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.ShowTranslate2}"  />
                         <CheckBox IsChecked="{Binding DetialWindowShowAllMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.DetailViewAll}"  />
                     </StackPanel>
+                    
+                    <!--TODO-->
+                    <!--ContextMenu-->
                     <WrapPanel Visibility="Visible" Orientation="Horizontal" Margin="20 0">
                         <TextBlock Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="0 2 20 0" Text="{x:Static lang:Resources.MoviePerPage}" />
-                        <hc:NumericUpDown  ToolTip="5-200"  Maximum="200" Minimum="4" Increment="10"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"   BorderThickness="0" Value="{Binding DisplayNumber, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"    />
+                        <hc:NumericUpDown   Margin="0 5"   ToolTip="5-200"  Maximum="200" Minimum="4" Increment="10"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"   BorderThickness="0" Value="{Binding DisplayNumber, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"    />
                         <TextBlock   Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="{x:Static lang:Resources.NumherEachFlow}"/>
-                        <hc:NumericUpDown ToolTip="5-50" Maximum="50" Minimum="1" Increment="5"   Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"     BorderThickness="0" Value="{Binding FlowNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"       />
+                        <hc:NumericUpDown   Margin="0 5"  ToolTip="5-50" Maximum="50" Minimum="1" Increment="5"   Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"     BorderThickness="0" Value="{Binding FlowNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Width="100"       />
                         <TextBlock  Foreground="{DynamicResource ForegroundGlobal}" Height="auto" VerticalAlignment="Center" Style="{StaticResource TextBlockTitle}" FontSize="15"  Margin="20 2 20 0" Text="{x:Static lang:Resources.ActorNumberPerPage}"/>
-                        <hc:NumericUpDown ToolTip="5-100" Maximum="100" Minimum="5" Increment="5"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"      BorderThickness="0" Value="{Binding ActorDisplayNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Width="100"       />
+                        <hc:NumericUpDown    Margin="0 5" ToolTip="5-100" Maximum="100" Minimum="5" Increment="5"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"      BorderThickness="0" Value="{Binding ActorDisplayNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Width="100"       />
                     </WrapPanel>
 
 
@@ -627,7 +631,7 @@
                         <TextBlock Text="{x:Static lang:Resources.FFmpegPath}" Style="{StaticResource BaseTextBlock}"   />
                         <hc:TextBox    Style="{StaticResource BaseHcTextBox}"  Text="{Binding FFMPEG_Path, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  />
                         <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.ChooseFFmpeg}"  Click="SetFFMPEGPath" />
-                        <Border MouseLeftButtonUp="Border_MouseLeftButtonUp" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="0" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
+                        <Border MouseLeftButtonUp="CopyFFmpegUrl" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="0" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
                             <Image Source="pack://application:,,,/Resources/Picture/download.png" Margin="5"  Height="20"  />
                         </Border>
 

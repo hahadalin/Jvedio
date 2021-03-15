@@ -1,6 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
 >
+
+
+
+
+
 
 
 
@@ -31,7 +37,7 @@
     </Style>
     
     <!--MenuItem-->
-<Style TargetType="MenuItem">
+    <Style    TargetType="MenuItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
@@ -91,8 +97,19 @@
         </Setter>
     </Style>
 
+    <ContextMenu x:Key="TextBoxContextMenu">
+        <MenuItem Command="ApplicationCommands.Copy" Header="{x:Static lang:Resources.Copy}" />
+        <MenuItem Command="ApplicationCommands.Cut"  Header="{x:Static lang:Resources.Cut}"  />
+        <MenuItem Command="ApplicationCommands.Paste"  Header="{x:Static lang:Resources.Paste}"  />
+        <MenuItem Command="ApplicationCommands.SelectAll"  Header="{x:Static lang:Resources.SelectAllText}"  />
+        <MenuItem Command="ApplicationCommands.Undo"  Header="{x:Static lang:Resources.Undo}"  />
+    </ContextMenu>
 
-    <!--<Style TargetType="ContextMenu" BasedOn="{StaticResource ContextMenu}"/>-->
-    <!--<Style TargetType="MenuItem" BasedOn="{StaticResource ComboBoxStyle1}"/>-->
+    <ContextMenu x:Key="CopyContextMenu">
+        <MenuItem Command="ApplicationCommands.Copy"   Header="{x:Static lang:Resources.Copy}"/>
+        <MenuItem Command="ApplicationCommands.SelectAll"  Header="{x:Static lang:Resources.SelectAllText}" />
+    </ContextMenu>
+
+
 
 </ResourceDictionary>

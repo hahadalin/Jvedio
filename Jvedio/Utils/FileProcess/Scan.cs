@@ -16,6 +16,7 @@ namespace Jvedio
     {
         public static double MinFileSize = Properties.Settings.Default.ScanMinFileSize * 1024 * 1024;//最小文件大小
         public static List<string> FilePattern = new List<string>();//文件格式
+        public static List<string> ImagePattern = new List<string>() { ".jpg",".png",".jpeg",".bmp" };
 
         public static void InitSearchPattern()
         {
@@ -376,7 +377,7 @@ namespace Jvedio
                     id = IsEurope ? Identify.GetEuFanhao(new FileInfo(item).Name) : Identify.GetFanhao(new FileInfo(item).Name);
 
                     if (IsEurope) { if (string.IsNullOrEmpty(id)) vt = 0; else vt = VedioType.欧美; }
-                    else vt = Identify.GetVedioType(id);
+                    else vt = Identify.GetVideoType(id);
 
 
                     if (vt != 0) result1.Add(item);
@@ -459,7 +460,7 @@ namespace Jvedio
                 string subsection = "";
                 FileInfo fileinfo = new FileInfo(item[0]);//获得第一个视频的文件信息
                 id = IsEurope ? Identify.GetEuFanhao(fileinfo.Name) : Identify.GetFanhao(fileinfo.Name);
-                if (IsEurope) { if (string.IsNullOrEmpty(id)) continue; else vt = VedioType.欧美; } else { vt = Identify.GetVedioType(id); }
+                if (IsEurope) { if (string.IsNullOrEmpty(id)) continue; else vt = VedioType.欧美; } else { vt = Identify.GetVideoType(id); }
                 if (string.IsNullOrEmpty(id) | vt == 0) { continue; }
 
                 //文件大小视为所有文件之和
@@ -506,7 +507,7 @@ namespace Jvedio
                 if (createDate == "") createDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                 id = IsEurope ? Identify.GetEuFanhao(fileinfo.Name) : Identify.GetFanhao(fileinfo.Name);
-                if (IsEurope) { if (string.IsNullOrEmpty(id)) continue; else vt = VedioType.欧美; } else { vt = Identify.GetVedioType(id); }
+                if (IsEurope) { if (string.IsNullOrEmpty(id)) continue; else vt = VedioType.欧美; } else { vt = Identify.GetVideoType(id); }
                 Movie movie = new Movie()
                 {
                     filepath = item,

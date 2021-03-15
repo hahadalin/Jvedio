@@ -14,7 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
 using static Jvedio.FileProcess;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 
 namespace Jvedio
 {
@@ -23,7 +23,7 @@ namespace Jvedio
     /// </summary>
     public partial class WindowTools : Jvedio_BaseWindow
     {
-
+        public const string GrowlToken = "ToolsGrowl";
         public CancellationTokenSource cts;
         public CancellationToken ct;
         public bool Running;
@@ -36,7 +36,7 @@ namespace Jvedio
             vieModel = new VieModel_Tools();
             this.DataContext = vieModel;
             cts = new CancellationTokenSource();
-            cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_CancelCurrentTask, "ToolsGrowl"); });
+            cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_CancelCurrentTask, GrowlToken); });
             ct = cts.Token;
             Running = false;
             TabControl.SelectedIndex = Properties.Settings.Default.ToolsIndex;
@@ -50,7 +50,7 @@ namespace Jvedio
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             OpenFileDialog1.Title = $"{Jvedio.Language.Resources.Choose} Access {Jvedio.Language.Resources.File}";
             OpenFileDialog1.FileName = "";
-            OpenFileDialog1.Filter =$"Access {Jvedio.Language.Resources.File}(*.mdb)| *.mdb";
+            OpenFileDialog1.Filter = $"Access {Jvedio.Language.Resources.File}(*.mdb)| *.mdb";
             OpenFileDialog1.FilterIndex = 1;
             OpenFileDialog1.InitialDirectory = Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "mdb") ? AppDomain.CurrentDomain.BaseDirectory + "mdb" : AppDomain.CurrentDomain.BaseDirectory;
             OpenFileDialog1.RestoreDirectory = true;
@@ -97,14 +97,16 @@ namespace Jvedio
             folderBrowserDialog.ShowNewFolderButton = false;
             if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
             {
-                    if (!vieModel.ScanPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.ScanPath.IsIntersectWith(folderBrowserDialog.SelectedPath)) 
-                    { 
-                        vieModel.ScanPath.Add(folderBrowserDialog.SelectedPath); 
-                    } else {
-                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl");
-                    }
+                if (!vieModel.ScanPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.ScanPath.IsIntersectWith(folderBrowserDialog.SelectedPath))
+                {
+                    vieModel.ScanPath.Add(folderBrowserDialog.SelectedPath);
+                }
+                else
+                {
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, GrowlToken);
+                }
 
-                
+
 
             }
 
@@ -134,14 +136,17 @@ namespace Jvedio
         public void AddEuPath(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderBrowserDialog.Description =Jvedio.Language.Resources.ChooseDir;
+            folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
             folderBrowserDialog.ShowNewFolderButton = true;
             if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
             {
-                if (!vieModel.ScanEuPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.ScanEuPath.IsIntersectWith(folderBrowserDialog.SelectedPath)) { 
+                if (!vieModel.ScanEuPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.ScanEuPath.IsIntersectWith(folderBrowserDialog.SelectedPath))
+                {
                     vieModel.ScanEuPath.Add(folderBrowserDialog.SelectedPath);
-                } else {
-                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl");
+                }
+                else
+                {
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, GrowlToken);
                 }
 
             }
@@ -180,12 +185,13 @@ namespace Jvedio
             folderBrowserDialog.SelectedPath = Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "DownLoad\\NFO") ? AppDomain.CurrentDomain.BaseDirectory + "DownLoad\\NFO" : AppDomain.CurrentDomain.BaseDirectory;
             if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
             {
-                if (!vieModel.NFOScanPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.NFOScanPath.IsIntersectWith(folderBrowserDialog.SelectedPath)) 
-                { 
-                    vieModel.NFOScanPath.Add(folderBrowserDialog.SelectedPath); 
-                } else 
-                { 
-                    HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl"); 
+                if (!vieModel.NFOScanPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.NFOScanPath.IsIntersectWith(folderBrowserDialog.SelectedPath))
+                {
+                    vieModel.NFOScanPath.Add(folderBrowserDialog.SelectedPath);
+                }
+                else
+                {
+                    HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.FilePathIntersection, GrowlToken);
                 }
 
             }
@@ -201,12 +207,12 @@ namespace Jvedio
 
             if (Running)
             {
-                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_StopAndTry, "ToolsGrowl");
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_StopAndTry, GrowlToken);
                 return;
             }
 
             cts = new CancellationTokenSource();
-            cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_CancelCurrentTask, "ToolsGrowl"); });
+            cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_CancelCurrentTask, GrowlToken); });
             ct = cts.Token;
 
             int index = TabControl.SelectedIndex;
@@ -258,7 +264,7 @@ namespace Jvedio
                         LoadingStackPanel.Visibility = Visibility.Hidden;
                         if (!cts.IsCancellationRequested)
                         {
-                            HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_ScanNum} {totalnum}  {Jvedio.Language.Resources.ImportNumber} {insertnum}", "ToolsGrowl");
+                            HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Message_ScanNum} {totalnum}  {Jvedio.Language.Resources.ImportNumber} {insertnum}", GrowlToken);
                         }
                     }
                     catch (OperationCanceledException ex)
@@ -279,7 +285,7 @@ namespace Jvedio
                     string AccessPath = AccessPathTextBox.Text;
                     if (!File.Exists(AccessPath))
                     {
-                        HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.Message_FileNotExist} {AccessPath}", "ToolsGrowl");
+                        HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.Message_FileNotExist} {AccessPath}", GrowlToken);
 
                         break;
                     }
@@ -292,7 +298,7 @@ namespace Jvedio
                         LoadingStackPanel.Visibility = Visibility.Hidden;
                         if (!cts.IsCancellationRequested)
                         {
-                            HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "ToolsGrowl");
+                            HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, GrowlToken);
                         }
 
                     }
@@ -304,11 +310,11 @@ namespace Jvedio
                     break;
                 case 2:
                     //NFO
-                    if (NFOTabControl.SelectedIndex==0)
+                    if (NFOTabControl.SelectedIndex == 0)
                     {
-                        if (vieModel.NFOScanPath.Count == 0) { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_CanNotBeNull, "ToolsGrowl"); }
+                        if (vieModel.NFOScanPath.Count == 0) { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_CanNotBeNull, GrowlToken); }
                     }
-                    else { if (!File.Exists(NFOPathTextBox.Text)) { HandyControl.Controls.Growl.Warning($"{Jvedio.Language.Resources.Message_FileNotExist} {NFOPathTextBox.Text}", "ToolsGrowl"); } }
+                    else { if (!File.Exists(NFOPathTextBox.Text)) { HandyControl.Controls.Growl.Warning($"{Jvedio.Language.Resources.Message_FileNotExist} {NFOPathTextBox.Text}", GrowlToken); } }
 
 
                     Running = true;
@@ -316,9 +322,9 @@ namespace Jvedio
                     try
                     {
                         List<string> nfoFiles = new List<string>();
-                        if (NFOTabControl.SelectedIndex == 1) 
-                        { 
-                            nfoFiles.Add(NFOPathTextBox.Text); 
+                        if (NFOTabControl.SelectedIndex == 1)
+                        {
+                            nfoFiles.Add(NFOPathTextBox.Text);
                         }
                         else
                         {
@@ -345,7 +351,7 @@ namespace Jvedio
 
 
                         //记录日志
-                        Logger.LogScanInfo(Environment.NewLine+ $"-----【" + DateTime.Now.ToString() + $"】NFO {Jvedio.Language.Resources.Scan}-----");
+                        Logger.LogScanInfo(Environment.NewLine + $"-----【" + DateTime.Now.ToString() + $"】NFO {Jvedio.Language.Resources.Scan}-----");
                         Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.Scan}{Jvedio.Language.Resources.Number} => {nfoFiles.Count}  ");
 
 
@@ -379,7 +385,7 @@ namespace Jvedio
                         if (!cts.IsCancellationRequested)
                         {
                             Logger.LogScanInfo(Environment.NewLine + $"{Jvedio.Language.Resources.ImportNumber} {total} ");
-                            HandyControl.Controls.Growl.Success(Environment.NewLine + $"{Jvedio.Language.Resources.ImportNumber} {total} ", "ToolsGrowl");
+                            HandyControl.Controls.Growl.Success(Environment.NewLine + $"{Jvedio.Language.Resources.ImportNumber} {total} ", GrowlToken);
                         }
 
                     }
@@ -407,13 +413,13 @@ namespace Jvedio
                             foreach (var item in vieModel.ScanEuPath) if (Directory.Exists(item)) { stringCollection.Add(item); }
                             List<string> filepaths = Scan.ScanPaths(stringCollection, ct);
                             totalnum = filepaths.Count;
-                            insertnum = Scan.InsertWithNfo(filepaths, ct, IsEurope:true);
+                            insertnum = Scan.InsertWithNfo(filepaths, ct, IsEurope: true);
                         });
 
                         LoadingStackPanel.Visibility = Visibility.Hidden;
                         if (!cts.IsCancellationRequested)
                         {
-                            HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Scan}{Jvedio.Language.Resources.Number} {totalnum}  {Jvedio.Language.Resources.ImportNumber} {insertnum} ", "ToolsGrowl");
+                            HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Scan}{Jvedio.Language.Resources.Number} {totalnum}  {Jvedio.Language.Resources.ImportNumber} {insertnum} ", GrowlToken);
                         }
                     }
                     finally
@@ -444,7 +450,7 @@ namespace Jvedio
                         catch { CanScan = false; }
                     });
 
-                    if (!CanScan) { LoadingStackPanel.Visibility = Visibility.Hidden; HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.InsufficientPermissions, "ToolsGrowl"); break; }
+                    if (!CanScan) { LoadingStackPanel.Visibility = Visibility.Hidden; HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.InsufficientPermissions, GrowlToken); break; }
 
 
                     bool IsEurope = !(bool)ScanTypeRadioButton.IsChecked;
@@ -459,11 +465,11 @@ namespace Jvedio
                             stringCollection.Add(path);
                             List<string> filepaths = Scan.ScanPaths(stringCollection, ct);
                             totalnum = filepaths.Count;
-                            insertnum = Scan.InsertWithNfo(filepaths, ct, IsEurope:IsEurope);
+                            insertnum = Scan.InsertWithNfo(filepaths, ct, IsEurope: IsEurope);
                         });
 
                         LoadingStackPanel.Visibility = Visibility.Hidden;
-                        if (!cts.IsCancellationRequested) { HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Scan}{Jvedio.Language.Resources.Number} {totalnum}  {Jvedio.Language.Resources.ImportNumber} {insertnum} ", "ToolsGrowl"); }
+                        if (!cts.IsCancellationRequested) { HandyControl.Controls.Growl.Info($"{Jvedio.Language.Resources.Scan}{Jvedio.Language.Resources.Number} {totalnum}  {Jvedio.Language.Resources.ImportNumber} {insertnum} ", GrowlToken); }
                     }
                     finally
                     {
@@ -511,49 +517,24 @@ namespace Jvedio
 
         public void ShowRunInfo(object sender, RoutedEventArgs e)
         {
-            try
+            int index = TabControl.SelectedIndex;
+            string filepath = "";
+            if (index == 1)
             {
-                int index = TabControl.SelectedIndex;
-                string filepath = "";
-                switch (index)
-                {
-                    case 0:
-                        filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotExists, "ToolsGrowl");
-                        break;
-
-                    case 1:
-                        filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\DataBase\\{DateTime.Now.ToString("yyyy -MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotExists, "ToolsGrowl");
-                        break;
-                    case 2:
-                        filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotExists, "ToolsGrowl");
-                        break;
-
-                    case 3:
-                        filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotExists, "ToolsGrowl");
-                        break;
-
-                    case 4:
-                        HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.NoLog, "ToolsGrowl");
-                        break;
-
-                    case 5:
-                        filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
-                        if (File.Exists(filepath)) Process.Start(filepath); else HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotExists, "ToolsGrowl");
-                        break;
-
-                    default:
-
-                        break;
-                }
-
-
+                filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\DataBase\\{DateTime.Now.ToString("yyyy -MM-dd")}.log";
+            }
+            else if (index == 4)
+            {
 
             }
-            catch { }
+            else
+            {
+                filepath = AppDomain.CurrentDomain.BaseDirectory + $"Log\\ScanLog\\{DateTime.Now.ToString("yyyy-MM-dd")}.log";
+            }
+            if (filepath == "")
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.NoLog, GrowlToken);
+            else
+                FileHelper.TryOpenSelectPath(filepath, GrowlToken);
         }
 
         public void DelNFOPath(object sender, RoutedEventArgs e)
@@ -635,8 +616,8 @@ namespace Jvedio
 
         private void DownloadMany(object sender, RoutedEventArgs e)
         {
-            if (Running) { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.OtherTaskIsRunning, "ToolsGrowl"); return; }
-            if (IsDownLoading()) { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_WaitForDownload, "ToolsGrowl"); return; }
+            if (Running) { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.OtherTaskIsRunning, GrowlToken); return; }
+            if (IsDownLoading()) { HandyControl.Controls.Growl.Warning(Jvedio.Language.Resources.Message_WaitForDownload, GrowlToken); return; }
 
 
 
@@ -656,10 +637,10 @@ namespace Jvedio
 
         private void CancelRun(object sender, RoutedEventArgs e)
         {
-           if(!cts.IsCancellationRequested) cts.Cancel();
+            if (!cts.IsCancellationRequested) cts.Cancel();
             LoadingStackPanel.Visibility = Visibility.Hidden;
 
-            HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Cancel, "ToolsGrowl");
+            HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Cancel, GrowlToken);
             Running = false;
         }
 
@@ -676,14 +657,14 @@ namespace Jvedio
             {
                 if (!IsFile(dragdropFile))
                 {
-                        if (!vieModel.ScanPath.Contains(dragdropFile) && !vieModel.ScanPath.IsIntersectWith(dragdropFile)) 
-                        { 
-                            vieModel.ScanPath.Add(dragdropFile);
-                        }
-                        else
-                        {
-                            HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl");
-                        }
+                    if (!vieModel.ScanPath.Contains(dragdropFile) && !vieModel.ScanPath.IsIntersectWith(dragdropFile))
+                    {
+                        vieModel.ScanPath.Add(dragdropFile);
+                    }
+                    else
+                    {
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, GrowlToken);
+                    }
                 }
             }
         }
@@ -724,13 +705,13 @@ namespace Jvedio
             {
                 if (!IsFile(dragdropFile))
                 {
-                    if (!vieModel.NFOScanPath.Contains(dragdropFile) && !vieModel.NFOScanPath.IsIntersectWith(dragdropFile)) 
-                    { 
+                    if (!vieModel.NFOScanPath.Contains(dragdropFile) && !vieModel.NFOScanPath.IsIntersectWith(dragdropFile))
+                    {
                         vieModel.NFOScanPath.Add(dragdropFile);
                     }
                     else
                     {
-                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, GrowlToken);
                     }
                 }
             }
@@ -778,7 +759,7 @@ namespace Jvedio
                     }
                     else
                     {
-                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, "ToolsGrowl");
+                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.FilePathIntersection, GrowlToken);
                     }
                 }
             }

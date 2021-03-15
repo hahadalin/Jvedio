@@ -14,6 +14,9 @@ using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
+    /// <summary>
+    /// SqliteHelper
+    /// </summary>
     public static class DataBase
     {
         public static string SQLITETABLE_MOVIE = "create table if not exists movie (id VARCHAR(50) PRIMARY KEY , title TEXT , filesize DOUBLE DEFAULT 0 , filepath TEXT , subsection TEXT , vediotype INT , scandate VARCHAR(30) , releasedate VARCHAR(10) DEFAULT '1900-01-01', visits INT  DEFAULT 0, director VARCHAR(50) , genre TEXT , tag TEXT , actor TEXT , actorid TEXT ,studio VARCHAR(50) , rating FLOAT  DEFAULT 0, chinesetitle TEXT , favorites INT  DEFAULT 0, label TEXT , plot TEXT , outline TEXT , year INT  DEFAULT 1900, runtime INT  DEFAULT 0, country VARCHAR(50) , countrycode INT DEFAULT 0 ,otherinfo TEXT, sourceurl TEXT, source VARCHAR(10),actressimageurl TEXT,smallimageurl TEXT,bigimageurl TEXT,extraimageurl TEXT)";
@@ -24,6 +27,9 @@ namespace Jvedio
         public static string SQLITETABLE_BAIDUAI = "create table if not exists baidu (id VARCHAR(50) PRIMARY KEY , age INT DEFAULT 0 , beauty FLOAT DEFAULT 0 , expression VARCHAR(20), face_shape VARCHAR(20), gender VARCHAR(20), glasses VARCHAR(20), race VARCHAR(20), emotion VARCHAR(20), mask VARCHAR(20))";
         public static string SQLITETABLE_BAIDUTRANSLATE = "create table if not exists baidu (id VARCHAR(50) PRIMARY KEY , title TEXT , translate_title TEXT, plot TEXT, translate_plot TEXT)";
         public static string SQLITETABLE_YOUDAO = "create table if not exists youdao (id VARCHAR(50) PRIMARY KEY , title TEXT , translate_title TEXT, plot TEXT, translate_plot TEXT)";
+        public static string SQLITETABLE_MAGNETS = "create table if not exists magnets (link VARCHAR(60) PRIMARY KEY, id VARCHAR(50) , title TEXT , size  DOUBLE DEFAULT 0 , releasedate VARCHAR(10) DEFAULT '1900-01-01', tag TEXT)";
+
+
         public static string SqlitePath { get; set; }
 
 
@@ -33,11 +39,7 @@ namespace Jvedio
             SqlitePath = Properties.Settings.Default.DataBasePath;
         }
 
-        public static string Unicode2String(string unicode)
-        {
-            return new Regex(@"\\u([0-9A-F]{4})", RegexOptions.IgnoreCase | RegexOptions.Compiled).Replace(
-                         unicode, x => string.Empty + Convert.ToChar(Convert.ToUInt16(x.Result("$1"), 16)));
-        }
+
 
 
         public static void CreateTable(string sqltext)
@@ -61,7 +63,15 @@ namespace Jvedio
         }
 
 
-        public static void CopyDatabaseInfo(string src, string dst, CancellationToken ct,Action<int> callback=null,bool skipnulltitle=true)
+        /// <summary>
+        /// 数据库之间复制数据
+        /// </summary>
+        /// <param name="src">原数据库</param>
+        /// <param name="dst">目标数据库</param>
+        /// <param name="ct"></param>
+        /// <param name="callback"></param>
+        /// <param name="skipnulltitle"></param>
+        public static void CopyDatabaseInfo(string src, string dst, CancellationToken ct, Action<int> callback = null, bool skipnulltitle = true)
         {
             DataTable dataTable = new DataTable();
             using (SQLiteConnection conn = new SQLiteConnection("data source=" + src))
@@ -90,8 +100,8 @@ namespace Jvedio
                     cmd.Connection = conn;
                     conn.Open();
 
-                    double idx=0;
-                    double total = dataTable.Rows.Count>0? dataTable.Rows.Count:1;
+                    double idx = 0;
+                    double total = dataTable.Rows.Count > 0 ? dataTable.Rows.Count : 1;
                     foreach (DataRow row in dataTable.Rows)
                     {
                         idx++;
@@ -99,7 +109,7 @@ namespace Jvedio
                         Console.WriteLine(progress);
                         callback?.Invoke(progress);
 
-                       
+
 
                         ct.ThrowIfCancellationRequested();
                         EnumerableRowCollection<DataRow> dataRows = dataTable.AsEnumerable().Where(myRow => myRow.Field<string>("id") == row["id"].ToString());
@@ -160,7 +170,7 @@ namespace Jvedio
 
         public static double SelectCountBySql(string sql)
         {
-            using (MySqlite sqlite = new MySqlite(SqlitePath,true))
+            using (MySqlite sqlite = new MySqlite(SqlitePath, true))
             {
                 return sqlite.SelectCountByTable("movie", "id", sql);
             }
@@ -172,8 +182,8 @@ namespace Jvedio
 
         public static string GenerateSort()
         {
-            Sort SortType = Sort.识别码;
-            Enum.TryParse(Properties.Settings.Default.SortType, out SortType);
+            int.TryParse(Properties.Settings.Default.SortType, out int st);
+            Sort SortType = (Sort)st;
             bool SortDescending = Properties.Settings.Default.SortDescending;
             return $"ORDER BY {SortType.ToSqlString()} {(SortDescending ? "DESC" : "ASC")}";
         }
@@ -216,7 +226,6 @@ namespace Jvedio
 
                     List<Movie> movies = new List<Movie>();
                     movies.AddRange(result);
-                    //FilterMovie(movies, ref result);
                     return result;
                 }
             }
@@ -227,7 +236,6 @@ namespace Jvedio
         public static List<string> SelectAllID()
         {
             Init();
-            string order = GenerateSort();
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + SqlitePath))
             {
                 cn.Open();
@@ -268,7 +276,6 @@ namespace Jvedio
                     else
                         cmd.CommandText = $"SELECT {field} FROM movie where vediotype={vediotype}";
 
-                    //Console.WriteLine(cmd.CommandText);
 
                     char[] splitChar = { ' ' };
                     if (splitChar != null) splitChar = (char[])splitchar;
@@ -308,7 +315,7 @@ namespace Jvedio
         /// <param name="vediotype"></param>
         /// <returns></returns>
 
-        public static List<string> SelectLabelByVedioType(VedioType vediotype,string type="label")
+        public static List<string> SelectLabelByVedioType(VedioType vediotype, string type = "label")
         {
             Dictionary<string, int> dicresult = SelectLabelLikeByVedioType(type, (int)vediotype);
             //降序
@@ -337,7 +344,7 @@ namespace Jvedio
             {
                 if (vediotype == VedioType.欧美)
                 {
-                    if (GenreEurope[0].IndexOf(item.Key) > 0) { newgenre.theme.Add(item.Key + "( " + item.Value + " )");continue; }
+                    if (GenreEurope[0].IndexOf(item.Key) > 0) { newgenre.theme.Add(item.Key + "( " + item.Value + " )"); continue; }
                     if (GenreEurope[1].IndexOf(item.Key) > 0) { newgenre.role.Add(item.Key + "( " + item.Value + " )"); continue; }
                     if (GenreEurope[2].IndexOf(item.Key) > 0) { newgenre.clothing.Add(item.Key + "( " + item.Value + " )"); continue; }
                     if (GenreEurope[3].IndexOf(item.Key) > 0) { newgenre.body.Add(item.Key + "( " + item.Value + " )"); continue; }
@@ -413,45 +420,6 @@ namespace Jvedio
         }
 
 
-        public static DetailMovie GetDetailMovieFromSQLiteDataReader(SQLiteDataReader sr)
-        {
-            DetailMovie detailMovie = new DetailMovie()
-            {
-                id = sr["id"].ToString(),
-                title = sr["title"].ToString(),
-                filesize = double.Parse(sr["filesize"].ToString()),
-                filepath = sr["filepath"].ToString(),
-                subsection = sr["subsection"].ToString(),
-                vediotype = int.Parse(sr["vediotype"].ToString()),
-                scandate = sr["scandate"].ToString(),
-                releasedate = sr["releasedate"].ToString(),
-                visits = int.Parse(sr["visits"].ToString()),
-                director = sr["director"].ToString(),
-                genre = sr["genre"].ToString(),
-                tag = sr["tag"].ToString(),
-                actor = sr["actor"].ToString(),
-                actorid = sr["actorid"].ToString(),
-                studio = sr["studio"].ToString(),
-                rating = float.Parse(sr["rating"].ToString()),
-                chinesetitle = sr["chinesetitle"].ToString(),
-                favorites = int.Parse(sr["favorites"].ToString()),
-                label = sr["label"].ToString(),
-                plot = sr["plot"].ToString(),
-                outline = sr["outline"].ToString(),
-                year = int.Parse(sr["year"].ToString()),
-                runtime = int.Parse(sr["runtime"].ToString()),
-                country = sr["country"].ToString(),
-                countrycode = int.Parse(sr["countrycode"].ToString()),
-                otherinfo = sr["otherinfo"].ToString(),
-                actressimageurl = sr["actressimageurl"].ToString(),
-                smallimageurl = sr["smallimageurl"].ToString(),
-                bigimageurl = sr["bigimageurl"].ToString(),
-                extraimageurl = sr["extraimageurl"].ToString(),
-                sourceurl = sr["sourceurl"].ToString(),
-                source = sr["source"].ToString()
-            };
-            return detailMovie;
-        }
 
 
         /// <summary>
@@ -461,8 +429,7 @@ namespace Jvedio
         /// <returns></returns>
         public static List<Movie> SelectMoviesBySql(string sqltext, string dbName = "")
         {
-            if (dbName == "")
-                Init();
+            if (dbName == "") Init();
             else
                 SqlitePath = dbName.EndsWith(".sqlite") ? dbName : $"{dbName}.sqlite";
 
@@ -473,7 +440,6 @@ namespace Jvedio
             }
             List<Movie> movies = new List<Movie>();
             movies.AddRange(result);
-            //FilterMovie(movies, ref result);
             return result;
         }
 
@@ -549,7 +515,7 @@ namespace Jvedio
         /// <param name="actress"></param>
         /// <returns></returns>
 
-        public static Actress SelectInfoFromActress(Actress actress)
+        public static Actress SelectInfoByActress(Actress actress)
         {
             if (string.IsNullOrEmpty(actress.name)) { return actress; }
             Init();
@@ -595,8 +561,9 @@ namespace Jvedio
                             }
                         }
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
+                        Console.WriteLine(e.Message);
                         actress.like = 0;
                     }
                     return actress;
@@ -611,7 +578,7 @@ namespace Jvedio
         public static List<string> SelectActressNameByLove(int islove)
         {
             Init();
-            using(MySqlite mySqlite=new MySqlite(SqlitePath, true))
+            using (MySqlite mySqlite = new MySqlite(SqlitePath, true))
             {
                 return mySqlite.GetInfosBySql($"select * from actresslove where islove={islove}");
             }
@@ -626,7 +593,7 @@ namespace Jvedio
         public static bool IsTableExist(string table)
         {
             Init();
-            using (MySqlite mySqlite=new MySqlite(SqlitePath, true))
+            using (MySqlite mySqlite = new MySqlite(SqlitePath, true))
             {
                 return mySqlite.IsTableExist(table);
             }
@@ -647,6 +614,18 @@ namespace Jvedio
             {
                 return mySqlite.SelectByField(info, table, id);
             }
+        }
+
+
+        public static List<Magnet> SelectMagnetsByID(string ID)
+        {
+
+            List<Magnet> result = new List<Magnet>();
+            using (MySqlite mySqlite = new MySqlite("Magnets"))
+            {
+                result = mySqlite.SelectMagnetsBySql($"select * from magnets where id='{ID}'");
+            }
+            return result;
         }
 
 
@@ -683,7 +662,7 @@ namespace Jvedio
         public static void UpdateMovieByID(string id, string content, object value, string savetype = "Int")
         {
             Init();
-            value = value.ToString().Replace("%", "").Replace("'", "");
+            value = value.ToString().ToProperSql(false);
             using (SQLiteConnection cn = new SQLiteConnection("data source=" + SqlitePath))
             {
                 cn.Open();
@@ -691,10 +670,10 @@ namespace Jvedio
                 {
                     cmd.Connection = cn;
                     string sqltext;
-                    if (savetype == "Int") 
-                        sqltext = $"UPDATE movie SET {content} = {value} WHERE id = '{id}'"; 
-                    else 
-                        sqltext = $"UPDATE movie SET {content} = '{value}' WHERE id = '{id}'"; 
+                    if (savetype == "Int")
+                        sqltext = $"UPDATE movie SET {content} = {value} WHERE id = '{id}'";
+                    else
+                        sqltext = $"UPDATE movie SET {content} = '{value}' WHERE id = '{id}'";
                     cmd.CommandText = sqltext;
                     cmd.ExecuteNonQuery();
                 }
@@ -751,9 +730,34 @@ namespace Jvedio
         public static Movie DicToMovie(Dictionary<string, string> info)
         {
 
-            Movie movie= new Movie();
-            movie.id = info["id"];
-            if (info.ContainsKey("vediotype")) movie.vediotype = int.Parse(info["vediotype"]);
+            Movie movie = new Movie(info["id"]);
+            if (info.ContainsKey("vediotype"))
+            {
+                int vt = 1;
+                int.TryParse(info["vediotype"],out  vt);
+                movie.vediotype = vt;
+            }
+
+            if (info.ContainsKey("year"))
+            {
+                int year = 1970;
+                int.TryParse(info["year"], out  year);
+                movie.year = year;
+            }
+
+            if (info.ContainsKey("rating"))
+            {
+                float.TryParse(info["rating"], out float rating);
+                movie.rating = rating;
+            }
+
+            if (info.ContainsKey("runtime"))
+            {
+                int.TryParse(info["runtime"], out int runtime);
+                movie.runtime = runtime;
+            }
+
+
             movie.title = info.ContainsKey("title") ? info["title"] : "";
             movie.plot = info.ContainsKey("plot") ? info["plot"] : "";
             movie.outline = info.ContainsKey("outline") ? info["outline"] : "";
@@ -764,15 +768,12 @@ namespace Jvedio
             movie.actor = info.ContainsKey("actor") ? info["actor"] : "";
             movie.actorid = info.ContainsKey("actorid") ? info["actorid"] : "";
             movie.studio = info.ContainsKey("studio") ? info["studio"] : "";
-            movie.year = int.Parse(info.ContainsKey("year") ? info["year"] : "1970");
             movie.sourceurl = info.ContainsKey("sourceurl") ? info["sourceurl"] : "";
             movie.source = info.ContainsKey("source") ? info["source"] : "";
             movie.bigimageurl = info.ContainsKey("bigimageurl") ? info["bigimageurl"] : "";
             movie.smallimageurl = info.ContainsKey("smallimageurl") ? info["smallimageurl"] : "";
             movie.extraimageurl = info.ContainsKey("extraimageurl") ? info["extraimageurl"] : "";
             movie.actressimageurl = info.ContainsKey("actressimageurl") ? info["actressimageurl"] : "";
-            movie.rating = info.ContainsKey("rating") ? float.Parse( info["rating"]) : 0;
-            movie.runtime = info.ContainsKey("runtime") ? int.Parse(info["runtime"]) : 0;
             return movie;
 
         }
@@ -784,14 +785,14 @@ namespace Jvedio
         /// <param name="webSite"></param>
         public static void UpdateInfoFromNet(Dictionary<string, string> info)
         {
-            if (info == null) return; 
+            if (info == null) return;
             if (!info.ContainsKey("id")) return;
-            if (info.ContainsKey("id") && string.IsNullOrEmpty(info["id"]))  return; 
+            if (info.ContainsKey("id") && string.IsNullOrEmpty(info["id"])) return;
 
             Init();
-            using(MySqlite mySqlite=new MySqlite(SqlitePath, true))
+            using (MySqlite mySqlite = new MySqlite(SqlitePath, true))
             {
-                mySqlite.InsertCrawledMovie(DicToMovie(info),"movie");
+                mySqlite.InsertCrawledMovie(DicToMovie(info), "movie");
             }
 
         }
@@ -811,7 +812,7 @@ namespace Jvedio
             Init();
             using (MySqlite mySqlite = new MySqlite(SqlitePath, true))
             {
-                mySqlite.InsertFullMovie(movie,"movie");
+                mySqlite.InsertFullMovie(movie, "movie");
             }
         }
 
@@ -822,17 +823,38 @@ namespace Jvedio
         public static void InsertScanMovie(Movie movie)
         {
             Init();
-            using(MySqlite mySqlite=new MySqlite(SqlitePath, true))
+            using (MySqlite mySqlite = new MySqlite(SqlitePath, true))
             {
                 mySqlite.InsertScanedMovie(movie);
             }
         }
 
+        public static void InsertSearchMovie(Movie movie)
+        {
+            Init();
+            using (MySqlite mySqlite = new MySqlite(SqlitePath, true))
+            {
+                mySqlite.InsertSearchMovie(movie, "movie");
+            }
+        }
+
         public static void SaveMovieCodeByID(string id, string table, string code)
         {
-            using (MySqlite mySqlite=new MySqlite(SqlitePath, true))
+            using (MySqlite mySqlite = new MySqlite(SqlitePath, true))
             {
                 mySqlite.InsertByField(table, "code", code, id);
+            }
+        }
+
+        public static void SaveMagnets(List<Magnet> magnets)
+        {
+            foreach (var item in magnets)
+            {
+                using (MySqlite mySqlite = new MySqlite("Magnets"))
+                {
+                    mySqlite.InsertMagnet(item);
+                }
+
             }
         }
 
@@ -887,7 +909,7 @@ namespace Jvedio
                     cmd.Parameters.Add("sourceurl", DbType.String).Value = actress.sourceurl;
                     cmd.Parameters.Add("source", DbType.String).Value = actress.source;
                     cmd.Parameters.Add("imageurl", DbType.String).Value = actress.imageurl;
-                    var success=cmd.ExecuteNonQuery();
+                    var success = cmd.ExecuteNonQuery();
                     Console.WriteLine(success);
                 }
             }
@@ -908,186 +930,187 @@ namespace Jvedio
         public async static Task<List<List<string>>> GetAllFilter()
         {
             Init();
-            return await Task.Run(() => {
-                using (SQLiteConnection cn = new SQLiteConnection("data source=" + SqlitePath))
+            return await Task.Run(() =>
             {
-                cn.Open();
-                using (SQLiteCommand cmd = new SQLiteCommand())
+                using (SQLiteConnection cn = new SQLiteConnection("data source=" + SqlitePath))
                 {
-                    cmd.Connection = cn;
-                    //年份
-                    List<string> Year = new List<string>();
-                    cmd.CommandText = "SELECT releasedate FROM movie";
-                    string year = "1900";
-                    using (SQLiteDataReader sr = cmd.ExecuteReader())
+                    cn.Open();
+                    using (SQLiteCommand cmd = new SQLiteCommand())
                     {
-                        while (sr.Read())
+                        cmd.Connection = cn;
+                        //年份
+                        List<string> Year = new List<string>();
+                        cmd.CommandText = "SELECT releasedate FROM movie";
+                        string year = "1900";
+                        using (SQLiteDataReader sr = cmd.ExecuteReader())
                         {
-                            string date = sr[0].ToString();
-                            if (!string.IsNullOrEmpty(date) && date.IndexOf(" ") < 0)
+                            while (sr.Read())
                             {
-                                try { year = Regex.Match(date, @"\d{4}").Value; }
-                                catch { }
-                                if (year == "0000") year = "1900";
-                                if (!Year.Contains(year)) Year.Add(year);
+                                string date = sr[0].ToString();
+                                if (!string.IsNullOrEmpty(date) && date.IndexOf(" ") < 0)
+                                {
+                                    try { year = Regex.Match(date, @"\d{4}").Value; }
+                                    catch { }
+                                    if (year == "0000") year = "1900";
+                                    if (!Year.Contains(year)) Year.Add(year);
+                                }
                             }
                         }
-                    }
-                    Year.Sort();
+                        Year.Sort();
 
-                    //类别
-                    List<string> Genre = new List<string>();
-                    cmd.CommandText = "SELECT genre FROM movie";
-                    using(SQLiteDataReader sr = cmd.ExecuteReader())
-                    {
-                        while (sr.Read())
+                        //类别
+                        List<string> Genre = new List<string>();
+                        cmd.CommandText = "SELECT genre FROM movie";
+                        using (SQLiteDataReader sr = cmd.ExecuteReader())
                         {
-                            sr[0].ToString().Split(' ').ToList().ForEach(arg =>
+                            while (sr.Read())
                             {
-                                if (arg.Length > 0 & arg.IndexOf(' ') < 0)
-                                    if (!Genre.Contains(arg)) Genre.Add(arg);
-                            });
-                        }
-                    }
-                    Genre.Sort();
-
-                    //演员
-                    List<string> Actor = new List<string>();
-                    cmd.CommandText = "SELECT actor,vediotype FROM movie";
-                    using (SQLiteDataReader sr = cmd.ExecuteReader())
-                    {
-                        while (sr.Read())
-                        {
-                            int.TryParse(sr[1].ToString(), out int vt);
-                            sr[0].ToString().Split(actorSplitDict[vt]).ToList().ForEach(arg =>
-                            {
-                                if (arg.Length > 0 & arg.IndexOf(' ') < 0)
-                                    if (!Actor.Contains(arg)) Actor.Add(arg);
-                            });
-                        }
-                    }
-                    Actor.Sort();
-
-                    //标签
-                    List<string> Label = new List<string>();
-                    cmd.CommandText = "SELECT label FROM movie";
-                    using (SQLiteDataReader sr = cmd.ExecuteReader())
-                    {
-                        while (sr.Read())
-                        {
-                            sr[0].ToString().Split(' ').ToList().ForEach(arg =>
-                            {
-                                if (arg.Length > 0 & arg.IndexOf(' ') < 0)
-                                    if (!Label.Contains(arg)) Label.Add(arg);
-                            });
-                        }
-                    }
-                    Label.Sort();
-
-                    //时长
-                    //45 90 120
-                    List<string> Runtime = new List<string>();
-                    cmd.CommandText = "SELECT runtime FROM movie";
-                    using (SQLiteDataReader sr = cmd.ExecuteReader())
-                    {
-                        while (sr.Read())
-                        {
-                            if (Runtime.Count >= 4) break;
-                            int.TryParse(sr[0].ToString(), out int runtime);
-                            if (runtime <= 45 && !Runtime.Contains("0-45"))
-                            {
-                                Runtime.Add("0-45");
-                            }
-                                
-                            else if ((runtime >= 45 & runtime <= 90) && !Runtime.Contains("45-90"))
-                            {
-                                Runtime.Add("45-90");
-                            }
-
-                            else if ((runtime >= 90 & runtime <= 120) && !Runtime.Contains("90-120"))
-                            {
-                                Runtime.Add("90-120");
-                            }
-                            else if (runtime >= 120 && !Runtime.Contains("120-999"))
-                            {
-                               Runtime.Add("120-999");
+                                sr[0].ToString().Split(' ').ToList().ForEach(arg =>
+                                {
+                                    if (arg.Length > 0 & arg.IndexOf(' ') < 0)
+                                        if (!Genre.Contains(arg)) Genre.Add(arg);
+                                });
                             }
                         }
-                    }
+                        Genre.Sort();
 
-                    Runtime.Sort(new RatingComparer());
-
-                    //文件大小
-                    //1 2 3 
-                    List<string> FileSize = new List<string>();
-                    cmd.CommandText = "SELECT filesize FROM movie";
-                    using (SQLiteDataReader sr = cmd.ExecuteReader())
-                    {
-                        while (sr.Read())
+                        //演员
+                        List<string> Actor = new List<string>();
+                        cmd.CommandText = "SELECT actor,vediotype FROM movie";
+                        using (SQLiteDataReader sr = cmd.ExecuteReader())
                         {
-                            if (FileSize.Count >= 4) break;
-                            double.TryParse(sr[0].ToString(), out double filesize);
-                            filesize /= 1073741824D;// B to GB
-                            if (filesize <= 1 && !FileSize.Contains("0-1"))
+                            while (sr.Read())
                             {
-                               FileSize.Add("0-1");
-                            }
-                            else if ((filesize >= 1 & filesize <= 2) && !FileSize.Contains("1-2"))
-                            {
-                                FileSize.Add("1-2");
-                            }
-                            else if ((filesize >= 2 & filesize <= 3) && !FileSize.Contains("2-3"))
-                            {
-                              FileSize.Add("2-3");
-                            }
-                            else if (filesize >= 3 && !FileSize.Contains("3-999"))
-                            {
-                                FileSize.Add("3-999");
+                                int.TryParse(sr[1].ToString(), out int vt);
+                                sr[0].ToString().Split(actorSplitDict[vt]).ToList().ForEach(arg =>
+                                {
+                                    if (arg.Length > 0 & arg.IndexOf(' ') < 0)
+                                        if (!Actor.Contains(arg)) Actor.Add(arg);
+                                });
                             }
                         }
-                    }
+                        Actor.Sort();
 
-                    FileSize.Sort(new RatingComparer());
-
-
-                    //评分
-                    //20 40 60 80 
-                    List<string> Rating = new List<string>();
-                    cmd.CommandText = "SELECT rating FROM movie";
-                    using (SQLiteDataReader sr = cmd.ExecuteReader())
-                    {
-                        while (sr.Read())
+                        //标签
+                        List<string> Label = new List<string>();
+                        cmd.CommandText = "SELECT label FROM movie";
+                        using (SQLiteDataReader sr = cmd.ExecuteReader())
                         {
-                            if (Rating.Count >= 4) break;
-                            double.TryParse(sr[0].ToString(), out double rating);
-                            if (rating <= 20 && !Rating.Contains("0-20"))
+                            while (sr.Read())
                             {
-                                Rating.Add("0-20");
-                            }
-                            else if ((rating >= 20 & rating <= 40) && !Rating.Contains("20-40"))
-                            {
-                                 Rating.Add("20-40");
-                            }
-                            else if ((rating >= 40 & rating <= 60) && !Rating.Contains("40-60"))
-                            {
-                                 Rating.Add("40-60");
-                            }
-
-                            else if ((rating >= 60 & rating <= 80) && !Rating.Contains("60-80"))
-                            {
-                                Rating.Add("60-80");
-                            }
-
-                            else if (rating >= 80 && !Rating.Contains("80-100"))
-                            {
-                                Rating.Add("80-100");
+                                sr[0].ToString().Split(' ').ToList().ForEach(arg =>
+                                {
+                                    if (arg.Length > 0 & arg.IndexOf(' ') < 0)
+                                        if (!Label.Contains(arg)) Label.Add(arg);
+                                });
                             }
                         }
-                    }
-                        
-                    Rating.Sort(new RatingComparer());
+                        Label.Sort();
 
-                    List<List<string>> result = new List<List<string>>
+                        //时长
+                        //45 90 120
+                        List<string> Runtime = new List<string>();
+                        cmd.CommandText = "SELECT runtime FROM movie";
+                        using (SQLiteDataReader sr = cmd.ExecuteReader())
+                        {
+                            while (sr.Read())
+                            {
+                                if (Runtime.Count >= 4) break;
+                                int.TryParse(sr[0].ToString(), out int runtime);
+                                if (runtime <= 45 && !Runtime.Contains("0-45"))
+                                {
+                                    Runtime.Add("0-45");
+                                }
+
+                                else if ((runtime >= 45 & runtime <= 90) && !Runtime.Contains("45-90"))
+                                {
+                                    Runtime.Add("45-90");
+                                }
+
+                                else if ((runtime >= 90 & runtime <= 120) && !Runtime.Contains("90-120"))
+                                {
+                                    Runtime.Add("90-120");
+                                }
+                                else if (runtime >= 120 && !Runtime.Contains("120-999"))
+                                {
+                                    Runtime.Add("120-999");
+                                }
+                            }
+                        }
+
+                        Runtime.Sort(new RatingComparer());
+
+                        //文件大小
+                        //1 2 3 
+                        List<string> FileSize = new List<string>();
+                        cmd.CommandText = "SELECT filesize FROM movie";
+                        using (SQLiteDataReader sr = cmd.ExecuteReader())
+                        {
+                            while (sr.Read())
+                            {
+                                if (FileSize.Count >= 4) break;
+                                double.TryParse(sr[0].ToString(), out double filesize);
+                                filesize /= 1073741824D;// B to GB
+                                if (filesize <= 1 && !FileSize.Contains("0-1"))
+                                {
+                                    FileSize.Add("0-1");
+                                }
+                                else if ((filesize >= 1 & filesize <= 2) && !FileSize.Contains("1-2"))
+                                {
+                                    FileSize.Add("1-2");
+                                }
+                                else if ((filesize >= 2 & filesize <= 3) && !FileSize.Contains("2-3"))
+                                {
+                                    FileSize.Add("2-3");
+                                }
+                                else if (filesize >= 3 && !FileSize.Contains("3-999"))
+                                {
+                                    FileSize.Add("3-999");
+                                }
+                            }
+                        }
+
+                        FileSize.Sort(new RatingComparer());
+
+
+                        //评分
+                        //20 40 60 80 
+                        List<string> Rating = new List<string>();
+                        cmd.CommandText = "SELECT rating FROM movie";
+                        using (SQLiteDataReader sr = cmd.ExecuteReader())
+                        {
+                            while (sr.Read())
+                            {
+                                if (Rating.Count >= 4) break;
+                                double.TryParse(sr[0].ToString(), out double rating);
+                                if (rating <= 20 && !Rating.Contains("0-20"))
+                                {
+                                    Rating.Add("0-20");
+                                }
+                                else if ((rating >= 20 & rating <= 40) && !Rating.Contains("20-40"))
+                                {
+                                    Rating.Add("20-40");
+                                }
+                                else if ((rating >= 40 & rating <= 60) && !Rating.Contains("40-60"))
+                                {
+                                    Rating.Add("40-60");
+                                }
+
+                                else if ((rating >= 60 & rating <= 80) && !Rating.Contains("60-80"))
+                                {
+                                    Rating.Add("60-80");
+                                }
+
+                                else if (rating >= 80 && !Rating.Contains("80-100"))
+                                {
+                                    Rating.Add("80-100");
+                                }
+                            }
+                        }
+
+                        Rating.Sort(new RatingComparer());
+
+                        List<List<string>> result = new List<List<string>>
                     {
                         Year,
                         Genre,
@@ -1097,10 +1120,10 @@ namespace Jvedio
                         FileSize,
                         Rating
                     };
-                    return result;
+                        return result;
 
+                    }
                 }
-            }
             });
         }
 
@@ -1118,8 +1141,8 @@ namespace Jvedio
                 {
                     cmd.Connection = cn;
                     string dbpath = AppDomain.CurrentDomain.BaseDirectory + "\\mdb\\MainDatabase.mdb";
-                    if (!string.IsNullOrEmpty(path) ) { dbpath = path; }
-                    if (!File.Exists(dbpath))  return; 
+                    if (!string.IsNullOrEmpty(path)) { dbpath = path; }
+                    if (!File.Exists(dbpath)) return;
                     OleDbConnection con = new OleDbConnection();
                     OleDbCommand OleDbcmd = new OleDbCommand();
                     con.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + dbpath + ";Mode=Read";
@@ -1143,23 +1166,23 @@ namespace Jvedio
                                 Movie AccessMovie = new Movie()
                                 {
                                     id = sr["fanhao"].ToString(),
-                                    title = Unicode2String(sr["mingcheng"].ToString()),
+                                    title =FileProcess.Unicode2String(sr["mingcheng"].ToString()),
                                     filesize = string.IsNullOrEmpty(sr["wenjiandaxiao"].ToString()) ? 0 : double.Parse(sr["wenjiandaxiao"].ToString()),
                                     filepath = sr["weizhi"].ToString(),
                                     vediotype = string.IsNullOrEmpty(sr["shipinleixing"].ToString()) ? 0 : int.Parse(sr["shipinleixing"].ToString()),
                                     scandate = scandate.ToString("yyyy-MM-dd HH:mm:ss"),//导入时间
                                     releasedate = string.IsNullOrEmpty(sr["faxingriqi"].ToString()) ? "1900-01-01" : sr["faxingriqi"].ToString(),
                                     visits = string.IsNullOrEmpty(sr["fangwencishu"].ToString()) ? 0 : int.Parse(sr["fangwencishu"].ToString()),
-                                    director = Unicode2String(sr["daoyan"].ToString()),
-                                    genre = Unicode2String(sr["leibie"].ToString()),
-                                    tag = Unicode2String(sr["xilie"].ToString()),
-                                    actor = Unicode2String(sr["yanyuan"].ToString()),
+                                    director = FileProcess.Unicode2String(sr["daoyan"].ToString()),
+                                    genre = FileProcess.Unicode2String(sr["leibie"].ToString()),
+                                    tag = FileProcess.Unicode2String(sr["xilie"].ToString()),
+                                    actor = FileProcess.Unicode2String(sr["yanyuan"].ToString()),
                                     actorid = "",
                                     sourceurl = "",
                                     source = "",
-                                    studio = Unicode2String(sr["faxingshang"].ToString()),
+                                    studio = FileProcess.Unicode2String(sr["faxingshang"].ToString()),
                                     favorites = string.IsNullOrEmpty(sr["love"].ToString()) ? 0 : int.Parse(sr["love"].ToString()),
-                                    label = Unicode2String(sr["biaoqian"].ToString()),
+                                    label = FileProcess.Unicode2String(sr["biaoqian"].ToString()),
                                     runtime = string.IsNullOrEmpty(sr["changdu"].ToString()) ? 0 : int.Parse(sr["changdu"].ToString()),
                                     rating = 0,
                                     year = string.IsNullOrEmpty(sr["faxingriqi"].ToString()) ? 1900 : int.Parse(sr["faxingriqi"].ToString().Split('-')[0]),

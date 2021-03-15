@@ -21,15 +21,16 @@ namespace Jvedio
     /// </summary>
     public partial class Window_ImageViewer : Window
     {
-        public Window_ImageViewer(ImageSource source)
+        public Window_ImageViewer(Window owner, ImageSource source)
         {
             InitializeComponent();
+            this.Owner = owner;
             this.Height = SystemParameters.PrimaryScreenHeight * 0.8;
             this.Width = SystemParameters.PrimaryScreenHeight * 0.8 * 1230 / 720;
             ImageViewer.ImageSource= BitmapFrame.Create((BitmapSource)source);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CloseWindow(object sender, RoutedEventArgs e)
         {
             if (Properties.Settings.Default.EnableWindowFade)
             {
@@ -49,12 +50,18 @@ namespace Jvedio
             base.OnClosed(e);
         }
 
-        private void Grid_MouseMove(object sender, MouseEventArgs e)
+        //private void Grid_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    if (e.LeftButton == MouseButtonState.Pressed )
+        //    {
+        //        this.DragMove();
+        //    }
+        //}
+
+        private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed )
-            {
-                this.DragMove();
-            }
+            if (e.Key == Key.Escape)
+                CloseWindow(null, null);
         }
     }
 }

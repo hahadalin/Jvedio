@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using static Jvedio.FileProcess;
-using static Jvedio.GlobalMethod;
+using static Jvedio.FileProcess;
 namespace Jvedio
 {
     /// <summary>
@@ -221,7 +221,7 @@ namespace Jvedio
                 FileInfo fileInfo = new FileInfo(filepath);
                 
                 string id = Identify.GetFanhao(fileInfo.Name);
-                int vt = (int)Identify.GetVedioType(id);
+                int vt = (int)Identify.GetVideoType(id);
                 if(vt>0)  vieModel.DetailMovie.vediotype = vt;
                 if (File.Exists(filepath)) {
                     string createDate = "";

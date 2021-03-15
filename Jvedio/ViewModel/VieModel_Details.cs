@@ -49,14 +49,14 @@ namespace Jvedio.ViewModel
             }
         }
 
-        private VedioInfo _VedioInfo;
+        private VideoInfo _VideoInfo;
 
-        public VedioInfo VedioInfo
+        public VideoInfo VideoInfo
         {
-            get { return _VedioInfo; }
+            get { return _VideoInfo; }
             set
             {
-                _VedioInfo = value;
+                _VideoInfo = value;
                 RaisePropertyChanged();
             }
         }
@@ -129,19 +129,24 @@ namespace Jvedio.ViewModel
 
         public void SaveLabel()
         {
-            List<string> labels = DetailMovie.labellist;
+            List<string> labels = new List<string>();
+            labels.AddRange(DetailMovie.labellist);
             labels.Remove("+");
-
             DataBase.UpdateMovieByID(DetailMovie.id, "label", string.Join(" ", labels), "string");
-
+            
         }
 
+
+        public void onLabelChanged()
+        {
+            RaisePropertyChanged("DetailMovie");
+        }
 
 
 
         public void Query(string movieid)
         {
-            ((WindowDetails)GlobalMethod.GetWindowByName("WindowDetails")).SetStatus(false);
+            ((WindowDetails)FileProcess.GetWindowByName("WindowDetails")).SetStatus(false);
             DetailMovie detailMovie = null;
                 detailMovie = DataBase.SelectDetailMovieById(movieid);
                 //访问次数+1

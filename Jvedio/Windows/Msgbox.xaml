@@ -88,8 +88,8 @@
                         <!--<Button  x:Name="CancelButton" Margin="5 0"  Style="{StaticResource ButtonTrigger_No}" FontSize="20" Background="Red"    Content="{x:Static lang:Resources.Cancel}" Width="80" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
                         <Button x:Name="YesButton"  Margin="5 0"  Style="{StaticResource ButtonTrigger_Yes}" FontSize="20"   Content="{x:Static lang:Resources.Confirm}" Width="80" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>-->
 
-                        <Button  x:Name="CancelButton"  Padding="5" Style="{StaticResource ButtonTrigger_No}" FontSize="20" Margin="10"  Background="Transparent"  BorderThickness="0" Content="{x:Static lang:Resources.Cancel}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
-                        <Button  x:Name="YesButton"   Padding="5"  Style="{StaticResource ButtonTrigger_Yes}" FontSize="20" Margin="10"  Background="Transparent"  BorderThickness="0" Content="{x:Static lang:Resources.Confirm}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>
+                        <Button  x:Name="YesButton"   Padding="5"  Style="{StaticResource FlatButton}" FontSize="20" Margin="10"    Content="{x:Static lang:Resources.Confirm}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click"/>
+                        <Button  x:Name="CancelButton"  Padding="5" Style="{StaticResource FlatRedButton}" FontSize="20" Margin="10"    Content="{x:Static lang:Resources.Cancel}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Button_Click_1"/>
 
 
                     </StackPanel>
